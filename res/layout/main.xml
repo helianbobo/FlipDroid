@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:id="@+id/testPage"
+             style="@style/Page"
+             android:stretchColumns="1">
+
+    <TableRow>
+        <TextView
+                android:id="@+id/article1"
+                style="@style/Article"
+                android:text="@string/title1"
+                android:padding="3dip"/>
+        <TextView
+                style="@style/Article"
+                android:text="@string/title2"
+                android:gravity="right"
+                android:padding="3dip"/>
+    </TableRow>
+
+    <TableRow>
+        <TextView
+                style="@style/Article"
+                android:text="@string/title3"
+                android:padding="3dip"
+                android:gravity="bottom"/>
+    </TableRow>
+</TableLayout>
