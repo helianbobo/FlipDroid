@@ -4,6 +4,7 @@ import java.util.*;
 
 public class FakeArticleSource extends AbstractArticleSource {
 
+
     private final static String strLib = "A hacking free-for-all has exploded on the Web, and Facebook and Twitter are stuck in the middle.\n" +
             "On Wednesday, anonymous hackers took aim at companies perceived to have harmed WikiLeaks after its release of a flood of confidential diplomatic documents. MasterCard, Visa and PayPal, which had cut off people's ability to donate money to WikiLeaks, were hit by attacks that tried to block access to the companies' Web sites and services.\n" +
             "To organize their efforts, the hackers have turned to sites like Facebook and Twitter. That has drawn these Web giants into the fray and created a precarious situation for them.\n" +
