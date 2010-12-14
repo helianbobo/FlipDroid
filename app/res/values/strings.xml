@@ -5,6 +5,11 @@
 
     <string name="config">Config</string>
 
+    <string name="key_anim_flip_duration_preference">anim_flip_duration</string>
+    <string name="title_anim_flip_duration_preference">Flip Duration</string>
+    <string name="summary_anim_flip_duration_preference">Flip Duration</string>
+    <string name="dialog_title_anim_flip_duration_preference">Flip Duration</string>
+
 
     <string name="title1">Hello World!</string>
     <string name="title2">FlipDroid Rocks!</string>

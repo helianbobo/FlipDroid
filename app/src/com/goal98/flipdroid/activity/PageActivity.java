@@ -2,7 +2,9 @@ package com.goal98.flipdroid.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.*;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
@@ -24,6 +26,7 @@ public class PageActivity extends Activity {
     private View next;
 
     private ContentRepo repo;
+    private SharedPreferences preferences;
 
 
     /**
@@ -32,6 +35,7 @@ public class PageActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.main);
 
         container = (ViewGroup) findViewById(R.id.pageContainer);
@@ -45,6 +49,12 @@ public class PageActivity extends Activity {
         ((PageView) current).setPage(repo.getPage(0));
         ((PageView) next).setPage(repo.getPage(1));
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
     }
 
     @Override
@@ -87,9 +97,12 @@ public class PageActivity extends Activity {
         final float centerX = 0;
         float depthZ = 0.0f;
         boolean reverse = true;
+        String key = getString(R.string.key_anim_flip_duration_preference);
+
+        long duration = Long.parseLong(preferences.getString(key, "500"));
 
         Rotate3DAnimation rotation = new Rotate3DAnimation(fromDegrees, toDegrees, centerX, centerY, depthZ, reverse);
-        rotation.setDuration(500);
+        rotation.setDuration(duration);
         rotation.setFillAfter(false);
         rotation.setInterpolator(new AccelerateDecelerateInterpolator());
         return rotation;
