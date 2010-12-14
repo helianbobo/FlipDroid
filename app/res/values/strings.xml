@@ -3,7 +3,12 @@
     <string name="hello">Hello World, Lop!</string>
     <string name="app_name">FlipDroid</string>
 
+    <string name="config">Config</string>
+
+
     <string name="title1">Hello World!</string>
     <string name="title2">FlipDroid Rocks!</string>
     <string name="title3">One million downloads!</string>
+
+
 </resources>

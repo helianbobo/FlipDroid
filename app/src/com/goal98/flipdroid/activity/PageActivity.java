@@ -1,10 +1,9 @@
 package com.goal98.flipdroid.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import com.goal98.flipdroid.R;
@@ -16,6 +15,9 @@ import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.view.PageView;
 
 public class PageActivity extends Activity {
+
+    static final private int CONFIG_ID = Menu.FIRST;
+
 
     private ViewGroup container;
     private View current;
@@ -42,8 +44,6 @@ public class PageActivity extends Activity {
 
         ((PageView) current).setPage(repo.getPage(0));
         ((PageView) next).setPage(repo.getPage(1));
-
-        new SinaArticleSource();
 
     }
 
@@ -105,4 +105,33 @@ public class PageActivity extends Activity {
 
 
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        menu.add(0, CONFIG_ID, 0, R.string.config);
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case CONFIG_ID:
+                startActivity(new Intent(this, ConfigActivity.class));
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }
