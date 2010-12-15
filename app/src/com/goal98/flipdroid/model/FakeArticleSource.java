@@ -1,5 +1,9 @@
 package com.goal98.flipdroid.model;
 
+import android.util.Log;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 public class FakeArticleSource extends AbstractArticleSource {
@@ -40,7 +44,13 @@ public class FakeArticleSource extends AbstractArticleSource {
 
         Article article = new Article();
         article.setTitle(title);
-        article.setImageUrl("");
+        URL imageUrl = null;
+        try {
+            imageUrl = new URL("http://tp4.sinaimg.cn/1702755335/50/1283204608/1");
+        } catch (MalformedURLException e) {
+            Log.e(this.getClass().getName(), e.getMessage(), e);
+        }
+        article.setImageUrl(imageUrl);
         article.setContent(content);
         return article;
     }

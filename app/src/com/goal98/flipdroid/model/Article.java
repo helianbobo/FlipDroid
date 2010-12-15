@@ -1,9 +1,11 @@
 package com.goal98.flipdroid.model;
 
+import java.net.URL;
+
 public class Article {
 
     private String title;
-    private String imageUrl;
+    private URL imageUrl;
     private String content;
 
     public String getContent() {
@@ -14,11 +16,11 @@ public class Article {
         this.content = content;
     }
 
-    public String getImageUrl() {
+    public URL getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(URL imageUrl) {
         this.imageUrl = imageUrl;
     }
 

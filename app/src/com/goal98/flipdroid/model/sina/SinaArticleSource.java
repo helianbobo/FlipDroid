@@ -1,7 +1,7 @@
 package com.goal98.flipdroid.model.sina;
 
 import android.util.Log;
-import com.goal98.flipdroid.Constants;
+import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.model.AbstractArticleSource;
 import com.goal98.flipdroid.model.Article;
 import weibo4j.Status;
@@ -55,6 +55,7 @@ public class SinaArticleSource extends AbstractArticleSource {
                 Article article = new Article();
                 article.setContent(status.getText());
                 article.setTitle(status.getUser().getName());
+                article.setImageUrl(status.getUser().getProfileImageURL());
                 result.add(article);
             }
 
@@ -63,28 +64,6 @@ public class SinaArticleSource extends AbstractArticleSource {
             Log.e(this.getClass().getName(),e.getMessage(),e);
         }
         return result;
-    }
-
-/*    private void testWeibo() {
-
-        try {
-            String id = "1702755335";
-            initWeibo(false, new String[]{"13774256612", "541116"});
-
-
-            testGetUserTimeline(id, weibo);
-        } catch (WeiboException e) {
-            Log.e("Weibo", "Weibo error", e);
-        }
-
-    }*/
-
-    private void testGetUserTimeline(String id) throws WeiboException {
-        List<Status> statuses = weibo.getUserTimeline(id);
-        for (Status status : statuses) {
-            Log.v("Weibo",status.getUser().getName() + ":" +
-                    status.getText());
-        }
     }
 
     private void initWeibo() {

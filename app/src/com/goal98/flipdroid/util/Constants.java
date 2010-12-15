@@ -1,4 +1,4 @@
-package com.goal98.flipdroid;
+package com.goal98.flipdroid.util;
 
 public class Constants {
     public static final String CONSUMER_KEY = "3540458031";
