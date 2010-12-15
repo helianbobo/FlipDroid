@@ -43,7 +43,10 @@ public class PageActivity extends Activity {
         next = findViewById(R.id.nextPage);
 
         repo = new ContentRepo();
-        repo.setArticleSource(new FakeArticleSource());
+        String userId = "13774256612";
+        String password = "541116";
+        String sourceUserId = "1702755335";
+        repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceUserId));
         repo.setPagingStretagy(new SimplePagingStretagy());
 
         ((PageView) current).setPage(repo.getPage(0));
