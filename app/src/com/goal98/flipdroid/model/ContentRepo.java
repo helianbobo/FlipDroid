@@ -33,15 +33,19 @@ public class ContentRepo {
         this.pagingStretagy = pagingStretagy;
     }
 
-    public Page getPage(int pageNo){
+    public Page getPage(int pageNo) {
 
-        if(articleSourceLastModified == null || articleSource.lastModified().after(articleSourceLastModified)){
-            pageList = pagingStretagy.doPaging(articleSource.getArticleList());
-            articleSourceLastModified = articleSource.lastModified();
+        if (articleSourceLastModified == null || articleSource.lastModified().after(articleSourceLastModified)) {
+            refresh();
         }
 
         return pageList.get(pageNo);
 
+    }
+
+    public void refresh() {
+        pageList = pagingStretagy.doPaging(articleSource.getArticleList());
+        articleSourceLastModified = articleSource.lastModified();
     }
 
 }

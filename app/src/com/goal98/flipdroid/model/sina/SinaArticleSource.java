@@ -1,5 +1,8 @@
 package com.goal98.flipdroid.model.sina;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.model.AbstractArticleSource;
@@ -8,6 +11,7 @@ import weibo4j.Status;
 import weibo4j.Weibo;
 import weibo4j.WeiboException;
 
+import java.net.URL;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,10 +36,10 @@ public class SinaArticleSource extends AbstractArticleSource {
         Weibo.CONSUMER_KEY = Constants.CONSUMER_KEY;
         Weibo.CONSUMER_SECRET = Constants.CONSUMER_SECRET;
 
-        if(useOauth){
+        if (useOauth) {
             oauthToken = param1;
             oauthTokenSecret = param2;
-        }else{
+        } else {
             basicUser = param1;
             basicPassword = param2;
         }
@@ -49,7 +53,11 @@ public class SinaArticleSource extends AbstractArticleSource {
         List<Article> result = new LinkedList<Article>();
 
         try {
-            List<Status> statuses = weibo.getUserTimeline(sourceUserId);
+            List<Status> statuses;
+            if (sourceUserId == null) {
+                statuses = weibo.getPublicTimeline();
+            } else
+                statuses = weibo.getUserTimeline(sourceUserId);
             for (int i = 0; i < statuses.size(); i++) {
                 Status status = statuses.get(i);
                 Article article = new Article();
@@ -61,7 +69,7 @@ public class SinaArticleSource extends AbstractArticleSource {
 
             this.lastModified = new Date();
         } catch (WeiboException e) {
-            Log.e(this.getClass().getName(),e.getMessage(),e);
+            Log.e(this.getClass().getName(), e.getMessage(), e);
         }
         return result;
     }

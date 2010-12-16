@@ -4,6 +4,7 @@ package com.goal98.flipdroid.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 import com.goal98.flipdroid.util.Cache;
@@ -33,18 +34,14 @@ public class InternetImageView extends ImageView {
     }
 
     public void loadImage() {
-        BitmapFactory.Options bmOptions;
-        bmOptions = new BitmapFactory.Options();
-        bmOptions.inSampleSize = 1;
-
-        Bitmap bm = loadBitmap(url, bmOptions);
-        setImageBitmap(bm);
+        DownloadImageTask task = new DownloadImageTask();
+        task.execute(url);
     }
 
     private Bitmap loadBitmap(URL url, BitmapFactory.Options options) {
 
         Cache bitmapCache = CacheFactory.getInstance().getCache(BITMAP_CACHE_NAME);
-        Bitmap bitmapFromCache = (Bitmap)bitmapCache.get(url);
+        Bitmap bitmapFromCache = (Bitmap) bitmapCache.get(url);
         if (bitmapFromCache == null) {
 
             Bitmap bitmap = null;
@@ -57,7 +54,7 @@ public class InternetImageView extends ImageView {
                 Log.e(this.getClass().getName(), e1.getMessage(), e1);
             }
             return bitmap;
-        }else{
+        } else {
             return bitmapFromCache;
         }
 
@@ -80,6 +77,21 @@ public class InternetImageView extends ImageView {
             Log.e(this.getClass().getName(), ex.getMessage(), ex);
         }
         return inputStream;
+    }
+
+    private class DownloadImageTask extends AsyncTask<URL, Integer, Bitmap> {
+        protected Bitmap doInBackground(URL... urls) {
+            BitmapFactory.Options bmOptions;
+            bmOptions = new BitmapFactory.Options();
+            bmOptions.inSampleSize = 1;
+
+            Bitmap bm = loadBitmap(url, bmOptions);
+            return bm;
+        }
+
+        protected void onPostExecute(Bitmap bitmap) {
+            setImageBitmap(bitmap);
+        }
     }
 
 

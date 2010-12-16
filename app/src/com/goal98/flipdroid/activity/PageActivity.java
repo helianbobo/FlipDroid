@@ -3,6 +3,9 @@ package com.goal98.flipdroid.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.*;
@@ -12,9 +15,12 @@ import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.anim.Rotate3DAnimation;
 import com.goal98.flipdroid.model.ContentRepo;
 import com.goal98.flipdroid.model.FakeArticleSource;
+import com.goal98.flipdroid.model.Page;
 import com.goal98.flipdroid.model.SimplePagingStretagy;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.view.PageView;
+
+import java.net.URL;
 
 public class PageActivity extends Activity {
 
@@ -46,12 +52,16 @@ public class PageActivity extends Activity {
         String userId = "13774256612";
         String password = "541116";
         String sourceUserId = "1702755335";
-        repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceUserId));
+        repo.setArticleSource(new SinaArticleSource(false, userId, password, null));
         repo.setPagingStretagy(new SimplePagingStretagy());
 
+        new FetchRepoTask().execute();
+
+    }
+
+    private void initPageViews() {
         ((PageView) current).setPage(repo.getPage(0));
         ((PageView) next).setPage(repo.getPage(1));
-
     }
 
     @Override
@@ -148,6 +158,17 @@ public class PageActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class FetchRepoTask extends AsyncTask<Void, Void, ContentRepo> {
+        protected ContentRepo doInBackground(Void...voids) {
+            repo.refresh();
+            return repo;
+        }
+
+        protected void onPostExecute(ContentRepo contentRepo) {
+            initPageViews();
+        }
     }
 
 }
