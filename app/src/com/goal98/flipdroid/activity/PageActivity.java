@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.*;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
@@ -36,6 +37,8 @@ public class PageActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        String repoStr = (String)getIntent().getExtras().get("repo");
+
         setContentView(R.layout.main);
 
         container = (ViewGroup) findViewById(R.id.pageContainer);
@@ -45,8 +48,13 @@ public class PageActivity extends Activity {
         repo = new ContentRepo();
         String userId = "13774256612";
         String password = "541116";
-        String sourceUserId = "1702755335";
-        repo.setArticleSource(new SinaArticleSource(false, userId, password, null));
+        String sourceUserId = null;
+        if("weibo".equals(repoStr)){
+            sourceUserId = null;
+        }else if("helianbobo".equals(repoStr)){
+            sourceUserId = "1702755335";
+        }
+        repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceUserId));
         repo.setPagingStretagy(new SimplePagingStrategy(3));
 
         new FetchRepoTask().execute();
