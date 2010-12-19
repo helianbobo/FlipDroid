@@ -4,13 +4,23 @@
 
 
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
-        <activity android:name=".activity.PageActivity">
+
+
+        <activity android:name=".activity.CoverActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity android:name=".activity.ConfigActivity"/>
+
+        <activity android:name=".activity.PageActivity">
+<!--            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>-->
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
