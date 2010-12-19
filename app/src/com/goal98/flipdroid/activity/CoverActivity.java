@@ -17,7 +17,7 @@ public class CoverActivity extends Activity {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()){
             case MotionEvent.ACTION_UP:
-                startActivity(new Intent(this, PageActivity.class));
+                startActivity(new Intent(this, IndexActivity.class));
                 overridePendingTransition(android.R.anim.slide_out_right, R.anim.hold);
         }
         return true;

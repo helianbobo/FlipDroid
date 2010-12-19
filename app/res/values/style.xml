@@ -5,6 +5,20 @@
         <item name="android:background">#FFFFFF</item>
     </style>
 
+    <style name="Index">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:listViewStyle">@style/IndexList</item>
+    </style>
+
+    <style name="IndexList">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:textColor">#000</item>
+    </style>
+
     <style name="Page">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
@@ -13,7 +27,7 @@
 
     <style name="Article">
         <item name="android:textColor">#000</item>
-        <item name="android:textSize">18px</item>
+        <item name="android:textSize">14px</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
     </style>

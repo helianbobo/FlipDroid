@@ -24,7 +24,8 @@ public final class R {
     }
     public static final class layout {
         public static final int cover=0x7f030000;
-        public static final int main=0x7f030001;
+        public static final int index=0x7f030001;
+        public static final int main=0x7f030002;
     }
     public static final class string {
         public static final int app_name=0x7f060001;
@@ -39,10 +40,12 @@ public final class R {
         public static final int title_anim_flip_duration_preference=0x7f060004;
     }
     public static final class style {
-        public static final int Article=0x7f070002;
+        public static final int Article=0x7f070004;
         public static final int Cover=0x7f070000;
-        public static final int Menu=0x7f070003;
-        public static final int Page=0x7f070001;
+        public static final int Index=0x7f070001;
+        public static final int IndexList=0x7f070002;
+        public static final int Menu=0x7f070005;
+        public static final int Page=0x7f070003;
     }
     public static final class xml {
         public static final int preferences=0x7f050000;
