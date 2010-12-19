@@ -6,7 +6,14 @@ import java.util.List;
 
 public class SimplePagingStretagy implements PagingStretagy {
 
-    private int articlePerpage = 5;
+    private int articlePerpage = 3;
+
+    public SimplePagingStretagy() {
+    }
+
+    public SimplePagingStretagy(int articlePerpage) {
+        this.articlePerpage = articlePerpage;
+    }
 
     public int getArticlePerpage() {
         return articlePerpage;

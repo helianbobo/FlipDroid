@@ -53,7 +53,7 @@ public class PageActivity extends Activity {
         String password = "541116";
         String sourceUserId = "1702755335";
         repo.setArticleSource(new SinaArticleSource(false, userId, password, null));
-        repo.setPagingStretagy(new SimplePagingStretagy());
+        repo.setPagingStretagy(new SimplePagingStretagy(3));
 
         new FetchRepoTask().execute();
 
