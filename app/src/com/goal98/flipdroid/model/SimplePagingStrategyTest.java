@@ -4,14 +4,14 @@ package com.goal98.flipdroid.model;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SimplePagingStretagyTest {
+public class SimplePagingStrategyTest {
     public void testDoPaging() throws Exception {
 
         List<Article> articleList = buildArticleList(14);
 
 
-        SimplePagingStretagy stretagy = new SimplePagingStretagy();
-        List<Page> pageList = stretagy.doPaging(articleList);
+        SimplePagingStrategy strategy = new SimplePagingStrategy();
+        List<Page> pageList = strategy.doPaging(articleList);
 
         System.out.println(3 == pageList.size());
         System.out.println(4 == pageList.get(2).getArticleList().size());
@@ -30,7 +30,7 @@ public class SimplePagingStretagyTest {
     }
 
     public static void main(String[] args) throws Exception{
-        SimplePagingStretagyTest test = new SimplePagingStretagyTest();
+        SimplePagingStrategyTest test = new SimplePagingStrategyTest();
         test.testDoPaging();
     }
 }

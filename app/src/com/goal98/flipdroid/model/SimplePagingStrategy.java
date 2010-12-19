@@ -4,28 +4,28 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SimplePagingStretagy implements PagingStretagy {
+public class SimplePagingStrategy implements PagingStretagy {
 
-    private int articlePerpage = 3;
+    private int articlePerPage = 3;
 
-    public SimplePagingStretagy() {
+    public SimplePagingStrategy() {
     }
 
-    public SimplePagingStretagy(int articlePerpage) {
-        this.articlePerpage = articlePerpage;
+    public SimplePagingStrategy(int articlePerPage) {
+        this.articlePerPage = articlePerPage;
     }
 
-    public int getArticlePerpage() {
-        return articlePerpage;
+    public int getArticlePerPage() {
+        return articlePerPage;
     }
 
-    public void setArticlePerpage(int articlePerpage) {
-        this.articlePerpage = articlePerpage;
+    public void setArticlePerPage(int articlePerPage) {
+        this.articlePerPage = articlePerPage;
     }
 
     public List<Page> doPaging(List<Article> articleList) {
         List<Page> result = new LinkedList<Page>();
-        int numberOfPages = (int) Math.floor(articleList.size() / articlePerpage) + 1;
+        int numberOfPages = (int) Math.floor(articleList.size() / articlePerPage) + 1;
 
         Iterator<Article> iterator = articleList.iterator();
 
@@ -33,7 +33,7 @@ public class SimplePagingStretagy implements PagingStretagy {
             Page page = new Page();
 
             int j = 0;
-            while (iterator.hasNext() && j < articlePerpage) {
+            while (iterator.hasNext() && j < articlePerPage) {
                 Article article = iterator.next();
                 page.addArticle(article);
                 j++;
