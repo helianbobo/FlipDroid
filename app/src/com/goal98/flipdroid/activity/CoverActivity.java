@@ -18,7 +18,7 @@ public class CoverActivity extends Activity {
         switch (event.getAction()){
             case MotionEvent.ACTION_UP:
                 startActivity(new Intent(this, IndexActivity.class));
-                overridePendingTransition(android.R.anim.slide_out_right, R.anim.hold);
+                overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
         }
         return true;
     }

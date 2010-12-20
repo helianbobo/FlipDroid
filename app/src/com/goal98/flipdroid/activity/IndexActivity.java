@@ -39,5 +39,6 @@ public class IndexActivity extends ListActivity {
         Intent intent = new Intent(this, PageActivity.class);
         intent.putExtra("repo", (String)l.getItemAtPosition(position));
         startActivity(intent);
+        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
     }
 }
