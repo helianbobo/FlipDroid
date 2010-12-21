@@ -20,10 +20,17 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <EditTextPreference
-            android:key="anim_flip_duration"
+            android:key="@string/key_anim_flip_duration_preference"
             android:defaultValue="500"
             android:title="@string/title_anim_flip_duration_preference"
             android:summary="@string/summary_anim_flip_duration_preference"
             android:dialogTitle="@string/dialog_title_anim_flip_duration_preference" />
+
+    <EditTextPreference
+            android:key="@string/key_article_per_page_preference"
+            android:defaultValue="3"
+            android:title="@string/title_article_per_page_preference"
+            android:summary="@string/summary_article_per_page_preference"
+            android:dialogTitle="@string/dialog_title_article_per_page_preference" />
 
 </PreferenceScreen>

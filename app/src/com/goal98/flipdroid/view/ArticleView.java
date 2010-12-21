@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.view;
 
 import android.content.Context;
+import android.text.method.HideReturnsTransformationMethod;
 import android.util.AttributeSet;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -28,6 +29,7 @@ public class ArticleView extends TableLayout{
 
         if(contentView == null){
             contentView = new TextView(getContext());
+            contentView.setTransformationMethod(new HideReturnsTransformationMethod());
         }
         contentView.setText(article.getContent());
 

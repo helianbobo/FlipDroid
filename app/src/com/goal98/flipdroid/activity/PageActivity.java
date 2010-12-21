@@ -29,6 +29,7 @@ public class PageActivity extends Activity {
     private ContentRepo repo;
     private SharedPreferences preferences;
 
+    private SimplePagingStrategy simplePagingStrategy;
 
     /**
      * Called when the activity is first created.
@@ -55,7 +56,8 @@ public class PageActivity extends Activity {
             sourceUserId = "1702755335";
         }
         repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceUserId));
-        repo.setPagingStretagy(new SimplePagingStrategy(3));
+        simplePagingStrategy = new SimplePagingStrategy();
+        repo.setPagingStretagy(simplePagingStrategy);
 
         new FetchRepoTask().execute();
 
@@ -70,6 +72,7 @@ public class PageActivity extends Activity {
     protected void onStart() {
         super.onStart();
         preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        simplePagingStrategy.setArticlePerPage(getArticlePerPageFromPreference());
     }
 
     @Override
@@ -112,15 +115,25 @@ public class PageActivity extends Activity {
         final float centerX = 0;
         float depthZ = 0.0f;
         boolean reverse = true;
-        String key = getString(R.string.key_anim_flip_duration_preference);
-
-        long duration = Long.parseLong(preferences.getString(key, "500"));
+        long duration = getFlipDurationFromPreference();
 
         Rotate3DAnimation rotation = new Rotate3DAnimation(fromDegrees, toDegrees, centerX, centerY, depthZ, reverse);
         rotation.setDuration(duration);
         rotation.setFillAfter(false);
         rotation.setInterpolator(new AccelerateDecelerateInterpolator());
         return rotation;
+    }
+
+    private long getFlipDurationFromPreference() {
+        String key = getString(R.string.key_anim_flip_duration_preference);
+
+        return Long.parseLong(preferences.getString(key, "500"));
+    }
+
+    private int getArticlePerPageFromPreference() {
+        String key = getString(R.string.key_article_per_page_preference);
+
+        return Integer.parseInt(preferences.getString(key, "3"));
     }
 
     private void switchViews() {

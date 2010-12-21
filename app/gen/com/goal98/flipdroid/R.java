@@ -31,13 +31,17 @@ public final class R {
         public static final int app_name=0x7f060001;
         public static final int config=0x7f060002;
         public static final int dialog_title_anim_flip_duration_preference=0x7f060006;
+        public static final int dialog_title_article_per_page_preference=0x7f06000a;
         public static final int hello=0x7f060000;
         public static final int key_anim_flip_duration_preference=0x7f060003;
+        public static final int key_article_per_page_preference=0x7f060007;
         public static final int summary_anim_flip_duration_preference=0x7f060005;
-        public static final int title1=0x7f060007;
-        public static final int title2=0x7f060008;
-        public static final int title3=0x7f060009;
+        public static final int summary_article_per_page_preference=0x7f060009;
+        public static final int title1=0x7f06000b;
+        public static final int title2=0x7f06000c;
+        public static final int title3=0x7f06000d;
         public static final int title_anim_flip_duration_preference=0x7f060004;
+        public static final int title_article_per_page_preference=0x7f060008;
     }
     public static final class style {
         public static final int Article=0x7f070004;

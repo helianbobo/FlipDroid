@@ -10,6 +10,11 @@
     <string name="summary_anim_flip_duration_preference">Flip Duration</string>
     <string name="dialog_title_anim_flip_duration_preference">Flip Duration</string>
 
+    <string name="key_article_per_page_preference">article_per_page</string>
+    <string name="title_article_per_page_preference">Article Per Page</string>
+    <string name="summary_article_per_page_preference">Article Per Page</string>
+    <string name="dialog_title_article_per_page_preference">Article Per Page</string>
+
 
     <string name="title1">Hello World!</string>
     <string name="title2">FlipDroid Rocks!</string>
