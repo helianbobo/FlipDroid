@@ -67,6 +67,7 @@ public class InternetImageView extends ImageView {
 
         try {
             HttpURLConnection httpConn = (HttpURLConnection) conn;
+            httpConn.setUseCaches(true);
             httpConn.setRequestMethod("GET");
             httpConn.connect();
 
