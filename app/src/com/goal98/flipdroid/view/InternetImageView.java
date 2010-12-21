@@ -20,9 +20,22 @@ public class InternetImageView extends ImageView {
 
     public static final String BITMAP_CACHE_NAME = "BITMAP_CACHE_NAME";
 
+    private int sampleSize = 1;
+
+    public void setSampleSize(int sampleSize) {
+        this.sampleSize = sampleSize;
+    }
+
     public InternetImageView(Context context, URL url) {
         super(context);
         loadImage(url);
+
+    }
+
+    public InternetImageView(Context context, URL url, int sampleSize) {
+        super(context);
+        loadImage(url);
+        this.sampleSize = sampleSize;
 
     }
 
@@ -84,7 +97,7 @@ public class InternetImageView extends ImageView {
         protected Bitmap doInBackground(URL... urls) {
             BitmapFactory.Options bmOptions;
             bmOptions = new BitmapFactory.Options();
-            bmOptions.inSampleSize = 1;
+            bmOptions.inSampleSize = sampleSize;
 
             Bitmap bm = loadBitmap(url, bmOptions);
             return bm;

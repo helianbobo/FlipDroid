@@ -24,17 +24,21 @@ public class ArticleView extends TableLayout {
     private void renderView() {
         if (titleView == null) {
             titleView = new TextView(getContext());
+            titleView.setPadding(2, 2, 2, 2);
+            titleView.setTextSize(20);
         }
         titleView.setText(article.getTitle());
 
         if (contentView == null) {
             contentView = new TextView(getContext());
-            contentView.setBackgroundColor(R.color.gray);
+            contentView.setPadding(5, 5, 5, 5);
         }
         contentView.setText(article.getContent());
 
         if (portraitView == null) {
-            portraitView = new InternetImageView(getContext(), article.getImageUrl());
+            portraitView = new InternetImageView(getContext(), article.getImageUrl(), 2);
+            portraitView.setImageResource(R.drawable.portrait_small);
+            portraitView.setPadding(2, 2 ,2 ,2);
         }
 
     }
@@ -63,10 +67,6 @@ public class ArticleView extends TableLayout {
         tableRow1.addView(portraitView);
         tableRow1.addView(titleView);
 
-
-        TableRow tableRow2 = new TableRow(getContext());
-        addView(tableRow2);
-
-        tableRow2.addView(contentView);
+        addView(contentView);
     }
 }
