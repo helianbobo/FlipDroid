@@ -9,7 +9,19 @@ public class GestureUtil {
         boolean result = false;
 
         if(event.getAction() == MotionEvent.ACTION_MOVE){
-            result =  event.getX() > event.getHistoricalX(0);
+            result =  event.getX() - event.getHistoricalX(0) > 5;
+        }
+
+        return result;
+
+    }
+
+    public static boolean flipLeft(MotionEvent event){
+
+        boolean result = false;
+
+        if(event.getAction() == MotionEvent.ACTION_MOVE){
+            result =  event.getHistoricalX(0) - event.getX()  > 5;
         }
 
         return result;

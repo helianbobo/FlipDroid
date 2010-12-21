@@ -16,6 +16,7 @@ import com.goal98.flipdroid.model.ContentRepo;
 import com.goal98.flipdroid.model.FakeArticleSource;
 import com.goal98.flipdroid.model.SimplePagingStrategy;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
+import com.goal98.flipdroid.util.GestureUtil;
 import com.goal98.flipdroid.view.PageView;
 
 public class PageActivity extends Activity {
@@ -39,7 +40,7 @@ public class PageActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String repoStr = (String)getIntent().getExtras().get("repo");
+        String repoStr = (String) getIntent().getExtras().get("repo");
 
         setContentView(R.layout.main);
 
@@ -51,13 +52,13 @@ public class PageActivity extends Activity {
         String userId = "13774256612";
         String password = "541116";
         String sourceUserId = null;
-        if("weibo".equals(repoStr)){
+        if ("weibo".equals(repoStr)) {
             sourceUserId = null;
             repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceUserId));
-        }else if("helianbobo".equals(repoStr)){
+        } else if ("helianbobo".equals(repoStr)) {
             sourceUserId = "1702755335";
             repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceUserId));
-        }else if("fake".equals(repoStr)){
+        } else if ("fake".equals(repoStr)) {
             repo.setArticleSource(new FakeArticleSource());
 
         }
@@ -84,33 +85,38 @@ public class PageActivity extends Activity {
     public boolean onTouchEvent(MotionEvent event) {
 
         switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                break;
-            case MotionEvent.ACTION_UP:
-                Animation rotation = buildAnimation();
-                rotation.setAnimationListener(new Animation.AnimationListener() {
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    public void onAnimationEnd(Animation animation) {
-                        switchViews();
-                    }
-
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-
-                current.startAnimation(rotation);
-
-
+            case MotionEvent.ACTION_MOVE:
+                if (event.getHistorySize() > 0) {
+                    if(GestureUtil.flipRight(event))
+                        flipPage(true);
+                    else if(GestureUtil.flipLeft(event))
+                        flipPage(false);
+                }
                 break;
             default:
                 break;
         }
         return true;
 
+    }
+
+    private void flipPage(boolean forward) {
+        Animation rotation = buildAnimation();
+        rotation.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            public void onAnimationEnd(Animation animation) {
+                switchViews();
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        current.startAnimation(rotation);
     }
 
     private Animation buildAnimation() {
@@ -181,7 +187,7 @@ public class PageActivity extends Activity {
     }
 
     private class FetchRepoTask extends AsyncTask<Void, Void, ContentRepo> {
-        protected ContentRepo doInBackground(Void...voids) {
+        protected ContentRepo doInBackground(Void... voids) {
             repo.refresh();
             return repo;
         }
