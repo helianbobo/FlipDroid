@@ -3,6 +3,7 @@ package com.goal98.flipdroid.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
 import android.widget.TableLayout;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.Page;
@@ -23,7 +24,9 @@ public class PageView extends TableLayout{
         if(articleList != null){
             for (int i = 0; i < articleList.size(); i++) {
                 Article article = (Article) articleList.get(i);
-                this.addView(new ArticleView(this.getContext(), article));
+                ArticleView articleView = new ArticleView(this.getContext(), article);
+                articleView.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+                this.addView(articleView);
             }
         }
 

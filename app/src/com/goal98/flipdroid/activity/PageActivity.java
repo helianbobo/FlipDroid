@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.anim.Rotate3DAnimation;
 import com.goal98.flipdroid.model.ContentRepo;
+import com.goal98.flipdroid.model.FakeArticleSource;
 import com.goal98.flipdroid.model.SimplePagingStrategy;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.view.PageView;
@@ -52,10 +53,14 @@ public class PageActivity extends Activity {
         String sourceUserId = null;
         if("weibo".equals(repoStr)){
             sourceUserId = null;
+            repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceUserId));
         }else if("helianbobo".equals(repoStr)){
             sourceUserId = "1702755335";
+            repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceUserId));
+        }else if("fake".equals(repoStr)){
+            repo.setArticleSource(new FakeArticleSource());
+
         }
-        repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceUserId));
         simplePagingStrategy = new SimplePagingStrategy();
         repo.setPagingStretagy(simplePagingStrategy);
 

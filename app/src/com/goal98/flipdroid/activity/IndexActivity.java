@@ -23,6 +23,7 @@ public class IndexActivity extends ListActivity {
 
         mStrings.add("weibo");
         mStrings.add("helianbobo");
+        mStrings.add("fake");
 
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mStrings);
         setListAdapter(mAdapter);

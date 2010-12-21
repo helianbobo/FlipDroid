@@ -3,12 +3,14 @@ package com.goal98.flipdroid.view;
 import android.content.Context;
 import android.text.method.HideReturnsTransformationMethod;
 import android.util.AttributeSet;
+import android.util.Xml;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import com.goal98.flipdroid.model.Article;
+import org.xmlpull.v1.XmlPullParser;
 
-public class ArticleView extends TableLayout{
+public class ArticleView extends TableLayout {
 
     private Article article;
 
@@ -22,18 +24,18 @@ public class ArticleView extends TableLayout{
     }
 
     private void renderView() {
-        if(titleView == null){
+        if (titleView == null) {
             titleView = new TextView(getContext());
         }
         titleView.setText(article.getTitle());
 
-        if(contentView == null){
+        if (contentView == null) {
             contentView = new TextView(getContext());
-            contentView.setTransformationMethod(new HideReturnsTransformationMethod());
+            contentView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT));
         }
         contentView.setText(article.getContent());
 
-        if(portraitView == null){
+        if (portraitView == null) {
             portraitView = new InternetImageView(getContext(), article.getImageUrl());
         }
 
@@ -62,7 +64,6 @@ public class ArticleView extends TableLayout{
 
         tableRow1.addView(portraitView);
         tableRow1.addView(titleView);
-
 
 
         TableRow tableRow2 = new TableRow(getContext());
