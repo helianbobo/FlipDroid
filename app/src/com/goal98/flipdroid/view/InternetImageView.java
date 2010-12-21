@@ -22,6 +22,8 @@ public class InternetImageView extends ImageView {
 
     private int sampleSize = 1;
 
+    private HttpURLConnection conn;
+
     public void setSampleSize(int sampleSize) {
         this.sampleSize = sampleSize;
     }
@@ -62,7 +64,11 @@ public class InternetImageView extends ImageView {
             try {
                 in = OpenHttpConnection(url);
                 bitmap = BitmapFactory.decodeStream(in, null, options);
-                in.close();
+                if (in != null)
+                    in.close();
+                if(conn != null){
+                    conn.disconnect();
+                }
             } catch (IOException e1) {
                 Log.e(this.getClass().getName(), e1.getMessage(), e1);
             }
@@ -76,17 +82,17 @@ public class InternetImageView extends ImageView {
     private InputStream OpenHttpConnection(URL url) throws IOException {
         InputStream inputStream = null;
 
-        URLConnection conn = url.openConnection();
+        conn = (HttpURLConnection)url.openConnection();
 
         try {
-            HttpURLConnection httpConn = (HttpURLConnection) conn;
-            httpConn.setUseCaches(true);
-            httpConn.setRequestMethod("GET");
-            httpConn.connect();
+            conn.setUseCaches(true);
+            conn.setRequestMethod("GET");
+            conn.connect();
 
-            if (httpConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                inputStream = httpConn.getInputStream();
+            if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                inputStream = conn.getInputStream();
             }
+
         } catch (Exception ex) {
             Log.e(this.getClass().getName(), ex.getMessage(), ex);
         }

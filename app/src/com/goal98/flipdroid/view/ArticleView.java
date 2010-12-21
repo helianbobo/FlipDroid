@@ -32,6 +32,9 @@ public class ArticleView extends TableLayout {
         if (contentView == null) {
             contentView = new TextView(getContext());
             contentView.setPadding(5, 5, 5, 5);
+            contentView.setSingleLine(false);
+            contentView.setWidth(1);
+            contentView.setMaxLines(4);
         }
         contentView.setText(article.getContent());
 

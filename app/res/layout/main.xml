@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/pageContainer"
               style="@style/Page">
 
     <com.goal98.flipdroid.view.PageView android:id="@+id/currentPage"
+                                        android:orientation="vertical"
                                         android:layout_height="fill_parent"
                                         android:layout_width="fill_parent">
 
@@ -22,6 +23,7 @@
 
     <com.goal98.flipdroid.view.PageView android:id="@+id/nextPage"
                                         android:visibility="gone"
+                                        android:orientation="vertical"
                                         android:layout_height="fill_parent"
                                         android:layout_width="fill_parent">
 
@@ -39,4 +41,4 @@
     </com.goal98.flipdroid.view.PageView>
 
 
-</LinearLayout>
+</FrameLayout>
