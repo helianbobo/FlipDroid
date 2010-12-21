@@ -38,7 +38,7 @@ public class FakeArticleSource extends AbstractArticleSource {
 
     private Article generateFakeArticle() {
 
-        String title = generateRandomText(10);
+        String title = "Title";
         String content = generateRandomText(140);
 
 

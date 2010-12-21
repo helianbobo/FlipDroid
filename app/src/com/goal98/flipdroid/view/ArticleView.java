@@ -1,14 +1,12 @@
 package com.goal98.flipdroid.view;
 
 import android.content.Context;
-import android.text.method.HideReturnsTransformationMethod;
 import android.util.AttributeSet;
-import android.util.Xml;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.model.Article;
-import org.xmlpull.v1.XmlPullParser;
 
 public class ArticleView extends TableLayout {
 
@@ -31,7 +29,7 @@ public class ArticleView extends TableLayout {
 
         if (contentView == null) {
             contentView = new TextView(getContext());
-            contentView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT));
+            contentView.setBackgroundColor(R.color.gray);
         }
         contentView.setText(article.getContent());
 
