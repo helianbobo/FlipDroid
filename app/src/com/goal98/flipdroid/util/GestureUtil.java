@@ -4,12 +4,15 @@ import android.view.MotionEvent;
 
 public class GestureUtil {
 
+    public static final int minDelta = 5;
+
     public static boolean flipRight(MotionEvent event){
 
         boolean result = false;
 
         if(event.getAction() == MotionEvent.ACTION_MOVE){
-            result =  event.getX() - event.getHistoricalX(0) > 5;
+
+            result =  event.getX() - event.getHistoricalX(0) > minDelta;
         }
 
         return result;
@@ -21,7 +24,7 @@ public class GestureUtil {
         boolean result = false;
 
         if(event.getAction() == MotionEvent.ACTION_MOVE){
-            result =  event.getHistoricalX(0) - event.getX()  > 5;
+            result =  event.getHistoricalX(0) - event.getX()  > minDelta;
         }
 
         return result;

@@ -5,6 +5,7 @@
 
     <com.goal98.flipdroid.view.PageView android:id="@+id/currentPage"
                                         android:orientation="vertical"
+                                        android:background="@color/white"
                                         android:layout_height="fill_parent"
                                         android:layout_width="fill_parent">
 
@@ -24,6 +25,7 @@
     <com.goal98.flipdroid.view.PageView android:id="@+id/nextPage"
                                         android:visibility="gone"
                                         android:orientation="vertical"
+                                        android:background="@color/white"
                                         android:layout_height="fill_parent"
                                         android:layout_width="fill_parent">
 

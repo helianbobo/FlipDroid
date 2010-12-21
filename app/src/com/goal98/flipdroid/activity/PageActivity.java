@@ -23,6 +23,7 @@ public class PageActivity extends Activity {
 
     static final private int CONFIG_ID = Menu.FIRST;
 
+    private boolean animationStarted = false;
 
     private ViewGroup container;
     private View current;
@@ -86,11 +87,11 @@ public class PageActivity extends Activity {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
-                if (event.getHistorySize() > 0) {
-                    if(GestureUtil.flipRight(event))
-                        flipPage(true);
-                    else if(GestureUtil.flipLeft(event))
+                if (event.getHistorySize() > 0 && !animationStarted) {
+                    if (GestureUtil.flipRight(event))
                         flipPage(false);
+                    else if (GestureUtil.flipLeft(event))
+                        flipPage(true);
                 }
                 break;
             default:
@@ -100,29 +101,24 @@ public class PageActivity extends Activity {
 
     }
 
-    private void flipPage(boolean forward) {
-        Animation rotation = buildAnimation();
-        rotation.setAnimationListener(new Animation.AnimationListener() {
-            public void onAnimationStart(Animation animation) {
+    private void flipPage(final boolean forward) {
+        next.setVisibility(View.VISIBLE);
 
-            }
+        Animation rotation = buildAnimation(forward);
 
-            public void onAnimationEnd(Animation animation) {
-                switchViews();
-            }
+        if (forward){
+            current.startAnimation(rotation);
+        } else {
+            next.startAnimation(rotation);
+        }
 
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        current.startAnimation(rotation);
+        animationStarted = true;
     }
 
-    private Animation buildAnimation() {
+    private Animation buildAnimation(final boolean forward) {
         final float centerY = container.getHeight() / 2.0f;
-        final float fromDegrees = 0;
-        final float toDegrees = -90;
+        final float fromDegrees = forward ? 0 : -90;
+        final float toDegrees = forward ? -90 : 0;
         final float centerX = 0;
         float depthZ = 0.0f;
         boolean reverse = true;
@@ -132,6 +128,27 @@ public class PageActivity extends Activity {
         rotation.setDuration(duration);
         rotation.setFillAfter(false);
         rotation.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        rotation.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            public void onAnimationEnd(Animation animation) {
+                current.setVisibility(View.GONE);
+                animationStarted = false;
+
+                switchViews(forward);
+
+                current.setAnimation(null);
+                next.setAnimation(null);
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
         return rotation;
     }
 
@@ -147,15 +164,10 @@ public class PageActivity extends Activity {
         return Integer.parseInt(preferences.getString(key, "3"));
     }
 
-    private void switchViews() {
+    private void switchViews(boolean forward) {
         View tmp = current;
         current = next;
         next = tmp;
-
-        next.setVisibility(View.GONE);
-        current.setVisibility(View.VISIBLE);
-
-
     }
 
 
