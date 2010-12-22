@@ -94,6 +94,15 @@ public class PageActivity extends Activity {
                         flipPage(true);
                 }
                 break;
+            case MotionEvent.ACTION_UP:
+                float middle = container.getWidth() / 2.0f;
+                boolean rightHalf = event.getX() > middle;
+                if (rightHalf) {
+                    flipPage(true);
+                } else {
+                    flipPage(false);
+                }
+                break;
             default:
                 break;
         }
@@ -102,13 +111,20 @@ public class PageActivity extends Activity {
     }
 
     private void flipPage(final boolean forward) {
+
+        container.removeAllViews();
+
         next.setVisibility(View.VISIBLE);
 
         Animation rotation = buildAnimation(forward);
 
-        if (forward){
+        if (forward) {
+            container.addView(next);
+            container.addView(current);
             current.startAnimation(rotation);
         } else {
+            container.addView(current);
+            container.addView(next);
             next.startAnimation(rotation);
         }
 

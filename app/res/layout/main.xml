@@ -7,40 +7,14 @@
                                         android:orientation="vertical"
                                         android:background="@color/white"
                                         android:layout_height="fill_parent"
-                                        android:layout_width="fill_parent">
-
-       <!-- <com.goal98.flipdroid.view.ArticleView
-                android:layout_height="fill_parent"
-                android:layout_width="fill_parent">
-
-            <TextView
-                    style="@style/Article"
-                    android:text="@string/title1"
-                    android:padding="3dip"
-                    android:background="#999"/>
-        </com.goal98.flipdroid.view.ArticleView>-->
-
-    </com.goal98.flipdroid.view.PageView>
+                                        android:layout_width="fill_parent"/>
 
     <com.goal98.flipdroid.view.PageView android:id="@+id/nextPage"
                                         android:visibility="gone"
                                         android:orientation="vertical"
                                         android:background="@color/white"
                                         android:layout_height="fill_parent"
-                                        android:layout_width="fill_parent">
-
-        <!--<com.goal98.flipdroid.view.ArticleView
-                android:layout_height="fill_parent"
-                android:layout_width="fill_parent">
-
-            <TextView
-                    style="@style/Article"
-                    android:text="@string/title2"
-                    android:padding="3dip"
-                    android:background="#FFF"/>
-        </com.goal98.flipdroid.view.ArticleView>-->
-
-    </com.goal98.flipdroid.view.PageView>
+                                        android:layout_width="fill_parent"/>
 
 
 </FrameLayout>

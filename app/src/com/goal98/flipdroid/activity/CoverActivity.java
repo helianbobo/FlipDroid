@@ -25,6 +25,12 @@ public class CoverActivity extends Activity {
                     if (GestureUtil.flipRight(event))
                         goToNextActivity();
                 }
+                break;
+            case MotionEvent.ACTION_UP:
+                if(!goingToSleep){
+                    goToNextActivity();
+                }
+                break;
 
         }
         return true;
