@@ -34,6 +34,8 @@ public class PageActivity extends Activity {
 
     private SimplePagingStrategy simplePagingStrategy;
 
+    private int currentPage = 0;
+
     /**
      * Called when the activity is first created.
      */
@@ -50,13 +52,14 @@ public class PageActivity extends Activity {
         next = findViewById(R.id.nextPage);
 
         repo = new ContentRepo();
-        String userId = "13774256612";
-        String password = "541116";
+
         String sourceUserId = null;
         if ("weibo".equals(repoStr)) {
             sourceUserId = null;
-            repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceUserId));
+            repo.setArticleSource(new SinaArticleSource(false, null, null, sourceUserId));
         } else if ("helianbobo".equals(repoStr)) {
+            String userId = "13774256612";
+            String password = "541116";
             sourceUserId = "1702755335";
             repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceUserId));
         } else if ("fake".equals(repoStr)) {
@@ -71,8 +74,8 @@ public class PageActivity extends Activity {
     }
 
     private void initPageViews() {
-        ((PageView) current).setPage(repo.getPage(0));
-        ((PageView) next).setPage(repo.getPage(1));
+        ((PageView) current).setPage(repo.getPage(currentPage));
+        ((PageView) next).setPage(repo.getPage(currentPage+1));
     }
 
     @Override
@@ -112,23 +115,34 @@ public class PageActivity extends Activity {
 
     private void flipPage(final boolean forward) {
 
-        container.removeAllViews();
+        if (forward)
+            currentPage++;
+        else
+            currentPage--;
 
-        next.setVisibility(View.VISIBLE);
+        if (currentPage >= 0) {
 
-        Animation rotation = buildAnimation(forward);
+            container.removeAllViews();
 
-        if (forward) {
-            container.addView(next);
-            container.addView(current);
-            current.startAnimation(rotation);
-        } else {
-            container.addView(current);
-            container.addView(next);
-            next.startAnimation(rotation);
+            next.setVisibility(View.VISIBLE);
+
+            Animation rotation = buildAnimation(forward);
+
+            if (forward) {
+                container.addView(next);
+                container.addView(current);
+                current.startAnimation(rotation);
+            } else {
+                container.addView(current);
+                container.addView(next);
+                next.startAnimation(rotation);
+            }
+
+            animationStarted = true;
+        }else {
+            startActivity(new Intent(this, IndexActivity.class));
+            overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
         }
-
-        animationStarted = true;
     }
 
     private Animation buildAnimation(final boolean forward) {
@@ -170,13 +184,11 @@ public class PageActivity extends Activity {
 
     private long getFlipDurationFromPreference() {
         String key = getString(R.string.key_anim_flip_duration_preference);
-
         return Long.parseLong(preferences.getString(key, "500"));
     }
 
     private int getArticlePerPageFromPreference() {
         String key = getString(R.string.key_article_per_page_preference);
-
         return Integer.parseInt(preferences.getString(key, "3"));
     }
 
