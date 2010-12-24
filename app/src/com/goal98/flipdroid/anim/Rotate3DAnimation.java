@@ -10,12 +10,12 @@ import android.view.animation.Transformation;
  * This animation also adds a translation on the Z axis (depth) to improve the effect.
  */
 public class Rotate3DAnimation extends Animation {
-    private final float mFromDegrees;
-    private final float mToDegrees;
-    private final float mCenterX;
-    private final float mCenterY;
-    private final float mDepthZ;
-    private final boolean mReverse;
+    private float mFromDegrees;
+    private float mToDegrees;
+    private float mCenterX;
+    private float mCenterY;
+    private float mDepthZ;
+    private boolean mReverse;
     private Camera mCamera;
 
     /**
@@ -72,5 +72,29 @@ public class Rotate3DAnimation extends Animation {
 
         matrix.preTranslate(-centerX, -centerY);
         matrix.postTranslate(centerX, centerY);
+    }
+
+    public void setmCenterX(float mCenterX) {
+        this.mCenterX = mCenterX;
+    }
+
+    public void setmCenterY(float mCenterY) {
+        this.mCenterY = mCenterY;
+    }
+
+    public void setmDepthZ(float mDepthZ) {
+        this.mDepthZ = mDepthZ;
+    }
+
+    public void setmFromDegrees(float mFromDegrees) {
+        this.mFromDegrees = mFromDegrees;
+    }
+
+    public void setmReverse(boolean mReverse) {
+        this.mReverse = mReverse;
+    }
+
+    public void setmToDegrees(float mToDegrees) {
+        this.mToDegrees = mToDegrees;
     }
 }

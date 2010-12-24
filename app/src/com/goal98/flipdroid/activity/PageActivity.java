@@ -11,6 +11,7 @@ import android.view.*;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.anim.AnimationFactory;
 import com.goal98.flipdroid.anim.Rotate3DAnimation;
 import com.goal98.flipdroid.model.ContentRepo;
 import com.goal98.flipdroid.model.FakeArticleSource;
@@ -147,17 +148,11 @@ public class PageActivity extends Activity {
 
     private Animation buildAnimation(final boolean forward) {
         final float centerY = container.getHeight() / 2.0f;
-        final float fromDegrees = forward ? 0 : -90;
-        final float toDegrees = forward ? -90 : 0;
         final float centerX = 0;
-        float depthZ = 0.0f;
-        boolean reverse = true;
         long duration = getFlipDurationFromPreference();
 
-        Rotate3DAnimation rotation = new Rotate3DAnimation(fromDegrees, toDegrees, centerX, centerY, depthZ, reverse);
-        rotation.setDuration(duration);
-        rotation.setFillAfter(false);
-        rotation.setInterpolator(new AccelerateDecelerateInterpolator());
+        AnimationFactory animationFactory = new AnimationFactory();
+        Animation rotation = animationFactory.buildFlipAnimation(forward, duration, centerX, centerY);
 
         rotation.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
