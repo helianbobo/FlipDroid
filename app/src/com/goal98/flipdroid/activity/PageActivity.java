@@ -56,13 +56,14 @@ public class PageActivity extends Activity {
 
         repo = new ContentRepo();
 
+        String userId = "13774256612";
+        String password = "541116";
         String sourceUserId = null;
+
         if ("weibo".equals(repoStr)) {
             sourceUserId = null;
-            repo.setArticleSource(new SinaArticleSource(false, null, null, sourceUserId));
+            repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceUserId));
         } else if ("helianbobo".equals(repoStr)) {
-            String userId = "13774256612";
-            String password = "541116";
             sourceUserId = "1702755335";
             repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceUserId));
         } else if ("fake".equals(repoStr)) {
@@ -79,7 +80,7 @@ public class PageActivity extends Activity {
     private void initPageViews() {
         try {
             ((PageView) current).setPage(repo.getPage(currentPage));
-            ((PageView) next).setPage(repo.getPage(currentPage+1));
+            ((PageView) next).setPage(repo.getPage(currentPage + 1));
         } catch (NoMorePageException e) {
             Log.e(this.getClass().getName(), e.getMessage(), e);
         }
@@ -142,7 +143,7 @@ public class PageActivity extends Activity {
 
             next.setVisibility(View.VISIBLE);
 
-            ((PageView)next).setPage(page);
+            ((PageView) next).setPage(page);
 
             Animation rotation = buildAnimation(forward);
 
@@ -157,7 +158,7 @@ public class PageActivity extends Activity {
             }
 
             animationStarted = true;
-        }else {
+        } else {
             startActivity(new Intent(this, IndexActivity.class));
             overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
         }

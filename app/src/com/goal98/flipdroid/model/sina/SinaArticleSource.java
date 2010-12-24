@@ -57,10 +57,12 @@ public class SinaArticleSource extends AbstractArticleSource {
     private void loadArticle() {
         try {
             List<Status> statuses;
+            Paging paging = new Paging(pageLoaded + 1);
             if (sourceUserId == null) {
-                statuses = weibo.getPublicTimeline();
-            } else
-                statuses = weibo.getUserTimeline(sourceUserId, new Paging(pageLoaded+1));
+                statuses = weibo.getHomeTimeline(paging);
+            } else {
+                statuses = weibo.getUserTimeline(sourceUserId, paging);
+            }
             for (int i = 0; i < statuses.size(); i++) {
                 Status status = statuses.get(i);
                 Article article = new Article();
