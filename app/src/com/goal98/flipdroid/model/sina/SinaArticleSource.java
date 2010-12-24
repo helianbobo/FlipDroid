@@ -1,17 +1,14 @@
 package com.goal98.flipdroid.model.sina;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.util.Log;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.model.AbstractArticleSource;
 import com.goal98.flipdroid.model.Article;
+import weibo4j.Paging;
 import weibo4j.Status;
 import weibo4j.Weibo;
 import weibo4j.WeiboException;
 
-import java.net.URL;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +24,10 @@ public class SinaArticleSource extends AbstractArticleSource {
     private String basicPassword;
 
     private String sourceUserId;
+
+    private int pageLoaded = 0;
+
+    private List<Article> articleList = new LinkedList<Article>();
 
     public SinaArticleSource(boolean useOauth, String param1, String param2, String sourceUserId) {
 
@@ -46,32 +47,35 @@ public class SinaArticleSource extends AbstractArticleSource {
         this.sourceUserId = sourceUserId;
 
         initWeibo();
+        loadArticle();
     }
 
     public List<Article> getArticleList() {
+        return articleList;
+    }
 
-        List<Article> result = new LinkedList<Article>();
-
+    private void loadArticle() {
         try {
             List<Status> statuses;
             if (sourceUserId == null) {
                 statuses = weibo.getPublicTimeline();
             } else
-                statuses = weibo.getUserTimeline(sourceUserId);
+                statuses = weibo.getUserTimeline(sourceUserId, new Paging(pageLoaded+1));
             for (int i = 0; i < statuses.size(); i++) {
                 Status status = statuses.get(i);
                 Article article = new Article();
                 article.setContent(status.getText());
                 article.setTitle(status.getUser().getName());
                 article.setImageUrl(status.getUser().getProfileImageURL());
-                result.add(article);
+                articleList.add(article);
             }
+
+            pageLoaded++;
 
             this.lastModified = new Date();
         } catch (WeiboException e) {
             Log.e(this.getClass().getName(), e.getMessage(), e);
         }
-        return result;
     }
 
     private void initWeibo() {
@@ -82,5 +86,9 @@ public class SinaArticleSource extends AbstractArticleSource {
             weibo.setUserId(basicUser);
             weibo.setPassword(basicPassword);
         }
+    }
+
+    public void loadMore() {
+        loadArticle();
     }
 }

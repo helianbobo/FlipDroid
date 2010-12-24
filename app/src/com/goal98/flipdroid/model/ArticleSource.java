@@ -10,4 +10,6 @@ public interface ArticleSource {
 
     public List<Article> getArticleList();
 
+    public void loadMore();
+
 }
