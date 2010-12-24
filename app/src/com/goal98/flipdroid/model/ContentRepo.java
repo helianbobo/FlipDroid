@@ -1,6 +1,8 @@
 package com.goal98.flipdroid.model;
 
 
+import com.goal98.flipdroid.exception.NoMorePageException;
+
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,7 +35,10 @@ public class ContentRepo {
         this.pagingStretagy = pagingStretagy;
     }
 
-    public Page getPage(int pageNo) {
+    public Page getPage(int pageNo) throws NoMorePageException{
+
+        if(pageNo >= pageList.size())
+            throw new NoMorePageException();
 
         if (articleSourceLastModified == null || articleSource.lastModified().after(articleSourceLastModified)) {
             refresh();

@@ -13,8 +13,10 @@ import android.view.animation.Animation;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.anim.AnimationFactory;
 import com.goal98.flipdroid.anim.Rotate3DAnimation;
+import com.goal98.flipdroid.exception.NoMorePageException;
 import com.goal98.flipdroid.model.ContentRepo;
 import com.goal98.flipdroid.model.FakeArticleSource;
+import com.goal98.flipdroid.model.Page;
 import com.goal98.flipdroid.model.SimplePagingStrategy;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.util.GestureUtil;
@@ -75,8 +77,12 @@ public class PageActivity extends Activity {
     }
 
     private void initPageViews() {
-        ((PageView) current).setPage(repo.getPage(currentPage));
-        ((PageView) next).setPage(repo.getPage(currentPage+1));
+        try {
+            ((PageView) current).setPage(repo.getPage(currentPage));
+            ((PageView) next).setPage(repo.getPage(currentPage+1));
+        } catch (NoMorePageException e) {
+            Log.e(this.getClass().getName(), e.getMessage(), e);
+        }
     }
 
     @Override
@@ -123,9 +129,20 @@ public class PageActivity extends Activity {
 
         if (currentPage >= 0) {
 
+            Page page = null;
+            try {
+                page = repo.getPage(currentPage);
+            } catch (NoMorePageException e) {
+                currentPage--;
+                return;
+            }
+
+
             container.removeAllViews();
 
             next.setVisibility(View.VISIBLE);
+
+            ((PageView)next).setPage(page);
 
             Animation rotation = buildAnimation(forward);
 

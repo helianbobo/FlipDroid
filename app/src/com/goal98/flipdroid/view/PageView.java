@@ -24,6 +24,9 @@ public class PageView extends LinearLayout {
     }
 
     private void setArticleList() {
+
+        removeAllViews();
+
         if (page != null) {
             List<Article> articleList = page.getArticleList();
             if (articleList != null) {
