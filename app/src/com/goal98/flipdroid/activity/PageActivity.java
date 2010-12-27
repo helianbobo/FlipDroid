@@ -81,7 +81,6 @@ public class PageActivity extends Activity {
     private void initPageViews() {
         try {
             ((PageView) current).setPage(repo.getPage(currentPage));
-            ((PageView) next).setPage(repo.getPage(currentPage + 1));
         } catch (NoMorePageException e) {
             Log.e(this.getClass().getName(), e.getMessage(), e);
         }
@@ -207,7 +206,7 @@ public class PageActivity extends Activity {
 
     private int getArticlePerPageFromPreference() {
         String key = getString(R.string.key_article_per_page_preference);
-        return Integer.parseInt(preferences.getString(key, "5"));
+        return Integer.parseInt(preferences.getString(key, "5f"));
     }
 
     private void switchViews(boolean forward) {

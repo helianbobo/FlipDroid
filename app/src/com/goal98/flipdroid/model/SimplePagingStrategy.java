@@ -6,7 +6,7 @@ import java.util.List;
 
 public class SimplePagingStrategy implements PagingStrategy {
 
-    private int articlePerPage = 3;
+    private int articlePerPage = 5;
 
     public SimplePagingStrategy() {
     }
@@ -25,7 +25,8 @@ public class SimplePagingStrategy implements PagingStrategy {
 
     public List<Page> doPaging(List<Article> articleList) {
         List<Page> result = new LinkedList<Page>();
-        int numberOfPages = (int) Math.floor(articleList.size() / articlePerPage) + 1;
+        int numberOfPages = (int) Math.floor(articleList.size() / articlePerPage)
+                + (articleList.size() % articlePerPage == 0?0:1);
 
         Iterator<Article> iterator = articleList.iterator();
 
