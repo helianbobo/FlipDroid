@@ -10,11 +10,9 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.*;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.anim.AnimationFactory;
-import com.goal98.flipdroid.anim.Rotate3DAnimation;
 import com.goal98.flipdroid.exception.NoMorePageException;
 import com.goal98.flipdroid.model.ContentRepo;
 import com.goal98.flipdroid.model.FakeArticleSource;
@@ -77,10 +75,7 @@ public class PageActivity extends Activity {
 
         }
         simplePagingStrategy = new SimplePagingStrategy();
-        repo.setPagingStretagy(simplePagingStrategy);
-
-        new FetchRepoTask().execute();
-
+        repo.setPagingStrategy(simplePagingStrategy);
     }
 
     private void initPageViews() {
@@ -97,6 +92,8 @@ public class PageActivity extends Activity {
         super.onStart();
         preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         simplePagingStrategy.setArticlePerPage(getArticlePerPageFromPreference());
+
+        new FetchRepoTask().execute();
     }
 
     @Override
@@ -210,7 +207,7 @@ public class PageActivity extends Activity {
 
     private int getArticlePerPageFromPreference() {
         String key = getString(R.string.key_article_per_page_preference);
-        return Integer.parseInt(preferences.getString(key, "3"));
+        return Integer.parseInt(preferences.getString(key, "5"));
     }
 
     private void switchViews(boolean forward) {

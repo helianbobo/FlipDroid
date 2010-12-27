@@ -12,7 +12,7 @@ public class ContentRepo {
 
     private ArticleSource articleSource;
     private Date articleSourceLastModified;
-    private PagingStretagy pagingStretagy;
+    private PagingStrategy pagingStrategy;
 
     private List<Page> pageList;
 
@@ -28,12 +28,12 @@ public class ContentRepo {
         this.articleSource = articleSource;
     }
 
-    public PagingStretagy getPagingStretagy() {
-        return pagingStretagy;
+    public PagingStrategy getPagingStrategy() {
+        return pagingStrategy;
     }
 
-    public void setPagingStretagy(PagingStretagy pagingStretagy) {
-        this.pagingStretagy = pagingStretagy;
+    public void setPagingStrategy(PagingStrategy pagingStrategy) {
+        this.pagingStrategy = pagingStrategy;
     }
 
     public Page getPage(int pageNo) throws NoMorePageException{
@@ -57,7 +57,7 @@ public class ContentRepo {
     }
 
     public void refresh() {
-        pageList = pagingStretagy.doPaging(articleSource.getArticleList());
+        pageList = pagingStrategy.doPaging(articleSource.getArticleList());
         articleSourceLastModified = articleSource.lastModified();
     }
 

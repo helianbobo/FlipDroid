@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SimplePagingStrategy implements PagingStretagy {
+public class SimplePagingStrategy implements PagingStrategy {
 
     private int articlePerPage = 3;
 

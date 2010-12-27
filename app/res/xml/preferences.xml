@@ -21,14 +21,14 @@
 
     <EditTextPreference
             android:key="@string/key_anim_flip_duration_preference"
-            android:defaultValue="500"
+            android:defaultValue="700"
             android:title="@string/title_anim_flip_duration_preference"
             android:summary="@string/summary_anim_flip_duration_preference"
             android:dialogTitle="@string/dialog_title_anim_flip_duration_preference" />
 
     <EditTextPreference
             android:key="@string/key_article_per_page_preference"
-            android:defaultValue="3"
+            android:defaultValue="5"
             android:title="@string/title_article_per_page_preference"
             android:summary="@string/summary_article_per_page_preference"
             android:dialogTitle="@string/dialog_title_article_per_page_preference" />
