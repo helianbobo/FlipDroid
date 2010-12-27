@@ -206,7 +206,7 @@ public class PageActivity extends Activity {
 
     private int getArticlePerPageFromPreference() {
         String key = getString(R.string.key_article_per_page_preference);
-        return Integer.parseInt(preferences.getString(key, "5f"));
+        return Integer.parseInt(preferences.getString(key, "5"));
     }
 
     private void switchViews(boolean forward) {
