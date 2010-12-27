@@ -130,7 +130,7 @@ public class PageActivity extends Activity {
         if (forward)
             currentPage++;
         else
-            currentPage--;
+            decreasePageNo();
 
         if (currentPage >= 0) {
 
@@ -138,7 +138,7 @@ public class PageActivity extends Activity {
             try {
                 page = repo.getPage(currentPage);
             } catch (NoMorePageException e) {
-                currentPage--;
+                decreasePageNo();
                 return;
             }
 
@@ -163,9 +163,14 @@ public class PageActivity extends Activity {
 
             animationStarted = true;
         } else {
+            currentPage++;
             startActivity(new Intent(this, IndexActivity.class));
             overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
         }
+    }
+
+    private void decreasePageNo() {
+        currentPage--;
     }
 
     private Animation buildAnimation(final boolean forward) {
