@@ -1,11 +1,13 @@
 package com.goal98.flipdroid.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.*;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -37,6 +39,7 @@ public class PageActivity extends Activity {
 
     private SimplePagingStrategy simplePagingStrategy;
 
+    private String deviceId;
     private int currentPage = 0;
 
     /**
@@ -45,6 +48,9 @@ public class PageActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        TelephonyManager tManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        deviceId = tManager.getDeviceId();
 
         String repoStr = (String) getIntent().getExtras().get("repo");
 
@@ -106,12 +112,14 @@ public class PageActivity extends Activity {
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                float middle = container.getWidth() / 2.0f;
-                boolean rightHalf = event.getX() > middle;
-                if (rightHalf) {
-                    flipPage(true);
-                } else {
-                    flipPage(false);
+                if (deviceId.startsWith("0000")) {
+                    float middle = container.getWidth() / 2.0f;
+                    boolean rightHalf = event.getX() > middle;
+                    if (rightHalf) {
+                        flipPage(true);
+                    } else {
+                        flipPage(false);
+                    }
                 }
                 break;
             default:
