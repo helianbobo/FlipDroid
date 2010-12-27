@@ -36,20 +36,10 @@ public class ContentRepo {
         this.pagingStrategy = pagingStrategy;
     }
 
-    public Page getPage(int pageNo) throws NoMorePageException{
+    public Page getPage(int pageNo) throws NoMorePageException {
 
-        if(pageNo >= pageList.size()){
-            try {
-                articleSource.loadMore();
-            } catch (Exception e) {
-                Log.e(this.getClass().getName(), e.getMessage(), e);
-                throw new NoMorePageException();
-            }
-
-        }
-
-        if (articleSourceLastModified == null || articleSource.lastModified().after(articleSourceLastModified)) {
-            refresh();
+        if (pageNo >= pageList.size()) {
+            throw new NoMorePageException();
         }
 
         return pageList.get(pageNo);
@@ -57,8 +47,17 @@ public class ContentRepo {
     }
 
     public void refresh() {
-        pageList = pagingStrategy.doPaging(articleSource.getArticleList());
-        articleSourceLastModified = articleSource.lastModified();
+        try {
+            articleSource.loadMore();
+        } catch (Exception e) {
+            Log.e(this.getClass().getName(), e.getMessage(), e);
+        }
+
+        if (articleSourceLastModified == null || articleSource.lastModified().after(articleSourceLastModified)) {
+            pageList = pagingStrategy.doPaging(articleSource.getArticleList());
+            articleSourceLastModified = articleSource.lastModified();
+        }
+
     }
 
 }
