@@ -36,7 +36,8 @@ public class CoverActivity extends Activity {
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                if (!goingToSleep && deviceId.startsWith("0000")) {
+                boolean emulator = deviceId != null && deviceId.startsWith("0000");
+                if (!goingToSleep && emulator) {
                     goToNextActivity();
                 }
                 break;

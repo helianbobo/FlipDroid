@@ -140,7 +140,6 @@ public class PageActivity extends Activity {
                 currentPage = repo.getPage(currentPageIndex + 1);
                 processCurrentPage();
             } catch (NoMorePageException e) {
-                setProgressBarIndeterminateVisibility(true);
                 new FetchRepoTask().execute(currentPageIndex + 1);
             }
 
@@ -237,25 +236,28 @@ public class PageActivity extends Activity {
     }
 
     private class FetchRepoTask extends AsyncTask<Integer, Void, Integer> {
+
+        @Override
+        protected void onPreExecute() {
+            setProgressBarIndeterminateVisibility(true);
+        }
+
         protected Integer doInBackground(Integer... integers) {
 
             repo.refresh();
-            try {
-                currentPage = repo.getPage(integers[0]);
-            } catch (NoMorePageException e1) {
-                noMorePage();
-            }
-
             return integers[0];
         }
 
         protected void onPostExecute(Integer pageIndex) {
+
+            try {
+                currentPage = repo.getPage(pageIndex);
+            } catch (NoMorePageException e1) {
+                noMorePage();
+            }
+
             processCurrentPage();
-            new Handler().post(new Runnable() {
-                public void run() {
-                    setProgressBarIndeterminateVisibility(false);
-                }
-            });
+            setProgressBarIndeterminateVisibility(false);
         }
 
 
