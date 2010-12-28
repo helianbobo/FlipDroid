@@ -134,18 +134,19 @@ public class PageActivity extends Activity {
         if (!forward)
             decreasePageNo();
 
-        if (currentPageIndex + 1 >= 0) {
+        int nextPageIndex = forward?currentPageIndex + 1:currentPageIndex;
+        if (nextPageIndex >= 0) {
 
             try {
-                currentPage = repo.getPage(currentPageIndex + 1);
+                currentPage = repo.getPage(nextPageIndex);
                 processCurrentPage();
             } catch (NoMorePageException e) {
-                new FetchRepoTask().execute(currentPageIndex + 1);
+                new FetchRepoTask().execute(nextPageIndex);
             }
 
 
         } else {
-            currentPageIndex++;
+//            currentPageIndex++;
             startActivity(new Intent(this, IndexActivity.class));
             overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
         }
