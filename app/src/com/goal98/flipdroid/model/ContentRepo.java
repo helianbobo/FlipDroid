@@ -47,11 +47,8 @@ public class ContentRepo {
     }
 
     public void refresh() {
-        try {
-            articleSource.loadMore();
-        } catch (Exception e) {
-            Log.e(this.getClass().getName(), e.getMessage(), e);
-        }
+
+        articleSource.loadMore();
 
         if (articleSourceLastModified == null || articleSource.lastModified().after(articleSourceLastModified)) {
             pageList = pagingStrategy.doPaging(articleSource.getArticleList());

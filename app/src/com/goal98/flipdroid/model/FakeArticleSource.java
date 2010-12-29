@@ -19,6 +19,8 @@ public class FakeArticleSource extends AbstractArticleSource {
 
     private List<Article> list = new LinkedList<Article>();
 
+    private int count = 1;
+
 
     public FakeArticleSource() {
 
@@ -42,7 +44,7 @@ public class FakeArticleSource extends AbstractArticleSource {
 
     private Article generateFakeArticle() {
 
-        String title = "Title";
+        String title = "Title " + count++;
         String content = generateRandomText(140);
 
 

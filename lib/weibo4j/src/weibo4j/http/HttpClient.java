@@ -98,7 +98,7 @@ public class HttpClient implements java.io.Serializable {
     private OAuthToken oauthToken = null;
     private String token = null;
     
-    static {
+    /*static {
         try {
             String versionStr = System.getProperty("java.specification.version");
             if (null != versionStr) {
@@ -107,7 +107,7 @@ public class HttpClient implements java.io.Serializable {
         } catch (AccessControlException ace) {
             isJDK14orEarlier = true;
         }
-    }
+    }*/
 
     public HttpClient(String userId, String password) {
         this();

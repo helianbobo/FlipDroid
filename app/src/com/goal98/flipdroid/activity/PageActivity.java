@@ -1,23 +1,23 @@
 package com.goal98.flipdroid.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.*;
 import android.view.animation.Animation;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.anim.AnimationFactory;
 import com.goal98.flipdroid.exception.NoMorePageException;
+import com.goal98.flipdroid.exception.NoNetworkException;
 import com.goal98.flipdroid.model.ContentRepo;
 import com.goal98.flipdroid.model.FakeArticleSource;
 import com.goal98.flipdroid.model.Page;
@@ -30,7 +30,7 @@ public class PageActivity extends Activity {
 
     static final private int CONFIG_ID = Menu.FIRST;
 
-    private boolean animationStarted = false;
+    private boolean flipStarted = false;
     private boolean mToggleIndeterminate = false;
     private boolean forward = false;
 
@@ -70,6 +70,9 @@ public class PageActivity extends Activity {
 
         repo = new ContentRepo();
 
+        simplePagingStrategy = new SimplePagingStrategy();
+        repo.setPagingStrategy(simplePagingStrategy);
+
         String userId = "13774256612";
         String password = "541116";
         String sourceUserId = null;
@@ -84,8 +87,29 @@ public class PageActivity extends Activity {
             repo.setArticleSource(new FakeArticleSource());
 
         }
-        simplePagingStrategy = new SimplePagingStrategy();
-        repo.setPagingStrategy(simplePagingStrategy);
+
+    }
+
+    private void handleException(NoNetworkException e) {
+        Bundle exceptionBundle = new Bundle();
+        exceptionBundle.putString("msg", e.getMessage());
+        showDialog(EXCEPTION_DIALOG_KEY, exceptionBundle);
+    }
+
+    private static final int EXCEPTION_DIALOG_KEY = 1;
+
+    @Override
+    protected Dialog onCreateDialog(int id, Bundle bundle) {
+        switch (id) {
+            case EXCEPTION_DIALOG_KEY: {
+                String msg = bundle.getString("msg");
+                return new AlertDialog.Builder(this).setMessage(msg).setPositiveButton("OK", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                }).create();
+            }
+        }
+        return null;
     }
 
     @Override
@@ -102,7 +126,7 @@ public class PageActivity extends Activity {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
-                if (event.getHistorySize() > 0 && !animationStarted) {
+                if (event.getHistorySize() > 0 && !flipStarted) {
                     if (GestureUtil.flipRight(event))
                         flipPage(false);
                     else if (GestureUtil.flipLeft(event))
@@ -128,13 +152,14 @@ public class PageActivity extends Activity {
     }
 
     private void flipPage(final boolean forward) {
+        flipStarted = true;
 
         this.forward = forward;
 
         if (!forward)
             decreasePageNo();
 
-        int nextPageIndex = forward?currentPageIndex + 1:currentPageIndex;
+        int nextPageIndex = forward ? currentPageIndex + 1 : currentPageIndex;
         if (nextPageIndex >= 0) {
 
             try {
@@ -171,7 +196,7 @@ public class PageActivity extends Activity {
 
             public void onAnimationEnd(Animation animation) {
                 current.setVisibility(View.GONE);
-                animationStarted = false;
+                flipStarted = false;
 
                 switchViews(forward);
 
@@ -233,10 +258,11 @@ public class PageActivity extends Activity {
 
     private void noMorePage() {
         //TODO: Popup "No More Page" notification
+        flipStarted = false;
 
     }
 
-    private class FetchRepoTask extends AsyncTask<Integer, Void, Integer> {
+    private class FetchRepoTask extends AsyncTask<Integer, NoNetworkException, Integer> {
 
         @Override
         protected void onPreExecute() {
@@ -245,7 +271,11 @@ public class PageActivity extends Activity {
 
         protected Integer doInBackground(Integer... integers) {
 
-            repo.refresh();
+            try {
+                repo.refresh();
+            } catch (NoNetworkException e) {
+                publishProgress(e);
+            }
             return integers[0];
         }
 
@@ -261,8 +291,13 @@ public class PageActivity extends Activity {
             setProgressBarIndeterminateVisibility(false);
         }
 
-
+        @Override
+        protected void onProgressUpdate(NoNetworkException... exceptions) {
+            if (exceptions != null && exceptions.length > 0)
+                handleException(exceptions[0]);
+        }
     }
+
 
     private void processCurrentPage() {
         container.removeAllViews();
@@ -280,13 +315,10 @@ public class PageActivity extends Activity {
                 container.addView(current);
                 current.startAnimation(rotation);
             } else {
-                decreasePageNo();
                 container.addView(current);
                 container.addView(next);
                 next.startAnimation(rotation);
             }
-
-            animationStarted = true;
         }
     }
 

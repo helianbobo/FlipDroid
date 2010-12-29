@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.model.sina;
 
 import android.util.Log;
+import com.goal98.flipdroid.exception.NoNetworkException;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.model.AbstractArticleSource;
 import com.goal98.flipdroid.model.Article;
@@ -45,9 +46,6 @@ public class SinaArticleSource extends AbstractArticleSource {
             basicPassword = param2;
         }
         this.sourceUserId = sourceUserId;
-
-        initWeibo();
-        loadArticle();
     }
 
     public List<Article> getArticleList() {
@@ -55,6 +53,10 @@ public class SinaArticleSource extends AbstractArticleSource {
     }
 
     private void loadArticle() {
+
+        if(weibo == null)
+            initWeibo();
+
         try {
             List<Status> statuses;
             Paging paging = new Paging(pageLoaded + 1);
@@ -77,11 +79,13 @@ public class SinaArticleSource extends AbstractArticleSource {
             this.lastModified = new Date();
         } catch (WeiboException e) {
             Log.e(this.getClass().getName(), e.getMessage(), e);
+            throw new NoNetworkException(e);
         }
     }
 
     private void initWeibo() {
         weibo = new Weibo();
+        weibo.setHttpConnectionTimeout(5000);
         if (oauthToken != null) {
             weibo.setToken(oauthToken, oauthTokenSecret);
         } else {

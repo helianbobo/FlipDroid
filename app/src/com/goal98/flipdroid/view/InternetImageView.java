@@ -70,7 +70,7 @@ public class InternetImageView extends ImageView {
                     conn.disconnect();
                 }
             } catch (IOException e1) {
-                Log.e(this.getClass().getName(), e1.getMessage(), e1);
+                Log.e(this.getClass().getName(), e1.getMessage());
             }
             return bitmap;
         } else {
@@ -94,7 +94,7 @@ public class InternetImageView extends ImageView {
             }
 
         } catch (Exception ex) {
-            Log.e(this.getClass().getName(), ex.getMessage(), ex);
+            Log.e(this.getClass().getName(), ex.getMessage());
         }
         return inputStream;
     }
@@ -110,7 +110,8 @@ public class InternetImageView extends ImageView {
         }
 
         protected void onPostExecute(Bitmap bitmap) {
-            setImageBitmap(bitmap);
+            if(bitmap != null)
+                setImageBitmap(bitmap);
         }
     }
 
