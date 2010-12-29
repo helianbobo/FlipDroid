@@ -1,9 +1,6 @@
 package com.goal98.flipdroid.activity;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
+import android.app.*;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.view.*;
 import android.view.animation.Animation;
+import android.widget.Toast;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.anim.AnimationFactory;
 import com.goal98.flipdroid.exception.NoMorePageException;
@@ -24,7 +22,10 @@ import com.goal98.flipdroid.model.Page;
 import com.goal98.flipdroid.model.SimplePagingStrategy;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.util.GestureUtil;
+import com.goal98.flipdroid.util.OneShotAlarm;
 import com.goal98.flipdroid.view.PageView;
+
+import java.util.Calendar;
 
 public class PageActivity extends Activity {
 
@@ -90,27 +91,39 @@ public class PageActivity extends Activity {
 
     }
 
+
+    Toast mToast;
+
     private void handleException(NoNetworkException e) {
-        Bundle exceptionBundle = new Bundle();
-        exceptionBundle.putString("msg", e.getMessage());
-        showDialog(EXCEPTION_DIALOG_KEY, exceptionBundle);
+
+        String msg = e.getMessage();
+        sendAlarm(msg);
     }
 
-    private static final int EXCEPTION_DIALOG_KEY = 1;
+    private void sendAlarm(String msg) {
+        Intent intent = new Intent(this, OneShotAlarm.class);
+        intent.putExtra("msg", msg);
+        PendingIntent sender = PendingIntent.getBroadcast(this,
+                0, intent, 0);
 
-    @Override
-    protected Dialog onCreateDialog(int id, Bundle bundle) {
-        switch (id) {
-            case EXCEPTION_DIALOG_KEY: {
-                String msg = bundle.getString("msg");
-                return new AlertDialog.Builder(this).setMessage(msg).setPositiveButton("OK", new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                }).create();
-            }
+        // We want the alarm to go off 30 seconds from now.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.add(Calendar.SECOND, 30);
+
+        // Schedule the alarm!
+        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
+
+        // Tell the user about what we did.
+        if (mToast != null) {
+            mToast.cancel();
         }
-        return null;
+        mToast = Toast.makeText(this, msg,
+                Toast.LENGTH_LONG);
+        mToast.show();
     }
+
 
     @Override
     protected void onStart() {
