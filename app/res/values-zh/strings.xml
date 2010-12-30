@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">天鹅绒</string>
+    <string name="config">配置参数</string>
+
+    <string name="key_anim_flip_duration_preference">anim_flip_duration</string>
+    <string name="title_anim_flip_duration_preference">翻页动画时间</string>
+    <string name="summary_anim_flip_duration_preference">翻页动画时间</string>
+    <string name="dialog_title_anim_flip_duration_preference">翻页动画时间</string>
+
+    <string name="key_article_per_page_preference">article_per_page</string>
+    <string name="title_article_per_page_preference">每页显示文章数</string>
+    <string name="summary_article_per_page_preference">每页显示文章数</string>
+    <string name="dialog_title_article_per_page_preference">每页显示文章数</string>
+
+    <string name="button_add_new_account">添加新账户</string>
+
+</resources>

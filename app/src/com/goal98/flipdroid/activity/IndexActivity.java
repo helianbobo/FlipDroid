@@ -25,6 +25,7 @@ public class IndexActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mStrings.add(getString(R.string.button_add_new_account));
         mStrings.add("weibo");
         mStrings.add("helianbobo");
         mStrings.add("fake");

@@ -36,6 +36,7 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f070000;
+        public static final int button_add_new_account=0x7f07000a;
         public static final int config=0x7f070001;
         public static final int dialog_title_anim_flip_duration_preference=0x7f070005;
         public static final int dialog_title_article_per_page_preference=0x7f070009;
