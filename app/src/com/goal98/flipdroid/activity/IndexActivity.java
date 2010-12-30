@@ -42,10 +42,14 @@ public class IndexActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
 
-        Intent intent = new Intent(this, PageActivity.class);
-        intent.putExtra("repo", (String)l.getItemAtPosition(position));
-        startActivity(intent);
-        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+        if (position == 0) {
+
+        } else {
+            Intent intent = new Intent(this, PageActivity.class);
+            intent.putExtra("repo", (String) l.getItemAtPosition(position));
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+        }
     }
 
 

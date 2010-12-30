@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">天鹅绒</string>
+    <string name="app_name">天鹅绒围脖</string>
     <string name="config">配置参数</string>
 
     <string name="key_anim_flip_duration_preference">anim_flip_duration</string>
