@@ -35,20 +35,16 @@ public final class R {
         public static final int main=0x7f030002;
     }
     public static final class string {
-        public static final int app_name=0x7f070001;
-        public static final int config=0x7f070002;
-        public static final int dialog_title_anim_flip_duration_preference=0x7f070006;
-        public static final int dialog_title_article_per_page_preference=0x7f07000a;
-        public static final int hello=0x7f070000;
-        public static final int key_anim_flip_duration_preference=0x7f070003;
-        public static final int key_article_per_page_preference=0x7f070007;
-        public static final int summary_anim_flip_duration_preference=0x7f070005;
-        public static final int summary_article_per_page_preference=0x7f070009;
-        public static final int title1=0x7f07000b;
-        public static final int title2=0x7f07000c;
-        public static final int title3=0x7f07000d;
-        public static final int title_anim_flip_duration_preference=0x7f070004;
-        public static final int title_article_per_page_preference=0x7f070008;
+        public static final int app_name=0x7f070000;
+        public static final int config=0x7f070001;
+        public static final int dialog_title_anim_flip_duration_preference=0x7f070005;
+        public static final int dialog_title_article_per_page_preference=0x7f070009;
+        public static final int key_anim_flip_duration_preference=0x7f070002;
+        public static final int key_article_per_page_preference=0x7f070006;
+        public static final int summary_anim_flip_duration_preference=0x7f070004;
+        public static final int summary_article_per_page_preference=0x7f070008;
+        public static final int title_anim_flip_duration_preference=0x7f070003;
+        public static final int title_article_per_page_preference=0x7f070007;
     }
     public static final class style {
         public static final int Article=0x7f080004;

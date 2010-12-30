@@ -6,13 +6,13 @@
     <TableRow android:layout_width="fill_parent">
 
         <ImageView android:src="@drawable/icon"
-                   android:padding="5px"
+                   android:padding="7px"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"/>
 
         <TextView android:textColor="#000"
                   android:layout_width="fill_parent"
-                  android:text="FlipDroid" android:textSize="40px"/>
+                  android:text="@string/app_name" android:textSize="40px"/>
 
     </TableRow>
 
@@ -20,8 +20,8 @@
     <TextView android:textSize="48px"
               android:paddingTop="100px"
               android:paddingBottom="100px"
-              android:paddingRight="200px"
-              android:text="FLIP!"/>
+              android:paddingRight="50px"
+              android:text="FLIP &gt;&gt;"/>
 
 
 </TableLayout>

@@ -6,4 +6,6 @@ public class Constants {
 
     public static final String CONNECTION_TIMEOUT = "5000";
 
+    public static final String DATABASE_NAME = "VELOUR_DB";
+
 }

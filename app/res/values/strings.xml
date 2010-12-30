@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, Lop!</string>
-    <string name="app_name">FlipDroid</string>
+
+    <string name="app_name">Velours</string>
 
     <string name="config">Config</string>
 
@@ -14,11 +14,6 @@
     <string name="title_article_per_page_preference">Article Per Page</string>
     <string name="summary_article_per_page_preference">Article Per Page</string>
     <string name="dialog_title_article_per_page_preference">Article Per Page</string>
-
-
-    <string name="title1">Hello World!</string>
-    <string name="title2">FlipDroid Rocks!</string>
-    <string name="title3">One million downloads!</string>
 
 
 </resources>
