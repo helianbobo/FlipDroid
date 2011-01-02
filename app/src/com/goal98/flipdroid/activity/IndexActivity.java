@@ -1,8 +1,10 @@
 package com.goal98.flipdroid.activity;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,19 +13,25 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.db.AccountDB;
 
 import java.util.ArrayList;
 
 public class IndexActivity extends ListActivity {
 
     static final private int CONFIG_ID = Menu.FIRST;
+    static final private int CLEAR_ID = Menu.FIRST+1;
 
     private ArrayAdapter<String> mAdapter;
 
     private ArrayList<String> mStrings = new ArrayList<String>();
 
+    private AccountDB accountDB;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        accountDB = new AccountDB(this);
 
         mStrings.add(getString(R.string.button_add_new_account));
         mStrings.add("weibo");
@@ -44,6 +52,9 @@ public class IndexActivity extends ListActivity {
 
         if (position == 0) {
 
+            Cursor cursor = accountDB.query(null, null, null, null);
+            Log.e(this.getClass().getName(), "cursor count = " + cursor.getCount());
+
         } else {
             Intent intent = new Intent(this, PageActivity.class);
             intent.putExtra("repo", (String) l.getItemAtPosition(position));
@@ -58,6 +69,7 @@ public class IndexActivity extends ListActivity {
         super.onCreateOptionsMenu(menu);
 
         menu.add(0, CONFIG_ID, 0, R.string.config);
+        menu.add(0, CLEAR_ID, 0, R.string.clear_all_account);
 
         return true;
     }
@@ -74,6 +86,10 @@ public class IndexActivity extends ListActivity {
         switch (item.getItemId()) {
             case CONFIG_ID:
                 startActivity(new Intent(this, ConfigActivity.class));
+                return true;
+            case CLEAR_ID:
+                int count = accountDB.deleteAll();
+                Log.e(this.getClass().getName(), count + " accounts are deleted.");
                 return true;
         }
 

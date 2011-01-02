@@ -4,6 +4,7 @@
     <string name="app_name">Velours</string>
 
     <string name="config">Config</string>
+    <string name="clear_all_account">Clear</string>
 
     <string name="key_anim_flip_duration_preference">anim_flip_duration</string>
     <string name="title_anim_flip_duration_preference">Flip Duration</string>
