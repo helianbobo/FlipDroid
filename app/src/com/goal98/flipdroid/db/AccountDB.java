@@ -1,10 +1,13 @@
 package com.goal98.flipdroid.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 import com.goal98.flipdroid.util.Constants;
 
@@ -37,15 +40,35 @@ public class AccountDB {
         return cursor;
     }
 
+    public long insert(ContentValues values) {
+        SQLiteDatabase db = accounthelper.getWritableDatabase();
+        return db.insert(ACCOUNT_TABLE_NAME, KEY_ACCOUNT_TYPE, values);
+    }
+
+    public long insert(String username, String password, String accountType) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_USERNAME, username);
+        values.put(KEY_PASSWORD, password);
+        values.put(KEY_ACCOUNT_TYPE, accountType);
+        return insert(values);
+    }
+
+    public int update(ContentValues values, String where, String[] whereArgs) {
+        SQLiteDatabase db = accounthelper.getWritableDatabase();
+        int count = db.update(ACCOUNT_TABLE_NAME, values, where, whereArgs);
+        return count;
+    }
+
     public static class AccountOpenHelper extends SQLiteOpenHelper {
 
-        private static final int DATABASE_VERSION = 1;
+        private static final int DATABASE_VERSION = 2;
 
         private static final String ACCOUNT_TABLE_CREATE =
                 "CREATE TABLE " + ACCOUNT_TABLE_NAME + " (" +
                         KEY_ACCOUNT_TYPE + " TEXT, " +
                         KEY_USERNAME + " TEXT, " +
-                        KEY_PASSWORD + " TEXT" +
+                        KEY_PASSWORD + " TEXT, " +
+                        "PRIMARY KEY ("+KEY_ACCOUNT_TYPE + "," + KEY_USERNAME +")" +
                         ");";
 
 

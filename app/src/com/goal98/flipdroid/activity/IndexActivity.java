@@ -52,8 +52,8 @@ public class IndexActivity extends ListActivity {
 
         if (position == 0) {
 
-            Cursor cursor = accountDB.query(null, null, null, null);
-            Log.e(this.getClass().getName(), "cursor count = " + cursor.getCount());
+            long accpuntId = accountDB.insert("13774256612", "541116", "sina_weibo");
+            Log.e(this.getClass().getName(), "id = " + accpuntId);
 
         } else {
             Intent intent = new Intent(this, PageActivity.class);
