@@ -2,11 +2,14 @@ package com.goal98.flipdroid.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.util.Constants;
@@ -46,21 +49,31 @@ public class SiteActivity extends Activity {
             return i;
         }
 
-        public View getView(int i, View convertView, ViewGroup viewGroup) {
-            ImageView imageView;
+        public View getView(final int i, View convertView, ViewGroup viewGroup) {
+            ImageButton imageButton;
             if (convertView == null) {
-                imageView = new ImageView(mContext);
-//                imageView.setLayoutParams(new GridView.LayoutParams(120, 120));
-                imageView.setAdjustViewBounds(true);
-                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-//                imageView.setPadding(8, 8, 8, 8);
+                imageButton = new ImageButton(mContext);
+                imageButton.setAdjustViewBounds(true);
+                imageButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
             } else {
-                imageView = (ImageView) convertView;
+                imageButton = (ImageButton) convertView;
             }
 
-            imageView.setImageResource(image_array[i]);
+            imageButton.setImageResource(image_array[i]);
 
-            return imageView;
+            imageButton.setOnClickListener(new View.OnClickListener() {
+
+                public void onClick(View view) {
+                    Intent intent = new Intent(SiteActivity.this, SourceActivity.class);
+                    intent.putExtra("type", (String) getItem(i));
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                }
+
+            });
+
+
+            return imageButton;
         }
     }
 }

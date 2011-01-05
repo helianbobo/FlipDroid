@@ -14,6 +14,7 @@
         <activity android:name=".activity.PageActivity"/>
         <activity android:name=".activity.IndexActivity"/>
         <activity android:name=".activity.SiteActivity"/>
+        <activity android:name=".activity.SourceActivity"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
