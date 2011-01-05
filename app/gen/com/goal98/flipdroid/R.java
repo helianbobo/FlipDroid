@@ -24,7 +24,8 @@ public final class R {
         public static final int portrait=0x7f020001;
         public static final int portrait_small=0x7f020002;
         public static final int sina=0x7f020003;
-        public static final int twitter=0x7f020004;
+        public static final int tencent=0x7f020004;
+        public static final int twitter=0x7f020005;
     }
     public static final class id {
         public static final int currentPage=0x7f090001;

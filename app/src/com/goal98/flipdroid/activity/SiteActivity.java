@@ -27,8 +27,8 @@ public class SiteActivity extends Activity {
 
         private Context mContext;
 
-        private String[] site_type_array = {Constants.TYPE_SINA_WEIBO, Constants.TYPE_TWITTER};
-        private int[] image_array = {R.drawable.sina, R.drawable.twitter};
+        private String[] site_type_array = {Constants.TYPE_SINA_WEIBO, Constants.TYPE_TWITTER, Constants.TYPE_TENCENT_WEIBO};
+        private int[] image_array = {R.drawable.sina, R.drawable.twitter, R.drawable.tencent};
 
         public ButtonAdapter(Context context) {
             this.mContext = context;
