@@ -51,9 +51,9 @@ public class IndexActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
 
         if (position == 0) {
-
-            long accpuntId = accountDB.insert("13774256612", "541116", "sina_weibo");
-            Log.e(this.getClass().getName(), "id = " + accpuntId);
+            Intent intent = new Intent(this, SiteActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
 
         } else {
             Intent intent = new Intent(this, PageActivity.class);

@@ -8,4 +8,7 @@ public class Constants {
 
     public static final String DATABASE_NAME = "VELOUR_DB";
 
+    public static final String TYPE_SINA_WEIBO = "SINA_WEIBO";
+    public static final String TYPE_TWITTER = "TWITTER";
+
 }
