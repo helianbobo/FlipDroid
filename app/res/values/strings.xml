@@ -17,5 +17,6 @@
     <string name="dialog_title_article_per_page_preference">Article Per Page</string>
 
     <string name="button_add_new_account">Add New Account</string>
+    <string name="button_login">Login</string>
 
 </resources>

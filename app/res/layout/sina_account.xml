@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/SinaAccount"
+        android:orientation="vertical"
+        android:paddingLeft="5dp" android:paddingRight="5dp">`
+
+    <EditText android:id="@+id/sina_username"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+
+    <EditText android:id="@+id/sina_password"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+
+     <Button android:id="@+id/button"
+            android:text="@string/button_login"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"/>
+
+</LinearLayout>

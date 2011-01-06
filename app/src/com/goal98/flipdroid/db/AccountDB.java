@@ -59,6 +59,11 @@ public class AccountDB {
         return count;
     }
 
+    public boolean hasAccount(String type){
+        //TODO: check whether account exsits
+        return false;
+    }
+
     public static class AccountOpenHelper extends SQLiteOpenHelper {
 
         private static final int DATABASE_VERSION = 2;

@@ -15,6 +15,7 @@
         <activity android:name=".activity.IndexActivity"/>
         <activity android:name=".activity.SiteActivity"/>
         <activity android:name=".activity.SourceActivity"/>
+        <activity android:name=".activity.SinaAccountActivity"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

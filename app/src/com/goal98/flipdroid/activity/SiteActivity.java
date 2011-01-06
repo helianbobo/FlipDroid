@@ -12,12 +12,18 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.util.Constants;
 
 
 public class SiteActivity extends Activity {
+
+    private AccountDB accountDB;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        accountDB = new AccountDB(this);
 
         setContentView(R.layout.site);
 
@@ -64,10 +70,25 @@ public class SiteActivity extends Activity {
             imageButton.setOnClickListener(new View.OnClickListener() {
 
                 public void onClick(View view) {
-                    Intent intent = new Intent(SiteActivity.this, SourceActivity.class);
-                    intent.putExtra("type", (String) getItem(i));
-                    startActivity(intent);
-                    overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+
+                    String type = (String) getItem(i);
+                    if (accountDB.hasAccount(type)) {
+                        Intent intent = new Intent(SiteActivity.this, SourceActivity.class);
+                        intent.putExtra("type", type);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                    } else {
+                        if (Constants.TYPE_SINA_WEIBO.equals(type)) {
+                            startActivity(new Intent(SiteActivity.this, SinaAccountActivity.class));
+                            overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                        } else if(Constants.TYPE_TENCENT_WEIBO.equals(type)){
+                            //TODO: Tencent Login
+                        } else if(Constants.TYPE_TWITTER.equals(type)){
+                            //TODO: Twitter Login
+                        }
+                    }
+
+
                 }
 
             });
