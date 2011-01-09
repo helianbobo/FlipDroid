@@ -3,7 +3,9 @@ package com.goal98.flipdroid.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,8 @@ public class SiteActivity extends Activity {
 
     private AccountDB accountDB;
 
+    private SharedPreferences preferences;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -30,6 +34,12 @@ public class SiteActivity extends Activity {
         GridView g = (GridView) findViewById(R.id.siteGrid);
         g.setAdapter(new ButtonAdapter(this));
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
     }
 
     public class ButtonAdapter extends BaseAdapter {
@@ -72,7 +82,7 @@ public class SiteActivity extends Activity {
                 public void onClick(View view) {
 
                     String type = (String) getItem(i);
-                    if (accountDB.hasAccount(type)) {
+                    if (accountDB.hasAccount(type) && preferences.getString("sina_account", null) != null) {
                         Intent intent = new Intent(SiteActivity.this, SourceActivity.class);
                         intent.putExtra("type", type);
                         startActivity(intent);

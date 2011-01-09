@@ -48,6 +48,8 @@ public class PageActivity extends Activity {
     private int currentPageIndex = -1;
     private Page currentPage;
 
+    private Toast mToast;
+
     /**
      * Called when the activity is first created.
      */
@@ -92,7 +94,7 @@ public class PageActivity extends Activity {
     }
 
 
-    Toast mToast;
+
 
     private void handleException(NoNetworkException e) {
 

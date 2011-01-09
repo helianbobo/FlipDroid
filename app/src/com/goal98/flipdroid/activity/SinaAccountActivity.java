@@ -3,7 +3,9 @@ package com.goal98.flipdroid.activity;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +20,8 @@ public class SinaAccountActivity extends Activity {
     private AccountDB accountDB;
     private TextView usernameView;
     private TextView passwordView;
+
+    private SharedPreferences preferences;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +40,18 @@ public class SinaAccountActivity extends Activity {
 
                 try {
                     accountDB.insertOrUpdate(username, password, Constants.TYPE_SINA_WEIBO);
+                    preferences.edit().putString("sina_account", username).commit();
                 } catch (Exception e) {
                     Log.e(SinaAccountActivity.class.getName(), e.getMessage());
                 }
 
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
     }
 }
