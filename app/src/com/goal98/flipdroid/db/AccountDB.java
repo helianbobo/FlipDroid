@@ -30,6 +30,16 @@ public class AccountDB {
         return db.delete(ACCOUNT_TABLE_NAME, null, null);
     }
 
+    public boolean exist(String username, String accountType) {
+        String[] projection = {KEY_USERNAME, KEY_ACCOUNT_TYPE};
+        String selection = KEY_USERNAME + " = ? and " + KEY_ACCOUNT_TYPE + " = ?";
+        String[] selectionArgs = {username, accountType};
+
+        Cursor cursor = query(projection, selection, selectionArgs, null);
+        return cursor != null && cursor.getCount() > 0;
+
+    }
+
     public Cursor query(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(ACCOUNT_TABLE_NAME);
@@ -53,15 +63,37 @@ public class AccountDB {
         return insert(values);
     }
 
+    public long insertOrUpdate(String username, String password, String accountType) {
+
+        boolean accountExsit = exist(username, accountType);
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_USERNAME, username);
+        values.put(KEY_PASSWORD, password);
+        values.put(KEY_ACCOUNT_TYPE, accountType);
+
+        if (!accountExsit) {
+            return insert(values);
+        } else {
+            return update(values, KEY_USERNAME + " = ? and " + KEY_ACCOUNT_TYPE + " = ?", new String[]{username, accountType});
+        }
+
+
+    }
+
     public int update(ContentValues values, String where, String[] whereArgs) {
         SQLiteDatabase db = accounthelper.getWritableDatabase();
         int count = db.update(ACCOUNT_TABLE_NAME, values, where, whereArgs);
         return count;
     }
 
-    public boolean hasAccount(String type){
-        //TODO: check whether account exsits
-        return false;
+    public boolean hasAccount(String type) {
+        String[] projection = {KEY_ACCOUNT_TYPE};
+        String selection = KEY_ACCOUNT_TYPE + " = ?";
+        String[] selectionArgs = {type};
+
+        Cursor cursor = query(projection, selection, selectionArgs, null);
+        return cursor != null && cursor.getCount() > 0;
     }
 
     public static class AccountOpenHelper extends SQLiteOpenHelper {
@@ -73,7 +105,7 @@ public class AccountDB {
                         KEY_ACCOUNT_TYPE + " TEXT, " +
                         KEY_USERNAME + " TEXT, " +
                         KEY_PASSWORD + " TEXT, " +
-                        "PRIMARY KEY ("+KEY_ACCOUNT_TYPE + "," + KEY_USERNAME +")" +
+                        "PRIMARY KEY (" + KEY_ACCOUNT_TYPE + "," + KEY_USERNAME + ")" +
                         ");";
 
 
