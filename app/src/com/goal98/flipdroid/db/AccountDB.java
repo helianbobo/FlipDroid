@@ -7,16 +7,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
 import com.goal98.flipdroid.util.Constants;
 
 public class AccountDB {
 
-    private static final String ACCOUNT_TABLE_NAME = "account";
-    private static final String KEY_USERNAME = "username";
-    private static final String KEY_PASSWORD = "password";
-    private static final String KEY_ACCOUNT_TYPE = "account_type";
+    public static final String ACCOUNT_TABLE_NAME = "account";
+    public static final String KEY_USERNAME = "username";
+    public static final String KEY_PASSWORD = "password";
+    public static final String KEY_ACCOUNT_TYPE = "account_type";
 
     private SQLiteOpenHelper accounthelper;
 
@@ -41,6 +42,24 @@ public class AccountDB {
             cursor.close();
         return result;
 
+    }
+
+    public Cursor findAll(){
+        String[] projection = null;
+        String selection = null;
+        String[] selectionArgs = null;
+
+        Cursor cursor = query(projection, selection, selectionArgs, null);
+        return cursor;
+    }
+
+    public Cursor findByType(String accountType){
+        String[] projection = null;
+        String selection = KEY_ACCOUNT_TYPE + " = ?";
+        String[] selectionArgs = {accountType};
+
+        Cursor cursor = query(projection, selection, selectionArgs, null);
+        return cursor;
     }
 
     public Cursor query(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
@@ -105,10 +124,11 @@ public class AccountDB {
 
     public static class AccountOpenHelper extends SQLiteOpenHelper {
 
-        private static final int DATABASE_VERSION = 2;
+        private static final int DATABASE_VERSION = 3;
 
         private static final String ACCOUNT_TABLE_CREATE =
                 "CREATE TABLE " + ACCOUNT_TABLE_NAME + " (" +
+                        BaseColumns._ID + " INTEGER," +
                         KEY_ACCOUNT_TYPE + " TEXT, " +
                         KEY_USERNAME + " TEXT, " +
                         KEY_PASSWORD + " TEXT, " +

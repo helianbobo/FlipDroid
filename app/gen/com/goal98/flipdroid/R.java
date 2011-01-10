@@ -29,27 +29,31 @@ public final class R {
         public static final int twitter=0x7f020006;
     }
     public static final class id {
-        public static final int currentPage=0x7f090001;
-        public static final int nextPage=0x7f090002;
-        public static final int pageContainer=0x7f090000;
-        public static final int sina_login=0x7f090005;
-        public static final int sina_password=0x7f090004;
-        public static final int sina_username=0x7f090003;
-        public static final int siteGrid=0x7f090006;
-        public static final int sourceGrid=0x7f090007;
+        public static final int accoount_title=0x7f090000;
+        public static final int accoount_type=0x7f090001;
+        public static final int currentPage=0x7f090003;
+        public static final int nextPage=0x7f090004;
+        public static final int pageContainer=0x7f090002;
+        public static final int sina_login=0x7f090007;
+        public static final int sina_password=0x7f090006;
+        public static final int sina_username=0x7f090005;
+        public static final int siteGrid=0x7f090008;
+        public static final int sourceGrid=0x7f090009;
     }
     public static final class layout {
-        public static final int cover=0x7f030000;
-        public static final int index=0x7f030001;
-        public static final int main=0x7f030002;
-        public static final int sina_account=0x7f030003;
-        public static final int site=0x7f030004;
-        public static final int source=0x7f030005;
+        public static final int account_item=0x7f030000;
+        public static final int cover=0x7f030001;
+        public static final int index=0x7f030002;
+        public static final int main=0x7f030003;
+        public static final int sina_account=0x7f030004;
+        public static final int site=0x7f030005;
+        public static final int source=0x7f030006;
     }
     public static final class string {
         public static final int app_name=0x7f070000;
         public static final int button_add_new_account=0x7f07000f;
-        public static final int button_login=0x7f070010;
+        public static final int button_add_new_source=0x7f070010;
+        public static final int button_login=0x7f070011;
         public static final int clear_all_account=0x7f070004;
         public static final int config=0x7f070001;
         public static final int dialog_title_anim_flip_duration_preference=0x7f07000a;
@@ -66,13 +70,14 @@ public final class R {
         public static final int username=0x7f070003;
     }
     public static final class style {
-        public static final int Article=0x7f08000a;
+        public static final int AccountItem=0x7f080009;
+        public static final int Article=0x7f08000b;
         public static final int Base=0x7f080000;
         public static final int Cover=0x7f080001;
         public static final int Index=0x7f080002;
         public static final int IndexList=0x7f080003;
-        public static final int Menu=0x7f08000b;
-        public static final int Page=0x7f080009;
+        public static final int Menu=0x7f08000c;
+        public static final int Page=0x7f08000a;
         public static final int SinaAccount=0x7f080006;
         public static final int SiteGrid=0x7f080004;
         public static final int SourceGrid=0x7f080005;

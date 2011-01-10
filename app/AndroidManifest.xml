@@ -4,7 +4,7 @@
 
 
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
-        <activity android:name=".activity.CoverActivity">
+        <activity android:name=".activity.CoverActivity" android:alwaysRetainTaskState="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -16,6 +16,7 @@
         <activity android:name=".activity.SiteActivity"/>
         <activity android:name=".activity.SourceActivity"/>
         <activity android:name=".activity.SinaAccountActivity"/>
+        <activity android:name=".activity.AccountListActivity" android:theme="@android:style/Theme.Light"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

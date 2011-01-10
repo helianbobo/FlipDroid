@@ -85,6 +85,7 @@ public class SiteActivity extends Activity {
                     if (accountDB.hasAccount(type) && preferences.getString("sina_account", null) != null) {
                         Intent intent = new Intent(SiteActivity.this, SourceActivity.class);
                         intent.putExtra("type", type);
+                        intent.putExtra("next", SourceActivity.class.getName());
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
                     } else {

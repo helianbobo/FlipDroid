@@ -21,6 +21,7 @@ public class IndexActivity extends ListActivity {
 
     static final private int CONFIG_ID = Menu.FIRST;
     static final private int CLEAR_ID = Menu.FIRST+1;
+    static final private int ACCOUNT_LIST_ID = Menu.FIRST+2;
 
     private ArrayAdapter<String> mAdapter;
 
@@ -33,7 +34,7 @@ public class IndexActivity extends ListActivity {
 
         accountDB = new AccountDB(this);
 
-        mStrings.add(getString(R.string.button_add_new_account));
+        mStrings.add(getString(R.string.button_add_new_source));
         mStrings.add("weibo");
         mStrings.add("helianbobo");
         mStrings.add("fake");
@@ -70,6 +71,7 @@ public class IndexActivity extends ListActivity {
 
         menu.add(0, CONFIG_ID, 0, R.string.config);
         menu.add(0, CLEAR_ID, 0, R.string.clear_all_account);
+        menu.add(0, ACCOUNT_LIST_ID, 0, "Accounts");
 
         return true;
     }
@@ -90,6 +92,9 @@ public class IndexActivity extends ListActivity {
             case CLEAR_ID:
                 int count = accountDB.deleteAll();
                 Log.e(this.getClass().getName(), count + " accounts are deleted.");
+                return true;
+            case ACCOUNT_LIST_ID:
+                startActivity(new Intent(this, AccountListActivity.class));
                 return true;
         }
 
