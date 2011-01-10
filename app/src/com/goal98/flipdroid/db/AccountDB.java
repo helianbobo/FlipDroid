@@ -36,7 +36,10 @@ public class AccountDB {
         String[] selectionArgs = {username, accountType};
 
         Cursor cursor = query(projection, selection, selectionArgs, null);
-        return cursor != null && cursor.getCount() > 0;
+        boolean result = cursor != null && cursor.getCount() > 0;
+        if(cursor!=null)
+            cursor.close();
+        return result;
 
     }
 
@@ -93,7 +96,11 @@ public class AccountDB {
         String[] selectionArgs = {type};
 
         Cursor cursor = query(projection, selection, selectionArgs, null);
-        return cursor != null && cursor.getCount() > 0;
+        boolean result = cursor != null && cursor.getCount() > 0;
+        if(cursor != null){
+            cursor.close();
+        }
+        return result;
     }
 
     public static class AccountOpenHelper extends SQLiteOpenHelper {
