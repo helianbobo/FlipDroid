@@ -3,24 +3,20 @@
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
              style="@style/Cover">
 
-    <TableRow android:layout_width="fill_parent">
 
-        <ImageView android:src="@drawable/icon"
-                   android:padding="7px"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"/>
+    <ImageView android:src="@drawable/logo"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"/>
 
-        <TextView android:textColor="#000"
-                  android:layout_width="fill_parent"
-                  android:text="@string/app_name" android:textSize="40px"/>
-
-    </TableRow>
+    <!--<TextView android:textColor="#000"
+   android:layout_width="fill_parent"
+   android:text="@string/app_name" android:textSize="40px"/>-->
 
 
-    <TextView android:textSize="48px"
-              android:paddingTop="100px"
-              android:paddingBottom="100px"
-              android:paddingRight="50px"
+    <TextView android:textSize="48dp"
+              android:paddingBottom="100dp"
+              android:paddingRight="50dp"
+              android:paddingLeft="5dp"
               android:text="FLIP &gt;&gt;"/>
 
 
