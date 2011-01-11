@@ -6,14 +6,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.provider.BaseColumns;
 import android.util.Log;
 import com.goal98.flipdroid.util.Constants;
 
 public class SourceDB {
 
-    private static final String TABLE_NAME = "source";
-    private static final String KEY_SOURCE_NAME = "source_name";
-    private static final String KEY_ACCOUNT_TYPE = "account_type";
+    public static final String TABLE_NAME = "source";
+    public static final String KEY_SOURCE_NAME = "source_name";
+    public static final String KEY_SOURCE_DESC = "source_desc";
+    public static final String KEY_SOURCE_ID = "source_id";
+    public static final String KEY_ACCOUNT_TYPE = "account_type";
 
     private SQLiteOpenHelper accounthelper;
 
@@ -58,12 +61,15 @@ public class SourceDB {
 
     public static class SourceOpenHelper extends SQLiteOpenHelper {
 
-        private static final int DATABASE_VERSION = 1;
+        private static final int DATABASE_VERSION = 3;
 
         private static final String ACCOUNT_TABLE_CREATE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
+                        BaseColumns._ID + " INTEGER," +
                         KEY_ACCOUNT_TYPE + " TEXT, " +
                         KEY_SOURCE_NAME + " TEXT, " +
+                        KEY_SOURCE_DESC + " TEXT, " +
+                        KEY_SOURCE_ID + " TEXT, " +
                         "PRIMARY KEY ("+KEY_ACCOUNT_TYPE + "," + KEY_SOURCE_NAME +")" +
                         ");";
 

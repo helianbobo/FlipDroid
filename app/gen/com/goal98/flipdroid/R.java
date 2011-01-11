@@ -39,6 +39,8 @@ public final class R {
         public static final int sina_username=0x7f090005;
         public static final int siteGrid=0x7f090008;
         public static final int sourceGrid=0x7f090009;
+        public static final int source_desc=0x7f09000b;
+        public static final int source_name=0x7f09000a;
     }
     public static final class layout {
         public static final int account_item=0x7f030000;
@@ -48,6 +50,8 @@ public final class R {
         public static final int sina_account=0x7f030004;
         public static final int site=0x7f030005;
         public static final int source=0x7f030006;
+        public static final int source_item=0x7f030007;
+        public static final int source_list=0x7f030008;
     }
     public static final class string {
         public static final int app_name=0x7f070000;

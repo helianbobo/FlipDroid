@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" style="@style/AccountItem"
+              android:orientation="vertical">
+
+    <TextView
+            android:id="@+id/source_name"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dip"
+            android:singleLine="true"
+            />
+    <TextView
+            android:id="@+id/source_desc"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textColor="@color/gray"
+            android:paddingLeft="5dip"
+            android:singleLine="true"
+            />
+
+</LinearLayout>
