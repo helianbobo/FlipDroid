@@ -4,18 +4,18 @@
 
 
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
-        <activity android:name=".activity.CoverActivity" android:alwaysRetainTaskState="true">
+        <activity android:name=".activity.CoverActivity" android:alwaysRetainTaskState="true" android:theme="@android:style/Theme.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ConfigActivity"/>
-        <activity android:name=".activity.PageActivity"/>
-        <activity android:name=".activity.IndexActivity"/>
-        <activity android:name=".activity.SiteActivity"/>
-        <activity android:name=".activity.SourceActivity"/>
-        <activity android:name=".activity.SinaAccountActivity"/>
+        <activity android:name=".activity.ConfigActivity" android:theme="@android:style/Theme.Light"/>
+        <activity android:name=".activity.PageActivity" android:theme="@android:style/Theme.Light"/>
+        <activity android:name=".activity.IndexActivity" android:theme="@android:style/Theme.Light"/>
+        <activity android:name=".activity.SiteActivity" android:theme="@android:style/Theme.Light"/>
+        <activity android:name=".activity.SourceSelectionActivity" android:theme="@android:style/Theme.Light"/>
+        <activity android:name=".activity.SinaAccountActivity" android:theme="@android:style/Theme.Light"/>
         <activity android:name=".activity.AccountListActivity" android:theme="@android:style/Theme.Light"/>
     </application>
 

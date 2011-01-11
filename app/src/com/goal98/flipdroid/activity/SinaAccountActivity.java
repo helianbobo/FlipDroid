@@ -1,8 +1,6 @@
 package com.goal98.flipdroid.activity;
 
 import android.app.Activity;
-import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -49,8 +47,8 @@ public class SinaAccountActivity extends Activity {
                     preferences.edit().putString("sina_account", username).commit();
 
                     Intent intent;
-                    if (SourceActivity.class.getName().equals(nextActivity)) {
-                        intent = new Intent(SinaAccountActivity.this, SourceActivity.class);
+                    if (SourceSelectionActivity.class.getName().equals(nextActivity)) {
+                        intent = new Intent(SinaAccountActivity.this, SourceSelectionActivity.class);
                     }else {
                         intent = new Intent(SinaAccountActivity.this, AccountListActivity.class);
                     }

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -83,9 +82,9 @@ public class SiteActivity extends Activity {
 
                     String type = (String) getItem(i);
                     if (accountDB.hasAccount(type) && preferences.getString("sina_account", null) != null) {
-                        Intent intent = new Intent(SiteActivity.this, SourceActivity.class);
+                        Intent intent = new Intent(SiteActivity.this, SourceSelectionActivity.class);
                         intent.putExtra("type", type);
-                        intent.putExtra("next", SourceActivity.class.getName());
+                        intent.putExtra("next", SourceSelectionActivity.class.getName());
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
                     } else {
