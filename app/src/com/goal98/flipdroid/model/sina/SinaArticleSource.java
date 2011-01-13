@@ -1,14 +1,13 @@
 package com.goal98.flipdroid.model.sina;
 
 import android.util.Log;
+import com.goal98.flipdroid.client.WeiboExt;
 import com.goal98.flipdroid.exception.NoNetworkException;
+import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.model.AbstractArticleSource;
 import com.goal98.flipdroid.model.Article;
-import weibo4j.Paging;
-import weibo4j.Status;
-import weibo4j.Weibo;
-import weibo4j.WeiboException;
+import weibo4j.*;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -16,7 +15,7 @@ import java.util.List;
 
 public class SinaArticleSource extends AbstractArticleSource {
 
-    private Weibo weibo;
+    private WeiboExt weibo;
 
     private String oauthToken;
     private String oauthTokenSecret;
@@ -46,6 +45,9 @@ public class SinaArticleSource extends AbstractArticleSource {
             basicPassword = param2;
         }
         this.sourceUserId = sourceUserId;
+
+        if(weibo == null)
+            initWeibo();
     }
 
     public List<Article> getArticleList() {
@@ -84,7 +86,7 @@ public class SinaArticleSource extends AbstractArticleSource {
     }
 
     private void initWeibo() {
-        weibo = new Weibo();
+        weibo = new WeiboExt ();
         weibo.setHttpConnectionTimeout(5000);
         if (oauthToken != null) {
             weibo.setToken(oauthToken, oauthTokenSecret);
@@ -96,5 +98,30 @@ public class SinaArticleSource extends AbstractArticleSource {
 
     public void loadMore() {
         loadArticle();
+    }
+
+    public List<Source> searchSource(String queryStr){
+
+        List<Source> result = new LinkedList<Source>();
+
+        try {
+            Query query = new Query(queryStr);
+            List<User> userList = weibo.searchUser(query);
+            if(userList != null){
+                for (int i = 0; i < userList.size(); i++) {
+                    User user = userList.get(i);
+                    Source source = new Source();
+                    source.setName(user.getName());
+                    source.setId(String.valueOf(user.getId()));
+                    source.setDesc(user.getDescription());
+                    result.add(source);
+                }
+            }
+
+        } catch (WeiboException e) {
+            Log.e(this.getClass().getName(), e.getMessage(), e);
+        }
+
+        return result;
     }
 }
