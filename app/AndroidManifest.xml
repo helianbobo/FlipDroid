@@ -17,6 +17,7 @@
         <activity android:name=".activity.SourceSelectionActivity" android:theme="@android:style/Theme.Light"/>
         <activity android:name=".activity.SinaAccountActivity" android:theme="@android:style/Theme.Light"/>
         <activity android:name=".activity.AccountListActivity" android:theme="@android:style/Theme.Light"/>
+        <activity android:name=".activity.SourceSearchActivity"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

@@ -43,9 +43,6 @@ public class IndexActivity extends ListActivity {
         setListAdapter(mAdapter);
 
         setContentView(R.layout.index);
-
-        setTheme(android.R.style.Theme_Light);
-
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.activity;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +43,11 @@ public class SourceSelectionActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         Map<String, String> source = (Map<String, String>)l.getItemAtPosition(position);
-        Log.v(this.getClass().getName(), source.get(SourceDB.KEY_SOURCE_ID));
+        String sourceId = source.get(SourceDB.KEY_SOURCE_ID);
+        Log.v(this.getClass().getName(), sourceId);
+
+        if(Constants.ADD_CUSTOME_SOURCE.equals(sourceId)){
+            startActivity(new Intent(this, SourceSearchActivity.class));
+        }
     }
 }
