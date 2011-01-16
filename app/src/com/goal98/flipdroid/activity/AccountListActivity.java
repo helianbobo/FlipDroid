@@ -15,27 +15,33 @@ import com.goal98.flipdroid.db.AccountDB;
 public class AccountListActivity extends ListActivity {
 
     private AccountDB accountDB;
+    private Cursor accountCursor;
 
     static final private int NEW_ACCOUNT_ID = Menu.FIRST;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         accountDB = new AccountDB(this);
-
-        Cursor cursor = accountDB.findAll();
-        startManagingCursor(cursor);
-
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.account_item, cursor,
-                new String[] { AccountDB.KEY_USERNAME, AccountDB.KEY_ACCOUNT_TYPE },
-                new int[] { R.id.accoount_title, R.id.accoount_type });
-        setListAdapter(adapter);
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        accountCursor.close();
         accountDB.close();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        accountCursor = accountDB.findAll();
+        startManagingCursor(accountCursor);
+
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.account_item, accountCursor,
+                new String[]{AccountDB.KEY_USERNAME, AccountDB.KEY_ACCOUNT_TYPE},
+                new int[]{R.id.accoount_title, R.id.accoount_type});
+        setListAdapter(adapter);
+
     }
 
     @Override

@@ -116,6 +116,7 @@ public class PageActivity extends Activity {
         if (Constants.TYPE_SINA_WEIBO.equals(accountType)) {
             String userId = preferences.getString("sina_account", null);
             Cursor cursor = accountDB.findByTypeAndUsername(accountType, userId);
+            cursor.moveToFirst();
             String password = cursor.getString(cursor.getColumnIndex(AccountDB.KEY_PASSWORD));
             cursor.close();
 

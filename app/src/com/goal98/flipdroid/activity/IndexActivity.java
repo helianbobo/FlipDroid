@@ -31,6 +31,7 @@ public class IndexActivity extends ListActivity {
 
     private AccountDB accountDB;
     private SourceDB sourceDB;
+    private Cursor sourceCursor;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,13 +39,7 @@ public class IndexActivity extends ListActivity {
         accountDB = new AccountDB(this);
         sourceDB = new SourceDB(this);
 
-        Cursor cursor = sourceDB.findAll();
-        startManagingCursor(cursor);
 
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.source_item, cursor,
-                new String[]{SourceDB.KEY_SOURCE_NAME, SourceDB.KEY_SOURCE_DESC},
-                new int[]{R.id.source_name, R.id.source_desc});
-        setListAdapter(adapter);
 
         setContentView(R.layout.index);
 
@@ -61,8 +56,21 @@ public class IndexActivity extends ListActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        sourceCursor.close();
         accountDB.close();
         sourceDB.close();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        sourceCursor = sourceDB.findAll();
+        startManagingCursor(sourceCursor);
+
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
+                new String[]{SourceDB.KEY_SOURCE_NAME, SourceDB.KEY_SOURCE_DESC},
+                new int[]{R.id.source_name, R.id.source_desc});
+        setListAdapter(adapter);
     }
 
     @Override

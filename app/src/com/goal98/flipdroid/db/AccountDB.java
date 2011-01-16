@@ -138,7 +138,7 @@ public class AccountDB {
 
     public static class AccountOpenHelper extends SQLiteOpenHelper {
 
-        private static final int DATABASE_VERSION = 3;
+        private static final int DATABASE_VERSION = 5;
 
         private static final String ACCOUNT_TABLE_CREATE =
                 "CREATE TABLE " + ACCOUNT_TABLE_NAME + " (" +
