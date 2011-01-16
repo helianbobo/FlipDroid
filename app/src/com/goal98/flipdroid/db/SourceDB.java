@@ -20,15 +20,15 @@ public class SourceDB {
     public static final String KEY_SOURCE_ID = "source_id";
     public static final String KEY_ACCOUNT_TYPE = "account_type";
 
-    private SQLiteOpenHelper accounthelper;
+    private SQLiteOpenHelper sourcehelper;
 
     public SourceDB(Context context) {
-        accounthelper = new SourceOpenHelper(context);
+        sourcehelper = new SourceOpenHelper(context);
     }
 
     public int deleteAll() {
 
-        SQLiteDatabase db = accounthelper.getWritableDatabase();
+        SQLiteDatabase db = sourcehelper.getWritableDatabase();
         return db.delete(TABLE_NAME, null, null);
     }
 
@@ -36,14 +36,23 @@ public class SourceDB {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(TABLE_NAME);
 
-        SQLiteDatabase db = accounthelper.getReadableDatabase();
+        SQLiteDatabase db = sourcehelper.getReadableDatabase();
         Cursor cursor = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 
         return cursor;
     }
 
+    public Cursor findAll(){
+        String[] projection = null;
+        String selection = null;
+        String[] selectionArgs = null;
+
+        Cursor cursor = query(projection, selection, selectionArgs, null);
+        return cursor;
+    }
+
     public long insert(ContentValues values) {
-        SQLiteDatabase db = accounthelper.getWritableDatabase();
+        SQLiteDatabase db = sourcehelper.getWritableDatabase();
         return db.insert(TABLE_NAME, KEY_ACCOUNT_TYPE, values);
     }
 
@@ -66,15 +75,20 @@ public class SourceDB {
     }
 
     public int update(ContentValues values, String where, String[] whereArgs) {
-        SQLiteDatabase db = accounthelper.getWritableDatabase();
+        SQLiteDatabase db = sourcehelper.getWritableDatabase();
         int count = db.update(TABLE_NAME, values, where, whereArgs);
         return count;
+    }
+
+    public void close(){
+        if(sourcehelper != null)
+            sourcehelper.close();
     }
 
 
     public static class SourceOpenHelper extends SQLiteOpenHelper {
 
-        private static final int DATABASE_VERSION = 3;
+        private static final int DATABASE_VERSION = 4;
 
         private static final String ACCOUNT_TABLE_CREATE =
                 "CREATE TABLE " + TABLE_NAME + " (" +

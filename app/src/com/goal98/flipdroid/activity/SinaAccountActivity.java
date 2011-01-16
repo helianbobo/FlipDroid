@@ -11,12 +11,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
+import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.util.Constants;
 
 
 public class SinaAccountActivity extends Activity {
 
     private AccountDB accountDB;
+    private SourceDB sourceDB;
     private TextView usernameView;
     private TextView passwordView;
     private String nextActivity;
@@ -32,6 +35,7 @@ public class SinaAccountActivity extends Activity {
 
         setContentView(R.layout.sina_account);
         accountDB = new AccountDB(this);
+        sourceDB = new SourceDB(this);
 
         usernameView = (TextView) findViewById(R.id.sina_username);
         passwordView = (TextView) findViewById(R.id.sina_password);
@@ -43,6 +47,7 @@ public class SinaAccountActivity extends Activity {
                 String password = passwordView.getText().toString();
 
                 try {
+                    sourceDB.insert(Constants.TYPE_SINA_WEIBO, getString(R.string.my_timeline), Constants.SOURCE_HOME, getString(R.string.my_timeline_desc));
                     accountDB.insertOrUpdate(username, password, Constants.TYPE_SINA_WEIBO);
                     preferences.edit().putString("sina_account", username).commit();
 
@@ -62,6 +67,13 @@ public class SinaAccountActivity extends Activity {
 
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        accountDB.close();
+        sourceDB.close();
     }
 
     @Override

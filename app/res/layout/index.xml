@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" style="@style/Index">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" style="@style/Index" android:orientation="vertical">
+
+    <Button android:layout_width="fill_parent" android:layout_height="wrap_content"
+            android:text="@string/button_add_new_source" android:id="@+id/btn_add_source"/>
 
     <ListView android:layout_height="fill_parent" android:layout_width="fill_parent"
               android:id="@android:id/list"/>

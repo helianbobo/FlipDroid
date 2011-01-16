@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,6 +15,7 @@ import android.view.animation.Animation;
 import android.widget.Toast;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.anim.AnimationFactory;
+import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.exception.NoMorePageException;
 import com.goal98.flipdroid.exception.NoNetworkException;
 import com.goal98.flipdroid.model.ContentRepo;
@@ -22,6 +24,7 @@ import com.goal98.flipdroid.model.Page;
 import com.goal98.flipdroid.model.SimplePagingStrategy;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.util.AlarmSender;
+import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.GestureUtil;
 import com.goal98.flipdroid.util.OneShotAlarm;
 import com.goal98.flipdroid.view.PageView;
@@ -52,6 +55,10 @@ public class PageActivity extends Activity {
 
     private AlarmSender alarmSender;
 
+    private AccountDB accountDB;
+    private String accountType;
+    private String sourceId;
+
     /**
      * Called when the activity is first created.
      */
@@ -59,6 +66,7 @@ public class PageActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        accountDB = new AccountDB(this);
         alarmSender = new AlarmSender(this);
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -67,7 +75,8 @@ public class PageActivity extends Activity {
         TelephonyManager tManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         deviceId = tManager.getDeviceId();
 
-        String repoStr = (String) getIntent().getExtras().get("repo");
+        accountType = (String) getIntent().getExtras().get("type");
+        sourceId = (String) getIntent().getExtras().get("sourceId");
 
         setContentView(R.layout.main);
 
@@ -80,24 +89,14 @@ public class PageActivity extends Activity {
         simplePagingStrategy = new SimplePagingStrategy();
         repo.setPagingStrategy(simplePagingStrategy);
 
-        String userId = "13774256612";
-        String password = "541116";
-        String sourceUserId = null;
-
-        if ("weibo".equals(repoStr)) {
-            sourceUserId = null;
-            repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceUserId));
-        } else if ("helianbobo".equals(repoStr)) {
-            sourceUserId = "1702755335";
-            repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceUserId));
-        } else if ("fake".equals(repoStr)) {
-            repo.setArticleSource(new FakeArticleSource());
-
-        }
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        accountDB.close();
+    }
 
 
     private void handleException(NoNetworkException e) {
@@ -112,6 +111,19 @@ public class PageActivity extends Activity {
         super.onStart();
         preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         simplePagingStrategy.setArticlePerPage(getArticlePerPageFromPreference());
+
+
+        if (Constants.TYPE_SINA_WEIBO.equals(accountType)) {
+            String userId = preferences.getString("sina_account", null);
+            Cursor cursor = accountDB.findByTypeAndUsername(accountType, userId);
+            String password = cursor.getString(cursor.getColumnIndex(AccountDB.KEY_PASSWORD));
+            cursor.close();
+
+            repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceId));
+        } else if (Constants.TYPE_FAKE.equals(accountType)) {
+            repo.setArticleSource(new FakeArticleSource());
+
+        }
 
         flipPage(true);
     }

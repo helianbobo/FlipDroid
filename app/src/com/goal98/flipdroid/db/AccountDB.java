@@ -25,6 +25,11 @@ public class AccountDB {
         accounthelper = new AccountOpenHelper(context);
     }
 
+    public void close(){
+        if(accounthelper!= null)
+            accounthelper.close();
+    }
+
     public int deleteAll() {
 
         SQLiteDatabase db = accounthelper.getWritableDatabase();
@@ -57,6 +62,15 @@ public class AccountDB {
         String[] projection = null;
         String selection = KEY_ACCOUNT_TYPE + " = ?";
         String[] selectionArgs = {accountType};
+
+        Cursor cursor = query(projection, selection, selectionArgs, null);
+        return cursor;
+    }
+
+    public Cursor findByTypeAndUsername(String accountType, String username){
+        String[] projection = null;
+        String selection = KEY_ACCOUNT_TYPE + " = ? AND " + KEY_USERNAME + " = ?";
+        String[] selectionArgs = {accountType, username};
 
         Cursor cursor = query(projection, selection, selectionArgs, null);
         return cursor;

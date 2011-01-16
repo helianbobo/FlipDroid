@@ -62,7 +62,7 @@ public class SinaArticleSource extends AbstractArticleSource {
         try {
             List<Status> statuses;
             Paging paging = new Paging(pageLoaded + 1);
-            if (sourceUserId == null) {
+            if (Constants.SOURCE_HOME.equals(sourceUserId)) {
                 statuses = weibo.getHomeTimeline(paging);
             } else {
                 statuses = weibo.getUserTimeline(sourceUserId, paging);

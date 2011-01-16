@@ -33,6 +33,12 @@ public class AccountListActivity extends ListActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        accountDB.close();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 

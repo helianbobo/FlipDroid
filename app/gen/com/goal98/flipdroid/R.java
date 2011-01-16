@@ -31,18 +31,19 @@ public final class R {
     public static final class id {
         public static final int accoount_title=0x7f090000;
         public static final int accoount_type=0x7f090001;
-        public static final int currentPage=0x7f090003;
-        public static final int nextPage=0x7f090004;
-        public static final int pageContainer=0x7f090002;
-        public static final int sina_login=0x7f090007;
-        public static final int sina_password=0x7f090006;
-        public static final int sina_username=0x7f090005;
-        public static final int siteGrid=0x7f090008;
-        public static final int sourceGrid=0x7f090009;
-        public static final int source_desc=0x7f09000b;
-        public static final int source_name=0x7f09000a;
-        public static final int source_query=0x7f09000c;
-        public static final int source_search_button=0x7f09000d;
+        public static final int btn_add_source=0x7f090002;
+        public static final int currentPage=0x7f090004;
+        public static final int nextPage=0x7f090005;
+        public static final int pageContainer=0x7f090003;
+        public static final int sina_login=0x7f090008;
+        public static final int sina_password=0x7f090007;
+        public static final int sina_username=0x7f090006;
+        public static final int siteGrid=0x7f090009;
+        public static final int sourceGrid=0x7f09000a;
+        public static final int source_desc=0x7f09000c;
+        public static final int source_name=0x7f09000b;
+        public static final int source_query=0x7f09000d;
+        public static final int source_search_button=0x7f09000e;
     }
     public static final class layout {
         public static final int account_item=0x7f030000;
@@ -68,6 +69,8 @@ public final class R {
         public static final int flip=0x7f070006;
         public static final int key_anim_flip_duration_preference=0x7f070008;
         public static final int key_article_per_page_preference=0x7f07000c;
+        public static final int my_timeline=0x7f070013;
+        public static final int my_timeline_desc=0x7f070014;
         public static final int password=0x7f070002;
         public static final int search=0x7f070005;
         public static final int sina_weibo=0x7f070007;

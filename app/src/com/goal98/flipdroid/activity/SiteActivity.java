@@ -36,6 +36,12 @@ public class SiteActivity extends Activity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        accountDB.close();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
