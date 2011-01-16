@@ -10,6 +10,8 @@ import android.provider.BaseColumns;
 import android.util.Log;
 import com.goal98.flipdroid.util.Constants;
 
+import java.util.Map;
+
 public class SourceDB {
 
     public static final String TABLE_NAME = "source";
@@ -45,10 +47,21 @@ public class SourceDB {
         return db.insert(TABLE_NAME, KEY_ACCOUNT_TYPE, values);
     }
 
-    public long insert(String sourceName, String accountType) {
+    public long insert(Map<String, String> source) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_SOURCE_NAME, source.get(KEY_SOURCE_NAME));
+        values.put(KEY_ACCOUNT_TYPE, source.get(KEY_ACCOUNT_TYPE));
+        values.put(KEY_SOURCE_ID, source.get(KEY_SOURCE_ID));
+        values.put(KEY_SOURCE_DESC, source.get(KEY_SOURCE_DESC));
+        return insert(values);
+    }
+
+    public long insert(String accountType, String sourceName, String sourceId, String sourceDesc) {
         ContentValues values = new ContentValues();
         values.put(KEY_SOURCE_NAME, sourceName);
         values.put(KEY_ACCOUNT_TYPE, accountType);
+        values.put(KEY_SOURCE_ID, sourceId);
+        values.put(KEY_SOURCE_DESC, sourceDesc);
         return insert(values);
     }
 

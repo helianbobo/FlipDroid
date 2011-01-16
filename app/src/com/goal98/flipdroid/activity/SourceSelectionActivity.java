@@ -27,7 +27,7 @@ public class SourceSelectionActivity extends ListActivity {
         Log.v(this.getClass().getName(), "Account type:"+type);
 
         List<Map<String, String>> sourceList = new SourceRepo().findSourceByType(type);
-        Map<String, String> customeSection = SourceRepo.buildSource("Add Custom Source", Constants.ADD_CUSTOME_SOURCE, "Add any person.");
+        Map<String, String> customeSection = SourceRepo.buildSource(Constants.TYPE_SINA_WEIBO ,"Add Custom Source", Constants.ADD_CUSTOME_SOURCE, "Add any person.");
 
         sourceList.add(customeSection);
 

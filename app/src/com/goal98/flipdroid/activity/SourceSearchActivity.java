@@ -9,10 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.SimpleAdapter;
-import android.widget.Toast;
+import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.exception.NoNetworkException;
@@ -40,6 +37,8 @@ public class SourceSearchActivity extends ListActivity {
 
     private AlarmSender alarmSender;
 
+    private SourceDB sourceDB;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -47,6 +46,8 @@ public class SourceSearchActivity extends ListActivity {
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(false);
+
+        sourceDB = new SourceDB(this);
 
         setContentView(R.layout.source_search);
 
@@ -74,6 +75,15 @@ public class SourceSearchActivity extends ListActivity {
         });
     }
 
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        Map<String, String> source = (Map<String, String>) l.getItemAtPosition(position);
+        sourceDB.insert(source);
+
+        startActivity(new Intent(this, IndexActivity.class));
+    }
+
     private class SearchSourceTask extends AsyncTask<String, NoNetworkException, Integer> {
 
         @Override
@@ -91,7 +101,7 @@ public class SourceSearchActivity extends ListActivity {
                 for (int i = 0; i < list.size(); i++) {
                     Source source = list.get(i);
                     Map<String, String> customeSection =
-                            SourceRepo.buildSource(source.getName(), source.getId(), source.getDesc());
+                            SourceRepo.buildSource(source.getAccountType() ,source.getName(), source.getId(), source.getDesc());
                     sourceList.add(customeSection);
 
                 }
