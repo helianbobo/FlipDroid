@@ -1,0 +1,42 @@
+<plugin name='gorm-jpa' version='0.7.1' grailsVersion='1.1 &gt; *'>
+  <author>Graeme Rocher</author>
+  <title>GORM-JPA Plugin</title>
+  <description>\
+A plugin that emulates the behavior of the GORM-Hibernate plugin against a standard JPA 1.0 backend
+</description>
+  <documentation>http://grails.org/plugin/gorm-jpa</documentation>
+  <resources>
+    <resource>BuildConfig</resource>
+    <resource>DataSource</resource>
+    <resource>UrlMappings</resource>
+    <resource>spring.resources</resource>
+    <resource>org.acme.Address</resource>
+    <resource>org.acme.Person</resource>
+    <resource>org.acme.Role</resource>
+  </resources>
+  <dependencies>
+    <resolvers>
+      <resolver type='grailsPlugins' name='grailsPlugins' />
+      <resolver type='flatDir' name='localJars' dirs='test/lib' />
+    </resolvers>
+    <dependency group='antlr' name='antlr' version='2.7.6' conf='runtime' transitive='true' />
+    <dependency group='javassist' name='javassist' version='3.11.0.GA' conf='runtime' transitive='true' />
+    <dependency group='org.hibernate' name='hibernate-core' version='3.3.1.GA' conf='compile' transitive='true'>
+      <excludes group='*' name='ehcache' />
+      <excludes group='*' name='xml-apis' />
+      <excludes group='*' name='commons-logging' />
+    </dependency>
+    <dependency group='org.hibernate' name='hibernate-commons-annotations' version='3.1.0.GA' conf='compile' transitive='true'>
+      <excludes group='*' name='hibernate' />
+    </dependency>
+    <dependency group='org.hibernate' name='hibernate-ehcache' version='3.3.1.GA' conf='runtime' transitive='true'>
+      <excludes group='*' name='ehcache' />
+    </dependency>
+    <dependency group='org.hibernate' name='hibernate-annotations' version='3.4.0.GA' conf='compile' transitive='true' />
+    <dependency group='dom4j' name='dom4j' version='1.6.1' conf='runtime' transitive='true'>
+      <excludes group='*' name='xml-apis' />
+    </dependency>
+    <dependency group='org.hibernate' name='hibernate-entitymanager' version='3.4.0.GA' conf='compile' transitive='true' />
+  </dependencies>
+  <behavior />
+</plugin>
