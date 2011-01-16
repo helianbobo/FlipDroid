@@ -8,51 +8,7 @@
         </fileset>
       </configuration>
     </facet>
-    <facet type="web" name="GrailsWeb">
-      <configuration>
-        <webroots>
-          <root url="file://$MODULE_DIR$/web-app" relative="/" />
-          <root url="file://$MODULE_DIR$/grails-app/views" relative="/" />
-        </webroots>
-        <sourceRoots />
-      </configuration>
-      <facet type="google-app-engine" name="Google App Engine">
-        <configuration>
-          <password>dfc6dfc9df9fdf9edf9bdf9bdf9bdf9c</password>
-          <persistence-api>JPA</persistence-api>
-          <sdk-home-path>$USER_HOME$/appengine-java-sdk-1.4.0</sdk-home-path>
-          <email>liuchao36@gmail.com</email>
-        </configuration>
-      </facet>
-    </facet>
     <facet type="web" name="Web">
-      <configuration>
-        <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/src/templates/war/web.xml" />
-        </descriptors>
-        <webroots>
-          <root url="file://$MODULE_DIR$/src/templates/war" relative="/WEB-INF" />
-        </webroots>
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/src/java" />
-          <root url="file://$MODULE_DIR$/grails-app/utils" />
-          <root url="file://$MODULE_DIR$/src/groovy" />
-          <root url="file://$MODULE_DIR$/grails-app/controllers" />
-          <root url="file://$MODULE_DIR$/grails-app/domain" />
-          <root url="file://$MODULE_DIR$/grails-app/services" />
-          <root url="file://$MODULE_DIR$/grails-app/taglib" />
-        </sourceRoots>
-      </configuration>
-    </facet>
-    <facet type="jpa" name="JPA">
-      <configuration>
-        <setting name="validation-enabled" value="true" />
-        <setting name="provider-name" value="" />
-        <datasource-mapping />
-        <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/grails-app/conf/persistence.xml" />
-      </configuration>
-    </facet>
-    <facet type="web" name="Web3">
       <configuration>
         <descriptors>
           <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/web-app/WEB-INF/web.xml" />
@@ -69,6 +25,23 @@
           <root url="file://$MODULE_DIR$/grails-app/services" />
           <root url="file://$MODULE_DIR$/grails-app/taglib" />
         </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="web" name="GrailsWeb">
+      <configuration>
+        <webroots>
+          <root url="file://$MODULE_DIR$/grails-app/views" relative="/" />
+        </webroots>
+        <sourceRoots />
+      </configuration>
+    </facet>
+    <facet type="web" name="GrailsWeb">
+      <configuration>
+        <webroots>
+          <root url="file://$MODULE_DIR$/web-app" relative="/" />
+          <root url="file://$MODULE_DIR$/grails-app/views" relative="/" />
+        </webroots>
+        <sourceRoots />
       </configuration>
     </facet>
   </component>
@@ -113,7 +86,7 @@
         <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="velour-server-grailsPlugins" />
+    <orderEntry type="module" module-name="velourapp-grailsPlugins" />
   </component>
 </module>
 
