@@ -21,6 +21,7 @@ import com.goal98.flipdroid.model.FakeArticleSource;
 import com.goal98.flipdroid.model.Page;
 import com.goal98.flipdroid.model.SimplePagingStrategy;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
+import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.GestureUtil;
 import com.goal98.flipdroid.util.OneShotAlarm;
 import com.goal98.flipdroid.view.PageView;
@@ -48,7 +49,8 @@ public class PageActivity extends Activity {
     private int currentPageIndex = -1;
     private Page currentPage;
 
-    private Toast mToast;
+
+    private AlarmSender alarmSender;
 
     /**
      * Called when the activity is first created.
@@ -56,6 +58,8 @@ public class PageActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        alarmSender = new AlarmSender(this);
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(false);
@@ -99,31 +103,7 @@ public class PageActivity extends Activity {
     private void handleException(NoNetworkException e) {
 
         String msg = e.getMessage();
-        sendAlarm(msg);
-    }
-
-    private void sendAlarm(String msg) {
-        Intent intent = new Intent(this, OneShotAlarm.class);
-        intent.putExtra("msg", msg);
-        PendingIntent sender = PendingIntent.getBroadcast(this,
-                0, intent, 0);
-
-        // We want the alarm to go off 30 seconds from now.
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.SECOND, 30);
-
-        // Schedule the alarm!
-        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-
-        // Tell the user about what we did.
-        if (mToast != null) {
-            mToast.cancel();
-        }
-        mToast = Toast.makeText(this, msg,
-                Toast.LENGTH_LONG);
-        mToast.show();
+        alarmSender.sendAlarm(msg);
     }
 
 

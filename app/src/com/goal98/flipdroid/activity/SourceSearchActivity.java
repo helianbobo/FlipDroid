@@ -19,6 +19,7 @@ import com.goal98.flipdroid.exception.NoNetworkException;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.model.SourceRepo;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
+import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.OneShotAlarm;
 
@@ -37,8 +38,12 @@ public class SourceSearchActivity extends ListActivity {
 
     private EditText queryText;
 
+    private AlarmSender alarmSender;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        alarmSender = new AlarmSender(this);
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(false);
@@ -110,37 +115,14 @@ public class SourceSearchActivity extends ListActivity {
     }
 
 
-    private Toast mToast;
 
     private void handleException(NoNetworkException e) {
 
         String msg = e.getMessage();
-        sendAlarm(msg);
+        alarmSender.sendAlarm(msg);
     }
 
-    private void sendAlarm(String msg) {
-        Intent intent = new Intent(this, OneShotAlarm.class);
-        intent.putExtra("msg", msg);
-        PendingIntent sender = PendingIntent.getBroadcast(this,
-                0, intent, 0);
 
-        // We want the alarm to go off 30 seconds from now.
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.SECOND, 30);
-
-        // Schedule the alarm!
-        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
-
-        // Tell the user about what we did.
-        if (mToast != null) {
-            mToast.cancel();
-        }
-        mToast = Toast.makeText(this, msg,
-                Toast.LENGTH_LONG);
-        mToast.show();
-    }
 
 
 }
