@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">Velours</string>
-
     <string name="config">Config</string>
     <string name="password">Password</string>
     <string name="username">Username</string>

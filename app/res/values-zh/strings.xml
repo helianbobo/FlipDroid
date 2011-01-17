@@ -2,9 +2,11 @@
 <resources>
 
     <string name="app_name">天鹅绒围脖</string>
+    <string name="config">配置参数</string>
     <string name="password">密码</string>
     <string name="username">用户名</string>
-    <string name="config">配置参数</string>
+    <string name="clear_all_account">清除账户</string>
+    <string name="search">搜索</string>
     <string name="flip">划动 >></string>
 
     <string name="sina_weibo">新浪微博</string>
@@ -20,6 +22,10 @@
     <string name="dialog_title_article_per_page_preference">每页显示文章数</string>
 
     <string name="button_add_new_account">添加新账户</string>
+    <string name="button_add_new_source">添加新内容</string>
     <string name="button_login">登入</string>
+
+    <string name="my_timeline">我的微博</string>
+    <string name="my_timeline_desc">我关注的微博</string>
 
 </resources>

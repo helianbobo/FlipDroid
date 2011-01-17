@@ -11,10 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
+import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
@@ -32,6 +29,8 @@ public class IndexActivity extends ListActivity {
     private AccountDB accountDB;
     private SourceDB sourceDB;
     private Cursor sourceCursor;
+
+    private SimpleCursorAdapter adapter;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +66,7 @@ public class IndexActivity extends ListActivity {
         sourceCursor = sourceDB.findAll();
         startManagingCursor(sourceCursor);
 
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
+        adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
                 new String[]{SourceDB.KEY_SOURCE_NAME, SourceDB.KEY_SOURCE_DESC},
                 new int[]{R.id.source_name, R.id.source_desc});
         setListAdapter(adapter);
@@ -113,6 +112,11 @@ public class IndexActivity extends ListActivity {
             case CLEAR_ID:
                 int count = accountDB.deleteAll();
                 Log.e(this.getClass().getName(), count + " accounts are deleted.");
+
+                count = sourceDB.deleteAll();
+                Log.e(this.getClass().getName(), count + " sources are deleted.");
+
+                adapter.notifyDataSetChanged();
                 return true;
             case ACCOUNT_LIST_ID:
                 startActivity(new Intent(this, AccountListActivity.class));
