@@ -19,9 +19,14 @@ import java.util.Map;
 
 public class SourceSelectionActivity extends ListActivity {
 
+
+    private SourceDB sourceDB;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.source_list);
+
+        sourceDB = new SourceDB(this);
 
         String type = getIntent().getExtras().getString("type");
         Log.v(this.getClass().getName(), "Account type:"+type);
@@ -48,6 +53,9 @@ public class SourceSelectionActivity extends ListActivity {
 
         if(Constants.ADD_CUSTOME_SOURCE.equals(sourceId)){
             startActivity(new Intent(this, SourceSearchActivity.class));
+        }else{
+            sourceDB.insert(source);
+            startActivity(new Intent(this, IndexActivity.class));
         }
     }
 }
