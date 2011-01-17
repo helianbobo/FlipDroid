@@ -265,7 +265,7 @@ public class PageActivity extends Activity {
     }
 
     private void noMorePage() {
-        //TODO: Popup "No More Page" notification
+        alarmSender.sendAlarm("");
         flipStarted = false;
 
     }

@@ -69,6 +69,7 @@ public final class R {
         public static final int flip=0x7f070006;
         public static final int key_anim_flip_duration_preference=0x7f070008;
         public static final int key_article_per_page_preference=0x7f07000c;
+        public static final int msg_no_more_page=0x7f070015;
         public static final int my_timeline=0x7f070013;
         public static final int my_timeline_desc=0x7f070014;
         public static final int password=0x7f070002;
