@@ -17,4 +17,6 @@ public class Constants {
 
     public static final String SOURCE_HOME = "SOURCE_HOME";
 
+    public static final String FILENAME_WEIBO_RECOMMAND_SOURCE = "WEIBO_RECOMMAND_SOURCE_DATA.json";
+
 }

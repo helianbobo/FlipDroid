@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import com.goal98.flipdroid.R;
@@ -13,7 +12,6 @@ import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.SourceRepo;
 import com.goal98.flipdroid.util.Constants;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +29,8 @@ public class SourceSelectionActivity extends ListActivity {
         String type = getIntent().getExtras().getString("type");
         Log.v(this.getClass().getName(), "Account type:"+type);
 
-        List<Map<String, String>> sourceList = new SourceRepo().findSourceByType(type);
-        Map<String, String> customeSection = SourceRepo.buildSource(Constants.TYPE_SINA_WEIBO ,"Add Custom Source", Constants.ADD_CUSTOME_SOURCE, "Add any person.");
+        List<Map<String, String>> sourceList = new SourceRepo(this).findSourceByType(type);
+        Map<String, String> customeSection = SourceDB.buildSource(Constants.TYPE_SINA_WEIBO, "Add Custom Source", Constants.ADD_CUSTOME_SOURCE, "Add any person.");
 
         sourceList.add(customeSection);
 

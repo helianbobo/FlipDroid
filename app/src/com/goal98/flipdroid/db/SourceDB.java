@@ -10,6 +10,7 @@ import android.provider.BaseColumns;
 import android.util.Log;
 import com.goal98.flipdroid.util.Constants;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class SourceDB {
@@ -24,6 +25,15 @@ public class SourceDB {
 
     public SourceDB(Context context) {
         sourcehelper = new SourceOpenHelper(context);
+    }
+
+    public static Map<String, String> buildSource(String accountType,String name, String id, String desc){
+        Map<String, String> result = new HashMap<String, String>();
+        result.put(KEY_SOURCE_NAME, name);
+        result.put(KEY_SOURCE_ID, id);
+        result.put(KEY_SOURCE_DESC, desc);
+        result.put(KEY_ACCOUNT_TYPE, accountType);
+        return  result;
     }
 
     public int deleteAll() {

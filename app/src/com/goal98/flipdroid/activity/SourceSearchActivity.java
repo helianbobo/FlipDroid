@@ -1,8 +1,6 @@
 package com.goal98.flipdroid.activity;
 
-import android.app.AlarmManager;
 import android.app.ListActivity;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,13 +12,10 @@ import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.exception.NoNetworkException;
 import com.goal98.flipdroid.model.Source;
-import com.goal98.flipdroid.model.SourceRepo;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
-import com.goal98.flipdroid.util.OneShotAlarm;
 
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +96,7 @@ public class SourceSearchActivity extends ListActivity {
                 for (int i = 0; i < list.size(); i++) {
                     Source source = list.get(i);
                     Map<String, String> customeSection =
-                            SourceRepo.buildSource(source.getAccountType() ,source.getName(), source.getId(), source.getDesc());
+                            SourceDB.buildSource(source.getAccountType(), source.getName(), source.getId(), source.getDesc());
                     sourceList.add(customeSection);
 
                 }
