@@ -1,16 +1,15 @@
 package com.goal98.flipdroid.activity;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SimpleCursorAdapter;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
+import com.goal98.flipdroid.model.Account;
 
 public class AccountListActivity extends ListActivity {
 
@@ -38,7 +37,7 @@ public class AccountListActivity extends ListActivity {
         startManagingCursor(accountCursor);
 
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.account_item, accountCursor,
-                new String[]{AccountDB.KEY_USERNAME, AccountDB.KEY_ACCOUNT_TYPE},
+                new String[]{Account.KEY_USERNAME, Account.KEY_ACCOUNT_TYPE},
                 new int[]{R.id.accoount_title, R.id.accoount_type});
         setListAdapter(adapter);
 

@@ -1,11 +1,8 @@
 package com.goal98.flipdroid.activity;
 
 import android.app.ListActivity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,9 +12,8 @@ import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.view.SourceItemViewBinder;
-
-import java.util.ArrayList;
 
 public class IndexActivity extends ListActivity {
 
@@ -35,11 +31,8 @@ public class IndexActivity extends ListActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        accountDB = new AccountDB(this);
-        sourceDB = new SourceDB(this);
-
-
+//        accountDB = new AccountDB(getApplicationContext());
+        sourceDB = new SourceDB(getApplicationContext());
 
         setContentView(R.layout.index);
 
@@ -53,22 +46,27 @@ public class IndexActivity extends ListActivity {
         });
 
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        sourceCursor.close();
-        accountDB.close();
-        sourceDB.close();
+        if (sourceCursor != null)
+            sourceCursor.close();
+        if (accountDB != null)
+            accountDB.close();
+        if (sourceDB != null)
+            sourceDB.close();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
         sourceCursor = sourceDB.findAll();
         startManagingCursor(sourceCursor);
 
         adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
-                new String[]{SourceDB.KEY_SOURCE_NAME, SourceDB.KEY_SOURCE_DESC, SourceDB.KEY_IMAGE_URL},
+                new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL},
                 new int[]{R.id.source_name, R.id.source_desc, R.id.source_image});
         adapter.setViewBinder(new SourceItemViewBinder());
         setListAdapter(adapter);
@@ -78,8 +76,8 @@ public class IndexActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Intent intent = new Intent(this, PageActivity.class);
         Cursor cursor = (Cursor) l.getItemAtPosition(position);
-        intent.putExtra("type", cursor.getString(cursor.getColumnIndex(SourceDB.KEY_ACCOUNT_TYPE)));
-        intent.putExtra("sourceId", cursor.getString(cursor.getColumnIndex(SourceDB.KEY_SOURCE_ID)));
+        intent.putExtra("type", cursor.getString(cursor.getColumnIndex(Source.KEY_ACCOUNT_TYPE)));
+        intent.putExtra("sourceId", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_ID)));
         cursor.close();
         startActivity(intent);
         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
@@ -112,10 +110,11 @@ public class IndexActivity extends ListActivity {
                 startActivity(new Intent(this, ConfigActivity.class));
                 return true;
             case CLEAR_ID:
-                int count = accountDB.deleteAll();
-                Log.e(this.getClass().getName(), count + " accounts are deleted.");
 
-                count = sourceDB.deleteAll();
+                /* int count = accountDB.deleteAll();
+          Log.e(this.getClass().getName(), count + " accounts are deleted.");*/
+
+                int count = sourceDB.deleteAll();
                 Log.e(this.getClass().getName(), count + " sources are deleted.");
 
                 adapter.notifyDataSetChanged();

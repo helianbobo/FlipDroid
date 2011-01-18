@@ -4,7 +4,9 @@
 
 
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
-        <activity android:name=".activity.CoverActivity" android:alwaysRetainTaskState="true" android:theme="@android:style/Theme.Light">
+        <activity android:name=".activity.CoverActivity"
+                  android:alwaysRetainTaskState="true"
+                  android:theme="@android:style/Theme.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -17,7 +19,7 @@
         <activity android:name=".activity.SourceSelectionActivity" android:theme="@android:style/Theme.Light"/>
         <activity android:name=".activity.SinaAccountActivity" android:theme="@android:style/Theme.Light"/>
         <activity android:name=".activity.AccountListActivity" android:theme="@android:style/Theme.Light"/>
-        <activity android:name=".activity.SourceSearchActivity"/>
+        <activity android:name=".activity.SourceSearchActivity" android:theme="@android:style/Theme.Light"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

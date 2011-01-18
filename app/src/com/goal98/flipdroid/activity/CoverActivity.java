@@ -8,6 +8,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.util.GestureUtil;
 
 
@@ -20,6 +21,8 @@ public class CoverActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cover);
+
+        new AccountDB(getApplicationContext());
 
         TelephonyManager tManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         deviceId = tManager.getDeviceId();

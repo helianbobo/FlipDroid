@@ -56,7 +56,7 @@ public class SourceSearchActivity extends ListActivity {
 
         sourceList = new LinkedList<Map<String, String>>();
 
-        String[] from = new String[]{SourceDB.KEY_SOURCE_NAME, SourceDB.KEY_SOURCE_DESC, SourceDB.KEY_IMAGE_URL};
+        String[] from = new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL};
         int[] to = new int[]{R.id.source_name, R.id.source_desc, R.id.source_image};
         adapter = new SimpleAdapter(this, sourceList, R.layout.source_item, from, to);
         adapter.setViewBinder(new SourceItemViewBinder());

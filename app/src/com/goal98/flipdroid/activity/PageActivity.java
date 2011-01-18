@@ -2,7 +2,6 @@ package com.goal98.flipdroid.activity;
 
 import android.app.*;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -12,24 +11,17 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.view.*;
 import android.view.animation.Animation;
-import android.widget.Toast;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.anim.AnimationFactory;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.exception.NoMorePageException;
 import com.goal98.flipdroid.exception.NoNetworkException;
-import com.goal98.flipdroid.model.ContentRepo;
-import com.goal98.flipdroid.model.FakeArticleSource;
-import com.goal98.flipdroid.model.Page;
-import com.goal98.flipdroid.model.SimplePagingStrategy;
+import com.goal98.flipdroid.model.*;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.GestureUtil;
-import com.goal98.flipdroid.util.OneShotAlarm;
 import com.goal98.flipdroid.view.PageView;
-
-import java.util.Calendar;
 
 public class PageActivity extends Activity {
 
@@ -117,7 +109,7 @@ public class PageActivity extends Activity {
             String userId = preferences.getString("sina_account", null);
             Cursor cursor = accountDB.findByTypeAndUsername(accountType, userId);
             cursor.moveToFirst();
-            String password = cursor.getString(cursor.getColumnIndex(AccountDB.KEY_PASSWORD));
+            String password = cursor.getString(cursor.getColumnIndex(Account.KEY_PASSWORD));
             cursor.close();
 
             repo.setArticleSource(new SinaArticleSource(false, userId, password, sourceId));
