@@ -19,6 +19,7 @@ public class SourceDB {
     public static final String KEY_SOURCE_NAME = "source_name";
     public static final String KEY_SOURCE_DESC = "source_desc";
     public static final String KEY_SOURCE_ID = "source_id";
+    public static final String KEY_IMAGE_URL = "image_url";
     public static final String KEY_ACCOUNT_TYPE = "account_type";
 
     private SQLiteOpenHelper sourcehelper;
@@ -27,12 +28,13 @@ public class SourceDB {
         sourcehelper = new SourceOpenHelper(context);
     }
 
-    public static Map<String, String> buildSource(String accountType,String name, String id, String desc){
+    public static Map<String, String> buildSource(String accountType,String name, String id, String desc, String imageUrl){
         Map<String, String> result = new HashMap<String, String>();
         result.put(KEY_SOURCE_NAME, name);
         result.put(KEY_SOURCE_ID, id);
         result.put(KEY_SOURCE_DESC, desc);
         result.put(KEY_ACCOUNT_TYPE, accountType);
+        result.put(KEY_IMAGE_URL, imageUrl);
         return  result;
     }
 
@@ -71,6 +73,7 @@ public class SourceDB {
         values.put(KEY_SOURCE_NAME, source.get(KEY_SOURCE_NAME));
         values.put(KEY_ACCOUNT_TYPE, source.get(KEY_ACCOUNT_TYPE));
         values.put(KEY_SOURCE_ID, source.get(KEY_SOURCE_ID));
+        values.put(KEY_IMAGE_URL, source.get(KEY_IMAGE_URL));
         values.put(KEY_SOURCE_DESC, source.get(KEY_SOURCE_DESC));
         return insert(values);
     }
@@ -98,8 +101,6 @@ public class SourceDB {
 
     public static class SourceOpenHelper extends SQLiteOpenHelper {
 
-        private static final int DATABASE_VERSION = 5;
-
         private static final String ACCOUNT_TABLE_CREATE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         BaseColumns._ID + " INTEGER," +
@@ -107,12 +108,13 @@ public class SourceDB {
                         KEY_SOURCE_NAME + " TEXT, " +
                         KEY_SOURCE_DESC + " TEXT, " +
                         KEY_SOURCE_ID + " TEXT, " +
+                        KEY_IMAGE_URL + " TEXT, " +
                         "PRIMARY KEY ("+KEY_ACCOUNT_TYPE + "," + KEY_SOURCE_NAME +")" +
                         ");";
 
 
         public SourceOpenHelper(Context context) {
-            super(context, Constants.DATABASE_NAME, null, DATABASE_VERSION);
+            super(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
         }
 
         @Override

@@ -15,6 +15,7 @@ import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.view.SourceItemViewBinder;
 
 import java.util.ArrayList;
 
@@ -67,8 +68,9 @@ public class IndexActivity extends ListActivity {
         startManagingCursor(sourceCursor);
 
         adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
-                new String[]{SourceDB.KEY_SOURCE_NAME, SourceDB.KEY_SOURCE_DESC},
-                new int[]{R.id.source_name, R.id.source_desc});
+                new String[]{SourceDB.KEY_SOURCE_NAME, SourceDB.KEY_SOURCE_DESC, SourceDB.KEY_IMAGE_URL},
+                new int[]{R.id.source_name, R.id.source_desc, R.id.source_image});
+        adapter.setViewBinder(new SourceItemViewBinder());
         setListAdapter(adapter);
     }
 

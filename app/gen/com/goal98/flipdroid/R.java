@@ -40,10 +40,11 @@ public final class R {
         public static final int sina_username=0x7f090006;
         public static final int siteGrid=0x7f090009;
         public static final int sourceGrid=0x7f09000a;
-        public static final int source_desc=0x7f09000c;
-        public static final int source_name=0x7f09000b;
-        public static final int source_query=0x7f09000d;
-        public static final int source_search_button=0x7f09000e;
+        public static final int source_desc=0x7f09000d;
+        public static final int source_image=0x7f09000b;
+        public static final int source_name=0x7f09000c;
+        public static final int source_query=0x7f09000e;
+        public static final int source_search_button=0x7f09000f;
     }
     public static final class layout {
         public static final int account_item=0x7f030000;

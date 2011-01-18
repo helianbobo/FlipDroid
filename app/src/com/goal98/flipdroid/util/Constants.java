@@ -19,4 +19,5 @@ public class Constants {
 
     public static final String FILENAME_WEIBO_RECOMMAND_SOURCE = "WEIBO_RECOMMAND_SOURCE_DATA.json";
 
+    public static final int DATABASE_VERSION = 7;
 }

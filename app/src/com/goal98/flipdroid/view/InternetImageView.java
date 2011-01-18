@@ -5,14 +5,17 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
+import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.util.Cache;
 import com.goal98.flipdroid.util.CacheFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -26,6 +29,20 @@ public class InternetImageView extends ImageView {
 
     public void setSampleSize(int sampleSize) {
         this.sampleSize = sampleSize;
+    }
+
+    public InternetImageView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        /*String imageUrl = attrs.getAttributeValue(SourceDB.KEY_IMAGE_URL, null);
+        if(imageUrl != null){
+            URL imageURL = null;
+            try {
+                imageURL = new URL(imageUrl);
+                loadImage(imageURL);
+            } catch (MalformedURLException e) {
+                Log.e(this.getClass().toString(), e.getMessage(), e);
+            }
+        }*/
     }
 
     public InternetImageView(Context context, URL url) {

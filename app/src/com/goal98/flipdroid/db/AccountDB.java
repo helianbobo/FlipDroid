@@ -17,6 +17,7 @@ public class AccountDB {
     public static final String ACCOUNT_TABLE_NAME = "account";
     public static final String KEY_USERNAME = "username";
     public static final String KEY_PASSWORD = "password";
+    public static final String KEY_IMAGE_URL = "image_url";
     public static final String KEY_ACCOUNT_TYPE = "account_type";
 
     private SQLiteOpenHelper accounthelper;
@@ -138,20 +139,19 @@ public class AccountDB {
 
     public static class AccountOpenHelper extends SQLiteOpenHelper {
 
-        private static final int DATABASE_VERSION = 5;
-
         private static final String ACCOUNT_TABLE_CREATE =
                 "CREATE TABLE " + ACCOUNT_TABLE_NAME + " (" +
                         BaseColumns._ID + " INTEGER," +
                         KEY_ACCOUNT_TYPE + " TEXT, " +
                         KEY_USERNAME + " TEXT, " +
                         KEY_PASSWORD + " TEXT, " +
+                        KEY_IMAGE_URL + " TEXT, " +
                         "PRIMARY KEY (" + KEY_ACCOUNT_TYPE + "," + KEY_USERNAME + ")" +
                         ");";
 
 
         public AccountOpenHelper(Context context) {
-            super(context, Constants.DATABASE_NAME, null, DATABASE_VERSION);
+            super(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
         }
 
         @Override

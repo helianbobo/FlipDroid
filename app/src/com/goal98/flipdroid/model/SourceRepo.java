@@ -39,7 +39,8 @@ public class SourceRepo {
                     Map<String, String> source1 = SourceDB.buildSource(type,
                             jsonObject.getString("name"),
                             jsonObject.getString("id"),
-                            jsonObject.getString("desc"));
+                            jsonObject.getString("desc"),
+                            jsonObject.getString("image_url"));
                     result.add(source1);
                 }
 

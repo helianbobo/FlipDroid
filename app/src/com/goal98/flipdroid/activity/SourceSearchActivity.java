@@ -15,6 +15,7 @@ import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.flipdroid.view.SourceItemViewBinder;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -55,9 +56,10 @@ public class SourceSearchActivity extends ListActivity {
 
         sourceList = new LinkedList<Map<String, String>>();
 
-        String[] from = new String[]{SourceDB.KEY_SOURCE_NAME, SourceDB.KEY_SOURCE_DESC};
-        int[] to = new int[]{R.id.source_name, R.id.source_desc};
+        String[] from = new String[]{SourceDB.KEY_SOURCE_NAME, SourceDB.KEY_SOURCE_DESC, SourceDB.KEY_IMAGE_URL};
+        int[] to = new int[]{R.id.source_name, R.id.source_desc, R.id.source_image};
         adapter = new SimpleAdapter(this, sourceList, R.layout.source_item, from, to);
+        adapter.setViewBinder(new SourceItemViewBinder());
         setListAdapter(adapter);
 
         Button searchButton = (Button) findViewById(R.id.source_search_button);
@@ -96,7 +98,12 @@ public class SourceSearchActivity extends ListActivity {
                 for (int i = 0; i < list.size(); i++) {
                     Source source = list.get(i);
                     Map<String, String> customeSection =
-                            SourceDB.buildSource(source.getAccountType(), source.getName(), source.getId(), source.getDesc());
+                            SourceDB.buildSource(
+                                    source.getAccountType(),
+                                    source.getName(),
+                                    source.getId(),
+                                    source.getDesc(),
+                                    source.getImageUrl());
                     sourceList.add(customeSection);
 
                 }

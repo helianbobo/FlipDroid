@@ -115,6 +115,7 @@ public class SinaArticleSource extends AbstractArticleSource {
                     source.setId(String.valueOf(user.getId()));
                     source.setDesc(user.getDescription());
                     source.setAccountType(Constants.TYPE_SINA_WEIBO);
+                    source.setImageUrl(user.getProfileImageURL().toString());
                     result.add(source);
                 }
             }
