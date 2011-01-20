@@ -97,12 +97,16 @@ public class SiteActivity extends Activity {
                         if (Constants.TYPE_SINA_WEIBO.equals(type)) {
                             startActivity(new Intent(SiteActivity.this, SinaAccountActivity.class));
                             overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+
                         } else if(Constants.TYPE_TENCENT_WEIBO.equals(type)){
                             //TODO: Tencent Login
                         } else if(Constants.TYPE_TWITTER.equals(type)){
                             //TODO: Twitter Login
                         }
+
+                        finish();
                     }
+
 
 
                 }
