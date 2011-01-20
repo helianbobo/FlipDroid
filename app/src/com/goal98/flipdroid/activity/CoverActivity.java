@@ -53,6 +53,7 @@ public class CoverActivity extends Activity {
         startActivity(new Intent(this, IndexActivity.class));
         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
         goingToSleep = true;
+        finish();
     }
 
     @Override

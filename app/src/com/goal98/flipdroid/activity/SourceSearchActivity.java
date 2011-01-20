@@ -79,6 +79,8 @@ public class SourceSearchActivity extends ListActivity {
         sourceDB.insert(source);
 
         startActivity(new Intent(this, IndexActivity.class));
+
+        finish();
     }
 
     private class SearchSourceTask extends AsyncTask<String, NoNetworkException, Integer> {

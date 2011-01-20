@@ -44,13 +44,15 @@ public class SourceItemViewBinder implements SimpleAdapter.ViewBinder, SimpleCur
                 break;
             case R.id.source_image:
 
-                InternetImageView sourceImageView = (InternetImageView) view;
-                try {
-                    URL url = new URL(value);
-                    sourceImageView.loadImage(url);
-                } catch (Exception e) {
-                    Log.e(this.getClass().getName(), e.getMessage(), e);
-                    binded = false;
+                if (value != null) {
+                    InternetImageView sourceImageView = (InternetImageView) view;
+                    try {
+                        URL url = new URL(value);
+                        sourceImageView.loadImage(url);
+                    } catch (Exception e) {
+                        Log.e(this.getClass().getName(), e.getMessage(), e);
+                        binded = false;
+                    }
                 }
 
                 break;

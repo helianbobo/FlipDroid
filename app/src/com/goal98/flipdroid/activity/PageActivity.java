@@ -172,8 +172,10 @@ public class PageActivity extends Activity {
 
         } else {
 //            currentPageIndex++;
-            startActivity(new Intent(this, IndexActivity.class));
+//            startActivity(new Intent(this, IndexActivity.class));
             overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+
+            finish();
         }
     }
 

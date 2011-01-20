@@ -111,10 +111,11 @@ public class IndexActivity extends ListActivity {
                 return true;
             case CLEAR_ID:
 
-                /* int count = accountDB.deleteAll();
-          Log.e(this.getClass().getName(), count + " accounts are deleted.");*/
+                accountDB = new AccountDB(this);
+                int count = accountDB.deleteAll();
+                Log.e(this.getClass().getName(), count + " accounts are deleted.");
 
-                int count = sourceDB.deleteAll();
+                count = sourceDB.deleteAll();
                 Log.e(this.getClass().getName(), count + " sources are deleted.");
 
                 adapter.notifyDataSetChanged();

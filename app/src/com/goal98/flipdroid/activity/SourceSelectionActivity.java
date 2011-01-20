@@ -61,5 +61,7 @@ public class SourceSelectionActivity extends ListActivity {
             sourceDB.insert(source);
             startActivity(new Intent(this, IndexActivity.class));
         }
+
+        finish();
     }
 }

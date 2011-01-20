@@ -30,7 +30,7 @@ public class SinaAccountActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         Bundle extras = getIntent().getExtras();
-        if(extras != null)
+        if (extras != null)
             nextActivity = extras.getString("next");
 
         setContentView(R.layout.sina_account);
@@ -43,23 +43,12 @@ public class SinaAccountActivity extends Activity {
         Button button = (Button) findViewById(R.id.sina_login);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                String username = usernameView.getText().toString();
-                String password = passwordView.getText().toString();
+
 
                 try {
-                    sourceDB.insert(Constants.TYPE_SINA_WEIBO, getString(R.string.my_timeline), Constants.SOURCE_HOME, getString(R.string.my_timeline_desc));
-                    accountDB.insertOrUpdate(username, password, Constants.TYPE_SINA_WEIBO);
-                    preferences.edit().putString("sina_account", username).commit();
+                    saveAccount();
 
-                    Intent intent;
-                    if (SourceSelectionActivity.class.getName().equals(nextActivity)) {
-                        intent = new Intent(SinaAccountActivity.this, SourceSelectionActivity.class);
-                    }else {
-                        intent = new Intent(SinaAccountActivity.this, AccountListActivity.class);
-                    }
-                    intent.putExtra("type", Constants.TYPE_SINA_WEIBO);
-
-                    startActivity(intent);
+                    goToNextActivity();
 
                 } catch (Exception e) {
                     Log.e(SinaAccountActivity.class.getName(), e.getMessage());
@@ -67,6 +56,27 @@ public class SinaAccountActivity extends Activity {
 
             }
         });
+    }
+
+    private void saveAccount() {
+        String username = usernameView.getText().toString();
+        String password = passwordView.getText().toString();
+        sourceDB.insert(Constants.TYPE_SINA_WEIBO, getString(R.string.my_timeline), Constants.SOURCE_HOME, getString(R.string.my_timeline_desc));
+        accountDB.insertOrUpdate(username, password, Constants.TYPE_SINA_WEIBO);
+        preferences.edit().putString("sina_account", username).commit();
+    }
+
+    private void goToNextActivity() {
+        Intent intent;
+        if (SourceSelectionActivity.class.getName().equals(nextActivity)) {
+            intent = new Intent(this, SourceSelectionActivity.class);
+        } else {
+            intent = new Intent(this, AccountListActivity.class);
+        }
+        intent.putExtra("type", Constants.TYPE_SINA_WEIBO);
+
+        startActivity(intent);
+        finish();
     }
 
     @Override
