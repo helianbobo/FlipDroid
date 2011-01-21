@@ -84,6 +84,10 @@ public abstract class AbstractDB {
                         "PRIMARY KEY ("+ Source.KEY_ACCOUNT_TYPE + "," + Source.KEY_SOURCE_NAME +")" +
                         ");";
 
+        private static final String SOURCE_INIT_DATA = "INSERT INTO " + Source.TABLE_NAME +
+                " ("+Source.KEY_SOURCE_NAME+","+Source.KEY_SOURCE_ID+","+Source.KEY_ACCOUNT_TYPE+")"+
+                " values ('FAKE', 'FAKE', '"+Constants.TYPE_FAKE+"');";
+
 
         public DBOpenHelper(Context context) {
             super(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
@@ -108,6 +112,7 @@ public abstract class AbstractDB {
             Log.w(this.getClass().getName(), "Creating table " + Source.TABLE_NAME);
             try {
                 sqLiteDatabase.execSQL(SOURCE_TABLE_CREATE);
+                sqLiteDatabase.execSQL(SOURCE_INIT_DATA);
             } catch (SQLException e) {
                 Log.e(this.getClass().getName(), e.getMessage(), e);
             }
