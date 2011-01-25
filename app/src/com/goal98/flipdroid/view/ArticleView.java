@@ -39,7 +39,7 @@ public class ArticleView extends TableLayout {
         contentView.setText(article.getContent());
 
         if (portraitView == null) {
-            portraitView = new InternetImageView(getContext(), article.getImageUrl(), 2);
+            portraitView = new InternetImageView(getContext(), article.getPortraitImageUrl(), 2);
             portraitView.setImageResource(R.drawable.portrait_small);
             portraitView.setPadding(2, 2 ,2 ,2);
         }

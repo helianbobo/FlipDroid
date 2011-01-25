@@ -46,19 +46,32 @@ public class FakeArticleSource extends AbstractArticleSource {
 
         String title = "Title " + count++;
         String content = generateRandomText(140);
+        String status = generateRandomStatus();
+        String author = "helianbobo";
 
 
         Article article = new Article();
         article.setTitle(title);
+        URL portraitImageUrl = null;
         URL imageUrl = null;
         try {
-            imageUrl = new URL("http://tp4.sinaimg.cn/1702755335/50/1283204608/1");
+            portraitImageUrl = new URL("http://tp4.sinaimg.cn/1702755335/50/1283204608/1");
+            imageUrl = new URL("http://42qu.net/pic_show/721/48/e2/10895.jpg");
         } catch (MalformedURLException e) {
             Log.e(this.getClass().getName(), e.getMessage(), e);
         }
+        article.setPortraitImageUrl(portraitImageUrl);
         article.setImageUrl(imageUrl);
         article.setContent(content);
+        article.setStatus(status);
+        article.setAuthor(author);
         return article;
+    }
+
+    private String generateRandomStatus(){
+        boolean includeUrl = new Random().nextBoolean();
+        String url = " http://sinaurl.cn/hGbIo8";
+        return "这场比较好看，世界杯之后的较量，看看谁的南非十六强含金量高。真正的亚洲老大之争。韩国如何跑动逼迫日本的传递技术，日本如何化解对手的硬朗。而且都是东亚球队，但是各自风格鲜明" + (includeUrl?url:"");
     }
 
     private String generateRandomText(int max) {
