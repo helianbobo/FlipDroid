@@ -72,7 +72,7 @@ public class SinaArticleSource extends AbstractArticleSource {
                 Article article = new Article();
                 article.setContent(status.getText());
                 article.setTitle(status.getUser().getName());
-                article.setImageUrl(status.getUser().getProfileImageURL());
+                article.setPortraitImageUrl(status.getUser().getProfileImageURL());
                 articleList.add(article);
             }
 
