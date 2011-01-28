@@ -2,6 +2,7 @@ package com.goal98.flipdroid.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -33,8 +34,9 @@ public class ArticleView extends TableLayout {
             contentView = new TextView(getContext());
             contentView.setPadding(5, 5, 5, 5);
             contentView.setSingleLine(false);
-            contentView.setWidth(1);
-            contentView.setMaxLines(4);
+            contentView.setGravity(Gravity.LEFT|Gravity.TOP);
+            //contentView.setWidth(1);
+            //contentView.setMaxLines(4);
         }
         contentView.setText(article.getContent());
 
