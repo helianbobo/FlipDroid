@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import com.goal98.flipdroid.R;
@@ -19,7 +20,7 @@ public class PageView extends LinearLayout {
 
     private Page page;
     private int articlePerRow = 2;
-    private View layout; //this layout is supposed to be dynamic, depending on the Articals on this page
+    private LinearLayout layout; //this layout is supposed to be dynamic, depending on the Articals on this page
 
 
     public void setPage(Page page) {
@@ -74,31 +75,34 @@ public class PageView extends LinearLayout {
     private int determineLayout(Page page) {
         int[] candidate = new int[]{R.layout.l1, R.layout.l2,R.layout.l3};
         int layoutIndex = new Random().nextInt(3);
-        return candidate[layoutIndex];
+        return candidate[0];
     }
 
     private void fillPartOnLayout(int index, int viewid, List<Article> articleList) {
         Article article = articleList.get(index);
         ArticleView articleView = new ArticleView(this.getContext(), article);
-
+        articleView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT,1));
         LinearLayout part1 = (LinearLayout)layout.findViewById(viewid);
-        part1.addView(articleView);
+        part1.addView(articleView,new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT,1));
     }
 
     public PageView(Context context) {
         super(context);
+        this.setBaselineAligned(false);
         //setDynamicLayout(context, R.layout.l1);
     }
 
     private void setDynamicLayout(Context context, int layoutId) {
         this.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(context);
-        this.layout = inflater.inflate(layoutId, null);
-        this.addView(layout, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT));
+        this.layout = (LinearLayout) inflater.inflate(layoutId, null);
+        layout.setBaselineAligned(false);
+        this.addView(layout, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT,1));
     }
 
     public PageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.setBaselineAligned(false);
         //setDynamicLayout(context, R.layout.l1);
     }
 }

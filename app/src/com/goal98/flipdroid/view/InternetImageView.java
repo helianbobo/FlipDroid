@@ -47,13 +47,13 @@ public class InternetImageView extends ImageView {
 
     public InternetImageView(Context context, URL url) {
         super(context);
-        loadImage(url);
+        //loadImage(url);
 
     }
 
     public InternetImageView(Context context, URL url, int sampleSize) {
         super(context);
-        loadImage(url);
+        //loadImage(url);
         this.sampleSize = sampleSize;
 
     }
@@ -62,12 +62,12 @@ public class InternetImageView extends ImageView {
 
     public void loadImage(URL url) {
         this.url = url;
-        loadImage();
+        //loadImage();
     }
 
     public void loadImage() {
         DownloadImageTask task = new DownloadImageTask();
-        task.execute(url);
+        //task.execute(url);
     }
 
     private Bitmap loadBitmap(URL url, BitmapFactory.Options options) {

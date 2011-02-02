@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.view.*;
 import android.view.animation.Animation;
+import android.widget.LinearLayout;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.anim.AnimationFactory;
 import com.goal98.flipdroid.db.AccountDB;
@@ -73,9 +74,12 @@ public class PageActivity extends Activity {
         setContentView(R.layout.main);
 
         container = (ViewGroup) findViewById(R.id.pageContainer);
-        current = findViewById(R.id.currentPage);
-        next = findViewById(R.id.nextPage);
+        current = new com.goal98.flipdroid.view.PageView(this);
+        current.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
 
+        next = new com.goal98.flipdroid.view.PageView(this);
+        next.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
+        next.setVisibility(LinearLayout.GONE);
         repo = new ContentRepo();
 
         simplePagingStrategy = new SimplePagingStrategy();
@@ -302,7 +306,7 @@ public class PageActivity extends Activity {
 
 
     private void processCurrentPage() {
-        container.removeAllViews();
+        //container.removeAllViews();
 
         next.setVisibility(View.VISIBLE);
 
