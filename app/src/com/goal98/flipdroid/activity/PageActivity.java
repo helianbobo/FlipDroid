@@ -306,7 +306,7 @@ public class PageActivity extends Activity {
 
 
     private void processCurrentPage() {
-        //container.removeAllViews();
+        container.removeAllViews();
 
         next.setVisibility(View.VISIBLE);
 
