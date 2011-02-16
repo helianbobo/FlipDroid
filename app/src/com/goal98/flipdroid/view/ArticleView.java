@@ -41,7 +41,7 @@ public class ArticleView extends LinearLayout {
         contentView.setText(article.getContent());
         contentView.setMaxLines(6);
         contentView.setPadding(10, 10, 10, 10);
-        contentView.setBackgroundColor(0xFFE4BEF1);
+        contentView.setBackgroundColor(0xFFFFFFFF);
             contentView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
             //contentView.setSingleLine(false);
             //contentView.setGravity(Gravity.LEFT|Gravity.TOP);

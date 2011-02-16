@@ -86,6 +86,7 @@ public final class R {
         public static final int password=0x7f070002;
         public static final int search=0x7f070005;
         public static final int sina_weibo=0x7f070007;
+        public static final int sinaweoboheader=0x7f070016;
         public static final int summary_anim_flip_duration_preference=0x7f07000a;
         public static final int summary_article_per_page_preference=0x7f07000e;
         public static final int title_anim_flip_duration_preference=0x7f070009;

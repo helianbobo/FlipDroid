@@ -2,12 +2,16 @@ package com.goal98.flipdroid.view;
 
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.Page;
@@ -20,7 +24,7 @@ public class PageView extends LinearLayout {
 
     private Page page;
     private int articlePerRow = 2;
-    private LinearLayout layout; //this layout is supposed to be dynamic, depending on the Articals on this page
+    private LinearLayout layout; //this layout is supposed to be dynamic, depending on the Articles on this page
 
 
     public void setPage(Page page) {
@@ -39,32 +43,11 @@ public class PageView extends LinearLayout {
             if (articleList != null) {
                 boolean useRow = true;
                 LinearLayout row = null;
-//                for (int i = 0; i < articleList.size(); i++) {
                 fillPartOnLayout(0, R.id.part1_1, articleList);
                 fillPartOnLayout(1, R.id.part1_2, articleList);
                 fillPartOnLayout(2, R.id.part2_1, articleList);
                 fillPartOnLayout(3, R.id.part2_2, articleList);
                 fillPartOnLayout(4, R.id.part2_3, articleList);
-
-
-//                    if(useRow){
-//                        if(row == null){
-//                            row = new LinearLayout(this.getContext());
-//                            int orientation = getOrientation() == VERTICAL? HORIZONTAL:VERTICAL;
-//                            row.setOrientation(orientation);
-//                            addView(row);
-//                        }
-//                        row.addView(articleView);
-//
-//                        if(row.getChildCount() == articlePerRow){
-//                            useRow = false;
-//                            row = null;
-//                        }
-//                    }else {
-//                        this.addView(articleView);
-//                        useRow = true;
-//                    }
-//                }
             }
         }
 
@@ -96,13 +79,31 @@ public class PageView extends LinearLayout {
         this.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(context);
         this.layout = (LinearLayout) inflater.inflate(layoutId, null);
-        layout.setBaselineAligned(false);
-        this.addView(layout, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT,1));
+        LinearLayout headerLayout = new LinearLayout(context);
+        headerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
+
+        TextView headerTextView = new TextView(context);
+        headerTextView.setGravity(Gravity.CENTER);
+        headerTextView.setText(R.string.sinaweoboheader);
+        Typeface boldTypeface = Typeface.DEFAULT_BOLD;
+        headerTextView.setTypeface(boldTypeface);
+        headerLayout.setGravity(Gravity.CENTER);
+        LayoutParams headerLayoutLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+        headerLayoutLayoutParams.setMargins(0, 0, 0, 1);
+        headerLayout.setBackgroundColor(Color.WHITE);
+
+        headerLayout.addView(headerTextView, headerLayoutLayoutParams);
+        this.setOrientation(VERTICAL);
+        this.setBackgroundColor(Color.BLACK);
+        LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 95);
+        layoutParams.setMargins(0,0,0,1);
+        this.addView(headerLayout, layoutParams);
+        this.addView(layout, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT,5));
     }
 
-    public PageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        this.setBaselineAligned(false);
-        //setDynamicLayout(context, R.layout.l1);
-    }
+//    public PageView(Context context, AttributeSet attrs) {
+//        super(context, attrs);
+//        this.setBaselineAligned(false);
+//        //setDynamicLayout(context, R.layout.l1);
+//    }
 }
