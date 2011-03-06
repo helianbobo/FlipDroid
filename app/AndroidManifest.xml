@@ -12,6 +12,14 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity><activity android:name=".activity.ActivityTestMultilineEllipse"
+                  android:alwaysRetainTaskState="true"
+                  android:theme="@android:style/Theme.Light">
+             <intent-filter>
+
+                <action android:name="android.intent.action.MAIN"/>
+
+            </intent-filter>
         </activity>
         <activity android:name=".activity.ConfigActivity" android:theme="@android:style/Theme.Light"/>
         <activity android:name=".activity.PageActivity" android:theme="@android:style/Theme.Light"/>
