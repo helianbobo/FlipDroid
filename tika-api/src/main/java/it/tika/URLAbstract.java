@@ -1,8 +1,6 @@
 package it.tika;
 
-
 public class URLAbstract {
-
     private String title;
     private String content;
 
@@ -22,10 +20,9 @@ public class URLAbstract {
         this.title = title;
     }
 
-    public URLAbstract(String title, String content){
+    public URLAbstract(String title, String content) {
         this.title = title;
         this.content = content;
 
     }
-
 }
