@@ -31,6 +31,19 @@ public class URLAbstractResource extends ServerResource {
             String url = form.getFirst("url").getValue();
             String urlDecoded =  java.net.URLDecoder.decode(url,"UTF-8") ;
             result = getDB().find(urlDecoded);
+
+            if(result == null){
+                String rawDocument = URLRawRepo.getInstance().fetch(urlDecoded);
+                if(rawDocument == null){
+                    getLogger().log(Level.INFO, "Can't fetch document from url:" + urlDecoded);
+                }else{
+                    result = ContentExtractor.getInstance().extract(rawDocument);
+                    if (result != null){
+                        getDB().insert(result);
+                    }
+                }
+            }
+
         } catch (UnsupportedEncodingException e) {
             getLogger().log(Level.INFO, e.getMessage(), e);
         } catch (NullPointerException ne){
@@ -46,9 +59,12 @@ public class URLAbstractResource extends ServerResource {
         try {
             urlAbstract = find();
         } catch (DBNotAvailableException e) {
+            getLogger().log(Level.INFO,e.getMessage());
             getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
             return null;
         }
+
+
         if(urlAbstract == null){
             getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
             return null;
