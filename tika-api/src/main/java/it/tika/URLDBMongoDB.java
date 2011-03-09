@@ -22,7 +22,7 @@ public class URLDBMongoDB implements URLDBInterface {
 
     }
 
-    public static URLDBInterface getInstance() throws DBNotAvailableException{
+    public static URLDBInterface getInstance() throws DBNotAvailableException {
         if (instance == null) {
             try {
                 instance = new URLDBMongoDB();
@@ -42,10 +42,12 @@ public class URLDBMongoDB implements URLDBInterface {
         URLAbstract urlAbstract = null;
         try {
             DBObject urlFromDB = db.getCollection(urlCollectionName).findOne(query);
-            urlAbstract = new URLAbstract(
-                    url,
-                    (String) urlFromDB.get("title"),
-                    (String) urlFromDB.get("content"));
+            if (urlFromDB != null) {
+                urlAbstract = new URLAbstract(
+                        url,
+                        (String) urlFromDB.get("title"),
+                        (String) urlFromDB.get("content"));
+            }
         } catch (MongoException e) {
             logger.log(Level.INFO, e.getMessage(), e);
         }
