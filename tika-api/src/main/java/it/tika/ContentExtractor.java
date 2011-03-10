@@ -1,5 +1,12 @@
 package it.tika;
 
+import de.l3s.boilerpipe.BoilerpipeProcessingException;
+import de.l3s.boilerpipe.document.TextDocument;
+import de.l3s.boilerpipe.extractors.ArticleExtractor;
+import de.l3s.boilerpipe.extractors.CommonExtractors;
+import de.l3s.boilerpipe.extractors.ExtractorBase;
+import it.tika.exception.ExtractorException;
+
 public class ContentExtractor {
 
     private static ContentExtractor instance;
@@ -15,9 +22,23 @@ public class ContentExtractor {
         return instance;
     }
 
-    public URLAbstract extract(String raw){
+    public String extract(TextDocument raw) throws ExtractorException{
+
+        ExtractorBase extractor = CommonExtractors.ARTICLE_EXTRACTOR;
+
         //TODO: shaoli
-        return null;
+        String result = null;
+
+        try {
+
+            result = extractor.getText(raw);
+
+
+        } catch (BoilerpipeProcessingException e) {
+            throw new ExtractorException(e);
+        }
+
+        return result;
     }
 
 }

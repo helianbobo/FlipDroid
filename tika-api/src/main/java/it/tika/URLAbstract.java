@@ -5,6 +5,9 @@ public class URLAbstract {
     private String title;
     private String content;
 
+    public URLAbstract() {
+    }
+
     public String getUrl() {
         return url;
     }
