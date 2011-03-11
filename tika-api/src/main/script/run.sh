@@ -10,7 +10,7 @@ DIRNAME=`dirname $0`
 # Setup TIKA_API_HOME
 if [ "x$TIKA_API_HOME" = "x" ]; then
     # get the full path (without any relative bits)
-    TIKA_API_HOME=`cd $DIRNAME/..; pwd`
+    TIKA_API_HOME=`cd $DIRNAME; pwd`
 fi
 
 # Setup the JVM
@@ -23,7 +23,7 @@ if [ "x$JAVA" = "x" ]; then
 fi
 
 # Setup the classpath
-runjar="$TIKA_API_HOME/bin/tika-api.jar"
+runjar="$TIKA_API_HOME/tika-api.jar"
 if [ ! -f "$runjar" ]; then
     die "Missing required file: $runjar"
 fi
