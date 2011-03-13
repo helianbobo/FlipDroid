@@ -2,9 +2,12 @@ package it.tika;
 
 
 import de.l3s.boilerpipe.document.TextDocument;
+import flipdroid.grepper.EncodingDetector;
 import it.tika.exception.DBNotAvailableException;
 import it.tika.exception.ExtractorException;
 import it.tika.exception.URLRepoException;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
@@ -14,6 +17,8 @@ import org.restlet.resource.ServerResource;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.logging.Level;
 
 public class URLAbstractResource extends ServerResource {
@@ -39,16 +44,26 @@ public class URLAbstractResource extends ServerResource {
                 getLogger().log(Level.INFO, e.getMessage(), e);
             }
 
+
             if (result == null) {
 
-                TextDocument rawDocument = URLRawRepo.getInstance().fetch(urlDecoded);
-                if (rawDocument == null) {
+                byte[] rawBytes = URLRawRepo.getInstance().fetch(urlDecoded);
+                String charset = EncodingDetector.detect(urlDecoded);
+
+                Charset cs = Charset.forName(charset);
+                if (charset == null) {
+                    try {
+                        cs = Charset.forName("utf-8");
+                    } catch (UnsupportedCharsetException e) {
+                        // keep default
+                    }
+                }
+                if (rawBytes == null) {
                     getLogger().log(Level.INFO, "Can't fetch document from url:" + urlDecoded);
                 } else {
-                    String content = ContentExtractor.getInstance().extract(rawDocument);
+                    result = new URLAbstract(rawBytes, cs);
 
-                    result = new URLAbstract(urlDecoded, rawDocument.getTitle(), content);
-
+                    result = WebpageExtractor.getInstance().extract(result);
                     if (result != null) {
                         try {
                             getDB().insert(result);
@@ -67,6 +82,8 @@ public class URLAbstractResource extends ServerResource {
             getLogger().log(Level.SEVERE, urle.getMessage(), urle);
         } catch (ExtractorException ee) {
             getLogger().log(Level.SEVERE, ee.getMessage(), ee);
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         return result;
     }
@@ -85,7 +102,16 @@ public class URLAbstractResource extends ServerResource {
             return null;
         }
 
-        JsonRepresentation representation = new JsonRepresentation(urlAbstract);
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.accumulate("title", urlAbstract.getTitle());
+            jsonObject.accumulate("content", urlAbstract.getContent());
+        } catch (JSONException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        JsonRepresentation representation = new JsonRepresentation(jsonObject);
         StringWriter writer = new StringWriter();
         try {
             representation.write(writer);

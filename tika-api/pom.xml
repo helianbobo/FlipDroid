@@ -64,19 +64,9 @@
         </dependency>
 
         <dependency>
-            <groupId>de.l3s.boilerpipe</groupId>
-            <artifactId>boilerpipe</artifactId>
-            <version>1.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>xerces</groupId>
-            <artifactId>xerces</artifactId>
-            <version>2.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sourceforge.nekohtml</groupId>
-            <artifactId>nekohtml</artifactId>
-            <version>1.9.13</version>
+            <groupId>flipdroid</groupId>
+            <artifactId>grepper</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

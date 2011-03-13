@@ -1,11 +1,25 @@
 package it.tika;
 
+import java.nio.charset.Charset;
+
 public class URLAbstract {
     private String url;
     private String title;
     private String content;
+    private Charset charset;
+
+    public byte[] getRawContent() {
+        return rawContent;
+    }
+
+    private byte[] rawContent;
 
     public URLAbstract() {
+    }
+    
+    public URLAbstract(byte[] rawContent, Charset charset){
+        this.rawContent = rawContent;
+        this.charset = charset;
     }
 
     public String getUrl() {
@@ -37,5 +51,9 @@ public class URLAbstract {
         this.title = title;
         this.content = content;
 
+    }
+
+    public Charset getCharset() {
+        return charset;
     }
 }

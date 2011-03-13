@@ -24,73 +24,46 @@ public class URLRawRepo {
 
     private static URLRawRepo instance;
 
-    private URLRawRepo(){
+
+    private URLRawRepo() {
 
     }
 
-    public static URLRawRepo getInstance(){
-        if(instance == null){
+    public static URLRawRepo getInstance() {
+        if (instance == null) {
             instance = new URLRawRepo();
         }
         return instance;
     }
 
-    public TextDocument fetch(String urlStr) throws URLRepoException{
-        TextDocument doc = null;
-        try {
-            URL url;
-            url = new URL(urlStr);
+    public byte[] fetch(String urlStr) throws URLRepoException, IOException {
+        URL url = new URL(urlStr);
+        final URLConnection conn = url.openConnection();
 
-            final InputSource is = fetch(url).toInputSource();
+        InputStream in = conn.getInputStream();
 
-            final BoilerpipeSAXInput in = new BoilerpipeSAXInput(is);
-            doc = in.getTextDocument();
-        } catch (IOException e) {
-            throw new URLRepoException(e);
-        } catch (SAXException e) {
-            throw new URLRepoException(e);
-        } catch (BoilerpipeProcessingException e) {
-            throw new URLRepoException(e);
+        final String encoding = conn.getContentEncoding();
+        if (encoding != null) {
+            if ("gzip".equalsIgnoreCase(encoding)) {
+                in = new GZIPInputStream(in);
+            } else {
+                System.err.println("WARN: unsupported Content-Encoding: " + encoding);
+            }
         }
-        return doc;
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        byte[] buf = new byte[4096];
+        int r;
+        try {
+            while ((r = in.read(buf)) != -1) {
+                bos.write(buf, 0, r);
+            }
+        } finally {
+            in.close();
+        }
+
+        return bos.toByteArray();
     }
 
-    //Copy from HTMLFetcher to fix encoding bug
-    public HTMLDocument fetch(final URL url) throws IOException {
-		final URLConnection conn = url.openConnection();
-		final String charset = conn.getContentEncoding();
-
-		Charset cs = Charset.forName("UTF-8");
-		if (charset != null) {
-			try {
-				cs = Charset.forName(charset);
-			} catch (UnsupportedCharsetException e) {
-				// keep default
-			}
-		}
-
-		InputStream in = conn.getInputStream();
-
-		final String encoding = conn.getContentEncoding();
-		if(encoding != null) {
-			if("gzip".equalsIgnoreCase(encoding)) {
-				in = new GZIPInputStream(in);
-			} else {
-				System.err.println("WARN: unsupported Content-Encoding: "+encoding);
-			}
-		}
-
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		byte[] buf = new byte[4096];
-		int r;
-		while ((r = in.read(buf)) != -1) {
-			bos.write(buf, 0, r);
-		}
-		in.close();
-
-		final byte[] data = bos.toByteArray();
-
-		return new HTMLDocument(data, cs);
-	}
 
 }
