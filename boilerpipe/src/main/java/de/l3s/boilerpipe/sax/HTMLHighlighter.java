@@ -66,12 +66,7 @@ public final class HTMLHighlighter {
 	}
 
 	private HTMLHighlighter(final boolean extractHTML) {
-		if (extractHTML) {
-			setOutputHighlightOnly(true);
-			setExtraStyleSheet("");
-			setPreHighlight("");
-			setPostHighlight("");
-		}
+		this(extractHTML, false);
 	}
 
     private HTMLHighlighter(final boolean extractHTML, boolean forChinese) {
@@ -336,28 +331,38 @@ public final class HTMLHighlighter {
 
 			try {
 				if (inIgnorableElement == 0) {
-					if (outputHighlightOnly) {
-						boolean highlight = contentBitSet
-								.get(characterElementIdx);
+//					if (outputHighlightOnly) {
+//						boolean highlight = contentBitSet
+//								.get(characterElementIdx);
+//
+//						if (!highlight) {
+//							return;
+//						}
+//					}
 
-						if (!highlight) {
-							return;
-						}
-					}
-
-					html.append('<');
-					html.append(qName);
-					final int numAtts = atts.getLength();
-					for (int i = 0; i < numAtts; i++) {
-						final String attr = atts.getQName(i);
-						final String value = atts.getValue(i);
-						html.append(' ');
-						html.append(attr);
-						html.append("=\"");
-						html.append(xmlEncode(value));
-						html.append("\"");
-					}
-					html.append('>');
+                    if(qName.equalsIgnoreCase("h1")||
+                            qName.equalsIgnoreCase("h2")||
+                            qName.equalsIgnoreCase("h3")||
+                            qName.equalsIgnoreCase("h4")||
+                            qName.equalsIgnoreCase("h5")||
+                            qName.equalsIgnoreCase("h6")||
+                            qName.equalsIgnoreCase("p")||
+                            qName.equalsIgnoreCase("br")
+                            )
+                    html.append('\n');
+//					html.append('<');
+//					html.append(qName);
+//					final int numAtts = atts.getLength();
+//					for (int i = 0; i < numAtts; i++) {
+//						final String attr = atts.getQName(i);
+//						final String value = atts.getValue(i);
+//						html.append(' ');
+//						html.append(attr);
+//						html.append("=\"");
+//						html.append(xmlEncode(value));
+//						html.append("\"");
+//					}
+//					html.append('>');
 				}
 			} finally {
 				if (ta != null) {
@@ -383,9 +388,9 @@ public final class HTMLHighlighter {
 							return;
 						}
 					}
-					html.append("</");
-					html.append(qName);
-					html.append('>');
+//					html.append("</");
+//					html.append(qName);
+//					html.append('>');
 				}
 			} finally {
 				if (ta != null) {
@@ -407,7 +412,7 @@ public final class HTMLHighlighter {
 				if (highlight) {
 					html.append(preHighlight);
 				}
-				html.append(xmlEncode(String.valueOf(ch, start, length)));
+				html.append(xmlEncode(String.valueOf(ch, start, length).replace("\n","")));
 				if (highlight) {
 					html.append(postHighlight);
 				}

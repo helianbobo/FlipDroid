@@ -34,7 +34,7 @@ public class URLAbstract {
     }
 
     public String getContent() {
-        content = content.replaceAll("</[pP]>", "</p>\n").replaceAll("</[pP]>", "").replaceAll("<[pP].*?>", "").replaceAll("(?i)<[bB][Rr].*?/?>", "<br />\n").replaceAll("<.+?>", "");
+        //content = content.replaceAll("</[Hh][1-6]>", "</h1>\n").replaceAll("<[Hh][1-6]>.*?", "").replaceAll("</[pP]>", "</p>\n").replaceAll("<[pP].*?>", "").replaceAll("(?i)<[bB][Rr].*?/?>", "<br />\n").replaceAll("<.+?>", "");
 
         //return Jsoup.parse(content).text();
         return content;

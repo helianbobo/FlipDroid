@@ -35,7 +35,7 @@ class URIFectherTest extends TestCase {
 //           'http://news.zol.com.cn/218/2182162.html': '联通3G上网卡市场火热 1月新增35万用户',  //相关阅读 trails
 //            'http://laoyaoba.com/ss6/?action-viewnews-itemid-176072': 'ipad2即将上市 盘点A股苹果迷(附股)',//老杳吧本周热点帖子 trails
 //            'http://tech.hexun.com/2011-02-26/127582009.html': '一山容二虎 无线上网卡VS无线局域网优劣谈(图)',
-            'http://www.pcpop.com/doc/0/639/639786.shtml':'a'
+            'http://wiki.restlet.org/docs_2.0/13-restlet/21-restlet.html':'a'
     ]
 
     public void testFetch() {

@@ -68,7 +68,11 @@
             <artifactId>grepper</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.4.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -112,7 +116,7 @@
                 <version>1.6</version>
                 <executions>
                     <execution>
-                        <phase> package </phase>
+                        <phase>package</phase>
                         <configuration>
                             <target>
                                 <copy file="${project.build.directory}/${project.build.finalName}.jar"
@@ -121,7 +125,7 @@
                                       tofile="${project.build.directory}/dist/run.sh"/>
 
                                 <tar destfile="${project.build.directory}/tika-api-server.tar.gz" compression="gzip">
-                                    <zipfileset  dir="${project.build.directory}/dist" includes="**/*"/>
+                                    <zipfileset dir="${project.build.directory}/dist" includes="**/*"/>
                                 </tar>
                             </target>
                         </configuration>

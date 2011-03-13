@@ -76,6 +76,9 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
                         || text.contains("热点")
                         || text.contains("版权所有")
                         || text.contains("推荐")
+                        || text.contains("标签")
+                        || text.contains("分类")
+                        || text.contains("点击观看")
                 ) {
                     tb.addLabel(DefaultLabels.INDICATES_END_OF_TEXT);
                     changes = true;

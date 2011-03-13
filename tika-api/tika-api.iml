@@ -11,6 +11,7 @@
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
       <excludeFolder url="file://$MODULE_DIR$/target/dist" />
       <excludeFolder url="file://$MODULE_DIR$/target/maven-archiver" />
+      <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -49,6 +50,7 @@
     <orderEntry type="library" name="Maven: org.codehaus.gpars:gpars:0.11" level="project" />
     <orderEntry type="library" name="Maven: org.coconut.forkjoin:jsr166y:070108" level="project" />
     <orderEntry type="module" module-name="boilerpipe" />
+    <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.4.1" level="project" />
   </component>
 </module>
 

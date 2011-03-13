@@ -57,6 +57,8 @@ public class URLAbstractResource extends ServerResource {
                         // keep default
                     }
                 }
+
+
                 if (rawBytes == null) {
                     getLogger().log(Level.INFO, "Can't fetch document from url:" + urlDecoded);
                 } else {

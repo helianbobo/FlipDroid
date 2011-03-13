@@ -82,7 +82,7 @@ public class ChineseNumWordsRulesClassifier implements BoilerpipeFilter {
 
         if (curr.getLinkDensity() <= 0.333333) {
             if (prev.getLinkDensity() <= 0.555556) {
-                if (curr.getNumWords() <=60) {
+                if (curr.getNumWords() <=56) {
                     if (next.getNumWords() <= 41) {
                         if (prev.getNumWords() <= 78) {
                             isContent = false;

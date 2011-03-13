@@ -18,20 +18,29 @@ import java.nio.charset.Charset;
  */
 public class PipeContentExtractor implements ContentExtractor {
     public String fireAbstract(byte[] data, Charset charset) throws GrepperException {
-        final BoilerpipeExtractor extractorChinese;
         final BoilerpipeExtractor extractor;
-
-        final HTMLHighlighter hhChinese;
         final HTMLHighlighter hh;
 
-        extractorChinese = CommonExtractors.CHINESE_ARTICLE_EXTRACTOR;
-        hhChinese = HTMLHighlighter.newExtractingInstanceForChinese();
 
-        extractor = CommonExtractors.ARTICLE_EXTRACTOR;
-        hh = HTMLHighlighter.newExtractingInstance();
-        try{
-           return hhChinese.process(new HTMLDocument(data, charset), extractorChinese);
-        }catch(Exception e){
+        String string = new String(data, charset);
+        char[] text = string.toCharArray();
+        boolean containsChinese = false;
+        for (int i = 0; i < text.length; i++) {
+            if ((text[i] >= 0x4e00) && (text[i] <= 0x9fbb)) {
+                containsChinese = true;
+                break;
+            }
+        }
+        try {
+            if (containsChinese) {
+                extractor = CommonExtractors.CHINESE_ARTICLE_EXTRACTOR;
+                hh = HTMLHighlighter.newExtractingInstanceForChinese();
+            } else {
+                extractor = CommonExtractors.ARTICLE_EXTRACTOR;
+                hh = HTMLHighlighter.newExtractingInstance();
+            }
+            return hh.process(new HTMLDocument(data, charset), extractor).trim();
+        } catch (Exception e) {
             throw new GrepperException(e);
         }
     }
