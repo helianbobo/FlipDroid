@@ -1,5 +1,8 @@
 package it.tika;
 
+import org.apache.commons.lang.StringUtils;
+import org.jsoup.Jsoup;
+
 import java.nio.charset.Charset;
 
 public class URLAbstract {
@@ -16,8 +19,8 @@ public class URLAbstract {
 
     public URLAbstract() {
     }
-    
-    public URLAbstract(byte[] rawContent, Charset charset){
+
+    public URLAbstract(byte[] rawContent, Charset charset) {
         this.rawContent = rawContent;
         this.charset = charset;
     }
@@ -31,6 +34,9 @@ public class URLAbstract {
     }
 
     public String getContent() {
+        content = content.replaceAll("</[pP]>", "</p>\n").replaceAll("</[pP]>", "").replaceAll("<[pP].*?>", "").replaceAll("(?i)<[bB][Rr].*?/?>", "<br />\n").replaceAll("<.+?>", "");
+
+        //return Jsoup.parse(content).text();
         return content;
     }
 
