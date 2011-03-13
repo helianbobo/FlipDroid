@@ -1,8 +1,5 @@
 package it.tika;
 
-import org.apache.commons.lang.StringUtils;
-import org.jsoup.Jsoup;
-
 import java.nio.charset.Charset;
 
 public class URLAbstract {

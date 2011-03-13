@@ -1,7 +1,5 @@
 package it.tika;
 
-import flipdroid.grepper.pipe.TitleExtractorImpl;
-
 /**
  * Created by IntelliJ IDEA.
  * User: jleo

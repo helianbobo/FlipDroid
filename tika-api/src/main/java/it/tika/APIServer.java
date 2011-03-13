@@ -2,11 +2,7 @@ package it.tika;
 
 
 import org.restlet.Component;
-import org.restlet.Context;
-import org.restlet.Server;
 import org.restlet.data.Protocol;
-import org.restlet.resource.ServerResource;
-import org.restlet.routing.Router;
 
 public class APIServer{
 
