@@ -1,7 +1,6 @@
 package it.tika;
 
 
-import de.l3s.boilerpipe.document.TextDocument;
 import flipdroid.grepper.EncodingDetector;
 import it.tika.exception.DBNotAvailableException;
 import it.tika.exception.ExtractorException;

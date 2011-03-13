@@ -1,10 +1,5 @@
 package it.tika;
 
-import de.l3s.boilerpipe.BoilerpipeProcessingException;
-import de.l3s.boilerpipe.document.TextDocument;
-import de.l3s.boilerpipe.extractors.ArticleExtractor;
-import de.l3s.boilerpipe.extractors.CommonExtractors;
-import de.l3s.boilerpipe.extractors.ExtractorBase;
 import flipdroid.grepper.GrepperException;
 import it.tika.exception.ExtractorException;
 
