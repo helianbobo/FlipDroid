@@ -34,7 +34,7 @@ public class ChineseArticleExtractor extends ExtractorBase{
         boolean a2 = new DocumentTitleMatchClassifier(doc.getTitle()).process(doc);
         boolean a3 = DensityRulesClassifier.INSTANCE.process(doc);
         boolean a4 = IgnoreBlocksAfterContentFilter.DEFAULT_INSTANCE.process(doc);
-        boolean a5 = BlockProximityFusion.MAX_DISTANCE_1.process(doc);
+        boolean a5 = BlockProximityFusion.MAX_DISTANCE_1_CONTENT_ONLY.process(doc);
         boolean a6 = BoilerplateBlockFilter.INSTANCE.process(doc);
         boolean a7 = BlockProximityFusion.MAX_DISTANCE_1_CONTENT_ONLY.process(doc);
          boolean a8 = KeepLargestFulltextBlockFilter.INSTANCE.process(doc);
