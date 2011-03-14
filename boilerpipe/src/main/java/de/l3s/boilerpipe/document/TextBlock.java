@@ -46,24 +46,25 @@ public class TextBlock implements Cloneable {
     float textDensity;
     float linkDensity;
     int numSegment;
+    float segmentDensity;
     BitSet containedTextElements;
 
     private int numFullTextWords = 0;
 
     private static final BitSet EMPTY_BITSET = new BitSet();
     public static final TextBlock EMPTY_START = new TextBlock("", EMPTY_BITSET,
-            0, 0, 0, 0, -1,0);
+            0, 0, 0, 0, -1,0,0);
     public static final TextBlock EMPTY_END = new TextBlock("", EMPTY_BITSET,
-            0, 0, 0, 0, Integer.MAX_VALUE,0);
+            0, 0, 0, 0, Integer.MAX_VALUE,0,0);
 
     public TextBlock(final String text) {
-        this(text, null, 0,0,0,0,0,0);
+        this(text, null, 0,0,0,0,0,0,0);
     }
     
     public TextBlock(final String text, final BitSet containedTextElements,
             final int numWords, final int numWordsInAnchorText,
             final int numWordsInWrappedLines, final int numWrappedLines,
-            final int offsetBlocks,int numSegment) {
+            final int offsetBlocks,int numSegment, float segmentDensity ) {
         this.text = text;
         this.containedTextElements = containedTextElements;
         this.numWords = numWords;
@@ -73,6 +74,7 @@ public class TextBlock implements Cloneable {
         this.offsetBlocksStart = offsetBlocks;
         this.offsetBlocksEnd = offsetBlocks;
         this.numSegment = numSegment;
+        this.segmentDensity = segmentDensity;
         initDensities();
     }
 
@@ -155,6 +157,11 @@ public class TextBlock implements Cloneable {
         }
         textDensity = numWordsInWrappedLines / (float) numWrappedLines;
         linkDensity = numWords == 0 ? 0 : numWordsInAnchorText / (float) (numSegment==0?numWords:numSegment);
+        if(numSegment == 0)
+           segmentDensity = Float.MAX_VALUE;
+        else
+           segmentDensity = numWords/(float)numSegment;
+        //linkDensity = numWords == 0 ? 0 : numWordsInAnchorText / (float) numWords;
     }
 
     public int getOffsetBlocksStart() {
