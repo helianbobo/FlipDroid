@@ -50,15 +50,26 @@ public class BoilerpipeHTMLChineseContentHandler extends BoilerpipeHTMLContentHa
             .compile("[\\p{L}\\p{Nd}\\p{Nl}\\p{No}]");
 
     private static int isWord(final String token, final boolean containsChinese) {
-        if (!containsChinese) {
+        if (containsChinese) {
+
+            if (PAT_VALID_WORD_CHARACTER.matcher(token).find()) {
+                return token.replaceAll("[0-9]","").length();
+            } else
+                return 0;
+        } else {
             if (PAT_VALID_WORD_CHARACTER.matcher(token).find())
                 return 1;
             else
                 return 0;
-        } else if (PAT_VALID_WORD_CHARACTER.matcher(token).find()) {
-            return token.replaceAll("[0-9]","").length();
-        } else
-            return 0;
+        }
+    }
+
+    public static void main(String[] args) {
+        String token = "归类于：Apple/iOS  标签： Apple, ios, iPad, smart cover";
+        final String[] tokens = UnicodeTokenizer.tokenize(token);
+
+        System.out.println(BoilerpipeHTMLChineseContentHandler.isWord(token, true));
+
     }
 
     void flushBlock() {
@@ -82,8 +93,7 @@ public class BoilerpipeHTMLChineseContentHandler extends BoilerpipeHTMLContentHa
                     return;
                 }
         }
-        Matcher matcher = pat.matcher(tokenBuffer);
-        this.containsChinese = matcher.find();
+
 
         final String[] tokens = UnicodeTokenizer.tokenize(tokenBuffer);
 
@@ -97,6 +107,9 @@ public class BoilerpipeHTMLChineseContentHandler extends BoilerpipeHTMLContentHa
         int numWordsCurrentLine = 0;
 
         for (String token : tokens) {
+            Matcher matcher = pat.matcher(token);
+            this.containsChinese = matcher.find();
+
             int numberOfWord = 0;
             if (ANCHOR_TEXT_START.equals(token)) {
                 inAnchorText = true;
@@ -108,7 +121,7 @@ public class BoilerpipeHTMLChineseContentHandler extends BoilerpipeHTMLContentHa
                 numWords+=numberOfWord;
                 numWordsCurrentLine++;
                 if (inAnchorText) {
-                    numLinkedWords++;
+                    numLinkedWords+=1;
                 }
                 final int tokenLength = token.length();
                 currentLineLength += tokenLength + 1;
