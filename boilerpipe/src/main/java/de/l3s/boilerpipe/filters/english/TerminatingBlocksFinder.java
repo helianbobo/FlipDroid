@@ -50,7 +50,7 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
         boolean changes = false;
 
         for (TextBlock tb : doc.getTextBlocks()) {
-            if (tb.getNumWords() < 25) {
+            if (tb.getNumWords() < 15) {
                 final String text = tb.getText().trim();
                 if (text.startsWith("Comments")
                         || N_COMMENTS.matcher(text).find()
