@@ -87,7 +87,7 @@ public final class BlockProximityFusion implements BoilerpipeFilter {
         for (Iterator<TextBlock> it = textBlocks.listIterator(offset); it
                 .hasNext();) {
             TextBlock block = it.next();
-            if (!block.isContent()) {
+            if (!block.isContent() || block.hasLabel(DefaultLabels.INDICATES_END_OF_TEXT)) {
                 prevBlock = block;
                 continue;
             }
@@ -101,7 +101,8 @@ public final class BlockProximityFusion implements BoilerpipeFilter {
                         ok = false;
                     }
                 }
-                if (ok && !prevBlock.hasLabel(DefaultLabels.INDICATES_END_OF_TEXT)) {
+                boolean hasTerminatingLink = prevBlock.getLinkDensity() != 0 && prevBlock.hasLabel(DefaultLabels.INDICATES_END_OF_TEXT);
+                if (ok && !hasTerminatingLink) {
                     prevBlock.mergeNext(block);
                     it.remove();
                     changes = true;
