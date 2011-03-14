@@ -109,7 +109,7 @@ public final class HTMLHighlighter {
 		final Implementation implementation = new Implementation();
 		implementation.process(doc, is);
 
-		return implementation.html.toString();
+		return implementation.html.toString().replaceAll("[\\n]+","\n");//replace multiple \n to a single \n
 	}
 
 	public String process(final URL url, final BoilerpipeExtractor extractor)
