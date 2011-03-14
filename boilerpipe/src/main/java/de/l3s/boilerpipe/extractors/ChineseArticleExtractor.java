@@ -2,7 +2,7 @@ package de.l3s.boilerpipe.extractors;
 
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextDocument;
-import de.l3s.boilerpipe.filters.chinese.ChineseNumWordsRulesClassifier;
+import de.l3s.boilerpipe.filters.english.DensityRulesClassifier;
 import de.l3s.boilerpipe.filters.english.IgnoreBlocksAfterContentFilter;
 import de.l3s.boilerpipe.filters.english.KeepLargestFulltextBlockFilter;
 import de.l3s.boilerpipe.filters.english.TerminatingBlocksFinder;
@@ -32,7 +32,7 @@ public class ChineseArticleExtractor extends ExtractorBase{
             throws BoilerpipeProcessingException {
         boolean a1 = TerminatingBlocksFinder.INSTANCE.process(doc);
         boolean a2 = new DocumentTitleMatchClassifier(doc.getTitle()).process(doc);
-        boolean a3 = ChineseNumWordsRulesClassifier.INSTANCE.process(doc);
+        boolean a3 = DensityRulesClassifier.INSTANCE.process(doc);
         boolean a4 = IgnoreBlocksAfterContentFilter.DEFAULT_INSTANCE.process(doc);
         boolean a5 = BlockProximityFusion.MAX_DISTANCE_1.process(doc);
         boolean a6 = BoilerplateBlockFilter.INSTANCE.process(doc);
