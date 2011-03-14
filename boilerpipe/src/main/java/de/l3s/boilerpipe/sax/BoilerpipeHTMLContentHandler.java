@@ -340,7 +340,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 
 		TextBlock tb = new TextBlock(textBuffer.toString().trim(),
 				currentContainedTextElements, numWords, numLinkedWords,
-				numWordsInWrappedLines, numWrappedLines, offsetBlocks,0);
+				numWordsInWrappedLines, numWrappedLines, offsetBlocks,0,0);
 		currentContainedTextElements = new BitSet();
 
 		offsetBlocks++;
