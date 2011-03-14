@@ -135,7 +135,7 @@ public class BoilerpipeHTMLChineseContentHandler extends BoilerpipeHTMLContentHa
 
         TextBlock tb = new TextBlock(textBuffer.toString().trim(),
                 currentContainedTextElements, numWords, numLinkedWords,
-                numWordsInWrappedLines, numWrappedLines, offsetBlocks, numSegment);
+                numWordsInWrappedLines, numWrappedLines, offsetBlocks, numSegment，0);
         currentContainedTextElements = new BitSet();
 
         offsetBlocks++;
