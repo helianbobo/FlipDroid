@@ -11,12 +11,13 @@ class FruitFetcher {
     DetectionResult fetch(def htmlNode) {
         final def title = htmlNode.head.title.text()
         def sameWithTitle
-        def underscorePos = title.indexOf('_')
+        def underscorePos = title.split("[_-]")
         final shortenedTitle
-        if (underscorePos == -1)
+        if (underscorePos.size() == 1)
             shortenedTitle = title
         else
-            shortenedTitle = title[0..underscorePos - 1].trim()
+            shortenedTitle = underscorePos[0].trim()
+
         Map headLines = htmlNode.body.depthFirst().toList().groupBy {
             if (it.text().trim() == shortenedTitle) {
                 return "sameWithTitle"
