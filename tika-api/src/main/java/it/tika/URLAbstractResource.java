@@ -34,6 +34,9 @@ public class URLAbstractResource extends ServerResource {
 
         URLAbstract result = null;
         Form form = this.getQuery();
+        long start = 0;
+        long end = 0;
+        StopWatch sw = new StopWatch();
         try {
             String url = form.getFirst("url").getValue();
             boolean nocache = false;
@@ -45,20 +48,24 @@ public class URLAbstractResource extends ServerResource {
 
             if (!nocache) {
                 try {
+                    sw.start("DB Cache Query");
                     result = getDB().find(urlDecoded);
                 } catch (DBNotAvailableException e) {
                     getLogger().log(Level.INFO, e.getMessage(), e);
                 }
             }
 
+            sw.stopPrintReset();
 
             if (result == null) {
-
+                sw.start("Bytes Fetching");
                 byte[] rawBytes = URLRawRepo.getInstance().fetch(urlDecoded);
+                sw.stopPrintReset();
+                sw.start("Charset Detection");
                 String charset = EncodingDetector.detect(urlDecoded);
-
+                sw.stopPrintReset();
                 Charset cs = null;
-                if(charset!= null)
+                if (charset != null)
                     cs = Charset.forName(charset);
 
                 else {
@@ -75,11 +82,14 @@ public class URLAbstractResource extends ServerResource {
                 } else {
                     result = new URLAbstract(rawBytes, cs);
                     result.setUrl(url);
-
+                    sw.start("Content Extraction");
                     result = WebpageExtractor.getInstance().extract(result);
+                    sw.stopPrintReset();
                     if (result != null) {
                         try {
+                            sw.start("Persist Result");
                             getDB().insert(result);
+                            sw.stopPrintReset();
                         } catch (DBNotAvailableException e) {
                             getLogger().log(Level.INFO, e.getMessage(), e);
                         }
@@ -133,5 +143,40 @@ public class URLAbstractResource extends ServerResource {
             getLogger().log(Level.INFO, e.getMessage(), e);
         }
         return result;
+    }
+}
+
+class StopWatch {
+    long start = 0;
+    long end = 0;
+    String event;
+
+    public void start() {
+        start = System.currentTimeMillis();
+    }
+
+    public void start(String event) {
+        start();
+        this.event = event;
+    }
+
+    public void stop() {
+        end = System.currentTimeMillis();
+    }
+
+    public void stopPrintReset() {
+        stop();
+        report();
+        reset();
+    }
+
+    public void reset() {
+        start = 0;
+        end = 0;
+        event = null;
+    }
+
+    public void report() {
+        System.out.println(event == null ? "No name event" : event + " cost " + (end - start) + "ms");
     }
 }
