@@ -36,11 +36,19 @@ public class URLAbstractResource extends ServerResource {
         Form form = this.getQuery();
         try {
             String url = form.getFirst("url").getValue();
+            boolean nocache = false;
+            if (form.getFirst("nocache") != null) {
+                nocache = Boolean.getBoolean(form.getFirst("nocache").getValue());
+            }
+
             String urlDecoded = java.net.URLDecoder.decode(url, "UTF-8");
-            try {
-                result = getDB().find(urlDecoded);
-            } catch (DBNotAvailableException e) {
-                getLogger().log(Level.INFO, e.getMessage(), e);
+
+            if (!nocache) {
+                try {
+                    result = getDB().find(urlDecoded);
+                } catch (DBNotAvailableException e) {
+                    getLogger().log(Level.INFO, e.getMessage(), e);
+                }
             }
 
 
@@ -66,6 +74,7 @@ public class URLAbstractResource extends ServerResource {
                     getLogger().log(Level.INFO, "Can't fetch document from url:" + urlDecoded);
                 } else {
                     result = new URLAbstract(rawBytes, cs);
+                    result.setUrl(url);
 
                     result = WebpageExtractor.getInstance().extract(result);
                     if (result != null) {
