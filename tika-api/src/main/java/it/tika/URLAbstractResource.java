@@ -38,7 +38,7 @@ public class URLAbstractResource extends ServerResource {
             String url = form.getFirst("url").getValue();
             boolean nocache = false;
             if (form.getFirst("nocache") != null) {
-                nocache = Boolean.getBoolean(form.getFirst("nocache").getValue());
+                nocache = Boolean.valueOf(form.getFirst("nocache").getValue());
             }
 
             String urlDecoded = java.net.URLDecoder.decode(url, "UTF-8");
