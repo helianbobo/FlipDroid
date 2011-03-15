@@ -13,9 +13,7 @@ import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.logging.Level;
@@ -50,19 +48,21 @@ public class URLAbstractResource extends ServerResource {
                 try {
                     sw.start("DB Cache Query");
                     result = getDB().find(urlDecoded);
+                    sw.stopPrintReset();
                 } catch (DBNotAvailableException e) {
                     getLogger().log(Level.INFO, e.getMessage(), e);
                 }
             }
 
-            sw.stopPrintReset();
+
 
             if (result == null) {
                 sw.start("Bytes Fetching");
                 byte[] rawBytes = URLRawRepo.getInstance().fetch(urlDecoded);
                 sw.stopPrintReset();
                 sw.start("Charset Detection");
-                String charset = EncodingDetector.detect(urlDecoded);
+                String charset = EncodingDetector.detect(new BufferedInputStream(new ByteArrayInputStream(rawBytes)));
+//                String charset = EncodingDetector.detect(urlDecoded);
                 sw.stopPrintReset();
                 Charset cs = null;
                 if (charset != null)
