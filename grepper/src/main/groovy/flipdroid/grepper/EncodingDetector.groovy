@@ -45,5 +45,6 @@ class EncodingDetector {
     if (isAscii) {
       detectedCharset = "ASCII"
     }
+   return detectedCharset
   }
 }
