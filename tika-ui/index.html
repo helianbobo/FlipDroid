@@ -5,6 +5,7 @@
     <title>tika.it - Web Page Content Extractor</title>
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js"></script>
     <script language="javascript">
+        var json;
         function extract() {
             $('#extractButton').disabled = true;
             $('#urlTitle').text('Loading ... ');
@@ -15,12 +16,43 @@
                 data: {url:url,nocache:true},
                 dataType:"json",
                 success: function(data) {
+                    json = data.title + "\n" + data.content;
                     var title = data.title;
                     var content = data.content;
                     $('#urlTitle').text(title);
                     content = content.replace(/\n/g, "</p><br/><p>");
-                    $('#urlContent').html("<p>"+content+"</p>");
+                    $('#urlContent').html("<p>" + content + "</p>");
                     $('#extractButton').disabled = false;
+                }
+            });
+        }
+
+        function good() {
+            $('#goodButton').disabled = true;
+            $('#badButton').disabled = true;
+
+            var url = $('#url').val();
+            $.ajax({
+                url: "/v1/url/abstract",
+                data: {url:url,nocache:true,rate:true,sample:json,tick:'true'},
+                success: function(data) {
+                    $('#urlTitle').text(data);
+                    $('#urlContent').text('');
+                }
+            });
+        }
+
+        function bad() {
+            $('#goodButton').disabled = true;
+            $('#badButton').disabled = true;
+
+            var url = $('#url').val();
+            $.ajax({
+                url: "/v1/url/abstract",
+                data: {url:url,nocache:true,rate:true,sample:json,tick:'false'},
+                success: function(data) {
+                    $('#urlTitle').text(data);
+                    $('#urlContent').text('');
                 }
             });
         }
@@ -73,9 +105,9 @@
             padding-top: 6px;
         }
 
-        #extractButton {
+        .button {
             border: solid 1px #ccc;
-            background-color:white;
+            background-color: white;
             cursor: pointer;
             height: 30px;
             margin: 0;
@@ -84,22 +116,22 @@
             vertical-align: top;
         }
 
-        #main{
-            text-align:center;
-            padding-top:20px;
-            padding-left:70px;
-            padding-right:70px;
+        #main {
+            text-align: center;
+            padding-top: 20px;
+            padding-left: 70px;
+            padding-right: 70px;
         }
 
-        #urlContent{
-            padding-top:30px;
-            width:609px;
+        #urlContent {
+            padding-top: 30px;
+            width: 609px;
         }
 
-        p{
-            text-indent:1em;
-            text-align:left;
-            font: "Lucida Grande",Geneva,Arial,Verdana,"Lucida Sans Unicode",Helvetica,sans-serif;
+        p {
+            text-indent: 1em;
+            text-align: left;
+            font: "Lucida Grande", Geneva, Arial, Verdana, "Lucida Sans Unicode", Helvetica, sans-serif;
         }
     </style>
 </head>
@@ -110,8 +142,12 @@
         <input class="inputBox" type='text' name='q' id="url" value="" title="Search">
     </div>
     <div id='extractButtonWrapper'>
-        <input type='button' value="Extract" id="extractButton"
+        <input type='button' value="Extract" id="extractButton" class='button'
                onclick="extract();">
+        <input type='button' value="Good" id="tickButton" class='button'
+               onclick="good();">
+        <input type='button' value="Bad" id="crossButton" class='button'
+               onclick="bad();">
     </div>
 </div>
 </div>

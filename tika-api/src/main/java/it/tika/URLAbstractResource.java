@@ -5,6 +5,7 @@ import flipdroid.grepper.EncodingDetector;
 import it.tika.exception.DBNotAvailableException;
 import it.tika.exception.ExtractorException;
 import it.tika.exception.URLRepoException;
+import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.data.Form;
@@ -16,6 +17,7 @@ import org.restlet.resource.ServerResource;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
+import java.util.Random;
 import java.util.logging.Level;
 
 public class URLAbstractResource extends ServerResource {
@@ -53,7 +55,6 @@ public class URLAbstractResource extends ServerResource {
                     getLogger().log(Level.INFO, e.getMessage(), e);
                 }
             }
-
 
 
             if (result == null) {
@@ -113,36 +114,69 @@ public class URLAbstractResource extends ServerResource {
 
     @Get("JSON")
     public String toJson() {
-        String result = "";
-        URLAbstract urlAbstract = null;
+        Form form = this.getQuery();
+        String isRating = form.getFirstValue("rate");
+        if (isRating == null || isRating.length() == 0) {
+            String result = "";
+            URLAbstract urlAbstract = null;
 
 
-        urlAbstract = find();
+            urlAbstract = find();
 
 
-        if (urlAbstract == null) {
-            getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-            return null;
+            if (urlAbstract == null) {
+                getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+                return null;
+            }
+
+
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.accumulate("title", urlAbstract.getTitle());
+                jsonObject.accumulate("content", urlAbstract.getContent());
+            } catch (JSONException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+
+            JsonRepresentation representation = new JsonRepresentation(jsonObject);
+            StringWriter writer = new StringWriter();
+            try {
+                representation.write(writer);
+                result += writer.toString();
+            } catch (IOException e) {
+                getLogger().log(Level.INFO, e.getMessage(), e);
+            }
+            return result;
+        } else {
+            String correct = form.getFirstValue("tick");
+            String json = form.getFirstValue("sample");
+            String url = form.getFirstValue("url");
+            File correctSampleFolder = new File("sample-correct");
+            File incorrectSampleFolder = new File("sample-incorrect");
+            if (!correctSampleFolder.exists()) {
+                correctSampleFolder.mkdir();
+            }
+            if (!incorrectSampleFolder.exists()) {
+                incorrectSampleFolder.mkdir();
+            }
+            int caseId = new Random().nextInt(99999999);
+            File dest = null;
+            if (Boolean.parseBoolean(correct)) {
+                dest = correctSampleFolder;
+            } else {
+                dest = incorrectSampleFolder;
+            }
+
+            File sample = new File(dest, caseId + ".case");
+            try {
+                sample.createNewFile();
+                FileUtils.writeStringToFile(sample, url + "\n" + json);
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            return "case created, id"+caseId;
+
         }
-
-
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.accumulate("title", urlAbstract.getTitle());
-            jsonObject.accumulate("content", urlAbstract.getContent());
-        } catch (JSONException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-        JsonRepresentation representation = new JsonRepresentation(jsonObject);
-        StringWriter writer = new StringWriter();
-        try {
-            representation.write(writer);
-            result += writer.toString();
-        } catch (IOException e) {
-            getLogger().log(Level.INFO, e.getMessage(), e);
-        }
-        return result;
     }
 }
 
