@@ -49,8 +49,11 @@ public class URLAbstractResource extends ServerResource {
                 byte[] rawBytes = URLRawRepo.getInstance().fetch(urlDecoded);
                 String charset = EncodingDetector.detect(urlDecoded);
 
-                Charset cs = Charset.forName(charset);
-                if (charset == null) {
+                Charset cs = null;
+                if(charset!= null)
+                    cs = Charset.forName(charset);
+
+                else {
                     try {
                         cs = Charset.forName("utf-8");
                     } catch (UnsupportedCharsetException e) {
