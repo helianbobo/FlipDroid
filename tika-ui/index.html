@@ -12,7 +12,7 @@
             var url = $('#url').val();
             $.ajax({
                 url: "/v1/url/abstract",
-                data: {url:url},
+                data: {url:url,nocache:true},
                 dataType:"json",
                 success: function(data) {
                     var title = data.title;
