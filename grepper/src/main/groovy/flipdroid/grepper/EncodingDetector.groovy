@@ -13,6 +13,12 @@ import org.mozilla.intl.chardet.HtmlCharsetDetector
  */
 class EncodingDetector {
   public static String detect(urlStr) {
+    URL url = new URL(urlStr);
+    BufferedInputStream imp = new BufferedInputStream(url.openStream());
+    return detect(imp)
+  }
+
+  public static String detect(InputStream imp){
     def det = new nsDetector(nsPSMDetector.ALL);
     String detectedCharset
     det.Init([
@@ -20,9 +26,6 @@ class EncodingDetector {
               detectedCharset = charset
             }
     ] as nsICharsetDetectionObserver);
-
-    URL url = new URL(urlStr);
-    BufferedInputStream imp = new BufferedInputStream(url.openStream());
 
     byte[] buf = new byte[1024];
     int len;
@@ -42,6 +45,5 @@ class EncodingDetector {
     if (isAscii) {
       detectedCharset = "ASCII"
     }
-    return detectedCharset
   }
 }
