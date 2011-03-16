@@ -24,6 +24,7 @@ import de.l3s.boilerpipe.BoilerpipeFilter;
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
+import de.l3s.boilerpipe.labels.DefaultLabels;
 
 /**
  * Classifies {@link TextBlock}s as content/not-content through rules that have
@@ -118,7 +119,7 @@ public class DensityRulesClassifier implements
             isContent = false;
         }
 
-        return curr.setIsContent(isContent);
+        return curr.setIsContent(isContent && !curr.hasLabel(DefaultLabels.INDICATES_END_OF_TEXT));
     }
 
 }
