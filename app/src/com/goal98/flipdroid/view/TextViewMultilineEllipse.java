@@ -461,7 +461,7 @@ public class TextViewMultilineEllipse extends View
                     }
                     else {
                         // Backup until we are at a space.
-                        while (input.charAt(pos) != ' ') {
+                        while (pos >= 0 && input.charAt(pos) != ' ') {
                             pos--;
                         }
 
