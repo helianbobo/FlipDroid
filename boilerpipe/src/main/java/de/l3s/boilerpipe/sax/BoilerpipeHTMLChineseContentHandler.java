@@ -53,7 +53,7 @@ public class BoilerpipeHTMLChineseContentHandler extends BoilerpipeHTMLContentHa
         if (containsChinese) {
 
             if (PAT_VALID_WORD_CHARACTER.matcher(token).find()) {
-                return token.replaceAll("[0-9]","").length();
+                return token.replaceAll("[0-9-:.,?<>]","").length();
             } else
                 return 0;
         } else {
