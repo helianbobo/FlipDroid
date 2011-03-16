@@ -2,6 +2,8 @@ package it.tika;
 
 
 import flipdroid.grepper.EncodingDetector;
+import it.tika.cases.Case;
+import it.tika.cases.CaseRepositoryDBMongoDB;
 import it.tika.exception.DBNotAvailableException;
 import it.tika.exception.ExtractorException;
 import it.tika.exception.URLRepoException;
@@ -17,6 +19,7 @@ import org.restlet.resource.ServerResource;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
+import java.util.Date;
 import java.util.Random;
 import java.util.logging.Level;
 
@@ -131,6 +134,7 @@ public class URLAbstractResource extends ServerResource {
 
 
             JSONObject jsonObject = new JSONObject();
+
             try {
                 jsonObject.accumulate("title", urlAbstract.getTitle());
                 jsonObject.accumulate("content", urlAbstract.getContent());
@@ -138,45 +142,50 @@ public class URLAbstractResource extends ServerResource {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
 
-            JsonRepresentation representation = new JsonRepresentation(jsonObject);
-            StringWriter writer = new StringWriter();
-            try {
-                representation.write(writer);
-                result += writer.toString();
-            } catch (IOException e) {
-                getLogger().log(Level.INFO, e.getMessage(), e);
-            }
-            return result;
+            return writeJSON(jsonObject);
         } else {
             String correct = form.getFirstValue("tick");
             String json = form.getFirstValue("sample");
             String url = form.getFirstValue("url");
-            File correctSampleFolder = new File("sample-correct");
-            File incorrectSampleFolder = new File("sample-incorrect");
-            if (!correctSampleFolder.exists()) {
-                correctSampleFolder.mkdir();
-            }
-            if (!incorrectSampleFolder.exists()) {
-                incorrectSampleFolder.mkdir();
-            }
             int caseId = new Random().nextInt(99999999);
-            File dest = null;
-            if (Boolean.parseBoolean(correct)) {
-                dest = correctSampleFolder;
-            } else {
-                dest = incorrectSampleFolder;
+
+            Case sample = new Case();
+            sample.setCreatedDate(new Date());
+            sample.setUrl(url);
+            sample.setGood(Boolean.parseBoolean(correct));
+            sample.setSampleBody(json);
+            sample.setId(caseId);
+            try {
+                CaseRepositoryDBMongoDB.getInstance().addCase(sample);
+            } catch (DBNotAvailableException e) {
+                getLogger().log(Level.INFO, e.getMessage(), e);
             }
 
-            File sample = new File(dest, caseId + ".case");
+            JSONObject jsonObject = new JSONObject();
             try {
-                sample.createNewFile();
-                FileUtils.writeStringToFile(sample, url + "\n" + json);
-            } catch (IOException e) {
+                jsonObject.accumulate("result", "succeed");
+                jsonObject.accumulate("caseId", caseId);
+            } catch (JSONException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
-            return "case created, id"+caseId;
+
+            return writeJSON(jsonObject);
 
         }
+    }
+
+    private String writeJSON(JSONObject jsonObject) {
+        String result = "";
+
+        JsonRepresentation representation = new JsonRepresentation(jsonObject);
+        StringWriter writer = new StringWriter();
+        try {
+            representation.write(writer);
+            result += writer.toString();
+        } catch (IOException e) {
+            getLogger().log(Level.INFO, e.getMessage(), e);
+        }
+        return result;
     }
 }
 

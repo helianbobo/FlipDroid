@@ -6,6 +6,8 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.pack.js"></script>
     <script language="javascript">
         var json;
+        var readyForRating = false;
+
         function extract() {
             $('#extractButton').disabled = true;
             $('#urlTitle').text('Loading ... ');
@@ -23,38 +25,61 @@
                     content = content.replace(/\n/g, "</p><br/><p>");
                     $('#urlContent').html("<p>" + content + "</p>");
                     $('#extractButton').disabled = false;
+                    readyForRating = true;
                 }
             });
         }
 
         function good() {
+            if (!checkIsReady()) {
+                return;
+            }
             $('#goodButton').disabled = true;
             $('#badButton').disabled = true;
 
             var url = $('#url').val();
             $.ajax({
                 url: "/v1/url/abstract",
+                dataType:"json",
                 data: {url:url,nocache:true,rate:true,sample:json,tick:'true'},
                 success: function(data) {
-                    $('#urlTitle').text(data);
+                    $('#urlTitle').text('case created, ID:' + data.caseId);
                     $('#urlContent').text('');
+                    readyForRating = false;
                 }
             });
         }
 
         function bad() {
+            if (!checkIsReady()) {
+                return;
+            }
             $('#goodButton').disabled = true;
             $('#badButton').disabled = true;
 
             var url = $('#url').val();
             $.ajax({
                 url: "/v1/url/abstract",
+                dataType:"json",
                 data: {url:url,nocache:true,rate:true,sample:json,tick:'false'},
                 success: function(data) {
-                    $('#urlTitle').text(data);
+                    $('#urlTitle').text('case created, ID:' + data.caseId);
                     $('#urlContent').text('');
+                    readyForRating = false;
                 }
             });
+        }
+
+        function checkIsReady() {
+            if (!readyForRating) {
+                if ($('#urlTitle').text().length == 0) {
+                    alert('please extract before you rate');
+                } else {
+                    alert('already rated!');
+                }
+                return false;
+            }
+            return true;
         }
     </script>
     <style>
@@ -139,7 +164,7 @@
 <div class="logoText">tika.it</div>
 <div id='searchform' class="searchBox">
     <div id="inputBoxWrapper">
-        <input class="inputBox" type='text' name='q' id="url" value="" title="Search">
+        <input class="inputBox" type='text' name='q' id="url" value="" title="Search" onclick="this.select()">
     </div>
     <div id='extractButtonWrapper'>
         <input type='button' value="Extract" id="extractButton" class='button'
