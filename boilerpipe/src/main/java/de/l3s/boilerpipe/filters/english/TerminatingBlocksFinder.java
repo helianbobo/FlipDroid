@@ -88,6 +88,7 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
                         || text.contains("分享")
                         || text.contains("扩展阅读")
                         || text.contains("赞")
+                        || text.contains("更多")
                 ) {
                     tb.addLabel(DefaultLabels.INDICATES_END_OF_TEXT);
                     changes = true;
