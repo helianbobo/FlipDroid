@@ -50,7 +50,7 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
         boolean changes = false;
 
         for (TextBlock tb : doc.getTextBlocks()) {
-            if (tb.getNumWords() < 15) {
+            if (tb.getNumWords() < 16) {
                 final String text = tb.getText().trim();
                 if (text.startsWith("Comments")
                         || N_COMMENTS.matcher(text).find()
@@ -90,6 +90,10 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
                         || text.contains("赞")
                         || text.contains("更多")
                         || text.contains("分享到")
+                        || text.contains("热线")
+                        || text.contains("收藏本文")
+                        || text.contains("时间")
+                        || text.contains("编辑")
                         || text.toUpperCase().contains("RELATED TOPICS")
                         || text.toUpperCase().contains("SHARE IT ON")
                         || text.toUpperCase().contains("SHARE THIS ON")
