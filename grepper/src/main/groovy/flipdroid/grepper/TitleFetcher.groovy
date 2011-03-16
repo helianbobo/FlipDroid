@@ -9,7 +9,7 @@ package flipdroid.grepper
  */
 class FruitFetcher {
   DetectionResult fetch(def htmlNode) {
-    final def title = htmlNode.head.title.text()
+    final def title = htmlNode.head.title.text().trim()
     def sameWithTitle
     def underscorePos = title.split("[_-]")
     final shortenedTitle
