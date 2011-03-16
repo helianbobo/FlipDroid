@@ -57,6 +57,15 @@ public class WebpageExtractor {
                          e.printStackTrace();
             return urlAbstract;//returns the urlAbstract so far
         }
+        String title = urlAbstract.getTitle();
+        String content = urlAbstract.getContent();
+
+        if(content.substring(0, title.length() * 2).indexOf(title) != -1){
+            urlAbstract.setContent(content.replaceFirst(title,""));
+        }
+
+
+
         return urlAbstract;
     }
 }
