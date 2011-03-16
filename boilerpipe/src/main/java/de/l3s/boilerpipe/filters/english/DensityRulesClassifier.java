@@ -64,6 +64,13 @@ public class DensityRulesClassifier implements
                 prevBlock = currentBlock;
                 currentBlock = nextBlock;
                 nextBlock = it.next();
+                String trimmedText = nextBlock.getText().trim();
+                while(trimmedText.length()==0 || trimmedText.length()==1 && trimmedText.charAt(0)==160){
+                    if(!it.hasNext())
+                        break;
+                    nextBlock = it.next();
+                    trimmedText = nextBlock.getText().trim();
+                }
                 hasChanges = classify(prevBlock, currentBlock, nextBlock)
                         | hasChanges;
             }

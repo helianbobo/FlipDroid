@@ -53,7 +53,8 @@ public class WebpageExtractor {
             for (Extractor extractor : extractors) {
                 extractor.extract(urlAbstract);
             }
-        } catch (ExtractorException exception) {
+        } catch (ExtractorException e) {
+                         e.printStackTrace();
             return urlAbstract;//returns the urlAbstract so far
         }
         return urlAbstract;
