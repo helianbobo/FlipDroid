@@ -313,8 +313,8 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 				numWords++;
 				numWordsCurrentLine++;
 				if (inAnchorText) {
-					numLinkedWords++;
-				}
+                    numLinkedWords+=numberOfWord;
+                }
 				final int tokenLength = token.length();
 				currentLineLength += tokenLength + 1;
 				if (currentLineLength > maxLineLength) {
