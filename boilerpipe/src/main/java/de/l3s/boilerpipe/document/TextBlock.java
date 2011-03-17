@@ -156,7 +156,7 @@ public class TextBlock implements Cloneable {
             numWrappedLines = 1;
         }
         textDensity = numWordsInWrappedLines / (float) numWrappedLines;
-        linkDensity = numWords == 0 ? 0 : numWordsInAnchorText / (float) (numSegment==0?numWords:numSegment);
+       linkDensity = numWords == 0 ? 0 : numWordsInAnchorText /  (float)numWords;
         if(numSegment == 0)
            segmentDensity = Float.MAX_VALUE;
         else
