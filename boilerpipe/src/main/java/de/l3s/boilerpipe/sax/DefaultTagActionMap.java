@@ -40,7 +40,7 @@ public class DefaultTagActionMap extends TagActionMap {
         setTagAction("EMBED", CommonTagActions.TA_IGNORABLE_ELEMENT);
         setTagAction("APPLET", CommonTagActions.TA_IGNORABLE_ELEMENT);
         setTagAction("LINK", CommonTagActions.TA_IGNORABLE_ELEMENT);
-
+setTagAction("CODE", CommonTagActions.TA_INLINE_NO_WHITESPACE);
         setTagAction("A", CommonTagActions.TA_ANCHOR_TEXT);
         setTagAction("BODY", CommonTagActions.TA_BODY);
 
