@@ -28,13 +28,13 @@ import de.l3s.boilerpipe.labels.LabelAction;
 
 /**
  * Defines an action that is to be performed whenever a particular tag occurs during HTML parsing.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public abstract class CommonTagActions {
 
-	private CommonTagActions() {
-	}
+    private CommonTagActions() {
+    }
 
     public static final class Chained implements TagAction {
 
@@ -47,14 +47,14 @@ public abstract class CommonTagActions {
         }
 
         public boolean start(BoilerpipeHTMLContentHandler instance,
-                String localName, String qName, Attributes atts)
+                             String localName, String qName, Attributes atts)
                 throws SAXException {
             return t1.start(instance, localName, qName, atts)
                     | t2.start(instance, localName, qName, atts);
         }
 
         public boolean end(BoilerpipeHTMLContentHandler instance,
-                String localName, String qName) throws SAXException {
+                           String localName, String qName) throws SAXException {
             return t1.end(instance, localName, qName)
                     | t2.end(instance, localName, qName);
         }
@@ -67,38 +67,58 @@ public abstract class CommonTagActions {
     public static final TagAction TA_IGNORABLE_ELEMENT = new TagAction() {
 
         public boolean start(final BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
+                             final String localName, final String qName,
+                             final Attributes atts) {
             instance.inIgnorableElement++;
             return true;
         }
 
         public boolean end(final BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+                           final String localName, final String qName) {
             instance.inIgnorableElement--;
             return true;
         }
     };
-    
+
     /**
      * Marks this tag as "anchor" (this should usually only be set for the <code>&lt;A&gt;</code> tag).
      * Anchor tags may not be nested.
-     * 
+     * <p/>
      * There is a bug in certain versions of NekoHTML which still allows nested tags.
      * If boilerpipe encounters such nestings, a SAXException is thrown.
      */
     public static final TagAction TA_ANCHOR_TEXT = new TagAction() {
+        boolean notLink;
 
         public boolean start(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) throws SAXException {
+                             final String localName, final String qName,
+                             final Attributes atts) throws SAXException {
             if (instance.inAnchor++ == 0) {
                 if (instance.inIgnorableElement == 0) {
                     instance.addWhitespaceIfNecessary();
-                    instance.tokenBuffer
-                            .append(BoilerpipeHTMLContentHandler.ANCHOR_TEXT_START);
-                    instance.tokenBuffer.append(' ');
-                    instance.sbLastWasWhitespace = true;
+
+                    int length = atts.getLength();
+
+                    String href = null;
+                    // Process each attribute
+                    for (int i = 0; i < length; i++) {
+                        // Get names and values for each attribute
+                        String name = atts.getQName(i);
+                        if (name.toUpperCase().equals("HREF")) {
+                            href = atts.getValue(i);
+                            break;
+                        }
+                    }
+                    if (href != null) {
+
+                        instance.tokenBuffer
+                                .append(BoilerpipeHTMLContentHandler.ANCHOR_TEXT_START);
+                        instance.tokenBuffer.append(' ');
+                        instance.sbLastWasWhitespace = true;
+                    }else{
+                        notLink = true;
+                        return false;
+                    }
                 }
                 return false;
             } else {
@@ -111,9 +131,14 @@ public abstract class CommonTagActions {
         }
 
         public boolean end(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+                           final String localName, final String qName) {
             if (--instance.inAnchor == 0) {
                 if (instance.inIgnorableElement == 0) {
+                    if(notLink){
+                        notLink = false;
+                        return false;
+                    }
+
                     instance.addWhitespaceIfNecessary();
                     instance.tokenBuffer
                             .append(BoilerpipeHTMLContentHandler.ANCHOR_TEXT_END);
@@ -125,21 +150,21 @@ public abstract class CommonTagActions {
         }
 
     };
-    
+
     /**
      * Marks this tag the body element (this should usually only be set for the <code>&lt;BODY&gt;</code> tag).
      */
     public static final TagAction TA_BODY = new TagAction() {
         public boolean start(final BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
+                             final String localName, final String qName,
+                             final Attributes atts) {
             instance.flushBlock();
             instance.inBody++;
             return false;
         }
 
         public boolean end(final BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+                           final String localName, final String qName) {
             instance.flushBlock();
             instance.inBody--;
             return false;
@@ -152,44 +177,44 @@ public abstract class CommonTagActions {
     public static final TagAction TA_INLINE_WHITESPACE = new TagAction() {
 
         public boolean start(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
+                             final String localName, final String qName,
+                             final Attributes atts) {
             instance.addWhitespaceIfNecessary();
             return false;
         }
 
         public boolean end(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+                           final String localName, final String qName) {
             instance.addWhitespaceIfNecessary();
             return false;
         }
     };
-    
+
     /**
      * @deprecated Use {@link #TA_INLINE_WHITESPACE} instead
      */
     @Deprecated
     public static final TagAction TA_INLINE = TA_INLINE_WHITESPACE;
-    
+
     /**
      * Marks this tag a simple "inline" element, which neither generates whitespace, nor a new block.
      */
     public static final TagAction TA_INLINE_NO_WHITESPACE = new TagAction() {
 
         public boolean start(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
+                             final String localName, final String qName,
+                             final Attributes atts) {
             return false;
         }
 
         public boolean end(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+                           final String localName, final String qName) {
             return false;
         }
     };
     private static final Pattern PAT_FONT_SIZE = Pattern
             .compile("([\\+\\-]?)([0-9])");
-    
+
     /**
      * Special TagAction for the <code>&lt;FONT&gt;</code> tag, which keeps track of the
      * absolute and relative font size.
@@ -197,8 +222,8 @@ public abstract class CommonTagActions {
     public static final TagAction TA_FONT = new TagAction() {
 
         public boolean start(final BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
+                             final String localName, final String qName,
+                             final Attributes atts) {
 
             String sizeAttr = atts.getValue("size");
             if (sizeAttr != null) {
@@ -242,7 +267,7 @@ public abstract class CommonTagActions {
         }
 
         public boolean end(final BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+                           final String localName, final String qName) {
             instance.fontSizeStack.removeFirst();
             return false;
         }
@@ -261,15 +286,15 @@ public abstract class CommonTagActions {
         }
 
         public boolean start(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
+                             final String localName, final String qName,
+                             final Attributes atts) {
             instance.addWhitespaceIfNecessary();
             instance.labelStack.add(action);
             return false;
         }
 
         public boolean end(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+                           final String localName, final String qName) {
             instance.addWhitespaceIfNecessary();
             instance.labelStack.removeLast();
             return false;
@@ -289,14 +314,14 @@ public abstract class CommonTagActions {
         }
 
         public boolean start(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName,
-                final Attributes atts) {
+                             final String localName, final String qName,
+                             final Attributes atts) {
             instance.labelStack.add(action);
             return true;
         }
 
         public boolean end(BoilerpipeHTMLContentHandler instance,
-                final String localName, final String qName) {
+                           final String localName, final String qName) {
             instance.labelStack.removeLast();
             return true;
         }
