@@ -95,9 +95,9 @@ public class PageView extends LinearLayout {
 
         headerLayout.addView(headerTextView, headerLayoutLayoutParams);
         this.setOrientation(VERTICAL);
-        this.setBackgroundColor(0xffcccccc);
+
         LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 93);
-        layoutParams.setMargins(0,0,0,1);
+        //layoutParams.setMargins(0,0,0,1);
         this.addView(headerLayout, layoutParams);
         this.addView(layout, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT,7));
     }

@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.view;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,11 +23,14 @@ public abstract class ArticleView extends LinearLayout {
         renderView();
     }
 
+    String indent = "    ";
     private void renderView() {
         if (titleView == null) {
             titleView = new TextView(getContext());
-            titleView.setPadding(2, 2, 2, 2);
+            titleView.setPadding(2, 2, 2, 5);
             titleView.setTextSize(16);
+            titleView.setTextColor(0xff1A1A1A);
+            titleView.setTypeface(Typeface.DEFAULT_BOLD);
             //titleView.
         }
         titleView.setText(article.getTitle());
@@ -42,10 +46,11 @@ public abstract class ArticleView extends LinearLayout {
             contentView = new TextViewMultilineEllipse(getContext());
             contentView.setEllipsis("...");
             contentView.setEllipsisMore("More!");
-            contentView.setText(article.getContent());
-            contentView.setMaxLines(3);
-            contentView.setPadding(10, 10, 10, 10);
-            contentView.setBackgroundColor(0xFFFFFFFF);
+            contentView.setText(indent + article.getContent());
+            contentView.setMaxLines(7);
+            contentView.setTextSize(14);
+            contentView.setPadding(2, 10, 2, 10);
+            contentView.setTextColor(0xff232323);
             contentView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
             //contentView.setSingleLine(false);
             //contentView.setGravity(Gravity.LEFT|Gravity.TOP);

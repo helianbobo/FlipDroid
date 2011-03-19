@@ -138,7 +138,7 @@ public class PageActivity extends Activity {
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                if (deviceId.startsWith("0000")) {
+                if (deviceId == null || deviceId.startsWith("0000")) {
                     float middle = container.getWidth() / 2.0f;
                     boolean rightHalf = event.getX() > middle;
                     if (rightHalf) {
