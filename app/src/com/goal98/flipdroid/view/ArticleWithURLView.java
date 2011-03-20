@@ -12,13 +12,17 @@ import com.goal98.flipdroid.model.Article;
  * Time: 10:54 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ArticleView2 extends ArticleView {
-    public ArticleView2(Context context) {
+public class ArticleWithURLView extends ArticleView {
+    public ArticleWithURLView(Context context) {
         super(context);
     }
 
-    public ArticleView2(Context context, Article article) {
+    public ArticleWithURLView(Context context, Article article) {
         super(context, article);
+    }
+
+    protected String getPrefix(){
+      return "        ";
     }
 
     protected void buildView() {
@@ -42,7 +46,7 @@ public class ArticleView2 extends ArticleView {
 
         TextView sharedByView = new TextView(this.getContext());
         sharedByView.setText("Shared by");
-        sharedByView.setPadding(2,2,5,2);
+        sharedByView.setPadding(2, 2, 5, 2);
         sharedByView.setTextSize(14);
         sharedByView.setTextColor(0xffAAAAAA);
         publisherView.addView(sharedByView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.FILL_PARENT));
@@ -51,6 +55,7 @@ public class ArticleView2 extends ArticleView {
 
         LinearLayout contentLL = new LinearLayout(this.getContext());
         contentLL.setBaselineAligned(false);
+        contentView.setText(getPrefix() + article.getContent());
         contentView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT,1));
         contentLL.addView(contentView, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT, 1));
         this.setOrientation(VERTICAL);

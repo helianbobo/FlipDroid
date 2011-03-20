@@ -1,6 +1,9 @@
 package com.goal98.flipdroid.model;
 
 import java.net.URL;
+import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Article {
 
@@ -10,23 +13,53 @@ public class Article {
     private String status;
     private String content;
     private URL imageUrl;
+
+    static Pattern urlPattern = Pattern.compile(
+            "http://([\\w-]+\\.)+[\\w-]+(/[\\w\\- ./?%&=]*)?",
+            Pattern.CASE_INSENSITIVE);
+
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
     private int weight = -1;
+    private Date createdDate;
+
+    public boolean hasLink() {
+        if(status == null)
+            return false;
+        Matcher mat = urlPattern.matcher(status);
+        boolean result = mat.find();
+        mat.reset();
+        return result;
+    }
+
+    public String extractURL(){
+         Matcher mat = urlPattern.matcher(status);
+         mat.find();
+         return mat.group();
+    }
 
     public int getWeight() {
-        if (weight == -1){
+        if (weight == -1) {
             weight = calculateWeight();
         }
         return weight;
     }
 
-    private int calculateWeight(){
+    private int calculateWeight() {
         int result = 0;
-        boolean containUrl = status != null && status.contains("http://");
-        if(containUrl)
+        boolean containUrl = hasLink();
+        if (containUrl)
             result++;
         if (imageUrl != null)
             result++;
-        if(content != null)
+        if (content != null)
             result++;
         return result;
     }

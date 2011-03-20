@@ -65,6 +65,7 @@ public class FakeArticleSource extends AbstractArticleSource {
         article.setContent(content);
         article.setStatus(status);
         article.setAuthor(author);
+        article.setCreatedDate(new Date());
         return article;
     }
 

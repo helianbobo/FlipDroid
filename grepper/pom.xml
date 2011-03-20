@@ -56,12 +56,13 @@
         </plugins>
     </build>
     <dependencies>
+
         <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
-                        <artifactId>groovy-all</artifactId>
-                        <version>1.7.9</version>
-                        <!-- 1.7.5-->
-                    </dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>1.7.9</version>
+            <!-- 1.7.5-->
+        </dependency>
         <dependency>
             <groupId>org.codehaus.groovy.modules.http-builder</groupId>
             <artifactId>http-builder</artifactId>

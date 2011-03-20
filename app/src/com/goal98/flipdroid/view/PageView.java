@@ -4,12 +4,8 @@ package com.goal98.flipdroid.view;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.goal98.flipdroid.R;
@@ -63,7 +59,12 @@ public class PageView extends LinearLayout {
 
     private void fillPartOnLayout(int index, int viewid, List<Article> articleList) {
         Article article = articleList.get(index);
-        ArticleView articleView = new ArticleView2(this.getContext(), article);
+        ArticleView articleView;
+       // if(article.hasLink()){
+       //    articleView = new ArticleWithURLView(this.getContext(), article);
+       // }else{
+           articleView = new ArticleWithoutURLView(this.getContext(), article);
+        //}
         articleView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT,1));
         LinearLayout part1 = (LinearLayout)layout.findViewById(viewid);
         part1.addView(articleView,new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT,1));

@@ -18,7 +18,7 @@ class FruitFetcher {
         def underscorePos = title.split("[_-]")
         final shortenedTitle
         if (underscorePos.size() == 1)
-            shortenedTitle = title
+            shortenedTitle = title.trim()
         else
             shortenedTitle = underscorePos[0].trim()
 

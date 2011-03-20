@@ -121,7 +121,7 @@ public class BoilerpipeHTMLChineseContentHandler extends BoilerpipeHTMLContentHa
                 numWords+=numberOfWord;
                 numWordsCurrentLine++;
                 if (inAnchorText) {
-                    numLinkedWords+=1;
+                    numLinkedWords+=numberOfWord;
                 }
                 final int tokenLength = token.length();
                 currentLineLength += tokenLength + 1;

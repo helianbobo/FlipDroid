@@ -61,7 +61,7 @@ class EncodingDetector {
     boolean done = false;
     boolean isAscii = true;
 
-    byte[] first2000Byte = new byte[2048];
+    byte[] first2000Byte = new byte[3072];
     int temp = 0;
     boolean sniffFail = false;
     while ((len = imp.read(buf, 0, buf.length)) != -1) {
