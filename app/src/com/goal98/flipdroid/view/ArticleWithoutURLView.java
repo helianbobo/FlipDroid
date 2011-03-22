@@ -30,18 +30,20 @@ public class ArticleWithoutURLView extends ArticleView {
         super(context, article);
     }
 
-    protected String getPrefix(){
-      return "    \"";
+    protected String getPrefix() {
+        return "    \"";
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(article.hasLink()){
-          String url = article.extractURL();
+        if (article.hasLink()) {
+            String url = article.extractURL();
+            if (url != null)
+                url = url.trim();
             TikaClient tc = new TikaClient();
             TikaResponse response = null;
             try {
-               response = tc.extract(url);
+                response = tc.extract(url);
             } catch (TikaClientException e) {
                 return true;
             }
@@ -68,7 +70,7 @@ public class ArticleWithoutURLView extends ArticleView {
         contentView.setTextSize(17);
         //contentView.setLayoutParams(new LayoutParams(0, LayoutParams.FILL_PARENT, 1));
         //contentView.setTypeface(Typeface.SERIF);
-        titleLL.addView(contentView,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
+        titleLL.addView(contentView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
 
         LinearLayout noneTitle = new LinearLayout(this.getContext());
         noneTitle.setOrientation(VERTICAL);
