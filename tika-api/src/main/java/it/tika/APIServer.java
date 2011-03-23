@@ -11,6 +11,7 @@ import org.restlet.resource.Directory;
 public class APIServer {
 
     public static final String ROOT_URI = "file:///home/jleo/FlipDroid/tika-ui/index.html";
+    public static final String CURRENT_VERSION = "v1";
 
     public static void main(String[] args) throws Exception {
 
@@ -18,7 +19,9 @@ public class APIServer {
 
         // Create the HTTP server and listen on port 8182
         c.getServers().add(Protocol.HTTP, 8182);
-        c.getDefaultHost().attach("/v1/url/abstract", URLAbstractResource.class);
+        c.getDefaultHost().attach("/"+CURRENT_VERSION+"/url/abstract", URLAbstractResource.class);
+        c.getDefaultHost().attach("/"+CURRENT_VERSION+"/url/abstract/batch", URLAbstractBatchResource.class);
+        c.getDefaultHost().attach("/"+CURRENT_VERSION+"/url/abstract/rating", URLAbstractRatingResource.class);
 
 
         // Create a component

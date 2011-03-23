@@ -30,4 +30,4 @@ grails.project.dependency.resolution = {
     }
 }
 
-google.appengine.sdk='/home/liuchao/appengine-java-sdk-1.4.0'
+//google.appengine.sdk='/home/liuchao/appengine-java-sdk-1.4.0'

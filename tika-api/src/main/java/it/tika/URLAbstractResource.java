@@ -7,7 +7,8 @@ import it.tika.cases.CaseRepositoryDBMongoDB;
 import it.tika.exception.DBNotAvailableException;
 import it.tika.exception.ExtractorException;
 import it.tika.exception.URLRepoException;
-import org.apache.commons.io.FileUtils;
+import it.tika.util.StopWatch;
+import it.tika.util.Util;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.data.Form;
@@ -33,19 +34,14 @@ public class URLAbstractResource extends ServerResource {
         //TODO: database implementation injection
     }
 
-    private URLAbstract find() {
+    protected URLAbstract find(String url, boolean nocache) {
 
         URLAbstract result = null;
-        Form form = this.getQuery();
-        long start = 0;
-        long end = 0;
+
+
         StopWatch sw = new StopWatch();
         try {
-            String url = form.getFirst("url").getValue();
-            boolean nocache = false;
-            if (form.getFirst("nocache") != null) {
-                nocache = Boolean.valueOf(form.getFirst("nocache").getValue());
-            }
+
 
             String urlDecoded = java.net.URLDecoder.decode(url, "UTF-8");
 
@@ -118,108 +114,51 @@ public class URLAbstractResource extends ServerResource {
     @Get("JSON")
     public String toJson() {
         Form form = this.getQuery();
-        String isRating = form.getFirstValue("rate");
-        if (isRating == null || isRating.length() == 0) {
-            String result = "";
-            URLAbstract urlAbstract = null;
 
-
-            urlAbstract = find();
-
-
-            if (urlAbstract == null) {
-                getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-                return null;
-            }
-
-
-            JSONObject jsonObject = new JSONObject();
-
-            try {
-                jsonObject.accumulate("title", urlAbstract.getTitle());
-                jsonObject.accumulate("content", urlAbstract.getContent());
-            } catch (JSONException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-
-            return writeJSON(jsonObject);
+        String url = null;
+        if (form.getFirst("url") != null) {
+            url = form.getFirst("url").getValue();
         } else {
-            String correct = form.getFirstValue("tick");
-            String json = form.getFirstValue("sample");
-            String url = form.getFirstValue("url");
-            int caseId = new Random().nextInt(99999999);
-
-            Case sample = new Case();
-            sample.setCreatedDate(new Date());
-            sample.setUrl(url);
-            sample.setGood(Boolean.parseBoolean(correct));
-            sample.setSampleBody(json);
-            sample.setId(caseId);
-            try {
-                CaseRepositoryDBMongoDB.getInstance().addCase(sample);
-            } catch (DBNotAvailableException e) {
-                getLogger().log(Level.INFO, e.getMessage(), e);
-            }
-
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.accumulate("result", "succeed");
-                jsonObject.accumulate("caseId", caseId);
-            } catch (JSONException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-
-            return writeJSON(jsonObject);
-
+            getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+            return null;
         }
-    }
 
-    private String writeJSON(JSONObject jsonObject) {
+
+        boolean nocache = false;
+        if (form.getFirst("nocache") != null) {
+            nocache = Boolean.valueOf(form.getFirst("nocache").getValue());
+        }
+
         String result = "";
+        URLAbstract urlAbstract = null;
 
-        JsonRepresentation representation = new JsonRepresentation(jsonObject);
-        StringWriter writer = new StringWriter();
-        try {
-            representation.write(writer);
-            result += writer.toString();
-        } catch (IOException e) {
-            getLogger().log(Level.INFO, e.getMessage(), e);
+
+        urlAbstract = find(url, nocache);
+
+
+        if (urlAbstract == null) {
+            getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+            return null;
         }
-        return result;
+
+
+        JSONObject jsonObject = convertURLAbstractToJSON(urlAbstract);
+
+        return Util.writeJSON(jsonObject);
     }
+
+    protected JSONObject convertURLAbstractToJSON(URLAbstract urlAbstract) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.accumulate("title", urlAbstract.getTitle());
+            jsonObject.accumulate("content", urlAbstract.getContent());
+        } catch (JSONException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return jsonObject;
+    }
+
+
 }
 
-class StopWatch {
-    long start = 0;
-    long end = 0;
-    String event;
-
-    public void start() {
-        start = System.currentTimeMillis();
-    }
-
-    public void start(String event) {
-        start();
-        this.event = event;
-    }
-
-    public void stop() {
-        end = System.currentTimeMillis();
-    }
-
-    public void stopPrintReset() {
-        stop();
-        report();
-        reset();
-    }
-
-    public void reset() {
-        start = 0;
-        end = 0;
-        event = null;
-    }
-
-    public void report() {
-        System.out.println(event == null ? "No name event" : event + " cost " + (end - start) + "ms");
-    }
-}

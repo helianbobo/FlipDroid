@@ -8,33 +8,6 @@
         </fileset>
       </configuration>
     </facet>
-    <facet type="web" name="Web">
-      <configuration>
-        <descriptors>
-          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/web-app/WEB-INF/web.xml" />
-        </descriptors>
-        <webroots>
-          <root url="file://$MODULE_DIR$/web-app" relative="/" />
-        </webroots>
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/src/java" />
-          <root url="file://$MODULE_DIR$/grails-app/utils" />
-          <root url="file://$MODULE_DIR$/src/groovy" />
-          <root url="file://$MODULE_DIR$/grails-app/controllers" />
-          <root url="file://$MODULE_DIR$/grails-app/domain" />
-          <root url="file://$MODULE_DIR$/grails-app/services" />
-          <root url="file://$MODULE_DIR$/grails-app/taglib" />
-        </sourceRoots>
-      </configuration>
-    </facet>
-    <facet type="web" name="GrailsWeb">
-      <configuration>
-        <webroots>
-          <root url="file://$MODULE_DIR$/grails-app/views" relative="/" />
-        </webroots>
-        <sourceRoots />
-      </configuration>
-    </facet>
     <facet type="web" name="GrailsWeb">
       <configuration>
         <webroots>
@@ -42,6 +15,14 @@
           <root url="file://$MODULE_DIR$/grails-app/views" relative="/" />
         </webroots>
         <sourceRoots />
+      </configuration>
+    </facet>
+    <facet type="jpa" name="JPA">
+      <configuration>
+        <setting name="validation-enabled" value="true" />
+        <setting name="provider-name" value="" />
+        <datasource-mapping />
+        <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/grails-app/conf/persistence.xml" />
       </configuration>
       <facet type="google-app-engine" name="Google App Engine">
         <configuration />
@@ -62,6 +43,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/grails-app/utils" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/groovy" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/grails-app/jobs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/grails-app/controllers" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/grails-app/domain" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/grails-app/services" isTestSource="false" />
@@ -74,23 +56,116 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="grails-1.3.5" level="application" />
+    <orderEntry type="module-library">
+      <library name="grails-1.3.6">
+        <CLASSES>
+          <root url="jar://E:/grails-1.3.6/dist/grails-bootstrap-1.3.6.jar!/" />
+          <root url="jar://E:/grails-1.3.6/dist/grails-core-1.3.6.jar!/" />
+          <root url="jar://E:/grails-1.3.6/dist/grails-crud-1.3.6.jar!/" />
+          <root url="jar://E:/grails-1.3.6/dist/grails-docs-1.3.6.jar!/" />
+          <root url="jar://E:/grails-1.3.6/dist/grails-gorm-1.3.6.jar!/" />
+          <root url="jar://E:/grails-1.3.6/dist/grails-osgi-1.3.6.jar!/" />
+          <root url="jar://E:/grails-1.3.6/dist/grails-resources-1.3.6.jar!/" />
+          <root url="jar://E:/grails-1.3.6/dist/grails-scripts-1.3.6.jar!/" />
+          <root url="jar://E:/grails-1.3.6/dist/grails-spring-1.3.6.jar!/" />
+          <root url="jar://E:/grails-1.3.6/dist/grails-test-1.3.6.jar!/" />
+          <root url="jar://E:/grails-1.3.6/dist/grails-web-1.3.6.jar!/" />
+          <root url="jar://E:/grails-1.3.6/dist/grails-webflow-1.3.6.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/ant-1.7.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/ant-junit-1.7.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/ant-launcher-1.7.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/ant-nodeps-1.7.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/ant-trax-1.7.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/antlr-2.7.6.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/aopalliance-1.0.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/aspectjrt-1.6.8.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/aspectjweaver-1.6.8.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/cglib-nodep-2.1_3.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/commons-beanutils-1.8.0.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/commons-cli-1.0.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/commons-codec-1.4.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/commons-collections-3.2.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/commons-dbcp-1.3.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/commons-el-1.0.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/commons-fileupload-1.2.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/commons-lang-2.4.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/commons-pool-1.5.5.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/commons-validator-1.3.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/concurrentlinkedhashmap-lru-1.0_jdk5.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/core-renderer-R8.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/dom4j-1.6.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/ehcache-core-1.7.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/ejb3-persistence-1.0.2.GA.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/gant_groovy1.7-1.9.2.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/gpars-0.9.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/groovy-all-1.7.5.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/hibernate-annotations-3.4.0.GA.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/hibernate-commons-annotations-3.1.0.GA.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/hibernate-core-3.3.1.GA.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/hibernate-ehcache-3.3.1.GA.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/hibernate-validator-3.1.0.GA.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/hsqldb-1.8.0.10.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/itext-2.0.8.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/ivy-2.2.0.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/jansi-1.2.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/javassist-3.11.0.GA.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/jcl-over-slf4j-1.5.8.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/jline-0.9.94.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/jsp-api-2.0.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/jsp-api-2.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/jsr107cache-1.0.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/jsr166y-070108.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/jstl-1.1.2.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/jta-1.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/jul-to-slf4j-1.5.8.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/junit-4.8.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/log4j-1.2.16.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/commons-io-1.4.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.binding-2.0.8.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.test-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/ognl-2.7.3.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.aop-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.asm-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.aspects-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.beans-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.context-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.context.support-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.core-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.expression-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.instrument-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.instrument.tomcat-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.jdbc-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.jms-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.js-2.0.8.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.orm-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.oxm-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.transaction-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.web-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.web.servlet-3.0.5.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/org.springframework.webflow-2.0.8.RELEASE.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/oro-2.0.8.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/radeox-1.0-b2.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/serializer-2.7.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/servlet-api-2.5.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/sitemesh-2.4.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/slf4j-api-1.5.8.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/slf4j-log4j12-1.5.8.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/standard-1.1.2.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/svnkit-1.3.1.jar!/" />
+          <root url="jar://E:/grails-1.3.6/lib/xpp3_min-1.1.3.4.O.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="file://E:/grails-1.3.6/doc/api" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="file://E:/grails-1.3.6/src/java" />
+        </SOURCES>
+      </library>
+    </orderEntry>
     <orderEntry type="module-library">
       <library name="Grails User Library">
         <CLASSES>
           <root url="file://$MODULE_DIR$/lib" />
-          <root url="jar://$USER_HOME$/appengine-java-sdk-1.4.0/lib/appengine-tools-api.jar!/" />
-          <root url="jar://$USER_HOME$/appengine-java-sdk-1.4.0/lib/user/orm/jdo2-api-2.3-eb.jar!/" />
-          <root url="jar://$USER_HOME$/appengine-java-sdk-1.4.0/lib/user/orm/geronimo-jta_1.1_spec-1.1.1.jar!/" />
-          <root url="jar://$USER_HOME$/appengine-java-sdk-1.4.0/lib/user/orm/geronimo-jpa_3.0_spec-1.1.1.jar!/" />
-          <root url="jar://$USER_HOME$/appengine-java-sdk-1.4.0/lib/user/orm/datanucleus-jpa-1.1.5.jar!/" />
-          <root url="jar://$USER_HOME$/appengine-java-sdk-1.4.0/lib/user/orm/datanucleus-core-1.1.5.jar!/" />
-          <root url="jar://$USER_HOME$/appengine-java-sdk-1.4.0/lib/user/orm/datanucleus-appengine-1.0.8.final.jar!/" />
-          <root url="jar://$USER_HOME$/appengine-java-sdk-1.4.0/lib/user/jsr107cache-1.1.jar!/" />
-          <root url="jar://$USER_HOME$/appengine-java-sdk-1.4.0/lib/user/appengine-jsr107cache-1.4.0.jar!/" />
-          <root url="jar://$USER_HOME$/appengine-java-sdk-1.4.0/lib/user/appengine-api-labs-1.4.0.jar!/" />
-          <root url="jar://$USER_HOME$/appengine-java-sdk-1.4.0/lib/user/appengine-api-1.0-sdk-1.4.0.jar!/" />
-          <root url="jar://$USER_HOME$/appengine-java-sdk-1.4.0/lib/impl/appengine-local-runtime.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
