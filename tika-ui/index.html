@@ -7,6 +7,7 @@
     <script language="javascript">
         var json;
         var readyForRating = false;
+        var ratingUrl = "/v1/url/abstract/rating";
 
         function extract() {
             $('#extractButton').disabled = true;
@@ -30,7 +31,9 @@
             });
         }
 
-        function good() {
+
+
+        function feedback(tick){
             if (!checkIsReady()) {
                 return;
             }
@@ -39,29 +42,13 @@
 
             var url = $('#url').val();
             $.ajax({
-                url: "/v1/url/abstract",
+                url: ratingUrl,
                 dataType:"json",
-                data: {url:url,nocache:true,rate:true,sample:json,tick:'true'},
-                success: function(data) {
-                    $('#urlTitle').text('case created, ID:' + data.caseId);
-                    $('#urlContent').text('');
-                    readyForRating = false;
-                }
-            });
-        }
-
-        function bad() {
-            if (!checkIsReady()) {
-                return;
-            }
-            $('#goodButton').disabled = true;
-            $('#badButton').disabled = true;
-
-            var url = $('#url').val();
-            $.ajax({
-                url: "/v1/url/abstract",
-                dataType:"json",
-                data: {url:url,nocache:true,rate:true,sample:json,tick:'false'},
+                data: {
+                    url:url,
+//                    json:json, //cause 400 response.
+                    tick:tick
+                },
                 success: function(data) {
                     $('#urlTitle').text('case created, ID:' + data.caseId);
                     $('#urlContent').text('');
@@ -170,9 +157,9 @@
         <input type='button' value="Extract" id="extractButton" class='button'
                onclick="extract();">
         <input type='button' value="Good" id="tickButton" class='button'
-               onclick="good();">
+               onclick="feedback(true);">
         <input type='button' value="Bad" id="crossButton" class='button'
-               onclick="bad();">
+               onclick="feedback(false);">
     </div>
 </div>
 </div>
