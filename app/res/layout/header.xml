@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/header"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent" android:gravity="center" android:orientation="horizontal" android:background="@color/white">
+    <ImageView android:maxHeight="22px" android:layout_gravity="center" android:adjustViewBounds="true" android:src="@drawable/sina" android:scaleType="fitCenter" android:layout_width="wrap_content" android:layout_height="fill_parent"></ImageView>
+    <TextView   android:id="@+id/headerText" android:gravity="center" android:textSize="18px" android:textStyle="bold" android:text="@string/sinaweoboheader"
+              android:layout_marginBottom="1px" android:layout_width="wrap_content"
+              android:layout_height="fill_parent"></TextView>
+</LinearLayout>

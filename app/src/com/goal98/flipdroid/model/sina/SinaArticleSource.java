@@ -46,7 +46,7 @@ public class SinaArticleSource extends AbstractArticleSource {
         }
         this.sourceUserId = sourceUserId;
 
-        if(weibo == null)
+        if (weibo == null)
             initWeibo();
     }
 
@@ -54,9 +54,9 @@ public class SinaArticleSource extends AbstractArticleSource {
         return articleList;
     }
 
-    private void loadArticle() {
+    private boolean loadArticle() {
 
-        if(weibo == null)
+        if (weibo == null)
             initWeibo();
 
         try {
@@ -67,11 +67,15 @@ public class SinaArticleSource extends AbstractArticleSource {
             } else {
                 statuses = weibo.getUserTimeline(sourceUserId, paging);
             }
+            if(statuses == null || statuses.size() == 0)
+                return false;
+
             for (int i = 0; i < statuses.size(); i++) {
                 Status status = statuses.get(i);
                 Article article = new Article();
                 article.setStatus(status.getText());
                 article.setAuthor(status.getUser().getName());
+
                 article.setPortraitImageUrl(status.getUser().getProfileImageURL());
                 articleList.add(article);
             }
@@ -79,14 +83,14 @@ public class SinaArticleSource extends AbstractArticleSource {
             pageLoaded++;
 
             this.lastModified = new Date();
+            return true;
         } catch (WeiboException e) {
-            Log.e(this.getClass().getName(), e.getMessage(), e);
             throw new NoNetworkException(e);
         }
     }
 
     private void initWeibo() {
-        weibo = new WeiboExt ();
+        weibo = new WeiboExt();
         weibo.setHttpConnectionTimeout(5000);
         if (oauthToken != null) {
             weibo.setToken(oauthToken, oauthTokenSecret);
@@ -96,18 +100,21 @@ public class SinaArticleSource extends AbstractArticleSource {
         }
     }
 
-    public void loadMore() {
-        loadArticle();
+    public boolean loadMore() {
+        boolean result = loadArticle();
+        Log.d("cache system","loading more " + (result?"succeed":"failed"));
+
+        return result;
     }
 
-    public List<Source> searchSource(String queryStr){
+    public List<Source> searchSource(String queryStr) {
 
         List<Source> result = new LinkedList<Source>();
 
         try {
             Query query = new Query(queryStr);
             List<User> userList = weibo.searchUser(query);
-            if(userList != null){
+            if (userList != null) {
                 for (int i = 0; i < userList.size(); i++) {
                     User user = userList.get(i);
                     Source source = new Source();

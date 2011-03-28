@@ -3,6 +3,7 @@ package com.goal98.flipdroid.view;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,9 +41,8 @@ public abstract class ArticleView extends LinearLayout {
             titleView.setTextColor(0xff1A1A1A);
             titleView.setTypeface(Typeface.DEFAULT_BOLD);
             titleView.setText(article.getTitle());
+            titleView.setGravity(Gravity.CENTER);
         }
-
-
         if (authorView == null) {
             authorView = new TextView(getContext());
             authorView.setPadding(2, 2, 2, 2);
@@ -55,11 +55,10 @@ public abstract class ArticleView extends LinearLayout {
             contentView.setEllipsis("...");
             contentView.setEllipsisMore("More!");
             contentView.setText(article.getContent());
-            contentView.setMaxLines(7);
+            contentView.setMaxLines(16);
             contentView.setTextSize(14);
             contentView.setPadding(2, 10, 2, 10);
             contentView.setTextColor(0xff232323);
-            contentView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
             //contentView.setSingleLine(false);
             //contentView.setGravity(Gravity.LEFT|Gravity.TOP);
             //contentView.setWidth(1);
@@ -71,7 +70,9 @@ public abstract class ArticleView extends LinearLayout {
             portraitView = new InternetImageView(getContext(), article.getPortraitImageUrl(), 2);
             portraitView.setImageResource(R.drawable.portrait_small);
             portraitView.setPadding(2, 2, 2, 2);
-            portraitView.setScaleType(ImageView.ScaleType.FIT_START);
+            portraitView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            portraitView.setAdjustViewBounds(true);
+            portraitView.setMaxHeight(20);
         }
 
         if (createDateView == null) {
@@ -99,22 +100,19 @@ public abstract class ArticleView extends LinearLayout {
 
     public ArticleView(Context context) {
         super(context);
-        this.setBaselineAligned(false);
     }
 
     public ArticleView(Context context, Article article) {
         super(context);
-        this.setBaselineAligned(false);
         setArticle(article);
 
         buildView();
     }
 
-
-    public ArticleView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        buildView();
-    }
-
     protected abstract void buildView();
+
+    public void enlarge() {
+       contentView.invalidate();
+       contentView.requestLayout();
+    }
 }

@@ -31,4 +31,10 @@
     <string name="msg_no_more_page">No more page to load.</string>
 
     <string name="sinaweoboheader">Sina</string>
+    <string name="loading">loading...</string>
+    <string name="sharedBy">Shared by</string>
+    <string name="tikaservererror">Error retrieving content</string>
+    <string name="tikatimeout">Retrieving content timeout</string>
+    <string name="unknownerror">Unknown error</string>
+    <string name="networkerror">No network</string>
 </resources>

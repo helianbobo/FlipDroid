@@ -3,6 +3,7 @@ package com.goal98.flipdroid.util;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 import com.goal98.flipdroid.exception.NoNetworkException;
@@ -17,6 +18,14 @@ public class AlarmSender {
 
     public AlarmSender(Activity activity) {
         this.activity = activity;
+    }
+
+    public static void sendInstantMessage(int msgId, Context context){
+        Toast.makeText(context, msgId, 3000).show();
+    }
+
+    public static void sendInstantMessage(String msg, Context context){
+        Toast.makeText(context, msg, 3000).show();
     }
 
     public void sendAlarm(String msg) {

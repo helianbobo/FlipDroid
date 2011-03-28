@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
 import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.util.Cache;
 import com.goal98.flipdroid.util.CacheFactory;
 
@@ -33,16 +34,16 @@ public class InternetImageView extends ImageView {
 
     public InternetImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        /*String imageUrl = attrs.getAttributeValue(SourceDB.KEY_IMAGE_URL, null);
-        if(imageUrl != null){
-            URL imageURL = null;
-            try {
-                imageURL = new URL(imageUrl);
-                loadImage(imageURL);
-            } catch (MalformedURLException e) {
-                Log.e(this.getClass().toString(), e.getMessage(), e);
-            }
-        }*/
+//        String imageUrl = attrs.getAttributeValue(Source.KEY_IMAGE_URL, null);
+//        if(imageUrl != null){
+//            URL imageURL = null;
+//            try {
+//                imageURL = new URL(imageUrl);
+//                loadImage(imageURL);
+//            } catch (MalformedURLException e) {
+//                Log.e(this.getClass().toString(), e.getMessage(), e);
+//            }
+//        }
     }
 
     public InternetImageView(Context context, URL url) {

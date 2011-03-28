@@ -28,8 +28,6 @@ import java.io.InputStream;
  * To change this template use File | Settings | File Templates.
  */
 public class TikaClient {
-    public static final String URL = "www.tika.it";
-
     public TikaResponse extract(String url) throws TikaClientException {
         HttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet("http://www.tika.it/v1/url/abstract?url="+url+"&nocache=true");

@@ -1,8 +1,15 @@
 package com.goal98.flipdroid.view;
 
 import android.content.Context;
+import android.opengl.Visibility;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.model.Article;
 
 /**
@@ -13,60 +20,59 @@ import com.goal98.flipdroid.model.Article;
  * To change this template use File | Settings | File Templates.
  */
 public class ArticleWithURLView extends ArticleView {
-    public ArticleWithURLView(Context context) {
-        super(context);
-    }
-
     public ArticleWithURLView(Context context, Article article) {
         super(context, article);
     }
 
-    protected String getPrefix(){
-      return "        ";
+    protected String getPrefix() {
+        return "      ";
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        ViewParent parent = this.getParent();
+        while(parent!=this.getRootView()){
+            if(parent.getClass().equals(PageView.class)){
+               ((PageView)parent).enlarge(this);
+                return true;
+            }
+            parent = parent.getParent();
+        }
+        return false;
     }
 
     protected void buildView() {
-        this.setBackgroundColor(0xffF7F7F7);
-        this.setPadding(8,0,8,0);
         LinearLayout titleLL = new LinearLayout(this.getContext());
         titleLL.setOrientation(HORIZONTAL);
-        titleLL.setBaselineAligned(false);
 
-        LinearLayout titleBarView = new LinearLayout(this.getContext());
-        titleBarView.addView(titleView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
-
-        //titleLL.addView(iconView);
-        titleLL.addView(titleBarView);
+        titleLL.addView(titleView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
         LinearLayout noneTitle = new LinearLayout(this.getContext());
         noneTitle.setOrientation(VERTICAL);
-        noneTitle.setBaselineAligned(false);
 
         LinearLayout publisherView = new LinearLayout(this.getContext());
 
         TextView sharedByView = new TextView(this.getContext());
-        sharedByView.setText("Shared by");
+        sharedByView.setText(this.getContext().getString(R.string.sharedBy));
         sharedByView.setPadding(2, 2, 5, 2);
         sharedByView.setTextSize(14);
         sharedByView.setTextColor(0xffAAAAAA);
-        publisherView.addView(sharedByView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.FILL_PARENT));
-        publisherView.addView(portraitView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.FILL_PARENT));
+        publisherView.addView(sharedByView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT));
+        publisherView.addView(portraitView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT));
         publisherView.addView(super.authorView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.FILL_PARENT));
 
         LinearLayout contentLL = new LinearLayout(this.getContext());
-        contentLL.setBaselineAligned(false);
         contentView.setText(getPrefix() + article.getContent());
-        contentView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT,1));
+        //contentView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT,1));
         contentLL.addView(contentView, new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT, 1));
         this.setOrientation(VERTICAL);
 
-        noneTitle.addView(publisherView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT, 85));
-        noneTitle.addView(contentLL, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,LinearLayout.LayoutParams.FILL_PARENT, 15));
+        noneTitle.addView(publisherView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        noneTitle.addView(contentLL, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
 
-        this.addView(titleLL,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT,75));
-        this.addView(noneTitle,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT, 25));
+        this.addView(titleLL, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        this.addView(noneTitle, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
 
-        this.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT,1));
-        this.setBaselineAligned(false);
+        //this.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT,1));
     }
 }

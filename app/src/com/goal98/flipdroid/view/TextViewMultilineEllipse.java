@@ -1,52 +1,18 @@
-/**
- * Copyright (C) 2009 Mark Wyszomierski.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package com.goal98.flipdroid.view;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint.Align;
-import android.graphics.Typeface;
 import android.text.TextPaint;
+import android.util.Log;
 import android.view.View;
+import com.goal98.flipdroid.activity.IndexActivity;
 
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Provides a simple TextView-like control which allows us to set a max number
- * of lines to wrap an input string, then ellipsizes the last line if there's
- * not enough room to handle the entire input string.
- * <p/>
- * This widget can be in a collapsed or expanded mode. In collapsed mode, the
- * maxLines parameter is honored, and ellipsizing will occur if there's not
- * enough space for the input string. In expanded mode, the widget takes up
- * as much height as necessary for the input string. You can toggle the mode
- * to expand/collapse the widget in-place, via a click-handler for example.
- * <p/>
- * This widget does not handle right to left text, spannables, it's pretty
- * basic.
- * <p/>
- * The basis for this widget is taken from the android custom widget doc:
- * http://developer.android.com/guide/samples/ApiDemos/src/com/example/android/apis/view/LabelView.html
- *
- * @author Mark Wyszomierski
- */
 public class TextViewMultilineEllipse extends View {
+
     private TextPaint mTextPaint;
     private String mText;
     private int mAscent;
@@ -60,10 +26,9 @@ public class TextViewMultilineEllipse extends View {
     private LineBreaker mBreakerExpanded;
     private LineBreaker mBreakerCollapsed;
 
-
     public TextViewMultilineEllipse(Context context) {
         super(context);
-
+        // TODO Auto-generated constructor stub
         mExpanded = false;
         mDrawEllipsizeMoreString = true;
         mRightAlignEllipsizeMoreString = false;
@@ -90,15 +55,8 @@ public class TextViewMultilineEllipse extends View {
      */
     public void setText(String text) {
         mText = text;
-        originalText = text;
         requestLayout();
         invalidate();
-    }
-
-    String originalText;
-
-    public String getOriginalText() {
-        return originalText;
     }
 
     /**
@@ -119,11 +77,6 @@ public class TextViewMultilineEllipse extends View {
      */
     public void setTextColor(int color) {
         mTextPaint.setColor(color);
-        invalidate();
-    }
-
-    public void setTypeface(Typeface typeFace) {
-        mTextPaint.setTypeface(typeFace);
         invalidate();
     }
 
@@ -174,8 +127,8 @@ public class TextViewMultilineEllipse extends View {
     }
 
     /**
-     * When drawing the ellipsizeMore string, either draw it wherever ellipsizing on the last
-     * line occurs, or always right align it. On by default.
+     * When drawing the ellipsizeMore string, either draw it wherever ellipsizing
+     * on the last line occurs, or always right align it. On by default.
      *
      * @param rightAlignEllipsizeMoreString Yes or no.
      */
@@ -188,9 +141,7 @@ public class TextViewMultilineEllipse extends View {
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(
-                measureWidth(widthMeasureSpec),
-                measureHeight(heightMeasureSpec));
+        setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec));
     }
 
     /**
@@ -212,12 +163,14 @@ public class TextViewMultilineEllipse extends View {
             breakWidth(specSize);
         } else {
             if (specMode == MeasureSpec.AT_MOST) {
-                // Use the AT_MOST size - if we had very short text, we may need even less
+                // Use the AT_MOST size - if we had very short text, we may need even
+                // less
                 // than the AT_MOST value, so return the minimum.
                 result = breakWidth(specSize);
                 result = Math.min(result, specSize);
             } else {
-                // We're not given any width - so in this case we assume we have an unlimited
+                // We're not given any width - so in this case we assume we have an
+                // unlimited
                 // width?
                 breakWidth(specSize);
             }
@@ -250,9 +203,7 @@ public class TextViewMultilineEllipse extends View {
             } else {
                 numLines = mBreakerCollapsed.getLines().size();
             }
-            result = numLines * (int) (-mAscent + mTextPaint.descent())
-                    + getPaddingTop()
-                    + getPaddingBottom();
+            result = numLines * (int) (-mAscent + mTextPaint.descent()) + getPaddingTop() + getPaddingBottom();
 
             // Respect AT_MOST value if that was what is called for by measureSpec.
             if (specMode == MeasureSpec.AT_MOST) {
@@ -332,259 +283,269 @@ public class TextViewMultilineEllipse extends View {
     private int breakWidth(int availableWidth) {
         int widthUsed = 0;
         if (mExpanded) {
-            widthUsed =
-                    mBreakerExpanded.breakText(
-                            mText,
-                            availableWidth - getPaddingLeft() - getPaddingRight(),
-                            mTextPaint);
+            widthUsed = mBreakerExpanded.breakText(mText, availableWidth - getPaddingLeft() - getPaddingRight(), mTextPaint);
         } else {
-            widthUsed =
-                    mBreakerCollapsed.breakText(
-                            mText,
-                            mStrEllipsis,
-                            mStrEllipsisMore,
-                            mMaxLines,
-                            availableWidth - getPaddingLeft() - getPaddingRight(),
-                            mTextPaint);
+            widthUsed = mBreakerCollapsed.breakTextFast(mText, mStrEllipsis, mStrEllipsisMore, mMaxLines, availableWidth - getPaddingLeft() - getPaddingRight(),
+                    mTextPaint);
         }
 
         return widthUsed + getPaddingLeft() + getPaddingRight();
     }
 
+    public void setExpand() {
+    }
 
     /**
-     * Used internally to break a string into a list of integer pairs. The pairs are
-     * start and end locations for lines given the current available layout width.
+     * Used internally to break a string into a list of integer pairs. The pairs
+     * are start and end locations for lines given the current available layout
+     * width.
      */
-    private static class LineBreaker {
-        /**
-         * Was the input text long enough to need an ellipsis?
-         */
-        private boolean mRequiredEllipsis;
-
-        /**
-         * Beginning and end indices for the input string.
-         */
-        private ArrayList<int[]> mLines;
-
-        /**
-         * The width in pixels of the last line, used to draw the ellipsis if necessary.
-         */
-        private float mLengthLastLine;
-
-        /**
-         * The width of the ellipsis string, so we know where to draw the ellipsisMore string
-         * if necessary.
-         */
-        private float mLengthEllipsis;
-
-        /**
-         * The width of the ellipsizeMore string, same use as above.
-         */
-        private float mLengthEllipsisMore;
 
 
-        public LineBreaker() {
-            mRequiredEllipsis = false;
-            mLines = new ArrayList<int[]>();
+}
+
+class LineBreaker {
+    /**
+     * Was the input text long enough to need an ellipsis?
+     */
+    private boolean mRequiredEllipsis;
+
+    /**
+     * Beginning and end indices for the input string.
+     */
+    private ArrayList<int[]> mLines;
+
+    /**
+     * The width in pixels of the last line, used to draw the ellipsis if
+     * necessary.
+     */
+    private float mLengthLastLine;
+
+    /**
+     * The width of the ellipsis string, so we know where to draw the
+     * ellipsisMore string if necessary.
+     */
+    private float mLengthEllipsis;
+
+    /**
+     * The width of the ellipsizeMore string, same use as above.
+     */
+    private float mLengthEllipsisMore;
+
+    public LineBreaker() {
+        mRequiredEllipsis = false;
+        mLines = new ArrayList<int[]>();
+    }
+
+    /**
+     * Used for breaking text in 'expanded' mode, which needs no ellipse. Uses
+     * as many lines as is necessary to accomodate the entire input string.
+     *
+     * @param input    String to be broken.
+     * @param maxWidth Available layout width.
+     * @param tp       Current paint object with styles applied to it.
+     */
+    public int breakText(String input, int maxWidth, TextPaint tp) {
+        // return breakText(input, null, null, -1, maxWidth, tp);
+        return breakTextFast(input, maxWidth, tp);
+    }
+
+    public final int breakTextFast(String input, int maxWidth, TextPaint tp) {
+        CharSequence textCharArray = input.subSequence(0, input.length());
+        int inputLength = textCharArray.length();
+        mLines.clear();
+        int offset = 0;
+        while (offset < inputLength) {
+            int numOfChars = tp.breakText(textCharArray, offset, textCharArray.length(), true, maxWidth, null);
+            mLines.add(new int[]{offset, (offset += numOfChars) - 1});
         }
+        return maxWidth;
+    }
 
-        /**
-         * Used for breaking text in 'expanded' mode, which needs no ellipse.
-         * Uses as many lines as is necessary to accomodate the entire input
-         * string.
-         *
-         * @param input    String to be broken.
-         * @param maxWidth Available layout width.
-         * @param tp       Current paint object with styles applied to it.
-         */
-        public int breakText(String input,
-                             int maxWidth,
-                             TextPaint tp) {
-            return breakText(input, null, null, -1, maxWidth, tp);
+    public final int breakTextFast(String input, String ellipsis, String ellipsisMore, int maxLines, int maxWidth, TextPaint tp) {
+        CharSequence textCharArray = input.subSequence(0, input.length());
+        int inputLength = textCharArray.length();
+        mRequiredEllipsis = false;
+        mLengthLastLine = 0.0f;
+        mLengthEllipsis = 0.0f;
+        mLengthEllipsisMore = 0.0f;
+        if (ellipsis != null) {
+            mLengthEllipsis = tp.measureText(ellipsis);
         }
+        if (ellipsisMore != null) {
+            mLengthEllipsis = tp.measureText(ellipsisMore);
+        }
+        float maxLineWidth = 0;
+        float[] measuredWidth = new float[1];
+        measuredWidth[0] = 0;
+        mLines.clear();
+        int offset = 0, k = 0;
+        while (k++ < maxLines && offset < inputLength) {
+            int numOfChars = tp.breakText(textCharArray, offset, textCharArray.length(), true, maxWidth, measuredWidth);
+            maxLineWidth = maxLineWidth > measuredWidth[0] ? maxLineWidth : measuredWidth[0];
+            mLines.add(new int[]{offset, (offset += numOfChars) - 1});
+        }
+        int[] location = mLines.get(mLines.size() - 1);
+        if (location[1] >= 0 && k >= maxLines && location[1] != inputLength - 1) {
+            mRequiredEllipsis = true;
+            location[1] = location[0] + tp.breakText(textCharArray, location[0], location[1], true, maxWidth - (mLengthEllipsis + mLengthEllipsis), measuredWidth)
+                    - 1;
+            maxLineWidth = maxLineWidth > measuredWidth[0] ? maxLineWidth : measuredWidth[0];
+        }
+        mLengthLastLine = measuredWidth[0];
+        return (int) maxLineWidth;
+    }
 
-        /**
-         * Used for breaking text, honors ellipsizing. The string will be broken into lines using
-         * the available width. The last line will subtract the physical width of the ellipsis
-         * string from maxWidth to reserve room for the ellipsis. If the ellpsisMore string is set,
-         * then space will also be reserved for its length as well.
-         *
-         * @param input        String to be broken.
-         * @param ellipsis     Ellipsis string, like "..."
-         * @param ellipsisMore Optional space reservation after the ellipsis, like " Read More!"
-         * @param maxLines     Max number of lines to allow before ellipsizing.
-         * @param maxWidth     Available layout width.
-         * @param tp           Current paint object with styles applied to it.
-         */
-        public int breakText(String input,
-                             String ellipsis,
-                             String ellipsisMore,
-                             int maxLines,
-                             int maxWidth,
-                             TextPaint tp) {
-            mLines.clear();
-            mRequiredEllipsis = false;
-            mLengthLastLine = 0.0f;
-            mLengthEllipsis = 0.0f;
-            mLengthEllipsisMore = 0.0f;
+    public boolean getRequiredEllipsis() {
+        return mRequiredEllipsis;
+    }
 
-            // If maxWidth is -1, interpret that as meaning to render the string on a single
-            // line. Skip everything.
-            if (maxWidth == -1) {
-                mLines.add(new int[]{0, input.length()});
-                return (int) (tp.measureText(input) + 0.5f);
-            }
+    public List<int[]> getLines() {
+        return mLines;
+    }
 
-            // Measure the ellipsis string, and the ellipsisMore string if valid.
-            if (ellipsis != null) {
-                mLengthEllipsis = tp.measureText(ellipsis);
-            }
-            if (ellipsisMore != null) {
-                mLengthEllipsisMore = tp.measureText(ellipsisMore);
-            }
+    public float getLengthLastEllipsizedLine() {
+        return mLengthLastLine;
+    }
 
-            // Start breaking.
-            int posStartThisLine = -1;
-            float lengthThisLine = 0.0f;
-            boolean breakWords = true;
-            int pos = 0;
-            while (pos < input.length()) {
+    public float getLengthLastEllipsizedLinePlusEllipsis() {
+        return mLengthLastLine + mLengthEllipsis;
+    }
 
-                if (posStartThisLine == -1) {
-                    posStartThisLine = pos;
-                }
+    public float getLengthEllipsis() {
+        return mLengthEllipsis;
+    }
 
-                if (mLines.size() == maxLines) {
-                    mRequiredEllipsis = true;
-                    break;
-                }
+    public float getLengthEllipsisMore() {
+        return mLengthEllipsisMore;
+    }
 
-                float widthOfChar = tp.measureText(input.charAt(pos) + "");
-                boolean newLineRequired = false;
+    /**
+     * ÅÐ¶ÏÎÄ±¾ÖÐÊÇ·ñº¬ÓÐÖÐÎÄ
+     */
+    private boolean hasChinese(String input) {
+        return input.getBytes().length != input.length();
+    }
+}
 
-                if (!hasChinese(input)) {/**english*/
-                    // Check for a new line character or if we've run over max width.
-                    if (input.charAt(pos) == '\n') {
-                        newLineRequired = true;
+class DimensionMeasureTool {
+    private TextPaint mTextPaint;
+    private String mText;
+    private int mAscent;
+    private String mStrEllipsis;
+    private String mStrEllipsisMore;
+    private int mMaxLines;
+    private boolean mDrawEllipsizeMoreString;
+    private int mColorEllipsizeMore;
+    private boolean mRightAlignEllipsizeMoreString;
+    private boolean mExpanded;
+    private LineBreaker mBreakerExpanded;
+    private LineBreaker mBreakerCollapsed;
+    private String ellipsisMore;
 
-                        // We want the current line to go up to the character right before the
-                        // new line char, and we want the next line to start at the char after
-                        // this new line char.
-                        mLines.add(new int[]{posStartThisLine, pos - 1});
-                    } else if (lengthThisLine + widthOfChar >= maxWidth) {
-                        newLineRequired = true;
-                        // We need to backup if we are in the middle of a word.
-                        if (input.charAt(pos) == ' ' || breakWords == false) {
-                            // Backup one character, because it doesn't fit on this line.
-                            pos--;
+    public DimensionMeasureTool() {
+        mTextPaint = new TextPaint();
+        mTextPaint.setAntiAlias(true);
+        mTextPaint.setTextSize(13);
+        mTextPaint.setColor(0xFF000000);
+        mTextPaint.setTextAlign(Align.LEFT);
 
-                            // So this line includes up to the character before the space.
-                            mLines.add(new int[]{posStartThisLine, pos});
-                        } else {
-                            // Backup until we are at a space.
-                            while (pos >= 0 && input.charAt(pos) != ' ') {
-                                pos--;
-                            }
+        mExpanded = false;
+        mDrawEllipsizeMoreString = true;
+        mRightAlignEllipsizeMoreString = false;
+        mMaxLines = -1;
+        mStrEllipsis = "...";
+        mStrEllipsisMore = "";
+        mColorEllipsizeMore = 0xFF0000FF;
 
-                            // This line includes up to the space.
-                            mLines.add(new int[]{posStartThisLine, pos});
-                        }
-                    }
-                } else {/**chinese*/
-                    // Check for a new line character or if we've run over max width.
-                    if (input.charAt(pos) == '\n') {
-                        newLineRequired = true;
+        mBreakerExpanded = new LineBreaker();
+        mBreakerCollapsed = new LineBreaker();
+    }
 
-                        // We want the current line to go up to the character right before the
-                        // new line char, and we want the next line to start at the char after
-                        // this new line char.
-                        mLines.add(new int[]{posStartThisLine, pos - 1});
-                    } else if (lengthThisLine + widthOfChar >= maxWidth) {
-                        newLineRequired = true;
-                        // This line includes up to the space.
-                        mLines.add(new int[]{posStartThisLine, pos});
-                    }
-                }
+    protected int[] onMeasure() {
+        int width = measureWidth();
+        int height = measureHeight();
+        int[] result = new int[2];
+        result[0] = width;
+        result[1] = height;
+        return result;
+    }
 
+    private int measureWidth() {
+        int result = 0;
+        int specMode = View.MeasureSpec.EXACTLY;
+        int specSize = IndexActivity.maxWidth;
 
-                if (newLineRequired) {
-                    // The next cycle should reset the position if it sees it's -1 (to whatever i is).
-                    posStartThisLine = -1;
+        if (specMode == View.MeasureSpec.EXACTLY) {
+            // We were told how big to be.
+            result = specSize;
 
-                    // Reset line length for next iteration.
-                    lengthThisLine = 0.0f;
-
-                    // When we get to the last line, subtract the width of the ellipsis.
-                    if (mLines.size() == maxLines - 1) {
-                        maxWidth -= (mLengthEllipsis + mLengthEllipsisMore);
-                        // We also don't need to break on a full word, it'll look a little
-                        // cleaner if all breaks on the final lines break in the middle of
-                        // the last word.
-                        breakWords = false;
-                    }
-                } else {
-                    if (!hasChinese(input)) {/**english*/
-                        lengthThisLine += widthOfChar;
-                    } else {/**chinese*/
-                        lengthThisLine += (widthOfChar + 0.5f);
-                    }
-
-                    // If we're on the last character of the input string, add on whatever we have leftover.
-                    if (pos == input.length() - 1) {
-                        mLines.add(new int[]{posStartThisLine, pos});
-                    }
-                }
-
-                pos++;
-            }
-
-            // If we ellipsized, then add the ellipsis string to the end.
-            if (mRequiredEllipsis) {
-                int[] pairLast = mLines.get(mLines.size() - 1);
-                mLengthLastLine = tp.measureText(input.substring(pairLast[0], pairLast[1] + 1));
-            }
-
-            // If we required only one line, return its length, otherwise we used
-            // whatever the maxWidth supplied was.
-            if (mLines.size() == 0) {
-                return 0;
-            } else if (mLines.size() == 1) {
-                return (int) (tp.measureText(input) + 0.5f);
+            // Format the text using this exact width, and the current mode.
+            breakWidth(specSize);
+        } else {
+            if (specMode == View.MeasureSpec.AT_MOST) {
+                // Use the AT_MOST size - if we had very short text, we may need even
+                // less
+                // than the AT_MOST value, so return the minimum.
+                result = breakWidth(specSize);
+                result = Math.min(result, specSize);
             } else {
-                return maxWidth;
+                // We're not given any width - so in this case we assume we have an
+                // unlimited
+                // width?
+                breakWidth(specSize);
             }
         }
 
-        public boolean getRequiredEllipsis() {
-            return mRequiredEllipsis;
+        return result;
+    }
+
+    public void setText(String text) {
+        mText = text;
+    }
+
+    /**
+     * Sets the text size for this widget.
+     *
+     * @param size Font size.
+     */
+    public void setTextSize(int size) {
+        mTextPaint.setTextSize(size);
+    }
+
+    public int measureHeight() {
+        int result = 0;
+        int specMode = View.MeasureSpec.UNSPECIFIED;
+
+        mAscent = (int) mTextPaint.ascent();
+
+        // The lines should already be broken up. Calculate our max desired height
+        // for our current mode.
+        int numLines;
+        if (mExpanded) {
+            numLines = mBreakerExpanded.getLines().size();
+        } else {
+            numLines = mBreakerCollapsed.getLines().size();
+        }
+        result = numLines * (int) (-mAscent + mTextPaint.descent()) + 10 + 10;
+
+        return result;
+    }
+
+    private int breakWidth(int availableWidth) {
+        int widthUsed = 0;
+        if (mExpanded) {
+            widthUsed = mBreakerExpanded.breakText(mText, availableWidth - 2 - 2, mTextPaint);
+        } else {
+            widthUsed = mBreakerCollapsed.breakTextFast(mText, mStrEllipsis, mStrEllipsisMore, mMaxLines, availableWidth - 2 - 2,
+                    mTextPaint);
         }
 
-        public List<int[]> getLines() {
-            return mLines;
-        }
+        return widthUsed + 2 + 2;
+    }
 
-        public float getLengthLastEllipsizedLine() {
-            return mLengthLastLine;
-        }
 
-        public float getLengthLastEllipsizedLinePlusEllipsis() {
-            return mLengthLastLine + mLengthEllipsis;
-        }
-
-        public float getLengthEllipsis() {
-            return mLengthEllipsis;
-        }
-
-        public float getLengthEllipsisMore() {
-            return mLengthEllipsisMore;
-        }
-
-        /**
-         * 判断文本中是否含有中文
-         */
-        private boolean hasChinese(String input) {
-            return input.getBytes().length != input.length();
-        }
+    public void setMaxLines(int mMaxLines) {
+        this.mMaxLines = mMaxLines;
     }
 }

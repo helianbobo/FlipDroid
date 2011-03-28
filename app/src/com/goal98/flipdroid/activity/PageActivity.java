@@ -7,8 +7,10 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.*;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
@@ -16,13 +18,17 @@ import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.anim.AnimationFactory;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.exception.NoMorePageException;
+import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.exception.NoNetworkException;
 import com.goal98.flipdroid.model.*;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
-import com.goal98.flipdroid.util.AlarmSender;
-import com.goal98.flipdroid.util.Constants;
-import com.goal98.flipdroid.util.GestureUtil;
-import com.goal98.flipdroid.view.PageView;
+import com.goal98.flipdroid.util.*;
+import com.goal98.flipdroid.view.NoMoreArticleListener;
+import com.goal98.flipdroid.view.Page;
+import com.goal98.flipdroid.view.SimplePagingStrategy;
+
+import java.util.List;
+import java.util.concurrent.Semaphore;
 
 public class PageActivity extends Activity {
 
@@ -72,21 +78,29 @@ public class PageActivity extends Activity {
         sourceId = (String) getIntent().getExtras().get("sourceId");
 
         setContentView(R.layout.main);
-
+        //this.findViewById(R.id.pageContainer).setOnTouchListener(touchListener);
         container = (ViewGroup) findViewById(R.id.pageContainer);
-        current = new com.goal98.flipdroid.view.PageView(this);
-        current.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
 
-        next = new com.goal98.flipdroid.view.PageView(this);
-        next.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
-        next.setVisibility(LinearLayout.GONE);
-        repo = new ContentRepo();
-
-        simplePagingStrategy = new SimplePagingStrategy();
-        repo.setPagingStrategy(simplePagingStrategy);
-
-
+        SimplePagingStrategy pagingStrategy = new SimplePagingStrategy(this);
+        pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
+            public void onNoMoreArticle() throws NoMoreStatusException {
+                Log.d("cache system", "no more articles, refreshing repo");
+//                try {
+//                    int currentToken = repo.getRefreshingToken();
+//                    refreshingSemaphore.acquire();
+                repo.refresh(repo.getRefreshingToken());
+//                } catch (InterruptedException e) {
+//
+//                } finally {
+//                    refreshingSemaphore.release();
+//                }
+            }
+        });
+        refreshingSemaphore = new Semaphore(1, true);
+        repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
     }
+
+    private Semaphore refreshingSemaphore;
 
     @Override
     protected void onDestroy() {
@@ -95,7 +109,7 @@ public class PageActivity extends Activity {
     }
 
 
-    private void handleException(NoNetworkException e) {
+    private void handleException(Exception e) {
 
         String msg = e.getMessage();
         alarmSender.sendAlarm(msg);
@@ -105,9 +119,16 @@ public class PageActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        simplePagingStrategy.setArticlePerPage(getArticlePerPageFromPreference());
 
+        current = new com.goal98.flipdroid.view.PageView(this);
+        current.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
+
+        next = new com.goal98.flipdroid.view.PageView(this);
+        next.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
+        next.setVisibility(LinearLayout.GONE);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        //simplePagingStrategy.setArticlePerPage(getArticlePerPageFromPreference());
 
         if (Constants.TYPE_SINA_WEIBO.equals(accountType)) {
             String userId = preferences.getString("sina_account", null);
@@ -126,8 +147,19 @@ public class PageActivity extends Activity {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_MOVE:
+                return onTouchEvent(event);
+            case MotionEvent.ACTION_UP:
+                return current.dispatchTouchEvent(event);
+        }
+        return super.dispatchTouchEvent(event);
+    }
 
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
                 if (event.getHistorySize() > 0 && !flipStarted) {
@@ -137,23 +169,23 @@ public class PageActivity extends Activity {
                         flipPage(true);
                 }
                 break;
-            case MotionEvent.ACTION_UP:
-                if (deviceId == null || deviceId.startsWith("0000")) {
-                    float middle = container.getWidth() / 2.0f;
-                    boolean rightHalf = event.getX() > middle;
-                    if (rightHalf) {
-                        flipPage(true);
-                    } else {
-                        flipPage(false);
-                    }
-                }
-                break;
+//            case MotionEvent.ACTION_DOWN:
+//                if (deviceId == null || deviceId.startsWith("0000")) {
+//                    float middle = container.getWidth() / 2.0f;
+//                    boolean rightHalf = event.getX() > middle;
+//                    if (rightHalf) {
+//                        flipPage(true);
+//                    } else {
+//                        flipPage(false);
+//                    }
+//                }
+//                break;
             default:
                 break;
         }
-        return true;
-
+        return false;
     }
+
 
     private void flipPage(final boolean forward) {
         flipStarted = true;
@@ -164,21 +196,20 @@ public class PageActivity extends Activity {
             decreasePageNo();
 
         int nextPageIndex = forward ? currentPageIndex + 1 : currentPageIndex;
-        if (nextPageIndex >= 0) {
 
+        if (currentPageIndex == -1 && forward) {//we are first timer
+            new FetchRepoTask().execute(nextPageIndex);
+        } else if (nextPageIndex >= 0) {
             try {
                 currentPage = repo.getPage(nextPageIndex);
                 processCurrentPage();
             } catch (NoMorePageException e) {
                 new FetchRepoTask().execute(nextPageIndex);
+            } catch (Exception e) {
+                executionFailed();
             }
-
-
         } else {
-//            currentPageIndex++;
-//            startActivity(new Intent(this, IndexActivity.class));
             overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-
             finish();
         }
     }
@@ -225,7 +256,7 @@ public class PageActivity extends Activity {
 
     private int getArticlePerPageFromPreference() {
         String key = getString(R.string.key_article_per_page_preference);
-        return Integer.parseInt(preferences.getString(key, "5"));
+        return Integer.parseInt(preferences.getString(key, "2"));
     }
 
     private void switchViews(boolean forward) {
@@ -263,12 +294,21 @@ public class PageActivity extends Activity {
     }
 
     private void noMorePage() {
-        alarmSender.sendAlarm("");
+        alarmSender.sendInstantMessage(R.string.msg_no_more_page, this);
         flipStarted = false;
-
     }
 
-    private class FetchRepoTask extends AsyncTask<Integer, NoNetworkException, Integer> {
+    private void executionFailed() {
+        alarmSender.sendInstantMessage(R.string.networkerror, this);
+        flipStarted = false;
+    }
+
+
+    private class FetchRepoTask extends AsyncTask<Integer, Exception, Integer> {
+        int status = 0;
+        private static final int NO_NETWORK = 1;
+        private static final int NO_MORE_PAGE = 2;
+        private static final int NORMAL = 0;
 
         @Override
         protected void onPreExecute() {
@@ -278,30 +318,46 @@ public class PageActivity extends Activity {
         protected Integer doInBackground(Integer... integers) {
 
             try {
-                repo.refresh();
-            } catch (NoNetworkException e) {
+                int currentToken = repo.getRefreshingToken();
+                refreshingSemaphore.acquire();
+                try {
+                    repo.refreshAndPage(currentToken);
+                } catch (NoNetworkException e) {
+                    status = NO_NETWORK;
+                    alarmSender.sendInstantMessage(R.string.networkerror, PageActivity.this);
+                } catch (NoMoreStatusException e) {
+                    status = NO_MORE_PAGE;
+                    alarmSender.sendInstantMessage(R.string.msg_no_more_page, PageActivity.this);
+                }
+            } catch (Exception e) {
                 publishProgress(e);
+            } finally {
+                refreshingSemaphore.release();
             }
             return integers[0];
         }
 
         protected void onPostExecute(Integer pageIndex) {
+            if (status != NORMAL)
+                return;
 
             try {
                 currentPage = repo.getPage(pageIndex);
-            } catch (NoMorePageException e1) {
+            } catch (NoSuchPageException e) {
                 noMorePage();
+            } catch (Exception e) {
+                executionFailed();
             }
 
             processCurrentPage();
             setProgressBarIndeterminateVisibility(false);
         }
 
-        @Override
-        protected void onProgressUpdate(NoNetworkException... exceptions) {
+        protected void onProgressUpdate(Exception... exceptions) {
             if (exceptions != null && exceptions.length > 0)
                 handleException(exceptions[0]);
         }
+
     }
 
 
@@ -311,7 +367,7 @@ public class PageActivity extends Activity {
         next.setVisibility(View.VISIBLE);
 
         if (currentPage != null) {
-            ((PageView) next).setPage(currentPage);
+            next = currentPage.getPageView();
 
             Animation rotation = buildAnimation(forward);
 

@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout android:background="#dddddd" android:orientation="vertical" android:layout_height="fill_parent" android:layout_width="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
-    <LinearLayout android:id="@+id/part1" android:layout_height="0dip" android:layout_width="fill_parent"
-                   android:layout_weight="50"   android:orientation="horizontal">
-        <LinearLayout android:id="@+id/part1_1" android:layout_height="fill_parent" android:layout_width="fill_parent"
-                  ></LinearLayout>
-                  </LinearLayout>
-    <LinearLayout android:id="@+id/part2" android:layout_height="0dip" android:layout_width="fill_parent"
-                  android:layout_weight="50"    android:layout_marginTop="1dip" android:orientation="horizontal">
-        <LinearLayout android:id="@+id/part2_1" android:layout_height="fill_parent" android:layout_width="fill_parent"
-                  ></LinearLayout>
-    </LinearLayout>
+<LinearLayout android:background="#F7F7F7" android:orientation="vertical" android:layout_height="fill_parent"
+              android:layout_width="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+
 </LinearLayout>

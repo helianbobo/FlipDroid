@@ -3,11 +3,14 @@ package com.goal98.flipdroid.activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
@@ -28,6 +31,10 @@ public class IndexActivity extends ListActivity {
     private Cursor sourceCursor;
 
     private SimpleCursorAdapter adapter;
+    public static int statusBarHeight;
+    public static int titleBarHeight;
+    public static int maxHeight;
+    public static int maxWidth;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +51,19 @@ public class IndexActivity extends ListActivity {
                 overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
             }
         });
-
+        button.post(new Runnable() {
+            public void run() {
+                Rect rect = new Rect();
+                Window window = getWindow();
+                window.getDecorView().getWindowVisibleDisplayFrame(rect);
+                statusBarHeight = rect.top;
+                int contentViewTop =
+                        window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
+                titleBarHeight = contentViewTop - statusBarHeight;
+                maxHeight = (int) ((int) (IndexActivity.this.getWindowManager().getDefaultDisplay().getHeight()) - statusBarHeight - titleBarHeight*2.2);
+                maxWidth = (int) (IndexActivity.this.getWindowManager().getDefaultDisplay().getWidth())-20;
+            }
+        });
     }
 
     @Override
@@ -71,6 +90,7 @@ public class IndexActivity extends ListActivity {
         adapter.setViewBinder(new SourceItemViewBinder());
         setListAdapter(adapter);
     }
+
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {

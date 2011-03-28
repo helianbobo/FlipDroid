@@ -29,5 +29,10 @@
     <string name="my_timeline_desc">我关注的微博</string>
 
     <string name="msg_no_more_page">读不到内容了。</string>
-
+    <string name="loading">加载中...</string>
+    <string name="sharedBy">分享自</string>
+    <string name="tikaservererror">获取内容错误</string>
+<string name="tikatimeout">获取内容超时</string>
+<string name="unknownerror">获取内容错误</string>
+<string name="networkerror">找不到网络</string>
 </resources>

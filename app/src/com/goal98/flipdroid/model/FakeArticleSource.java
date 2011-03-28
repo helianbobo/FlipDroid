@@ -28,7 +28,7 @@ public class FakeArticleSource extends AbstractArticleSource {
 
     }
 
-    private void loadArticle() {
+    private boolean loadArticle() {
         strLibArray = strLib.split("\\s+");
 
         for (int i = 0; i < 20; i++) {
@@ -36,6 +36,7 @@ public class FakeArticleSource extends AbstractArticleSource {
         }
 
         lastModified = new Date();
+        return true;
     }
 
     public List<Article> getArticleList() {
@@ -85,7 +86,7 @@ public class FakeArticleSource extends AbstractArticleSource {
         return title;
     }
 
-    public void loadMore() {
-        loadArticle();
+    public boolean loadMore() {
+        return loadArticle();
     }
 }
