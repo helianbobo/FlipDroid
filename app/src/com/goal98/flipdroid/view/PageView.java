@@ -126,7 +126,7 @@ public class PageView extends LinearLayout {
             if(linearLayout.indexOfChild(articleView) != -1){
                 layout.removeView(linearLayout);
                 viewList.remove(i);
-                return;
+                return ;
             }
         }
     }
