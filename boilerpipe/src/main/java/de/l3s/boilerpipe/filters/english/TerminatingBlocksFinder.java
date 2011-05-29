@@ -98,6 +98,8 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
                         || text.contains("阅读")
                         || text.contains("复制")
                         || text.contains("字号")
+|| text.contains("转载")
+                        || text.contains("原创")
                         || text.contains("评论")
                         || text.contains("稿源")
                         || text.contains("欢迎参与")
