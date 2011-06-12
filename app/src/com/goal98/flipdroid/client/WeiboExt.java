@@ -12,7 +12,7 @@ public class WeiboExt extends Weibo {
 
     public List<User> searchUser(Query query) throws WeiboException {
         try {
-            Response response = get(searchUserBaseURL + "search.json", query.asPostParameters(), false);
+            Response response = get(searchUserBaseURL + "search.json", query.getParameters(), false);
             return User.constructUsers(response);
         } catch (WeiboException te) {
             if (404 == te.getStatusCode()) {
