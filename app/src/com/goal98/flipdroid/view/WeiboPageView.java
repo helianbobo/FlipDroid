@@ -62,6 +62,7 @@ public class WeiboPageView extends FrameLayout {
         this.contentLayout.removeAllViews();
         List<Article> articleList = this.page.getArticleViewList();
         System.out.println("articleList:" + articleList.size());
+
         for (int i = 0; i < articleList.size(); i++) {
             Article article = articleList.get(i);
             boolean isLastArticle = i == articleList.size() - 1;
