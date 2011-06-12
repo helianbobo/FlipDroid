@@ -21,6 +21,14 @@
     <string name="summary_article_per_page_preference">Article Per Page</string>
     <string name="dialog_title_article_per_page_preference">Article Per Page</string>
 
+    <string name="key_browse_mode_preference">browse_mode</string>
+    <string name="title_browse_mode_preference">Browse Mode</string>
+    <string name="dialog_title_browse_mode_preference">Brose Mode</string>
+
+    <string name="key_animation_mode_preference">animation</string>
+    <string name="title_animation_mode_preference">Flip Animation</string>
+    <string name="dialog_title_animation_mode_preference">Flip Animation</string>
+
     <string name="button_add_new_account">Add New Account</string>
     <string name="button_add_new_source">Add New Source</string>
     <string name="button_login">Login</string>
@@ -28,7 +36,7 @@
     <string name="my_timeline">My Timeline</string>
     <string name="my_timeline_desc">The tweets I am follwing.</string>
 
-    <string name="msg_no_more_page">No more page to load.</string>
+    <string name="msg_no_more_page">No more smartPage to load.</string>
 
     <string name="sinaweoboheader">Sina</string>
     <string name="loading">loading...</string>
@@ -37,4 +45,15 @@
     <string name="tikatimeout">Retrieving content timeout</string>
     <string name="unknownerror">Unknown error</string>
     <string name="networkerror">No network</string>
+    <string name="locale"></string>
+    <string name="comment">Comment</string>
+    <string name="saysomething">Say something...</string>
+    <string name="pastersshere">Paste RSS URL here</string>
+    <string name="rssinvalid">Invalid RSS URL</string>
+    <string name="deletesource">Delete Source</string>
+    <string name="yes">Delete</string>
+    <string name="no">Cancel</string>
+    <string name="my_feed">My feeds</string>
+    <string name="my_feed_desc">My Google Reader feeds</string>
+    <string name="credentialInCorrect">Fail to authenticate</string>
 </resources>

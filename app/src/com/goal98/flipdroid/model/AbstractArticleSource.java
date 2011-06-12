@@ -9,4 +9,6 @@ public abstract class AbstractArticleSource implements ArticleSource{
     public Date lastModified() {
         return lastModified;
     }
+
+
 }

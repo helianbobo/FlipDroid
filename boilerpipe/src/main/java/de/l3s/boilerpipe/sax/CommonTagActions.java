@@ -115,7 +115,7 @@ public abstract class CommonTagActions {
                                 .append(BoilerpipeHTMLContentHandler.ANCHOR_TEXT_START);
                         instance.tokenBuffer.append(' ');
                         instance.sbLastWasWhitespace = true;
-                    }else{
+                    } else {
                         notLink = true;
                         return false;
                     }
@@ -134,7 +134,7 @@ public abstract class CommonTagActions {
                            final String localName, final String qName) {
             if (--instance.inAnchor == 0) {
                 if (instance.inIgnorableElement == 0) {
-                    if(notLink){
+                    if (notLink) {
                         notLink = false;
                         return false;
                     }
@@ -204,6 +204,7 @@ public abstract class CommonTagActions {
         public boolean start(BoilerpipeHTMLContentHandler instance,
                              final String localName, final String qName,
                              final Attributes atts) {
+
             return false;
         }
 
@@ -326,4 +327,37 @@ public abstract class CommonTagActions {
             return true;
         }
     }
+
+    public static final TagAction TA_IMAGE = new TagAction() {
+        public boolean start(BoilerpipeHTMLContentHandler instance, String localName, String qName, Attributes atts) throws SAXException {
+            int length = atts.getLength();
+
+            String image = null;
+            // Process each attribute
+            for (int i = 0; i < length; i++) {
+                // Get names and values for each attribute
+                String name = atts.getQName(i);
+                if (name.toUpperCase().equals("SRC")) {
+                    image = atts.getValue(i);
+                    break;
+                }
+            }
+            if (image != null) {
+
+//                instance.tokenBuffer
+//                        .append(BoilerpipeHTMLContentHandler.ANCHOR_TEXT_START);
+                instance.LOOKING_FOR_IMAGE=true;
+                instance.textBuffer.append(image);
+                instance.tokenBuffer.append(image);
+                instance.flushBlock();
+//                instance.sbLastWasWhitespace = true;
+            }
+            return false;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public boolean end(BoilerpipeHTMLContentHandler instance, String localName, String qName) throws SAXException {
+            instance.LOOKING_FOR_IMAGE=false;
+            return false;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+    };
 }

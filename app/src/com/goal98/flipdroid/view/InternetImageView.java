@@ -4,21 +4,20 @@ package com.goal98.flipdroid.view;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
-import com.goal98.flipdroid.db.SourceDB;
-import com.goal98.flipdroid.model.Source;
+import com.goal98.flipdroid.model.cachesystem.CacheSystem;
+import com.goal98.flipdroid.model.cachesystem.ImageCache;
 import com.goal98.flipdroid.util.Cache;
 import com.goal98.flipdroid.util.CacheFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 
 public class InternetImageView extends ImageView {
 
@@ -60,10 +59,15 @@ public class InternetImageView extends ImageView {
     }
 
     private URL url;
+    private ImageCache imageCache = CacheSystem.getImageCache();
 
     public void loadImage(URL url) {
         this.url = url;
-        loadImage();
+        Drawable cachedImage = imageCache.load(url);
+        if(cachedImage == null)
+            loadImage();
+        else
+            setImageDrawable(cachedImage);
     }
 
     public void loadImage() {

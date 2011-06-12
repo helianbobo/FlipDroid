@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 
 import java.net.URL;
@@ -42,13 +43,17 @@ public class SourceItemViewBinder implements SimpleAdapter.ViewBinder, SimpleCur
                 noteName.setText(value);
 
                 break;
+
+
             case R.id.source_image:
 
                 if (value != null) {
-                    InternetImageView sourceImageView = (InternetImageView) view;
+                    WebImageView sourceImageView = (WebImageView) view;
                     try {
-                        URL url = new URL(value);
-                        sourceImageView.loadImage(url);
+                        if (value != null)
+                            sourceImageView.setImageUrl(value);
+                        System.out.println("webImageView" + value);
+                        sourceImageView.loadImage();
                     } catch (Exception e) {
                         Log.e(this.getClass().getName(), e.getMessage(), e);
                         binded = false;

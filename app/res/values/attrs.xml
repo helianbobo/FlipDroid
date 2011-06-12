@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="webimage">
+        <attr name="autoLoad" format="boolean"/>
+        <attr name="defaultWidth" format="integer"/>
+        <attr name="defaultHeight" format="integer"/>
+        <attr name="errorDrawable" format="reference"/>
+        <attr name="progressDrawable" format="reference"/>
+    </declare-styleable>
+</resources>

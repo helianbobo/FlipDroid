@@ -12,4 +12,6 @@ public interface ArticleSource {
 
     public boolean loadMore();
 
+    boolean isNoMoreToLoad();
+
 }

@@ -17,19 +17,19 @@
  */
 package de.l3s.boilerpipe.filters.english;
 
-import java.util.regex.Pattern;
-
 import de.l3s.boilerpipe.BoilerpipeFilter;
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.labels.DefaultLabels;
 
+import java.util.regex.Pattern;
+
 /**
  * Finds blocks which are potentially indicating the end of an article text and marks
  * them with {@link DefaultLabels#INDICATES_END_OF_TEXT}. This can be used in conjunction
- * with a downstream {@link IgnoreBlocksAfterContentFilter}. 
- * 
+ * with a downstream {@link IgnoreBlocksAfterContentFilter}.
+ *
  * @author Christian Kohlschütter
  * @see IgnoreBlocksAfterContentFilter
  */
@@ -42,7 +42,7 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
     public static TerminatingBlocksFinder getInstance() {
         return INSTANCE;
     }
-    
+
     private static final Pattern N_COMMENTS = Pattern.compile("(?msi)^[0-9]+ (Comments|users responded in)");
 
     public boolean process(TextDocument doc)
@@ -54,17 +54,17 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
                 final String text = tb.getText().trim();
                 if (text.startsWith("Comments")
                         || N_COMMENTS.matcher(text).find()
-                        || text.contains("What you think...")
-                        || text.contains("add your comment")
-                        || text.contains("Add your comment")
-                        || text.contains("Add Your Comment")
-                        || text.contains("Add Comment")
-                        || text.contains("Reader views")
-                        || text.contains("相关阅读")
-                        || text.contains("相关新闻")
-                        || text.contains("Have your say")
-                        || text.contains("Have Your Say")
+
                         || text.contains("Reader Comments")
+                        || text.contains("2010")
+                        || text.contains("2011")
+                        || text.contains("2012")
+                        || text.contains("2013")
+                        || text.contains("2014")
+                        || text.contains("2015")
+                        || text.contains("2016")
+                        || text.contains("2017")
+                        || text.contains("2018")
                         || text.equals("Thanks for your comments - this feedback is now closed")
                         || text.startsWith("© Reuters")
                         || text.startsWith("Please rate this")
@@ -98,16 +98,26 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
                         || text.contains("阅读")
                         || text.contains("复制")
                         || text.contains("字号")
-|| text.contains("转载")
-                        || text.contains("原创")
                         || text.contains("评论")
                         || text.contains("稿源")
+                        || text.contains("转载")
+                        || text.contains("原创")
                         || text.contains("欢迎参与")
                         || text.contains("免责声明")
+                        || text.contains("What you think...")
+                        || text.contains("add your comment")
+                        || text.contains("Add your comment")
+                        || text.contains("Add Your Comment")
+                        || text.contains("Add Comment")
+                        || text.contains("Reader views")
+                        || text.contains("相关阅读")
+                        || text.contains("相关新闻")
+                        || text.contains("Have your say")
+                        || text.contains("Have Your Say")
                         || text.toUpperCase().contains("RELATED TOPICS")
                         || text.toUpperCase().contains("SHARE IT ON")
                         || text.toUpperCase().contains("SHARE THIS ON")
-                ) {
+                        ) {
                     tb.addLabel(DefaultLabels.INDICATES_END_OF_TEXT);
                     changes = true;
                 }

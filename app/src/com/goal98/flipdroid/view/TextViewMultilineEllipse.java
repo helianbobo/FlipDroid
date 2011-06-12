@@ -6,7 +6,7 @@ import android.graphics.Paint.Align;
 import android.text.TextPaint;
 import android.util.Log;
 import android.view.View;
-import com.goal98.flipdroid.activity.IndexActivity;
+import com.goal98.flipdroid.util.DeviceInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -237,7 +237,8 @@ public class TextViewMultilineEllipse extends View {
         for (int i = 0; i < lines.size(); i++) {
             // Draw the current line.
             int[] pair = lines.get(i);
-            canvas.drawText(mText, pair[0], pair[1] + 1, x, y, mTextPaint);
+            Log.d("SLIDING", "ellipsis " + i);
+            canvas.drawText(mText.replace("\n", " "), pair[0], pair[1] + 1, x, y, mTextPaint);
 
             // Draw the ellipsis if necessary.
             if (i == lines.size() - 1) {
@@ -346,7 +347,7 @@ class LineBreaker {
      * @param tp       Current paint object with styles applied to it.
      */
     public int breakText(String input, int maxWidth, TextPaint tp) {
-        // return breakText(input, null, null, -1, maxWidth, tp);
+//        return breakText(input, null, null, -1, maxWidth, tp);
         return breakTextFast(input, maxWidth, tp);
     }
 
@@ -355,8 +356,16 @@ class LineBreaker {
         int inputLength = textCharArray.length();
         mLines.clear();
         int offset = 0;
+
         while (offset < inputLength) {
             int numOfChars = tp.breakText(textCharArray, offset, textCharArray.length(), true, maxWidth, null);
+//            String s = textCharArray.subSequence(offset, offset + numOfChars).toString();
+//            int line = s.indexOf("\n");
+//            while (line != -1) {
+//                System.out.println("new line..........");
+//                mLines.add(new int[]{offset, (offset += line) - 1});
+//                line = s.substring(line).indexOf("\n");
+//            }
             mLines.add(new int[]{offset, (offset += numOfChars) - 1});
         }
         return maxWidth;
@@ -383,7 +392,18 @@ class LineBreaker {
         while (k++ < maxLines && offset < inputLength) {
             int numOfChars = tp.breakText(textCharArray, offset, textCharArray.length(), true, maxWidth, measuredWidth);
             maxLineWidth = maxLineWidth > measuredWidth[0] ? maxLineWidth : measuredWidth[0];
-            mLines.add(new int[]{offset, (offset += numOfChars) - 1});
+
+            String s = textCharArray.subSequence(offset, offset + numOfChars).toString();
+            int line = s.indexOf("\n");
+            while (line != -1 && k++ < maxLines) {
+                mLines.add(new int[]{offset, (offset += line)});
+                line = s.substring(line + 1).indexOf("\n");
+                if (line != -1)
+                    line++;
+            }
+            numOfChars = tp.breakText(textCharArray, offset, textCharArray.length(), true, maxWidth, measuredWidth);
+            if (k <= maxLines)
+                mLines.add(new int[]{offset, (offset += numOfChars) - 1});
         }
         int[] location = mLines.get(mLines.size() - 1);
         if (location[1] >= 0 && k >= maxLines && location[1] != inputLength - 1) {
@@ -474,7 +494,7 @@ class DimensionMeasureTool {
     private int measureWidth() {
         int result = 0;
         int specMode = View.MeasureSpec.EXACTLY;
-        int specSize = IndexActivity.maxWidth;
+        int specSize = DeviceInfo.displayWidth;
 
         if (specMode == View.MeasureSpec.EXACTLY) {
             // We were told how big to be.

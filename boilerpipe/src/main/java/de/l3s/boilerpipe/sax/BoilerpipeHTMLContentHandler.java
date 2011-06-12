@@ -17,22 +17,17 @@
  */
 package de.l3s.boilerpipe.sax;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
+import de.l3s.boilerpipe.document.TextBlock;
+import de.l3s.boilerpipe.document.TextDocument;
+import de.l3s.boilerpipe.labels.LabelAction;
+import de.l3s.boilerpipe.util.UnicodeTokenizer;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
-import de.l3s.boilerpipe.document.TextBlock;
-import de.l3s.boilerpipe.document.TextDocument;
-import de.l3s.boilerpipe.labels.LabelAction;
-import de.l3s.boilerpipe.util.UnicodeTokenizer;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * A simple SAX {@link ContentHandler}, used by {@link BoilerpipeSAXInput}. Can
@@ -73,8 +68,9 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 
 	LinkedList<LabelAction> labelStack = new LinkedList<LabelAction>();
 	LinkedList<Integer> fontSizeStack = new LinkedList<Integer>();
+    public static boolean LOOKING_FOR_IMAGE = false;
 
-	/**
+    /**
 	 * Recycles this instance.
 	 */
 	public void recycle() {
@@ -111,7 +107,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 	/**
 	 * Constructs a {@link BoilerpipeHTMLContentHandler} using the given
 	 * {@link TagActionMap}.
-	 * 
+	 *
 	 * @param tagActions
 	 *            The {@link TagActionMap} to use, e.g.
 	 *            {@link DefaultTagActionMap}.
@@ -340,7 +336,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 
 		TextBlock tb = new TextBlock(textBuffer.toString().trim(),
 				currentContainedTextElements, numWords, numLinkedWords,
-				numWordsInWrappedLines, numWrappedLines, offsetBlocks,0,0);
+				numWordsInWrappedLines, numWrappedLines, offsetBlocks,0,0,LOOKING_FOR_IMAGE);
 		currentContainedTextElements = new BitSet();
 
 		offsetBlocks++;

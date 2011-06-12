@@ -81,6 +81,7 @@ public abstract class AbstractDB {
                         Source.KEY_SOURCE_DESC + " TEXT, " +
                         Source.KEY_SOURCE_ID + " TEXT, " +
                         Source.KEY_IMAGE_URL + " TEXT, " +
+                        Source.KEY_CONTENT_URL + " TEXT, " +
                         "PRIMARY KEY ("+ Source.KEY_ACCOUNT_TYPE + "," + Source.KEY_SOURCE_NAME +")" +
                         ");";
 

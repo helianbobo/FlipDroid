@@ -1,15 +1,15 @@
 package com.goal98.flipdroid.model;
 
 
-import android.os.Handler;
 import android.util.Log;
 import com.goal98.flipdroid.exception.NoMorePageException;
 import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.view.Page;
 import com.goal98.flipdroid.view.PagingStrategy;
-import com.goal98.flipdroid.view.SimplePagingStrategy;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.*;
 
 public class ContentRepo {
@@ -24,16 +24,16 @@ public class ContentRepo {
     private ContentCache contentCache;
     private ExecutorService executor;
 
-    public int getRefreshingToken(){
+    public int getRefreshingToken() {
         return contentCache.getRefreshingToken();
     }
 
     private Map<Integer, Future<Page>> futureMap = new HashMap<Integer, Future<Page>>();
 
-    public ContentRepo(SimplePagingStrategy pagingStrategy,Semaphore refreshingSemaphore) {
+    public ContentRepo(PagingStrategy pagingStrategy, Semaphore refreshingSemaphore) {
         pagedList = new PagedArticles();
         unPagedArticles = new UnPagedArticles(new ArrayList<Article>());
-        contentCache = new ContentCache(pagedList, unPagedArticles, pagingStrategy,refreshingSemaphore);
+        contentCache = new ContentCache(pagedList, unPagedArticles, pagingStrategy, refreshingSemaphore);
         executor = Executors.newFixedThreadPool(10);
     }
 
@@ -58,47 +58,46 @@ public class ContentRepo {
         return contentCache;
     }
 
-    //同时只有一个线程会调用该方法，第三页没拿到不能拿第四页
-    public Page getPage(final int pageNo) throws NoMorePageException, ExecutionException, InterruptedException, NoSuchPageException {
+    //同时只能一个线程会调用该方法，第三页没拿到不能拿第四页
+    public synchronized Page getPage(final int pageNo) throws NoMorePageException, ExecutionException, InterruptedException, NoSuchPageException {
         if (contentCache.getPageCacheTo() < pageNo) {//还没取到，或者取到了，没放倒cache里去
             if (futureMap.containsKey(pageNo)) {//看看是不是在在futureMap里，是的话就等他取好
-                Log.d("cache system", "waiting page " + pageNo + " to load");
-                Page page = futureMap.get(pageNo).get();
-                //contentCache.addPage(page);
+                Log.d("cache system", "waiting smartPage " + pageNo + " to load");
+                Page smartPage = futureMap.get(pageNo).get();
+                //contentCache.addPage(smartPage);
                 futureMap.remove(pageNo);
-                return page;
+                return smartPage;
             }
         }
         Log.d("cache system", "looking repo for " + pageNo + " to load");
-        Page page = contentCache.getPage(pageNo);
+        Page smartPage = contentCache.getPage(pageNo);
         int preloadPageNo = pageNo + 3;
 
-        Log.d("cache system", "checking if page " + preloadPageNo + " need to be loaded");
+        Log.d("cache system", "checking if smartPage " + preloadPageNo + " need to be loaded");
         if (preloadPageNo > contentCache.getPageCacheTo() && !futureMap.containsKey(preloadPageNo)) {  //看到第8页的时候，去看是不是cache有第10页
             preload(preloadPageNo);
         }
-        return page;
+        return smartPage;
     }
 
     private void preload(final int pageNo) {
         Log.d("cache system", "preloading page " + pageNo);
         Future future = executor.submit(new Callable() {
             public Object call() throws Exception {
-
-                Page preloadedPage = contentCache.getPagePreload(pageNo);
+                Page preloadedSmartPage = contentCache.getPagePreload(pageNo);
                 Log.d("cache system", "preload page " + pageNo + " done");
-                return preloadedPage;
+                return preloadedSmartPage;
             }
         });
         futureMap.put(pageNo, future);
     }
 
-    public void refreshAndPage(int token) throws NoMoreStatusException {
+    public synchronized void refreshAndPage(int token) throws NoMoreStatusException {
         refresh(token);
         contentCache.pageAfterRefresh();
     }
 
-    public void refresh(int token) throws NoMoreStatusException {
+    public synchronized void refresh(int token) throws NoMoreStatusException {
         contentCache.refresh(token);
     }
 }

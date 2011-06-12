@@ -1,15 +1,8 @@
-import junit.framework.TestCase
-import groovyx.gpars.GParsPool
-
-import de.l3s.boilerpipe.BoilerpipeExtractor
-import de.l3s.boilerpipe.sax.HTMLHighlighter
-import de.l3s.boilerpipe.extractors.CommonExtractors
-
-import de.l3s.boilerpipe.sax.HTMLFetcher
-import java.util.concurrent.ConcurrentHashMap
-import flipdroid.grepper.GpathFromURIFetcher
-import flipdroid.grepper.FruitFetcher
 import flipdroid.grepper.EncodingDetector
+import flipdroid.grepper.FruitFetcher
+import flipdroid.grepper.GpathFromURIFetcher
+import junit.framework.TestCase
+
 /**
  * Created by IntelliJ IDEA.
  * User: Administrator
@@ -35,47 +28,54 @@ class URIFectherTest extends TestCase {
            'http://news.zol.com.cn/218/2182162.html': '联通3G上网卡市场火热 1月新增35万用户',  //相关阅读 trails
             'http://laoyaoba.com/ss6/?action-viewnews-itemid-176072': 'ipad2即将上市 盘点A股苹果迷(附股)',//老杳吧本周热点帖子 trails
             'http://tech.hexun.com/2011-02-26/127582009.html': '一山容二虎 无线上网卡VS无线局域网优劣谈(图)',
-            'http://wiki.restlet.org/docs_2.0/13-restlet/21-restlet.html':'a'
     ]
 
     public void testFetch() {
 
-        Map compareMap = new ConcurrentHashMap();
-        GParsPool.withPool {
-            testMap.eachParallel {url, title ->
-                def gpathFetcher = new GpathFromURIFetcher()
-                final detector = new EncodingDetector()
-                gpathFetcher.encodingDetector = detector
-                def htmlNode = gpathFetcher.fetch(url)
-                final titleNode = new FruitFetcher().fetch(htmlNode)
-//                assertNotNull(title, titleNode)
-//                assertEquals(title.trim(), titleNode.titleText)
+//        Map compareMap = new ConcurrentHashMap();
+//        GParsPool.withPool {
+//            testMap.eachParallel {url, title ->
+//                def gpathFetcher = new GpathFromURIFetcher()
+//                final detector = new EncodingDetector()
+//                gpathFetcher.encodingDetector = detector
+//                def htmlNode = gpathFetcher.fetch(url)
+//                final titleNode = new FruitFetcher().fetch(htmlNode)
+////                assertNotNull(title, titleNode)
+////                assertEquals(title.trim(), titleNode.titleText)
+//
+//                def htmlDoc = HTMLFetcher.fetch(new URL(url), detector.detect(url));
+//
+//                final BoilerpipeExtractor extractorChinese;
+//                final BoilerpipeExtractor extractor;
+//                final HTMLHighlighter hhChinese;
+//                final HTMLHighlighter hh;
+//
+////                boolean forChinese = true;
+////                if (forChinese) {
+//                    extractorChinese = CommonExtractors.CHINESE_ARTICLE_EXTRACTOR;
+//                    hhChinese = HTMLHighlighter.newExtractingInstanceForChinese();
+////                } else {
+//                    extractor = CommonExtractors.ARTICLE_EXTRACTOR;
+//                    hh = HTMLHighlighter.newExtractingInstance();
+////                }
+//                String bodyTextPipeChinese = hhChinese.process(htmlDoc, extractorChinese);
+//                String bodyTextPipe = hh.process(htmlDoc, extractor);
+//
+//                compareMap << [(titleNode.titleText.toString()) : "Original:\n"+bodyTextPipe +"\n"+"Optimized:\n"+bodyTextPipeChinese]
+//            }
+//        }
+//        compareMap.each {k,v->
+//            println k
+//
+//            println v
+//        }
 
-                def htmlDoc = HTMLFetcher.fetch(new URL(url), detector.detect(url));
-
-                final BoilerpipeExtractor extractorChinese;
-                final BoilerpipeExtractor extractor;
-                final HTMLHighlighter hhChinese;
-                final HTMLHighlighter hh;
-
-//                boolean forChinese = true;
-//                if (forChinese) {
-                    extractorChinese = CommonExtractors.CHINESE_ARTICLE_EXTRACTOR;
-                    hhChinese = HTMLHighlighter.newExtractingInstanceForChinese();
-//                } else {
-                    extractor = CommonExtractors.ARTICLE_EXTRACTOR;
-                    hh = HTMLHighlighter.newExtractingInstance();
-//                }
-                String bodyTextPipeChinese = hhChinese.process(htmlDoc, extractorChinese);
-                String bodyTextPipe = hh.process(htmlDoc, extractor);
-
-                compareMap << [(titleNode.titleText.toString()) : "Original:\n"+bodyTextPipe +"\n"+"Optimized:\n"+bodyTextPipeChinese]
-            }
-        }
-        compareMap.each {k,v->
-            println k
-
-            println v
-        }
+        def url = "http://www.ifanr.com/42005"
+        def gpathFetcher = new GpathFromURIFetcher()
+        final detector = new EncodingDetector()
+        gpathFetcher.encodingDetector = detector
+        def htmlNode = gpathFetcher.fetch(url)
+        final titleNode = new FruitFetcher().fetch(htmlNode)
+        println titleNode.titleText
     }
 }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout android:id="@+id/shadowlayer" xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent" android:paddingTop="20dip" android:paddingBottom="20dip"
+              android:paddingLeft="14dip"
+              android:paddingRight="14dip" android:layout_height="fill_parent" android:background="#77000000"
+              android:gravity="center">
+    <LinearLayout android:id="@+id/contentWrapper" android:background="@drawable/roundcorner" android:weightSum="100"
+                  android:layout_width="fill_parent" android:layout_height="fill_parent"
+                  android:orientation="vertical">
+        <LinearLayout android:layout_marginTop="3dip" android:layout_marginRight="3dip"
+                      android:layout_marginLeft="3dip" android:id="@+id/toolbar" android:orientation="horizontal"
+                      android:layout_width="fill_parent" android:layout_weight="7"
+                      android:layout_height="0dip" android:background="#f7f7f7">
+            <LinearLayout android:layout_width="0dip" android:layout_weight="1"
+                          android:layout_height="wrap_content" android:gravity="left">
+                <ImageButton android:id="@+id/close" android:textSize="14px" android:background="@drawable/close"
+                             android:layout_width="wrap_content" android:maxHeight="30dip"
+                             android:adjustViewBounds="true" android:scaleType="centerInside"
+                             android:layout_height="fill_parent" android:layout_gravity="left"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dip" android:layout_weight="1" android:orientation="horizontal"
+                          android:layout_height="wrap_content" android:gravity="right|center_vertical"
+                          android:layout_gravity="right|center_vertical">
+                <ImageButton android:id="@+id/like" android:background="@drawable/like"
+                             android:layout_width="wrap_content" android:maxHeight="30dip"
+                             android:adjustViewBounds="true" android:scaleType="centerInside"
+                             android:layout_height="fill_parent" android:layout_gravity="right|center_vertical"/>
+                <ImageButton android:id="@+id/retweet" android:background="@drawable/retweet"
+                             android:layout_width="wrap_content" android:maxHeight="30dip"
+                             android:adjustViewBounds="true" android:scaleType="centerInside"
+                             android:layout_height="fill_parent" android:layout_gravity="right|center_vertical"/>
+                <ImageButton android:id="@+id/share" android:background="@drawable/share"
+                             android:layout_width="wrap_content" android:maxHeight="30dip"
+                             android:adjustViewBounds="true" android:scaleType="centerInside"
+                             android:layout_height="fill_parent" android:layout_gravity="right|center_vertical"/>
+            </LinearLayout>
+        </LinearLayout>
+        <!--<LinearLayout android:id="@+id/topbar"-->
+        <!--android:layout_width="fill_parent" android:layout_weight="10"-->
+        <!--android:layout_height="0dip" android:background="#f7f7f7">-->
+
+        <!--</LinearLayout>-->
+        <LinearLayout android:id="@+id/content" android:paddingTop="10dip" android:paddingBottom="10dip"
+                      android:layout_width="fill_parent"
+                      android:layout_weight="93"
+                      android:layout_height="0dip" android:background="@drawable/roundbottom">
+
+                <LinearLayout android:id="@+id/wrapperll" android:layout_height="fill_parent"
+                              android:layout_width="fill_parent"
+                              android:background="#f7f7f7"></LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

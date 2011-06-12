@@ -5,4 +5,8 @@ public class NoNetworkException extends RuntimeException{
     public NoNetworkException(Throwable cause) {
         super(cause);
     }
+
+    public NoNetworkException() {
+        super();
+    }
 }

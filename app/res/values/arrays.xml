@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="browse_mode_options">
+        <item>Weibo Mode</item>
+        <item>Magzine Mode</item>
+    </string-array>
+    <string-array name="browse_mode_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="animation_mode_options">
+        <item>horizontal</item>
+        <item>vertical</item>
+    </string-array>
+    <string-array name="animation_mode_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+</resources>   

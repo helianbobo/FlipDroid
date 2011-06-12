@@ -7,7 +7,6 @@
     <script language="javascript">
         var json;
         var readyForRating = false;
-        var ratingUrl = "/v1/url/abstract/rating";
 
         function extract() {
             $('#extractButton').disabled = true;
@@ -22,6 +21,8 @@
                     json = data.title + "\n" + data.content;
                     var title = data.title;
                     var content = data.content;
+                    var image = data.images[0];
+                    $('#image').attr("src", image);
                     $('#urlTitle').text(title);
                     content = content.replace(/\n/g, "</p><br/><p>");
                     $('#urlContent').html("<p>" + content + "</p>");
@@ -31,9 +32,7 @@
             });
         }
 
-
-
-        function feedback(tick){
+        function good() {
             if (!checkIsReady()) {
                 return;
             }
@@ -42,13 +41,29 @@
 
             var url = $('#url').val();
             $.ajax({
-                url: ratingUrl,
+                url: "/v1/url/abstract",
                 dataType:"json",
-                data: {
-                    url:url,
-//                    json:json, //cause 400 response.
-                    tick:tick
-                },
+                data: {url:url,nocache:true,rate:true,sample:json,tick:'true'},
+                success: function(data) {
+                    $('#urlTitle').text('case created, ID:' + data.caseId);
+                    $('#urlContent').text('');
+                    readyForRating = false;
+                }
+            });
+        }
+
+        function bad() {
+            if (!checkIsReady()) {
+                return;
+            }
+            $('#goodButton').disabled = true;
+            $('#badButton').disabled = true;
+
+            var url = $('#url').val();
+            $.ajax({
+                url: "/v1/url/abstract",
+                dataType:"json",
+                data: {url:url,nocache:true,rate:true,sample:json,tick:'false'},
                 success: function(data) {
                     $('#urlTitle').text('case created, ID:' + data.caseId);
                     $('#urlContent').text('');
@@ -157,15 +172,16 @@
         <input type='button' value="Extract" id="extractButton" class='button'
                onclick="extract();">
         <input type='button' value="Good" id="tickButton" class='button'
-               onclick="feedback(true);">
+               onclick="good();">
         <input type='button' value="Bad" id="crossButton" class='button'
-               onclick="feedback(false);">
+               onclick="bad();">
     </div>
 </div>
 </div>
 
 <div id='main'>
     <div id='extractId'>
+        <img id="image" src="">
         <h2 id="urlTitle"></h2>
 
         <p id="urlContent"></p>

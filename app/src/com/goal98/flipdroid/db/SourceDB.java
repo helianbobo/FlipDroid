@@ -2,20 +2,13 @@ package com.goal98.flipdroid.db;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteQueryBuilder;
-import android.provider.BaseColumns;
-import android.util.Log;
 import com.goal98.flipdroid.model.Source;
-import com.goal98.flipdroid.util.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class SourceDB extends AbstractDB{
+public class SourceDB extends AbstractDB {
 
     public SourceDB(Context context) {
         super(context);
@@ -26,14 +19,19 @@ public class SourceDB extends AbstractDB{
         return Source.TABLE_NAME;
     }
 
-    public static Map<String, String> buildSource(String accountType,String name, String id, String desc, String imageUrl){
+    public static Map<String, String> buildSource(String accountType, String name, String id, String desc, String imageUrl, String contentURL) {
         Map<String, String> result = new HashMap<String, String>();
         result.put(Source.KEY_SOURCE_NAME, name);
         result.put(Source.KEY_SOURCE_ID, id);
         result.put(Source.KEY_SOURCE_DESC, desc);
         result.put(Source.KEY_ACCOUNT_TYPE, accountType);
         result.put(Source.KEY_IMAGE_URL, imageUrl);
-        return  result;
+        result.put(Source.KEY_CONTENT_URL, contentURL);
+        return result;
+    }
+
+    public static Map<String, String> buildSource(String accountType, String name, String id, String desc, String imageUrl) {
+        return buildSource(accountType, name, id, desc, imageUrl, null);
     }
 
     public long insert(ContentValues values) {
@@ -48,15 +46,17 @@ public class SourceDB extends AbstractDB{
         values.put(Source.KEY_SOURCE_ID, source.get(Source.KEY_SOURCE_ID));
         values.put(Source.KEY_IMAGE_URL, source.get(Source.KEY_IMAGE_URL));
         values.put(Source.KEY_SOURCE_DESC, source.get(Source.KEY_SOURCE_DESC));
+        values.put(Source.KEY_CONTENT_URL, source.get(Source.KEY_CONTENT_URL));
         return insert(values);
     }
 
-    public long insert(String accountType, String sourceName, String sourceId, String sourceDesc) {
+    public long insert(String accountType, String sourceName, String sourceId, String sourceDesc, String contentURL) {
         ContentValues values = new ContentValues();
         values.put(Source.KEY_SOURCE_NAME, sourceName);
         values.put(Source.KEY_ACCOUNT_TYPE, accountType);
         values.put(Source.KEY_SOURCE_ID, sourceId);
         values.put(Source.KEY_SOURCE_DESC, sourceDesc);
+        values.put(Source.KEY_CONTENT_URL, contentURL);
         return insert(values);
     }
 
@@ -64,5 +64,10 @@ public class SourceDB extends AbstractDB{
         SQLiteDatabase db = helper.getWritableDatabase();
         int count = db.update(Source.TABLE_NAME, values, where, whereArgs);
         return count;
+    }
+
+    public void removeSourceByName(String sourceName) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        db.delete(Source.TABLE_NAME, Source.KEY_SOURCE_NAME + " = ? ", new String[]{sourceName});
     }
 }

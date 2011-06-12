@@ -5,17 +5,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
+import android.view.*;
 import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.Source;
+import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.view.SourceItemViewBinder;
 
 public class IndexActivity extends ListActivity {
@@ -33,8 +30,6 @@ public class IndexActivity extends ListActivity {
     private SimpleCursorAdapter adapter;
     public static int statusBarHeight;
     public static int titleBarHeight;
-    public static int maxHeight;
-    public static int maxWidth;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,15 +55,68 @@ public class IndexActivity extends ListActivity {
                 int contentViewTop =
                         window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
                 titleBarHeight = contentViewTop - statusBarHeight;
-                maxHeight = (int) ((int) (IndexActivity.this.getWindowManager().getDefaultDisplay().getHeight()) - statusBarHeight - titleBarHeight*2.2);
-                maxWidth = (int) (IndexActivity.this.getWindowManager().getDefaultDisplay().getWidth())-20;
+                DeviceInfo.displayHeight = (int) ((int) (IndexActivity.this.getWindowManager().getDefaultDisplay().getHeight()) - statusBarHeight - titleBarHeight * 2.2);
+                DeviceInfo.displayWidth = (int) (IndexActivity.this.getWindowManager().getDefaultDisplay().getWidth()) - 20;
+                DeviceInfo.width = IndexActivity.this.getWindowManager().getDefaultDisplay().getWidth();
+                DeviceInfo.height = IndexActivity.this.getWindowManager().getDefaultDisplay().getHeight();
+            }
+        });
+        this.getListView().setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+            public void onCreateContextMenu(ContextMenu menu, View v,
+                                            ContextMenu.ContextMenuInfo menuInfo) {
+
+                menu.setHeaderTitle(R.string.deletesource);
+                menu.setHeaderIcon(R.drawable.btndelete);
+                menu.add(0, 0, 0, R.string.yes);
+                menu.add(0, 1, 0, R.string.no);
             }
         });
     }
 
     @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        TextView sourceNameTextView = (TextView) info.targetView
+                .findViewById(R.id.source_name);
+        String sourceName = sourceNameTextView.getText().toString();
+        if (item.getItemId() == 0) {//delete
+            sourceDB.removeSourceByName(sourceName);
+            bindAdapter();
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    private void bindAdapter() {
+        adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
+                new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL},
+                new int[]{R.id.source_name, R.id.source_desc, R.id.source_image});
+        adapter.setViewBinder(new SourceItemViewBinder());
+        setListAdapter(adapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        sourceCursor = sourceDB.findAll();
+        startManagingCursor(sourceCursor);
+
+        bindAdapter();
+
+        adapter.notifyDataSetChanged();
+    }
+
+    private void openDatabase() {
+        sourceDB = new SourceDB(getApplicationContext());
+        sourceCursor = sourceDB.findAll();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        closeDB();
+    }
+
+    private void closeDB() {
         if (sourceCursor != null)
             sourceCursor.close();
         if (accountDB != null)
@@ -78,19 +126,22 @@ public class IndexActivity extends ListActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        sourceCursor = sourceDB.findAll();
-        startManagingCursor(sourceCursor);
-
-        adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
-                new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL},
-                new int[]{R.id.source_name, R.id.source_desc, R.id.source_image});
-        adapter.setViewBinder(new SourceItemViewBinder());
-        setListAdapter(adapter);
+    protected void onResume() {
+        super.onResume();
+        openDatabase();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        closeDB();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        closeDB();
+    }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -98,10 +149,12 @@ public class IndexActivity extends ListActivity {
         Cursor cursor = (Cursor) l.getItemAtPosition(position);
         intent.putExtra("type", cursor.getString(cursor.getColumnIndex(Source.KEY_ACCOUNT_TYPE)));
         intent.putExtra("sourceId", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_ID)));
+        intent.putExtra("sourceImage", cursor.getString(cursor.getColumnIndex(Source.KEY_IMAGE_URL)));
+        intent.putExtra("sourceName", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_NAME)));
+        intent.putExtra("contentUrl", cursor.getString(cursor.getColumnIndex(Source.KEY_CONTENT_URL)));//for rss
         cursor.close();
         startActivity(intent);
         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-
     }
 
 

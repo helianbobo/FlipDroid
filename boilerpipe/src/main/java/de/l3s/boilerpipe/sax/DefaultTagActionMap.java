@@ -20,13 +20,13 @@ package de.l3s.boilerpipe.sax;
 
 /**
  * Default {@link TagAction}s. Seem to work well.
- * 
+ *
  * @see TagActionMap
  */
 public class DefaultTagActionMap extends TagActionMap {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -40,9 +40,11 @@ public class DefaultTagActionMap extends TagActionMap {
         setTagAction("EMBED", CommonTagActions.TA_IGNORABLE_ELEMENT);
         setTagAction("APPLET", CommonTagActions.TA_IGNORABLE_ELEMENT);
         setTagAction("LINK", CommonTagActions.TA_IGNORABLE_ELEMENT);
-setTagAction("CODE", CommonTagActions.TA_INLINE_NO_WHITESPACE);
+        setTagAction("CODE", CommonTagActions.TA_INLINE_NO_WHITESPACE);
         setTagAction("A", CommonTagActions.TA_ANCHOR_TEXT);
         setTagAction("BODY", CommonTagActions.TA_BODY);
+        setTagAction("IMAGE", CommonTagActions.TA_IMAGE);
+        setTagAction("IMG", CommonTagActions.TA_IMAGE);
 
         setTagAction("STRIKE", CommonTagActions.TA_INLINE_NO_WHITESPACE);
         setTagAction("U", CommonTagActions.TA_INLINE_NO_WHITESPACE);
@@ -51,7 +53,7 @@ setTagAction("CODE", CommonTagActions.TA_INLINE_NO_WHITESPACE);
         setTagAction("EM", CommonTagActions.TA_INLINE_NO_WHITESPACE);
         setTagAction("STRONG", CommonTagActions.TA_INLINE_NO_WHITESPACE);
         setTagAction("SPAN", CommonTagActions.TA_INLINE_NO_WHITESPACE);
-        
+
         // New in 1.1 (especially to improve extraction quality from Wikipedia etc.)
         setTagAction("SUP", CommonTagActions.TA_INLINE_NO_WHITESPACE);
 

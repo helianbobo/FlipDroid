@@ -14,32 +14,32 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class PagedArticles {
-    private List<Page> pageList;
+    private List<Page> pages;
 
-    public PagedArticles(){
-        this.pageList = new ArrayList();
+    public PagedArticles() {
+        this.pages = new ArrayList();
     }
 
     public Page getPage(int pageNo) throws NoMorePageException {
-        if (pageNo >= pageList.size()) {
+        if (pageNo >= pages.size()) {
             throw new NoMorePageException();
         }
-        return pageList.get(pageNo);
+        return pages.get(pageNo);
     }
 
-    public void add(Page page) {
-        pageList.add(page);
+    public void add(Page smartPage) {
+        pages.add(smartPage);
     }
 
-    public void addAll(List<Page> pages) {
-        pageList.addAll(pages);
+    public void addAll(List<Page> smartPages) {
+        pages.addAll(smartPages);
     }
 
     public int size() {
-        return pageList.size();
+        return pages.size();
     }
 
     public List<Page> getPages() {
-        return pageList;
+        return pages;
     }
 }

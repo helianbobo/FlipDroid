@@ -5,13 +5,11 @@ import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Restlet;
 import org.restlet.data.Protocol;
-import org.restlet.data.Reference;
 import org.restlet.resource.Directory;
 
 public class APIServer {
 
-    public static final String ROOT_URI = "file:///home/jleo/FlipDroid/tika-ui/index.html";
-    public static final String CURRENT_VERSION = "v1";
+    public static final String ROOT_URI = "file:///G:\\helianbobo-FlipDroid-48d8e89\\tika-ui/index.html";
 
     public static void main(String[] args) throws Exception {
 
@@ -19,9 +17,7 @@ public class APIServer {
 
         // Create the HTTP server and listen on port 8182
         c.getServers().add(Protocol.HTTP, 8182);
-        c.getDefaultHost().attach("/"+CURRENT_VERSION+"/url/abstract", URLAbstractResource.class);
-        c.getDefaultHost().attach("/"+CURRENT_VERSION+"/url/abstract/batch", URLAbstractBatchResource.class);
-        c.getDefaultHost().attach("/"+CURRENT_VERSION+"/url/abstract/rating", URLAbstractRatingResource.class);
+        c.getDefaultHost().attach("/v1/url/abstract", URLAbstractResource.class);
 
 
         // Create a component

@@ -12,14 +12,20 @@
     <string name="sina_weibo">新浪微博</string>
 
     <string name="key_anim_flip_duration_preference">anim_flip_duration</string>
+
     <string name="title_anim_flip_duration_preference">翻页动画时间</string>
     <string name="summary_anim_flip_duration_preference">翻页动画时间</string>
     <string name="dialog_title_anim_flip_duration_preference">翻页动画时间</string>
 
-    <string name="key_article_per_page_preference">article_per_page</string>
     <string name="title_article_per_page_preference">每页显示文章数</string>
     <string name="summary_article_per_page_preference">每页显示文章数</string>
     <string name="dialog_title_article_per_page_preference">每页显示文章数</string>
+
+    <string name="title_browse_mode_preference">浏览模式</string>
+    <string name="dialog_title_browse_mode_preference">浏览模式</string>
+
+    <string name="title_animation_mode_preference">翻页动画</string>
+    <string name="dialog_title_animation_mode_preference">翻页动画</string>
 
     <string name="button_add_new_account">添加新账户</string>
     <string name="button_add_new_source">添加新内容</string>
@@ -32,7 +38,18 @@
     <string name="loading">加载中...</string>
     <string name="sharedBy">分享自</string>
     <string name="tikaservererror">获取内容错误</string>
-<string name="tikatimeout">获取内容超时</string>
-<string name="unknownerror">获取内容错误</string>
-<string name="networkerror">找不到网络</string>
+    <string name="tikatimeout">获取内容超时</string>
+    <string name="unknownerror">获取内容错误</string>
+    <string name="networkerror">找不到网络</string>
+    <string name="locale">ZH_CN</string>
+    <string name="comment">评论微博</string>
+    <string name="saysomething">说点儿什么吧......</string>
+    <string name="pastersshere">在这儿粘贴订阅源</string>
+    <string name="rssinvalid">无效RSS源</string>
+    <string name="deletesource">删除源</string>
+    <string name="yes">删除</string>
+    <string name="no">取消</string>
+    <string name="my_feed">我的订阅</string>
+    <string name="my_feed_desc">我的谷歌订阅</string>
+    <string name="credentialInCorrect">认证失败</string>
 </resources>

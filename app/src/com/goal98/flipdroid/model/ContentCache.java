@@ -42,7 +42,7 @@ public class ContentCache {
 
     private int pageCacheTo;
 
-    public ContentCache(PagedArticles pagedList, UnPagedArticles unPagedArticles, PagingStrategy pagingStrategy,Semaphore refreshingSemaphore) {
+    public ContentCache(PagedArticles pagedList, UnPagedArticles unPagedArticles, PagingStrategy pagingStrategy, Semaphore refreshingSemaphore) {
         this.pagedList = pagedList;
         this.unPagedArticles = unPagedArticles;
         this.pagingStrategy = pagingStrategy;
@@ -52,21 +52,21 @@ public class ContentCache {
     public Page getPagePreload(int pageNo) throws NoMorePageException, NoSuchPageException {
         try {
             lock.lock();
-            Page page = pagedList.getPage(pageNo);
-            Log.d("cache system", "from cache, page " + pageNo + " loaded");
-            return page;
+            Page smartPage = pagedList.getPage(pageNo);
+            Log.d("cache system", "from cache, smartPage " + pageNo + " loaded");
+            return smartPage;
         } catch (NoMorePageException e) {
             Log.d("cache system", "no more pages, doing paging in a sec");
             try {
                 refreshingSemaphore.acquire();
-                List<Page> newPages = pagingStrategy.doPaging(unPagedArticles).getPages();
-                if (newPages.size() == 0) {
+                List<Page> newSmartPages = pagingStrategy.doPaging(unPagedArticles).getPages();
+                if (newSmartPages.size() == 0) {
                     Log.d("cache system", "no more status.");
                     throw new NoSuchPageException("page no" + pageNo);
                 }
-                pagedList.addAll(newPages);
-                pageCacheTo += newPages.size();
-                Log.d("cache system", "loaded " + newPages.size() + " more pages");
+                pagedList.addAll(newSmartPages);
+                pageCacheTo += newSmartPages.size();
+                Log.d("cache system", "loaded " + newSmartPages.size() + " more pages");
                 return pagedList.getPage(pageNo);
             } catch (InterruptedException e1) {
                 return pagedList.getPage(pageNo);
@@ -83,9 +83,9 @@ public class ContentCache {
 
 
     public Page getPage(int pageNo) throws NoMorePageException, NoSuchPageException {
-        Page page = pagedList.getPage(pageNo);
-        Log.d("cache system", "from cache, page " + pageNo + " loaded");
-        return page;
+        Page smartPage = pagedList.getPage(pageNo);
+        Log.d("cache system", "from cache, smartPage " + pageNo + " loaded");
+        return smartPage;
     }
 
     public void refresh(int refreshingToken) throws NoMoreStatusException {
@@ -93,6 +93,10 @@ public class ContentCache {
         Log.d("cache system", "content repo token is " + this.refreshingToken);
         if (this.refreshingToken <= refreshingToken) {
             this.refreshingToken++;
+            if (articleSource.isNoMoreToLoad()) {
+                throw new NoMoreStatusException();
+            }
+
             Log.d("cache system", "refreshing");
             boolean loadResult = articleSource.loadMore();
             if (!loadResult) {
@@ -103,20 +107,21 @@ public class ContentCache {
                 articleSourceLastModified = articleSource.lastModified();
             }
             Log.d("cache system", "refresh done");
-        }else{
-           Log.d("cache system", "ignore the refresh request since toke doesn't match");
+
+        } else {
+            Log.d("cache system", "ignore the refresh request since toke doesn't match");
         }
     }
 
     public void pageAfterRefresh() {
-        List<Page> pageList = pagingStrategy.doPaging(unPagedArticles).getPages();
-        pagedList.addAll(pageList);
-        Log.d("cache system", "added " + pageList.size() + " pages");
-        pageCacheTo += pageList.size();
+        List<Page> smartPageList = pagingStrategy.doPaging(unPagedArticles).getPages();
+        pagedList.addAll(smartPageList);
+        Log.d("cache system", "added " + smartPageList.size() + " pages");
+        pageCacheTo += smartPageList.size();
     }
 
-    public void addPage(Page page) {
-        this.pagedList.add(page);
+    public void addPage(Page smartPage) {
+        this.pagedList.add(smartPage);
         pageCacheTo++;
     }
 

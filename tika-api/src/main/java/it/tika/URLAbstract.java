@@ -1,12 +1,25 @@
 package it.tika;
 
+import com.mongodb.BasicDBList;
+
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 public class URLAbstract {
     private String url;
     private String title;
     private String content;
     private Charset charset;
+    private List<String> images = new ArrayList<String>();
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
 
     public byte[] getRawContent() {
         return rawContent;
@@ -49,11 +62,13 @@ public class URLAbstract {
         this.title = title;
     }
 
-    public URLAbstract(String url, String title, String content) {
+    public URLAbstract(String url, String title, String content, BasicDBList images) {
         this.url = url;
         this.title = title;
         this.content = content;
-
+        if (images != null)
+            for (int i = 0; i < images.size(); i++)
+                this.images.add((String) images.get(i));
     }
 
     public Charset getCharset() {

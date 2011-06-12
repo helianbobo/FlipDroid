@@ -21,7 +21,7 @@
 		<body-content>JSP</body-content>
 
 		<description>
-			Sets default HTML escape value for the current page.
+			Sets default HTML escape value for the current smartPage.
 			Overrides a "defaultHtmlEscape" context-param in web.xml, if any.
 		</description>
 
@@ -42,7 +42,7 @@
 
 		<description>
 			Escapes its enclosed body content, applying HTML escaping and/or JavaScript escaping.
-			The HTML escaping flag participates in a page-wide or application-wide setting
+			The HTML escaping flag participates in a smartPage-wide or application-wide setting
 			(i.e. by HtmlEscapeTag or a "defaultHtmlEscape" context-param in web.xml).
 		</description>
 
@@ -69,7 +69,7 @@
 
 		<description>
 			Retrieves the message with the given code, or text if code isn't resolvable.
-			The HTML escaping flag participates in a page-wide or application-wide setting
+			The HTML escaping flag participates in a smartPage-wide or application-wide setting
 			(i.e. by HtmlEscapeTag or a "defaultHtmlEscape" context-param in web.xml).
 		</description>
 
@@ -126,7 +126,7 @@
 
 		<description>
 			Retrieves the theme message with the given code, or text if code isn't resolvable.
-			The HTML escaping flag participates in a page-wide or application-wide setting
+			The HTML escaping flag participates in a smartPage-wide or application-wide setting
 			(i.e. by HtmlEscapeTag or a "defaultHtmlEscape" context-param in web.xml).
 		</description>
 
@@ -183,7 +183,7 @@
 
 		<description>
 			Provides Errors instance in case of bind errors.
-			The HTML escaping flag participates in a page-wide or application-wide setting
+			The HTML escaping flag participates in a smartPage-wide or application-wide setting
 			(i.e. by HtmlEscapeTag or a "defaultHtmlEscape" context-param in web.xml).
 		</description>
 
@@ -239,7 +239,7 @@
 
 		<description>
 			Provides BindStatus object for the given bind path.
-			The HTML escaping flag participates in a page-wide or application-wide setting
+			The HTML escaping flag participates in a smartPage-wide or application-wide setting
 			(i.e. by HtmlEscapeTag or a "defaultHtmlEscape" context-param in web.xml).
 		</description>
 
@@ -278,7 +278,7 @@
 		<description>
 			Provides transformation of variables to Strings, using an appropriate
 			custom PropertyEditor from BindTag (can only be used inside BindTag).
-			The HTML escaping flag participates in a page-wide or application-wide setting
+			The HTML escaping flag participates in a smartPage-wide or application-wide setting
 			(i.e. by HtmlEscapeTag or a "defaultHtmlEscape" context-param in web.xml).
 		</description>
 

@@ -17,11 +17,11 @@
  */
 package de.l3s.boilerpipe.document;
 
+import de.l3s.boilerpipe.labels.DefaultLabels;
+
 import java.util.BitSet;
 import java.util.HashSet;
 import java.util.Set;
-
-import de.l3s.boilerpipe.labels.DefaultLabels;
 
 /**
  * Describes a block of text.
@@ -53,18 +53,27 @@ public class TextBlock implements Cloneable {
 
     private static final BitSet EMPTY_BITSET = new BitSet();
     public static final TextBlock EMPTY_START = new TextBlock("", EMPTY_BITSET,
-            0, 0, 0, 0, -1,0,0);
+            0, 0, 0, 0, -1,0,0,false);
     public static final TextBlock EMPTY_END = new TextBlock("", EMPTY_BITSET,
-            0, 0, 0, 0, Integer.MAX_VALUE,0,0);
+            0, 0, 0, 0, Integer.MAX_VALUE,0,0,false);
+    private boolean isImage;
+
+    public boolean isImage() {
+        return isImage;
+    }
+
+    public void setImage(boolean image) {
+        isImage = image;
+    }
 
     public TextBlock(final String text) {
-        this(text, null, 0,0,0,0,0,0,0);
+        this(text, null, 0,0,0,0,0,0,0,false);
     }
     
     public TextBlock(final String text, final BitSet containedTextElements,
             final int numWords, final int numWordsInAnchorText,
             final int numWordsInWrappedLines, final int numWrappedLines,
-            final int offsetBlocks,int numSegment, float segmentDensity ) {
+            final int offsetBlocks,int numSegment, float segmentDensity,boolean isImage ) {
         this.text = text;
         this.containedTextElements = containedTextElements;
         this.numWords = numWords;
@@ -75,6 +84,7 @@ public class TextBlock implements Cloneable {
         this.offsetBlocksEnd = offsetBlocks;
         this.numSegment = numSegment;
         this.segmentDensity = segmentDensity;
+        this.isImage = isImage;
         initDensities();
     }
 

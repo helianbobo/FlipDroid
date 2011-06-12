@@ -4,8 +4,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import java.math.BigDecimal;
-
 /**
  * Unit test for simple App.
  */
@@ -35,6 +33,6 @@ public class AppTest
      */
     public void testApp()
     {
-        assertTrue( true );
+        System.out.println("\n\n\n\n\n\n\naa\n\na".replaceAll("\n*","\n"));
     }
 }

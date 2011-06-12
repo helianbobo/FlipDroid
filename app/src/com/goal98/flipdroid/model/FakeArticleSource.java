@@ -1,10 +1,14 @@
 package com.goal98.flipdroid.model;
 
 import android.util.Log;
+import weibo4j.WeiboException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 public class FakeArticleSource extends AbstractArticleSource {
 
@@ -88,5 +92,13 @@ public class FakeArticleSource extends AbstractArticleSource {
 
     public boolean loadMore() {
         return loadArticle();
+    }
+
+    public boolean isNoMoreToLoad() {
+        return false;
+    }
+
+    public void comment(String status, long statusId) throws WeiboException {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

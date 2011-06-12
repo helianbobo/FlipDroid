@@ -31,7 +31,7 @@ public class SiteActivity extends Activity {
         setContentView(R.layout.site);
 
         GridView g = (GridView) findViewById(R.id.siteGrid);
-        g.setAdapter(new ButtonAdapter(this));
+        g.setAdapter(new SiteAdapter(this));
 
     }
 
@@ -47,14 +47,14 @@ public class SiteActivity extends Activity {
         preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
     }
 
-    public class ButtonAdapter extends BaseAdapter {
+    public class SiteAdapter extends BaseAdapter {
 
         private Context mContext;
 
-        private String[] site_type_array = {Constants.TYPE_SINA_WEIBO, Constants.TYPE_TWITTER, Constants.TYPE_TENCENT_WEIBO};
-        private int[] image_array = {R.drawable.sina, R.drawable.twitter, R.drawable.tencent};
+        private String[] site_type_array = {Constants.TYPE_SINA_WEIBO, Constants.TYPE_RSS, Constants.TYPE_GOOGLE_READER};
+        private int[] image_array = {R.drawable.sina, R.drawable.rss, R.drawable.greader};
 
-        public ButtonAdapter(Context context) {
+        public SiteAdapter(Context context) {
             this.mContext = context;
         }
 
@@ -87,31 +87,43 @@ public class SiteActivity extends Activity {
                 public void onClick(View view) {
 
                     String type = (String) getItem(i);
-                    if (accountDB.hasAccount(type) && preferences.getString("sina_account", null) != null) {
-                        Intent intent = new Intent(SiteActivity.this, SourceSelectionActivity.class);
-                        intent.putExtra("type", type);
-                        intent.putExtra("next", SourceSelectionActivity.class.getName());
-                        startActivity(intent);
-                        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                    } else {
-                        if (Constants.TYPE_SINA_WEIBO.equals(type)) {
+
+                    if (Constants.TYPE_SINA_WEIBO.equals(type)) {
+                        if (accountDB.hasAccount(type) && preferences.getString("sina_account", null) != null) {
+                            Intent intent = new Intent(SiteActivity.this, SinaSourceSelectionActivity.class);
+                            intent.putExtra("type", type);
+                            intent.putExtra("next", SinaSourceSelectionActivity.class.getName());
+                            startActivity(intent);
+                            overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                        } else {
                             startActivity(new Intent(SiteActivity.this, SinaAccountActivity.class));
                             overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-
-                        } else if(Constants.TYPE_TENCENT_WEIBO.equals(type)){
-                            //TODO: Tencent Login
-                        } else if(Constants.TYPE_TWITTER.equals(type)){
-                            //TODO: Twitter Login
                         }
-
-                        finish();
                     }
+                    if (Constants.TYPE_GOOGLE_READER.equals(type)) {
+                        startActivity(new Intent(SiteActivity.this, GoogleAccountActivity.class));
+                        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                    }
+                    if (Constants.TYPE_RSS.equals(type)) {
+                        Intent intent = new Intent(SiteActivity.this, RSSSourceSelectionActivity.class);
+                        intent.putExtra("type", type);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                    }
+//                        if(Constants.TYPE_TENCENT_WEIBO.equals(type)){
+//                            //TODO: Tencent Login
+//                        } if(Constants.TYPE_TWITTER.equals(type)){
+//                            //TODO: Twitter Login
+//                        }
 
 
+                    finish();
 
                 }
 
-            });
+            }
+
+            );
 
 
             return imageButton;

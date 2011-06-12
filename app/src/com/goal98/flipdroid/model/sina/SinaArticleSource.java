@@ -3,11 +3,14 @@ package com.goal98.flipdroid.model.sina;
 import android.util.Log;
 import com.goal98.flipdroid.client.WeiboExt;
 import com.goal98.flipdroid.exception.NoNetworkException;
-import com.goal98.flipdroid.model.Source;
-import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.model.AbstractArticleSource;
 import com.goal98.flipdroid.model.Article;
-import weibo4j.*;
+import com.goal98.flipdroid.model.ArticleFilter;
+import com.goal98.flipdroid.util.Constants;
+import weibo4j.Paging;
+import weibo4j.Status;
+import weibo4j.Weibo;
+import weibo4j.WeiboException;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -28,9 +31,10 @@ public class SinaArticleSource extends AbstractArticleSource {
     private int pageLoaded = 0;
 
     private List<Article> articleList = new LinkedList<Article>();
+    private ArticleFilter filter;
 
-    public SinaArticleSource(boolean useOauth, String param1, String param2, String sourceUserId) {
-
+    public SinaArticleSource(boolean useOauth, String param1, String param2, String sourceUserId, ArticleFilter filter) {
+        this.filter = filter;
         System.setProperty("weibo4j.oauth.consumerKey", Constants.CONSUMER_KEY);
         System.setProperty("weibo4j.oauth.consumerSecret", Constants.CONSUMER_SECRET);
 
@@ -54,30 +58,33 @@ public class SinaArticleSource extends AbstractArticleSource {
         return articleList;
     }
 
-    private boolean loadArticle() {
-
+    private synchronized boolean loadArticle() {
         if (weibo == null)
             initWeibo();
 
         try {
             List<Status> statuses;
             Paging paging = new Paging(pageLoaded + 1);
+            paging.setCount(10);
             if (Constants.SOURCE_HOME.equals(sourceUserId)) {
                 statuses = weibo.getHomeTimeline(paging);
             } else {
                 statuses = weibo.getUserTimeline(sourceUserId, paging);
             }
-            if(statuses == null || statuses.size() == 0)
+            if (statuses == null || statuses.size() == 0)
                 return false;
 
             for (int i = 0; i < statuses.size(); i++) {
                 Status status = statuses.get(i);
                 Article article = new Article();
+                article.setSourceType(Constants.TYPE_SINA_WEIBO);
                 article.setStatus(status.getText());
                 article.setAuthor(status.getUser().getName());
-
+                article.setCreatedDate(status.getCreatedAt());
                 article.setPortraitImageUrl(status.getUser().getProfileImageURL());
-                articleList.add(article);
+                article.setStatusId(status.getId());
+                if (filter.doFilter(article))
+                    articleList.add(article);
             }
 
             pageLoaded++;
@@ -102,35 +109,16 @@ public class SinaArticleSource extends AbstractArticleSource {
 
     public boolean loadMore() {
         boolean result = loadArticle();
-        Log.d("cache system","loading more " + (result?"succeed":"failed"));
+        Log.d("cache system", "loading more " + (result ? "succeed" : "failed"));
+        if (!result)
+            this.noMoreToLoad = true;
 
         return result;
     }
 
-    public List<Source> searchSource(String queryStr) {
+    volatile boolean noMoreToLoad;
 
-        List<Source> result = new LinkedList<Source>();
-
-        try {
-            Query query = new Query(queryStr);
-            List<User> userList = weibo.searchUser(query);
-            if (userList != null) {
-                for (int i = 0; i < userList.size(); i++) {
-                    User user = userList.get(i);
-                    Source source = new Source();
-                    source.setName(user.getName());
-                    source.setId(String.valueOf(user.getId()));
-                    source.setDesc(user.getDescription());
-                    source.setAccountType(Constants.TYPE_SINA_WEIBO);
-                    source.setImageUrl(user.getProfileImageURL().toString());
-                    result.add(source);
-                }
-            }
-
-        } catch (WeiboException e) {
-            Log.e(this.getClass().getName(), e.getMessage(), e);
-        }
-
-        return result;
+    public boolean isNoMoreToLoad() {
+        return noMoreToLoad;
     }
 }

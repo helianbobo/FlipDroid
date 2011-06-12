@@ -5,4 +5,6 @@ import com.goal98.flipdroid.model.UnPagedArticles;
 
 public interface PagingStrategy {
     public PagedArticles doPaging(UnPagedArticles articleList);
+
+    void setNoMoreArticleListener(NoMoreArticleListener noMoreArticleListener);
 }

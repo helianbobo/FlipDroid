@@ -7,12 +7,22 @@ public class Source {
     public static final String KEY_SOURCE_DESC = "source_desc";
     public static final String KEY_SOURCE_ID = "source_id";
     public static final String KEY_IMAGE_URL = "image_url";
+    public static final String KEY_CONTENT_URL = "content_url";
     public static final String KEY_ACCOUNT_TYPE = "account_type";
     private String name;
     private String id;
     private String desc;
     private String accountType;
     private String imageUrl;
+    private String contentUrl;
+
+    public String getContentUrl() {
+        return contentUrl;
+    }
+
+    public void setContentUrl(String contentUrl) {
+        this.contentUrl = contentUrl;
+    }
 
     public String getImageUrl() {
         return imageUrl;

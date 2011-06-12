@@ -1,6 +1,6 @@
 package com.goal98.flipdroid.view;
 
-import android.app.Activity;
+import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.PagedArticles;
@@ -8,58 +8,56 @@ import com.goal98.flipdroid.model.UnPagedArticles;
 
 import java.util.List;
 
-public class SimplePagingStrategy implements PagingStrategy {
+public class FixedPagingStrategy implements PagingStrategy {
 
-    private Activity activity;
+    private PageActivity activity;
 
     public void setNoMoreArticleListener(NoMoreArticleListener noMoreArticleListener) {
         this.noMoreArticleListener = noMoreArticleListener;
     }
 
     private NoMoreArticleListener noMoreArticleListener = new DoNothingListener();
+    private int number;
 
-    public SimplePagingStrategy(Activity activity) {
+    public FixedPagingStrategy(PageActivity activity, int number) {
         this.activity = activity;
+        this.number = number;
     }
 
     public PagedArticles doPaging(UnPagedArticles unPagedArticles) {
         PagedArticles pagedArticles = new PagedArticles();
 
-        Page page = new Page(activity);
 
-        List<Article> articles = unPagedArticles.getArticleList();
-        if (articles.size() == 0 || unPagedArticles.getPagedTo() >= articles.size()) {//1第一次进来  2.正好分完，蛮巧的
+        List<Article> unpagesArticlesList = unPagedArticles.getArticleList();
+        if (unpagesArticlesList.size() == 0 || unPagedArticles.getPagedTo() >= unpagesArticlesList.size()) {//1第一次进来  2.正好分完，蛮巧的
             if (!onNoMoreArticle())
                 return pagedArticles;
-            articles = unPagedArticles.getArticleList();
+            unpagesArticlesList = unPagedArticles.getArticleList();
         }
-
-        for (int i = unPagedArticles.getPagedTo(); i < articles.size(); i++) {
-            Article article = articles.get(i);
-
-            if (!page.addArticle(article)) {//试试看能不能加进去
-                page.settle();//搞定一页，重新做layout
-                pagedArticles.add(page);
+        Page smartPage = new Page(activity);
+        for (int i = unPagedArticles.getPagedTo(), j = 0; i < unpagesArticlesList.size(); i++) {
+            Article article = unpagesArticlesList.get(i);
+            if (j == number) {
+                j = 0;
+                pagedArticles.add(smartPage);//这页加好了
                 if (pagedArticles.size() >= 2) {//预拿2页
                     unPagedArticles.setPagedTo(i);//下次从i开始再拿
                     return pagedArticles;
                 }
-                i--;//这页没加进去，下次继续加
-                page = new Page(activity);
-            } else {
-                articles.remove(article);
-                i--;
+                smartPage = new Page(activity);
+            }
+            smartPage.addArticle(article);
+            j++;
+            unpagesArticlesList.remove(article);
+            i--;
 
-                if (articles.size() <= 0) {
-                    if (articles.size() == 0) {//分完了，还有吗?
-                        if (!onNoMoreArticle()) {
-                            return pagedArticles;
-                        }
-
-                    }
+            if (unpagesArticlesList.size() == 0) {//分完了，还有吗?
+                if (!onNoMoreArticle()) {
+                    return pagedArticles;
                 }
             }
         }
+
         return pagedArticles;
     }
 
@@ -69,7 +67,6 @@ public class SimplePagingStrategy implements PagingStrategy {
                 noMoreArticleListener.onNoMoreArticle();
             } catch (NoMoreStatusException e) {//真的没了
                 return false;
-            } finally {
             }
         return true;
     }

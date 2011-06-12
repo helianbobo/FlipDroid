@@ -9,6 +9,8 @@ public class Constants {
     public static final String DATABASE_NAME = "VELOUR_DB";
 
     public static final String TYPE_SINA_WEIBO = "SINA_WEIBO";
+    public static final String TYPE_RSS = "RSS";
+    public static final String TYPE_GOOGLE_READER = "GOOGLE_READER";
     public static final String TYPE_TENCENT_WEIBO = "TENCENT_WEIBO";
     public static final String TYPE_TWITTER = "TWITTER";
     public static final String TYPE_FAKE = "FAKE";
@@ -17,8 +19,9 @@ public class Constants {
 
     public static final String SOURCE_HOME = "SOURCE_HOME";
 
-    public static final String FILENAME_WEIBO_RECOMMAND_SOURCE = "WEIBO_RECOMMAND_SOURCE_DATA.json";
+    public static final String RECOMMAND_SOURCE_SUFFIX = "RECOMMAND_SOURCE_DATA.json";
 
     public static final int DATABASE_VERSION = 10;
     public static final String WITHURLPREFIX = "    \"";
+    public static final String INDENT = "    ";
 }

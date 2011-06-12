@@ -12,7 +12,7 @@ import java.util.List;
  * User: jleo
  * Date: 3/13/11
  * Time: 11:45 AM
-
+ * <p/>
  * To change this template use File | Settings | File Templates.
  */
 public class WebpageExtractor {
@@ -54,16 +54,16 @@ public class WebpageExtractor {
                 extractor.extract(urlAbstract);
             }
         } catch (ExtractorException e) {
-                         e.printStackTrace();
+            e.printStackTrace();
             return urlAbstract;//returns the urlAbstract so far
         }
         String title = urlAbstract.getTitle();
         String content = urlAbstract.getContent();
 
-        if(content.substring(0, title.length() * 2).indexOf(title) != -1){
-            urlAbstract.setContent(content.replaceFirst(title,""));
-        }
-
+        if (title != null)
+            if (content.substring(0, title.length() * 2).indexOf(title) != -1) {
+                urlAbstract.setContent(content.replaceFirst(title, ""));
+            }
 
 
         return urlAbstract;

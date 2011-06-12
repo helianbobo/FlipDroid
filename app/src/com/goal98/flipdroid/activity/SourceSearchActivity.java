@@ -7,12 +7,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.exception.NoNetworkException;
 import com.goal98.flipdroid.model.Source;
-import com.goal98.flipdroid.model.sina.SinaArticleSource;
+import com.goal98.flipdroid.model.sina.SinaSearchSource;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.view.SourceItemViewBinder;
@@ -93,7 +96,7 @@ public class SourceSearchActivity extends ListActivity {
         @Override
         protected Integer doInBackground(String... strings) {
 
-            SinaArticleSource sinaSource = new SinaArticleSource(false, "13774256612", "541116", null);
+            SinaSearchSource sinaSource = new SinaSearchSource(false, "13774256612", "541116", null);
             List<Source> list = sinaSource.searchSource(strings[0]);
 
             if (list != null) {
@@ -105,12 +108,11 @@ public class SourceSearchActivity extends ListActivity {
                                     source.getName(),
                                     source.getId(),
                                     source.getDesc(),
-                                    source.getImageUrl());
+                                    source.getImageUrl(),
+                                    source.getContentUrl());
                     sourceList.add(customeSection);
-
                 }
             }
-
             return null;
         }
 
@@ -129,14 +131,11 @@ public class SourceSearchActivity extends ListActivity {
     }
 
 
-
     private void handleException(NoNetworkException e) {
 
         String msg = e.getMessage();
         alarmSender.sendAlarm(msg);
     }
-
-
 
 
 }

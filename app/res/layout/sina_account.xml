@@ -5,8 +5,8 @@
              android:orientation="vertical"
              android:paddingLeft="5dp" android:paddingRight="5dp" android:paddingTop="100dp">`
 
-    <TableRow>
-        <ImageView android:src="@drawable/sina"
+    <TableRow android:id="@+id/logo">
+        <ImageView  android:src="@drawable/sina"
                    android:layout_width="60dp"
                    android:layout_height="60dp"/>
         <TextView android:text="@string/sina_weibo" android:textSize="40dp"/>
@@ -17,7 +17,7 @@
         <TextView android:text="@string/username" android:paddingLeft="20dp"/>
 
         <EditText android:id="@+id/sina_username"
-                  android:layout_width="200dp"
+                  android:layout_width="200dp" android:singleLine="true"
                   android:layout_height="wrap_content"/>
     </TableRow>
 
@@ -26,7 +26,7 @@
         <TextView android:text="@string/password" android:paddingLeft="20dp"/>
 
         <EditText android:id="@+id/sina_password"
-                  android:password="true"
+                  android:password="true" android:singleLine="true"
                   android:layout_width="200dp"
                   android:layout_height="wrap_content"/>
     </TableRow>

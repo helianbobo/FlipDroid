@@ -10,9 +10,9 @@ package flipdroid.grepper
 class FruitFetcher {
     DetectionResult fetch(def htmlNode) {
         final def title = htmlNode.head.title.text()
-        if(!title || title.trim().length()==0){
-          title = htmlNode.html.head.title.text()
-          htmlNode = htmlNode.html
+        if (!title || title.trim().length() == 0) {
+            title = htmlNode.html.head.title.text()
+            htmlNode = htmlNode.html
         }
         def sameWithTitle
         def underscorePos = title.split("[_-]")
@@ -26,6 +26,7 @@ class FruitFetcher {
             if (it.text().trim() == shortenedTitle) {
                 return "sameWithTitle"
             }
+
             if (it.name() == "h1" || it.name() == "h2" || it.name() == "h3") {
                 return "heads"
             }
@@ -44,18 +45,18 @@ class FruitFetcher {
         def determinedTitle
         if (headLines['heads']) {
             sortedHeadlines = headLines['heads'].sort(
-                [compare:{ o1, o2->
-                    if (o1.name() < o2.name()) {
-                        return -1
-                    }
-                    if (o1.name() == o2.name()) {
-                        return 0
-                    }
-                    if (o1.name() > o2.name()) {
-                        return 1
-                    }
+                    [compare: { o1, o2 ->
+                        if (o1.name() < o2.name()) {
+                            return -1
+                        }
+                        if (o1.name() == o2.name()) {
+                            return 0
+                        }
+                        if (o1.name() > o2.name()) {
+                            return 1
+                        }
 
-            }] as Comparator)
+                    }] as Comparator)
         }
         DetectionResult result = new DetectionResult()
 
@@ -73,7 +74,19 @@ class FruitFetcher {
             result.titleNode = determinedTitle
 
         } else if (sortedHeadlines && sortedHeadlines.size() != 0) {
-            result.titleText = title[0..title.indexOf('_') - 1]
+            final underScore = title.indexOf('_')
+            final pipe = title.indexOf('|')
+            final minus = title.indexOf('-')
+            underScore = underScore == -1 ? Integer.MAX_VALUE : underScore
+            pipe = pipe == -1 ? Integer.MAX_VALUE : pipe
+            minus = minus == -1 ? Integer.MAX_VALUE : minus
+
+            final pos = Math.min(Math.min(underScore, pipe), minus)
+
+            if (pos != Integer.MAX_VALUE)
+                result.titleText = title[0..pos - 1]
+            else
+                result.titleText = title[0..-1]
             result.titleNode = determinedTitle
 
         }
@@ -87,7 +100,6 @@ class FruitFetcher {
             return result
         }
         return result
-
 
 //        boolean bodyDetermined = false
 //        def tempText = result.titleText

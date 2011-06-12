@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" style="@style/AccountItem"
-              android:orientation="horizontal">
-
-    <com.goal98.flipdroid.view.InternetImageView
-            android:id="@+id/source_image"
-            android:src="@drawable/portrait"
-            android:layout_height="wrap_content"
-            android:layout_width="50dp"/>
-
-
-    <LinearLayout android:layout_width="260dp" android:layout_height="wrap_content" android:orientation="vertical">
+<LinearLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
+              xmlns:android="http://schemas.android.com/apk/res/android" style="@style/AccountItem"
+              android:orientation="horizontal" android:padding="2dip">
+    <com.goal98.android.WebImageView android:id="@+id/source_image" webimage:autoLoad="false"
+                                     android:src="@drawable/portrait" webimage:errorDrawable="@drawable/portrait"
+                                     android:layout_height="50dip" webimage:defaultWidth="50"
+                                     webimage:defaultHeight="50" webimage:progressDrawable="@drawable/portrait"
+                                     android:layout_width="50dip"></com.goal98.android.WebImageView>
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:orientation="vertical">
         <TextView
                 android:id="@+id/source_name"
                 android:layout_width="fill_parent"
@@ -31,5 +30,4 @@
                 android:singleLine="true"
                 />
     </LinearLayout>
-
 </LinearLayout>

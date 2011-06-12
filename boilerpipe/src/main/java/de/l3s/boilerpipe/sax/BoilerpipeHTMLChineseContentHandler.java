@@ -17,23 +17,13 @@
  */
 package de.l3s.boilerpipe.sax;
 
-import java.util.ArrayList;
+import de.l3s.boilerpipe.document.TextBlock;
+import de.l3s.boilerpipe.util.UnicodeTokenizer;
+import org.xml.sax.ContentHandler;
+
 import java.util.BitSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-
-import de.l3s.boilerpipe.document.TextBlock;
-import de.l3s.boilerpipe.document.TextDocument;
-import de.l3s.boilerpipe.labels.LabelAction;
-import de.l3s.boilerpipe.util.UnicodeTokenizer;
 
 /**
  * A simple SAX {@link ContentHandler}, used by {@link BoilerpipeSAXInput}. Can
@@ -53,7 +43,7 @@ public class BoilerpipeHTMLChineseContentHandler extends BoilerpipeHTMLContentHa
         if (containsChinese) {
 
             if (PAT_VALID_WORD_CHARACTER.matcher(token).find()) {
-                return token.replaceAll("[0-9-:.,?<>]","").length();
+                return token.replaceAll("[0-9-:.,?<>]", "").length();
             } else
                 return 0;
         } else {
@@ -81,7 +71,10 @@ public class BoilerpipeHTMLChineseContentHandler extends BoilerpipeHTMLContentHa
             tokenBuffer.setLength(0);
             return;
         }
-
+//        if (IMAGE) {
+//            System.out.println(tokenBuffer.toString().trim());
+//            return;
+//        }
         final int length = tokenBuffer.length();
         switch (length) {
             case 0:
@@ -118,10 +111,10 @@ public class BoilerpipeHTMLChineseContentHandler extends BoilerpipeHTMLContentHa
             } else if ((numberOfWord = isWord(token, containsChinese)) != 0) {
                 numTokens++;
                 numSegment++;
-                numWords+=numberOfWord;
+                numWords += numberOfWord;
                 numWordsCurrentLine++;
                 if (inAnchorText) {
-                    numLinkedWords+=numberOfWord;
+                    numLinkedWords += numberOfWord;
                 }
                 final int tokenLength = token.length();
                 currentLineLength += tokenLength + 1;
@@ -148,7 +141,7 @@ public class BoilerpipeHTMLChineseContentHandler extends BoilerpipeHTMLContentHa
 
         TextBlock tb = new TextBlock(textBuffer.toString().trim(),
                 currentContainedTextElements, numWords, numLinkedWords,
-                numWordsInWrappedLines, numWrappedLines, offsetBlocks, numSegment,0);
+                numWordsInWrappedLines, numWrappedLines, offsetBlocks, numSegment, 0, LOOKING_FOR_IMAGE);
         currentContainedTextElements = new BitSet();
 
         offsetBlocks++;

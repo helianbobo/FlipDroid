@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
+              xmlns:android="http://schemas.android.com/apk/res/android" style="@style/AccountItem"
+              android:orientation="horizontal" android:layout_marginTop="5dip" android:padding="2dip">
+    <com.goal98.android.WebImageView android:id="@+id/source_image" webimage:autoLoad="false"
+                                     android:src="@drawable/portrait" webimage:errorDrawable="@drawable/portrait"
+                                     android:layout_height="40dip" webimage:defaultWidth="40"
+                                     webimage:defaultHeight="40" webimage:progressDrawable="@drawable/portrait"
+                                     android:layout_width="40dip"></com.goal98.android.WebImageView>
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:orientation="vertical">
+        <TextView
+                android:id="@+id/source_name"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textSize="20dip"
+                android:gravity="center_vertical"
+                android:textColor="@color/black"
+                android:paddingLeft="5dip"/>
+    </LinearLayout>
+</LinearLayout>

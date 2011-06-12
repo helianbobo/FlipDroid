@@ -5,7 +5,7 @@ import android.view.MotionEvent;
 
 public class GestureUtil {
 
-    public static final int minDelta = 1;
+    public static final int minDelta = 7;
 
     public static boolean flipRight(MotionEvent event){
 
@@ -13,7 +13,7 @@ public class GestureUtil {
 
         if(event.getAction() == MotionEvent.ACTION_MOVE){
 
-            float delta = event.getX() - event.getHistoricalX(0);
+            float delta = event.getX() - event.getHistoricalX(event.getHistorySize()-1);
             Log.v(GestureUtil.class.getName(), "delta="+delta);
             result =  delta > minDelta;
         }
@@ -27,7 +27,7 @@ public class GestureUtil {
         boolean result = false;
 
         if(event.getAction() == MotionEvent.ACTION_MOVE){
-            result =  event.getHistoricalX(0) - event.getX()  > minDelta;
+            result =  event.getHistoricalX(event.getHistorySize()-1) - event.getX()  > minDelta;
         }
 
         return result;

@@ -1,5 +1,7 @@
 package com.goal98.flipdroid.model;
 
+import android.graphics.Bitmap;
+
 import java.net.URL;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -13,9 +15,20 @@ public class Article {
     private String status;
     private String content;
     private URL imageUrl;
+    private long statusId;
+    private String sourceType;
+    private Bitmap image;
+
+    public long getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(long statusId) {
+        this.statusId = statusId;
+    }
 
     static Pattern urlPattern = Pattern.compile(
-            "http://([\\w-]+\\.)+[\\w-]+(/[\\w\\- ./?%&=]*)?",
+            "http://([\\w-]+\\.)+[\\w-]+(/[\\w\\-./?:~%&=]*)?",
             Pattern.CASE_INSENSITIVE);
 
 
@@ -31,7 +44,7 @@ public class Article {
     private Date createdDate;
 
     public boolean hasLink() {
-        if(status == null)
+        if (status == null)
             return false;
         Matcher mat = urlPattern.matcher(status);
         boolean result = mat.find();
@@ -39,10 +52,10 @@ public class Article {
         return result;
     }
 
-    public String extractURL(){
-         Matcher mat = urlPattern.matcher(status);
-         mat.find();
-         return mat.group();
+    public String extractURL() {
+        Matcher mat = urlPattern.matcher(status);
+        mat.find();
+        return mat.group();
     }
 
     public int getWeight() {
@@ -88,6 +101,21 @@ public class Article {
         return title;
     }
 
+    public int getTitleLength() {
+        String str1 = title;
+        int numberOfFull = 0;
+        for (int i = 0; i < str1.length(); i++) {
+            String test = str1.substring(i, i + 1);
+            if (test.matches("[\\u4E00-\\u9FA5]+")) {
+                numberOfFull += 2;
+            } else {
+                numberOfFull++;
+            }
+
+        }
+        return numberOfFull;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -108,11 +136,27 @@ public class Article {
         this.imageUrl = imageUrl;
     }
 
+    public String getSourceType() {
+        return sourceType;
+    }
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setSourceType(String sourceType) {
+        this.sourceType = sourceType;
+    }
+
+    public void setImageBitmap(Bitmap image) {
+        this.image = image;
+    }
+
+    public Bitmap getImage() {
+        return image;
     }
 }

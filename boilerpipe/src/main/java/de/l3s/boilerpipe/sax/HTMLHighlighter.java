@@ -17,25 +17,20 @@
  */
 package de.l3s.boilerpipe.sax;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.net.URL;
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.xerces.parsers.AbstractSAXParser;
-import org.cyberneko.html.HTMLConfiguration;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-
 import de.l3s.boilerpipe.BoilerpipeExtractor;
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
+import de.l3s.boilerpipe.util.JaneSort;
+import org.apache.xerces.parsers.AbstractSAXParser;
+import org.cyberneko.html.HTMLConfiguration;
+import org.xml.sax.*;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
 
 /**
  * Highlights text blocks in an HTML document that have been marked as "content"
@@ -79,6 +74,8 @@ public final class HTMLHighlighter {
         this.forChinese = forChinese;
     }
 
+    private static TextDocument doc;
+
     /**
      * Processes the given {@link TextDocument} and the original HTML text (as a
      * String).
@@ -87,24 +84,24 @@ public final class HTMLHighlighter {
      * @param origHTML The original HTML document.
      * @throws BoilerpipeProcessingException
      */
-    public String process(final TextDocument doc, final String origHTML)
-            throws BoilerpipeProcessingException {
-        return process(doc, new InputSource(new StringReader(origHTML)));
-    }
+//    public String process(final TextDocument doc, final String origHTML)
+//            throws BoilerpipeProcessingException {
+//        return process(doc, new InputSource(new StringReader(origHTML)));
+//    }
 
     /**
      * Processes the given {@link TextDocument} and the original HTML text (as
      * an {@link InputSource}).
      *
-     * @param doc The processed {@link TextDocument}.
-     * @param is  The original HTML document.
+     * @param doc    The processed {@link de.l3s.boilerpipe.document.TextDocument}.
+     * @param is     The original HTML document.
+     * @param images
      * @throws BoilerpipeProcessingException
      */
-    public String process(final TextDocument doc, final InputSource is)
+    public String process(final TextDocument doc, final InputSource is, List<TextBlock> images)
             throws BoilerpipeProcessingException {
         final Implementation implementation = new Implementation();
-        implementation.process(doc, is);
-
+        implementation.process(doc, is, images);
         return implementation.html.toString().replaceAll("[\\n]+", "\n");//replace multiple \n to a single \n
     }
 
@@ -120,11 +117,70 @@ public final class HTMLHighlighter {
             throws IOException, BoilerpipeProcessingException, SAXException {
         final TextDocument doc = new BoilerpipeSAXInput(htmlDoc.toInputSource())
                 .getTextDocument(forChinese);  //for chinese
+
+        Map<Integer, TextBlock> images = new HashMap<Integer, TextBlock>();
+        for (TextBlock text : doc.getTextBlocks()) {
+            if (text.isImage()) {
+                images.put(text.getOffsetBlocksStart(), text);
+            }
+        }
+
         extractor.process(doc);
+
+        List contentArr = new ArrayList();
+        for (TextBlock text : doc.getTextBlocks()) {
+            if (text.isContent()) {
+                contentArr.add(text.getOffsetBlocksStart());
+            }
+        }
+        List<TextBlock> result = JaneSort.findBetween(images, contentArr, 4);
+        Iterator<TextBlock> textBlockIterator = result.iterator();
+
+        while (textBlockIterator.hasNext()) {
+            String imageURL = textBlockIterator.next().getText();
+            try {
+                URL url = new URL(imageURL);
+                if (getFileSize(url) < 10000) {
+                    textBlockIterator.remove();
+                }
+            } catch (MalformedURLException e) {
+                textBlockIterator.remove();
+            } catch (Exception e) {
+
+            }
+        }
 
         final InputSource is = htmlDoc.toInputSource();
 
-        return process(doc, is);
+        return process(doc, is, result);
+    }
+
+    private int getFileSize(URL url) {
+        int fileLength = -1;
+        try {
+            HttpURLConnection httpConnection = (HttpURLConnection) (url
+                    .openConnection());
+            int responseCode = httpConnection.getResponseCode();
+            if (responseCode < 200 || responseCode > 299) {
+                return -1;
+            }
+            String sHeader;
+            for (int i = 1; ; i++) {
+                sHeader = httpConnection.getHeaderFieldKey(i);
+                if (sHeader != null) {
+                    if (sHeader.equals("Content-Length")) {
+                        fileLength = Integer.parseInt(httpConnection
+                                .getHeaderField(sHeader));
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+        } catch (Exception ex) {
+            return -1;
+        }
+        return fileLength;
     }
 
     private boolean outputHighlightOnly = false;
@@ -216,7 +272,7 @@ public final class HTMLHighlighter {
     }
 
     private abstract static class TagAction {
-        void beforeStart(final Implementation instance, final String localName) {
+        void beforeStart(final Implementation instance, final String localName, Attributes atts) {
         }
 
         void afterStart(final Implementation instance, final String localName) {
@@ -230,7 +286,7 @@ public final class HTMLHighlighter {
     }
 
     private static final TagAction TA_IGNORABLE_ELEMENT = new TagAction() {
-        void beforeStart(final Implementation instance, final String localName) {
+        void beforeStart(final Implementation instance, final String localName, Attributes atts) {
             instance.inIgnorableElement++;
         }
 
@@ -239,12 +295,43 @@ public final class HTMLHighlighter {
         }
     };
 
+//    private final TagAction TA_IMAGE = new TagAction() {
+//        void beforeStart(final Implementation instance, final String localName, Attributes atts) {
+//            int length = atts.getLength();
+//
+//            String image = null;
+//            // Process each attribute
+//            for (int i = 0; i < length; i++) {
+//                // Get names and values for each attribute
+//                String name = atts.getQName(i);
+//                if (name.toUpperCase().equals("SRC")) {
+//                    image = atts.getValue(i);
+//                    break;
+//                }
+//            }
+//            if (image != null)
+//                for (TextBlock block : doc.getTextBlocks()) {
+//                    if (block.getText() != null)
+//                        if (block.getText().contains(image)) {
+//                            images.add(image);
+//                            break;
+//                        }
+//                }
+//
+//        }
+//
+//        void afterEnd(final Implementation instance, final String localName) {
+//        }
+//    };
+
+
     private static final TagAction TA_HEAD = new TagAction() {
 
         void beforeEnd(final Implementation instance, String localName) {
             instance.html.append(instance.hl.extraStyleSheet);
         }
     };
+    public List<String> images = new ArrayList<String>();
 
     private static Map<String, TagAction> TAG_ACTIONS = new HashMap<String, TagAction>();
 
@@ -258,7 +345,12 @@ public final class HTMLHighlighter {
         TAG_ACTIONS.put("APPLET", TA_IGNORABLE_ELEMENT);
         TAG_ACTIONS.put("LINK", TA_IGNORABLE_ELEMENT);
 
+
         TAG_ACTIONS.put("HEAD", TA_HEAD);
+    }
+
+    public List<String> getImages() {
+        return images;
     }
 
     private final class Implementation extends AbstractSAXParser implements
@@ -275,8 +367,9 @@ public final class HTMLHighlighter {
             setContentHandler(this);
         }
 
-        void process(final TextDocument doc, final InputSource is)
+        void process(final TextDocument doc, final InputSource is, List<TextBlock> images)
                 throws BoilerpipeProcessingException {
+            HTMLHighlighter.this.doc = doc;
             for (TextBlock block : doc.getTextBlocks()) {
                 if (block.isContent()) {
                     final BitSet bs = block.getContainedTextElements();
@@ -285,7 +378,11 @@ public final class HTMLHighlighter {
                     }
                 }
             }
+            List<String> imagesSet = new ArrayList<String>();
+            for (TextBlock text : images)
+                imagesSet.add(text.getText());
 
+            HTMLHighlighter.this.images = imagesSet;
             try {
                 parse(is);
             } catch (SAXException e) {
@@ -320,21 +417,17 @@ public final class HTMLHighlighter {
 
         public void startElement(String uri, String localName, String qName,
                                  Attributes atts) throws SAXException {
-            TagAction ta = TAG_ACTIONS.get(localName);
-            if (ta != null) {
-                ta.beforeStart(this, localName);
-            }
 
+            TagAction ta = TAG_ACTIONS.get(localName);
+
+            if (ta != null) {
+                ta.beforeStart(this, localName, atts);
+            }
+//            if (localName.toUpperCase().equals("IMG") || localName.toUpperCase().equals("IMAGE")) {
+//                TA_IMAGE.beforeStart(this, localName, atts);
+//            }
             try {
                 if (inIgnorableElement == 0) {
-//					if (outputHighlightOnly) {
-//						boolean highlight = contentBitSet
-//								.get(characterElementIdx);
-//
-//						if (!highlight) {
-//							return;
-//						}
-//					}
 
                     if (qName.equalsIgnoreCase("h1") ||
                             qName.equalsIgnoreCase("h2") ||
@@ -364,6 +457,7 @@ public final class HTMLHighlighter {
                 if (ta != null) {
                     ta.afterStart(this, localName);
                 }
+
             }
         }
 
@@ -432,30 +526,18 @@ public final class HTMLHighlighter {
         if (in == null) {
             return "";
         }
-        char c;
-        StringBuilder out = new StringBuilder(in.length());
+//        char c;
+//        StringBuilder out = new StringBuilder(in.length());
+//
+//        for (int i = 0; i < in.length(); i++) {
+//            c = in.charAt(i);
+//            switch (c) {
+//                default:
+//                    out.append(c);
+//            }
+//        }
 
-        for (int i = 0; i < in.length(); i++) {
-            c = in.charAt(i);
-            switch (c) {
-                case '<':
-                    out.append("&lt;");
-                    break;
-                case '>':
-                    out.append("&gt;");
-                    break;
-                case '&':
-                    out.append("&amp;");
-                    break;
-                case '"':
-                    out.append("&quot;");
-                    break;
-                default:
-                    out.append(c);
-            }
-        }
-
-        return out.toString();
+        return in;
     }
 
 }

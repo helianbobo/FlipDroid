@@ -46,7 +46,8 @@ public class URLDBMongoDB implements URLDBInterface {
                 urlAbstract = new URLAbstract(
                         url,
                         (String) urlFromDB.get("title"),
-                        (String) urlFromDB.get("content"));
+                        (String) urlFromDB.get("content"),
+                        (BasicDBList) urlFromDB.get("images"));
             }
         } catch (MongoException e) {
             logger.log(Level.INFO, e.getMessage(), e);
@@ -59,9 +60,29 @@ public class URLDBMongoDB implements URLDBInterface {
         urlAbstractObj.put("url", urlAbstract.getUrl());
         urlAbstractObj.put("title", urlAbstract.getTitle());
         urlAbstractObj.put("content", urlAbstract.getContent());
+        urlAbstractObj.put("images", urlAbstract.getImages());
 
         try {
             db.getCollection(urlCollectionName).insert(urlAbstractObj);
+        } catch (MongoException e) {
+            logger.log(Level.INFO, e.getMessage(), e);
+        }
+    }
+
+    public void insertOrUpdate(URLAbstract urlAbstract) {
+        BasicDBObject query = new BasicDBObject();
+
+        query.put("url", urlAbstract.getUrl());
+        try {
+            DBObject urlFromDB = db.getCollection(urlCollectionName).findOne(query);
+            if (urlFromDB == null) {
+                insert(urlAbstract);
+                return;
+            }
+            urlFromDB.put("title", urlAbstract.getTitle());
+            urlFromDB.put("content", urlAbstract.getContent());
+            urlFromDB.put("images", urlAbstract.getImages());
+            db.getCollection(urlCollectionName).update(query, urlFromDB);
         } catch (MongoException e) {
             logger.log(Level.INFO, e.getMessage(), e);
         }

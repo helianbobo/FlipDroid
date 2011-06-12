@@ -22,15 +22,26 @@
     <EditTextPreference
             android:key="@string/key_anim_flip_duration_preference"
             android:defaultValue="700"
+            android:inputType="number"
             android:title="@string/title_anim_flip_duration_preference"
             android:summary="@string/summary_anim_flip_duration_preference"
-            android:dialogTitle="@string/dialog_title_anim_flip_duration_preference" />
+            android:dialogTitle="@string/dialog_title_anim_flip_duration_preference"/>
 
-    <EditTextPreference
-            android:key="@string/key_article_per_page_preference"
-            android:defaultValue="5"
-            android:title="@string/title_article_per_page_preference"
-            android:summary="@string/summary_article_per_page_preference"
-            android:dialogTitle="@string/dialog_title_article_per_page_preference" />
+    <ListPreference android:id="@+id/mode"
+                    android:key="@string/key_browse_mode_preference"
+                    android:defaultValue="0"
+                    android:title="@string/title_browse_mode_preference"
+                    android:dialogTitle="@string/dialog_title_browse_mode_preference"
+                    android:entries="@array/browse_mode_options"
+                    android:entryValues="@array/browse_mode_values"
+            />
 
+    <ListPreference android:id="@+id/animation"
+                    android:key="@string/key_animation_mode_preference"
+                    android:defaultValue="0"
+                    android:title="@string/title_animation_mode_preference"
+                    android:dialogTitle="@string/dialog_title_animation_mode_preference"
+                    android:entries="@array/animation_mode_options"
+                    android:entryValues="@array/animation_mode_values"
+            />
 </PreferenceScreen>

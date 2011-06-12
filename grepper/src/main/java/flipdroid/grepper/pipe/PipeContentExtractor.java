@@ -8,6 +8,7 @@ import flipdroid.grepper.ContentExtractor;
 import flipdroid.grepper.GrepperException;
 
 import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,6 +18,13 @@ import java.nio.charset.Charset;
  * To change this template use File | Settings | File Templates.
  */
 public class PipeContentExtractor implements ContentExtractor {
+
+    private List<String> images;
+
+    public List<String> getImages() {
+        return images;
+    }
+
     public String fireAbstract(byte[] data, Charset charset) throws GrepperException {
         final BoilerpipeExtractor extractor;
         final HTMLHighlighter hh;
@@ -39,8 +47,11 @@ public class PipeContentExtractor implements ContentExtractor {
                 extractor = CommonExtractors.ARTICLE_EXTRACTOR;
                 hh = HTMLHighlighter.newExtractingInstance();
             }
-            return hh.process(new HTMLDocument(data, charset), extractor).trim();
+            String abstractText = hh.process(new HTMLDocument(data, charset), extractor).trim();
+            images = hh.images;
+            return abstractText;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new GrepperException(e);
         }
     }
