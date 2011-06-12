@@ -7,6 +7,7 @@ import it.tika.cases.CaseRepositoryDBMongoDB;
 import it.tika.exception.DBNotAvailableException;
 import it.tika.exception.ExtractorException;
 import it.tika.exception.URLRepoException;
+import it.tika.util.Util;
 import net.sf.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,19 +35,13 @@ public class URLAbstractResource extends ServerResource {
         //TODO: database implementation injection
     }
 
-    private URLAbstract find() {
+    protected URLAbstract find(String url, boolean nocache) {
 
         URLAbstract result = null;
-        Form form = this.getQuery();
-        long start = 0;
-        long end = 0;
+
         StopWatch sw = new StopWatch();
         try {
-            String url = form.getFirst("url").getValue();
-            boolean bypassCache = false;
-            if (form.getFirst("nocache") != null) {
-                bypassCache = Boolean.valueOf(form.getFirst("nocache").getValue());
-            }
+            boolean bypassCache = nocache;
 
             String urlDecoded = java.net.URLDecoder.decode(url, "UTF-8");
 
@@ -115,84 +110,59 @@ public class URLAbstractResource extends ServerResource {
     @Get("JSON")
     public String toJson() {
         Form form = this.getQuery();
-        String isRating = form.getFirstValue("rate");
-        if (isRating == null || isRating.length() == 0) {
-            String result = "";
-            URLAbstract urlAbstract = null;
 
-
-            urlAbstract = find();
-
-
-            if (urlAbstract == null) {
-                getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-                return null;
-            }
-
-
-            JSONObject jsonObject = new JSONObject();
-
-            try {
-                jsonObject.accumulate("title", urlAbstract.getTitle());
-                jsonObject.accumulate("content", urlAbstract.getContent());
-                JSONArray jsonArray = new JSONArray();
-                List<String> images = urlAbstract.getImages();
-                if (images != null) {
-                    for (int i = 0; i < images.size(); i++) {
-                        jsonArray.add(images.get(i));
-                    }
-                }
-                jsonObject.accumulate("images", jsonArray);
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-
-            return writeJSON(jsonObject);
+        String url = null;
+        if (form.getFirst("url") != null) {
+            url = form.getFirst("url").getValue();
         } else {
-            String correct = form.getFirstValue("tick");
-            String json = form.getFirstValue("sample");
-            String url = form.getFirstValue("url");
-            int caseId = new Random().nextInt(99999999);
-
-            Case sample = new Case();
-            sample.setCreatedDate(new Date());
-            sample.setUrl(url);
-            sample.setGood(Boolean.parseBoolean(correct));
-            sample.setSampleBody(json);
-            sample.setId(caseId);
-            try {
-                CaseRepositoryDBMongoDB.getInstance().addCase(sample);
-            } catch (DBNotAvailableException e) {
-                getLogger().log(Level.INFO, e.getMessage(), e);
-            }
-
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.accumulate("result", "succeed");
-                jsonObject.accumulate("caseId", caseId);
-            } catch (JSONException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-
-            return writeJSON(jsonObject);
-
+            getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+            return null;
         }
+
+
+        boolean nocache = false;
+        if (form.getFirst("nocache") != null) {
+            nocache = Boolean.valueOf(form.getFirst("nocache").getValue());
+        }
+
+
+        String result = "";
+        URLAbstract urlAbstract = null;
+
+
+        urlAbstract = find(url, nocache);
+
+
+        if (urlAbstract == null) {
+            getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+            return null;
+        }
+
+
+        return Util.writeJSON(convertURLAbstractToJSON(urlAbstract));
+
     }
 
-    private String writeJSON(JSONObject jsonObject) {
-        String result = "";
+    protected JSONObject convertURLAbstractToJSON(URLAbstract urlAbstract) {
+        JSONObject jsonObject = new JSONObject();
 
-        JsonRepresentation representation = new JsonRepresentation(jsonObject);
-        StringWriter writer = new StringWriter();
         try {
-            representation.write(writer);
-            result += writer.toString();
-        } catch (IOException e) {
-            getLogger().log(Level.INFO, e.getMessage(), e);
+            jsonObject.accumulate("title", urlAbstract.getTitle());
+            jsonObject.accumulate("content", urlAbstract.getContent());
+            JSONArray jsonArray = new JSONArray();
+            List<String> images = urlAbstract.getImages();
+            if (images != null) {
+                for (int i = 0; i < images.size(); i++) {
+                    jsonArray.add(images.get(i));
+                }
+            }
+            jsonObject.accumulate("images", jsonArray);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        return result;
+        return jsonObject;
     }
 }
 
