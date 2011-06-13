@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.anim;
 
 import android.graphics.Camera;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -58,13 +59,17 @@ public class RotateVertical3DAnimation extends Animation {
     protected void applyTransformation(float interpolatedTime, Transformation t) {
         final float fromDegrees = mFromDegrees;
         float degrees = fromDegrees + ((mToDegrees - fromDegrees) * interpolatedTime);
-
-//        int c = Color.argb((int) (100 * (1-interpolatedTime)), 245, 245, 245);
-//        int c2 = Color.argb((int) (100 * (interpolatedTime)), 245, 245, 245);
+//        shadow1.setBackgroundColor(Color.parseColor("#15999999"));
+//        int c = Color.argb((int) (100 * (1-interpolatedTime)), 153, 153, 153);
+        int c2 = 0;
+        if(Math.abs(mToDegrees) - Math.abs(fromDegrees) > 0)
+            c2 = Color.argb((int) (255 * (1-interpolatedTime)), 153, 153, 153);
+        else
+            c2 = Color.argb((int) (255 * interpolatedTime), 153, 153, 153);
 //
 //
 //        System.out.println((100 * (1-interpolatedTime)));
-//        shadow2.setBackgroundColor(c);
+        shadow2.setBackgroundColor(c2);
 //        shadow1.setBackgroundColor(c2);
         final float centerX = mCenterX;
         final float centerY = mCenterY;

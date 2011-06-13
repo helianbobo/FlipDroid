@@ -5,14 +5,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.*;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.animation.Animation;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ViewSwitcher;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.anim.AnimationFactory;
 import com.goal98.flipdroid.client.WeiboExt;
@@ -63,13 +69,16 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private String sourceImage;
     private String sourceName;
     private String contentUrl;
-    private int browseMode;
+//    private int browseMode;
     private PageViewSlidingWindows slidingWindows;
     private WeiboPageViewFactory pageViewFactory;
     private ArticleSource source;
     private Weibo weibo;
-    private int animationMode;
-
+//    private int animationMode;
+    private LinearLayout shadow;
+    private LinearLayout shadow2;
+    private LinearLayout.LayoutParams shadowParams;
+    private FrameLayout.LayoutParams pageViewLayoutParams;
 
     public String getSourceImage() {
         return sourceImage;
@@ -109,8 +118,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         pageViewFactory = new WeiboPageViewFactory();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        this.browseMode = getBrowseMode();
-        this.animationMode = getAnimationMode();
+//        this.browseMode = getBrowseMode();
+//        this.animationMode = getAnimationMode();
         refreshingSemaphore = new Semaphore(1, true);
         if (accountType.equals(Constants.TYPE_SINA_WEIBO)) {
 
@@ -168,6 +177,16 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         repo.setArticleSource(source);
         slidingWindows = new PageViewSlidingWindows(20, repo, pageViewFactory, 3);
         current = pageViewFactory.createFirstPage();
+
+        shadow = new LinearLayout(PageActivity.this);
+        shadow.setBackgroundColor(Color.parseColor("#10999999"));
+
+        shadow2 = new LinearLayout(PageActivity.this);
+        shadow2.setBackgroundColor(Color.parseColor("#FFDDDDDD"));
+
+        shadowParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
+        pageViewLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT);
+
         flipPage(true);
     }
 
@@ -185,11 +204,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     boolean isWeiboMode() {
-        return browseMode == 0;
+        return getBrowseMode() == 0;
     }
 
     boolean isFlipHorizonal() {
-        return animationMode == 0;
+        return getAnimationMode() == 0;
     }
 
     public void onWindowLoaded(com.goal98.flipdroid.model.Window window) {
@@ -296,9 +315,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         this.enlargedMode = enlargedMode;
     }
 
-    public boolean isFlipStarted() {
-        return flipStarted;
-    }
+
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -371,7 +388,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
         if (currentPageIndex == -1 && forward) {//we are first timer
             currentPageIndex++;
-            container.addView(current);
+            container.addView(current, pageViewLayoutParams);
             new Thread(new Runnable() {
                 public void run() {
                     slideToNextPage();
@@ -444,8 +461,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         final float centerX = 0;
         long duration = getFlipDurationFromPreference();
 
-        AnimationFactory animationFactory = new AnimationFactory();
-        Animation rotation = animationFactory.buildHorizontalFlipAnimation(forward, duration, centerX, centerY);
+        Animation rotation = AnimationFactory.buildHorizontalFlipAnimation(forward, duration, centerX, centerY);
 
 
         rotation.setAnimationListener(new Animation.AnimationListener() {
@@ -524,29 +540,113 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private void showAnimation() {
-        container.removeAllViews();
+
         enlargedMode = false;
         for (ArticleView v : next.getWeiboViews()) {
             v.renderBeforeLayout();
         }
         next.setVisibility(View.VISIBLE);
+        Log.d("ANI", "start animation");
+        container.removeAllViews();
+        if (isWeiboMode() || isFlipHorizonal() || current.isFirstPage() || next.isLastPage()) {
 
-        if (isFlipHorizonal()) {
             Animation rotation = buildFlipHorizonalAnimation(forward);
 
             if (forward) {
                 currentPageIndex++;
-                container.addView(next);
-                container.addView(current);
+                container.addView(next, pageViewLayoutParams);
+                container.addView(current, pageViewLayoutParams);
                 current.startAnimation(rotation);
             } else {
-                container.addView(current);
-                container.addView(next);
+                container.addView(current, pageViewLayoutParams);
+                container.addView(next, pageViewLayoutParams);
                 next.startAnimation(rotation);
             }
         } else {
+            if (forward) {
+                currentPageIndex++;
 
+            }
+            container.addView(next, pageViewLayoutParams);
+            container.addView(current, pageViewLayoutParams);
+
+
+            final LinearLayout currentUpper = current.getWrapperViews().get(0);
+            final LinearLayout currentBottom = current.getWrapperViews().get(1);
+            final LinearLayout nextUpper = next.getWrapperViews().get(0);
+            final LinearLayout nextBottom = next.getWrapperViews().get(1);
+            if (forward) {
+                final Animation flipToNext = buildFlipAnimation(currentUpper, currentBottom, nextUpper, nextBottom, true);
+                currentBottom.startAnimation(flipToNext);
+            } else {
+                final Animation flipToPrevious = buildFlipAnimation(currentUpper, currentBottom, nextUpper, nextBottom, false);
+                currentUpper.startAnimation(flipToPrevious);
+            }
         }
 
+    }
+
+    private Animation buildFlipAnimation(final LinearLayout currentUpper, final LinearLayout currentBottom, final LinearLayout nextUpper, final LinearLayout nextBottom, final boolean forward) {
+        final float centerY = container.getHeight() / 2;
+        final float centerX = container.getWidth() / 2;
+        long duration = getFlipDurationFromPreference();
+
+        final Animation step1 = forward ? AnimationFactory.buildVerticalFlipAnimation(0, 90, duration, centerX, 0, shadow, shadow2)
+                : AnimationFactory.buildVerticalFlipAnimation(0, -90, duration, centerX, centerY, shadow, shadow2);
+
+        final Animation step2 = forward ? AnimationFactory.buildVerticalFlipAnimation(-90, 0, duration, centerX, centerY, shadow, shadow2)
+                : AnimationFactory.buildVerticalFlipAnimation(90, 0, duration, centerX, 0, shadow, shadow2);
+        step2.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+                Log.d("ANI", "upper part animation starts");
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
+                params.setMargins(0, 0 - nextUpper.getHeight(), 0, 0);
+
+                (forward ? nextUpper : nextBottom).addView(shadow, params);
+                (forward ? currentUpper : currentBottom).addView(shadow2, params);
+            }
+
+            public void onAnimationEnd(Animation animation) {
+                Log.d("ANI", "upper part animation end");
+                Log.d("ANI", "remove shadows");
+                (forward ? nextUpper : nextBottom).removeView(shadow);
+                (forward ? currentUpper : currentBottom).removeView(shadow2);
+
+                flipStarted = false;
+
+                switchViews(PageActivity.this.forward);
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        step1.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+
+                shadowParams.setMargins(0, (int) (0 - currentBottom.getHeight()), 0, 0);
+                Log.d("ANI", "adding shadows " + currentBottom.getHeight() + "," + currentBottom.getChildCount());
+//                currentBottom.removeAllViews();
+
+                (forward ? currentBottom : currentUpper).addView(shadow, shadowParams);
+                (forward ? nextBottom : nextUpper).addView(shadow2, shadowParams);
+//                        nextBottom.setVisibility(View.GONE);
+            }
+
+            public void onAnimationEnd(Animation animation) {
+                Log.d("ANI", "animate upper part");
+                (forward ? currentBottom : currentUpper).removeView(shadow);
+                (forward ? nextBottom : nextUpper).removeView(shadow2);
+//                        nextBottom.setVisibility(View.VISIBLE);
+                container.removeAllViews();
+                container.addView(current, pageViewLayoutParams);
+                container.addView(next, pageViewLayoutParams);
+                (forward ? nextUpper : nextBottom).startAnimation(step2);
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        Log.d("ANI", "currentBottom");
+        return step1;
     }
 }

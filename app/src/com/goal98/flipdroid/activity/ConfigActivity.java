@@ -31,7 +31,6 @@ public class ConfigActivity extends PreferenceActivity implements SharedPreferen
     }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
         if (key.equals(browseModeKey)) {
             setSummary(sharedPreferences, key, browseModePreference);
         }

@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.view;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -84,6 +85,7 @@ public class ThumbnailArticleView extends WeiboArticleView {
                     }
 
                     TextView t = new TextView(ThumbnailArticleView.this.getContext());
+                    t.getPaint().setAntiAlias(true);
                     int scaleTextSize = scaled ? textSize - 3 : textSize;
                     t.setTextSize(scaleTextSize);
                     t.setPadding(2, 8, 2, 8);

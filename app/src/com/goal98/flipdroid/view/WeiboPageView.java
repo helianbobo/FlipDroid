@@ -74,14 +74,21 @@ public class WeiboPageView extends FrameLayout {
         return weiboViews;
     }
 
+    public List<LinearLayout> getWrapperViews() {
+        return wrapperViews;
+    }
+
     protected List<ArticleView> weiboViews = new ArrayList<ArticleView>();
+    protected List<LinearLayout> wrapperViews = new ArrayList<LinearLayout>();
 
     public LinearLayout addArticleView(Article article, boolean last) {
 
         WeiboArticleView withoutURLArticleView = new WeiboArticleView(WeiboPageView.this.getContext(), article, this);
         weiboViews.add(withoutURLArticleView);
 
+
         LinearLayout articleWrapper = new LinearLayout(this.getContext());
+        wrapperViews.add(articleWrapper);
         articleWrapper.setBackgroundColor(0xffDDDDDD);
         articleWrapper.setGravity(Gravity.CENTER);
         LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);

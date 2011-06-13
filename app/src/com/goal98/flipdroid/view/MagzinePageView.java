@@ -10,8 +10,7 @@ public class MagzinePageView extends WeiboPageView {
     public LinearLayout addArticleView(Article article, boolean last) {
         final ThumbnailArticleView thumnnailView = new ThumbnailArticleView(MagzinePageView.this.getContext(), article, this);
         weiboViews.add(thumnnailView);
-
-
+        wrapperViews.add(thumnnailView);
         if (!last) {
             LayoutParams layoutParams = new LayoutParams(DeviceInfo.width, DeviceInfo.displayHeight / 2);
             contentLayout.addView(thumnnailView, layoutParams);

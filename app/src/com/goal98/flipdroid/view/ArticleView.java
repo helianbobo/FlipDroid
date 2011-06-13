@@ -1,6 +1,9 @@
 package com.goal98.flipdroid.view;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +22,7 @@ public abstract class ArticleView extends LinearLayout {
     protected LinearLayout contentViewWrapper;
 
     protected WeiboPageView pageView;
+    public PaintFlagsDrawFilter pfd;
 
     public WeiboPageView getPageView() {
         return pageView;
@@ -38,8 +42,14 @@ public abstract class ArticleView extends LinearLayout {
 
     protected abstract String getPrefix();
 
+
+
     public ArticleView(Context context, Article article, WeiboPageView pageView) {
         super(context);
+        this.setOrientation(VERTICAL);
+
+        pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG);
+
         this.pageView = pageView;
         setArticle(article);
 
@@ -49,4 +59,6 @@ public abstract class ArticleView extends LinearLayout {
     public abstract void buildView();
 
     public abstract void renderBeforeLayout();
+
+
 }
