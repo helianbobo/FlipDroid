@@ -332,23 +332,32 @@ public abstract class CommonTagActions {
         public boolean start(BoilerpipeHTMLContentHandler instance, String localName, String qName, Attributes atts) throws SAXException {
             int length = atts.getLength();
 
-            String image = null;
+            String image = "";
+            String width = "";
+            String height = "";
+
+
             // Process each attribute
             for (int i = 0; i < length; i++) {
                 // Get names and values for each attribute
                 String name = atts.getQName(i);
                 if (name.toUpperCase().equals("SRC")) {
                     image = atts.getValue(i);
-                    break;
+                }
+                if (name.toUpperCase().equals("WIDTH")) {
+                    width = atts.getValue(i);
+                }
+                if (name.toUpperCase().equals("HEIGHT")) {
+                    height = atts.getValue(i);
                 }
             }
             if (image != null) {
 
 //                instance.tokenBuffer
 //                        .append(BoilerpipeHTMLContentHandler.ANCHOR_TEXT_START);
-                instance.LOOKING_FOR_IMAGE=true;
-                instance.textBuffer.append(image);
-                instance.tokenBuffer.append(image);
+                instance.LOOKING_FOR_IMAGE = true;
+                instance.textBuffer.append(image + "#" + width + "," + height);
+                instance.tokenBuffer.append(image + "#" + width + "," + height);
                 instance.flushBlock();
 //                instance.sbLastWasWhitespace = true;
             }
@@ -356,7 +365,7 @@ public abstract class CommonTagActions {
         }
 
         public boolean end(BoilerpipeHTMLContentHandler instance, String localName, String qName) throws SAXException {
-            instance.LOOKING_FOR_IMAGE=false;
+            instance.LOOKING_FOR_IMAGE = false;
             return false;  //To change body of implemented methods use File | Settings | File Templates.
         }
     };

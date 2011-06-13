@@ -40,6 +40,8 @@ import java.util.*;
  */
 public final class HTMLHighlighter {
 
+    private URL url;
+
     /**
      * Creates a new {@link HTMLHighlighter}, which is set-up to return the full
      * HTML text, with the extracted text portion <b>highlighted</b>.
@@ -108,6 +110,7 @@ public final class HTMLHighlighter {
     public String process(final URL url, final BoilerpipeExtractor extractor)
             throws IOException, BoilerpipeProcessingException, SAXException {
         final HTMLDocument htmlDoc = HTMLFetcher.fetch(url);
+        this.url = url;
         return process(htmlDoc, extractor);
     }
 
@@ -127,61 +130,31 @@ public final class HTMLHighlighter {
 
         extractor.process(doc);
 
-        List contentArr = new ArrayList();
+        List<Block> contentArr = new ArrayList<Block>();
         for (TextBlock text : doc.getTextBlocks()) {
             if (text.isContent()) {
-                contentArr.add(text.getOffsetBlocksStart());
+                int start = text.getOffsetBlocksStart();
+                int end = text.getOffsetBlocksEnd();
+                Block b = new Block();
+                b.start = start;
+                b.end = end;
+                contentArr.add(b);
             }
         }
         List<TextBlock> result = JaneSort.findBetween(images, contentArr, 4);
-        Iterator<TextBlock> textBlockIterator = result.iterator();
 
-        while (textBlockIterator.hasNext()) {
-            String imageURL = textBlockIterator.next().getText();
-            try {
-                URL url = new URL(imageURL);
-                if (getFileSize(url) < 10000) {
-                    textBlockIterator.remove();
-                }
-            } catch (MalformedURLException e) {
-                textBlockIterator.remove();
-            } catch (Exception e) {
-
-            }
-        }
 
         final InputSource is = htmlDoc.toInputSource();
 
         return process(doc, is, result);
     }
 
-    private int getFileSize(URL url) {
-        int fileLength = -1;
-        try {
-            HttpURLConnection httpConnection = (HttpURLConnection) (url
-                    .openConnection());
-            int responseCode = httpConnection.getResponseCode();
-            if (responseCode < 200 || responseCode > 299) {
-                return -1;
-            }
-            String sHeader;
-            for (int i = 1; ; i++) {
-                sHeader = httpConnection.getHeaderFieldKey(i);
-                if (sHeader != null) {
-                    if (sHeader.equals("Content-Length")) {
-                        fileLength = Integer.parseInt(httpConnection
-                                .getHeaderField(sHeader));
-                        break;
-                    }
-                } else {
-                    break;
-                }
-            }
-        } catch (Exception ex) {
-            return -1;
-        }
-        return fileLength;
+    public class Block{
+        public int start;
+        public int end;
     }
+
+
 
     private boolean outputHighlightOnly = false;
     private String extraStyleSheet = "\n<style type=\"text/css\">\n"

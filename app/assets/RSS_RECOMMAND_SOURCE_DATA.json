@@ -5,10 +5,11 @@
         "desc": "发现创新价值的科技媒体。 全景关注移动互联网，集中报道创业团队、最潮的智能手持及最酷的互联网应用，致力于“独立，前瞻，深入”的分析评论",
         "image_url": "http://bbs.ifanr.com/static/image/common/logo.png",
         "content_url":"http://www.ifanr.com/feed/rss"
-    },{
+    },
+    {
         "name": "新浪体育",
         "id": "3",
-        "desc": "道哥的体育新闻",
+        "desc": "新浪体育新闻",
         "image_url": "http://www.36kr.com/wp-content/uploads/2011/04/36kr-Logo.png",
         "content_url":"http://rss.sina.com.cn/roll/sports/hot_roll.xml"
     },
@@ -18,5 +19,65 @@
         "desc": "关注互联网创业",
         "image_url": "http://www.36kr.com/wp-content/uploads/2011/04/36kr-Logo.png",
         "content_url":"http://www.36kr.com/rss"
+    },
+    {
+        "name": "Technology Review(计算)",
+        "id": "4",
+        "desc": "麻省理工科技创业中文网",
+        "image_url": "http://www.mittrchinese.com/img/logo.gif",
+        "content_url":"http://www.mittrchinese.com/rssone.php?id=1"
+    },
+    {
+        "name": "Technology Review(网络)",
+        "id": "4",
+        "desc": "麻省理工科技创业中文网",
+        "image_url": "http://www.mittrchinese.com/img/logo.gif",
+        "content_url":"http://www.mittrchinese.com/rssone.php?id=9"
+    },
+    {
+        "name": "Technology Review(通讯)",
+        "id": "4",
+        "desc": "麻省理工科技创业中文网",
+        "image_url": "http://www.mittrchinese.com/img/logo.gif",
+        "content_url":"http://www.mittrchinese.com/rssone.php?id=10"
+    }
+    ,
+    {
+        "name": "Technology Review(能源)",
+        "id": "4",
+        "desc": "麻省理工科技创业中文网",
+        "image_url": "http://www.mittrchinese.com/img/logo.gif",
+        "content_url":"http://www.mittrchinese.com/rssone.php?id=4"
+    }
+    ,
+    {
+        "name": "Technology Review(新材料)",
+        "id": "4",
+        "desc": "麻省理工科技创业中文网",
+        "image_url": "http://www.mittrchinese.com/img/logo.gif",
+        "content_url":"http://www.mittrchinese.com/rssone.php?id=3"
+    },
+    {
+        "name": "Technology Review(生物医药)",
+        "id": "4",
+        "desc": "麻省理工科技创业中文网",
+        "image_url": "http://www.mittrchinese.com/img/logo.gif",
+        "content_url":"http://www.mittrchinese.com/rssone.php?id=2"
+    }
+    ,
+    {
+        "name": "Technology Review(商务科技)",
+        "id": "4",
+        "desc": "麻省理工科技创业中文网",
+        "image_url": "http://www.mittrchinese.com/img/logo.gif",
+        "content_url":"http://www.mittrchinese.com/rssone.php?id=5"
+    }
+    ,
+    {
+        "name": "Technology Review(网络新闻精粹)",
+        "id": "4",
+        "desc": "麻省理工科技创业中文网",
+        "image_url": "http://www.mittrchinese.com/img/logo.gif",
+        "content_url":"http://www.mittrchinese.com/rssone.php?id=16"
     }
 ]

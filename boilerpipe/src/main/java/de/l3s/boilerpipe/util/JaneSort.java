@@ -1,6 +1,7 @@
 package de.l3s.boilerpipe.util;
 
 import de.l3s.boilerpipe.document.TextBlock;
+import de.l3s.boilerpipe.sax.HTMLHighlighter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 public class JaneSort {
-    public static List<TextBlock> findBetween(Map<Integer, TextBlock> map, List<Integer> list, int range) {
+    public static List<TextBlock> findBetween(Map<Integer, TextBlock> map, List<HTMLHighlighter.Block> list, int range) {
 
         List<TextBlock> result = new ArrayList<TextBlock>();
 
@@ -22,8 +23,8 @@ public class JaneSort {
 
         int param = range;
         for (int j = 0; j < list.size(); j++) {
-            int min = list.get(j) - param;
-            int max = list.get(j) + param;
+            int min = list.get(j).start - param;
+            int max = list.get(j).end + param;
             int length = keyArray.length;
 
             for (int i = 0; i < length; i++) {

@@ -1,13 +1,18 @@
 package flipdroid.grepper.pipe;
 
 import de.l3s.boilerpipe.BoilerpipeExtractor;
+import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.extractors.CommonExtractors;
 import de.l3s.boilerpipe.sax.HTMLDocument;
 import de.l3s.boilerpipe.sax.HTMLHighlighter;
 import flipdroid.grepper.ContentExtractor;
 import flipdroid.grepper.GrepperException;
 
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -49,10 +54,16 @@ public class PipeContentExtractor implements ContentExtractor {
             }
             String abstractText = hh.process(new HTMLDocument(data, charset), extractor).trim();
             images = hh.images;
+
+
+
+
             return abstractText;
         } catch (Exception e) {
             e.printStackTrace();
             throw new GrepperException(e);
         }
     }
+
+
 }
