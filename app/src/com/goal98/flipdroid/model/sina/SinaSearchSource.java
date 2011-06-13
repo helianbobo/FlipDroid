@@ -56,7 +56,8 @@ public class SinaSearchSource{
         List<Source> result = new LinkedList<Source>();
 
         try {
-            Query query = new Query(queryStr);
+            Query query = new Query();
+            query.setQ(queryStr);
             List<User> userList = weibo.searchUser(query);
             if (userList != null) {
                 for (int i = 0; i < userList.size(); i++) {
