@@ -38,7 +38,7 @@ public class TikaClient {
                 InputStream is = response.getEntity().getContent();
 
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                int i = -1;
+                int i;
                 byte[] bytes = new byte[1024];
                 while ((i = is.read(bytes)) != -1) {
                     baos.write(bytes, 0, i);

@@ -111,6 +111,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         sourceName = (String) getIntent().getExtras().get("sourceName");
         contentUrl = (String) getIntent().getExtras().get("contentUrl");
 
+        System.out.println("sourceImage:"+sourceImage);
         setContentView(R.layout.main);
         container = (ViewGroup) findViewById(R.id.pageContainer);
 
@@ -545,6 +546,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         for (ArticleView v : next.getWeiboViews()) {
             v.renderBeforeLayout();
         }
+        next.renderBeforeLayout();
         next.setVisibility(View.VISIBLE);
         Log.d("ANI", "start animation");
         container.removeAllViews();

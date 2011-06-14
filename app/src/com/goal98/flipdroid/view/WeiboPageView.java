@@ -46,6 +46,7 @@ public class WeiboPageView extends FrameLayout {
     private ListView sourceList;
     private LinearLayout navigatorFrame;
     private LinearLayout commentShadowLayer;
+    public WebImageView headerImage;
 
     public boolean isSourceSelectMode() {
 
@@ -159,6 +160,7 @@ public class WeiboPageView extends FrameLayout {
 
 
         TextView headerText = (TextView) headerLayout.findViewById(R.id.headerText);
+
         headerText.setText(this.sourceName);
         headerText.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
@@ -199,6 +201,10 @@ public class WeiboPageView extends FrameLayout {
                 sourceList.setAdapter(adapter);
             }
         });
+
+        headerImage = (WebImageView) headerLayout.findViewById(R.id.headerImage);
+        if (pageActivity.getSourceImage() != null)
+            headerImage.setImageUrl(pageActivity.getSourceImage());
 
         this.addView(this.frame, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
         navigatorFrame.addView(navigatorShadow, new LinearLayout.LayoutParams
@@ -403,5 +409,10 @@ public class WeiboPageView extends FrameLayout {
 
     public boolean isFirstPage() {
         return false;  //To change body of created methods use File | Settings | File Templates.
+    }
+
+    public void renderBeforeLayout() {
+        if (headerImage != null)
+            headerImage.loadImage();
     }
 }

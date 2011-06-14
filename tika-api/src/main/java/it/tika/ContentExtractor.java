@@ -4,6 +4,7 @@ import flipdroid.grepper.GrepperException;
 import flipdroid.grepper.pipe.PipeContentExtractor;
 import it.tika.exception.ExtractorException;
 
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -77,7 +78,7 @@ public class ContentExtractor implements Extractor {
                 }
                 try {
                     URL touchingImageURL = new URL(imageURL);
-                    if (getFileSize(touchingImageURL) < 10000) {
+                    if (getFileSize(touchingImageURL) < 7000) {
                         if (height < 130 && width < 130)
                             imagesIterator.remove();
                         else
@@ -120,9 +121,21 @@ public class ContentExtractor implements Extractor {
                     break;
                 }
             }
+            if (fileLength == -1) {
+                InputStream is = httpConnection.getInputStream();
+                int i;
+                int sum = 0;
+                byte[] bytes = new byte[1024];
+                while ((i = is.read(bytes)) != -1) {
+                    sum += i;
+                    bytes = new byte[1024];
+                }
+                return sum;
+            }
         } catch (Exception ex) {
             return -1;
         }
+
         return fileLength;
     }
 }

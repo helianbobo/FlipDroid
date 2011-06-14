@@ -6,10 +6,9 @@ import com.goal98.flipdroid.util.Constants;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -56,8 +55,10 @@ public class RSSArticleSource implements ArticleSource {
             Article article = new Article();
             if (item.author == null || item.author.trim().length() == 0)
                 article.setAuthor(sourceName);
-            else
-                article.setAuthor(item.author);
+            else {
+                String[] authors = item.author.split(" ");
+                article.setAuthor(authors[0]);
+            }
 
             if (sourceImage != null)
                 try {
@@ -67,6 +68,28 @@ public class RSSArticleSource implements ArticleSource {
                 }
             article.setTitle(item.title);
             article.setStatus(item.link);
+            System.out.println("item.pubDate " + item.pubDate);
+            Date date = new Date();
+            if (item.pubDate != null)
+                try {
+                    date = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US).parse(item.pubDate);
+                } catch (ParseException e) {
+                    try {
+                        date = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm z", Locale.US).parse(item.pubDate);
+                    } catch (ParseException e1) {
+                        try {
+                            date = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US).parse(item.pubDate);
+                        } catch (ParseException e2) {
+                            try {
+                                date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).parse(item.pubDate);
+                            } catch (ParseException e3) {
+
+                            }
+                        }
+                    }
+                }
+
+            article.setCreatedDate(date);
             article.setSourceType(Constants.TYPE_RSS);
             list.add(article);
         }

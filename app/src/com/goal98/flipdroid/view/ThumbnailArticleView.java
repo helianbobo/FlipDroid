@@ -53,7 +53,6 @@ public class ThumbnailArticleView extends WeiboArticleView {
     }
 
     public void displayLoadedThumbnail() {
-
         try {
             System.out.println("taking content");
             final Article article = future.get();
