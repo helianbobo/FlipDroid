@@ -86,6 +86,9 @@ public abstract class SlidingWindows {
         lock.lock();
         try {
             decreaseWindowIndex();
+            if(cycle == -1){
+                return getFirstWindow();
+            }
             Window currentWindow = windows[current];
 
             int bufferStep = getBufferStep();
@@ -108,6 +111,8 @@ public abstract class SlidingWindows {
             lock.unlock();
         }
     }
+
+    protected abstract Window getFirstWindow();
 
     public void loadIfNot(Window window) {
         if (!window.isLoaded())

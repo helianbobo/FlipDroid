@@ -47,6 +47,11 @@ public class WeiboPageView extends FrameLayout {
     private LinearLayout navigatorFrame;
     private LinearLayout commentShadowLayer;
     public WebImageView headerImage;
+    private boolean rendered;
+
+    public boolean isRendered() {
+        return rendered;
+    }
 
     public boolean isSourceSelectMode() {
 
@@ -412,6 +417,7 @@ public class WeiboPageView extends FrameLayout {
     }
 
     public void renderBeforeLayout() {
+        rendered = true;
         if (headerImage != null)
             headerImage.loadImage();
     }

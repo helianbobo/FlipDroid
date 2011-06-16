@@ -18,7 +18,7 @@ public class ContentRepo {
 
     private PagingStrategy pagingStrategy;
 
-    private PagedArticles pagedList;
+    private PagedPageView pagedList;
 
     private UnPagedArticles unPagedArticles;
     private ContentCache contentCache;
@@ -31,7 +31,7 @@ public class ContentRepo {
     private Map<Integer, Future<Page>> futureMap = new HashMap<Integer, Future<Page>>();
 
     public ContentRepo(PagingStrategy pagingStrategy, Semaphore refreshingSemaphore) {
-        pagedList = new PagedArticles();
+        pagedList = new PagedPageView();
         unPagedArticles = new UnPagedArticles(new ArrayList<Article>());
         contentCache = new ContentCache(pagedList, unPagedArticles, pagingStrategy, refreshingSemaphore);
         executor = Executors.newFixedThreadPool(10);
@@ -77,6 +77,7 @@ public class ContentRepo {
         if (preloadPageNo > contentCache.getPageCacheTo() && !futureMap.containsKey(preloadPageNo)) {  //看到第8页的时候，去看是不是cache有第10页
             preload(preloadPageNo);
         }
+        Log.d("cache system", "returning smartPage" + pageNo);
         return smartPage;
     }
 

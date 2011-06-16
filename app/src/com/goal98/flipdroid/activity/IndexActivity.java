@@ -44,6 +44,7 @@ public class IndexActivity extends ListActivity {
                 Intent intent = new Intent(IndexActivity.this, SiteActivity.class);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                IndexActivity.this.finish();
             }
         });
         button.post(new Runnable() {

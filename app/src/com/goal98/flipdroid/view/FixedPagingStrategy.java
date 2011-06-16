@@ -1,9 +1,10 @@
 package com.goal98.flipdroid.view;
 
+import android.util.Log;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.model.Article;
-import com.goal98.flipdroid.model.PagedArticles;
+import com.goal98.flipdroid.model.PagedPageView;
 import com.goal98.flipdroid.model.UnPagedArticles;
 
 import java.util.List;
@@ -17,48 +18,56 @@ public class FixedPagingStrategy implements PagingStrategy {
     }
 
     private NoMoreArticleListener noMoreArticleListener = new DoNothingListener();
-    private int number;
+    private int articlePerPage;
 
-    public FixedPagingStrategy(PageActivity activity, int number) {
+    public FixedPagingStrategy(PageActivity activity, int articlePerPage) {
         this.activity = activity;
-        this.number = number;
+        this.articlePerPage = articlePerPage;
     }
 
-    public PagedArticles doPaging(UnPagedArticles unPagedArticles) {
-        PagedArticles pagedArticles = new PagedArticles();
+    public PagedPageView doPaging(UnPagedArticles unPagedArticles) {
+        Log.d("cache system", "paging " + unPagedArticles.getArticleList().size() + "articles");
+        PagedPageView pagedPageView = new PagedPageView();
 
 
         List<Article> unpagesArticlesList = unPagedArticles.getArticleList();
-        if (unpagesArticlesList.size() == 0 || unPagedArticles.getPagedTo() >= unpagesArticlesList.size()) {//1第一次进来  2.正好分完，蛮巧的
-            if (!onNoMoreArticle())
-                return pagedArticles;
+        if (unpagesArticlesList.size() == 0) {//1第一次进来  2.正好分完，蛮巧的
+            if (!onNoMoreArticle()) {
+                return pagedPageView;
+            }
             unpagesArticlesList = unPagedArticles.getArticleList();
         }
         Page smartPage = new Page(activity);
-        for (int i = unPagedArticles.getPagedTo(), j = 0; i < unpagesArticlesList.size(); i++) {
+        int k = unPagedArticles.getPagedTo();
+        for (int i = 0, j = 0; i < unpagesArticlesList.size(); i++) {
             Article article = unpagesArticlesList.get(i);
-            if (j == number) {
+            if (j == articlePerPage) {
                 j = 0;
-                pagedArticles.add(smartPage);//这页加好了
-                if (pagedArticles.size() >= 2) {//预拿2页
-                    unPagedArticles.setPagedTo(i);//下次从i开始再拿
-                    return pagedArticles;
+                pagedPageView.add(smartPage);//这页加好了
+                if (pagedPageView.size() >= 2) {//预拿2页
+                    unPagedArticles.setPagedTo(k);//下次从i开始再拿
+                    Log.d("cache system", "paging done1,paged to" + unPagedArticles.getPagedTo());
+                    return pagedPageView;
                 }
                 smartPage = new Page(activity);
             }
             smartPage.addArticle(article);
             j++;
+            k++;
             unpagesArticlesList.remove(article);
             i--;
 
             if (unpagesArticlesList.size() == 0) {//分完了，还有吗?
                 if (!onNoMoreArticle()) {
-                    return pagedArticles;
+                    pagedPageView.add(smartPage);
+                    unPagedArticles.setPagedTo(k);
+                    return pagedPageView;
                 }
             }
         }
-
-        return pagedArticles;
+        unPagedArticles.setPagedTo(k);
+        Log.d("cache system", "paging done2,paged to" + unPagedArticles.getPagedTo());
+        return pagedPageView;
     }
 
     private boolean onNoMoreArticle() {

@@ -23,6 +23,9 @@ public abstract class Window {
     protected int pageNumber;
     protected Lock reloadingLock;
 
+    Window(){
+
+    }
     Window(int arrayPos, int pageNumber, Lock reloadingLock) {
         this.arrayPos = arrayPos;
         this.pageNumber = pageNumber;

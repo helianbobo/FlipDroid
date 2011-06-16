@@ -18,7 +18,6 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ViewSwitcher;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.anim.AnimationFactory;
 import com.goal98.flipdroid.client.WeiboExt;
@@ -50,6 +49,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private ViewGroup container;
     private WeiboPageView current;
     private WeiboPageView next;
+    private WeiboPageView previous;
 
     private ContentRepo repo;
     private SharedPreferences preferences;
@@ -69,16 +69,19 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private String sourceImage;
     private String sourceName;
     private String contentUrl;
-//    private int browseMode;
+    //    private int browseMode;
     private PageViewSlidingWindows slidingWindows;
     private WeiboPageViewFactory pageViewFactory;
     private ArticleSource source;
     private Weibo weibo;
-//    private int animationMode;
+    //    private int animationMode;
     private LinearLayout shadow;
     private LinearLayout shadow2;
     private LinearLayout.LayoutParams shadowParams;
     private FrameLayout.LayoutParams pageViewLayoutParams;
+    public com.goal98.flipdroid.model.Window preparingWindow;
+    private boolean previousDirection;
+    private boolean prepareFail;
 
     public String getSourceImage() {
         return sourceImage;
@@ -111,7 +114,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         sourceName = (String) getIntent().getExtras().get("sourceName");
         contentUrl = (String) getIntent().getExtras().get("contentUrl");
 
-        System.out.println("sourceImage:"+sourceImage);
+        System.out.println("sourceImage:" + sourceImage);
         setContentView(R.layout.main);
         container = (ViewGroup) findViewById(R.id.pageContainer);
 
@@ -213,7 +216,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     public void onWindowLoaded(com.goal98.flipdroid.model.Window window) {
-        next = window.get();
+        if (forward)
+            next = window.get();
+        else
+            previous = window.get();
         Log.d("SLIDING", "on windows loaded");
         handler.post(new Runnable() {
             public void run() {
@@ -317,7 +323,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
 
-
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         System.out.println("flipStarted" + flipStarted);
@@ -380,6 +385,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private void flipPage(final boolean forward) {
         flipStarted = true;
 
+        this.previousDirection = this.forward;
         this.forward = forward;
 
         if (!forward)
@@ -417,40 +423,147 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     private void slideToNextPage() {
         try {
-            final com.goal98.flipdroid.model.Window window = forward ? slidingWindows.getNextWindow() : slidingWindows.getPreviousWindow();
-            if (window.isLoading()) {
+            if (preparingWindow == null)
+                preparingWindow = forward ? slidingWindows.getNextWindow() : slidingWindows.getPreviousWindow();
+            else {
+                if (previousDirection != forward) {
+                    if (previousDirection) {
+                        if (currentPageIndex == 0) {
+                            overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                            finish();
+                            return;
+                        }
+                        preparingWindow = slidingWindows.getPreviousWindow();
+                        preparingWindow = slidingWindows.getPreviousWindow();
+                    } else {
+                        preparingWindow = slidingWindows.getNextWindow();
+                        preparingWindow = slidingWindows.getNextWindow();
+                    }
+                }
+                boolean preparingWindowReady = preparingWindow.isLoaded();
+                if (!preparingWindowReady) {
+                    preparingWindow.registerOnLoadListener(PageActivity.this);
+                    handler.post(new Runnable() {
+                        public void run() {
+                            current.showLoading();
+                        }
+                    });
+                    return;
+                }
+            }
+            final com.goal98.flipdroid.model.Window nextWindow = preparingWindow;
+            if (nextWindow.isLoading()) {
                 Log.d("SLIDING", "register on load listener...");
 
                 handler.post(new Runnable() {
                     public void run() {
-                        window.registerOnLoadListener(PageActivity.this);
+                        nextWindow.registerOnLoadListener(PageActivity.this);
                         current.showLoading();
                     }
                 });
                 return;
-            } else if (window.isSkip()) {
+            } else if (nextWindow.isSkip()) {
                 Log.d("SLIDING", "slide to next page...");
                 current.setLoadingNext(false);
                 slideToNextPage();
                 return;
             } else {
-                next = window.get();
+                if (next.isLastPage()) {
+                    System.out.println("lastpage");
+                } else {
+                    if (forward)
+                        next = nextWindow.get();
+                    else
+                        previous = nextWindow.get();
+                }
+
                 handler.post(new Runnable() {
                     public void run() {
-                        next.removeLoadingIfNecessary();
+                        if (forward)
+                            next.removeLoadingIfNecessary();
+                        else
+                            previous.removeLoadingIfNecessary();
+                        showAnimation();
                     }
                 });
             }
         } catch (LastWindowException e) {
+            next = pageViewFactory.createLastPage();
+        }
+    }
+
+    private void prepareNextPage() {
+        try {
+            preparingWindow = forward ? slidingWindows.getNextWindow() : slidingWindows.getPreviousWindow();
+            System.out.println("preparingWindow" + preparingWindow);
+            if (preparingWindow.isLoading()) {
+                Log.d("SLIDING", "register on load listener...");
+
+                handler.post(new Runnable() {
+                    public void run() {
+                        preparingWindow.registerOnLoadListener(new com.goal98.flipdroid.model.Window.OnLoadListener() {
+
+                            public void onWindowLoaded(com.goal98.flipdroid.model.Window window) {
+                                if (forward)
+                                    next = preparingWindow.get();
+                                else {
+                                    previous = preparingWindow.get();
+                                }
+                                renderNextPageIfNotRendered();
+                                prepareFail = false;
+                            }
+
+                            public void onWindowSkipped(com.goal98.flipdroid.model.Window pageViewWindow) {
+                                prepareNextPage();
+                            }
+                        });
+                    }
+                });
+                return;
+            } else if (preparingWindow.isSkip()) {
+                Log.d("SLIDING", "slide to next page...");
+                prepareNextPage();
+                return;
+            } else {
+                if (forward)
+                    next = preparingWindow.get();
+                else
+                    previous = preparingWindow.get();
+
+                handler.post(new Runnable() {
+                    public void run() {
+                        renderNextPageIfNotRendered();
+                        if (forward)
+                            next.removeLoadingIfNecessary();
+                        else
+                            previous.removeLoadingIfNecessary();
+                    }
+                });
+                prepareFail = false;
+            }
+        } catch (LastWindowException e) {
+            prepareFail = true;
             e.printStackTrace();
             next = pageViewFactory.createLastPage();
         }
-        handler.post(new Runnable() {
-            public void run() {
-                showAnimation();
-            }
-        });
+    }
 
+    private void renderNextPageIfNotRendered() {
+        WeiboPageView renderingPageView;
+
+        if (forward) {
+            renderingPageView = next;
+        } else {
+            renderingPageView = previous;
+        }
+        if (renderingPageView.isRendered())
+            return;
+
+        for (ArticleView v : renderingPageView.getWeiboViews()) {
+            v.renderBeforeLayout();
+        }
+        renderingPageView.renderBeforeLayout();
+        renderingPageView.setVisibility(View.VISIBLE);
     }
 
     private void decreasePageNo() {
@@ -475,9 +588,15 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 flipStarted = false;
 
                 switchViews(forward);
+//                container.removeAllViews();
+//                current.setAnimation(null);
+//                next.setAnimation(null);
+                new Thread(new Runnable() {
+                    public void run() {
+                        prepareNextPage();
+                    }
+                }).start();
 
-                current.setAnimation(null);
-                next.setAnimation(null);
 
                 System.out.println("last page" + current.isLastPage());
                 if (current.isLastPage()) {
@@ -504,9 +623,14 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private void switchViews(boolean forward) {
-        WeiboPageView tmp = current;
-        current = next;
-        next = tmp;
+        if (forward) {
+            previous = current;
+            current = next;
+//            next = previous;
+        } else {
+            next = current;
+            current = previous;
+        }
     }
 
     @Override
@@ -543,11 +667,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private void showAnimation() {
 
         enlargedMode = false;
-        for (ArticleView v : next.getWeiboViews()) {
-            v.renderBeforeLayout();
-        }
-        next.renderBeforeLayout();
-        next.setVisibility(View.VISIBLE);
+        renderNextPageIfNotRendered();
         Log.d("ANI", "start animation");
         container.removeAllViews();
         if (isWeiboMode() || isFlipHorizonal() || current.isFirstPage() || next.isLastPage()) {
@@ -560,27 +680,36 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 container.addView(current, pageViewLayoutParams);
                 current.startAnimation(rotation);
             } else {
+
                 container.addView(current, pageViewLayoutParams);
-                container.addView(next, pageViewLayoutParams);
-                next.startAnimation(rotation);
+                container.addView(previous, pageViewLayoutParams);
+                previous.startAnimation(rotation);
             }
+
+
         } else {
             if (forward) {
                 currentPageIndex++;
-
+                container.addView(next, pageViewLayoutParams);
+            } else {
+                container.addView(previous, pageViewLayoutParams);
             }
-            container.addView(next, pageViewLayoutParams);
             container.addView(current, pageViewLayoutParams);
 
 
-            final LinearLayout currentUpper = current.getWrapperViews().get(0);
-            final LinearLayout currentBottom = current.getWrapperViews().get(1);
-            final LinearLayout nextUpper = next.getWrapperViews().get(0);
-            final LinearLayout nextBottom = next.getWrapperViews().get(1);
             if (forward) {
+                final LinearLayout currentUpper = current.getWrapperViews().get(0);
+                final LinearLayout currentBottom = current.getWrapperViews().get(1);
+                final LinearLayout nextUpper = next.getWrapperViews().get(0);
+                final LinearLayout nextBottom = next.getWrapperViews().get(1);
                 final Animation flipToNext = buildFlipAnimation(currentUpper, currentBottom, nextUpper, nextBottom, true);
                 currentBottom.startAnimation(flipToNext);
             } else {
+                final LinearLayout currentUpper = current.getWrapperViews().get(0);
+                final LinearLayout currentBottom = current.getWrapperViews().get(1);
+                final LinearLayout nextUpper = previous.getWrapperViews().get(0);
+                final LinearLayout nextBottom = previous.getWrapperViews().get(1);
+
                 final Animation flipToPrevious = buildFlipAnimation(currentUpper, currentBottom, nextUpper, nextBottom, false);
                 currentUpper.startAnimation(flipToPrevious);
             }
@@ -617,6 +746,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 flipStarted = false;
 
                 switchViews(PageActivity.this.forward);
+                new Thread(new Runnable() {
+                    public void run() {
+                        prepareNextPage();
+                    }
+                }).start();
             }
 
             public void onAnimationRepeat(Animation animation) {
@@ -641,7 +775,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 //                        nextBottom.setVisibility(View.VISIBLE);
                 container.removeAllViews();
                 container.addView(current, pageViewLayoutParams);
-                container.addView(next, pageViewLayoutParams);
+                container.addView(forward ? next : previous, pageViewLayoutParams);
                 (forward ? nextUpper : nextBottom).startAnimation(step2);
             }
 

@@ -108,7 +108,12 @@ public class SinaArticleSource extends AbstractArticleSource {
     }
 
     public boolean loadMore() {
-        boolean result = loadArticle();
+        boolean result = false;
+        try {
+            result = loadArticle();
+        } catch (Exception e) {
+            return false;
+        }
         Log.d("cache system", "loading more " + (result ? "succeed" : "failed"));
         if (!result)
             this.noMoreToLoad = true;

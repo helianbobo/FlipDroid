@@ -13,10 +13,10 @@ import java.util.List;
  * Time: 1:51 PM
  * To change this template use File | Settings | File Templates.
  */
-public class PagedArticles {
+public class PagedPageView {
     private List<Page> pages;
 
-    public PagedArticles() {
+    public PagedPageView() {
         this.pages = new ArrayList();
     }
 

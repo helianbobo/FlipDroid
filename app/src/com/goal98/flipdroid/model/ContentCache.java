@@ -20,7 +20,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * To change this template use File | Settings | File Templates.
  */
 public class ContentCache {
-    private PagedArticles pagedList;
+    private PagedPageView pagedList;
     private UnPagedArticles unPagedArticles;
     private PagingStrategy pagingStrategy;
     private ArticleSource articleSource;
@@ -42,7 +42,7 @@ public class ContentCache {
 
     private int pageCacheTo;
 
-    public ContentCache(PagedArticles pagedList, UnPagedArticles unPagedArticles, PagingStrategy pagingStrategy, Semaphore refreshingSemaphore) {
+    public ContentCache(PagedPageView pagedList, UnPagedArticles unPagedArticles, PagingStrategy pagingStrategy, Semaphore refreshingSemaphore) {
         this.pagedList = pagedList;
         this.unPagedArticles = unPagedArticles;
         this.pagingStrategy = pagingStrategy;
@@ -66,7 +66,7 @@ public class ContentCache {
                 }
                 pagedList.addAll(newSmartPages);
                 pageCacheTo += newSmartPages.size();
-                Log.d("cache system", "loaded " + newSmartPages.size() + " more pages");
+                Log.d("cache system", "added " + newSmartPages.size() + " more pages");
                 return pagedList.getPage(pageNo);
             } catch (InterruptedException e1) {
                 return pagedList.getPage(pageNo);
@@ -94,7 +94,16 @@ public class ContentCache {
         if (this.refreshingToken <= refreshingToken) {
             this.refreshingToken++;
             if (articleSource.isNoMoreToLoad()) {
-                throw new NoMoreStatusException();
+                Log.d("cache system", "source says it has no more to give,let's see if that is true");
+                Log.d("cache system", "paged to " + unPagedArticles.getPagedTo() + ", " + unPagedArticles.getArticleList().size());
+
+                if (unPagedArticles.getArticleList().size() > 0) {
+                    Log.d("cache system", "oh, he lied");
+                    pageAfterRefresh();
+                    return;
+                } else {
+                    throw new NoMoreStatusException();
+                }
             }
 
             Log.d("cache system", "refreshing");
@@ -118,11 +127,6 @@ public class ContentCache {
         pagedList.addAll(smartPageList);
         Log.d("cache system", "added " + smartPageList.size() + " pages");
         pageCacheTo += smartPageList.size();
-    }
-
-    public void addPage(Page smartPage) {
-        this.pagedList.add(smartPage);
-        pageCacheTo++;
     }
 
     public void setArticleSource(ArticleSource articleSource) {
