@@ -33,6 +33,12 @@ public class WeiboPageView extends FrameLayout {
     private Page page;
 
     protected LinearLayout frame;
+    public LayoutInflater inflater;
+
+    public LinearLayout getContentLayout() {
+        return contentLayout;
+    }
+
     protected LinearLayout contentLayout; //this layout is supposed to be dynamic, depending on the Articles on this smartPage
     protected LinearLayout headerLayout;
 
@@ -43,10 +49,13 @@ public class WeiboPageView extends FrameLayout {
     protected PageActivity pageActivity;
     private LinearLayout wrapperll;
     private LinearLayout loadingView;
+
     private ListView sourceList;
     private LinearLayout navigatorFrame;
     private LinearLayout commentShadowLayer;
     public WebImageView headerImage;
+    private boolean sourceSelectMode;
+
     private boolean rendered;
 
     public boolean isRendered() {
@@ -58,7 +67,7 @@ public class WeiboPageView extends FrameLayout {
         return sourceSelectMode;
     }
 
-    private boolean sourceSelectMode;
+
 
     protected boolean loadingNext;
 
@@ -128,12 +137,20 @@ public class WeiboPageView extends FrameLayout {
     protected void setDynamicLayout(Context context) {
         this.removeAllViews();
 
-        final LayoutInflater inflater = LayoutInflater.from(context);
+        inflater = LayoutInflater.from(context);
 
         this.frame = (LinearLayout) inflater.inflate(R.layout.pageview, null);
         this.contentLayout = (LinearLayout) frame.findViewById(R.id.content);
-        this.headerLayout = (LinearLayout) frame.findViewById(R.id.header);
+//        this.headerLayout = (LinearLayout) frame.findViewById(R.id.header);
+        this.addView(this.frame, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
+        //buildHeaderText();
+
+//        WeiboPageView.this.addView(navigatorFrame, new LinearLayout.LayoutParams
+//                (LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
+    }
+
+    private void buildHeaderText() {
         navigatorFrame = new LinearLayout(WeiboPageView.this.getContext());
         navigatorFrame.setPadding(0, IndexActivity.statusBarHeight + 4, 0, 0);
         navigatorFrame.setVisibility(GONE);
@@ -158,7 +175,7 @@ public class WeiboPageView extends FrameLayout {
         navigator.setGravity(Gravity.CENTER);
 
         navigator.addView(sourceList);
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams((int)
+        LayoutParams layoutParams = new LayoutParams((int)
                 (DeviceInfo.width * 0.8), (int) (DeviceInfo.height * 0.5));
         layoutParams.gravity = Gravity.CENTER;
         navigatorShadow.addView(navigator, layoutParams);
@@ -211,10 +228,8 @@ public class WeiboPageView extends FrameLayout {
         if (pageActivity.getSourceImage() != null)
             headerImage.setImageUrl(pageActivity.getSourceImage());
 
-        this.addView(this.frame, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+
         navigatorFrame.addView(navigatorShadow, new LinearLayout.LayoutParams
-                (LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
-        WeiboPageView.this.addView(navigatorFrame, new LinearLayout.LayoutParams
                 (LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
     }
 

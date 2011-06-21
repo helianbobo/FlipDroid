@@ -38,7 +38,7 @@
 
     <string name="msg_no_more_page">No more smartPage to load.</string>
 
-    <string name="sinaweoboheader">Sina</string>
+    <string name="sinaweiboheader">Sina</string>
     <string name="loading">loading...</string>
     <string name="sharedBy">Shared by</string>
     <string name="tikaservererror">Error retrieving content</string>

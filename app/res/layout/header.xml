@@ -6,7 +6,7 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent" android:gravity="center" android:orientation="horizontal" android:background="@color/white">
     <com.goal98.flipdroid.view.InternetImageView android:layout_marginBottom="2dip" android:src="@drawable/portrait" android:id="@+id/headerImage" android:maxWidth="22dip" android:adjustViewBounds="true"  android:scaleType="fitCenter" android:layout_width="wrap_content" android:layout_height="wrap_content"></com.goal98.flipdroid.view.InternetImageView>
-    <TextView android:layout_marginLeft="3dip"  android:id="@+id/headerText" android:gravity="center" android:textSize="18px" android:textStyle="bold" android:text="@string/sinaweoboheader"
+    <TextView android:layout_marginLeft="3dip"  android:id="@+id/headerText" android:gravity="center" android:textSize="18px" android:textStyle="bold" android:text="@string/sinaweiboheader"
               android:layout_marginBottom="1px" android:layout_width="wrap_content"
               android:layout_height="fill_parent"></TextView>
 </LinearLayout>

@@ -31,6 +31,7 @@ import com.goal98.flipdroid.model.rss.RSSArticleSource;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.GestureUtil;
 import com.goal98.flipdroid.view.*;
 import weibo4j.Weibo;
@@ -78,10 +79,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private LinearLayout shadow;
     private LinearLayout shadow2;
     private LinearLayout.LayoutParams shadowParams;
-    private FrameLayout.LayoutParams pageViewLayoutParams;
+    private FrameLayout.LayoutParams pageViewLayoutParamsFront;
     public com.goal98.flipdroid.model.Window preparingWindow;
     private boolean previousDirection;
     private boolean prepareFail;
+    private FrameLayout.LayoutParams pageViewLayoutParamsBack;
 
     public String getSourceImage() {
         return sourceImage;
@@ -189,8 +191,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         shadow2.setBackgroundColor(Color.parseColor("#FFDDDDDD"));
 
         shadowParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
-        pageViewLayoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT);
-
+        pageViewLayoutParamsFront = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT);
+        pageViewLayoutParamsBack = pageViewLayoutParamsFront;
         flipPage(true);
     }
 
@@ -395,7 +397,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
         if (currentPageIndex == -1 && forward) {//we are first timer
             currentPageIndex++;
-            container.addView(current, pageViewLayoutParams);
+            container.addView(current, pageViewLayoutParamsFront);
             new Thread(new Runnable() {
                 public void run() {
                     slideToNextPage();
@@ -422,6 +424,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private void slideToNextPage() {
+
         try {
             if (preparingWindow == null)
                 preparingWindow = forward ? slidingWindows.getNextWindow() : slidingWindows.getPreviousWindow();
@@ -452,6 +455,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 }
             }
             final com.goal98.flipdroid.model.Window nextWindow = preparingWindow;
+            preparingWindow = null;
             if (nextWindow.isLoading()) {
                 Log.d("SLIDING", "register on load listener...");
 
@@ -489,6 +493,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             }
         } catch (LastWindowException e) {
             next = pageViewFactory.createLastPage();
+            handler.post(new Runnable() {
+                public void run() {
+                    showAnimation();
+                }
+            });
         }
     }
 
@@ -624,12 +633,13 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     private void switchViews(boolean forward) {
         if (forward) {
-            previous = current;
+            WeiboPageView tmp = current;
             current = next;
-//            next = previous;
+            next = tmp;
         } else {
-            next = current;
+            WeiboPageView tmp = current;
             current = previous;
+            previous = tmp;
         }
     }
 
@@ -670,19 +680,24 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         renderNextPageIfNotRendered();
         Log.d("ANI", "start animation");
         container.removeAllViews();
-        if (isWeiboMode() || isFlipHorizonal() || current.isFirstPage() || next.isLastPage()) {
+        if (isWeiboMode() || isFlipHorizonal() || current.isFirstPage() || next.isLastPage() || next.getWrapperViews().size() < 2) {
 
             Animation rotation = buildFlipHorizonalAnimation(forward);
-
+            if (forward)
+                next.setVisibility(View.VISIBLE);
+            else
+                previous.setVisibility(View.VISIBLE);
             if (forward) {
                 currentPageIndex++;
-                container.addView(next, pageViewLayoutParams);
-                container.addView(current, pageViewLayoutParams);
+                container.addView(next, pageViewLayoutParamsFront);
+                container.addView(current, pageViewLayoutParamsBack);
+
                 current.startAnimation(rotation);
             } else {
 
-                container.addView(current, pageViewLayoutParams);
-                container.addView(previous, pageViewLayoutParams);
+                container.addView(current, pageViewLayoutParamsFront);
+
+                container.addView(previous, pageViewLayoutParamsBack);
                 previous.startAnimation(rotation);
             }
 
@@ -690,11 +705,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         } else {
             if (forward) {
                 currentPageIndex++;
-                container.addView(next, pageViewLayoutParams);
+                container.addView(next, pageViewLayoutParamsFront);
             } else {
-                container.addView(previous, pageViewLayoutParams);
+                container.addView(previous, pageViewLayoutParamsFront);
             }
-            container.addView(current, pageViewLayoutParams);
+            container.addView(current, pageViewLayoutParamsBack);
 
 
             if (forward) {
@@ -718,8 +733,12 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private Animation buildFlipAnimation(final LinearLayout currentUpper, final LinearLayout currentBottom, final LinearLayout nextUpper, final LinearLayout nextBottom, final boolean forward) {
-        final float centerY = container.getHeight() / 2;
-        final float centerX = container.getWidth() / 2;
+//        final float centerY = container.getHeight() / 2;
+//        final float centerX = container.getWidth() / 2;
+
+        final float centerY = 240;
+        final float centerX = 160;
+
         long duration = getFlipDurationFromPreference();
 
         final Animation step1 = forward ? AnimationFactory.buildVerticalFlipAnimation(0, 90, duration, centerX, 0, shadow, shadow2)
@@ -774,8 +793,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 (forward ? nextBottom : nextUpper).removeView(shadow2);
 //                        nextBottom.setVisibility(View.VISIBLE);
                 container.removeAllViews();
-                container.addView(current, pageViewLayoutParams);
-                container.addView(forward ? next : previous, pageViewLayoutParams);
+                container.addView(current, pageViewLayoutParamsFront);
+                container.addView(forward ? next : previous, pageViewLayoutParamsBack);
                 (forward ? nextUpper : nextBottom).startAnimation(step2);
             }
 
