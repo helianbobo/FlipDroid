@@ -14,7 +14,7 @@
     <string name="key_anim_flip_duration_preference">anim_flip_duration</string>
 
     <string name="title_anim_flip_duration_preference">翻页动画时间</string>
-    <string name="summary_anim_flip_duration_preference">翻页动画时间</string>
+    <string name="summary_anim_flip_duration_preference">翻页动画时间(毫秒)</string>
     <string name="dialog_title_anim_flip_duration_preference">翻页动画时间</string>
 
     <string name="title_article_per_page_preference">每页显示文章数</string>
@@ -52,4 +52,9 @@
     <string name="my_feed">我的订阅</string>
     <string name="my_feed_desc">我的谷歌订阅</string>
     <string name="credentialInCorrect">认证失败</string>
+    <string name="nonetwork">没有可用网络连接，现在就去设置网络？</string>
+    <string name="ok">好的</string>
+    <string name="cancel">不了</string>
+    <string name="gotosinaoauth">现在就去新浪微博做认证吗？</string>
+    <string name="commentneedsinaoauth">评论功能需要绑定新浪帐号</string>
 </resources>

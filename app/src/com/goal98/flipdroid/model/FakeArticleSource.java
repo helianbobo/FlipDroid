@@ -98,6 +98,10 @@ public class FakeArticleSource extends AbstractArticleSource {
         return false;
     }
 
+    public boolean getForceMagzine() {
+        return true;
+    }
+
     public void comment(String status, long statusId) throws WeiboException {
         //To change body of implemented methods use File | Settings | File Templates.
     }

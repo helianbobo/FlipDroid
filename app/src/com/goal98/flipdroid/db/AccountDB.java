@@ -86,6 +86,25 @@ public class AccountDB extends AbstractDB{
 
     }
 
+    public long insertOrUpdateOAuth(String id, String token, String tokenSecret, String accountType) {
+
+        boolean accountExsit = exist(id, accountType);
+
+        ContentValues values = new ContentValues();
+        values.put(Account.KEY_USERNAME, id);
+        values.put(Account.KEY_PASSWORD, token);
+        values.put(Account.KEY_PASSWORD_SECRET, tokenSecret);
+        values.put(Account.KEY_ACCOUNT_TYPE, accountType);
+
+        if (!accountExsit) {
+            return insert(values);
+        } else {
+            return update(values, Account.KEY_USERNAME + " = ? and " + Account.KEY_ACCOUNT_TYPE + " = ?", new String[]{id, accountType});
+        }
+
+
+    }
+
     public boolean hasAccount(String type) {
         String[] projection = {Account.KEY_ACCOUNT_TYPE};
         String selection = Account.KEY_ACCOUNT_TYPE + " = ?";

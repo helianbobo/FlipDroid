@@ -42,8 +42,8 @@ public class WeiboArticleView extends ArticleView {
     public LinearLayout enlargedView;
     protected ViewSwitcher switcher;
 
-    public WeiboArticleView(Context context, Article article, WeiboPageView pageView) {
-        super(context, article, pageView);
+    public WeiboArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
+        super(context, article, pageView,placedAtBottom);
         executor = Executors.newFixedThreadPool(1);
         preload();
     }
@@ -68,8 +68,6 @@ public class WeiboArticleView extends ArticleView {
 
         if (handler == null)
             handler = new Handler();
-        if (this.getPageView().isSourceSelectMode())
-            return false;
 
         if (!isLoading && !this.getPageView().loadingNext && article.hasLink() && event.getAction() == MotionEvent.ACTION_UP) {
             if (enlargedView != null) {//以前打开过的，直接显示
@@ -234,7 +232,10 @@ public class WeiboArticleView extends ArticleView {
             }
         });
         LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-        layoutParams.setMargins(0, 0, 0, 1);
+        if(placedAtBottom)//分割线
+            layoutParams.setMargins(0, 0, 0, 0);
+        else
+            layoutParams.setMargins(0, 0, 0, 1);
         this.addView(switcher, layoutParams);
     }
 
@@ -279,8 +280,13 @@ public class WeiboArticleView extends ArticleView {
 //                                    preloadImageLoaderHandler.setWidth(DeviceInfo.width/2-32);
 //                                    preloadImageLoaderHandler.setHeight(DeviceInfo.height/2-100);
 
-                                    ImageLoader loader = new ImageLoader(image, preloadImageLoaderHandler);
-                                    loader.run();
+                                    final ImageLoader loader = new ImageLoader(image, preloadImageLoaderHandler);
+                                    new Thread(new Runnable(){
+                                        public void run() {
+                                            loader.run();
+                                        }
+                                    }).start();
+
                                 }
 
                             } catch (Exception e) {

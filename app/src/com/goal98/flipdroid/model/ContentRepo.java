@@ -28,6 +28,10 @@ public class ContentRepo {
         return contentCache.getRefreshingToken();
     }
 
+    public int getTotal(){
+        return pagedList.size();
+    }
+
     private Map<Integer, Future<Page>> futureMap = new HashMap<Integer, Future<Page>>();
 
     public ContentRepo(PagingStrategy pagingStrategy, Semaphore refreshingSemaphore) {

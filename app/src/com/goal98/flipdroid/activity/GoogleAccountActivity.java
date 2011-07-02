@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.db.AccountDB;
+import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.google.GReader;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
@@ -15,6 +17,8 @@ import com.goal98.flipdroid.util.DeviceInfo;
 
 public class GoogleAccountActivity extends SinaAccountActivity {
 
+    protected AccountDB accountDB;
+    protected SourceDB sourceDB;
 
     private static final String GOOGLE_ACCOUNT_PREF_KEY = "google_account";
     public static final String GOOGLE_ACCOUNT_SID = "GOOGLE_ACCOUNT_SID";
@@ -22,6 +26,10 @@ public class GoogleAccountActivity extends SinaAccountActivity {
 
     protected void initView() {
         setContentView(R.layout.google_account);
+
+        sourceDB = new SourceDB(this);
+        accountDB = new AccountDB(this);
+
         usernameView = (TextView) findViewById(R.id.sina_username);
         passwordView = (TextView) findViewById(R.id.sina_password);
 
@@ -35,7 +43,8 @@ public class GoogleAccountActivity extends SinaAccountActivity {
                     saveAccount();
                     goToNextActivity();
                 } catch (Exception e) {
-                    Log.e(SinaAccountActivity.class.getName(), e.getMessage());
+                    e.printStackTrace();
+                    Log.e(GoogleAccountActivity.class.getName(), e.getMessage());
                 }
 
             }
@@ -68,8 +77,6 @@ public class GoogleAccountActivity extends SinaAccountActivity {
 
     protected void goToNextActivity() {
         Intent intent = new Intent(this, IndexActivity.class);
-
-
         startActivity(intent);
         finish();
     }

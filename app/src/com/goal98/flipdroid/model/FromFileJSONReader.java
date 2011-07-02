@@ -8,16 +8,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class FromFileSourceResolver {
+public class FromFileJSONReader {
 
     private Context context;
 
-    public FromFileSourceResolver(Context context) {
+    public FromFileJSONReader(Context context) {
         this.context = context;
     }
 
-    public String resolve(String sourceName) throws IOException {
-        AssetManager.AssetInputStream stream = (AssetManager.AssetInputStream) context.getResources().getAssets().open(sourceName);
+    public String resolve(String assetName) throws IOException {
+        AssetManager.AssetInputStream stream = (AssetManager.AssetInputStream) context.getResources().getAssets().open(assetName);
         return inputStream2String(stream);
     }
 

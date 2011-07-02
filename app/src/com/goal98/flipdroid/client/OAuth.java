@@ -3,6 +3,8 @@ package com.goal98.flipdroid.client;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import com.goal98.flipdroid.activity.BindSinaActivity;
+import com.goal98.flipdroid.util.Constants;
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.basic.DefaultOAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
@@ -32,7 +34,7 @@ public class OAuth {
     public OAuth() {
 // 第一组：（App Key和App Secret）
 // 这组参数就是本系列文本第一篇提到的建一个新的应用获取App Key和App Secret。
-        this("3315495489", "e2731e7grf592c0fd7fea32406f86e1b");
+        this(Constants.CONSUMER_KEY, Constants.CONSUMER_SECRET);
     }
 
     public OAuth(String consumerKey, String consumerSecret) {
@@ -46,30 +48,47 @@ public class OAuth {
             httpOauthConsumer = new CommonsHttpOAuthConsumer(consumerKey, consumerSecret);
             httpOauthprovider = new DefaultOAuthProvider("http://api.t.sina.com.cn/oauth/request_token", "http://api.t.sina.com.cn/oauth/access_token", "http://api.t.sina.com.cn/oauth/authorize");
             String authUrl = httpOauthprovider.retrieveRequestToken(httpOauthConsumer, callBackUrl);
-            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(authUrl)));
+
+            Intent intent = new Intent(activity, BindSinaActivity.class);
+            intent.putExtra(BindSinaActivity.URL, authUrl);
+
+            activity.startActivity(intent);
             ret = true;
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return ret;
     }
 
-    public UserInfo GetAccessToken(Intent intent) {
+    public UserInfo GetAccessToken(String url) {
         UserInfo user = null;
-        Uri uri = intent.getData();
-        String verifier = uri.getQueryParameter(oauth.signpost.OAuth.OAUTH_VERIFIER);
+
+        String verifier = url.substring(url.indexOf("oauth_verifier") + "oauth_verifier=".length());
+//        try {
+        httpOauthprovider.setOAuth10a(true);
         try {
-            httpOauthprovider.setOAuth10a(true);
             httpOauthprovider.retrieveAccessToken(httpOauthConsumer, verifier);
-        } catch (OAuthMessageSignerException ex) {
-            ex.printStackTrace();
-        } catch (OAuthNotAuthorizedException ex) {
-            ex.printStackTrace();
-        } catch (OAuthExpectationFailedException ex) {
-            ex.printStackTrace();
-        } catch (OAuthCommunicationException ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            try {
+                httpOauthprovider.retrieveAccessToken(httpOauthConsumer, verifier);
+            } catch (Exception e1) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                try {
+                    httpOauthprovider.retrieveAccessToken(httpOauthConsumer, verifier);
+                } catch (Exception e2) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
         }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            return null;
+//        }
         SortedSet<String> user_id = httpOauthprovider.getResponseParameters().get("user_id");
+        if(user_id==null){
+            return null;
+        }
         String userId = user_id.first();
         String userKey = httpOauthConsumer.getToken();
         String userSecret = httpOauthConsumer.getTokenSecret();

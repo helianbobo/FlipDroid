@@ -33,7 +33,7 @@ public class SinaArticleSource extends AbstractArticleSource {
     private List<Article> articleList = new LinkedList<Article>();
     private ArticleFilter filter;
 
-    public SinaArticleSource(boolean useOauth, String param1, String param2, String sourceUserId, ArticleFilter filter) {
+    public SinaArticleSource(boolean useOauth, String userId, String token, String sourceUserId, ArticleFilter filter) {
         this.filter = filter;
         System.setProperty("weibo4j.oauth.consumerKey", Constants.CONSUMER_KEY);
         System.setProperty("weibo4j.oauth.consumerSecret", Constants.CONSUMER_SECRET);
@@ -42,11 +42,11 @@ public class SinaArticleSource extends AbstractArticleSource {
         Weibo.CONSUMER_SECRET = Constants.CONSUMER_SECRET;
 
         if (useOauth) {
-            oauthToken = param1;
-            oauthTokenSecret = param2;
+            oauthToken = userId;
+            oauthTokenSecret = token;
         } else {
-            basicUser = param1;
-            basicPassword = param2;
+            basicUser = userId;
+            basicPassword = token;
         }
         this.sourceUserId = sourceUserId;
 
@@ -125,5 +125,9 @@ public class SinaArticleSource extends AbstractArticleSource {
 
     public boolean isNoMoreToLoad() {
         return noMoreToLoad;
+    }
+
+    public boolean getForceMagzine() {
+        return false;
     }
 }

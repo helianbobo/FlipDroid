@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<LinearLayout android:orientation="horizontal" xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
               xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/header"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent" android:gravity="center" android:orientation="horizontal" android:background="@color/white">
-    <com.goal98.flipdroid.view.InternetImageView android:layout_marginBottom="2dip" android:src="@drawable/portrait" android:id="@+id/headerImage" android:maxWidth="22dip" android:adjustViewBounds="true"  android:scaleType="fitCenter" android:layout_width="wrap_content" android:layout_height="wrap_content"></com.goal98.flipdroid.view.InternetImageView>
-    <TextView android:layout_marginLeft="3dip"  android:id="@+id/headerText" android:gravity="center" android:textSize="18px" android:textStyle="bold" android:text="@string/sinaweiboheader"
+              android:layout_height="wrap_content" android:gravity="center"
+              android:background="@color/white">
+    <com.goal98.android.WebImageView android:id="@+id/headerImage" webimage:autoLoad="false"
+                                     android:src="@drawable/portrait"
+                                     android:layout_height="25dip" webimage:defaultWidth="25"
+                                     webimage:defaultHeight="25" android:layout_margin="2dip"
+                                     android:layout_width="25dip"></com.goal98.android.WebImageView>
+
+    <TextView android:layout_marginLeft="3dip" android:id="@+id/headerText" android:gravity="top"
+              android:textSize="18px" android:textStyle="bold" android:text="@string/sinaweiboheader"
               android:layout_marginBottom="1px" android:layout_width="wrap_content"
-              android:layout_height="fill_parent"></TextView>
+              android:layout_height="wrap_content"></TextView>
+
 </LinearLayout>

@@ -2,9 +2,11 @@ package com.goal98.flipdroid.activity;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -31,6 +33,12 @@ public class IndexActivity extends ListActivity {
     public static int statusBarHeight;
     public static int titleBarHeight;
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        accountDB = new AccountDB(getApplicationContext());
@@ -44,7 +52,6 @@ public class IndexActivity extends ListActivity {
                 Intent intent = new Intent(IndexActivity.this, SiteActivity.class);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                IndexActivity.this.finish();
             }
         });
         button.post(new Runnable() {
@@ -82,6 +89,8 @@ public class IndexActivity extends ListActivity {
         String sourceName = sourceNameTextView.getText().toString();
         if (item.getItemId() == 0) {//delete
             sourceDB.removeSourceByName(sourceName);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+            preferences.edit().putString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY,null).commit();
             bindAdapter();
         }
         return super.onContextItemSelected(item);
@@ -192,7 +201,7 @@ public class IndexActivity extends ListActivity {
                 count = sourceDB.deleteAll();
                 Log.e(this.getClass().getName(), count + " sources are deleted.");
 
-                adapter.notifyDataSetChanged();
+                bindAdapter();
                 return true;
             case ACCOUNT_LIST_ID:
                 startActivity(new Intent(this, AccountListActivity.class));

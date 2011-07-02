@@ -13,7 +13,7 @@
 
     <string name="key_anim_flip_duration_preference">anim_flip_duration</string>
     <string name="title_anim_flip_duration_preference">Flip Duration</string>
-    <string name="summary_anim_flip_duration_preference">Flip Duration</string>
+    <string name="summary_anim_flip_duration_preference">Flip Duration(ms)</string>
     <string name="dialog_title_anim_flip_duration_preference">Flip Duration</string>
 
     <string name="key_article_per_page_preference">article_per_page</string>
@@ -23,7 +23,7 @@
 
     <string name="key_browse_mode_preference">browse_mode</string>
     <string name="title_browse_mode_preference">Browse Mode</string>
-    <string name="dialog_title_browse_mode_preference">Brose Mode</string>
+    <string name="dialog_title_browse_mode_preference">Browse Mode</string>
 
     <string name="key_animation_mode_preference">animation</string>
     <string name="title_animation_mode_preference">Flip Animation</string>
@@ -56,4 +56,10 @@
     <string name="my_feed">My feeds</string>
     <string name="my_feed_desc">My Google Reader feeds</string>
     <string name="credentialInCorrect">Fail to authenticate</string>
+
+    <string name="nonetwork">No available connection found, do you want to set it now?</string>
+    <string name="ok">Yes</string>
+    <string name="cancel">No</string>
+    <string name="gotosinaoauth">We will redirect you to Sina to do the authentication</string>
+    <string name="commentneedsinaoauth">Comment feature requires Sina weibo account binding</string>
 </resources>

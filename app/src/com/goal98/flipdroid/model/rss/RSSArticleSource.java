@@ -60,12 +60,13 @@ public class RSSArticleSource implements ArticleSource {
                 article.setAuthor(authors[0]);
             }
 
-            if (sourceImage != null)
+            if (sourceImage != null) {
                 try {
                     article.setPortraitImageUrl(new URL(sourceImage));
                 } catch (MalformedURLException e) {
-                    return false;
+
                 }
+            }
             article.setTitle(item.title);
             article.setStatus(item.link);
             System.out.println("item.pubDate " + item.pubDate);
@@ -83,7 +84,11 @@ public class RSSArticleSource implements ArticleSource {
                             try {
                                 date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).parse(item.pubDate);
                             } catch (ParseException e3) {
+                                try {
+                                    date = new SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(item.pubDate);
+                                } catch (ParseException e4) {
 
+                                }
                             }
                         }
                     }
@@ -103,5 +108,9 @@ public class RSSArticleSource implements ArticleSource {
         if (loaded)
             return true;
         return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public boolean getForceMagzine() {
+        return true;
     }
 }

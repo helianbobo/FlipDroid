@@ -9,6 +9,7 @@ import weibo4j.User;
 import weibo4j.Weibo;
 import weibo4j.WeiboException;
 
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class SinaSearchSource{
 
         try {
             Query query = new Query();
-            query.setQ(queryStr);
+            query.setQuery(queryStr);
             List<User> userList = weibo.searchUser(query);
             if (userList != null) {
                 for (int i = 0; i < userList.size(); i++) {

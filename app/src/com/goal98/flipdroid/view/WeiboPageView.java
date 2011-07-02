@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.view;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.activity.IndexActivity;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.activity.SinaAccountActivity;
+import com.goal98.flipdroid.activity.WeiPaiWebViewClient;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.exception.NoSinaAccountBindedException;
 import com.goal98.flipdroid.model.Article;
@@ -40,7 +42,7 @@ public class WeiboPageView extends FrameLayout {
     }
 
     protected LinearLayout contentLayout; //this layout is supposed to be dynamic, depending on the Articles on this smartPage
-    protected LinearLayout headerLayout;
+
 
     protected LinearLayout enlargedViewWrapper;
     //    protected ScrollView wrapper;
@@ -49,24 +51,16 @@ public class WeiboPageView extends FrameLayout {
     protected PageActivity pageActivity;
     private LinearLayout wrapperll;
     private LinearLayout loadingView;
-
-    private ListView sourceList;
-    private LinearLayout navigatorFrame;
     private LinearLayout commentShadowLayer;
+
     public WebImageView headerImage;
-    private boolean sourceSelectMode;
+
 
     private boolean rendered;
 
     public boolean isRendered() {
         return rendered;
     }
-
-    public boolean isSourceSelectMode() {
-
-        return sourceSelectMode;
-    }
-
 
 
     protected boolean loadingNext;
@@ -97,14 +91,13 @@ public class WeiboPageView extends FrameLayout {
     protected List<LinearLayout> wrapperViews = new ArrayList<LinearLayout>();
 
     public LinearLayout addArticleView(Article article, boolean last) {
-
-        WeiboArticleView withoutURLArticleView = new WeiboArticleView(WeiboPageView.this.getContext(), article, this);
+        WeiboArticleView withoutURLArticleView = new WeiboArticleView(WeiboPageView.this.getContext(), article, this, last);
         weiboViews.add(withoutURLArticleView);
 
 
         LinearLayout articleWrapper = new LinearLayout(this.getContext());
         wrapperViews.add(articleWrapper);
-        articleWrapper.setBackgroundColor(0xffDDDDDD);
+        articleWrapper.setBackgroundColor(0xffDDDDDD);//分割线颜色
         articleWrapper.setGravity(Gravity.CENTER);
         LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 
@@ -116,7 +109,6 @@ public class WeiboPageView extends FrameLayout {
         else {
             wrapperLayoutParam = new LayoutParams(DeviceInfo.width, LayoutParams.WRAP_CONTENT);
         }
-        wrapperLayoutParam.setMargins(0, 0, 0, 1);
         contentLayout.addView(articleWrapper, wrapperLayoutParam);
         return articleWrapper;
     }
@@ -125,14 +117,11 @@ public class WeiboPageView extends FrameLayout {
         super(pageActivity);
         this.pageActivity = pageActivity;
         this.sourceName = pageActivity.getSourceName();
-        this.sourceImageURL = pageActivity.getSourceImage();
+        this.sourceImageURL = pageActivity.getSourceImageURL();
 
         setDynamicLayout(pageActivity);
     }
 
-    public void setSourceSelectMode(boolean sourceSelectMode) {
-        this.sourceSelectMode = sourceSelectMode;
-    }
 
     protected void setDynamicLayout(Context context) {
         this.removeAllViews();
@@ -141,102 +130,9 @@ public class WeiboPageView extends FrameLayout {
 
         this.frame = (LinearLayout) inflater.inflate(R.layout.pageview, null);
         this.contentLayout = (LinearLayout) frame.findViewById(R.id.content);
-//        this.headerLayout = (LinearLayout) frame.findViewById(R.id.header);
         this.addView(this.frame, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-
-        //buildHeaderText();
-
-//        WeiboPageView.this.addView(navigatorFrame, new LinearLayout.LayoutParams
-//                (LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
     }
 
-    private void buildHeaderText() {
-        navigatorFrame = new LinearLayout(WeiboPageView.this.getContext());
-        navigatorFrame.setPadding(0, IndexActivity.statusBarHeight + 4, 0, 0);
-        navigatorFrame.setVisibility(GONE);
-
-        LinearLayout navigatorShadow = new LinearLayout(WeiboPageView.this.getContext());
-
-        navigatorShadow.setPadding((int) (DeviceInfo.width * 0.1), 0, (int) (DeviceInfo.width * 0.1), 0);
-        navigatorShadow.setBackgroundColor(Color.parseColor("#77000000"));
-
-        navigatorShadow.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-
-                closeSourceSelection();
-            }
-        });
-
-        sourceList = (ListView) inflater.inflate(R.layout.navigator, null);
-
-        final LinearLayout navigator = new LinearLayout(WeiboPageView.this.getContext());
-        navigator.setOrientation(LinearLayout.VERTICAL);
-        navigator.setBackgroundResource(R.drawable.roundcorner);
-        navigator.setGravity(Gravity.CENTER);
-
-        navigator.addView(sourceList);
-        LayoutParams layoutParams = new LayoutParams((int)
-                (DeviceInfo.width * 0.8), (int) (DeviceInfo.height * 0.5));
-        layoutParams.gravity = Gravity.CENTER;
-        navigatorShadow.addView(navigator, layoutParams);
-
-
-        TextView headerText = (TextView) headerLayout.findViewById(R.id.headerText);
-
-        headerText.setText(this.sourceName);
-        headerText.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                if (sourceSelectMode) {
-                    closeSourceSelection();
-                    return;
-                }
-                setSourceSelectMode(true);
-                navigatorFrame.setVisibility(VISIBLE);
-
-                SourceDB sourceDB = new SourceDB(pageActivity.getApplicationContext());
-
-                Cursor sourceCursor = sourceDB.findAll();
-                pageActivity.startManagingCursor(sourceCursor);
-
-                SimpleCursorAdapter adapter = new SimpleCursorAdapter(pageActivity, R.layout.source_selection_item, sourceCursor,
-                        new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL},
-                        new int[]{R.id.source_name, R.id.source_desc, R.id.source_image});
-                adapter.setViewBinder(new SourceItemViewBinder());
-                sourceList.setOnItemClickListener(new ListView.OnItemClickListener() {
-
-                    public void onItemClick(AdapterView<?> l, View view, int i, long id) {
-                        closeSourceSelection();
-
-                        Intent intent = new Intent(pageActivity, PageActivity.class);
-                        Cursor cursor = (Cursor) l.getItemAtPosition(i);
-                        intent.putExtra("type", cursor.getString(cursor.getColumnIndex(Source.KEY_ACCOUNT_TYPE)));
-                        intent.putExtra("sourceId", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_ID)));
-                        intent.putExtra("sourceImage", cursor.getString(cursor.getColumnIndex(Source.KEY_IMAGE_URL)));
-                        intent.putExtra("sourceName", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_NAME)));
-                        intent.putExtra("contentUrl", cursor.getString(cursor.getColumnIndex(Source.KEY_CONTENT_URL)));
-                        cursor.close();
-                        pageActivity.startActivity(intent);
-                        pageActivity.overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                        pageActivity.finish();
-                    }
-                });
-                sourceList.setAdapter(adapter);
-            }
-        });
-
-        headerImage = (WebImageView) headerLayout.findViewById(R.id.headerImage);
-        if (pageActivity.getSourceImage() != null)
-            headerImage.setImageUrl(pageActivity.getSourceImage());
-
-
-        navigatorFrame.addView(navigatorShadow, new LinearLayout.LayoutParams
-                (LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
-    }
-
-    private void closeSourceSelection() {
-        setSourceSelectMode(false);
-        navigatorFrame.setVisibility(GONE);
-    }
 
     public void enlarge(final ArticleView articleView, final WeiboArticleView weiboArticleView) {
         pageActivity.setEnlargedMode(true);
@@ -278,6 +174,11 @@ public class WeiboPageView extends FrameLayout {
 
         retweetButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
+                if(!pageActivity.sinaAlreadyBinded()){
+                    pageActivity.showDialog(PageActivity.PROMPT_OAUTH);
+                    return;
+                }
+
                 commentShadowLayer = new LinearLayout(WeiboPageView.this.getContext());
                 commentShadowLayer.setBackgroundColor(Color.parseColor("#00000000"));
                 commentShadowLayer.setPadding(14, 20, 14, 20);
@@ -379,6 +280,8 @@ public class WeiboPageView extends FrameLayout {
 
     }
 
+
+
     private void closeEnlargedView(WeiboArticleView weiboArticleView) {
         if (commentShadowLayer != null)
             this.removeView(commentShadowLayer);
@@ -436,4 +339,5 @@ public class WeiboPageView extends FrameLayout {
         if (headerImage != null)
             headerImage.loadImage();
     }
+
 }

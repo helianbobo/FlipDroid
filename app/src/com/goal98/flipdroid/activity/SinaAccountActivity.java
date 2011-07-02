@@ -1,28 +1,33 @@
 package com.goal98.flipdroid.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TableRow;
 import android.widget.TextView;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.client.OAuth;
+import com.goal98.flipdroid.client.UserInfo;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.model.sina.OAuthHolder;
 import com.goal98.flipdroid.util.Constants;
 import weibo4j.WeiboException;
 
 
 public class SinaAccountActivity extends Activity {
 
-    private static final String SINA_ACCOUNT_PREF_KEY = "sina_account";
 
-    protected AccountDB accountDB;
-    protected SourceDB sourceDB;
+
     protected TextView usernameView;
     protected TextView passwordView;
     protected String nextActivity;
@@ -37,44 +42,45 @@ public class SinaAccountActivity extends Activity {
             nextActivity = extras.getString("next");
 
 
-        accountDB = new AccountDB(this);
-        sourceDB = new SourceDB(this);
         initView();
     }
 
-    protected void initView() {
-        setContentView(R.layout.sina_account);
-        usernameView = (TextView) findViewById(R.id.sina_username);
-        passwordView = (TextView) findViewById(R.id.sina_password);
 
-        Button button = (Button) findViewById(R.id.sina_login);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                try {
-                    saveAccount();
-                    goToNextActivity();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e(SinaAccountActivity.class.getName(), e.getMessage());
-                }
 
-            }
-        });
+    protected Dialog onCreateDialog(int id) {
+        Dialog dialog;
+        switch (id) {
+            case GOTO_OAUTH:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(R.string.gotosinaoauth)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                FlipdroidApplications application = (FlipdroidApplications) getApplication();
+                                OAuth oauth = new OAuth();
+                                application.setOauth(oauth);
+                                System.out.println("OAuthHolder.oauth" + application + oauth);
+                                oauth.RequestAccessToken(SinaAccountActivity.this, "flipdroid://SinaAccountSaver");
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                SinaAccountActivity.this.finish();
+                            }
+                        });
+                dialog = builder.create();
+                break;
+
+            default:
+                dialog = null;
+        }
+        return dialog;
     }
 
-    protected void saveAccount() throws WeiboException {
-        String username = usernameView.getText().toString();
-        String password = passwordView.getText().toString();
+    public static final int GOTO_OAUTH = 1;
 
-//        Weibo wb = new Weibo(username, password);
-//        if (wb.verifyCredentials().isVerified()) {
-        sourceDB.insert(Constants.TYPE_SINA_WEIBO, getString(R.string.my_timeline), Constants.SOURCE_HOME, getString(R.string.my_timeline_desc), null);
-        accountDB.insertOrUpdate(username, password, Constants.TYPE_SINA_WEIBO);
-        preferences.edit().putString(SINA_ACCOUNT_PREF_KEY, username).commit();
-//        } else {
-//            AlarmSender.sendInstantMessage(R.string.credentialInCorrect, SinaAccountActivity.this);
-//        }
-
+    protected void initView() {
+        showDialog(GOTO_OAUTH);
     }
 
     protected void goToNextActivity() {
@@ -93,8 +99,6 @@ public class SinaAccountActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        accountDB.close();
-        sourceDB.close();
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.goal98.flipdroid.model;
 
 import android.graphics.Bitmap;
+import android.util.Log;
+import com.goal98.flipdroid.view.ThumbnailArticleView;
 
 import java.net.URL;
 import java.util.Date;
@@ -18,6 +20,7 @@ public class Article {
     private long statusId;
     private String sourceType;
     private Bitmap image;
+    private ThumbnailArticleView.Notifier notifier;
 
     public long getStatusId() {
         return statusId;
@@ -154,9 +157,16 @@ public class Article {
 
     public void setImageBitmap(Bitmap image) {
         this.image = image;
+        Log.d("imageLoading","loaded");
+        if(notifier!=null)
+            notifier.notifyImageLoaded();
     }
 
     public Bitmap getImage() {
         return image;
+    }
+
+    public void addNotifier(ThumbnailArticleView.Notifier notifier) {
+        this.notifier = notifier;
     }
 }

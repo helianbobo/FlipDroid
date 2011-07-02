@@ -27,7 +27,6 @@ public class SiteActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         accountDB = new AccountDB(this);
-
         setContentView(R.layout.site);
 
         GridView g = (GridView) findViewById(R.id.siteGrid);
@@ -89,7 +88,7 @@ public class SiteActivity extends Activity {
                     String type = (String) getItem(i);
 
                     if (Constants.TYPE_SINA_WEIBO.equals(type)) {
-                        if (accountDB.hasAccount(type) && preferences.getString("sina_account", null) != null) {
+                        if (sinaAlreadyBinded()) {
                             Intent intent = new Intent(SiteActivity.this, SinaSourceSelectionActivity.class);
                             intent.putExtra("type", type);
                             intent.putExtra("next", SinaSourceSelectionActivity.class.getName());
@@ -103,12 +102,14 @@ public class SiteActivity extends Activity {
                     if (Constants.TYPE_GOOGLE_READER.equals(type)) {
                         startActivity(new Intent(SiteActivity.this, GoogleAccountActivity.class));
                         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                        finish();
                     }
                     if (Constants.TYPE_RSS.equals(type)) {
                         Intent intent = new Intent(SiteActivity.this, RSSSourceSelectionActivity.class);
                         intent.putExtra("type", type);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                        finish();
                     }
 //                        if(Constants.TYPE_TENCENT_WEIBO.equals(type)){
 //                            //TODO: Tencent Login
@@ -117,16 +118,16 @@ public class SiteActivity extends Activity {
 //                        }
 
 
-                    finish();
-
                 }
 
             }
 
             );
-
-
             return imageButton;
+        }
+
+        private boolean sinaAlreadyBinded() {
+            return accountDB.hasAccount(Constants.TYPE_SINA_WEIBO) && preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null) != null;
         }
     }
 }

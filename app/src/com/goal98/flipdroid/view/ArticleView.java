@@ -23,6 +23,7 @@ public abstract class ArticleView extends LinearLayout {
 
     protected WeiboPageView pageView;
     public PaintFlagsDrawFilter pfd;
+    protected boolean placedAtBottom;
 
     public WeiboPageView getPageView() {
         return pageView;
@@ -44,10 +45,10 @@ public abstract class ArticleView extends LinearLayout {
 
 
 
-    public ArticleView(Context context, Article article, WeiboPageView pageView) {
+    public ArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
         super(context);
         this.setOrientation(VERTICAL);
-
+this.placedAtBottom= placedAtBottom;
         pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG);
 
         this.pageView = pageView;

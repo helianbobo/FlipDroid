@@ -2,8 +2,11 @@
 
 <LinearLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
               xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
+              android:layout_width="match_parent"  android:weightSum="100"
               android:layout_height="match_parent" android:orientation="vertical" android:gravity="center">
-    <TextView android:layout_height="fill_parent" android:layout_width="fill_parent" android:gravity="center"
-              android:text="@string/loading" android:textSize="30dip" android:textStyle="bold"></TextView>
+    <TextView android:layout_height="0dip" android:layout_width="fill_parent" android:gravity="center|bottom"
+              android:text="@string/loading" android:textSize="30dip" android:layout_weight="50" android:textStyle="bold"></TextView>
+
+    <TextView android:id="@+id/tips" android:textColor="#232323" android:layout_margin="10dip" android:layout_height="0dip" android:layout_width="fill_parent" android:gravity="bottom|center"
+               android:textSize="18dip"  android:layout_weight="50"></TextView>
 </LinearLayout>

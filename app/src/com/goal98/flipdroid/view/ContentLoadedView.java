@@ -26,7 +26,7 @@ public class ContentLoadedView extends ArticleView {
     private float oldDist;
 
     public ContentLoadedView(Context context, Article article, WeiboPageView pageView) {
-        super(context, article, pageView);
+        super(context, article, pageView, true);
     }
 
     protected String getPrefix() {

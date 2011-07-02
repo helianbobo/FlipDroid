@@ -36,12 +36,12 @@
                     android:entryValues="@array/browse_mode_values"
             />
 
-    <ListPreference android:id="@+id/animation"
-                    android:key="@string/key_animation_mode_preference"
-                    android:defaultValue="0"
-                    android:title="@string/title_animation_mode_preference"
-                    android:dialogTitle="@string/dialog_title_animation_mode_preference"
-                    android:entries="@array/animation_mode_options"
-                    android:entryValues="@array/animation_mode_values"
-            />
+    <!--<ListPreference android:id="@+id/animation"-->
+                    <!--android:key="@string/key_animation_mode_preference"-->
+                    <!--android:defaultValue="0"-->
+                    <!--android:title="@string/title_animation_mode_preference"-->
+                    <!--android:dialogTitle="@string/dialog_title_animation_mode_preference"-->
+                    <!--android:entries="@array/animation_mode_options"-->
+                    <!--android:entryValues="@array/animation_mode_values"-->
+            <!--/>-->
 </PreferenceScreen>

@@ -72,4 +72,8 @@ public class GoogleReaderArticleSource implements ArticleSource {
     public boolean isNoMoreToLoad() {
         return noMoreToLoad;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    public boolean getForceMagzine() {
+        return true;
+    }
 }

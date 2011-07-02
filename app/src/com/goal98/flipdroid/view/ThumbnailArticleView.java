@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -38,8 +39,8 @@ public class ThumbnailArticleView extends WeiboArticleView {
     private View loadedThumbnail;
     private WebImageView imageView;
 
-    public ThumbnailArticleView(Context context, Article article, WeiboPageView pageView) {
-        super(context, article, pageView);
+    public ThumbnailArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
+        super(context, article, pageView, placedAtBottom);
         executor = Executors.newFixedThreadPool(1);
     }
 
@@ -107,25 +108,39 @@ public class ThumbnailArticleView extends WeiboArticleView {
                         imageView = new WebImageView(ThumbnailArticleView.this.getContext(), article.getImageUrl().toExternalForm(), false);
                         imageView.imageView.setTag(article.getImageUrl().toExternalForm());
                         imageView.setDefaultWidth(DeviceInfo.width / 2 - 8);
-                        imageView.setDefaultHeight((scaleTextSize +(largeScreen?15:5))* maxLine);
+                        imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : 5)) * maxLine);
                         System.out.println("article.getImage()" + article.getImage());
                         if (article.getImage() != null)
                             imageView.handleImageLoaded(article.getImage(), null);
+                        else
+                            article.addNotifier(new Notifier());
+                        LayoutParams layoutParamsText = new LayoutParams(0, LayoutParams.FILL_PARENT);
+                        LayoutParams layoutParamsImage = new LayoutParams(0, LayoutParams.FILL_PARENT);
+                        if (imageView.getFatOrSlim() == WebImageView.FAT) {
+                            layoutParamsText.weight = 50;
+                            layoutParamsImage.weight = 50;
+                        } else {
+                            layoutParamsText.weight = 50;
+                            layoutParamsImage.weight = 50;
+                            System.out.println("imageView.getPercentageInWidth()"+imageView.getPercentageInWidth());
+                        }
 
-                        LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
-                        layoutParams.weight = 50;
                         Random random = new Random();
                         random.setSeed(System.currentTimeMillis());
                         if (random.nextBoolean()) {
-                            contentViewWrapper.addView(t, layoutParams);
-                            contentViewWrapper.addView(imageView, layoutParams);
+                            contentViewWrapper.addView(t, layoutParamsText);
+                            layoutParamsImage.gravity = Gravity.RIGHT;
+                            contentViewWrapper.addView(imageView, layoutParamsImage);
                         } else {
-                            contentViewWrapper.addView(imageView, layoutParams);
-                            contentViewWrapper.addView(t, layoutParams);
+                            layoutParamsImage.gravity = Gravity.LEFT;
+                            contentViewWrapper.addView(imageView, layoutParamsImage);
+                            contentViewWrapper.addView(t, layoutParamsText);
                         }
                     }
                     reloadOriginalView();
                 }
+
+
             });
         } catch (InterruptedException e) {
             handler.post(new Runnable() {
@@ -156,6 +171,16 @@ public class ThumbnailArticleView extends WeiboArticleView {
         }
     }
 
+    public class Notifier {
+        public void notifyImageLoaded() {
+            handler.post(new Runnable() {
+                public void run() {
+                    imageView.handleImageLoaded(article.getImage(), null);
+                }
+            });
+        }
+    }
+
     protected void reloadOriginalView() {
         switcher.setDisplayedChild(0);
         fadeInAni.setAnimationListener(new Animation.AnimationListener() {
@@ -178,7 +203,9 @@ public class ThumbnailArticleView extends WeiboArticleView {
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
         switcher = (ViewSwitcher) inflater.inflate(R.layout.thumbnail, null);
         LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-        layoutParams.setMargins(0, 0, 0, 1);
+        if(!placedAtBottom)
+            layoutParams.setMargins(0, 0, 0, 1);
+
         this.addView(switcher, layoutParams);
         switcher.setDisplayedChild(1);
         this.thumbnailViewWrapper = (LinearLayout) switcher.findViewById(R.id.loadedView);

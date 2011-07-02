@@ -3,10 +3,13 @@ package com.goal98.flipdroid.view;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.activity.PageActivity;
-import com.goal98.flipdroid.model.PageViewSlidingWindows;
-import com.goal98.flipdroid.model.SlidingWindows;
+import com.goal98.flipdroid.model.*;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,16 +20,27 @@ import com.goal98.flipdroid.model.SlidingWindows;
  */
 public class FirstPageView extends WeiboPageView {
     private LinearLayout frame;
-    SlidingWindows windows;
+    private FromFileJSONReader jsonReader;
 
     public FirstPageView(PageActivity context, PageViewSlidingWindows windows) {
         super(context);
-
+        jsonReader = new FromFileJSONReader(context);
     }
 
     protected void setDynamicLayout(Context context) {
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
         this.frame = (LinearLayout) inflater.inflate(R.layout.first_page_view, null);
+        TextView textView = (TextView) this.frame.findViewById(R.id.tips);
+        TipsRepo tipsRepo = new TipsRepo(context);
+        List<Tip> tips = tipsRepo.getTips();
+        int size = tips.size();
+        if (size > 0) {
+            Random random = new Random();
+            int tipId = random.nextInt(size);
+            textView.setText("小贴士:"+tips.get(tipId).getText());
+        }
+
+
         this.addView(frame, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
     }
 
