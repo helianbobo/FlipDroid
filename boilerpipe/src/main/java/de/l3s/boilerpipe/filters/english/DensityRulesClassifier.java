@@ -110,7 +110,10 @@ public class DensityRulesClassifier implements
                 }
             } else {
                 if (next.getTextDensity() <= 11) {
-                    isContent = false;
+                    if(curr.getNumWords() > 200){
+                        isContent = true;
+                    }else
+                        isContent = false;
                 } else {
                     isContent = true;
                 }

@@ -1,70 +1,73 @@
 package com.goal98.flipdroid.activity;
 
 import android.app.AlertDialog;
+import android.app.ExpandableListActivity;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.model.GroupedSource;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.model.SourceRepo;
 import com.goal98.flipdroid.model.rss.RssParser;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.flipdroid.view.SourceExpandableListAdapter;
 import com.goal98.flipdroid.view.SourceItemViewBinder;
 
-import java.util.List;
-import java.util.Map;
+import java.sql.RowId;
+import java.util.*;
 
-public class RSSSourceSelectionActivity extends ListActivity {
+public class RSSSourceSelectionActivity extends ExpandableListActivity {
+
     protected SourceDB sourceDB;
-    private List<Map<String, String>> sourceList;
+    private GroupedSource groupedSource;
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.source_list);
+        setContentView(R.layout.source_expandable_list);
         sourceDB = new SourceDB(this);
         String type = getIntent().getExtras().getString("type");
-        System.out.println("on create");
-        sourceList = new SourceRepo(this).findSourceByType(type);
-        addExtraItem(sourceList);
+        groupedSource = new SourceRepo(this).findGroupedSourceByType(type);
+        //////System.out.println("on create");
+        addExtraItem(groupedSource);
+        group();
+    }
+
+    private void group() {
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        System.out.println("on start");
-        String[] from = new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL};
-        int[] to = new int[]{R.id.source_name, R.id.source_desc, R.id.source_image};
-        SimpleAdapter adapter = new SimpleAdapter(this, sourceList, R.layout.source_item, from, to);
-        adapter.setViewBinder(new SourceItemViewBinder());
-
+        String[] from = new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_ACCOUNT_TYPE};
+        int[] to = new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type, R.id.group_desc};
+        ExpandableListAdapter adapter = new SourceExpandableListAdapter(this, groupedSource.getGroups(), R.layout.group, new String[]{SourceRepo.KEY_NAME_GROUP, SourceRepo.KEY_NAME_SAMPLES}, new int[]{R.id.txt_group, R.id.group_desc}, groupedSource.getChildren(), R.layout.source_item, from, to);
         setListAdapter(adapter);
-        adapter.notifyDataSetChanged();
     }
 
-    protected void addExtraItem(List<Map<String, String>> sourceList) {
+    protected void addExtraItem(GroupedSource groupedSource) {
         Map<String, String> customeSection = SourceDB.buildSource(Constants.TYPE_RSS,
                 "Add Custom RSS Feed",
                 Constants.ADD_CUSTOME_SOURCE,
-                "Add any RSS URL here.", null, null);
+                "Add any RSS URL here.", null, this.getString(R.string.custom));
 
-        sourceList.add(customeSection);
+        groupedSource.addGroup(SourceRepo.KEY_NAME_GROUP,this.getString(R.string.custom));
+        groupedSource.addChild(this.getString(R.string.custom), customeSection);
     }
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        Map<String, String> source = (Map<String, String>) l.getItemAtPosition(position);
+    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+        super.onChildClick(parent, v, groupPosition, childPosition, id);
+        Map<String, String> source = (Map<String, String>) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
         String sourceId = source.get(Source.KEY_SOURCE_ID);
-        Log.v(this.getClass().getName(), sourceId);
 
         if (Constants.ADD_CUSTOME_SOURCE.equals(sourceId)) {
             doWithAddCustomerSouce();
@@ -73,8 +76,7 @@ public class RSSSourceSelectionActivity extends ListActivity {
             startActivity(new Intent(this, IndexActivity.class));
             finish();
         }
-
-
+        return true;
     }
 
     public void doWithAddCustomerSouce() {
@@ -105,7 +107,7 @@ public class RSSSourceSelectionActivity extends ListActivity {
                                     Map<String, String> customeRSSFeed = SourceDB.buildSource(Constants.TYPE_RSS,
                                             feed.title,
                                             null,
-                                            feed.description, null, url);
+                                            feed.description, feed.imageUrl, url);
                                     sourceDB.insert(customeRSSFeed);
 
                                     startActivity(new Intent(RSSSourceSelectionActivity.this, IndexActivity.class));

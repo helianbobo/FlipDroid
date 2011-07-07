@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 
 //import com.goal98.flipdroid.client.TikaClient;
 //import com.goal98.flipdroid.client.TikaClientException;
-//import com.goal98.flipdroid.client.TikaResponse;
+//import com.goal98.flipdroid.client.TikaExtractResponse;
 
 /**
  * Created by IntelliJ IDEA.
@@ -55,7 +55,7 @@ public class ThumbnailArticleView extends WeiboArticleView {
 
     public void displayLoadedThumbnail() {
         try {
-            System.out.println("taking content");
+            //System.out.println("taking content");
             final Article article = future.get();
             isLoading = true;
             handler.post(new Runnable() {
@@ -99,7 +99,7 @@ public class ThumbnailArticleView extends WeiboArticleView {
                         t.setVisibility(GONE);
                         titleView.setTextSize(25);
                     }
-                    System.out.println("article.getImageUrl()" + article.getImageUrl());
+                    //System.out.println("article.getImageUrl()" + article.getImageUrl());
                     if (article.getImageUrl() == null) {
                         LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
                         layoutParams.weight = 100;
@@ -109,7 +109,7 @@ public class ThumbnailArticleView extends WeiboArticleView {
                         imageView.imageView.setTag(article.getImageUrl().toExternalForm());
                         imageView.setDefaultWidth(DeviceInfo.width / 2 - 8);
                         imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : 5)) * maxLine);
-                        System.out.println("article.getImage()" + article.getImage());
+                        //System.out.println("article.getImage()" + article.getImage());
                         if (article.getImage() != null)
                             imageView.handleImageLoaded(article.getImage(), null);
                         else
@@ -122,7 +122,7 @@ public class ThumbnailArticleView extends WeiboArticleView {
                         } else {
                             layoutParamsText.weight = 50;
                             layoutParamsImage.weight = 50;
-                            System.out.println("imageView.getPercentageInWidth()"+imageView.getPercentageInWidth());
+                            //System.out.println("imageView.getPercentageInWidth()"+imageView.getPercentageInWidth());
                         }
 
                         Random random = new Random();
@@ -150,7 +150,7 @@ public class ThumbnailArticleView extends WeiboArticleView {
                 }
             });
         } catch (ExecutionException e) {
-            System.out.println("taking content error");
+            //System.out.println("taking content error");
             handler.post(new Runnable() {
                 public void run() {
                     AlarmSender.sendInstantMessage(R.string.tikaservererror, ThumbnailArticleView.this.getContext());
@@ -159,7 +159,7 @@ public class ThumbnailArticleView extends WeiboArticleView {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("taking content error");
+            //System.out.println("taking content error");
             handler.post(new Runnable() {
                 public void run() {
                     AlarmSender.sendInstantMessage(R.string.unknownerror, ThumbnailArticleView.this.getContext());
@@ -203,8 +203,6 @@ public class ThumbnailArticleView extends WeiboArticleView {
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
         switcher = (ViewSwitcher) inflater.inflate(R.layout.thumbnail, null);
         LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-        if(!placedAtBottom)
-            layoutParams.setMargins(0, 0, 0, 1);
 
         this.addView(switcher, layoutParams);
         switcher.setDisplayedChild(1);
@@ -232,9 +230,9 @@ public class ThumbnailArticleView extends WeiboArticleView {
                     return;
 
                 if (article.hasLink() && !ThumbnailArticleView.this.getPageView().loadingNext) {
-                    Log.d("scale", ThumbnailArticleView.this.getLeft() + ":" + ThumbnailArticleView.this.getRight() + ":" + ThumbnailArticleView.this.getTop() + ":" + ThumbnailArticleView.this.getBottom());
+                    //Log.d("scale", ThumbnailArticleView.this.getLeft() + ":" + ThumbnailArticleView.this.getRight() + ":" + ThumbnailArticleView.this.getTop() + ":" + ThumbnailArticleView.this.getBottom());
                     if (enlargedView != null) {//以前打开过的，直接显示
-                        Log.d("scale", ThumbnailArticleView.this.getLeft() + ":" + ThumbnailArticleView.this.getRight() + ":" + ThumbnailArticleView.this.getTop() + ":" + ThumbnailArticleView.this.getBottom());
+                        //Log.d("scale", ThumbnailArticleView.this.getLeft() + ":" + ThumbnailArticleView.this.getRight() + ":" + ThumbnailArticleView.this.getTop() + ":" + ThumbnailArticleView.this.getBottom());
                         ThumbnailArticleView.this.getPageView().enlarge(loadedArticleView, ThumbnailArticleView.this);
 
                         return;

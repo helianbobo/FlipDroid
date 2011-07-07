@@ -58,7 +58,7 @@ public class BoilerpipeHTMLChineseContentHandler extends BoilerpipeHTMLContentHa
         String token = "归类于：Apple/iOS  标签： Apple, ios, iPad, smart cover";
         final String[] tokens = UnicodeTokenizer.tokenize(token);
 
-        System.out.println(BoilerpipeHTMLChineseContentHandler.isWord(token, true));
+        //System.out.println(BoilerpipeHTMLChineseContentHandler.isWord(token, true));
 
     }
 
@@ -72,7 +72,7 @@ public class BoilerpipeHTMLChineseContentHandler extends BoilerpipeHTMLContentHa
             return;
         }
 //        if (IMAGE) {
-//            System.out.println(tokenBuffer.toString().trim());
+//            //System.out.println(tokenBuffer.toString().trim());
 //            return;
 //        }
         final int length = tokenBuffer.length();
@@ -149,8 +149,8 @@ public class BoilerpipeHTMLChineseContentHandler extends BoilerpipeHTMLContentHa
         textBuffer.setLength(0);
         tokenBuffer.setLength(0);
 
-        // System.out.println(tb.getText());
-        // System.out.println(numWords + "\t" + numLinkedWords + "\t"
+        // //System.out.println(tb.getText());
+        // //System.out.println(numWords + "\t" + numLinkedWords + "\t"
         // + tb.textDensity + "\t" +
         // tb.linkDensity+"\t"+numWordsCurrentLine+"\t"+numWrappedLines);
 

@@ -10,7 +10,7 @@ import org.restlet.resource.Directory;
 
 public class APIServer {
 
-    public static final String ROOT_URI = "file:///G:\\helianbobo-FlipDroid-48d8e89\\tika-ui/index.html";
+    public static final String ROOT_URI = "file:///D:\\myprojects\\android\\helianbobo-FlipDroid\\tika-ui";
     public static final String CURRENT_VERSION = "v1";
 
     public static void main(String[] args) throws Exception {
@@ -22,6 +22,7 @@ public class APIServer {
         c.getDefaultHost().attach("/"+CURRENT_VERSION+"/url/abstract", URLAbstractResource.class);
         c.getDefaultHost().attach("/"+CURRENT_VERSION+"/url/abstract/batch", URLAbstractBatchResource.class);
         c.getDefaultHost().attach("/"+CURRENT_VERSION+"/url/abstract/rating", URLAbstractRatingResource.class);
+        c.getDefaultHost().attach("/"+CURRENT_VERSION+"/sources/search", SourcesResource.class);
 
 
         // Create a component

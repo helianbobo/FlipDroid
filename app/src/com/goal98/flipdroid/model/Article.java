@@ -21,6 +21,15 @@ public class Article {
     private String sourceType;
     private Bitmap image;
     private ThumbnailArticleView.Notifier notifier;
+    private int height;
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
     public long getStatusId() {
         return statusId;
@@ -124,7 +133,16 @@ public class Article {
     }
 
     public String getAuthor() {
-        return author;
+        return shorten(author);
+    }
+
+    private String shorten(String original) {
+        if(original == null)
+            return "";
+        final String[] split = original.split("[_-]");
+        if(split.length == 1)
+            return original;
+        return split[0];
     }
 
     public void setAuthor(String author) {
@@ -157,7 +175,7 @@ public class Article {
 
     public void setImageBitmap(Bitmap image) {
         this.image = image;
-        Log.d("imageLoading","loaded");
+        //Log.d("imageLoading","loaded");
         if(notifier!=null)
             notifier.notifyImageLoaded();
     }

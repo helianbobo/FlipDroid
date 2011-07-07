@@ -15,7 +15,7 @@ import com.goal98.android.ImageLoader;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.client.TikaClient;
-import com.goal98.flipdroid.client.TikaResponse;
+import com.goal98.flipdroid.client.TikaExtractResponse;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.PreloadImageLoaderHandler;
 import com.goal98.flipdroid.model.cachesystem.CacheSystem;
@@ -28,7 +28,7 @@ import java.util.concurrent.*;
 
 //import com.goal98.flipdroid.client.TikaClient;
 //import com.goal98.flipdroid.client.TikaClientException;
-//import com.goal98.flipdroid.client.TikaResponse;
+//import com.goal98.flipdroid.client.TikaExtractResponse;
 
 /**
  * Created by IntelliJ IDEA.
@@ -62,6 +62,7 @@ public class WeiboArticleView extends ArticleView {
     }
 
     protected Handler handler;
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -172,6 +173,7 @@ public class WeiboArticleView extends ArticleView {
 
 
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
+//        this.setBackgroundColor(0xff000000);//分割线颜色
 //        progressBar = (LinearLayout) inflater.inflate(R.layout.progressbar, null);
         switcher = (ViewSwitcher) inflater.inflate(R.layout.weibo_article_view, null);
         switcher.setDisplayedChild(0);
@@ -232,10 +234,7 @@ public class WeiboArticleView extends ArticleView {
             }
         });
         LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-        if(placedAtBottom)//分割线
-            layoutParams.setMargins(0, 0, 0, 0);
-        else
-            layoutParams.setMargins(0, 0, 0, 1);
+
         this.addView(switcher, layoutParams);
     }
 
@@ -250,31 +249,31 @@ public class WeiboArticleView extends ArticleView {
                 public Object call() throws Exception {
                     try {
                         String url = article.extractURL();
-                        Log.d("Weibo view", "preloading " + url);
+                        //Log.d("Weibo view", "preloading " + url);
 
-                        TikaResponse loadedTikeResponse = CacheSystem.getTikaCache().load(new URL(url));
-                        if (loadedTikeResponse != null) {
-                            return loadedTikeResponse;
+                        TikaExtractResponse loadedTikeExtractResponse = CacheSystem.getTikaCache().load(new URL(url));
+                        if (loadedTikeExtractResponse != null) {
+                            return loadedTikeExtractResponse;
                         } else {
                             TikaClient tc = new TikaClient();
-                            TikaResponse response = null;
+                            TikaExtractResponse extractResponse = null;
                             try {
-                                response = tc.extract(url);
+                                extractResponse = tc.extract(url);
                             } catch (Exception e) {
                                 e.printStackTrace();
                                 return article;
                             }
-                            Log.d("Weibo view", "preloading " + url + " done");
-                            if (response.getContent() != null)
-                                article.setContent(response.getContent().replaceFirst("\n", "\n      "));
+                            //Log.d("Weibo view", "preloading " + url + " done");
+                            if (extractResponse.getContent() != null)
+                                article.setContent(extractResponse.getContent().replaceFirst("\n", "\n      "));
                             else
                                 article.setContent("");
-                            article.setTitle(response.getTitle());
+                            article.setTitle(extractResponse.getTitle());
 
 
                             try {
-                                if (!response.getImages().isEmpty()) {
-                                    String image = response.getImages().get(0);
+                                if (!extractResponse.getImages().isEmpty()) {
+                                    String image = extractResponse.getImages().get(0);
                                     article.setImageUrl(new URL(image));
                                     PreloadImageLoaderHandler preloadImageLoaderHandler = new PreloadImageLoaderHandler(article);
 //                                    preloadImageLoaderHandler.setWidth(DeviceInfo.width/2-32);

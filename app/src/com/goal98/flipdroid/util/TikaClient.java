@@ -34,7 +34,7 @@ public class TikaClient {
 
         try {
             HttpResponse response = client.execute(request);
-            System.out.println(response.getStatusLine().getStatusCode());
+            //System.out.println(response.getStatusLine().getStatusCode());
             if (response.getStatusLine().getStatusCode() >= 200 && response.getStatusLine().getStatusCode() <= 299) {
                 InputStream is = response.getEntity().getContent();
 
@@ -63,6 +63,6 @@ public class TikaClient {
     public static void main(String[] args) throws TikaClientException {
         TikaClient client = new TikaClient();
         TikaResponse response = client.extract("http://www.88799.com/show.php?tid=1797");
-        System.out.println(response.getTitle());
+        //System.out.println(response.getTitle());
     }
 }

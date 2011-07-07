@@ -35,10 +35,10 @@ public class Oneliner {
         		);
 
         // This can also be done in one line:
-         System.out.println(ArticleExtractor.INSTANCE.getText(url));
+         //System.out.println(ArticleExtractor.INSTANCE.getText(url));
 
         // Also try other extractors!
-//        System.out.println(DefaultExtractor.INSTANCE.getText(url));
-//       System.out.println(CommonExtractors.CANOLA_EXTRACTOR.getText(url));
+//        ////System.out.println(DefaultExtractor.INSTANCE.getText(url));
+//       //System.out.println(CommonExtractors.CANOLA_EXTRACTOR.getText(url));
     }
 }

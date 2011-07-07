@@ -20,12 +20,12 @@ import com.goal98.flipdroid.client.UserInfo;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.sina.OAuthHolder;
+import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import weibo4j.WeiboException;
 
 
 public class SinaAccountActivity extends Activity {
-
 
 
     protected TextView usernameView;
@@ -35,16 +35,17 @@ public class SinaAccountActivity extends Activity {
     protected SharedPreferences preferences;
     protected TableRow logoView;
 
+    String promptText = null;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
         if (extras != null)
             nextActivity = extras.getString("next");
 
-
+        promptText = getIntent().getExtras().getString("PROMPTTEXT");
         initView();
     }
-
 
 
     protected Dialog onCreateDialog(int id) {
@@ -52,15 +53,17 @@ public class SinaAccountActivity extends Activity {
         switch (id) {
             case GOTO_OAUTH:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(R.string.gotosinaoauth)
+                builder.setMessage(promptText)
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 FlipdroidApplications application = (FlipdroidApplications) getApplication();
                                 OAuth oauth = new OAuth();
                                 application.setOauth(oauth);
-                                System.out.println("OAuthHolder.oauth" + application + oauth);
-                                oauth.RequestAccessToken(SinaAccountActivity.this, "flipdroid://SinaAccountSaver");
+                                ////System.out.println("OAuthHolder.oauth" + application + oauth);
+                                boolean result = oauth.RequestAccessToken(SinaAccountActivity.this, "flipdroid://SinaAccountSaver");
+                                if (!result)
+                                    AlarmSender.sendInstantMessage(R.string.networkerror, SinaAccountActivity.this);
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

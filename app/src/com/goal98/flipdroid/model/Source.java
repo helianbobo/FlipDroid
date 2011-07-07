@@ -9,12 +9,14 @@ public class Source {
     public static final String KEY_IMAGE_URL = "image_url";
     public static final String KEY_CONTENT_URL = "content_url";
     public static final String KEY_ACCOUNT_TYPE = "account_type";
+    public static final String KEY_CAT = "cat";
     private String name;
     private String id;
     private String desc;
     private String accountType;
     private String imageUrl;
     private String contentUrl;
+
 
     public String getContentUrl() {
         return contentUrl;

@@ -51,22 +51,22 @@ public class ContentLoadedView extends ArticleView {
         switch (event.getAction()) {
             case MotionEvent.ACTION_POINTER_DOWN:
                 oldDist = spacing(event);
-                Log.d("MTZ", "oldDist=" + oldDist);
+                //Log.d("MTZ", "oldDist=" + oldDist);
 
                 if (oldDist > 10f) {
                     mode = ZOOM;
-                    Log.d("MTZ", "mode=ZOOM");
+                    //Log.d("MTZ", "mode=ZOOM");
                 }
                 break;
 
             case MotionEvent.ACTION_MOVE:
                 if (mode == ZOOM) {
                     float newDist = spacing(event);
-                    Log.d("MTZ", "newDist=" + newDist);
+                    //Log.d("MTZ", "newDist=" + newDist);
                     if (newDist > oldDist) {
-                        Log.d("MTZ", "zoomout" + newDist);
+                        //Log.d("MTZ", "zoomout" + newDist);
                     } else if (newDist < oldDist) {
-                        Log.d("MTZ", "zoomin" + newDist);
+                        //Log.d("MTZ", "zoomin" + newDist);
                     }
                 }
                 break;

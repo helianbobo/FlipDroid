@@ -53,20 +53,20 @@ public class ContentCache {
         try {
             lock.lock();
             Page smartPage = pagedList.getPage(pageNo);
-            Log.d("cache system", "from cache, smartPage " + pageNo + " loaded");
+            //Log.d("cache system", "from cache, smartPage " + pageNo + " loaded");
             return smartPage;
         } catch (NoMorePageException e) {
-            Log.d("cache system", "no more pages, doing paging in a sec");
+            //Log.d("cache system", "no more pages, doing paging in a sec");
             try {
                 refreshingSemaphore.acquire();
                 List<Page> newSmartPages = pagingStrategy.doPaging(unPagedArticles).getPages();
                 if (newSmartPages.size() == 0) {
-                    Log.d("cache system", "no more status.");
+                    //Log.d("cache system", "no more status.");
                     throw new NoSuchPageException("page no" + pageNo);
                 }
                 pagedList.addAll(newSmartPages);
                 pageCacheTo += newSmartPages.size();
-                Log.d("cache system", "added " + newSmartPages.size() + " more pages");
+                //Log.d("cache system", "added " + newSmartPages.size() + " more pages");
                 return pagedList.getPage(pageNo);
             } catch (InterruptedException e1) {
                 return pagedList.getPage(pageNo);
@@ -74,7 +74,7 @@ public class ContentCache {
                 refreshingSemaphore.release();
             }
         } catch (Exception e) {
-            Log.d("cache system", e.getMessage());
+            //Log.d("cache system", e.getMessage());
             return pagedList.getPage(pageNo - 1);
         } finally {
             lock.unlock();
@@ -84,21 +84,21 @@ public class ContentCache {
 
     public Page getPage(int pageNo) throws NoMorePageException, NoSuchPageException {
         Page smartPage = pagedList.getPage(pageNo);
-        Log.d("cache system", "from cache, smartPage " + pageNo + " loaded");
+        //Log.d("cache system", "from cache, smartPage " + pageNo + " loaded");
         return smartPage;
     }
 
     public void refresh(int refreshingToken) throws NoMoreStatusException {
-        Log.d("cache system", "someone issued a refresh request, token " + refreshingToken);
-        Log.d("cache system", "content repo token is " + this.refreshingToken);
+        //Log.d("cache system", "someone issued a refresh request, token " + refreshingToken);
+        //Log.d("cache system", "content repo token is " + this.refreshingToken);
         if (this.refreshingToken <= refreshingToken) {
             this.refreshingToken++;
             if (articleSource.isNoMoreToLoad()) {
-                Log.d("cache system", "source says it has no more to give,let's see if that is true");
-                Log.d("cache system", "paged to " + unPagedArticles.getPagedTo() + ", " + unPagedArticles.getArticleList().size());
+                //Log.d("cache system", "source says it has no more to give,let's see if that is true");
+                //Log.d("cache system", "paged to " + unPagedArticles.getPagedTo() + ", " + unPagedArticles.getArticleList().size());
 
                 if (unPagedArticles.getArticleList().size() > 0) {
-                    Log.d("cache system", "oh, he lied");
+                    //Log.d("cache system", "oh, he lied");
                     pageAfterRefresh();
                     return;
                 } else {
@@ -106,7 +106,7 @@ public class ContentCache {
                 }
             }
 
-            Log.d("cache system", "refreshing");
+            //Log.d("cache system", "refreshing");
             boolean loadResult = articleSource.loadMore();
             if (!loadResult) {
                 throw new NoMoreStatusException();
@@ -115,17 +115,17 @@ public class ContentCache {
                 unPagedArticles.setArticles(articleSource.getArticleList());
                 articleSourceLastModified = articleSource.lastModified();
             }
-            Log.d("cache system", "refresh done");
+            //Log.d("cache system", "refresh done");
 
         } else {
-            Log.d("cache system", "ignore the refresh request since toke doesn't match");
+            //Log.d("cache system", "ignore the refresh request since toke doesn't match");
         }
     }
 
     public void pageAfterRefresh() {
         List<Page> smartPageList = pagingStrategy.doPaging(unPagedArticles).getPages();
         pagedList.addAll(smartPageList);
-        Log.d("cache system", "added " + smartPageList.size() + " pages");
+        //Log.d("cache system", "added " + smartPageList.size() + " pages");
         pageCacheTo += smartPageList.size();
     }
 

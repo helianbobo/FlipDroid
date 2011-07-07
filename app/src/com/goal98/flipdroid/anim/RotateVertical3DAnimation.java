@@ -68,7 +68,7 @@ public class RotateVertical3DAnimation extends Animation {
             c2 = Color.argb((int) (255 * interpolatedTime), 153, 153, 153);
 //
 //
-//        System.out.println((100 * (1-interpolatedTime)));
+//        //System.out.println((100 * (1-interpolatedTime)));
         shadow2.setBackgroundColor(c2);
 //        shadow1.setBackgroundColor(c2);
         final float centerX = mCenterX;

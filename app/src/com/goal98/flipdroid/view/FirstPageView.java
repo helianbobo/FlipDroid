@@ -1,7 +1,9 @@
 package com.goal98.flipdroid.view;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.view.LayoutInflater;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.goal98.flipdroid.R;
@@ -31,16 +33,26 @@ public class FirstPageView extends WeiboPageView {
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
         this.frame = (LinearLayout) inflater.inflate(R.layout.first_page_view, null);
         TextView textView = (TextView) this.frame.findViewById(R.id.tips);
+
         TipsRepo tipsRepo = new TipsRepo(context);
         List<Tip> tips = tipsRepo.getTips();
         int size = tips.size();
         if (size > 0) {
             Random random = new Random();
             int tipId = random.nextInt(size);
-            textView.setText("小贴士:"+tips.get(tipId).getText());
+            Tip tip = tips.get(tipId);
+            textView.setText("小贴士:" + tip.getText());
+
+            ImageView imageView = (ImageView) this.frame.findViewById(R.id.tipImage);
+            imageView.setAlpha(130);
+            try {
+                Class clazz = Class.forName("com.goal98.flipdroid.R$drawable");
+                int tipImage=clazz.getField("tips_" +tip.getId()).getInt(clazz);
+                imageView.setImageResource(tipImage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
-
         this.addView(frame, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
     }
 

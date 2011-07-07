@@ -19,8 +19,12 @@ class FruitFetcher {
         final shortenedTitle
         if (underscorePos.size() == 1)
             shortenedTitle = title.trim()
-        else
+        else {
             shortenedTitle = underscorePos[0].trim()
+            if(shortenedTitle.indexOf("南方周末")!=-1){
+                shortenedTitle = underscorePos[1].trim()
+            }
+        }
 
         Map headLines = htmlNode.body.depthFirst().toList().groupBy {
             if (it.text().trim() == shortenedTitle) {
@@ -102,63 +106,63 @@ class FruitFetcher {
         return result
 
 //        boolean bodyDetermined = false
-//        def tempText = result.titleText
-//        groovy.util.slurpersupport.NodeChild foundNode = result.titleNode
-//        def nodeLength = foundNode.text().length()
-//        String bodyTextPipe
-//        while (!bodyDetermined) {
-//
-//            def parentNode = foundNode.parent()
-//            if (foundNode == parentNode)
-//                break;
-//            foundNode = parentNode
-//
-//            def parentNodeLength = foundNode.text().length()
-//
-//
-//            if ((parentNodeLength / nodeLength) > 10) {
-//
-////                StringWriter sw = new StringWriter();
-////                PrintWriter pw = new PrintWriter(sw);
-////                XmlNodePrinter nodePrinter = new XmlNodePrinter(pw);
-////                groovy.util.slurpersupport.Node current = foundNode.nodeIterator().next()
-//
-//                def nodeText = new StreamingMarkupBuilder().bind {
-//                     mkp.yield foundNode.parent()
-//                }
-//                //nodePrinter.print(current.)
-//
-//                final byte[] data = (nodeText as String).bytes
-//
-//
-//                final BoilerpipeExtractor extractor = CommonExtractors.ARTICLE_EXTRACTOR;
-//                final HTMLHighlighter hh = HTMLHighlighter.newExtractingInstance();
-//                def cs
-//                try {
-//                    cs = Charset.forName("utf-8");
-//                } catch (UnsupportedCharsetException e) {
-//                    // keep default
-//                }
-//
-//                bodyTextPipe = hh.process(new HTMLDocument(data, cs), extractor);
-////                foundNode = foundNode.children().list().max {it ->
-////                    if (it.name() == "style" || it.name() == "script")
-////                        return 0
-////
-////                    final length = it.filteredText().length()
-////                    return length
-////                }
-//                bodyDetermined = true
-//            }
-//        }
-//
-//        if (!bodyDetermined) {
-//            return result
-//        } else {
-//            result.bodyNode = foundNode
-//            result.bodyText = bodyTextPipe
-//
-//        }
+        //        def tempText = result.titleText
+        //        groovy.util.slurpersupport.NodeChild foundNode = result.titleNode
+        //        def nodeLength = foundNode.text().length()
+        //        String bodyTextPipe
+        //        while (!bodyDetermined) {
+        //
+        //            def parentNode = foundNode.parent()
+        //            if (foundNode == parentNode)
+        //                break;
+        //            foundNode = parentNode
+        //
+        //            def parentNodeLength = foundNode.text().length()
+        //
+        //
+        //            if ((parentNodeLength / nodeLength) > 10) {
+        //
+        ////                StringWriter sw = new StringWriter();
+        ////                PrintWriter pw = new PrintWriter(sw);
+        ////                XmlNodePrinter nodePrinter = new XmlNodePrinter(pw);
+        ////                groovy.util.slurpersupport.Node current = foundNode.nodeIterator().next()
+        //
+        //                def nodeText = new StreamingMarkupBuilder().bind {
+        //                     mkp.yield foundNode.parent()
+        //                }
+        //                //nodePrinter.print(current.)
+        //
+        //                final byte[] data = (nodeText as String).bytes
+        //
+        //
+        //                final BoilerpipeExtractor extractor = CommonExtractors.ARTICLE_EXTRACTOR;
+        //                final HTMLHighlighter hh = HTMLHighlighter.newExtractingInstance();
+        //                def cs
+        //                try {
+        //                    cs = Charset.forName("utf-8");
+        //                } catch (UnsupportedCharsetException e) {
+        //                    // keep default
+        //                }
+        //
+        //                bodyTextPipe = hh.process(new HTMLDocument(data, cs), extractor);
+        ////                foundNode = foundNode.children().list().max {it ->
+        ////                    if (it.name() == "style" || it.name() == "script")
+        ////                        return 0
+        ////
+        ////                    final length = it.filteredText().length()
+        ////                    return length
+        ////                }
+        //                bodyDetermined = true
+        //            }
+        //        }
+        //
+        //        if (!bodyDetermined) {
+        //            return result
+        //        } else {
+        //            result.bodyNode = foundNode
+        //            result.bodyText = bodyTextPipe
+        //
+        //        }
 
     }
 

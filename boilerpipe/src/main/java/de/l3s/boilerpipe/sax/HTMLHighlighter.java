@@ -458,7 +458,8 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("h5") ||
                             qName.equalsIgnoreCase("h6") ||
                             qName.equalsIgnoreCase("p") ||
-                            qName.equalsIgnoreCase("br")
+                            qName.equalsIgnoreCase("br")||
+                            qName.equalsIgnoreCase("li")
                             )
                         html.append('\n');
                 }

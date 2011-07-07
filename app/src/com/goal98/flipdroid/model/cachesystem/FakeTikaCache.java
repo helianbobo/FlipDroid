@@ -1,6 +1,6 @@
 package com.goal98.flipdroid.model.cachesystem;
 
-import com.goal98.flipdroid.client.TikaResponse;
+import com.goal98.flipdroid.client.TikaExtractResponse;
 
 import java.net.URL;
 
@@ -12,11 +12,11 @@ import java.net.URL;
  * To change this template use File | Settings | File Templates.
  */
 public class FakeTikaCache implements TikaCache {
-    public TikaResponse load(URL url){
+    public TikaExtractResponse load(URL url){
        return null;
     }
 
-    public void put(String key, TikaResponse response){
+    public void put(String key, TikaExtractResponse extractResponse){
 
     }
 }

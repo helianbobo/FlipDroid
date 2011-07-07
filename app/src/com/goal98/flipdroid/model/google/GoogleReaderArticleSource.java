@@ -42,14 +42,14 @@ public class GoogleReaderArticleSource implements ArticleSource {
 
     public boolean loadMore() {
         boolean result = false;
-        Log.d("GOOGLE_READER", "loading more");
+        //Log.d("GOOGLE_READER", "loading more");
         try {
             if (gReader.loadMore()) {
-                Log.d("GOOGLE_READER", "loaded");
+                //Log.d("GOOGLE_READER", "loaded");
                 List<GreaderListItem> grFeeds = gReader.getNewRead();
                 articles = new ArrayList<Article>();
                 for (GreaderListItem item : grFeeds) {
-                    System.out.println(item);
+                    ////System.out.println(item);
                     Article article = new Article();
                     article.setTitle(item.getTitle());
                     article.setStatus(item.getLink());

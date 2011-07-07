@@ -66,31 +66,31 @@ public class ContentRepo {
     public synchronized Page getPage(final int pageNo) throws NoMorePageException, ExecutionException, InterruptedException, NoSuchPageException {
         if (contentCache.getPageCacheTo() < pageNo) {//还没取到，或者取到了，没放倒cache里去
             if (futureMap.containsKey(pageNo)) {//看看是不是在在futureMap里，是的话就等他取好
-                Log.d("cache system", "waiting smartPage " + pageNo + " to load");
+                //Log.d("cache system", "waiting smartPage " + pageNo + " to load");
                 Page smartPage = futureMap.get(pageNo).get();
                 //contentCache.addPage(smartPage);
                 futureMap.remove(pageNo);
                 return smartPage;
             }
         }
-        Log.d("cache system", "looking repo for " + pageNo + " to load");
+        //Log.d("cache system", "looking repo for " + pageNo + " to load");
         Page smartPage = contentCache.getPage(pageNo);
         int preloadPageNo = pageNo + 3;
 
-        Log.d("cache system", "checking if smartPage " + preloadPageNo + " need to be loaded");
+        //Log.d("cache system", "checking if smartPage " + preloadPageNo + " need to be loaded");
         if (preloadPageNo > contentCache.getPageCacheTo() && !futureMap.containsKey(preloadPageNo)) {  //看到第8页的时候，去看是不是cache有第10页
             preload(preloadPageNo);
         }
-        Log.d("cache system", "returning smartPage" + pageNo);
+        //Log.d("cache system", "returning smartPage" + pageNo);
         return smartPage;
     }
 
     private void preload(final int pageNo) {
-        Log.d("cache system", "preloading page " + pageNo);
+        //Log.d("cache system", "preloading page " + pageNo);
         Future future = executor.submit(new Callable() {
             public Object call() throws Exception {
                 Page preloadedSmartPage = contentCache.getPagePreload(pageNo);
-                Log.d("cache system", "preload page " + pageNo + " done");
+                //Log.d("cache system", "preload page " + pageNo + " done");
                 return preloadedSmartPage;
             }
         });

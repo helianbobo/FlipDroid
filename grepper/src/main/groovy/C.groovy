@@ -14,6 +14,6 @@ public class C {
     }
 
     public void c(){
-       System.out.println("I am right");
+       //System.out.println("I am right");
     }
 }

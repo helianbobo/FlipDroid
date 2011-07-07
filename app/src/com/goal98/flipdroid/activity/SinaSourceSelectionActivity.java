@@ -1,25 +1,28 @@
 package com.goal98.flipdroid.activity;
 
 import android.content.Intent;
+import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.model.GroupedSource;
+import com.goal98.flipdroid.model.SourceRepo;
 import com.goal98.flipdroid.util.Constants;
 
 import java.util.List;
 import java.util.Map;
 
 public class SinaSourceSelectionActivity extends RSSSourceSelectionActivity {
-    @Override
-    protected void addExtraItem(List<Map<String, String>> sourceList) {
+    protected void addExtraItem(GroupedSource groupedSource) {
         Map<String, String> customeSection = SourceDB.buildSource(Constants.TYPE_SINA_WEIBO,
                 "Add Custom Source",
                 Constants.ADD_CUSTOME_SOURCE,
-                "Add any person.", null, null);
+                "Add any person.", null, this.getString(R.string.custom));
 
-        sourceList.add(customeSection);
+        groupedSource.addGroup(SourceRepo.KEY_NAME_GROUP,this.getString(R.string.custom));
+        groupedSource.addChild(this.getString(R.string.custom), customeSection);
     }
 
     public void doWithAddCustomerSouce() {
-        startActivity(new Intent(this, SourceSearchActivity.class));
+        startActivity(new Intent(this, SinaSourceSearchActivity.class));
         finish();
     }
 }

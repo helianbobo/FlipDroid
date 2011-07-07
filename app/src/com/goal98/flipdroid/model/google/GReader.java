@@ -96,13 +96,13 @@ public class GReader {
         HttpClient httpclient = new DefaultHttpClient();
         response = httpclient.execute(post);
         int result = response.getStatusLine().getStatusCode();
-        System.out.println("$$$$$");
-        System.out.println(result);
+        ////System.out.println("$$$$$");
+        //////System.out.println(result);
         if (result == 200) {
             loginstate = 200;
 
             String[] temps = EntityUtils.toString(response.getEntity()).split("\n");
-            System.out.println(temps);
+            ////System.out.println(temps);
             for (String temp : temps) {
                 if (temp.startsWith(sidtag))
                     this.sid = temp.substring(sidtag.length());
@@ -131,14 +131,14 @@ public class GReader {
         HttpResponse response = null;
         response = httpclient.execute(get);
         int result = response.getStatusLine().getStatusCode();
-        System.out.println(result);
+        //////System.out.println(result);
         if (result == 200) {
             // this.token = get.getResponseBodyAsString().substring(2);
-            System.out.println("2222222222222");
+            ////System.out.println("2222222222222");
             this.token = EntityUtils.toString(response.getEntity()).substring(2);
-            System.out.println(this.token);
+            ////System.out.println(this.token);
         }
-        // System.out.println(this.token);
+        // ////System.out.println(this.token);
         get.abort();
         httpclient.getConnectionManager().shutdown();
         httpclient = null;
@@ -157,12 +157,12 @@ public class GReader {
         int result = response.getStatusLine().getStatusCode();
         StringBuilder requestListSB;
         if (result == 200) {
-            // System.out.println(get.getResponseBodyAsString());
+            // //System.out.println(get.getResponseBodyAsString());
 
             requestListSB = new StringBuilder(EntityUtils.toString(response.getEntity()));
 
         } else {
-            System.out.println("xxx:" + String.valueOf(result));
+            ////System.out.println("xxx:" + String.valueOf(result));
 
             requestListSB = null;
         }
@@ -219,14 +219,14 @@ public class GReader {
         HttpResponse response = null;
         response = httpclient.execute(getreadinglistmethod);
         int result = response.getStatusLine().getStatusCode();
-        Log.d("GOOGLE_READER", "load result"+result);
+        //Log.d("GOOGLE_READER", "load result"+result);
         if (result >= 200 && result <= 299) {
 
 
             RssParser rp = new RssParser(response.getEntity().getContent());
-//            System.out.println("++++++++++");
+//            //System.out.println("++++++++++");
 
-//            System.out.println((rp != null ? 1 : 0));
+//            //System.out.println((rp != null ? 1 : 0));
             rp.parse();
             feed = rp.getFeed();
             try {
@@ -345,7 +345,7 @@ public class GReader {
             isGetSidAndAuth = true;
         else {
             isGetSidAndAuth = false;
-            System.out.printf("isGetSidAndAuth=false");
+            //System.out.printf("isGetSidAndAuth=false");
         }
         return this.isGetSidAndAuth;
 
@@ -439,7 +439,7 @@ public class GReader {
      * "gzip, deflate"); int result =
      * httpclient.executeMethod(getreadinglistmethod); if (result == 200) {
      * 
-     * System.out.println(getreadinglistmethod
+     * //System.out.println(getreadinglistmethod
      * .getResponseBodyAsStream().toString());
      * 
      * 
@@ -447,12 +447,12 @@ public class GReader {
      * .getResponseBodyAsStream(), "UTF-8"); java.io.BufferedReader br = new
      * java.io.BufferedReader(isr); StringBuffer sb = new StringBuffer(); String
      * tempbf; while ((tempbf = br.readLine()) != null) { sb.append(tempbf);
-     * sb.append("\r\n"); //System.out.println("***********");
-     * //System.out.println(tempbf); } isr.close();
+     * sb.append("\r\n"); ////System.out.println("***********");
+     * ////System.out.println(tempbf); } isr.close();
      * 
      * //
      * this.getreadingliststring=getreadinglistmethod.getResponseBodyAsString();
-     * } else { System.out.println("xxx:" + String.valueOf(result));
+     * } else { //System.out.println("xxx:" + String.valueOf(result));
      * 
      * } releaseReadingList(getreadinglistmethod); }
      */

@@ -9,7 +9,7 @@ import java.util.List;
  * Time: 6:49 PM
  * To change this template use File | Settings | File Templates.
  */
-public class TikaResponse {
+public class TikaExtractResponse {
     public String getContent() {
         return content;
     }

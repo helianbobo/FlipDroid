@@ -6,12 +6,14 @@ import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class SmartPage extends Page{
     private int heightSum;
 
+    private List<Integer> heights = new ArrayList();
     private WeiboPageView weiboPageView;
 
     private List<Article> articleList;
@@ -39,7 +41,9 @@ public class SmartPage extends Page{
         int height = dmt.onMeasure()[1] + 29;
         DryRunResult result = overflowIfPut(height);
         if (!result.overflow) {
+            article.setHeight(height);
             articleList.add(article);
+            heights.add(result.height);
             heightSum += result.height;
             addResult = true;
         } else {
@@ -51,11 +55,11 @@ public class SmartPage extends Page{
     private DryRunResult overflowIfPut(int height) {
         int dryRunSumHeight = heightSum;
 
-        Log.d("height measure single", height + "");
+        //Log.d("height measure single", height + "");
         DryRunResult result = new DryRunResult();
         result.height = height;
         dryRunSumHeight += height;
-        Log.d("height measure sum", dryRunSumHeight + "");
+        //Log.d("height measure sum", dryRunSumHeight + "");
         if (dryRunSumHeight > DeviceInfo.displayHeight) {
             result.overflow = true;
         } else {

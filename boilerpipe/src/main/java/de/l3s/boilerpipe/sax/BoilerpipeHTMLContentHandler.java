@@ -344,8 +344,8 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 		textBuffer.setLength(0);
 		tokenBuffer.setLength(0);
 
-		// System.out.println(tb.getText());
-		// System.out.println(numWords + "\t" + numLinkedWords + "\t"
+		// //System.out.println(tb.getText());
+		// //System.out.println(numWords + "\t" + numLinkedWords + "\t"
 		// + tb.textDensity + "\t" +
 		// tb.linkDensity+"\t"+numWordsCurrentLine+"\t"+numWrappedLines);
 

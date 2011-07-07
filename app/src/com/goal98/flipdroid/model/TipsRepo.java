@@ -35,7 +35,8 @@ public class TipsRepo {
             for (int i = 0; i < count; i++) {
                 JSONObject jsonObject = tipsArray.getJSONObject(i);
                 String tipText = jsonObject.getString("name");
-                Tip tip = new Tip(tipText);
+                int tipId = jsonObject.getInt("id");
+                Tip tip = new Tip(tipText,tipId);
                 tips.add(tip);
             }
             return tips;

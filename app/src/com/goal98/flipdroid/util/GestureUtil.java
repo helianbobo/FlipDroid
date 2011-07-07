@@ -5,7 +5,7 @@ import android.view.MotionEvent;
 
 public class GestureUtil {
 
-    public static final int minDelta = 10;
+    public static final int minDelta = 3;
 
     public static boolean flipRight(MotionEvent event){
 

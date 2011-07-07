@@ -26,7 +26,7 @@ public class FixedPagingStrategy implements PagingStrategy {
     }
 
     public PagedPageView doPaging(UnPagedArticles unPagedArticles) {
-        Log.d("cache system", "paging " + unPagedArticles.getArticleList().size() + "articles");
+        //Log.d("cache system", "paging " + unPagedArticles.getArticleList().size() + "articles");
         PagedPageView pagedPageView = new PagedPageView();
 
 
@@ -46,7 +46,7 @@ public class FixedPagingStrategy implements PagingStrategy {
                 pagedPageView.add(smartPage);//这页加好了
                 if (pagedPageView.size() >= 2) {//预拿2页
                     unPagedArticles.setPagedTo(k);//下次从i开始再拿
-                    Log.d("cache system", "paging done1,paged to" + unPagedArticles.getPagedTo());
+                    //Log.d("cache system", "paging done1,paged to" + unPagedArticles.getPagedTo());
                     return pagedPageView;
                 }
                 smartPage = new Page(activity);
@@ -66,7 +66,7 @@ public class FixedPagingStrategy implements PagingStrategy {
             }
         }
         unPagedArticles.setPagedTo(k);
-        Log.d("cache system", "paging done2,paged to" + unPagedArticles.getPagedTo());
+        //Log.d("cache system", "paging done2,paged to" + unPagedArticles.getPagedTo());
         return pagedPageView;
     }
 

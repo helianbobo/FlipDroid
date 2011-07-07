@@ -1,6 +1,7 @@
 package de.l3s.boilerpipe.extractors;
 
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
+import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.filters.english.DensityRulesClassifier;
 import de.l3s.boilerpipe.filters.english.KeepLargestFulltextBlockFilter;
@@ -9,6 +10,7 @@ import de.l3s.boilerpipe.filters.heuristics.BlockProximityFusion;
 import de.l3s.boilerpipe.filters.heuristics.DocumentTitleMatchClassifier;
 import de.l3s.boilerpipe.filters.heuristics.ExpandTitleToContentFilter;
 import de.l3s.boilerpipe.filters.simple.BoilerplateBlockFilter;
+import de.l3s.boilerpipe.labels.DefaultLabels;
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,6 +34,8 @@ public class ChineseArticleExtractor extends ExtractorBase {
 
         boolean a1 = TerminatingBlocksFinder.INSTANCE.process(doc);
         boolean a2 = new DocumentTitleMatchClassifier(doc.getTitle()).process(doc);
+
+        //int titleBlock = findTitleBlock(doc);
         boolean a3 = DensityRulesClassifier.INSTANCE.process(doc);
         // boolean a4 = IgnoreBlocksAfterContentFilter.DEFAULT_INSTANCE.process(doc);
         boolean a5 = BlockProximityFusion.MAX_DISTANCE_1_CONTENT_ONLY.process(doc);
@@ -41,4 +45,14 @@ public class ChineseArticleExtractor extends ExtractorBase {
         boolean a9 = ExpandTitleToContentFilter.INSTANCE.process(doc);
         return a1 | a2 | a3 | a5 | a6 | a7 | a8 | a9;
     }
+
+//    private int findTitleBlock(TextDocument doc) {
+//        int i=0;
+//        for(TextBlock tb:doc.getTextBlocks()){
+//            if(tb.hasLabel(DefaultLabels.TITLE))
+//                return i;
+//            i++;
+//        }
+//        return -1;
+//    }
 }

@@ -6,13 +6,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.Window;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
+import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.GestureUtil;
 import com.goal98.flipdroid.util.NetworkUtil;
 
@@ -23,6 +26,8 @@ public class CoverActivity extends Activity {
 
     private String deviceId;
     public static final int WIRELESS_SETTING = 1;
+     public static int statusBarHeight;
+    public static int titleBarHeight;
 
     protected Dialog onCreateDialog(int id) {
         Dialog dialog;
@@ -53,6 +58,21 @@ public class CoverActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cover);
+        this.findViewById(R.id.flipbar).post(new Runnable() {
+            public void run() {
+                Rect rect = new Rect();
+                Window window = getWindow();
+                window.getDecorView().getWindowVisibleDisplayFrame(rect);
+                statusBarHeight = rect.top;
+                int contentViewTop =
+                        window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
+                titleBarHeight = contentViewTop - statusBarHeight;
+                DeviceInfo.displayHeight = (int) ((int) (CoverActivity.this.getWindowManager().getDefaultDisplay().getHeight()) - statusBarHeight - titleBarHeight * 2.2);
+                DeviceInfo.displayWidth = (int) (CoverActivity.this.getWindowManager().getDefaultDisplay().getWidth()) - 20;
+                DeviceInfo.width = CoverActivity.this.getWindowManager().getDefaultDisplay().getWidth();
+                DeviceInfo.height = CoverActivity.this.getWindowManager().getDefaultDisplay().getHeight();
+            }
+        });
         if (!NetworkUtil.isNetworkAvailable(CoverActivity.this)) {
             showDialog(WIRELESS_SETTING);
             return;

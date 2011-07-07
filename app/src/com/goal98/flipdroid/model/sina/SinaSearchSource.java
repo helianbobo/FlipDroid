@@ -2,7 +2,10 @@ package com.goal98.flipdroid.model.sina;
 
 import android.util.Log;
 import com.goal98.flipdroid.client.WeiboExt;
+import com.goal98.flipdroid.model.GroupedSource;
+import com.goal98.flipdroid.model.SearchSource;
 import com.goal98.flipdroid.model.Source;
+import com.goal98.flipdroid.model.SourceRepo;
 import com.goal98.flipdroid.util.Constants;
 import weibo4j.Query;
 import weibo4j.User;
@@ -10,10 +13,9 @@ import weibo4j.Weibo;
 import weibo4j.WeiboException;
 
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-public class SinaSearchSource{
+public class SinaSearchSource implements SearchSource {
 
     private WeiboExt weibo;
 
@@ -52,9 +54,8 @@ public class SinaSearchSource{
         }
     }
 
-    public List<Source> searchSource(String queryStr) {
-
-        List<Source> result = new LinkedList<Source>();
+    public GroupedSource searchSource(String queryStr) {
+        List<Map<String, String>> sourceList = new ArrayList<Map<String, String>>();
 
         try {
             Query query = new Query();
@@ -63,13 +64,15 @@ public class SinaSearchSource{
             if (userList != null) {
                 for (int i = 0; i < userList.size(); i++) {
                     User user = userList.get(i);
-                    Source source = new Source();
-                    source.setName(user.getName());
-                    source.setId(String.valueOf(user.getId()));
-                    source.setDesc(user.getDescription());
-                    source.setAccountType(Constants.TYPE_SINA_WEIBO);
-                    source.setImageUrl(user.getProfileImageURL().toString());
-                    result.add(source);
+                    Map<String, String> result = new HashMap<String, String>();
+                    result.put(Source.KEY_SOURCE_NAME, user.getName());
+                    result.put(Source.KEY_SOURCE_ID, String.valueOf(user.getId()));
+                    result.put(Source.KEY_SOURCE_DESC, user.getDescription());
+                    result.put(Source.KEY_ACCOUNT_TYPE, Constants.TYPE_SINA_WEIBO);
+                    result.put(Source.KEY_IMAGE_URL, user.getProfileImageURL().toString());
+                    result.put(Source.KEY_CAT, "新浪微博");
+
+                    sourceList.add(result);
                 }
             }
 
@@ -77,6 +80,6 @@ public class SinaSearchSource{
             Log.e(this.getClass().getName(), e.getMessage(), e);
         }
 
-        return result;
+        return SourceRepo.group(sourceList);
     }
 }

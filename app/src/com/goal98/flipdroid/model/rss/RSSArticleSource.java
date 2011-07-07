@@ -35,23 +35,29 @@ public class RSSArticleSource implements ArticleSource {
     }
 
     public List<Article> getArticleList() {
-        System.out.println("getting article list");
+        //System.out.println("getting article list");
 
 
         return list;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    public static long cachedTime = -1;
+
     public boolean loadMore() {
-        System.out.println("this.contentUrl" + this.contentUrl);
+        //System.out.println("this.contentUrl" + this.contentUrl);
         RssParser rp = new RssParser(this.contentUrl);
-        rp.parse();
+        try{
+            rp.parse();
+        }catch (Exception e){
+            return false;
+        }
         RssParser.RssFeed feed = rp.getFeed();
-        System.out.println("this.contentUrl" + this.contentUrl);
-        System.out.println("sourceImage:" + sourceImage);
+        //System.out.println("this.contentUrl" + this.contentUrl);
+        //System.out.println("sourceImage:" + sourceImage);
         ArrayList<RssParser.Item> items = feed.getItems();
         for (int i = 0; i < items.size(); i++) {
             RssParser.Item item = items.get(i);
-            System.out.println("item" + item.title);
+            //System.out.println("item" + item.title);
             Article article = new Article();
             if (item.author == null || item.author.trim().length() == 0)
                 article.setAuthor(sourceName);
@@ -69,23 +75,23 @@ public class RSSArticleSource implements ArticleSource {
             }
             article.setTitle(item.title);
             article.setStatus(item.link);
-            System.out.println("item.pubDate " + item.pubDate);
+            //System.out.println("item.pubDate " + item.pubDate);
             Date date = new Date();
             if (item.pubDate != null)
                 try {
-                    date = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US).parse(item.pubDate);
+                    date = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z").parse(item.pubDate);
                 } catch (ParseException e) {
                     try {
-                        date = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm z", Locale.US).parse(item.pubDate);
+                        date = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm z").parse(item.pubDate);
                     } catch (ParseException e1) {
                         try {
-                            date = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US).parse(item.pubDate);
+                            date = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(item.pubDate);
                         } catch (ParseException e2) {
                             try {
-                                date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).parse(item.pubDate);
+                                date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(item.pubDate);
                             } catch (ParseException e3) {
                                 try {
-                                    date = new SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(item.pubDate);
+                                    date = new SimpleDateFormat("yyyy-MM-dd").parse(item.pubDate);
                                 } catch (ParseException e4) {
 
                                 }
@@ -99,12 +105,12 @@ public class RSSArticleSource implements ArticleSource {
             list.add(article);
         }
         loaded = true;
-        System.out.println("LOADED" + loaded);
+        ////System.out.println("LOADED" + loaded);
         return true;
     }
 
     public boolean isNoMoreToLoad() {
-        System.out.println("loaded--:" + loaded);
+        ////System.out.println("loaded--:" + loaded);
         if (loaded)
             return true;
         return false;  //To change body of implemented methods use File | Settings | File Templates.

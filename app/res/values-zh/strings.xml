@@ -15,7 +15,7 @@
 
     <string name="title_anim_flip_duration_preference">翻页动画时间</string>
     <string name="summary_anim_flip_duration_preference">翻页动画时间(毫秒)</string>
-    <string name="dialog_title_anim_flip_duration_preference">翻页动画时间</string>
+    <string name="dialog_title_anim_flip_duration_preference">翻页动画时间(毫秒)</string>
 
     <string name="title_article_per_page_preference">每页显示文章数</string>
     <string name="summary_article_per_page_preference">每页显示文章数</string>
@@ -57,4 +57,6 @@
     <string name="cancel">不了</string>
     <string name="gotosinaoauth">现在就去新浪微博做认证吗？</string>
     <string name="commentneedsinaoauth">评论功能需要绑定新浪帐号</string>
+    <string name="addsinamusthavesina">要添加新浪微博的源，你必须绑定新浪微博帐号，现在就去绑定吗？</string>
+    <string name="custom">自定义</string>
 </resources>

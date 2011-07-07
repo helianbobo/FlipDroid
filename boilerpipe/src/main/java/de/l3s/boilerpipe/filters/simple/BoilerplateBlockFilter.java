@@ -24,6 +24,7 @@ import de.l3s.boilerpipe.BoilerpipeFilter;
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
+import de.l3s.boilerpipe.labels.DefaultLabels;
 
 /**
  * Removes {@link TextBlock}s which have explicitly been marked as "not content". 
@@ -47,7 +48,7 @@ public final class BoilerplateBlockFilter implements BoilerpipeFilter {
 
         for (Iterator<TextBlock> it = textBlocks.iterator(); it.hasNext();) {
             TextBlock tb = it.next();
-            if (!tb.isContent()) {
+            if (!tb.isContent() && !tb.hasLabel(DefaultLabels.TITLE)) {
                 it.remove();
                 hasChanges = true;
             }

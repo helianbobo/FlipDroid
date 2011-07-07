@@ -15,18 +15,15 @@ import android.widget.ImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.flipdroid.util.SinaAccountUtil;
 
 
 public class SiteActivity extends Activity {
 
-    private AccountDB accountDB;
-
-    private SharedPreferences preferences;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        accountDB = new AccountDB(this);
         setContentView(R.layout.site);
 
         GridView g = (GridView) findViewById(R.id.siteGrid);
@@ -37,21 +34,19 @@ public class SiteActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        accountDB.close();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
     }
 
     public class SiteAdapter extends BaseAdapter {
 
         private Context mContext;
 
-        private String[] site_type_array = {Constants.TYPE_SINA_WEIBO, Constants.TYPE_RSS, Constants.TYPE_GOOGLE_READER};
-        private int[] image_array = {R.drawable.sina, R.drawable.rss, R.drawable.greader};
+        private String[] site_type_array = {Constants.TYPE_SINA_WEIBO, Constants.TYPE_RSS, Constants.TYPE_GOOGLE_READER, Constants.TYPE_FLIPDROID};
+        private int[] image_array = {R.drawable.sina, R.drawable.rss, R.drawable.greader, R.drawable.icon_large};
 
         public SiteAdapter(Context context) {
             this.mContext = context;
@@ -88,14 +83,16 @@ public class SiteActivity extends Activity {
                     String type = (String) getItem(i);
 
                     if (Constants.TYPE_SINA_WEIBO.equals(type)) {
-                        if (sinaAlreadyBinded()) {
+                        if (SinaAccountUtil.alreadyBinded(SiteActivity.this)) {
                             Intent intent = new Intent(SiteActivity.this, SinaSourceSelectionActivity.class);
                             intent.putExtra("type", type);
                             intent.putExtra("next", SinaSourceSelectionActivity.class.getName());
                             startActivity(intent);
                             overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
                         } else {
-                            startActivity(new Intent(SiteActivity.this, SinaAccountActivity.class));
+                            final Intent intent = new Intent(SiteActivity.this, SinaAccountActivity.class);
+                            intent.putExtra("PROMPTTEXT",SiteActivity.this.getString(R.string.gotosinaoauth));
+                            startActivity(intent);
                             overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
                         }
                     }
@@ -111,6 +108,14 @@ public class SiteActivity extends Activity {
                         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
                         finish();
                     }
+                    if (Constants.TYPE_FLIPDROID.equals(type)) {
+                        Intent intent = new Intent(SiteActivity.this, FlipdroidSourceActivity.class);
+                        intent.putExtra("type", type);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                        finish();
+                    }
+
 //                        if(Constants.TYPE_TENCENT_WEIBO.equals(type)){
 //                            //TODO: Tencent Login
 //                        } if(Constants.TYPE_TWITTER.equals(type)){
@@ -126,8 +131,6 @@ public class SiteActivity extends Activity {
             return imageButton;
         }
 
-        private boolean sinaAlreadyBinded() {
-            return accountDB.hasAccount(Constants.TYPE_SINA_WEIBO) && preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null) != null;
-        }
+
     }
 }

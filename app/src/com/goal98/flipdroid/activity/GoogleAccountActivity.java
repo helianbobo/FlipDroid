@@ -65,7 +65,7 @@ public class GoogleAccountActivity extends SinaAccountActivity {
             return;
         }
         if (gr.isLogin()) {
-            sourceDB.insert(Constants.TYPE_GOOGLE_READER, getString(R.string.my_feed), Constants.SOURCE_HOME, getString(R.string.my_feed_desc), null);
+            sourceDB.insert(Constants.TYPE_GOOGLE_READER, getString(R.string.my_feed), Constants.SOURCE_HOME, getString(R.string.my_feed_desc), null,"mygr");
             accountDB.insertOrUpdate(username, password, Constants.TYPE_GOOGLE_READER);
             preferences.edit().putString(GOOGLE_ACCOUNT_PREF_KEY, username).commit();
             preferences.edit().putString(GOOGLE_ACCOUNT_SID, gr.getSid()).commit();

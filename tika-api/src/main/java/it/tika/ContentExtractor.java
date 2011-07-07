@@ -3,12 +3,17 @@ package it.tika;
 import flipdroid.grepper.GrepperException;
 import flipdroid.grepper.pipe.PipeContentExtractor;
 import it.tika.exception.ExtractorException;
+import org.apache.commons.io.IOUtils;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -30,6 +35,9 @@ public class ContentExtractor implements Extractor {
 
             }
 
+            int largestAreaIndex = -1;
+            int largestArea = -1;
+            int index = 0;
             Iterator<String> imagesIterator = extractor.getImages().iterator();
             List<String> filteredImages = new ArrayList<String>();
             while (imagesIterator.hasNext()) {
@@ -72,31 +80,81 @@ public class ContentExtractor implements Extractor {
                         }
                     }
                 }
+
                 imageURL = imageURL.substring(0, hashIndex);
                 if (imageURL.startsWith("/")) {
                     imageURL = url.getProtocol() + "://" + url.getHost() + imageURL;
                 }
-                try {
-                    URL touchingImageURL = new URL(imageURL);
-                    if (getFileSize(touchingImageURL) < 7000) {
-                        if (height < 130 && width < 130)
-                            imagesIterator.remove();
-                        else
-                            filteredImages.add(imageURL);
-                    } else {
-                        filteredImages.add(imageURL);
+                ImageInfo ii = null;
+                if (width == 0 || height == 0) {
+                    try {
+                        ii = getImageInfo(imageURL);
+                    } catch (IOException e) {
+                        imagesIterator.remove();
+                        index++;
+                        continue;
                     }
-                } catch (MalformedURLException e) {
-                    imagesIterator.remove();
-                } catch (Exception e) {
-
+                } else {
+                    ii = new ImageInfo();
+                    ii.setWidth(width);
+                    ii.setHeight(height);
+                    try {
+                        ii.setSize(getFileSize(new URL(imageURL)));
+                    } catch (IOException e) {
+                        imagesIterator.remove();
+                        index++;
+                        continue;
+                    }
                 }
-            }
+                final long fileSize = ii.getSize();
+                final int fileArea = ii.getWidth() * ii.getHeight();
+                if (fileArea > largestArea) {
+                    largestArea = fileArea;
+                    largestAreaIndex = index;
+                }
+                if (fileSize < 5000) {
+                    if (height < 130 && width < 130)
+                        imagesIterator.remove();
+                    else
+                        filteredImages.add(imageURL);
+                } else {
+                    filteredImages.add(imageURL);
+                }
 
+                index++;
+            }
+            if (largestAreaIndex >= 0 && filteredImages.size() > largestAreaIndex)
+                Collections.swap(filteredImages, 0, largestAreaIndex);
             urlAbstract.setImages(filteredImages);
         } catch (GrepperException e) {
             throw new ExtractorException(e);
         }
+    }
+
+    private ImageInfo getImageInfo(String imageURL) throws IOException {
+        URL touchingImageURL = new URL(imageURL);
+        HttpURLConnection httpConnection = (HttpURLConnection) (touchingImageURL
+                .openConnection());
+        int responseCode = httpConnection.getResponseCode();
+        if (responseCode < 200 || responseCode > 299) {
+            ImageInfo ii = new InvalidImageInfo();
+            return ii;
+        }
+        InputStream is = httpConnection.getInputStream();
+
+        byte[] image = IOUtils.toByteArray(is);
+        ImageInfo ii = new ImageInfo();
+
+        ii.setSize(image.length);
+        BufferedImage bi = null;
+        bi = javax.imageio.ImageIO.read(new ByteArrayInputStream(image));
+        if (bi != null) {
+            ii.setWidth(bi.getWidth());
+            ii.setHeight(bi.getHeight());
+        }
+
+        return ii;
+
     }
 
     private int getFileSize(URL url) {
@@ -137,5 +195,50 @@ public class ContentExtractor implements Extractor {
         }
 
         return fileLength;
+    }
+
+    private class ImageInfo {
+        private long size;
+        private int width;
+        private int height;
+
+        public long getSize() {
+            return size;
+        }
+
+        public void setSize(long size) {
+            this.size = size;
+        }
+
+        public int getWidth() {
+            return width;
+        }
+
+        public void setWidth(int width) {
+            this.width = width;
+        }
+
+        public int getHeight() {
+            return height;
+        }
+
+        public void setHeight(int height) {
+            this.height = height;
+        }
+    }
+
+    private class InvalidImageInfo extends ImageInfo {
+        public long getSize() {
+            return -1;
+        }
+
+
+        public int getWidth() {
+            return -1;
+        }
+
+        public int getHeight() {
+            return -1;
+        }
     }
 }

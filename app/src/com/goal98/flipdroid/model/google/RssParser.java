@@ -37,7 +37,7 @@ public class RssParser extends DefaultHandler {
 
         try {
             InputSource is = new InputSource(new InputStreamReader(content, "utf-8"));
-            System.out.println("++++1++@@++++");
+            //System.out.println("++++1++@@++++");
             if (spf != null) {
                 sp = spf.newSAXParser();
                 //XMLReader xr = sp.getXMLReader();
@@ -46,21 +46,21 @@ public class RssParser extends DefaultHandler {
 
                 sp = spf.newSAXParser();
                 sp.parse(is, this);
-                System.out.println("++++2++@@++++");
+                //System.out.println("++++2++@@++++");
 
 
             }
         } catch (ParserConfigurationException e) {
             // TODO Auto-generated catch block
-            System.out.println("++33+++@@++++");
+            //System.out.println("++33+++@@++++");
             e.printStackTrace();
         } catch (SAXException e) {
             // TODO Auto-generated catch block
-            System.out.println("+++44@@++++");
+            //System.out.println("+++44@@++++");
             e.printStackTrace();
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            System.out.println("++33+++@@++++");
+            //System.out.println("++33+++@@++++");
             e.printStackTrace();
         } finally {
             try {
@@ -83,7 +83,7 @@ public class RssParser extends DefaultHandler {
     }
 
     catch (Exception e) {
-        System.out.println("Exception: " + e);
+        //System.out.println("Exception: " + e);
         e.printStackTrace();
 
 
@@ -123,9 +123,9 @@ public class RssParser extends DefaultHandler {
                 for (int i = 0; i < attributes.getLength(); i++) {
                     String aname = attributes.getLocalName(i);
                     if (aname.equals("href")) {
-                        // System.out.println(attributes.getValue(i));
+                        // //System.out.println(attributes.getValue(i));
                         this.item.link = attributes.getValue(i);
-                        // System.out.println(this.item.link);
+                        // //System.out.println(this.item.link);
                     }
                 }
             } else if (this.imgStatus)
@@ -146,7 +146,7 @@ public class RssParser extends DefaultHandler {
 
             if (this.item != null) {
                 this.item.id = this.text.toString();
-                // System.out.println(this.item.id);
+                // //System.out.println(this.item.id);
             }
         } else if (qName.equalsIgnoreCase("image"))
             this.imgStatus = false;
@@ -154,10 +154,10 @@ public class RssParser extends DefaultHandler {
         else if (qName.equalsIgnoreCase("title")) {
             if (this.item != null) {
                 this.item.title = this.text.toString().trim();
-                // System.out.println(item.title);
+                // //System.out.println(item.title);
             }
 
-            // System.out.println(item.title);
+            // //System.out.println(item.title);
 
             else if (this.imgStatus)
                 this.rssFeed.imageTitle = this.text.toString().trim();

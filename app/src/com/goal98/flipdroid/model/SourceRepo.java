@@ -8,24 +8,92 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SourceRepo {
 
     private Context context;
     public FromFileJSONReader fromFileSourceResolver;
+    public static final String KEY_NAME_SAMPLES = "samples";
+    public static final String KEY_NAME_GROUP = "group";
 
     public SourceRepo(Context context) {
         this.context = context;
         fromFileSourceResolver = new FromFileJSONReader(context);
     }
 
+    public static GroupedSource group(List<Map<String, String>> sourceList) {
+        Map<Map<String, String>, List<Map<String, String>>> groupsChildrenMap = new HashMap<Map<String, String>, List<Map<String, String>>>();
+
+        List<Map<String, String>> groups = new ArrayList<Map<String, String>>();
+        List<List<Map<String, String>>> children = new ArrayList<List<Map<String, String>>>();
+
+        for (int i = 0; i < sourceList.size(); i++) {
+            Map<String, String> childValueMap = sourceList.get(i);
+            String cat = childValueMap.get("cat");
+            String sourceName = childValueMap.get(Source.KEY_SOURCE_NAME);
+            final Map<String, String> group = new HashMap<String, String>();
+            group.put(KEY_NAME_GROUP, cat);
+            group.put(KEY_NAME_SAMPLES, "");
+            int index = -1;
+            for (int j = 0; j < groups.size(); j++) {
+                Map<String, String> groupMap = groups.get(j);
+                if (groupMap.get(KEY_NAME_GROUP).equals(cat)) {
+                    index = j;
+                    break;
+                }
+            }
+            if (index == -1) {
+                groups.add(group);
+                group.put(KEY_NAME_SAMPLES, group.get(KEY_NAME_SAMPLES).concat(sourceName));
+            } else {
+                final Map<String, String> groupMap = groups.get(index);
+                groupMap.put(KEY_NAME_SAMPLES, groupMap.get(KEY_NAME_SAMPLES).concat(", " + sourceName));
+            }
+            int tmp = 0;
+            index = -1;
+
+            for (Map.Entry<Map<String, String>, List<Map<String, String>>> entry : groupsChildrenMap.entrySet()) {
+                final Map<String, String> key = entry.getKey();
+                List<Map<String, String>> value = entry.getValue();
+                if (key.get(KEY_NAME_GROUP).equals(cat)) {
+                    index = tmp;
+                    value.add(childValueMap);
+                    break;
+                }
+                tmp++;
+            }
+
+            if (index == -1) {
+                final ArrayList<Map<String, String>> maps = new ArrayList<Map<String, String>>();
+                maps.add(childValueMap);
+                groupsChildrenMap.put(group, maps);
+            }
+        }
+        children = new ArrayList<List<Map<String, String>>>();
+        for (int i = 0; i < groups.size(); i++) {
+            Map<String, String> group = groups.get(i);
+            List<Map<String, String>> list_childs = new ArrayList<Map<String, String>>();
+
+            for (Map.Entry<Map<String, String>, List<Map<String, String>>> entry : groupsChildrenMap.entrySet()) {
+                final Map<String, String> key = entry.getKey();
+                List<Map<String, String>> value = entry.getValue();
+                if (key.get(KEY_NAME_GROUP).equals(group.get(KEY_NAME_GROUP))) {
+                    list_childs.addAll(value);
+                }
+            }
+            children.add(list_childs);
+        }
+        GroupedSource gs = new GroupedSource();
+        gs.setGroups(groups);
+        gs.setChildren(children);
+        return gs;
+    }
+
     public List<Map<String, String>> findSourceByType(String type) {
         LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
         String sourceName = type.toUpperCase() + "_" + Constants.RECOMMAND_SOURCE_SUFFIX;
-        JSONArray array = getSourceJSON(type, result, sourceName);
+        JSONArray array = getSourceJSON(sourceName);
         if (Constants.TYPE_SINA_WEIBO.equals(type)) {
             int count = array.length();
             for (int i = 0; i < count; i++) {
@@ -36,7 +104,8 @@ public class SourceRepo {
                             jsonObject.getString("name"),
                             jsonObject.getString("id"),
                             jsonObject.getString("desc"),
-                            jsonObject.getString("image_url"));
+                            jsonObject.getString("image_url"),
+                            jsonObject.getString("cat"));
                     result.add(source1);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -54,7 +123,8 @@ public class SourceRepo {
                             jsonObject.getString("id"),
                             jsonObject.getString("desc"),
                             jsonObject.getString("image_url"),
-                            jsonObject.getString("content_url"));
+                            jsonObject.getString("content_url"),
+                            jsonObject.getString("cat"));
                     result.add(source1);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -64,7 +134,7 @@ public class SourceRepo {
         return result;
     }
 
-    private JSONArray getSourceJSON(String type, LinkedList<Map<String, String>> result, String sourceName) {
+    private JSONArray getSourceJSON(String sourceName) {
         try {
             String sourceJsonStr = fromFileSourceResolver.resolve(sourceName);
             return new JSONArray(sourceJsonStr);
@@ -72,5 +142,9 @@ public class SourceRepo {
             Log.e(this.getClass().getName(), e.getMessage(), e);
         }
         return null;
+    }
+
+    public GroupedSource findGroupedSourceByType(String type) {
+        return group(findSourceByType(type));
     }
 }

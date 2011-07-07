@@ -14,6 +14,7 @@ import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.Source;
+import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.view.SourceItemViewBinder;
 
@@ -30,13 +31,11 @@ public class IndexActivity extends ListActivity {
     private Cursor sourceCursor;
 
     private SimpleCursorAdapter adapter;
-    public static int statusBarHeight;
-    public static int titleBarHeight;
+
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -52,21 +51,6 @@ public class IndexActivity extends ListActivity {
                 Intent intent = new Intent(IndexActivity.this, SiteActivity.class);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-            }
-        });
-        button.post(new Runnable() {
-            public void run() {
-                Rect rect = new Rect();
-                Window window = getWindow();
-                window.getDecorView().getWindowVisibleDisplayFrame(rect);
-                statusBarHeight = rect.top;
-                int contentViewTop =
-                        window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
-                titleBarHeight = contentViewTop - statusBarHeight;
-                DeviceInfo.displayHeight = (int) ((int) (IndexActivity.this.getWindowManager().getDefaultDisplay().getHeight()) - statusBarHeight - titleBarHeight * 2.2);
-                DeviceInfo.displayWidth = (int) (IndexActivity.this.getWindowManager().getDefaultDisplay().getWidth()) - 20;
-                DeviceInfo.width = IndexActivity.this.getWindowManager().getDefaultDisplay().getWidth();
-                DeviceInfo.height = IndexActivity.this.getWindowManager().getDefaultDisplay().getHeight();
             }
         });
         this.getListView().setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -86,11 +70,18 @@ public class IndexActivity extends ListActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         TextView sourceNameTextView = (TextView) info.targetView
                 .findViewById(R.id.source_name);
+        TextView sourceTypeTextView = (TextView) info.targetView
+                .findViewById(R.id.source_type);
         String sourceName = sourceNameTextView.getText().toString();
+        String sourceType = sourceTypeTextView.getText().toString();
         if (item.getItemId() == 0) {//delete
             sourceDB.removeSourceByName(sourceName);
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-            preferences.edit().putString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY,null).commit();
+            if (sourceType.equals(Constants.TYPE_MY_SINA_WEIBO)) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                String sinaAccountId = preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY,null);
+                preferences.edit().putString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null).commit();
+                preferences.edit().putString(WeiPaiWebViewClient.PREVIOUS_SINA_ACCOUNT_PREF_KEY, sinaAccountId).commit();
+            }
             bindAdapter();
         }
         return super.onContextItemSelected(item);
@@ -98,8 +89,8 @@ public class IndexActivity extends ListActivity {
 
     private void bindAdapter() {
         adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
-                new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL},
-                new int[]{R.id.source_name, R.id.source_desc, R.id.source_image});
+                new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_ACCOUNT_TYPE},
+                new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type});
         adapter.setViewBinder(new SourceItemViewBinder());
         setListAdapter(adapter);
     }
@@ -117,6 +108,7 @@ public class IndexActivity extends ListActivity {
 
     private void openDatabase() {
         sourceDB = new SourceDB(getApplicationContext());
+        accountDB = new AccountDB(this);
         sourceCursor = sourceDB.findAll();
     }
 
@@ -162,7 +154,7 @@ public class IndexActivity extends ListActivity {
         intent.putExtra("sourceImage", cursor.getString(cursor.getColumnIndex(Source.KEY_IMAGE_URL)));
         intent.putExtra("sourceName", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_NAME)));
         intent.putExtra("contentUrl", cursor.getString(cursor.getColumnIndex(Source.KEY_CONTENT_URL)));//for rss
-        cursor.close();
+        closeDB();
         startActivity(intent);
         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
     }
@@ -193,6 +185,8 @@ public class IndexActivity extends ListActivity {
                 startActivity(new Intent(this, ConfigActivity.class));
                 return true;
             case CLEAR_ID:
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                preferences.edit().putString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null).commit();
 
                 accountDB = new AccountDB(this);
                 int count = accountDB.deleteAll();

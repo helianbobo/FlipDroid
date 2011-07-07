@@ -21,7 +21,7 @@ public class PageViewSlidingWindows extends SlidingWindows {
 
     public PageViewSlidingWindows(int worker, ContentRepo repo, PageActivity.WeiboPageViewFactory pageViewFactory, int step) {
         super(worker, step);
-        Log.d("SLIDING", "creating PageViewSlidingWindows with " + worker + " workers");
+        //Log.d("SLIDING", "creating PageViewSlidingWindows with " + worker + " workers");
 //        for (int i = 0; i < worker; i++) {
         windows[0] = new PageViewWindow(0, 0, preloadingLock, repo, pageViewFactory);
         windows[0].startTask();
@@ -32,7 +32,7 @@ public class PageViewSlidingWindows extends SlidingWindows {
 
     public void createWindowIfNullOrOld(int index, int pageNumber) {
         if (windows[index] == null || windows[index].pageNumber != pageNumber) {
-            Log.d("SLIDING", "creating new Window: arr pos:" + (index) + "pageNumber:" + pageNumber);
+            //Log.d("SLIDING", "creating new Window: arr pos:" + (index) + "pageNumber:" + pageNumber);
             windows[index] = new PageViewWindow(index, pageNumber, preloadingLock, repo, pageViewFactory);
         }
     }

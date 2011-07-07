@@ -33,6 +33,6 @@ public class AppTest
      */
     public void testApp()
     {
-        System.out.println("\n\n\n\n\n\n\naa\n\na".replaceAll("\n*","\n"));
+        //System.out.println("\n\n\n\n\n\n\naa\n\na".replaceAll("\n*","\n"));
     }
 }

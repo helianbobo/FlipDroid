@@ -11,7 +11,7 @@ if("1".equals(request.getParameter("opt")))
 		out.println(resToken.getToken());
 		out.println(resToken.getTokenSecret());
 		session.setAttribute("resToken",resToken);
-		response.sendRedirect(resToken.getAuthorizationURL());
+		extractResponse.sendRedirect(resToken.getAuthorizationURL());
 
 	}else{
 		out.println("request error");

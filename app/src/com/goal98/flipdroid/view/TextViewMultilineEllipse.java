@@ -237,7 +237,7 @@ public class TextViewMultilineEllipse extends View {
         for (int i = 0; i < lines.size(); i++) {
             // Draw the current line.
             int[] pair = lines.get(i);
-            Log.d("SLIDING", "ellipsis " + i);
+            //Log.d("SLIDING", "ellipsis " + i);
             canvas.drawText(mText.replace("\n", " "), pair[0], pair[1] + 1, x, y, mTextPaint);
 
             // Draw the ellipsis if necessary.
@@ -362,7 +362,7 @@ class LineBreaker {
 //            String s = textCharArray.subSequence(offset, offset + numOfChars).toString();
 //            int line = s.indexOf("\n");
 //            while (line != -1) {
-//                System.out.println("new line..........");
+//                //System.out.println("new line..........");
 //                mLines.add(new int[]{offset, (offset += line) - 1});
 //                line = s.substring(line).indexOf("\n");
 //            }

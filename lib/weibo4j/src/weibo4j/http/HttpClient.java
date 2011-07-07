@@ -46,14 +46,10 @@ import java.util.Map;
 
 import javax.activation.MimetypesFileTypeMap;
 
+
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.multipart.FilePart;
-import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
-import org.apache.commons.httpclient.methods.multipart.Part;
-import org.apache.commons.httpclient.methods.multipart.PartBase;
-import org.apache.commons.httpclient.methods.multipart.StringPart;
-
+import org.apache.commons.httpclient.methods.multipart.*;
 import weibo4j.Configuration;
 import weibo4j.Weibo;
 import weibo4j.WeiboException;
@@ -505,7 +501,7 @@ public class HttpClient implements java.io.Serializable {
     		parts[parts.length-1]= filePart;
 
     		post.setRequestEntity( new MultipartRequestEntity(parts, post.getParams()) );
-    		 List<Header> headers = new ArrayList<Header>();   
+    		 List<Header> headers = new ArrayList<Header>();
     		 
     		 if (authenticated) {
     	            if (basic == null && oauth == null) {

@@ -9,9 +9,20 @@ package com.goal98.flipdroid.model;
  */
 public class Tip {
     String text;
+    int id;
 
-    public Tip(String tipText) {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Tip(String tipText, int tipId) {
         this.text = tipText;
+        this.id=tipId;
+
     }
 
     public String getText() {

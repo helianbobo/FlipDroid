@@ -56,7 +56,7 @@ public class PageViewWindow extends Window {
         if (loading)
             return;
 
-        Log.d("SLIDING", "starting Task:" + this);
+        //Log.d("SLIDING", "starting Task:" + this);
         loading = true;
         task = executor.submit(new Callable() {
             public Object call() {
@@ -65,7 +65,7 @@ public class PageViewWindow extends Window {
                     Page page = null;
                     try {
                         page = repo.getPage(pageNumber);
-                        Log.d("SLIDING", "page loaded: " + this);
+                        //Log.d("SLIDING", "page loaded: " + this);
                     } catch (NoMorePageException e) {
                         page = onNoMorePage(page);
                     } catch (Exception e) {
@@ -73,11 +73,11 @@ public class PageViewWindow extends Window {
                         skip = true;
                     }
                     if (skip) {
-                        Log.d("SLIDING", "skipped " + this);
+                        //Log.d("SLIDING", "skipped " + this);
                         new Thread(new Runnable() {
                             public void run() {
                                 for (OnLoadListener listener : onLoadListeners) {
-                                    Log.d("SLIDING", "onload...");
+                                    //Log.d("SLIDING", "onload...");
                                     listener.onWindowSkipped(PageViewWindow.this);
                                 }
                             }
@@ -86,7 +86,7 @@ public class PageViewWindow extends Window {
                     }
 
                     pageView = pageViewFactory.createPageView();
-                    Log.d("SLIDING", "creating page view on " + PageViewWindow.this + ", page:" + page);
+                    //Log.d("SLIDING", "creating page view on " + PageViewWindow.this + ", page:" + page);
                     if (page != null) {
                         pageView.setPage(page);
                     } else {
@@ -95,16 +95,16 @@ public class PageViewWindow extends Window {
 
                     new Thread(new Runnable() {
                         public void run() {
-                            Log.d("SLIDING", "calling on load from  " + PageViewWindow.this);
+                            //Log.d("SLIDING", "calling on load from  " + PageViewWindow.this);
                             for (OnLoadListener listener : onLoadListeners) {
-                                Log.d("SLIDING", "onload...");
+                                //Log.d("SLIDING", "onload...");
                                 listener.onWindowLoaded(PageViewWindow.this);
                             }
                         }
                     }).start();
 
                     loaded = true;
-                    Log.d("SLIDING", "done. returning" + pageView.getClass().getSimpleName());
+                    //Log.d("SLIDING", "done. returning" + pageView.getClass().getSimpleName());
                     return pageView;
                 } finally {
                     loading = false;
@@ -113,7 +113,7 @@ public class PageViewWindow extends Window {
             }
 
             private Page onNoMorePage(Page page) {
-                Log.d("SLIDING", "no more page, refreshing: " + this);
+                //Log.d("SLIDING", "no more page, refreshing: " + this);
                 int currentToken = repo.getRefreshingToken();
                 try {
                     repo.refreshAndPage(currentToken);
@@ -141,10 +141,10 @@ public class PageViewWindow extends Window {
     }
 
     public void registerOnLoadListener(OnLoadListener listener) {
-        Log.d("SLIDING", "adding listener on  " + PageViewWindow.this);
+        //Log.d("SLIDING", "adding listener on  " + PageViewWindow.this);
         this.addListener(listener);
         if (!this.loading) {
-            Log.d("SLIDING", "missed, calling listener on  " + PageViewWindow.this);
+            //Log.d("SLIDING", "missed, calling listener on  " + PageViewWindow.this);
             if (skip)
                 listener.onWindowSkipped(this);
             else

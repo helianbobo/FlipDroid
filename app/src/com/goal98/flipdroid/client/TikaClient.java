@@ -23,17 +23,102 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class TikaClient {
-    public TikaResponse extract(String url) throws TikaClientException {
-        HttpClient client = new DefaultHttpClient();
-        HttpGet request = null;
+    public List<TikaSourceResponse> searchSource(String keyword) throws TikaClientException {
+        String url = null;
+        String requestURL = null;
         try {
-            request = new HttpGet("http://www.tika.it/v1/url/abstract?url=" + URLEncoder.encode(url.trim(), "utf-8") + "&nocache=false");
+            requestURL = "http://www.tika.it/v1/sources/search?kw=" + URLEncoder.encode(keyword.trim(), "utf-8");
         } catch (UnsupportedEncodingException e) {
 
         }
+        String tikaResponse = read(requestURL);
+        List<TikaSourceResponse> sourceResponses = new ArrayList<TikaSourceResponse>();
+        try {
+            JSONArray sourceArray = new JSONArray(tikaResponse);
+            for (int i = 0; i < sourceArray.length(); i++) {
+                JSONObject object = (JSONObject) sourceArray.get(i);
+                String id = object.getString("id");
+                String accountType = object.getString("accountType");
+                String name = object.getString("name");
+                String cat = object.getString("cat");
+
+                String imageURL = "";
+                if(object.has("image_url"))
+                    object.getString("image_url");
+                String desc = object.getString("desc");
+                String contentURL = "";
+                if(object.has("content_url"))
+                    contentURL = object.getString("content_url");
+
+                TikaSourceResponse response = new TikaSourceResponse();
+                response.setId(id);
+                response.setAccountType(accountType);
+                response.setImageURL(imageURL);
+                response.setDesc(desc);
+                response.setContentURL(contentURL);
+                response.setName(name);
+                response.setCat(cat);
+
+                sourceResponses.add(response);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return sourceResponses;
+    }
+
+    public TikaExtractResponse extract(String url) throws TikaClientException {
+        JSONObject s = toJSONObject(url);
+        String title = "";
+        try {
+            title = (String) s.get("title");
+        } catch (Exception e) {
+
+        }
+        String content = null;
+        try {
+            content = (String) s.get("content");
+        } catch (JSONException e) {
+
+        }
+        List<String> images = new ArrayList<String>();
+        try {
+            JSONArray imagesArr = (JSONArray) s.get("images");
+            for (int j = 0; j < imagesArr.length(); j++) {
+                String imageURL = (String) imagesArr.get(j);
+                images.add(imageURL);
+            }
+        } catch (JSONException e) {
+
+        }
+        TikaExtractResponse tikaExtractResponse = new TikaExtractResponse();
+        tikaExtractResponse.setContent(content);
+        tikaExtractResponse.setTitle(title);
+        tikaExtractResponse.setImages(images);
+        return tikaExtractResponse;
+    }
+
+    private JSONObject toJSONObject(String url) throws TikaClientException {
+        String tikeResponse = null;
+        try {
+            tikeResponse = read("http://www.tika.it/v1/url/abstract?url=" + URLEncoder.encode(url.trim(), "utf-8") + "&nocache=false");
+        } catch (UnsupportedEncodingException e) {
+
+        }
+        JSONObject s = null;
+        try {
+            s = new JSONObject(tikeResponse);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    public String read(String url) throws TikaClientException {
+        HttpClient client = new DefaultHttpClient();
+        HttpGet request = new HttpGet(url);
         try {
             HttpResponse response = client.execute(request);
-            System.out.println(response.getStatusLine().getStatusCode());
             if (response.getStatusLine().getStatusCode() >= 200 && response.getStatusLine().getStatusCode() <= 299) {
                 InputStream is = response.getEntity().getContent();
 
@@ -44,38 +129,10 @@ public class TikaClient {
                     baos.write(bytes, 0, i);
                     bytes = new byte[1024];
                 }
-                JSONObject s = null;
-                String tikeResponse = new String(baos.toByteArray(), "UTF-8");
-                System.out.println(tikeResponse);
-                s = new JSONObject(tikeResponse);
-                String title = "";
-                try {
-                    title = (String) s.get("title");
-                } catch (Exception e) {
 
-                }
-                String content = null;
-                try {
-                    content = (String) s.get("content");
-                } catch (JSONException e) {
-
-                }
-                List<String> images = new ArrayList<String>();
-                try {
-                    JSONArray imagesArr = (JSONArray) s.get("images");
-                    for (int j = 0; j < imagesArr.length(); j++){
-                        String imageURL = (String) imagesArr.get(j);
-                        System.out.println(imageURL);
-                        images.add(imageURL);
-                    }
-                } catch (JSONException e) {
-
-                }
-                TikaResponse tikaResponse = new TikaResponse();
-                tikaResponse.setContent(content);
-                tikaResponse.setTitle(title);
-                tikaResponse.setImages(images);
-                return tikaResponse;
+                String s = new String(baos.toByteArray(), "utf-8");
+                ////System.out.println(s);
+                return s;
             } else {
                 throw new TikaClientException();
             }
@@ -87,7 +144,7 @@ public class TikaClient {
 
     public static void main(String[] args) throws TikaClientException {
         TikaClient client = new TikaClient();
-        TikaResponse response = client.extract("http://www.88799.com/show.php?tid=1797");
-        System.out.println(response.getTitle());
+        TikaExtractResponse extractResponse = client.extract("http://www.88799.com/show.php?tid=1797");
+        ////System.out.println(extractResponse.getTitle());
     }
 }

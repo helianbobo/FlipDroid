@@ -70,11 +70,17 @@ public class WeiboPageView extends FrameLayout {
 
         this.contentLayout.removeAllViews();
         List<Article> articleList = this.page.getArticleViewList();
-        System.out.println("articleList:" + articleList.size());
+        //System.out.println("articleList:" + articleList.size());
+
+        int heightSum = 0 ;
+        for (int i = 0; i < articleList.size(); i++) {
+            heightSum+=articleList.get(i).getHeight();
+        }
 
         for (int i = 0; i < articleList.size(); i++) {
             Article article = articleList.get(i);
             boolean isLastArticle = i == articleList.size() - 1;
+            article.setHeight((int) ((article.getHeight()* DeviceInfo.displayHeight)/(float)heightSum));
             addArticleView(article, isLastArticle);
         }
     }
@@ -98,17 +104,23 @@ public class WeiboPageView extends FrameLayout {
         LinearLayout articleWrapper = new LinearLayout(this.getContext());
         wrapperViews.add(articleWrapper);
         articleWrapper.setBackgroundColor(0xffDDDDDD);//分割线颜色
-        articleWrapper.setGravity(Gravity.CENTER);
+        articleWrapper.setGravity(Gravity.TOP);
         LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 
         articleWrapper.addView(withoutURLArticleView, layoutParams);
 
         LayoutParams wrapperLayoutParam = null;
-        if (last)
-            wrapperLayoutParam = new LayoutParams(DeviceInfo.width, LayoutParams.MATCH_PARENT);
-        else {
-            wrapperLayoutParam = new LayoutParams(DeviceInfo.width, LayoutParams.WRAP_CONTENT);
-        }
+//        if (last)
+            wrapperLayoutParam = new LayoutParams(DeviceInfo.width, article.getHeight());
+//        else {
+//            wrapperLayoutParam = new LayoutParams(DeviceInfo.width, LayoutParams.WRAP_CONTENT);
+//        }
+
+        if(last)//分割线
+            articleWrapper.setPadding(0, 0, 0, 0);
+        else
+            articleWrapper.setPadding(0, 0, 0, 1);
+
         contentLayout.addView(articleWrapper, wrapperLayoutParam);
         return articleWrapper;
     }

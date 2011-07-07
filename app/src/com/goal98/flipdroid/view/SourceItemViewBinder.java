@@ -38,6 +38,7 @@ public class SourceItemViewBinder implements SimpleAdapter.ViewBinder, SimpleCur
         switch (viewId) {
             case R.id.source_name:
             case R.id.source_desc:
+            case R.id.source_type:
 
                 TextView noteName = (TextView) view;
                 noteName.setText(value);
@@ -52,7 +53,7 @@ public class SourceItemViewBinder implements SimpleAdapter.ViewBinder, SimpleCur
                     try {
                         if (value != null)
                             sourceImageView.setImageUrl(value);
-                        System.out.println("webImageView" + value);
+                        //System.out.println("webImageView" + value);
                         sourceImageView.loadImage();
                     } catch (Exception e) {
                         Log.e(this.getClass().getName(), e.getMessage(), e);

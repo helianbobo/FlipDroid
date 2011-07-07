@@ -20,15 +20,14 @@
         <activity android:name=".activity.SinaSourceSelectionActivity"
                   android:theme="@android:style/Theme.Light"/>
         <activity android:name=".activity.RSSSourceSelectionActivity" android:theme="@android:style/Theme.Light"/>
-        <activity android:name=".activity.SinaAccountSaver" android:theme="@android:style/Theme.Light">
 
-        </activity>
         <activity android:name=".activity.SinaAccountActivity" android:theme="@android:style/Theme.Light">
 
         </activity>
         <activity android:name=".activity.AccountListActivity" android:theme="@android:style/Theme.Light"/>
         <activity android:name=".activity.BindSinaActivity" android:theme="@android:style/Theme.Light"/>
-        <activity android:name=".activity.SourceSearchActivity" android:theme="@android:style/Theme.Light"/>
+        <activity android:name=".activity.SinaSourceSearchActivity" android:theme="@android:style/Theme.Light"/>
+        <activity android:name=".activity.FlipdroidSourceActivity" android:theme="@android:style/Theme.Light"/>
         <activity android:name=".activity.GoogleAccountActivity" android:theme="@android:style/Theme.Light"/>
 
 

@@ -70,7 +70,7 @@ class URIFectherTest extends TestCase {
 //            println v
 //        }
 
-        def url = "http://www.ifanr.com/42005"
+        def url = "http://www.infzm.com/content/60900"
         def gpathFetcher = new GpathFromURIFetcher()
         final detector = new EncodingDetector()
         gpathFetcher.encodingDetector = detector

@@ -1,47 +1,44 @@
 package com.goal98.flipdroid.activity;
 
+import android.app.ExpandableListActivity;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import android.widget.*;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
-import com.goal98.flipdroid.exception.NoNetworkException;
+import com.goal98.flipdroid.model.GroupedSource;
+import com.goal98.flipdroid.model.SearchSource;
 import com.goal98.flipdroid.model.Source;
-import com.goal98.flipdroid.model.sina.SinaSearchSource;
-import com.goal98.flipdroid.util.AlarmSender;
+import com.goal98.flipdroid.model.SourceRepo;
+import com.goal98.flipdroid.model.sina.SearchSourceTask;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.flipdroid.util.SinaAccountUtil;
+import com.goal98.flipdroid.view.SourceExpandableListAdapter;
 import com.goal98.flipdroid.view.SourceItemViewBinder;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class SourceSearchActivity extends ListActivity {
+abstract public class SourceSearchActivity extends ExpandableListActivity {
 
-    private String type = Constants.TYPE_SINA_WEIBO;
+//    protected List<Map<String, String>> sourceList;
 
-    private List<Map<String, String>> sourceList;
-
-    private SimpleAdapter adapter;
+    private ExpandableListAdapter adapter;
 
     private EditText queryText;
 
-    private AlarmSender alarmSender;
-
     private SourceDB sourceDB;
+    private GroupedSource groupedSource = new GroupedSource();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        alarmSender = new AlarmSender(this);
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(false);
@@ -52,89 +49,55 @@ public class SourceSearchActivity extends ListActivity {
 
         queryText = (EditText) findViewById(R.id.source_query);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null)
-            type = extras.getString("type");
-        Log.v(this.getClass().getName(), "Account type:" + type);
+//        sourceList = new LinkedList<Map<String, String>>();
+//        String[] from = new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_ACCOUNT_TYPE};
+//        int[] to = new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type};
+//        adapter = new SimpleAdapter(this, sourceList, R.layout.source_item, from, to);
+//        adapter.setViewBinder(new SourceItemViewBinder());
+//        setListAdapter(adapter);
 
-        sourceList = new LinkedList<Map<String, String>>();
-
-        String[] from = new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL};
-        int[] to = new int[]{R.id.source_name, R.id.source_desc, R.id.source_image};
-        adapter = new SimpleAdapter(this, sourceList, R.layout.source_item, from, to);
-        adapter.setViewBinder(new SourceItemViewBinder());
+        String[] from = new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_ACCOUNT_TYPE};
+        int[] to = new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type, R.id.group_desc};
+        adapter = new SourceExpandableListAdapter(this, groupedSource.getGroups(), R.layout.group, new String[]{SourceRepo.KEY_NAME_GROUP, SourceRepo.KEY_NAME_SAMPLES}, new int[]{R.id.txt_group, R.id.group_desc}, groupedSource.getChildren(), R.layout.source_item, from, to);
         setListAdapter(adapter);
 
         Button searchButton = (Button) findViewById(R.id.source_search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 String query = queryText.getText().toString();
-                sourceList.removeAll(sourceList);
-                new SearchSourceTask().execute(query);
+//                sourceList.removeAll(sourceList);
+                groupedSource.getGroups().clear();
+                groupedSource.getChildren().clear();
+                doSearch(query);
             }
         });
     }
 
+    public abstract SearchSource getSearchSource();
+
+    public void doSearch(String query) {
+        new SearchSourceTask(this, adapter, groupedSource, getSearchSource()).execute(query);
+    }
+
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        Map<String, String> source = (Map<String, String>) l.getItemAtPosition(position);
+    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+        super.onChildClick(parent, v, groupPosition, childPosition, id);
+        Map<String, String> source = (Map<String, String>) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
+
+        if (source.get(Source.KEY_ACCOUNT_TYPE).equals(Constants.TYPE_SINA_WEIBO)) {
+            if (!SinaAccountUtil.alreadyBinded(this)) {
+                final Intent intent = new Intent(this, SinaAccountActivity.class);
+                intent.putExtra("PROMPTTEXT", this.getString(R.string.addsinamusthavesina));
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+            }
+        }
         sourceDB.insert(source);
 
         startActivity(new Intent(this, IndexActivity.class));
 
         finish();
-    }
-
-    private class SearchSourceTask extends AsyncTask<String, NoNetworkException, Integer> {
-
-        @Override
-        protected void onPreExecute() {
-            setProgressBarIndeterminateVisibility(true);
-        }
-
-        @Override
-        protected Integer doInBackground(String... strings) {
-
-            SinaSearchSource sinaSource = new SinaSearchSource(false, "13774256612", "541116", null);
-            List<Source> list = sinaSource.searchSource(strings[0]);
-
-            if (list != null) {
-                for (int i = 0; i < list.size(); i++) {
-                    Source source = list.get(i);
-                    Map<String, String> customeSection =
-                            SourceDB.buildSource(
-                                    source.getAccountType(),
-                                    source.getName(),
-                                    source.getId(),
-                                    source.getDesc(),
-                                    source.getImageUrl(),
-                                    source.getContentUrl());
-                    sourceList.add(customeSection);
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Integer pageIndex) {
-
-            adapter.notifyDataSetChanged();
-            setProgressBarIndeterminateVisibility(false);
-        }
-
-        @Override
-        protected void onProgressUpdate(NoNetworkException... exceptions) {
-            if (exceptions != null && exceptions.length > 0)
-                handleException(exceptions[0]);
-        }
-    }
-
-
-    private void handleException(NoNetworkException e) {
-
-        String msg = e.getMessage();
-        alarmSender.sendAlarm(msg);
+        return true;
     }
 
 

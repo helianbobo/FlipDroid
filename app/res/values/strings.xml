@@ -14,7 +14,7 @@
     <string name="key_anim_flip_duration_preference">anim_flip_duration</string>
     <string name="title_anim_flip_duration_preference">Flip Duration</string>
     <string name="summary_anim_flip_duration_preference">Flip Duration(ms)</string>
-    <string name="dialog_title_anim_flip_duration_preference">Flip Duration</string>
+    <string name="dialog_title_anim_flip_duration_preference">Flip Duration(ms)</string>
 
     <string name="key_article_per_page_preference">article_per_page</string>
     <string name="title_article_per_page_preference">Article Per Page</string>
@@ -62,4 +62,6 @@
     <string name="cancel">No</string>
     <string name="gotosinaoauth">We will redirect you to Sina to do the authentication</string>
     <string name="commentneedsinaoauth">Comment feature requires Sina weibo account binding</string>
+    <string name="addsinamusthavesina">You have to bind Sina weibo before you can add any source from Sina weibo, would you like to do so?</string>
+    <string name="custom">Custom</string>
 </resources>

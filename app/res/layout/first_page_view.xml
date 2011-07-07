@@ -2,11 +2,19 @@
 
 <LinearLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
               xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"  android:weightSum="100"
+              android:layout_width="match_parent" android:weightSum="100"
               android:layout_height="match_parent" android:orientation="vertical" android:gravity="center">
     <TextView android:layout_height="0dip" android:layout_width="fill_parent" android:gravity="center|bottom"
-              android:text="@string/loading" android:textSize="30dip" android:layout_weight="50" android:textStyle="bold"></TextView>
+              android:text="@string/loading" android:textSize="30dip" android:layout_weight="20"
+              android:textStyle="bold"></TextView>
 
-    <TextView android:id="@+id/tips" android:textColor="#232323" android:layout_margin="10dip" android:layout_height="0dip" android:layout_width="fill_parent" android:gravity="bottom|center"
-               android:textSize="18dip"  android:layout_weight="50"></TextView>
+    <LinearLayout android:layout_margin="10dip" android:layout_height="0dip" android:layout_weight="80" android:layout_width="fill_parent"
+                  android:gravity="bottom|center" android:orientation="vertical">
+        <ImageView android:maxHeight="200dip"  android:layout_height="wrap_content" android:layout_width="wrap_content"
+                   android:id="@+id/tipImage" android:adjustViewBounds="true" android:scaleType="centerInside" android:layout_marginTop="20dip"></ImageView>
+        <TextView  android:layout_height="wrap_content" android:layout_width="fill_parent"
+                  android:id="@+id/tips" android:gravity="bottom|center"
+                  android:textColor="#232323"
+                  android:textSize="20dip"></TextView>
+    </LinearLayout>
 </LinearLayout>

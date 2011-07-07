@@ -27,13 +27,14 @@ public class WeiPaiWebViewClient extends WebViewClient {
     protected SourceDB sourceDB;
     protected SharedPreferences preferences;
     public static final String SINA_ACCOUNT_PREF_KEY = "sina_account";
+    public static final String PREVIOUS_SINA_ACCOUNT_PREF_KEY = "previous_sina_account";
 
     public WeiPaiWebViewClient(Activity context) {
         this.activity = context;
     }
 
     public void onPageFinished(WebView view, String url) {
-        System.out.println("url"+url);
+        ////System.out.println("url"+url);
         if (url.indexOf("oauth_verifier") != -1) {
             sourceDB = new SourceDB(activity);
             accountDB = new AccountDB(activity);
@@ -41,12 +42,11 @@ public class WeiPaiWebViewClient extends WebViewClient {
             preferences = PreferenceManager.getDefaultSharedPreferences(activity.getBaseContext());
             FlipdroidApplications application = (FlipdroidApplications) activity.getApplication();
             final OAuth oauth = application.getOauth();
-            System.out.println("OAuthHolder.oauth" + application + oauth);
             if (oauth != null) {
                 UserInfo user = oauth.GetAccessToken(url);
                 if (user != null) {
-                    sourceDB.insert(Constants.TYPE_SINA_WEIBO, activity.getString(R.string.my_timeline), Constants.SOURCE_HOME, activity.getString(R.string.my_timeline_desc), null);
-                    accountDB.insertOrUpdateOAuth(user.getUserId(), user.getToken(), user.getTokenSecret(), Constants.TYPE_SINA_WEIBO);
+                    sourceDB.insert(Constants.TYPE_MY_SINA_WEIBO, activity.getString(R.string.my_timeline), Constants.SOURCE_HOME, activity.getString(R.string.my_timeline_desc), null,"mysina");
+                    accountDB.insertOrUpdateOAuth(user.getUserId(), user.getToken(), user.getTokenSecret(), Constants.TYPE_MY_SINA_WEIBO);
                     preferences.edit().putString(SINA_ACCOUNT_PREF_KEY, user.getUserId()).commit();
 
                     activity.startActivity(new Intent(activity, IndexActivity.class));

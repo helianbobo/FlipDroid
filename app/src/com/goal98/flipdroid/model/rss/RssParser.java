@@ -1,15 +1,24 @@
 package com.goal98.flipdroid.model.rss;
 
+import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.util.Constants;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
+import weibo4j.org.json.JSONArray;
+import weibo4j.org.json.JSONObject;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class RssParser extends DefaultHandler {
@@ -47,7 +56,7 @@ public class RssParser extends DefaultHandler {
             }
         } catch (Exception
                 e) {
-            System.out.println("Exception: " + e);
+            ////System.out.println("Exception: " + e);
             e.printStackTrace();
         } finally {
             try {
@@ -93,8 +102,11 @@ public class RssParser extends DefaultHandler {
             else if (this.imgStatus) this.rssFeed.imageLink = this.text.toString().trim();
             else this.rssFeed.link = this.text.toString().trim();
         } else if (qName.equalsIgnoreCase("description")) {
-            if (this.item != null) this.item.description = this.text.toString().trim();
-            else this.rssFeed.description = this.text.toString().trim();
+            if (this.item != null)
+                this.item.description = this.text.toString().trim();
+            else if (imgStatus) {
+                this.rssFeed.imageDescription = this.text.toString().trim();
+            } else this.rssFeed.description = this.text.toString().trim();
         } else if (qName.equalsIgnoreCase("url") && this.imgStatus)
             this.rssFeed.imageUrl = this.text.toString().trim();
         else if (qName.equalsIgnoreCase("author")) {
@@ -139,6 +151,7 @@ public class RssParser extends DefaultHandler {
         public String imageUrl;
         public String imageTitle;
         public String imageLink;
+        public String imageDescription;
 
         public ArrayList<Item> getItems() {
             return items;
@@ -174,4 +187,49 @@ public class RssParser extends DefaultHandler {
         }
     }
 
+
+    public static void main(String[] args) {
+        String url = "\t\n" +
+                "http://www.20ju.com/rss.xml";
+        String cat = "草根";
+
+        String template = ",{\n" +
+                "        \"name\": \"$name\",\n" +
+                "        \"id\": \"$id\",\n" +
+                "        \"desc\": \"$desc\",\n" +
+                "        \"image_url\": \"$imageUrl\",\n" +
+                "        \"content_url\":\"$contentUrl\",\n" +
+                "        \"cat\":\"$cat\"\n" +
+                "    }";
+
+        RssParser rp = new RssParser(url);
+        try {
+            rp.parse();
+            RssParser.RssFeed feed = rp.getFeed();
+            final String title = feed.title;
+            final String description = feed.description == null ? "" : feed.description;
+            final String imageUrl = feed.imageUrl == null ? "" : feed.imageUrl;
+
+            final String contentUrl = url;
+            String json = template.replace("$name", title).replace("$desc", description).replace("$imageUrl", imageUrl).replace("$contentUrl", contentUrl);
+            System.out.println(json);
+
+
+            File f = new File("G:\\androidprj\\FlipDroid\\app\\assets\\RSS_RECOMMAND_SOURCE_DATA.json");
+            String content = FileUtils.readFileToString(f);
+            JSONArray array = new JSONArray(content);
+            int id = 0;
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject object = (JSONObject) array.get(i);
+                id = Integer.valueOf((String) object.get("id"));
+            }
+            id++;
+            json = json.replace("$id",id+"");
+            json = json.replace("$cat",cat);
+            content = content.replace("]","") + "\n"+json + "]";
+            FileUtils.writeStringToFile(f, content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
