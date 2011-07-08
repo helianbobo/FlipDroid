@@ -11,25 +11,41 @@ public class GestureUtil {
 
         boolean result = false;
 
-        if(event.getAction() == MotionEvent.ACTION_MOVE){
+        if(event.getAction() == MotionEvent.ACTION_MOVE && !flipVertical(event)){
 
-            float delta = event.getX() - event.getHistoricalX(event.getHistorySize()-1);
-            Log.v(GestureUtil.class.getName(), "delta="+delta);
+            float delta = deltaRight(event);
+            Log.v(GestureUtil.class.getName(), "flipRight delta="+delta);
             result =  delta > minDelta;
         }
 
         return result;
 
+    }
+
+    private static float deltaRight(MotionEvent event) {
+        return event.getX() - event.getHistoricalX(event.getHistorySize()-1);
+    }
+
+    private static float deltaHorizontal(MotionEvent event) {
+        return Math.abs(event.getX() - event.getHistoricalX(event.getHistorySize()-1));
+    }
+
+    private static float deltaVertical(MotionEvent event) {
+        return Math.abs(event.getY() - event.getHistoricalY(event.getHistorySize()-1));
+    }
+
+    private static boolean flipVertical(MotionEvent event){
+        return deltaHorizontal(event) < deltaVertical(event);
     }
 
     public static boolean flipUp(MotionEvent event){
 
         boolean result = false;
 
-        if(event.getAction() == MotionEvent.ACTION_MOVE){
+        if(event.getAction() == MotionEvent.ACTION_MOVE && flipVertical(event)){
 
-            float delta = event.getY() - event.getHistoricalY(event.getHistorySize()-1);
-            Log.v(GestureUtil.class.getName(), "delta="+delta);
+            float delta = deltaUp(event);
+            Log.v(GestureUtil.class.getName(), "flipUp delta="+delta);
             result =  delta > minDelta;
         }
 
@@ -37,28 +53,44 @@ public class GestureUtil {
 
     }
 
+    private static float deltaUp(MotionEvent event) {
+        return event.getY() - event.getHistoricalY(event.getHistorySize()-1);
+    }
+
     public static boolean flipLeft(MotionEvent event){
 
         boolean result = false;
 
-        if(event.getAction() == MotionEvent.ACTION_MOVE){
-            result =  event.getHistoricalX(event.getHistorySize()-1) - event.getX()  > minDelta;
+        if(event.getAction() == MotionEvent.ACTION_MOVE && !flipVertical(event)){
+            float delta = deltaLeft(event);
+            Log.v(GestureUtil.class.getName(), "flipLeft delta="+delta);
+            result =  delta > minDelta;
         }
 
         return result;
 
     }
 
+    private static float deltaLeft(MotionEvent event) {
+        return event.getHistoricalX(event.getHistorySize() - 1) - event.getX();
+    }
+
     public static boolean flipDown(MotionEvent event){
 
         boolean result = false;
 
-        if(event.getAction() == MotionEvent.ACTION_MOVE){
-            result =  event.getHistoricalY(event.getHistorySize()-1) - event.getY()  > minDelta;
+        if(event.getAction() == MotionEvent.ACTION_MOVE && flipVertical(event)){
+            float delta = deltaDown(event);
+            Log.v(GestureUtil.class.getName(), "flipDown delta="+delta);
+            result =  delta > minDelta;
         }
 
         return result;
 
+    }
+
+    private static float deltaDown(MotionEvent event) {
+        return event.getHistoricalY(event.getHistorySize() - 1) - event.getY();
     }
 
 }
