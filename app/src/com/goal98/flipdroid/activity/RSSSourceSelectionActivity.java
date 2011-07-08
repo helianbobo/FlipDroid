@@ -2,13 +2,14 @@ package com.goal98.flipdroid.activity;
 
 import android.app.AlertDialog;
 import android.app.ExpandableListActivity;
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.EditText;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.GroupedSource;
@@ -18,10 +19,8 @@ import com.goal98.flipdroid.model.rss.RssParser;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.view.SourceExpandableListAdapter;
-import com.goal98.flipdroid.view.SourceItemViewBinder;
 
-import java.sql.RowId;
-import java.util.*;
+import java.util.Map;
 
 public class RSSSourceSelectionActivity extends ExpandableListActivity {
 

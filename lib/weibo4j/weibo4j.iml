@@ -20,7 +20,7 @@
     <orderEntry type="module-library" scope="PROVIDED">
       <library name="commons-logging-1.1.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/commons-logging-1.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/../commons-logging-1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -29,7 +29,7 @@
     <orderEntry type="module-library">
       <library name="commons-codec.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/commons-codec.jar!/" />
+          <root url="jar://$MODULE_DIR$/../commons-codec.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -38,7 +38,7 @@
     <orderEntry type="module-library" scope="PROVIDED">
       <library name="commons-httpclient-3.1.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/commons-httpclient-3.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/../commons-httpclient-3.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -47,7 +47,7 @@
     <orderEntry type="module-library" scope="TEST">
       <library name="junit-4.1.jar">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/junit-4.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/../junit-4.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
