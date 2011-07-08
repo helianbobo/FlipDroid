@@ -21,7 +21,7 @@
 
     <EditTextPreference
             android:key="@string/key_anim_flip_duration_preference"
-            android:defaultValue="700"
+            android:defaultValue="600"
             android:inputType="number"
             android:title="@string/title_anim_flip_duration_preference"
             android:summary="@string/summary_anim_flip_duration_preference"
@@ -29,7 +29,7 @@
 
     <ListPreference android:id="@+id/mode"
                     android:key="@string/key_browse_mode_preference"
-                    android:defaultValue="0"
+                    android:defaultValue="1"
                     android:title="@string/title_browse_mode_preference"
                     android:dialogTitle="@string/dialog_title_browse_mode_preference"
                     android:entries="@array/browse_mode_options"
