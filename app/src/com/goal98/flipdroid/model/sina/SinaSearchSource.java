@@ -59,7 +59,7 @@ public class SinaSearchSource implements SearchSource {
 
         try {
             Query query = new Query();
-            query.setQuery(queryStr);
+            query.setQ(queryStr);
             List<User> userList = weibo.searchUser(query);
             if (userList != null) {
                 for (int i = 0; i < userList.size(); i++) {
