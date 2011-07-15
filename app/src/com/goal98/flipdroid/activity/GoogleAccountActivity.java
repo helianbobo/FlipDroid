@@ -51,7 +51,6 @@ public class GoogleAccountActivity extends SinaAccountActivity {
         });
     }
 
-
     protected void saveAccount() {
 
         String username = usernameView.getText().toString();

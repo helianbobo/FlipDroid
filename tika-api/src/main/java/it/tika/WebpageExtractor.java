@@ -61,7 +61,7 @@ public class WebpageExtractor {
         String content = urlAbstract.getContent();
 
         if (title != null)
-            if (content.substring(0, title.length() * 2).indexOf(title) != -1) {
+            if (content.length() > title.length() * 2 && content.substring(0, title.length() * 2).indexOf(title) != -1) {
                 urlAbstract.setContent(content.replaceFirst(title, ""));
             }
 

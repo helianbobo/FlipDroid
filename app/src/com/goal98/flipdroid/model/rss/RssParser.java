@@ -2,19 +2,18 @@ package com.goal98.flipdroid.model.rss;
 
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.flipdroid.util.EncodingDetector;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
 import weibo4j.org.json.JSONArray;
 import weibo4j.org.json.JSONObject;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,9 +49,28 @@ public class RssParser extends DefaultHandler {
             SAXParser sp = null;
 
             spf = SAXParserFactory.newInstance();
-            if (spf != null) {
+//            if (spf != null) {
+//                sp = spf.newSAXParser();
+//                String raw = IOUtils.toString(urlInputStream);
+//                String encoding = EncodingDetector.detect(new ByteArrayInputStream(raw.getBytes()));
+//                InputSource inputSource = new InputSource();
+//                inputSource.setByteStream(new ByteArrayInputStream(raw.getBytes(encoding)));
+//                inputSource.setSystemId(urlString);
+//                sp.parse(inputSource, this);
+//            }
+             if (spf != null) {
                 sp = spf.newSAXParser();
-                sp.parse(urlInputStream, this);
+                byte[] contents = IOUtils.toByteArray(urlInputStream);
+
+                 String encoding = EncodingDetector.detect(new ByteArrayInputStream(contents));
+
+                String content = new String(contents, encoding);
+
+                InputSource inputSource = new InputSource();
+//                String newString = new String(content.getBytes("gb2312"),"utf-8");
+                inputSource.setByteStream(new ByteArrayInputStream(content.getBytes()));
+                inputSource.setSystemId(urlString);
+                sp.parse(inputSource, this);
             }
         } catch (Exception
                 e) {
@@ -190,8 +208,8 @@ public class RssParser extends DefaultHandler {
 
     public static void main(String[] args) {
         String url = "\t\n" +
-                "http://www.20ju.com/rss.xml";
-        String cat = "草根";
+                "http://news.baidu.com/ns?word=%D7%E3%C7%F2&tn=newsrss&sr=0&cl=1&rn=20&ct=0";
+        String cat = "手机";
 
         String template = ",{\n" +
                 "        \"name\": \"$name\",\n" +
@@ -211,11 +229,11 @@ public class RssParser extends DefaultHandler {
             final String imageUrl = feed.imageUrl == null ? "" : feed.imageUrl;
 
             final String contentUrl = url;
-            String json = template.replace("$name", title).replace("$desc", description).replace("$imageUrl", imageUrl).replace("$contentUrl", contentUrl);
+            String json = template.replace("$name", title).replace("$desc", description).replace("$imageUrl", imageUrl.trim()).replace("$contentUrl", contentUrl.trim());
             System.out.println(json);
 
 
-            File f = new File("G:\\androidprj\\FlipDroid\\app\\assets\\RSS_RECOMMAND_SOURCE_DATA.json");
+            File f = new File("D:\\myprojects\\android\\helianbobo-FlipDroid\\app\\assets\\RSS_RECOMMAND_SOURCE_DATA.json");
             String content = FileUtils.readFileToString(f);
             JSONArray array = new JSONArray(content);
             int id = 0;
@@ -224,9 +242,9 @@ public class RssParser extends DefaultHandler {
                 id = Integer.valueOf((String) object.get("id"));
             }
             id++;
-            json = json.replace("$id",id+"");
-            json = json.replace("$cat",cat);
-            content = content.replace("]","") + "\n"+json + "]";
+            json = json.replace("$id", id + "");
+            json = json.replace("$cat", cat);
+            content = content.replace("]", "") + "\n" + json + "]";
             FileUtils.writeStringToFile(f, content);
         } catch (Exception e) {
             e.printStackTrace();

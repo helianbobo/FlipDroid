@@ -9,6 +9,7 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
@@ -23,7 +24,7 @@ public class SourcesResource extends ServerResource {
     @Get("JSON")
     public String getRecommend() throws IOException, JSONException {
         String keyword = this.getQuery().getFirst("kw").getValue();
-        String jsonString = new String(IOUtils.toByteArray(this.getClass().getClassLoader().getResourceAsStream("recommend.json")));
+        String jsonString = IOUtils.toString(new FileInputStream("recommend.json"));
         JSONArray sources = new JSONArray(jsonString);
         for (int i = 0; i < sources.length(); i++) {
              JSONObject source = (JSONObject) sources.get(i);

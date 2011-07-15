@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" style="@style/Base" android:orientation="vertical">
 
     <LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content">
-        <EditText android:id="@+id/source_query" android:layout_width="220dp" android:layout_height="wrap_content"/>
+        <EditText android:id="@+id/source_query" android:hint="@string/keywordhere" android:layout_width="220dp" android:layout_height="wrap_content"/>
         <Button android:text="@string/search"
                 android:id="@+id/source_search_button"
                 android:layout_width="100dp"

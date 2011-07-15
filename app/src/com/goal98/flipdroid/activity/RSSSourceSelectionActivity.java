@@ -2,14 +2,13 @@ package com.goal98.flipdroid.activity;
 
 import android.app.AlertDialog;
 import android.app.ExpandableListActivity;
+import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
+import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.GroupedSource;
@@ -19,8 +18,7 @@ import com.goal98.flipdroid.model.rss.RssParser;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.view.SourceExpandableListAdapter;
-
-import java.util.Map;
+import java.util.*;
 
 public class RSSSourceSelectionActivity extends ExpandableListActivity {
 
@@ -41,6 +39,12 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
 
     private void group() {
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        sourceDB.close();
     }
 
     @Override
@@ -77,6 +81,8 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
         }
         return true;
     }
+
+
 
     public void doWithAddCustomerSouce() {
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(

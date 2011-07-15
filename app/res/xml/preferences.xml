@@ -21,7 +21,7 @@
 
     <EditTextPreference
             android:key="@string/key_anim_flip_duration_preference"
-            android:defaultValue="600"
+            android:defaultValue="700"
             android:inputType="number"
             android:title="@string/title_anim_flip_duration_preference"
             android:summary="@string/summary_anim_flip_duration_preference"
@@ -29,19 +29,23 @@
 
     <ListPreference android:id="@+id/mode"
                     android:key="@string/key_browse_mode_preference"
-                    android:defaultValue="1"
+                    android:defaultValue="0"
                     android:title="@string/title_browse_mode_preference"
                     android:dialogTitle="@string/dialog_title_browse_mode_preference"
                     android:entries="@array/browse_mode_options"
                     android:entryValues="@array/browse_mode_values"
             />
-
+    <android.preference.CheckBoxPreference android:id="@+id/loadImage"
+                                           android:key="@string/key_load_image_preference"
+                                           android:defaultValue="false"
+                                           android:title="@string/title_load_image_preference"
+            ></android.preference.CheckBoxPreference>
     <!--<ListPreference android:id="@+id/animation"-->
-                    <!--android:key="@string/key_animation_mode_preference"-->
-                    <!--android:defaultValue="0"-->
-                    <!--android:title="@string/title_animation_mode_preference"-->
-                    <!--android:dialogTitle="@string/dialog_title_animation_mode_preference"-->
-                    <!--android:entries="@array/animation_mode_options"-->
-                    <!--android:entryValues="@array/animation_mode_values"-->
-            <!--/>-->
+    <!--android:key="@string/key_animation_mode_preference"-->
+    <!--android:defaultValue="0"-->
+    <!--android:title="@string/title_animation_mode_preference"-->
+    <!--android:dialogTitle="@string/dialog_title_animation_mode_preference"-->
+    <!--android:entries="@array/animation_mode_options"-->
+    <!--android:entryValues="@array/animation_mode_values"-->
+    <!--/>-->
 </PreferenceScreen>

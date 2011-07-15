@@ -12,6 +12,8 @@ import weibo4j.Status;
 import weibo4j.Weibo;
 import weibo4j.WeiboException;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -78,6 +80,11 @@ public class SinaArticleSource extends AbstractArticleSource {
                 Status status = statuses.get(i);
                 Article article = new Article();
                 article.setSourceType(Constants.TYPE_SINA_WEIBO);
+                try {
+                    article.setImageUrl(new URL(status.getThumbnail_pic()));
+                } catch (MalformedURLException e) {
+
+                }
                 article.setStatus(status.getText());
                 article.setAuthor(status.getUser().getName());
                 article.setCreatedDate(status.getCreatedAt());

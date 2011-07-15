@@ -3,6 +3,7 @@ package com.goal98.flipdroid.view;
 import android.content.Context;
 import android.graphics.Paint;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -100,7 +101,7 @@ public class ThumbnailArticleView extends WeiboArticleView {
                         titleView.setTextSize(25);
                     }
                     //System.out.println("article.getImageUrl()" + article.getImageUrl());
-                    if (article.getImageUrl() == null) {
+                    if (article.getImageUrl() == null || !loadImage(getContext())) {
                         LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
                         layoutParams.weight = 100;
                         contentViewWrapper.addView(t, layoutParams);
@@ -170,6 +171,8 @@ public class ThumbnailArticleView extends WeiboArticleView {
             isLoading = false;
         }
     }
+
+
 
     public class Notifier {
         public void notifyImageLoaded() {

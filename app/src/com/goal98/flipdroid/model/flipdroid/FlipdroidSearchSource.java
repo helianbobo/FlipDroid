@@ -39,8 +39,10 @@ public class FlipdroidSearchSource implements SearchSource {
                 sourceList.add(result);
             }
         } catch (TikaClientException e) {
+            e.printStackTrace();
             return new GroupedSource();
         }
+        System.out.println("wawawa");
         return SourceRepo.group(sourceList);
     }
 }

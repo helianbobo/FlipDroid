@@ -26,4 +26,5 @@ public class Constants {
     public static final String WITHURLPREFIX = "    \"";
     public static final String INDENT = "    ";
     public static final String TYPE_FLIPDROID = "FLIPDROID";
+    public static final String TYPE_BAIDUSEARCH="BAIDUSEARCH";
 }

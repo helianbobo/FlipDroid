@@ -2,6 +2,7 @@ package com.goal98.flipdroid.view;
 
 import android.content.Context;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -43,7 +44,7 @@ public class WeiboArticleView extends ArticleView {
     protected ViewSwitcher switcher;
 
     public WeiboArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
-        super(context, article, pageView,placedAtBottom);
+        super(context, article, pageView, placedAtBottom);
         executor = Executors.newFixedThreadPool(1);
         preload();
     }
@@ -238,6 +239,10 @@ public class WeiboArticleView extends ArticleView {
         this.addView(switcher, layoutParams);
     }
 
+    protected boolean loadImage(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getString(R.string.key_load_image_preference), true);
+    }
+
     public void renderBeforeLayout() {
         portraitView.loadImage();
     }
@@ -270,26 +275,27 @@ public class WeiboArticleView extends ArticleView {
                                 article.setContent("");
                             article.setTitle(extractResponse.getTitle());
 
-
-                            try {
-                                if (!extractResponse.getImages().isEmpty()) {
-                                    String image = extractResponse.getImages().get(0);
-                                    article.setImageUrl(new URL(image));
-                                    PreloadImageLoaderHandler preloadImageLoaderHandler = new PreloadImageLoaderHandler(article);
+                            if (loadImage(WeiboArticleView.this.getContext())) {
+                                try {
+                                    if (!extractResponse.getImages().isEmpty()) {
+                                        String image = extractResponse.getImages().get(0);
+                                        article.setImageUrl(new URL(image));
+                                        PreloadImageLoaderHandler preloadImageLoaderHandler = new PreloadImageLoaderHandler(article);
 //                                    preloadImageLoaderHandler.setWidth(DeviceInfo.width/2-32);
 //                                    preloadImageLoaderHandler.setHeight(DeviceInfo.height/2-100);
 
-                                    final ImageLoader loader = new ImageLoader(image, preloadImageLoaderHandler);
-                                    new Thread(new Runnable(){
-                                        public void run() {
-                                            loader.run();
-                                        }
-                                    }).start();
+                                        final ImageLoader loader = new ImageLoader(image, preloadImageLoaderHandler);
+                                        new Thread(new Runnable() {
+                                            public void run() {
+                                                loader.run();
+                                            }
+                                        }).start();
 
+                                    }
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-
-                            } catch (Exception e) {
-                                 e.printStackTrace();
                             }
                             return article;
                         }

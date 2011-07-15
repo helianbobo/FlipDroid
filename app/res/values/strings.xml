@@ -29,6 +29,9 @@
     <string name="title_animation_mode_preference">Flip Animation</string>
     <string name="dialog_title_animation_mode_preference">Flip Animation</string>
 
+    <string name="title_load_image_preference">load image</string>
+    <string name="key_load_image_preference">load_image</string>
+
     <string name="button_add_new_account">Add New Account</string>
     <string name="button_add_new_source">Add New Source</string>
     <string name="button_login">Login</string>
@@ -64,4 +67,6 @@
     <string name="commentneedsinaoauth">Comment feature requires Sina weibo account binding</string>
     <string name="addsinamusthavesina">You have to bind Sina weibo before you can add any source from Sina weibo, would you like to do so?</string>
     <string name="custom">Custom</string>
+    <string name="keywordhere">Keywords here</string>
+
 </resources>

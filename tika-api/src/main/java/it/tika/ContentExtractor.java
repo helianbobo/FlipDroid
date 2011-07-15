@@ -28,6 +28,8 @@ public class ContentExtractor implements Extractor {
         try {
             String content = extractor.fireAbstract(urlAbstract.getRawContent(), urlAbstract.getCharset());
             urlAbstract.setContent(content);
+            if(urlAbstract.getTitle() == null || urlAbstract.getTitle().length() == 0)//in case title fetcher failed
+                urlAbstract.setTitle(extractor.getTitle());
             URL url = null;
             try {
                 url = new URL(urlAbstract.getUrl());

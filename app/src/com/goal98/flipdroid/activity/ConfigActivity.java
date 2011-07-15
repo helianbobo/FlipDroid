@@ -2,6 +2,7 @@ package com.goal98.flipdroid.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -10,6 +11,7 @@ import com.goal98.flipdroid.R;
 public class ConfigActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     SharedPreferences settings;
     private ListPreference browseModePreference;
+    private CheckBoxPreference loadImagePreference;
 //    private ListPreference animationModePreference;
     private String browseModeKey;
     private String animationModeKey;
@@ -22,6 +24,8 @@ public class ConfigActivity extends PreferenceActivity implements SharedPreferen
         browseModeKey = getString(R.string.key_browse_mode_preference);
         animationModeKey = getString(R.string.key_animation_mode_preference);
         browseModePreference = (ListPreference) this.findPreference(getString(R.string.key_browse_mode_preference));
+        loadImagePreference = (CheckBoxPreference) this.findPreference(getString(R.string.key_load_image_preference));
+
 //        animationModePreference = (ListPreference) this.findPreference(getString(R.string.key_animation_mode_preference));
         int browseModeIndex = findEntryIndex(settings, browseModeKey, browseModePreference);
 //        int animationModeIndex = findEntryIndex(settings, animationModeKey, animationModePreference);

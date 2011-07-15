@@ -1,5 +1,6 @@
 package com.goal98.flipdroid.model.sina;
 
+import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.widget.ExpandableListAdapter;
 import android.widget.SimpleAdapter;
@@ -11,18 +12,19 @@ import com.goal98.flipdroid.model.SearchSource;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.model.flipdroid.FlipdroidSearchSource;
 import com.goal98.flipdroid.util.AlarmSender;
+import com.goal98.flipdroid.view.SourceExpandableListAdapter;
 
 import java.util.List;
 import java.util.Map;
 
 public class SearchSourceTask extends AsyncTask<String, NoNetworkException, Integer> {
     private SourceSearchActivity sourceSearchActivity;
-    private ExpandableListAdapter adapter;
+    private SourceExpandableListAdapter adapter;
     private GroupedSource groupedSource;
     private AlarmSender alarmSender;
     public SearchSource source;
 
-    public SearchSourceTask(SourceSearchActivity sourceSearchActivity, ExpandableListAdapter adapter, GroupedSource groupedSource, SearchSource searchSource) {
+    public SearchSourceTask(SourceSearchActivity sourceSearchActivity, SourceExpandableListAdapter adapter, GroupedSource groupedSource, SearchSource searchSource) {
         this.sourceSearchActivity = sourceSearchActivity;
         this.adapter = adapter;
         this.groupedSource = groupedSource;
@@ -37,27 +39,20 @@ public class SearchSourceTask extends AsyncTask<String, NoNetworkException, Inte
 
     @Override
     protected Integer doInBackground(String... strings) {
-        groupedSource = source.searchSource(strings[0]);
-//        if (list != null) {
-//            for (int i = 0; i < list.size(); i++) {
-//                Source source = list.get(i);
-//                Map<String, String> customeSection =
-//                        SourceDB.buildSource(
-//                                source.getAccountType(),
-//                                source.getName(),
-//                                source.getId(),
-//                                source.getDesc(),
-//                                source.getImageUrl(),
-//                                source.getContentUrl());
-//                sourceList.add(customeSection);
-//            }
-//        }
+        GroupedSource groupedSource = source.searchSource(strings[0]);
+        this.groupedSource.getChildren().addAll(groupedSource.getChildren());
+        this.groupedSource.getGroups().addAll(groupedSource.getGroups());
+
         return null;
     }
 
     @Override
     protected void onPostExecute(Integer pageIndex) {
+
         sourceSearchActivity.setProgressBarIndeterminateVisibility(false);
+        adapter.notifyDataSetChanged();
+        System.out.println("wawanotified");
+
     }
 
     @Override

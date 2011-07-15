@@ -21,6 +21,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -119,7 +120,7 @@ public class URLAbstractResource extends ServerResource {
             return null;
         }
 
-
+        onRequestResource();
         boolean nocache = false;
         if (form.getFirst("nocache") != null) {
             nocache = Boolean.valueOf(form.getFirst("nocache").getValue());
@@ -141,6 +142,24 @@ public class URLAbstractResource extends ServerResource {
 
         return Util.writeJSON(convertURLAbstractToJSON(urlAbstract));
 
+    }
+
+    private void onRequestResource() {
+        List<OnRequestListener> listeners = getListeners();
+        for (int i = 0; i < listeners.size(); i++) {
+            try {
+                OnRequestListener onRequestListener = listeners.get(i);
+                onRequestListener.onRequest(this);
+            } catch (Exception e) {
+                getLogger().log(Level.SEVERE, listeners.get(i).toString(), e);
+            }
+        }
+    }
+
+    private List<OnRequestListener> getListeners() {
+        List<OnRequestListener> listeners = new LinkedList<OnRequestListener>();
+        listeners.add(new Logger());
+        return listeners;
     }
 
     protected JSONObject convertURLAbstractToJSON(URLAbstract urlAbstract) {

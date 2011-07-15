@@ -30,7 +30,7 @@ abstract public class SourceSearchActivity extends ExpandableListActivity {
 
 //    protected List<Map<String, String>> sourceList;
 
-    private ExpandableListAdapter adapter;
+    private SourceExpandableListAdapter adapter;
 
     private EditText queryText;
 
@@ -65,6 +65,7 @@ abstract public class SourceSearchActivity extends ExpandableListActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 String query = queryText.getText().toString();
+                System.out.println("wawa"+groupedSource.getChildren().size());
 //                sourceList.removeAll(sourceList);
                 groupedSource.getGroups().clear();
                 groupedSource.getChildren().clear();

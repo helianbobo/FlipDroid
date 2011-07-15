@@ -45,8 +45,8 @@ public class SiteActivity extends Activity {
 
         private Context mContext;
 
-        private String[] site_type_array = {Constants.TYPE_SINA_WEIBO, Constants.TYPE_RSS, Constants.TYPE_GOOGLE_READER, Constants.TYPE_FLIPDROID};
-        private int[] image_array = {R.drawable.sina, R.drawable.rss, R.drawable.greader, R.drawable.icon_large};
+        private String[] site_type_array = {Constants.TYPE_SINA_WEIBO, Constants.TYPE_RSS, Constants.TYPE_GOOGLE_READER, Constants.TYPE_FLIPDROID,Constants.TYPE_BAIDUSEARCH};
+        private int[] image_array = {R.drawable.sina, R.drawable.rss, R.drawable.greader, R.drawable.icon_large,R.drawable.baidu};
 
         public SiteAdapter(Context context) {
             this.mContext = context;
@@ -110,6 +110,14 @@ public class SiteActivity extends Activity {
                     }
                     if (Constants.TYPE_FLIPDROID.equals(type)) {
                         Intent intent = new Intent(SiteActivity.this, FlipdroidSourceActivity.class);
+                        intent.putExtra("type", type);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                        finish();
+                    }
+                    
+                    if (Constants.TYPE_BAIDUSEARCH.equals(type)) {
+                        Intent intent = new Intent(SiteActivity.this, BaiduSearchSourceActivity.class);
                         intent.putExtra("type", type);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);

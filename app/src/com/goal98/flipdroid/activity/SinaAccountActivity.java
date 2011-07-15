@@ -40,10 +40,10 @@ public class SinaAccountActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
-        if (extras != null)
+        if (extras != null) {
             nextActivity = extras.getString("next");
-
-        promptText = getIntent().getExtras().getString("PROMPTTEXT");
+            promptText = extras.getString("PROMPTTEXT");
+        }
         initView();
     }
 

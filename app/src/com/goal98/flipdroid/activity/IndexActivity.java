@@ -78,11 +78,14 @@ public class IndexActivity extends ListActivity {
             sourceDB.removeSourceByName(sourceName);
             if (sourceType.equals(Constants.TYPE_MY_SINA_WEIBO)) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                String sinaAccountId = preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY,null);
+                String sinaAccountId = preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null);
                 preferences.edit().putString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null).commit();
                 preferences.edit().putString(WeiPaiWebViewClient.PREVIOUS_SINA_ACCOUNT_PREF_KEY, sinaAccountId).commit();
             }
-            bindAdapter();
+            sourceCursor.close();
+            sourceCursor = sourceDB.findAll();
+            adapter.changeCursor(sourceCursor);
+            return true;
         }
         return super.onContextItemSelected(item);
     }
@@ -93,6 +96,7 @@ public class IndexActivity extends ListActivity {
                 new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type});
         adapter.setViewBinder(new SourceItemViewBinder());
         setListAdapter(adapter);
+
     }
 
     @Override
@@ -195,7 +199,10 @@ public class IndexActivity extends ListActivity {
                 count = sourceDB.deleteAll();
                 Log.e(this.getClass().getName(), count + " sources are deleted.");
 
-                bindAdapter();
+                sourceCursor.close();
+                sourceCursor = sourceDB.findAll();
+                adapter.changeCursor(sourceCursor);
+                sourceCursor.close();
                 return true;
             case ACCOUNT_LIST_ID:
                 startActivity(new Intent(this, AccountListActivity.class));

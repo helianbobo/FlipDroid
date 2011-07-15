@@ -137,10 +137,10 @@ public class Article {
     }
 
     private String shorten(String original) {
-        if(original == null)
+        if (original == null)
             return "";
         final String[] split = original.split("[_-]");
-        if(split.length == 1)
+        if (split.length == 1)
             return original;
         return split[0];
     }
@@ -176,7 +176,7 @@ public class Article {
     public void setImageBitmap(Bitmap image) {
         this.image = image;
         //Log.d("imageLoading","loaded");
-        if(notifier!=null)
+        if (notifier != null)
             notifier.notifyImageLoaded();
     }
 
