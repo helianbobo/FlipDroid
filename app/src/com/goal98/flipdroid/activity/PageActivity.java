@@ -147,17 +147,14 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
 
         fadeOutAnimationListener = new Animation.AnimationListener() {
-            @Override
             public void onAnimationStart(Animation animation) {
 
             }
 
-            @Override
             public void onAnimationEnd(Animation animation) {
                 current.setVisibility(View.VISIBLE);
             }
 
-            @Override
             public void onAnimationRepeat(Animation animation) {
                 //To change body of implemented methods use File | Settings | File Templates.
             }
@@ -568,8 +565,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
             source = new GoogleReaderArticleSource(sid, auth);
         }
-        Log.v("contentUrl",contentUrl);
-        
+
         repo.setArticleSource(source);
 
         headerText.setText(sourceName);
