@@ -38,7 +38,7 @@ public class InternetImageView extends ImageView {
 //            URL imageURL = null;
 //            try {
 //                imageURL = new URL(imageUrl);
-//                loadImage(imageURL);
+//                toLoadImage(imageURL);
 //            } catch (MalformedURLException e) {
 //                Log.e(this.getClass().toString(), e.getMessage(), e);
 //            }

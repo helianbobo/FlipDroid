@@ -23,6 +23,7 @@ import com.goal98.flipdroid.util.PrettyTimeUtil;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 //import com.goal98.flipdroid.client.TikaClient;
 //import com.goal98.flipdroid.client.TikaClientException;
@@ -35,20 +36,18 @@ import java.util.concurrent.Executors;
  * Time: 10:54 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ThumbnailArticleView extends WeiboArticleView {
+public class ThumbnailArticleView extends ExpandableArticleView {
     private LinearLayout thumbnailViewWrapper;
     private View loadedThumbnail;
     private WebImageView imageView;
+    volatile boolean isLoading = false;
+    protected Handler handler;
 
     public ThumbnailArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
         super(context, article, pageView, placedAtBottom);
-        executor = Executors.newFixedThreadPool(1);
-    }
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//
-//    }
+        preload();
+    }
 
     protected String getPrefix() {
         return Constants.INDENT;
@@ -101,7 +100,7 @@ public class ThumbnailArticleView extends WeiboArticleView {
                         titleView.setTextSize(25);
                     }
                     //System.out.println("article.getImageUrl()" + article.getImageUrl());
-                    if (article.getImageUrl() == null || !loadImage(getContext())) {
+                    if (article.getImageUrl() == null || !toLoadImage(getContext())) {
                         LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
                         layoutParams.weight = 100;
                         contentViewWrapper.addView(t, layoutParams);

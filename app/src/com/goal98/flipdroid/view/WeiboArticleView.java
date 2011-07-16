@@ -3,12 +3,10 @@ package com.goal98.flipdroid.view;
 import android.content.Context;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
@@ -38,31 +36,22 @@ import java.util.concurrent.*;
  * Time: 10:54 PM
  * To change this template use File | Settings | File Templates.
  */
-public class WeiboArticleView extends ArticleView {
-    protected ArticleView loadedArticleView;
-    public LinearLayout enlargedView;
-    protected ViewSwitcher switcher;
+public class WeiboArticleView extends ExpandableArticleView {
+
+
 
     public WeiboArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
         super(context, article, pageView, placedAtBottom);
-        executor = Executors.newFixedThreadPool(1);
-        preload();
+
     }
 
     protected String getPrefix() {
         return Constants.WITHURLPREFIX;
     }
 
-    protected final Animation fadeOutAni = AnimationUtils.loadAnimation(this.getContext(), R.anim.fade);
-    protected final Animation fadeInAni = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
 
-    volatile boolean isLoading = false;
 
-    public void setLoading(boolean loading) {
-        isLoading = loading;
-    }
 
-    protected Handler handler;
 
 
     @Override
@@ -109,43 +98,7 @@ public class WeiboArticleView extends ArticleView {
         return false;
     }
 
-    protected void enlargeLoadedView() {
 
-        try {
-            loadedArticleView = new ContentLoadedView(this.getContext(), future.get(), pageView);
-
-
-            handler.post(new Runnable() {
-                public void run() {
-                    switcher.setDisplayedChild(0);
-                    WeiboArticleView.this.getPageView().enlarge(loadedArticleView, WeiboArticleView.this);
-                }
-            });
-        } catch (InterruptedException e) {
-            handler.post(new Runnable() {
-                public void run() {
-                    AlarmSender.sendInstantMessage(R.string.tikatimeout, WeiboArticleView.this.getContext());
-                    reloadOriginalView();
-                }
-            });
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            handler.post(new Runnable() {
-                public void run() {
-                    AlarmSender.sendInstantMessage(R.string.tikaservererror, WeiboArticleView.this.getContext());
-                    reloadOriginalView();
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            handler.post(new Runnable() {
-                public void run() {
-                    AlarmSender.sendInstantMessage(R.string.unknownerror, WeiboArticleView.this.getContext());
-                    reloadOriginalView();
-                }
-            });
-        }
-    }
 
     protected void reloadOriginalView() {
         switcher.setDisplayedChild(0);
@@ -165,8 +118,6 @@ public class WeiboArticleView extends ArticleView {
         });
         WeiboArticleView.this.contentView.startAnimation(fadeInAni);
     }
-
-    protected Future<Article> future;
 
     protected ExecutorService executor;
 
@@ -239,72 +190,11 @@ public class WeiboArticleView extends ArticleView {
         this.addView(switcher, layoutParams);
     }
 
-    protected boolean loadImage(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getString(R.string.key_load_image_preference), true);
-    }
+
 
     public void renderBeforeLayout() {
         portraitView.loadImage();
     }
 
-    public void preload() {
-        if (article.hasLink()) {
-            isLoading = true;
-            future = executor.submit(new Callable() {
-                public Object call() throws Exception {
-                    try {
-                        String url = article.extractURL();
-                        //Log.d("Weibo view", "preloading " + url);
 
-                        TikaExtractResponse loadedTikeExtractResponse = CacheSystem.getTikaCache().load(new URL(url));
-                        if (loadedTikeExtractResponse != null) {
-                            return loadedTikeExtractResponse;
-                        } else {
-                            TikaClient tc = new TikaClient();
-                            TikaExtractResponse extractResponse = null;
-                            try {
-                                extractResponse = tc.extract(url);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                return article;
-                            }
-                            //Log.d("Weibo view", "preloading " + url + " done");
-                            if (extractResponse.getContent() != null)
-                                article.setContent(extractResponse.getContent().replaceFirst("\n", "\n      "));
-                            else
-                                article.setContent("");
-                            article.setTitle(extractResponse.getTitle());
-
-                            if (loadImage(WeiboArticleView.this.getContext())) {
-                                try {
-                                    if (!extractResponse.getImages().isEmpty()) {
-                                        String image = extractResponse.getImages().get(0);
-                                        article.setImageUrl(new URL(image));
-                                        PreloadImageLoaderHandler preloadImageLoaderHandler = new PreloadImageLoaderHandler(article);
-//                                    preloadImageLoaderHandler.setWidth(DeviceInfo.width/2-32);
-//                                    preloadImageLoaderHandler.setHeight(DeviceInfo.height/2-100);
-
-                                        final ImageLoader loader = new ImageLoader(image, preloadImageLoaderHandler);
-                                        new Thread(new Runnable() {
-                                            public void run() {
-                                                loader.run();
-                                            }
-                                        }).start();
-
-                                    }
-
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            return article;
-                        }
-                    } finally {
-                        isLoading = false;
-                    }
-
-                }
-            });
-        }
-    }
 }

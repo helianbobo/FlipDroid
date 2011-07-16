@@ -146,7 +146,7 @@ public class WeiboPageView extends FrameLayout {
     }
 
 
-    public void enlarge(final ArticleView articleView, final WeiboArticleView weiboArticleView) {
+    public void enlarge(final ArticleView articleView, final ExpandableArticleView weiboArticleView) {
         pageActivity.setEnlargedMode(true);
         final Animation fadeinArticle = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
         final Animation fadeinBoard = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
@@ -294,7 +294,7 @@ public class WeiboPageView extends FrameLayout {
 
 
 
-    private void closeEnlargedView(WeiboArticleView weiboArticleView) {
+    private void closeEnlargedView(ExpandableArticleView weiboArticleView) {
         if (commentShadowLayer != null)
             this.removeView(commentShadowLayer);
         weiboArticleView.getContentView().setVisibility(VISIBLE);
