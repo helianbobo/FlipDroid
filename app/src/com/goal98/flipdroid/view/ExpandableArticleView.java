@@ -3,6 +3,7 @@ package com.goal98.flipdroid.view;
 import android.content.Context;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -146,5 +147,48 @@ public abstract class ExpandableArticleView extends ArticleView {
 
     protected boolean toLoadImage(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getString(R.string.key_load_image_preference), true);
+    }
+
+    protected void addOnClickListener() {
+        contentView.setOnClickListener(new OnClickListener() {
+            public void onClick(View view) {
+                if (handler == null)
+                    handler = new Handler();
+                if (!isLoading && !ExpandableArticleView.this.getPageView().loadingNext && article.hasLink()) {
+
+                    if (enlargedView != null) {//以前打开过的，直接显示
+                        ExpandableArticleView.this.getPageView().enlarge(loadedArticleView, ExpandableArticleView.this);
+                        return;
+                    }
+
+                    if (future.isDone()) { //如果加载好了，直接显示
+                        enlargeLoadedView();
+                        return;
+                    }
+
+                    isLoading = true;
+                    fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
+                        public void onAnimationStart(Animation animation) {
+                        }
+
+                        public void onAnimationEnd(Animation animation) {
+                            fadeOutAni.setAnimationListener(null);
+                            switcher.setDisplayedChild(1);
+                            new Thread(new Runnable() {
+                                public void run() {
+                                    enlargeLoadedView();
+                                }
+                            }).start();
+                        }
+
+                        public void onAnimationRepeat(Animation animation) {
+                        }
+                    });
+                    ExpandableArticleView.this.contentViewWrapper.startAnimation(fadeOutAni);
+                    return;
+                }
+                return;
+            }
+        });
     }
 }

@@ -64,11 +64,9 @@ public class RssParser extends DefaultHandler {
 
                  String encoding = EncodingDetector.detect(new ByteArrayInputStream(contents));
 
-                String content = new String(contents, encoding);
-
-                InputSource inputSource = new InputSource();
-//                String newString = new String(content.getBytes("gb2312"),"utf-8");
-                inputSource.setByteStream(new ByteArrayInputStream(content.getBytes()));
+//                String content = new String(contents, encoding);
+                InputStreamReader streamReader = new InputStreamReader(new ByteArrayInputStream(contents),encoding);
+                InputSource inputSource = new InputSource(streamReader);
                 inputSource.setSystemId(urlString);
                 sp.parse(inputSource, this);
             }

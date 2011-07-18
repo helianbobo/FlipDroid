@@ -48,11 +48,8 @@ public class SearchSourceTask extends AsyncTask<String, NoNetworkException, Inte
 
     @Override
     protected void onPostExecute(Integer pageIndex) {
-
         sourceSearchActivity.setProgressBarIndeterminateVisibility(false);
         adapter.notifyDataSetChanged();
-        System.out.println("wawanotified");
-
     }
 
     @Override

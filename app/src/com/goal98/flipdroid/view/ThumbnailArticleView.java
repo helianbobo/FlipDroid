@@ -41,11 +41,9 @@ public class ThumbnailArticleView extends ExpandableArticleView {
     private View loadedThumbnail;
     private WebImageView imageView;
     volatile boolean isLoading = false;
-    protected Handler handler;
 
     public ThumbnailArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
         super(context, article, pageView, placedAtBottom);
-
         preload();
     }
 
@@ -56,7 +54,9 @@ public class ThumbnailArticleView extends ExpandableArticleView {
     public void displayLoadedThumbnail() {
         try {
             //System.out.println("taking content");
+
             final Article article = future.get();
+
             isLoading = true;
             handler.post(new Runnable() {
                 public void run() {
@@ -170,8 +170,6 @@ public class ThumbnailArticleView extends ExpandableArticleView {
             isLoading = false;
         }
     }
-
-
 
     public class Notifier {
         public void notifyImageLoaded() {

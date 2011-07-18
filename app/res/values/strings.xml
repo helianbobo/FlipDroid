@@ -68,5 +68,6 @@
     <string name="addsinamusthavesina">You have to bind Sina weibo before you can add any source from Sina weibo, would you like to do so?</string>
     <string name="custom">Custom</string>
     <string name="keywordhere">Keywords here</string>
+    <string name="nodata">No source added, Click button above to add sources</string>
 
 </resources>

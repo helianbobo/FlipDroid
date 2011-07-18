@@ -58,4 +58,5 @@
     <string name="addsinamusthavesina">要添加新浪微博的源，你必须绑定新浪微博帐号，现在就去绑定吗？</string>
     <string name="custom">自定义</string>
     <string name="keywordhere">输入您想查找的关键字</string>
+     <string name="nodata">尚未添加源,点击上方按钮以添加源</string>
 </resources>

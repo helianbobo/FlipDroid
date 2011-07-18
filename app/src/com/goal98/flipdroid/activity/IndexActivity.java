@@ -18,6 +18,11 @@ import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.view.SourceItemViewBinder;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class IndexActivity extends ListActivity {
 
     static final private int CONFIG_ID = Menu.FIRST;
@@ -30,7 +35,7 @@ public class IndexActivity extends ListActivity {
     private SourceDB sourceDB;
     private Cursor sourceCursor;
 
-    private SimpleCursorAdapter adapter;
+    private BaseAdapter adapter;
 
 
     @Override
@@ -45,8 +50,8 @@ public class IndexActivity extends ListActivity {
 
         setContentView(R.layout.index);
 
-        Button button = (Button) findViewById(R.id.btn_add_source);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button addSourceButton = (Button) findViewById(R.id.btn_add_source);
+        addSourceButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent(IndexActivity.this, SiteActivity.class);
                 startActivity(intent);
@@ -84,17 +89,29 @@ public class IndexActivity extends ListActivity {
             }
             sourceCursor.close();
             sourceCursor = sourceDB.findAll();
-            adapter.changeCursor(sourceCursor);
+            ((SimpleCursorAdapter) adapter).changeCursor(sourceCursor);
             return true;
         }
         return super.onContextItemSelected(item);
     }
 
     private void bindAdapter() {
-        adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
-                new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_ACCOUNT_TYPE},
-                new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type});
-        adapter.setViewBinder(new SourceItemViewBinder());
+        if (!sourceCursor.moveToFirst()) {
+
+            Map<String, String> noDate = new HashMap<String, String>();
+            noDate.put("text", getString(R.string.nodata));
+            List emptyBlock = new ArrayList();
+            emptyBlock.add(noDate);
+            adapter = new SimpleAdapter(this, emptyBlock, R.layout.nodataitem,
+                    new String[]{"text"},
+                    new int[]{R.id.text});
+        } else {
+            adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
+                    new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_ACCOUNT_TYPE},
+                    new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type});
+            ((SimpleCursorAdapter) adapter).setViewBinder(new SourceItemViewBinder());
+        }
+
         setListAdapter(adapter);
 
     }
@@ -114,12 +131,6 @@ public class IndexActivity extends ListActivity {
         sourceDB = new SourceDB(getApplicationContext());
         accountDB = new AccountDB(this);
         sourceCursor = sourceDB.findAll();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        closeDB();
     }
 
     private void closeDB() {
@@ -144,12 +155,6 @@ public class IndexActivity extends ListActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        closeDB();
-    }
-
-    @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Intent intent = new Intent(this, PageActivity.class);
         Cursor cursor = (Cursor) l.getItemAtPosition(position);
@@ -158,7 +163,6 @@ public class IndexActivity extends ListActivity {
         intent.putExtra("sourceImage", cursor.getString(cursor.getColumnIndex(Source.KEY_IMAGE_URL)));
         intent.putExtra("sourceName", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_NAME)));
         intent.putExtra("contentUrl", cursor.getString(cursor.getColumnIndex(Source.KEY_CONTENT_URL)));//for rss
-        closeDB();
         startActivity(intent);
         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
     }
@@ -201,7 +205,8 @@ public class IndexActivity extends ListActivity {
 
                 sourceCursor.close();
                 sourceCursor = sourceDB.findAll();
-                adapter.changeCursor(sourceCursor);
+                if (adapter instanceof SimpleCursorAdapter)
+                    ((SimpleCursorAdapter) adapter).changeCursor(sourceCursor);
                 sourceCursor.close();
                 return true;
             case ACCOUNT_LIST_ID:
