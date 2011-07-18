@@ -112,7 +112,7 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
                                     Map<String, String> customeRSSFeed = SourceDB.buildSource(Constants.TYPE_RSS,
                                             feed.title,
                                             null,
-                                            feed.description, feed.imageUrl, url);
+                                            feed.description, feed.imageUrl, url,feedURL.getContext().getString(R.string.custom));
                                     sourceDB.insert(customeRSSFeed);
 
                                     startActivity(new Intent(RSSSourceSelectionActivity.this, IndexActivity.class));
