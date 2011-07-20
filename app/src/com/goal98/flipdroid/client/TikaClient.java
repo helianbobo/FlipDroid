@@ -33,6 +33,9 @@ public class TikaClient {
         }
         String tikaResponse = read(requestURL);
         List<TikaSourceResponse> sourceResponses = new ArrayList<TikaSourceResponse>();
+        if("{}".equals(tikaResponse)){
+            return sourceResponses;
+        }
         try {
             JSONArray sourceArray = new JSONArray(tikaResponse);
             for (int i = 0; i < sourceArray.length(); i++) {

@@ -40,8 +40,13 @@ public abstract class ExpandableArticleView extends ArticleView {
 
     public ExpandableArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
         super(context, article, pageView, placedAtBottom);
-        executor = Executors.newFixedThreadPool(1);
-        preload();
+        if (!article.isAlreadyLoaded()) {
+            executor = Executors.newFixedThreadPool(1);
+            preload();
+        } else {
+            if (toLoadImage(context))
+                loadImage(article.getImageUrl().toExternalForm());
+        }
     }
 
     public void preload() {
@@ -77,16 +82,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                                     if (!extractResponse.getImages().isEmpty()) {
                                         String image = extractResponse.getImages().get(0);
                                         article.setImageUrl(new URL(image));
-                                        PreloadImageLoaderHandler preloadImageLoaderHandler = new PreloadImageLoaderHandler(article);
-//                                    preloadImageLoaderHandler.setWidth(DeviceInfo.width/2-32);
-//                                    preloadImageLoaderHandler.setHeight(DeviceInfo.height/2-100);
-
-                                        final ImageLoader loader = new ImageLoader(image, preloadImageLoaderHandler);
-                                        new Thread(new Runnable() {
-                                            public void run() {
-                                                loader.run();
-                                            }
-                                        }).start();
+                                        loadImage(image);
 
                                     }
 
@@ -105,10 +101,24 @@ public abstract class ExpandableArticleView extends ArticleView {
         }
     }
 
+    private void loadImage(String image) {
+        PreloadImageLoaderHandler preloadImageLoaderHandler = new PreloadImageLoaderHandler(article);
+
+        final ImageLoader loader = new ImageLoader(image, preloadImageLoaderHandler);
+        new Thread(new Runnable() {
+            public void run() {
+                loader.run();
+            }
+        }).start();
+    }
+
     protected void enlargeLoadedView() {
 
         try {
-            loadedArticleView = new ContentLoadedView(this.getContext(), future.get(), pageView);
+            if(!article.isAlreadyLoaded())
+                future.get();
+
+            loadedArticleView = new ContentLoadedView(this.getContext(), article, pageView);
 
 
             handler.post(new Runnable() {

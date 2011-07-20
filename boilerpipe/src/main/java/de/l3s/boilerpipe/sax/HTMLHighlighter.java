@@ -21,6 +21,7 @@ import de.l3s.boilerpipe.BoilerpipeExtractor;
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
+import de.l3s.boilerpipe.labels.DefaultLabels;
 import de.l3s.boilerpipe.util.JaneSort;
 import org.apache.xerces.parsers.AbstractSAXParser;
 import org.cyberneko.html.HTMLConfiguration;
@@ -131,29 +132,39 @@ public final class HTMLHighlighter {
         extractor.process(doc);
 
         List<Block> contentArr = new ArrayList<Block>();
-        for (TextBlock text : doc.getTextBlocks()) {
-            if (text.isContent()) {
-                int start = text.getOffsetBlocksStart();
-                int end = text.getOffsetBlocksEnd();
+        for (TextBlock textBlock : doc.getTextBlocks()) {
+            if (textBlock.isContent()) {
+                int start = textBlock.getOffsetBlocksStart();
+                int end = textBlock.getOffsetBlocksEnd();
                 Block b = new Block();
                 b.start = start;
                 b.end = end;
                 contentArr.add(b);
             }
+
         }
         List<TextBlock> result = JaneSort.findBetween(images, contentArr, 4);
-
+        this.title = doc.getTitle();
 
         final InputSource is = htmlDoc.toInputSource();
 
         return process(doc, is, result);
     }
 
-    public class Block{
+    private String title = null;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public class Block {
         public int start;
         public int end;
     }
-
 
 
     private boolean outputHighlightOnly = false;
@@ -409,22 +420,25 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("h5") ||
                             qName.equalsIgnoreCase("h6") ||
                             qName.equalsIgnoreCase("p") ||
-                            qName.equalsIgnoreCase("br")
+                            qName.equalsIgnoreCase("br")||
+                            qName.equalsIgnoreCase("li")
                             )
-                        html.append('\n');
-//					html.append('<');
-//					html.append(qName);
-//					final int numAtts = atts.getLength();
-//					for (int i = 0; i < numAtts; i++) {
-//						final String attr = atts.getQName(i);
-//						final String value = atts.getValue(i);
-//						html.append(' ');
-//						html.append(attr);
-//						html.append("=\"");
-//						html.append(xmlEncode(value));
-//						html.append("\"");
-//					}
-//					html.append('>');
+//                        html.append('\n');
+                    {
+                        html.append('<');
+                        html.append("p");
+                        final int numAtts = atts.getLength();
+                        for (int i = 0; i < numAtts; i++) {
+                            final String attr = atts.getQName(i);
+                            final String value = atts.getValue(i);
+                            html.append(' ');
+                            html.append(attr);
+                            html.append("=\"");
+                            html.append(xmlEncode(value));
+                            html.append("\"");
+                        }
+                        html.append('>');
+                    }
                 }
             } finally {
                 if (ta != null) {
@@ -458,10 +472,10 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("h5") ||
                             qName.equalsIgnoreCase("h6") ||
                             qName.equalsIgnoreCase("p") ||
-                            qName.equalsIgnoreCase("br")||
+                            qName.equalsIgnoreCase("br") ||
                             qName.equalsIgnoreCase("li")
                             )
-                        html.append('\n');
+                        html.append("</p>");
                 }
             } finally {
                 if (ta != null) {

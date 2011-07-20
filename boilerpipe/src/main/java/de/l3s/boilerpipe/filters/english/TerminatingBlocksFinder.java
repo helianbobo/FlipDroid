@@ -44,6 +44,7 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
     }
 
     private static final Pattern N_COMMENTS = Pattern.compile("(?msi)^[0-9]+ (Comments|users responded in)");
+    private static final Pattern NUMBERS = Pattern.compile("[0-9]+");
 
     public boolean process(TextDocument doc)
             throws BoilerpipeProcessingException {
@@ -54,7 +55,7 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
                 final String text = tb.getText().trim();
                 if (text.startsWith("Comments")
                         || N_COMMENTS.matcher(text).find()
-
+                        || NUMBERS.matcher(text).find()
                         || text.contains("Reader Comments")
                         || text.contains("2010")
                         || text.contains("2011")
@@ -71,11 +72,13 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
                         || text.equals("Thanks for your comments - this feedback is now closed")
                         || text.startsWith("© Reuters")
                         || text.startsWith("Please rate this")
+                        || text.contains("Responses")
                         || text.startsWith("声明")
                         || text.contains("评论")
                         || text.matches("到第[0-9 ]*页")
                         || (text.contains("回复") && tb.getLinkDensity() != 0)
                         || text.contains("相关")
+                        || text.contains("可能也喜欢")
                         || text.contains("发表")
                         || text.contains("热点")
                         || text.contains("Email")

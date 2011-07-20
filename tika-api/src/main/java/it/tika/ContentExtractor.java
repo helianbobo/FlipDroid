@@ -28,7 +28,7 @@ public class ContentExtractor implements Extractor {
         try {
             String content = extractor.fireAbstract(urlAbstract.getRawContent(), urlAbstract.getCharset());
             urlAbstract.setContent(content);
-            if(urlAbstract.getTitle() == null || urlAbstract.getTitle().length() == 0)//in case title fetcher failed
+            if (urlAbstract.getTitle() == null || urlAbstract.getTitle().length() == 0)//in case title fetcher failed
                 urlAbstract.setTitle(extractor.getTitle());
             URL url = null;
             try {
@@ -47,6 +47,9 @@ public class ContentExtractor implements Extractor {
 
                 int width = 0;
                 int height = 0;
+                if (imageURL.indexOf("#") == -1) {
+                    continue;
+                }
                 int hashIndex = imageURL.lastIndexOf("#");
                 String dimensionInfo = imageURL.substring(hashIndex, imageURL.length());
                 if ("#,".equals(dimensionInfo)) {
@@ -109,26 +112,26 @@ public class ContentExtractor implements Extractor {
                     }
                 }
                 final long fileSize = ii.getSize();
-                final int fileArea = ii.getWidth() * ii.getHeight();
-                if (fileArea > largestArea) {
-                    largestArea = fileArea;
-                    largestAreaIndex = index;
-                }
-                if (fileSize < 5000) {
-                    if (height < 130 && width < 130)
-                        imagesIterator.remove();
-                    else
-                        filteredImages.add(imageURL);
+
+
+                if (fileSize < 5000 && height < 130 && width < 130) {
+                    imagesIterator.remove();
                 } else {
                     filteredImages.add(imageURL);
+                    final int fileArea = ii.getWidth() * ii.getHeight();
+                    if (fileArea > largestArea) {
+                        largestArea = fileArea;
+                        largestAreaIndex = filteredImages.size() - 1;
+                    }
                 }
-
                 index++;
             }
             if (largestAreaIndex >= 0 && filteredImages.size() > largestAreaIndex)
                 Collections.swap(filteredImages, 0, largestAreaIndex);
             urlAbstract.setImages(filteredImages);
         } catch (GrepperException e) {
+            throw new ExtractorException(e);
+        } catch (Exception e) {
             throw new ExtractorException(e);
         }
     }

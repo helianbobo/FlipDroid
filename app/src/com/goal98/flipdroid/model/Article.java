@@ -23,6 +23,12 @@ public class Article {
     private ThumbnailArticleView.Notifier notifier;
     private int height;
 
+    public boolean isAlreadyLoaded() {
+        return alreadyLoaded;
+    }
+
+    private boolean alreadyLoaded;
+
     public int getHeight() {
         return height;
     }
@@ -186,5 +192,9 @@ public class Article {
 
     public void addNotifier(ThumbnailArticleView.Notifier notifier) {
         this.notifier = notifier;
+    }
+
+    public void setAlreadyLoaded(boolean alreadyLoaded) {
+        this.alreadyLoaded = alreadyLoaded;
     }
 }

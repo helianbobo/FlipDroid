@@ -38,6 +38,7 @@ import com.goal98.flipdroid.model.google.GoogleReaderArticleSource;
 import com.goal98.flipdroid.model.rss.RSSArticleSource;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.model.sina.SinaToken;
+import com.goal98.flipdroid.model.taobao.TaobaoArticleSource;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.GestureUtil;
@@ -564,14 +565,27 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             });
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
             source = new GoogleReaderArticleSource(sid, auth);
+        }else if (accountType.equals(Constants.TYPE_TAOBAO ) ){
+
+            pagingStrategy = new FixedPagingStrategy(this, 2);
+            pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
+                public void onNoMoreArticle() throws NoMoreStatusException {
+                    throw new NoMoreStatusException();
+                }
+            });
+
+            repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
+            source = new TaobaoArticleSource(sourceName,this.getApplicationContext());
         }
 
         repo.setArticleSource(source);
 
         headerText.setText(sourceName);
-        if (sourceImageURL != null) {
+        if (sourceImageURL != null && sourceImageURL.length()!=0) {
             headerImageView.setImageUrl(sourceImageURL);
             headerImageView.loadImage();
+        }else{
+            headerImageView.setVisibility(View.GONE);
         }
 
         slidingWindows = new PageViewSlidingWindows(20, repo, pageViewFactory, 3);

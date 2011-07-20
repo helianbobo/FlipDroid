@@ -3,6 +3,7 @@ package com.goal98.flipdroid.view;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.PointF;
+import android.text.Html;
 import android.util.FloatMath;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.model.Article;
+import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.PrettyTimeUtil;
 
 /**
@@ -110,7 +112,10 @@ public class ContentLoadedView extends ArticleView {
 
         this.contentView = (TextView) layout.findViewById(R.id.content);
         if (article.getContent() != null)
-            contentView.setText(getPrefix() + article.getContent().trim().concat("\n").replaceAll("\n+", getPrefix() + "\n"));
+            if (article.getSourceType() != null && article.getSourceType().equals(Constants.TYPE_TAOBAO))
+                contentView.setText(Html.fromHtml(article.getContent()));
+            else
+                contentView.setText(getPrefix() + article.getContent().trim().concat("\n").replaceAll("\n+", getPrefix() + "\n"));
     }
 
     public void renderBeforeLayout() {

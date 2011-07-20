@@ -25,6 +25,7 @@ import java.util.List;
 public class PipeContentExtractor implements ContentExtractor {
 
     private List<String> images;
+    private String title;
 
     public List<String> getImages() {
         return images;
@@ -54,9 +55,7 @@ public class PipeContentExtractor implements ContentExtractor {
             }
             String abstractText = hh.process(new HTMLDocument(data, charset), extractor).trim();
             images = hh.images;
-
-
-
+            this.title = hh.getTitle();
 
             return abstractText;
         } catch (Exception e) {
@@ -66,4 +65,7 @@ public class PipeContentExtractor implements ContentExtractor {
     }
 
 
+    public String getTitle() {
+        return title;
+    }
 }

@@ -18,9 +18,11 @@ import de.l3s.boilerpipe.sax.HTMLHighlighter;
  */
 public class HTMLHighlightDemo {
     public static void main(String[] args) throws Exception {
-        //System.out.println(",".split(",").length);
-        //System.out.println(",1".split(",").length);
-        //System.out.println("1,".split(",").length);
-        //System.out.println("1,1".split(",").length);
+        URL url = new URL("http://book.douban.com/review/5030542/");
+
+        final BoilerpipeExtractor extractor = CommonExtractors.CHINESE_ARTICLE_EXTRACTOR;
+        final HTMLHighlighter hh = HTMLHighlighter.newExtractingInstanceForChinese();
+
+        System.out.println(hh.process(url, extractor));
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -44,7 +45,6 @@ public class ThumbnailArticleView extends ExpandableArticleView {
 
     public ThumbnailArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
         super(context, article, pageView, placedAtBottom);
-        preload();
     }
 
     protected String getPrefix() {
@@ -54,8 +54,8 @@ public class ThumbnailArticleView extends ExpandableArticleView {
     public void displayLoadedThumbnail() {
         try {
             //System.out.println("taking content");
-
-            final Article article = future.get();
+            if (!article.isAlreadyLoaded())
+                article = future.get();
 
             isLoading = true;
             handler.post(new Runnable() {
@@ -94,7 +94,14 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                     t.setMaxLines(maxLine);
 
                     if (article != null && article.getContent() != null) {
-                        t.setText(getPrefix() + (article.getContent().trim()).replaceAll("\n+", "      \n"));
+                	if (article.getSourceType()!=null&& article.getSourceType().equals(Constants.TYPE_TAOBAO))
+                	    {
+                	    System.out.println("haole#################"+article.getContent());
+                	     
+                    		t.setText(Html.fromHtml(article.getContent()));
+                    		}
+                	else
+                	    t.setText(getPrefix() + (article.getContent().trim()).replaceAll("\n+", "      \n"));
                     } else {
                         t.setVisibility(GONE);
                         titleView.setTextSize(25);
@@ -238,7 +245,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                         return;
                     }
 
-                    if (future.isDone()) { //如果加载好了，直接显示
+                    if (article.isAlreadyLoaded() || future.isDone()) { //如果加载好了，直接显示
                         enlargeLoadedView();
                         return;
                     }
