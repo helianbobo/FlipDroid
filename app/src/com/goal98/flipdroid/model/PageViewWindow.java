@@ -29,9 +29,9 @@ public class PageViewWindow extends Window {
     private PageActivity.WeiboPageViewFactory pageViewFactory;
     private WeiboPageView pageView;
 
-    PageViewWindow(int index, int pageNumber, Lock preloadingLock, ContentRepo repo, PageActivity.WeiboPageViewFactory pageViewFactory) {
+    PageViewWindow(int index, int pageNumber, Lock preloadingLock, ContentRepo repo, PageActivity.WeiboPageViewFactory pageViewFactory, ExecutorService executor) {
         super(index, pageNumber, preloadingLock);
-        executor = Executors.newFixedThreadPool(1);
+        this.executor = executor;
         this.repo = repo;
         this.pageViewFactory = pageViewFactory;
         startTask();

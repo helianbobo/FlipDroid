@@ -35,9 +35,9 @@ public class PreloadImageLoaderHandler implements MyHandler {
 
             //缩放图片的尺寸
 
-            float scaleWidth = 0.5f;     //按固定大小缩放  sWidth 写多大就多大
+            float scaleWidth = 0.3f;     //按固定大小缩放  sWidth 写多大就多大
 
-            float scaleHeight = 0.5f;  //
+            float scaleHeight = 0.3f;  //
 
 
             Matrix matrix = new Matrix();

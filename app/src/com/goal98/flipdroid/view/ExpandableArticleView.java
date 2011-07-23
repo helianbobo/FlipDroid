@@ -16,6 +16,7 @@ import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.PreloadImageLoaderHandler;
 import com.goal98.flipdroid.model.cachesystem.CacheSystem;
 import com.goal98.flipdroid.util.AlarmSender;
+import com.goal98.flipdroid.util.Constants;
 
 import java.net.URL;
 import java.util.concurrent.*;
@@ -36,12 +37,12 @@ public abstract class ExpandableArticleView extends ArticleView {
     protected Handler handler;
     protected Future<Article> future;
     public volatile boolean isLoading = false;
-    private ExecutorService executor;
+    protected ExecutorService executor;
 
-    public ExpandableArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
+    public ExpandableArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom,ExecutorService executor) {
         super(context, article, pageView, placedAtBottom);
         if (!article.isAlreadyLoaded()) {
-            executor = Executors.newFixedThreadPool(1);
+            this.executor = executor;
             preload();
         } else {
             if (toLoadImage(context))
@@ -62,7 +63,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                         if (loadedTikeExtractResponse != null) {
                             return loadedTikeExtractResponse;
                         } else {
-                            TikaClient tc = new TikaClient();
+                            TikaClient tc = new TikaClient(Constants.TIKA_HOST);
                             TikaExtractResponse extractResponse = null;
                             try {
                                 extractResponse = tc.extract(url);

@@ -24,8 +24,9 @@ public class Constants {
 
     public static final int DATABASE_VERSION = 10;
     public static final String WITHURLPREFIX = "    \"";
-    public static final String INDENT = "    ";
+    public static final String INDENT = "      ";
     public static final String TYPE_FLIPDROID = "FLIPDROID";
     public static final String TYPE_BAIDUSEARCH="BAIDUSEARCH";
     public static final String TYPE_TAOBAO="TAOBAO";
+    public static final String TIKA_HOST="www.tika.it";
 }

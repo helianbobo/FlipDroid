@@ -23,11 +23,16 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class TikaClient {
+    private String host;
+
+    public TikaClient(String host){
+        this.host = host;
+    }
     public List<TikaSourceResponse> searchSource(String keyword) throws TikaClientException {
         String url = null;
         String requestURL = null;
         try {
-            requestURL = "http://www.tika.it/v1/sources/search?kw=" + URLEncoder.encode(keyword.trim(), "utf-8");
+            requestURL = "http://"+host+"/v1/sources/search?kw=" + URLEncoder.encode(keyword.trim(), "utf-8");
         } catch (UnsupportedEncodingException e) {
 
         }
@@ -104,7 +109,7 @@ public class TikaClient {
     private JSONObject toJSONObject(String url) throws TikaClientException {
         String tikeResponse = null;
         try {
-            tikeResponse = read("http://www.tika.it/v1/url/abstract?url=" + URLEncoder.encode(url.trim(), "utf-8") + "&nocache=false");
+            tikeResponse = read("http://"+host+"/v1/url/abstract?url=" + URLEncoder.encode(url.trim(), "utf-8") + "&nocache=false");
         } catch (UnsupportedEncodingException e) {
 
         }
@@ -145,9 +150,5 @@ public class TikaClient {
         }
     }
 
-    public static void main(String[] args) throws TikaClientException {
-        TikaClient client = new TikaClient();
-        TikaExtractResponse extractResponse = client.extract("http://www.88799.com/show.php?tid=1797");
-        ////System.out.println(extractResponse.getTitle());
-    }
+
 }

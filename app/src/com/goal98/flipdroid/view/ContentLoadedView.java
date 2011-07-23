@@ -8,6 +8,7 @@ import android.util.FloatMath;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -108,14 +109,12 @@ public class ContentLoadedView extends ArticleView {
         if (article.getPortraitImageUrl() != null) {
             this.portraitView.setImageUrl(article.getPortraitImageUrl().toString());
             this.portraitView.loadImage();
+        }else{
+            this.portraitView.setVisibility(View.GONE);
         }
 
         this.contentView = (TextView) layout.findViewById(R.id.content);
-        if (article.getContent() != null)
-            if (article.getSourceType() != null && article.getSourceType().equals(Constants.TYPE_TAOBAO))
-                contentView.setText(Html.fromHtml(article.getContent()));
-            else
-                contentView.setText(getPrefix() + article.getContent().trim().concat("\n").replaceAll("\n+", getPrefix() + "\n"));
+        new ArticleTextViewRender(getPrefix()).renderTextView(contentView, article);
     }
 
     public void renderBeforeLayout() {

@@ -7,9 +7,11 @@ import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.DeviceInfo;
 
+import java.util.concurrent.ExecutorService;
+
 public class MagzinePageView extends WeiboPageView {
     public LinearLayout addArticleView(Article article, boolean last) {
-        final ThumbnailArticleView thumnnailView = new ThumbnailArticleView(MagzinePageView.this.getContext(), article, this,last);
+        final ThumbnailArticleView thumnnailView = new ThumbnailArticleView(MagzinePageView.this.getContext(), article, this,last,executor);
         weiboViews.add(thumnnailView);
 
         if (!last) {

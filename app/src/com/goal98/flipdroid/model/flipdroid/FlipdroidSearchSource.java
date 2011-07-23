@@ -32,7 +32,7 @@ public class FlipdroidSearchSource implements SearchSource {
     public GroupedSource searchSource(String queryStr) {
         List<Map<String, String>> sourceList = new ArrayList<Map<String, String>>();
         try {
-            List<TikaSourceResponse> responses = new TikaClient().searchSource(queryStr);
+            List<TikaSourceResponse> responses = new TikaClient(Constants.TIKA_HOST).searchSource(queryStr);
             for (int i = 0; i < responses.size(); i++) {
                 TikaSourceResponse tikaSourceResponse = responses.get(i);
                 Map<String, String> result = new HashMap<String, String>();

@@ -1,7 +1,11 @@
 package com.goal98.flipdroid.model;
 
 import android.graphics.Bitmap;
+import android.text.Html;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.view.ThumbnailArticleView;
 
 import java.net.URL;
@@ -197,4 +201,6 @@ public class Article {
     public void setAlreadyLoaded(boolean alreadyLoaded) {
         this.alreadyLoaded = alreadyLoaded;
     }
+
+
 }

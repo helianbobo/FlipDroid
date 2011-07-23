@@ -82,6 +82,14 @@
         "image_url": "http://www.mittrchinese.com/img/logo.gif",
         "content_url":"http://www.mittrchinese.com/rssone.php?id=5"
     }
+    ,{
+        "id":"9010",
+        "name": "Technology Review(商务科技)",
+        "accountType": "RSS",
+        "desc": "麻省理工科技创业中文网",
+        "image_url": "http://www.mittrchinese.com/img/logo.gif",
+        "content_url":"http://feed.feedsky.com/alibuybuy"
+    }
     ,
     {
         "id":"9011",

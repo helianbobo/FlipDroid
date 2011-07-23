@@ -3,6 +3,8 @@ package it.tika;
 import flipdroid.grepper.GrepperException;
 import flipdroid.grepper.pipe.PipeContentExtractor;
 import it.tika.exception.ExtractorException;
+import it.tika.image.ImageDBMongoDB;
+import it.tika.image.TikaImage;
 import org.apache.commons.io.IOUtils;
 
 import java.awt.image.BufferedImage;
@@ -51,68 +53,91 @@ public class ContentExtractor implements Extractor {
                     continue;
                 }
                 int hashIndex = imageURL.lastIndexOf("#");
-                String dimensionInfo = imageURL.substring(hashIndex, imageURL.length());
-                if ("#,".equals(dimensionInfo)) {
-                    width = 0;
-                    height = 0;
+                String queryURL = imageURL.substring(0, hashIndex);
+
+                ImageInfo ii = null;
+                final ImageDBMongoDB dbInstance = ImageDBMongoDB.getInstance();
+                final TikaImage tikaImage = dbInstance.find(queryURL);
+                if (tikaImage != null) {
+                    ii = new ImageInfo();
+                    ii.setSize(tikaImage.getSize());
+                    ii.setHeight(tikaImage.getHeight());
+                    ii.setWidth(tikaImage.getWidth());
+                    System.out.println("From Image DB Cache....");
                 } else {
-                    dimensionInfo = dimensionInfo.substring(1);
-                    String[] dimension = dimensionInfo.split(",");
-                    if (dimension.length == 1) {
-                        try {
-                            width = Integer.valueOf(dimension[0]);
-                        } catch (Exception e) {
-                            width = 0;
-                        }
-                        height = 0;
-                    } else if (dimensionInfo.startsWith(",")) {
+                    String dimensionInfo = imageURL.substring(hashIndex, imageURL.length());
+                    if ("#,".equals(dimensionInfo)) {
                         width = 0;
-                        try {
-                            height = Integer.valueOf(dimension[1]);
-                        } catch (Exception e) {
+                        height = 0;
+                    } else {
+                        dimensionInfo = dimensionInfo.substring(1);
+                        String[] dimension = dimensionInfo.split(",");
+                        if (dimension.length == 1) {
+                            try {
+                                width = Integer.valueOf(dimension[0]);
+                            } catch (Exception e) {
+                                width = 0;
+                            }
                             height = 0;
+                        } else if (dimensionInfo.startsWith(",")) {
+                            width = 0;
+                            try {
+                                height = Integer.valueOf(dimension[1]);
+                            } catch (Exception e) {
+                                height = 0;
+                            }
+                        } else {
+                            try {
+                                width = Integer.valueOf(dimension[0]);
+                            } catch (Exception e) {
+                                width = 0;
+                            }
+                            try {
+                                height = Integer.valueOf(dimension[1]);
+                            } catch (Exception e) {
+                                height = 0;
+                            }
+                        }
+                    }
+
+
+                    if (imageURL.startsWith("/")) {
+                        imageURL = url.getProtocol() + "://" + url.getHost() + imageURL;
+                    }
+
+                    if (width == 0 || height == 0) {
+                        try {
+                            ii = getImageInfo(imageURL);
+                        } catch (IOException e) {
+                            imagesIterator.remove();
+                            index++;
+                            continue;
                         }
                     } else {
+                        ii = new ImageInfo();
+                        ii.setWidth(width);
+                        ii.setHeight(height);
                         try {
-                            width = Integer.valueOf(dimension[0]);
-                        } catch (Exception e) {
-                            width = 0;
-                        }
-                        try {
-                            height = Integer.valueOf(dimension[1]);
-                        } catch (Exception e) {
-                            height = 0;
+                            ii.setSize(getFileSize(new URL(imageURL)));
+                        } catch (IOException e) {
+                            imagesIterator.remove();
+                            index++;
+                            continue;
                         }
                     }
                 }
+                final int fileSize = ii.getSize();
 
-                imageURL = imageURL.substring(0, hashIndex);
-                if (imageURL.startsWith("/")) {
-                    imageURL = url.getProtocol() + "://" + url.getHost() + imageURL;
-                }
-                ImageInfo ii = null;
-                if (width == 0 || height == 0) {
-                    try {
-                        ii = getImageInfo(imageURL);
-                    } catch (IOException e) {
-                        imagesIterator.remove();
-                        index++;
-                        continue;
-                    }
-                } else {
-                    ii = new ImageInfo();
-                    ii.setWidth(width);
-                    ii.setHeight(height);
-                    try {
-                        ii.setSize(getFileSize(new URL(imageURL)));
-                    } catch (IOException e) {
-                        imagesIterator.remove();
-                        index++;
-                        continue;
-                    }
-                }
-                final long fileSize = ii.getSize();
+                TikaImage newImage = new TikaImage();
+                newImage.setUrl(queryURL);
+                newImage.setSize(fileSize);
+                newImage.setHeight(height);
+                newImage.setWidth(width);
+                try {
+                    dbInstance.insert(newImage);
+                } catch (Exception e) {
 
+                }
 
                 if (fileSize < 5000 && height < 130 && width < 130) {
                     imagesIterator.remove();
@@ -203,15 +228,15 @@ public class ContentExtractor implements Extractor {
     }
 
     private class ImageInfo {
-        private long size;
+        private int size;
         private int width;
         private int height;
 
-        public long getSize() {
+        public int getSize() {
             return size;
         }
 
-        public void setSize(long size) {
+        public void setSize(int size) {
             this.size = size;
         }
 
@@ -233,7 +258,7 @@ public class ContentExtractor implements Extractor {
     }
 
     private class InvalidImageInfo extends ImageInfo {
-        public long getSize() {
+        public int getSize() {
             return -1;
         }
 

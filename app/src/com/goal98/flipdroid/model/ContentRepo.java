@@ -38,7 +38,7 @@ public class ContentRepo {
         pagedList = new PagedPageView();
         unPagedArticles = new UnPagedArticles(new ArrayList<Article>());
         contentCache = new ContentCache(pagedList, unPagedArticles, pagingStrategy, refreshingSemaphore);
-        executor = Executors.newFixedThreadPool(10);
+        executor = Executors.newCachedThreadPool();
     }
 
     public ArticleSource getArticleSource() {

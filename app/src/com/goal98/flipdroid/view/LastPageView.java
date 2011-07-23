@@ -8,6 +8,8 @@ import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.model.PageViewSlidingWindows;
 import com.goal98.flipdroid.model.SlidingWindows;
 
+import java.util.concurrent.ExecutorService;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Administrator
@@ -19,7 +21,7 @@ public class LastPageView extends WeiboPageView {
     private LinearLayout frame;
     SlidingWindows windows;
 
-    public LastPageView(PageActivity context, PageViewSlidingWindows windows) {
+    public LastPageView(PageActivity context) {
         super(context);
 
     }

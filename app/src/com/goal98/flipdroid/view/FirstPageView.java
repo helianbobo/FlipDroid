@@ -12,6 +12,7 @@ import com.goal98.flipdroid.model.*;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,7 +25,7 @@ public class FirstPageView extends WeiboPageView {
     private LinearLayout frame;
     private FromFileJSONReader jsonReader;
 
-    public FirstPageView(PageActivity context, PageViewSlidingWindows windows) {
+    public FirstPageView(PageActivity context, PageViewSlidingWindows windows,ExecutorService executor) {
         super(context);
         jsonReader = new FromFileJSONReader(context);
     }

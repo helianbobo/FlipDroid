@@ -23,6 +23,7 @@ import com.goal98.flipdroid.util.PrettyTimeUtil;
 
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
@@ -43,8 +44,8 @@ public class ThumbnailArticleView extends ExpandableArticleView {
     private WebImageView imageView;
     volatile boolean isLoading = false;
 
-    public ThumbnailArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
-        super(context, article, pageView, placedAtBottom);
+    public ThumbnailArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom,ExecutorService executor) {
+        super(context, article, pageView, placedAtBottom,executor);
     }
 
     protected String getPrefix() {
@@ -54,8 +55,10 @@ public class ThumbnailArticleView extends ExpandableArticleView {
     public void displayLoadedThumbnail() {
         try {
             //System.out.println("taking content");
-            if (!article.isAlreadyLoaded())
+            if (!article.isAlreadyLoaded()){
                 article = future.get();
+//                executor.shutdown();
+            }
 
             isLoading = true;
             handler.post(new Runnable() {
@@ -93,19 +96,8 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                     int maxLine = scaled ? maxLines + (largeScreen ? 1 : 1) : maxLines;
                     t.setMaxLines(maxLine);
 
-                    if (article != null && article.getContent() != null) {
-                	if (article.getSourceType()!=null&& article.getSourceType().equals(Constants.TYPE_TAOBAO))
-                	    {
-                	    System.out.println("haole#################"+article.getContent());
-                	     
-                    		t.setText(Html.fromHtml(article.getContent()));
-                    		}
-                	else
-                	    t.setText(getPrefix() + (article.getContent().trim()).replaceAll("\n+", "      \n"));
-                    } else {
-                        t.setVisibility(GONE);
-                        titleView.setTextSize(25);
-                    }
+                    new ArticleTextViewRender(getPrefix()).renderTextView(t, article);
+
                     //System.out.println("article.getImageUrl()" + article.getImageUrl());
                     if (article.getImageUrl() == null || !toLoadImage(getContext())) {
                         LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
@@ -121,6 +113,8 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                             imageView.handleImageLoaded(article.getImage(), null);
                         else
                             article.addNotifier(new Notifier());
+
+//                        article.getImage().recycle();
                         LayoutParams layoutParamsText = new LayoutParams(0, LayoutParams.FILL_PARENT);
                         LayoutParams layoutParamsImage = new LayoutParams(0, LayoutParams.FILL_PARENT);
                         if (imageView.getFatOrSlim() == WebImageView.FAT) {
@@ -230,6 +224,8 @@ public class ThumbnailArticleView extends ExpandableArticleView {
         createDateView.setText(time);
         if (article.getPortraitImageUrl() != null)
             portraitView.setImageUrl(article.getPortraitImageUrl().toString());
+        else
+            portraitView.setVisibility(GONE);
 
         contentViewWrapper.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {

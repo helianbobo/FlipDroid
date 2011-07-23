@@ -9,6 +9,7 @@ import com.goal98.flipdroid.util.DeviceInfo;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 public class SmartPage extends Page{
     private int heightSum;

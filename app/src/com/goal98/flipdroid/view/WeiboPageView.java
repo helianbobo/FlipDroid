@@ -30,12 +30,14 @@ import weibo4j.WeiboException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 public class WeiboPageView extends FrameLayout {
     private Page page;
 
     protected LinearLayout frame;
     public LayoutInflater inflater;
+    protected ExecutorService executor;
 
     public LinearLayout getContentLayout() {
         return contentLayout;
@@ -97,7 +99,7 @@ public class WeiboPageView extends FrameLayout {
     protected List<LinearLayout> wrapperViews = new ArrayList<LinearLayout>();
 
     public LinearLayout addArticleView(Article article, boolean last) {
-        WeiboArticleView withoutURLArticleView = new WeiboArticleView(WeiboPageView.this.getContext(), article, this, last);
+        WeiboArticleView withoutURLArticleView = new WeiboArticleView(WeiboPageView.this.getContext(), article, this, last, executor);
         weiboViews.add(withoutURLArticleView);
 
 
@@ -130,7 +132,7 @@ public class WeiboPageView extends FrameLayout {
         this.pageActivity = pageActivity;
         this.sourceName = pageActivity.getSourceName();
         this.sourceImageURL = pageActivity.getSourceImageURL();
-
+        this.executor = pageActivity.getExecutor();
         setDynamicLayout(pageActivity);
     }
 
