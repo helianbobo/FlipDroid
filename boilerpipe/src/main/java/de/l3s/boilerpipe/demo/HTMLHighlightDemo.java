@@ -18,11 +18,13 @@ import de.l3s.boilerpipe.sax.HTMLHighlighter;
  */
 public class HTMLHighlightDemo {
     public static void main(String[] args) throws Exception {
-        URL url = new URL("http://book.douban.com/review/5030542/");
+        URL url = new URL("http://www.ifanr.com/47234");
 
         final BoilerpipeExtractor extractor = CommonExtractors.CHINESE_ARTICLE_EXTRACTOR;
         final HTMLHighlighter hh = HTMLHighlighter.newExtractingInstanceForChinese();
 
-        System.out.println(hh.process(url, extractor));
+        String process = hh.process(url, extractor);
+
+        System.out.println(process);
     }
 }

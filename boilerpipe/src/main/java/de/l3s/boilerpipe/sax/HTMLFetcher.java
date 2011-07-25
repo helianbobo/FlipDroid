@@ -20,6 +20,7 @@ public class HTMLFetcher {
 
     public static HTMLDocument fetch(final URL url, String charsetStr) throws IOException {
        final URLConnection conn = url.openConnection();
+
 	   final String charset = conn.getContentEncoding();
 
 		Charset cs = Charset.forName(charsetStr);

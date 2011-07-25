@@ -50,6 +50,7 @@ public class PreloadImageLoaderHandler implements MyHandler {
             Bitmap resizeBitmap = Bitmap.createBitmap(
 
                     bitmap, 0, 0, bmpWidth, bmpHeight, matrix, false);
+//            bitmap.recycle();
             article.setImageBitmap(bitmap);
             return true;
         }

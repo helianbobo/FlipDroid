@@ -2,6 +2,8 @@ package it.tika;
 
 import flipdroid.grepper.GrepperException;
 import flipdroid.grepper.pipe.PipeContentExtractor;
+import it.tika.blacklist.BlacklistedImageDBMongoDB;
+import it.tika.blacklist.BlacklistedTikaImage;
 import it.tika.exception.ExtractorException;
 import it.tika.image.ImageDBMongoDB;
 import it.tika.image.TikaImage;
@@ -45,19 +47,51 @@ public class ContentExtractor implements Extractor {
             Iterator<String> imagesIterator = extractor.getImages().iterator();
             List<String> filteredImages = new ArrayList<String>();
             while (imagesIterator.hasNext()) {
-                String imageURL = imagesIterator.next();
-
+                String imageURL = imagesIterator.next().trim();
+                char[] chars = imageURL.toCharArray();
+                int firstChar = 0;
+                for (int i = 0; i < chars.length; i++) {
+                    if (chars[i] <= 127) {
+                        firstChar = i;
+                        break;
+                    }
+                }
+                imageURL = imageURL.substring(firstChar);
                 int width = 0;
                 int height = 0;
                 if (imageURL.indexOf("#") == -1) {
                     continue;
                 }
+                if (!imageURL.startsWith("http")) {
+                    if (imageURL.startsWith("/")) {
+                        imageURL = url.getProtocol() + "://" + url.getHost() + imageURL;
+                    } else {
+                        String upOneLevel = url.getPath().substring(0, url.getPath().lastIndexOf("/"));
+                        imageURL = url.getProtocol() + "://" + url.getHost() + upOneLevel + imageURL;
+                    }
+                }
                 int hashIndex = imageURL.lastIndexOf("#");
                 String queryURL = imageURL.substring(0, hashIndex);
+                int first = queryURL.indexOf("http");
+                queryURL = queryURL.substring(first);
+                try {
+                    BlacklistedTikaImage blacklistedTikaImage = BlacklistedImageDBMongoDB.getInstance().find(queryURL);
+                    if (blacklistedTikaImage != null)
+                        continue;
+                } catch (Exception e) {
+
+                }
+
 
                 ImageInfo ii = null;
-                final ImageDBMongoDB dbInstance = ImageDBMongoDB.getInstance();
-                final TikaImage tikaImage = dbInstance.find(queryURL);
+                TikaImage tikaImage;
+                ImageDBMongoDB dbInstance = null;
+                try {
+                    dbInstance = ImageDBMongoDB.getInstance();
+                    tikaImage = dbInstance.find(queryURL);
+                } catch (Exception e) {
+                    tikaImage = null;
+                }
                 if (tikaImage != null) {
                     ii = new ImageInfo();
                     ii.setSize(tikaImage.getSize());
@@ -101,13 +135,9 @@ public class ContentExtractor implements Extractor {
                     }
 
 
-                    if (imageURL.startsWith("/")) {
-                        imageURL = url.getProtocol() + "://" + url.getHost() + imageURL;
-                    }
-
                     if (width == 0 || height == 0) {
                         try {
-                            ii = getImageInfo(imageURL);
+                            ii = getImageInfo(queryURL);
                         } catch (IOException e) {
                             imagesIterator.remove();
                             index++;
@@ -118,7 +148,7 @@ public class ContentExtractor implements Extractor {
                         ii.setWidth(width);
                         ii.setHeight(height);
                         try {
-                            ii.setSize(getFileSize(new URL(imageURL)));
+                            ii.setSize(getFileSize(new URL(queryURL)));
                         } catch (IOException e) {
                             imagesIterator.remove();
                             index++;
@@ -131,10 +161,11 @@ public class ContentExtractor implements Extractor {
                 TikaImage newImage = new TikaImage();
                 newImage.setUrl(queryURL);
                 newImage.setSize(fileSize);
-                newImage.setHeight(height);
-                newImage.setWidth(width);
+                newImage.setHeight(ii.getHeight());
+                newImage.setWidth(ii.getWidth());
                 try {
-                    dbInstance.insert(newImage);
+                    if (dbInstance != null)
+                        dbInstance.insert(newImage);
                 } catch (Exception e) {
 
                 }
@@ -142,7 +173,7 @@ public class ContentExtractor implements Extractor {
                 if (fileSize < 5000 && height < 130 && width < 130) {
                     imagesIterator.remove();
                 } else {
-                    filteredImages.add(imageURL);
+                    filteredImages.add(queryURL);
                     final int fileArea = ii.getWidth() * ii.getHeight();
                     if (fileArea > largestArea) {
                         largestArea = fileArea;

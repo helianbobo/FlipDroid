@@ -46,9 +46,9 @@ public class RSSArticleSource implements ArticleSource {
     public boolean loadMore() {
         //System.out.println("this.contentUrl" + this.contentUrl);
         RssParser rp = new RssParser(this.contentUrl);
-        try{
+        try {
             rp.parse();
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
         RssParser.RssFeed feed = rp.getFeed();
@@ -77,12 +77,13 @@ public class RSSArticleSource implements ArticleSource {
             article.setStatus(item.link);
             //System.out.println("item.pubDate " + item.pubDate);
             Date date = new Date();
-            if (item.pubDate != null)
+            if (item.pubDate != null){
+                item.pubDate = preFormat(item.pubDate);
                 try {
-                    date = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z").parse(item.pubDate);
+                    date = new SimpleDateFormat("dd MM yyyy HH:mm:ss").parse(item.pubDate);
                 } catch (ParseException e) {
                     try {
-                        date = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm z").parse(item.pubDate);
+                        date = new SimpleDateFormat("dd MM yyyy HH:mm").parse(item.pubDate);
                     } catch (ParseException e1) {
                         try {
                             date = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(item.pubDate);
@@ -99,7 +100,7 @@ public class RSSArticleSource implements ArticleSource {
                         }
                     }
                 }
-
+            }
             article.setCreatedDate(date);
             article.setSourceType(Constants.TYPE_RSS);
             list.add(article);
@@ -107,6 +108,28 @@ public class RSSArticleSource implements ArticleSource {
         loaded = true;
         ////System.out.println("LOADED" + loaded);
         return true;
+    }
+
+    private String preFormat(String pubDate) {
+        return pubDate.replace("Jan","01")
+                .replace("Feb","02")
+                .replace("Mar","03")
+                .replace("Apr","04")
+                .replace("May","05")
+                .replace("Jun","06")
+                .replace("Jul","07")
+                .replace("Aug","08")
+                .replace("Sep","09")
+                .replace("Oct","10")
+                .replace("Nov","11")
+                .replace("Dec","12")
+                .replace("Sun, ","")
+                .replace("Mon, ","")
+                .replace("Tue, ","")
+                .replace("Wen, ","")
+                .replace("Thu, ","")
+                .replace("Fri, ","")
+                .replace("Sat, ","");
     }
 
     public boolean isNoMoreToLoad() {

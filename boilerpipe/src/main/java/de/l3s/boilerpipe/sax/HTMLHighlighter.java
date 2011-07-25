@@ -420,24 +420,13 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("h5") ||
                             qName.equalsIgnoreCase("h6") ||
                             qName.equalsIgnoreCase("p") ||
-                            qName.equalsIgnoreCase("br")||
+                            qName.equalsIgnoreCase("br") ||
                             qName.equalsIgnoreCase("li")
                             )
 //                        html.append('\n');
                     {
-                        html.append('<');
-                        html.append("p");
-                        final int numAtts = atts.getLength();
-                        for (int i = 0; i < numAtts; i++) {
-                            final String attr = atts.getQName(i);
-                            final String value = atts.getValue(i);
-                            html.append(' ');
-                            html.append(attr);
-                            html.append("=\"");
-                            html.append(xmlEncode(value));
-                            html.append("\"");
-                        }
-                        html.append('>');
+                        if (!html.toString().endsWith("<p>"))
+                            html.append("<p>");
                     }
                 }
             } finally {
@@ -474,8 +463,10 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("p") ||
                             qName.equalsIgnoreCase("br") ||
                             qName.equalsIgnoreCase("li")
-                            )
-                        html.append("</p>");
+                            ) {
+                        if (!html.toString().endsWith("</p>"))
+                            html.append("</p>");
+                    }
                 }
             } finally {
                 if (ta != null) {

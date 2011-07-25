@@ -29,7 +29,7 @@
     <string name="title_animation_mode_preference">Flip Animation</string>
     <string name="dialog_title_animation_mode_preference">Flip Animation</string>
 
-    <string name="title_load_image_preference">load image</string>
+    <string name="title_load_image_preference">load imageBlacklisted</string>
     <string name="key_load_image_preference">load_image</string>
 
     <string name="button_add_new_account">Add New Account</string>

@@ -1,108 +1,108 @@
 
-ÐÂÀËÎ¢²©API£¨java°æ£©
+ï¿½ï¿½ï¿½ï¿½Î¢ï¿½ï¿½APIï¿½ï¿½javaï¿½æ£©
 ============================
-ÐÞ¸ÄÊÂÏî£º
-1¡¢½Ó¿Ú·µ»Ø½á¹û²ÉÓÃjson¶ÔÏó·½Ê½·â×°
-2¡¢ÐÞ¸ÄWeiboResponseÖÐ¿Õ×Ö·û´®("")µ÷ÓÃÅÐ¶ÏµÄbug
-3¡¢ÐÞ¸ÄÁËJSONObjectÖÐ·µ»Ø¿Õ¶ÔÏóµÄÎÊÌâ
-4¡¢Ôö¼ÓÁËÖ±½ÓÎÄ¼þÉÏ´«½Ó¿ÚÖ±½Ó
+ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½î£º
+1ï¿½ï¿½ï¿½Ó¿Ú·ï¿½ï¿½Ø½ï¿½ï¿½ï¿½ï¿½ï¿½jsonï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½×°
+2ï¿½ï¿½ï¿½Þ¸ï¿½WeiboResponseï¿½Ð¿ï¿½ï¿½Ö·ï¿½("")ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ïµï¿½bug
+3ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½JSONObjectï¿½Ð·ï¿½ï¿½Ø¿Õ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ï´ï¿½ï¿½Ó¿ï¿½Ö±ï¿½ï¿½
 
-³£ÓÃ½Ó¿ÚÊµÀý£º
-£¨Ê¹ÓÃÇ°ÏÈÐÞ¸Ä Weibo.java ÖÐ 
+ï¿½ï¿½ï¿½Ã½Ó¿ï¿½Êµï¿½ï¿½
+ï¿½ï¿½Ê¹ï¿½ï¿½Ç°ï¿½ï¿½ï¿½Þ¸ï¿½ Weibo.java ï¿½ï¿½ 
  	public static final String CONSUMER_KEY = "";
 	public static final String CONSUMER_SECRET = "";
- ÌîÐ´³ÉÊµ¼ÊÉêÇëµÄ CONSUMER_KEY ¼° CONSUMER_SECRET£©
+ ï¿½ï¿½Ð´ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ CONSUMER_KEY ï¿½ï¿½ CONSUMER_SECRETï¿½ï¿½
 
-1¡¢»ñÈ¡×îÐÂ¹«¹²Î¢²©ÁÐ±í
-	²Î¿¼£ºweibo4j.examples.GetTimelines ÖÐµÄgetPublicTimeline()²¿·Ö
+1ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½Â¹ï¿½ï¿½ï¿½Î¢ï¿½ï¿½ï¿½Ð±ï¿½
+	ï¿½Î¿ï¿½ï¿½ï¿½weibo4j.examples.GetTimelines ï¿½Ðµï¿½getPublicTimeline()ï¿½ï¿½ï¿½ï¿½
 
-2¡¢·¢±íÎ¢²©
-	²Î¿¼£ºweibo4j.examples.Update ÖÐµÄupdateStatus(...)²¿·Ö
+2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¢ï¿½ï¿½
+	ï¿½Î¿ï¿½ï¿½ï¿½weibo4j.examples.Update ï¿½Ðµï¿½updateStatus(...)ï¿½ï¿½ï¿½ï¿½
 
-3¡¢·¢±íÆÀÂÛ
-	²Î¿¼£ºweibo4j.examples.Update ÖÐµÄupdateComment(...)²¿·Ö
+3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½Î¿ï¿½ï¿½ï¿½weibo4j.examples.Update ï¿½Ðµï¿½updateComment(...)ï¿½ï¿½ï¿½ï¿½
 
-4¡¢É¾³ýÆÀÂÛ
-	²Î¿¼£ºweibo4j.examples.Update ÖÐµÄdestroyComment(...)²¿·Ö
+4ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	ï¿½Î¿ï¿½ï¿½ï¿½weibo4j.examples.Update ï¿½Ðµï¿½destroyComment(...)ï¿½ï¿½ï¿½ï¿½
 
-5¡¢·¢ËÍË½ÈËÏûÏ¢
-	²Î¿¼£ºweibo4j.examples.DirectMessage Àà
+5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë½ï¿½ï¿½ï¿½ï¿½Ï¢
+	ï¿½Î¿ï¿½ï¿½ï¿½weibo4j.examples.DirectMessage ï¿½ï¿½
 
-6¡¢·¢±í´øÍ¼Æ¬µÄÎ¢²©
-	²Î¿¼£ºweibo4j.examples.OAuthUploadByFile ÖÐµÄuploadStatus(status,file)²¿·Ö
+6ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ï¿½ï¿½Î¢ï¿½ï¿½
+	ï¿½Î¿ï¿½ï¿½ï¿½weibo4j.examples.OAuthUploadByFile ï¿½Ðµï¿½uploadStatus(status,file)ï¿½ï¿½ï¿½ï¿½
 
-7¡¢¸üÐÂÓÃ»§Í·Ïñ
-	²Î¿¼£ºweibo4j.examples.OAuthUpdateProfileÀà
+7ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Í·ï¿½ï¿½
+	ï¿½Î¿ï¿½ï¿½ï¿½weibo4j.examples.OAuthUpdateProfileï¿½ï¿½
 
-8¡¢OAuth×ÀÃæÓ¦ÓÃ·ÃÎÊ
-	²½Öè£º 1> ÔÚweibo4j.examples.OAuthUpdate ·ÃÎÊÈÏÖ¤µÄURL£¬µÃµ½pin
-		  2> ÔÚweibo4j.examples.OAuthUpdate 	ÊäÈëpin£¬È»ºóµÃµ½AccessToken
-		  3> ¼´¿É·ÃÎÊÓÃ»§µÄÎ¢²©£¬²Î¿¼£ºweibo4j.examples.OAuthUpdateTwo
+8ï¿½ï¿½OAuthï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ã·ï¿½ï¿½ï¿½
+	ï¿½ï¿½ï¿½è£º 1> ï¿½ï¿½weibo4j.examples.OAuthUpdate ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½URLï¿½ï¿½ï¿½Ãµï¿½pin
+		  2> ï¿½ï¿½weibo4j.examples.OAuthUpdate 	ï¿½ï¿½ï¿½ï¿½pinï¿½ï¿½È»ï¿½ï¿½Ãµï¿½AccessToken
+		  3> ï¿½ï¿½ï¿½É·ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Î¢ï¿½ï¿½ï¿½ï¿½ï¿½Î¿ï¿½ï¿½ï¿½weibo4j.examples.OAuthUpdateTwo
 
-9¡¢OAuth WEBÓ¦ÓÃ·ÃÎÊ
-	²½Öè£º 
-					1> ÔÚweibo4j.examples.WebOAuth ´øbackurl²ÎÊýÇëÇóOAuthÈÏÖ¤£¬»ñµÃRequestToken
-				  2> ÔÚcallback µÄµØÖ·ÀïÃæ£¬½ÓÊÜµ½oauth_verifier²ÎÊý£¬È»ºóÔÙ·¢Ò»´ÎÇëÇó£¬¼´¿É»ñµÃAccessToken
-				  3> ÓÃAccessToken·ÃÎÊÓÃ»§µÄÎ¢²©
-	ÊµÀýËµÃ÷£º
+9ï¿½ï¿½OAuth WEBÓ¦ï¿½Ã·ï¿½ï¿½ï¿½
+	ï¿½ï¿½ï¿½è£º 
+					1> ï¿½ï¿½weibo4j.examples.WebOAuth ï¿½ï¿½backurlï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½OAuthï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½ï¿½RequestToken
+				  2> ï¿½ï¿½callback ï¿½Äµï¿½Ö·ï¿½ï¿½ï¿½æ£¬ï¿½ï¿½ï¿½Üµï¿½oauth_verifierï¿½ï¿½ï¿½ï¿½È»ï¿½ï¿½ï¿½Ù·ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ó£¬¼ï¿½ï¿½É»ï¿½ï¿½AccessToken
+				  3> ï¿½ï¿½AccessTokenï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Î¢ï¿½ï¿½
+	Êµï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½
 	
-		ÔÚwebÄ¿Â¼ÏÂÃæÓÐÁ½¸öjspÒ³Ãæ£º
+		ï¿½ï¿½webÄ¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½jspÒ³ï¿½æ£º
 		call.jsp 
-					ÊÇ·¢ËÍrequestµÄÇëÇó£¬ÔÚµÚ¾ÅÐÐµÄ²ÎÊý¡°http://localhost:8080/callback.jsp¡±ÊÇ»Øµ÷µØÖ·
-				  µ±»ñÈ¡³É¹¦ºó½«RequestTokenÖÃÈësession£¬²¢ÖØ¶¨Ïòµ½ÓÃ»§ÈÏÖ¤µØÖ·
+					ï¿½Ç·ï¿½ï¿½ï¿½requestï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÚµÚ¾ï¿½ï¿½ÐµÄ²ï¿½ï¿½ï¿½http://localhost:8080/callback.jspï¿½ï¿½ï¿½Ç»Øµï¿½ï¿½ï¿½Ö·
+				  ï¿½ï¿½ï¿½ï¿½È¡ï¿½É¹ï¿½ï¿½ï¿½RequestTokenï¿½ï¿½ï¿½ï¿½sessionï¿½ï¿½ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ö¤ï¿½ï¿½Ö·
 	  callback.jsp 
-	  			½ÓÊÕµ½oauth_verifier²ÎÊý£¬´ÓsessionÀïÃæÄÃµ½RequestToken£¬ÔÙÇëÇó»ñÈ¡AccessToken
-	    		»ñÈ¡µ½ºó¼´¿É¶ÔÓÃ»§Î¢²©½øÐÐ²Ù×÷£¬±¾ÀýÖÐÊÇ·¢±íÎ¢²©
+	  			ï¿½ï¿½ï¿½Õµï¿½oauth_verifierï¿½ï¿½ï¿½ï¿½ï¿½sessionï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½RequestTokenï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡AccessToken
+	    		ï¿½ï¿½È¡ï¿½ï¿½ï¿½ó¼´¿É¶ï¿½ï¿½Ã»ï¿½Î¢ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Î¢ï¿½ï¿½
 	
-	²âÊÔ»·¾³£º
+	ï¿½ï¿½ï¿½Ô»ï¿½ï¿½ï¿½ï¿½ï¿½
 		
-		±¾ÀýÖÐ¿ÉÒÔ½«call.jspºÍ  callback.jspÖ±½Ó·Åµ½tomcatµÄ¸ùÄ¿Â¼ÏÂÃæ£ºwebapps\ROOT
-		²¢½«ÊµÀýÏîÄ¿±àÒëºÃµÄclassesÎÄ¼þºÍlibÄ¿Â¼¿½±´µ½ROOT\WEB-INFÏÂÃæ
-		ÖØÆôtomcat£¬·ÃÎÊhttp://localhost:8080/call.jsp?opt=1	
-	×¢£ºÒ²¿ÉÒÔ´ò³Éwar°ü£¬µ«×¢Òâcall.jspÀïÃæµÄcallback²ÎÊýÐèÒª×öÏàÓ¦ÐÞ¸Ä
+		ï¿½ï¿½ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½Ô½ï¿½call.jspï¿½ï¿½  callback.jspÖ±ï¿½Ó·Åµï¿½tomcatï¿½Ä¸ï¿½Ä¿Â¼ï¿½ï¿½ï¿½æ£ºwebapps\ROOT
+		ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Ãµï¿½classesï¿½Ä¼ï¿½ï¿½ï¿½libÄ¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ROOT\WEB-INFï¿½ï¿½ï¿½ï¿½
+		ï¿½ï¿½ï¿½ï¿½tomcatï¿½ï¿½ï¿½ï¿½ï¿½ï¿½http://localhost:8080/call.jsp?opt=1	
+	×¢ï¿½ï¿½Ò²ï¿½ï¿½ï¿½Ô´ï¿½ï¿½warï¿½ï¿½×¢ï¿½ï¿½call.jspï¿½ï¿½ï¿½ï¿½ï¿½callbackï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Þ¸ï¿½
 
 
 =============================================================================
-ÆäËû½Ó¿ÚÔÚweibo4j.WeiboÀàÖÐ¶¨Òå£¬µ÷ÓÃ·½Ê½Çë²Î¿¼weibo4j.examples£¬ÏÂÃæÊÇÍêÕûµÄ½Ó¿ÚÁÐ±í£º
+ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½weibo4j.Weiboï¿½ï¿½ï¿½Ð¶ï¿½ï¿½å£¬ï¿½ï¿½ï¿½Ã·ï¿½Ê½ï¿½ï¿½Î¿ï¿½weibo4j.examplesï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä½Ó¿ï¿½ï¿½Ð±?
 
-»ñÈ¡ÏÂÐÐÊý¾Ý¼¯(timeline)½Ó¿Ú  ·½·¨Ãû£º
-statuses/public_timeline ×îÐÂ¹«¹²Î¢²©      ·½·¨Ãû£ºgetPublicTimeline
-statuses/friends_timeline ×îÐÂ¹Ø×¢ÈËÎ¢²© (±ðÃû: statuses/home_timeline)  ·½·¨Ãû£ºgetFriendsTimeline 
-statuses/user_timeline ÓÃ»§·¢±íÎ¢²©ÁÐ±í   ·½·¨Ãû£ºgetUserTimeline(String id, Paging paging)
-statuses/mentions ×îÐÂ @ÓÃ»§µÄ    ·½·¨Ãû£º getMentions()
-statuses/comments µ¥ÌõÆÀÂÛÁÐ±í(°´Î¢²©)   ·½·¨Ãû£ºgetComments()
+ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¼ï¿½(timeline)ï¿½Ó¿ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+statuses/public_timeline ï¿½ï¿½ï¿½Â¹ï¿½ï¿½ï¿½Î¢ï¿½ï¿½      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½getPublicTimeline
+statuses/friends_timeline ï¿½ï¿½ï¿½Â¹ï¿½×¢ï¿½ï¿½Î¢ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½: statuses/home_timeline)  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½getFriendsTimeline 
+statuses/user_timeline ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½Î¢ï¿½ï¿½ï¿½Ð±ï¿½   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½getUserTimeline(String id, Paging paging)
+statuses/mentions ï¿½ï¿½ï¿½ï¿½ @ï¿½Ã»ï¿½ï¿½ï¿½    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ getMentions()
+statuses/comments ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½(ï¿½ï¿½Î¢ï¿½ï¿½)   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½getComments()
 
-Î¢²©·ÃÎÊ½Ó¿Ú
-statuses/show »ñÈ¡µ¥Ìõ   ·½·¨Ãû£ºshowStatus(long id)
+Î¢ï¿½ï¿½ï¿½ï¿½ï¿½Ê½Ó¿ï¿½
+statuses/show ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½showStatus(long id)
 
-statuses/update ·¢±íÎ¢²©   ·½·¨Ãû£ºupdateStatus(String status)
-statuses/upload ·¢±íÎ¢²©¼°Í¼Æ¬ ·½·¨Ãû£ºuploadStatus(String status,File file)
-statuses/destroy É¾³ý ·½·¨Ãû£º destroyStatus(long statusId)
+statuses/update ï¿½ï¿½ï¿½ï¿½Î¢ï¿½ï¿½   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½updateStatus(String status)
+statuses/upload ï¿½ï¿½ï¿½ï¿½Î¢ï¿½ï¿½ï¿½ï¿½Í¼Æ¬ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½uploadStatus(String status,File file)
+statuses/destroy É¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ destroyStatus(long statusId)
 
-statuses/comment ÆÀÂÛ ·½·¨Ãû£º destroyComment(long commentId)
-statuses/comment_destroy É¾³ýÆÀÂÛ  ·½·¨Ãû£ºdestroyComment
+statuses/comment ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ destroyComment(long commentId)
+statuses/comment_destroy É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½destroyComment
 
-Ë½ÐÅ½Ó¿Ú
-direct_messages ÎÒµÄË½ÐÅÁÐ±í ·½·¨Ãû£ºgetDirectMessages() ·ÖÒ³ getDirectMessages(Paging paging)
-direct_messages/sent ÎÒ·¢ËÍµÄË½ÐÅÁÐ±í ·½·¨Ãû£ºgetSentDirectMessages()
-direct_messages/new ·¢ËÍË½ÐÅ ·½·¨Ãû£ºsendDirectMessage(String id,String text)
-direct_messages/destroy É¾³ýÒ»ÌõË½ÐÅ ·½·¨Ãû£ºdestroyDirectMessage(int id)
-¹Ø×¢½Ó¿Ú
-friendships/create ¹Ø×¢Ä³ÓÃ»§ ·½·¨Ãû£ºcreateFriendship(String id)»ò createFriendship(String id, boolean follow)
-friendships/destroy È¡Ïû¹Ø×¢ ·½·¨Ãû£º destroyFriendship(String id)
-friendships/exists ÊÇ·ñ¹Ø×¢Ä³ÓÃ»§ ·½·¨Ãû£ºexistsFriendship(String userA, String userB)
+Ë½ï¿½Å½Ó¿ï¿½
+direct_messages ï¿½Òµï¿½Ë½ï¿½ï¿½ï¿½Ð±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½getDirectMessages() ï¿½ï¿½Ò³ getDirectMessages(Paging paging)
+direct_messages/sent ï¿½Ò·ï¿½ï¿½Íµï¿½Ë½ï¿½ï¿½ï¿½Ð±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½getSentDirectMessages()
+direct_messages/new ï¿½ï¿½ï¿½ï¿½Ë½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sendDirectMessage(String id,String text)
+direct_messages/destroy É¾ï¿½ï¿½Ò»ï¿½ï¿½Ë½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½destroyDirectMessage(int id)
+ï¿½ï¿½×¢ï¿½Ó¿ï¿½
+friendships/create ï¿½ï¿½×¢Ä³ï¿½Ã»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½createFriendship(String id)ï¿½ï¿½ createFriendship(String id, boolean follow)
+friendships/destroy È¡ï¿½ï¿½ï¿½×¢ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ destroyFriendship(String id)
+friendships/exists ï¿½Ç·ï¿½ï¿½×¢Ä³ï¿½Ã»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½existsFriendship(String userA, String userB)
 
-friends/ids ¹Ø×¢ÁÐ±í ·½·¨Ãû£º getFriendsIDs(long cursor)
-followers/ids ·ÛË¿ÁÐ±í ·½·¨Ãû£ºgetFollowersIDs(long cursor)
-ÕËºÅ½Ó¿Ú
-account/verify_credentials ÑéÖ¤Éí·ÝÊÇ·ñºÏ·¨ ·½·¨Ãû£ºverifyCredentials()
-account/rate_limit_status ²é¿´µ±Ç°ÆµÂÊÏÞÖÆ ·½·¨Ãû£ºrateLimitStatus()
+friends/ids ï¿½ï¿½×¢ï¿½Ð±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ getFriendsIDs(long cursor)
+followers/ids ï¿½ï¿½Ë¿ï¿½Ð±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½getFollowersIDs(long cursor)
+ï¿½ËºÅ½Ó¿ï¿½
+account/verify_credentials ï¿½ï¿½Ö¤ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½verifyCredentials()
+account/rate_limit_status ï¿½é¿´ï¿½ï¿½Ç°Æµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rateLimitStatus()
 
-account/update_profile_image ¸ü¸ÄÍ·Ïñ ·½·¨Ãû£ºupdateProfileImage(File image)
-account/update_profile ¸ü¸Ä×ÊÁÏ ·½·¨Ãû£ºUser updateProfile(String name, String email, String url, String location, String description)
+account/update_profile_image ï¿½ï¿½ï¿½Í·ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½updateProfileImage(File imageBlacklisted)
+account/update_profile ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½User updateProfile(String name, String email, String url, String location, String description)
 
-ÊÕ²Ø½Ó¿Ú
-favorites ÊÕ²ØÁÐ±í ·½·¨Ãû£ºgetFavorites()
-favorites/create Ìí¼ÓÊÕ²Ø ·½·¨Ãû£ºcreateFavorite(long id)
-favorites/destroy É¾³ýÊÕ²Ø ·½·¨Ãû£ºdestroyFavorite(long id)
+ï¿½Õ²Ø½Ó¿ï¿½
+favorites ï¿½Õ²ï¿½ï¿½Ð±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½getFavorites()
+favorites/create ï¿½ï¿½ï¿½ï¿½Õ²ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½createFavorite(long id)
+favorites/destroy É¾ï¿½ï¿½ï¿½Õ²ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½destroyFavorite(long id)
 

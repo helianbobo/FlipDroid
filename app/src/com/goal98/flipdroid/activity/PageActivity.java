@@ -47,9 +47,7 @@ import com.goal98.flipdroid.view.*;
 import weibo4j.Weibo;
 import weibo4j.WeiboException;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.*;
 
 public class PageActivity extends Activity implements com.goal98.flipdroid.model.Window.OnLoadListener {
 
@@ -158,7 +156,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         setProgressBarIndeterminateVisibility(false);
         System.out.println("debug on create");
 
-        executor = Executors.newCachedThreadPool();
+        executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                      10L, TimeUnit.SECONDS,
+                                      new SynchronousQueue<Runnable>());
         sourceDB = new SourceDB(this);
         alarmSender = new AlarmSender(this);
 
@@ -221,7 +221,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
 
             SinaToken sinaToken = SinaAccountUtil.getToken(PageActivity.this);
-            ArticleFilter filter = null;
+            ArticleFilter filter;
             if (isWeiboMode())
                 filter = new NullArticleFilter();
             else
