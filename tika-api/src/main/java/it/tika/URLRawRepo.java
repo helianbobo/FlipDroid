@@ -28,7 +28,7 @@ public class URLRawRepo {
     public byte[] fetch(String urlStr) throws URLRepoException, IOException {
         URL url = new URL(urlStr);
         final URLConnection conn = url.openConnection();
-        conn.setRequestProperty("User-Agent","ozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
+        conn.setRequestProperty("User-Agent","Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
         InputStream in = conn.getInputStream();
 
         final String encoding = conn.getContentEncoding();

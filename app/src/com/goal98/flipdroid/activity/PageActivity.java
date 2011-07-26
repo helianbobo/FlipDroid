@@ -34,6 +34,7 @@ import com.goal98.flipdroid.exception.LastWindowException;
 import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.exception.NoSinaAccountBindedException;
 import com.goal98.flipdroid.model.*;
+import com.goal98.flipdroid.model.cachesystem.CacheSystem;
 import com.goal98.flipdroid.model.google.GoogleReaderArticleSource;
 import com.goal98.flipdroid.model.rss.RSSArticleSource;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
@@ -168,7 +169,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         createShakeListener();
 
         accountDB = new AccountDB(this);
-        registerShakeListener();
+
         Cursor sourceCursor = sourceDB.findAll();
 
         startManagingCursor(sourceCursor);
@@ -491,6 +492,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     @Override
     protected void onPause() {
         super.onDestroy();
+        CacheSystem.getTikaCache(this).shutdown();
         accountDB.close();
         sm.unregisterListener(acceleromererListener);
     }
@@ -615,7 +617,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     @Override
     protected void onResume() {
         super.onResume();
-
+        registerShakeListener();
+        accountDB = new AccountDB(this);
     }
 
     boolean enlargedMode = false;

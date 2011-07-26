@@ -13,10 +13,15 @@ import java.net.URL;
  */
 public class FakeTikaCache implements TikaCache {
     public TikaExtractResponse load(URL url){
+
        return null;
     }
 
     public void put(String key, TikaExtractResponse extractResponse){
 
+    }
+
+    public void shutdown() {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

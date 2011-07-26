@@ -1,5 +1,7 @@
 package com.goal98.flipdroid.model.cachesystem;
 
+import android.content.Context;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Administrator
@@ -8,11 +10,11 @@ package com.goal98.flipdroid.model.cachesystem;
  * To change this template use File | Settings | File Templates.
  */
 public class CacheSystem {
-    public static ImageCache getImageCache(){
+    public static ImageCache getImageCache() {
         return new FakeImageCache();
     }
 
-    public static TikaCache getTikaCache(){
-        return new FakeTikaCache();
+    public static TikaCache getTikaCache(Context context) {
+        return SQLLiteTikaCache.getInstance(context);
     }
 }

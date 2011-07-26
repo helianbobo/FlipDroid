@@ -15,6 +15,7 @@ import com.goal98.flipdroid.client.TikaExtractResponse;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.PreloadImageLoaderHandler;
 import com.goal98.flipdroid.model.cachesystem.CacheSystem;
+import com.goal98.flipdroid.model.cachesystem.TikaCache;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 
@@ -38,8 +39,9 @@ public abstract class ExpandableArticleView extends ArticleView {
     protected Future<Article> future;
     public volatile boolean isLoading = false;
     protected ExecutorService executor;
+    private TikaCache tikaCache;
 
-    public ExpandableArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom,ExecutorService executor) {
+    public ExpandableArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom, ExecutorService executor) {
         super(context, article, pageView, placedAtBottom);
         if (!article.isAlreadyLoaded()) {
             this.executor = executor;
@@ -59,9 +61,11 @@ public abstract class ExpandableArticleView extends ArticleView {
                         String url = article.extractURL();
                         //Log.d("Weibo view", "preloading " + url);
 
-                        TikaExtractResponse loadedTikeExtractResponse = CacheSystem.getTikaCache().load(new URL(url));
+                        tikaCache = CacheSystem.getTikaCache(ExpandableArticleView.this.getContext());
+                        TikaExtractResponse loadedTikeExtractResponse = tikaCache.load(new URL(url));
                         if (loadedTikeExtractResponse != null) {
-                            return loadedTikeExtractResponse;
+                            responseToArticle(loadedTikeExtractResponse);
+                            return article;
                         } else {
                             TikaClient tc = new TikaClient(Constants.TIKA_HOST);
                             TikaExtractResponse extractResponse = null;
@@ -72,33 +76,41 @@ public abstract class ExpandableArticleView extends ArticleView {
                                 return article;
                             }
                             //Log.d("Weibo view", "preloading " + url + " done");
-                            if (extractResponse.getContent() != null)
-                                article.setContent(extractResponse.getContent().replaceFirst("\n", "\n      "));
-                            else
-                                article.setContent("");
-                            article.setTitle(extractResponse.getTitle());
-
-                            if (toLoadImage(ExpandableArticleView.this.getContext())) {
-                                try {
-                                    if (!extractResponse.getImages().isEmpty()) {
-                                        String image = extractResponse.getImages().get(0);
-                                        article.setImageUrl(new URL(image));
-                                        loadImage(image);
-
-                                    }
-
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
+                            responseToArticle(extractResponse);
+                            tikaCache.put(url, extractResponse);
                             return article;
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return article;
                     } finally {
                         isLoading = false;
                     }
-
                 }
             });
+        }
+    }
+
+    private void responseToArticle(TikaExtractResponse extractResponse) {
+        if (extractResponse.getContent() != null)
+            article.setContent(extractResponse.getContent().replaceFirst("\n", "\n      "));
+        else
+            article.setContent("");
+        article.setTitle(extractResponse.getTitle());
+
+        if (toLoadImage(this.getContext())) {
+            try {
+                if (!extractResponse.getImages().isEmpty()) {
+                    String image = extractResponse.getImages().get(0);
+                    if (image != null && image.length() != 0) {
+                        article.setImageUrl(new URL(image));
+                        loadImage(image);
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -116,7 +128,7 @@ public abstract class ExpandableArticleView extends ArticleView {
     protected void enlargeLoadedView() {
 
         try {
-            if(!article.isAlreadyLoaded())
+            if (!article.isAlreadyLoaded())
                 future.get();
 
             loadedArticleView = new ContentLoadedView(this.getContext(), article, pageView);

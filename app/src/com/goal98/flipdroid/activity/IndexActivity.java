@@ -96,8 +96,8 @@ public class IndexActivity extends ListActivity {
     }
 
     private void bindAdapter() {
-        if (!sourceCursor.moveToFirst()) {
-
+        if (sourceCursor.getCount()==0) {
+            sourceCursor.close();
             Map<String, String> noDate = new HashMap<String, String>();
             noDate.put("text", getString(R.string.nodata));
             List emptyBlock = new ArrayList();
@@ -157,6 +157,9 @@ public class IndexActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Intent intent = new Intent(this, PageActivity.class);
+        if(l.getItemAtPosition(position) instanceof Map){
+            return;
+        }
         Cursor cursor = (Cursor) l.getItemAtPosition(position);
         intent.putExtra("type", cursor.getString(cursor.getColumnIndex(Source.KEY_ACCOUNT_TYPE)));
         intent.putExtra("sourceId", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_ID)));

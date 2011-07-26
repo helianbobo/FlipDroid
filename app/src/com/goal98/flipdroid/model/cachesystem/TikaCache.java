@@ -15,4 +15,6 @@ public interface TikaCache {
     public TikaExtractResponse load(URL url);
 
     public void put(String key, TikaExtractResponse extractResponse);
+
+    public void shutdown();
 }

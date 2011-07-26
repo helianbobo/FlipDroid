@@ -196,6 +196,7 @@ public class ContentExtractor implements Extractor {
         URL touchingImageURL = new URL(imageURL);
         HttpURLConnection httpConnection = (HttpURLConnection) (touchingImageURL
                 .openConnection());
+        httpConnection.setRequestProperty("User-Agent","Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
         int responseCode = httpConnection.getResponseCode();
         if (responseCode < 200 || responseCode > 299) {
             ImageInfo ii = new InvalidImageInfo();
@@ -223,6 +224,7 @@ public class ContentExtractor implements Extractor {
         try {
             HttpURLConnection httpConnection = (HttpURLConnection) (url
                     .openConnection());
+            httpConnection.setRequestProperty("User-Agent","Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
             int responseCode = httpConnection.getResponseCode();
             if (responseCode < 200 || responseCode > 299) {
                 return -1;

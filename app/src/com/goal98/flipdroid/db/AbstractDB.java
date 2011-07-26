@@ -13,6 +13,8 @@ import com.goal98.flipdroid.model.Account;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.util.Constants;
 
+import java.net.URL;
+
 public abstract class AbstractDB {
 
     protected SQLiteOpenHelper helper;
@@ -23,8 +25,8 @@ public abstract class AbstractDB {
         helper = new DBOpenHelper(context);
     }
 
-    public void close(){
-        if(helper != null)
+    public void close() {
+        if (helper != null)
             helper.close();
     }
 
@@ -46,7 +48,7 @@ public abstract class AbstractDB {
         return count;
     }
 
-    public Cursor findAll(){
+    public Cursor findAll() {
         String[] projection = null;
         String selection = null;
         String[] selectionArgs = null;
@@ -84,12 +86,22 @@ public abstract class AbstractDB {
                         Source.KEY_IMAGE_URL + " TEXT, " +
                         Source.KEY_CONTENT_URL + " TEXT, " +
                         Source.KEY_CAT + " TEXT, " +
-                        "PRIMARY KEY ("+ Source.KEY_ACCOUNT_TYPE + "," + Source.KEY_SOURCE_NAME +")" +
+                        "PRIMARY KEY (" + Source.KEY_ACCOUNT_TYPE + "," + Source.KEY_SOURCE_NAME + ")" +
+                        ");";
+
+        private static final String URL_TABLE_CREATE =
+                "CREATE TABLE " + URLDB.TABLE_NAME + " (" +
+                        BaseColumns._ID + " INTEGER," +
+                        URLDB.URL + " TEXT, " +
+                        URLDB.CONTENT + " TEXT, " +
+                        URLDB.TITLE + " TEXT, " +
+                        URLDB.IMAGES + " TEXT, " +
+                        "PRIMARY KEY (" + URLDB.URL + ")" +
                         ");";
 
         private static final String SOURCE_INIT_DATA = "INSERT INTO " + Source.TABLE_NAME +
-                " ("+Source.KEY_SOURCE_NAME+","+Source.KEY_SOURCE_ID+","+Source.KEY_ACCOUNT_TYPE+")"+
-                " values ('FAKE', 'FAKE', '"+Constants.TYPE_FAKE+"');";
+                " (" + Source.KEY_SOURCE_NAME + "," + Source.KEY_SOURCE_ID + "," + Source.KEY_ACCOUNT_TYPE + ")" +
+                " values ('FAKE', 'FAKE', '" + Constants.TYPE_FAKE + "');";
 
 
         public DBOpenHelper(Context context) {
@@ -100,6 +112,16 @@ public abstract class AbstractDB {
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
             createAccountTable(sqLiteDatabase);
             createSourceTable(sqLiteDatabase);
+            createURLTable(sqLiteDatabase);
+        }
+
+        private void createURLTable(SQLiteDatabase sqLiteDatabase) {
+            Log.w(this.getClass().getName(), "Creating table " + URLDB.TABLE_NAME);
+            try {
+                sqLiteDatabase.execSQL(URL_TABLE_CREATE);
+            } catch (SQLException e) {
+                Log.e(this.getClass().getName(), e.getMessage(), e);
+            }
         }
 
         private void createAccountTable(SQLiteDatabase sqLiteDatabase) {
@@ -127,6 +149,7 @@ public abstract class AbstractDB {
                     + newVersion + ", which will destroy all old data");
             db.execSQL("DROP TABLE IF EXISTS " + Account.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + Source.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + URLDB.TABLE_NAME);
             onCreate(db);
 
         }
