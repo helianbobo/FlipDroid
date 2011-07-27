@@ -115,7 +115,6 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
                         || text.contains("相关阅读")
                         || text.contains("相关新闻")
                         || text.contains("Have your say")
-                        || text.contains("Have Your Say")
                         || text.toUpperCase().contains("RELATED TOPICS")
                         || text.toUpperCase().contains("SHARE IT ON")
                         || text.toUpperCase().contains("SHARE THIS ON")
