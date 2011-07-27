@@ -51,21 +51,14 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
         boolean changes = false;
 
         for (TextBlock tb : doc.getTextBlocks()) {
-            if (tb.getNumWords() <= 20) {
+            if (tb.getNumWords() <= 20 ) {
+                if(tb.isImage())
+                    continue;
                 final String text = tb.getText().trim();
                 if (text.startsWith("Comments")
                         || N_COMMENTS.matcher(text).find()
-                        || NUMBERS.matcher(text).find()
+                        || text.matches("[0-9]+")
                         || text.contains("Reader Comments")
-                        || text.contains("2010")
-                        || text.contains("2011")
-                        || text.contains("2012")
-                        || text.contains("2013")
-                        || text.contains("2014")
-                        || text.contains("2015")
-                        || text.contains("2016")
-                        || text.contains("2017")
-                        || text.contains("2018")
                         || text.contains("Copyright")
                         || text.contains("Relevant Posts")
                         || text.contains("copyright")

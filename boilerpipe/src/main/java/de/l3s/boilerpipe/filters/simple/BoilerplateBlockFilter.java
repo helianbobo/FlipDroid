@@ -48,7 +48,7 @@ public final class BoilerplateBlockFilter implements BoilerpipeFilter {
 
         for (Iterator<TextBlock> it = textBlocks.iterator(); it.hasNext();) {
             TextBlock tb = it.next();
-            if (!tb.isContent() && !tb.hasLabel(DefaultLabels.TITLE)) {
+            if (!tb.isContent() && !tb.hasLabel(DefaultLabels.TITLE) && !tb.isImage()) {
                 it.remove();
                 hasChanges = true;
             }
