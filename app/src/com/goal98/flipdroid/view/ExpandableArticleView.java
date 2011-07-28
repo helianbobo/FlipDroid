@@ -48,7 +48,7 @@ public abstract class ExpandableArticleView extends ArticleView {
             preload();
         } else {
             if (toLoadImage(context))
-                loadImage(article.getImageUrl().toExternalForm());
+                article.loadImage();
         }
     }
 
@@ -104,7 +104,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                     String image = extractResponse.getImages().get(0);
                     if (image != null && image.length() != 0) {
                         article.setImageUrl(new URL(image));
-                        loadImage(image);
+                        article.loadImage(image);
                     }
                 }
 
@@ -114,16 +114,6 @@ public abstract class ExpandableArticleView extends ArticleView {
         }
     }
 
-    private void loadImage(String image) {
-        PreloadImageLoaderHandler preloadImageLoaderHandler = new PreloadImageLoaderHandler(article);
-
-        final ImageLoader loader = new ImageLoader(image, preloadImageLoaderHandler);
-        new Thread(new Runnable() {
-            public void run() {
-                loader.run();
-            }
-        }).start();
-    }
 
     protected void enlargeLoadedView() {
 

@@ -5,6 +5,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import com.goal98.android.ImageLoader;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.view.ThumbnailArticleView;
 
@@ -186,7 +187,7 @@ public class Article {
     public void setImageBitmap(Bitmap image) {
         this.image = image;
         //Log.d("imageLoading","loaded");
-        if (notifier != null)
+        if (notifier != null && image != null)
             notifier.notifyImageLoaded();
     }
 
@@ -202,5 +203,28 @@ public class Article {
         this.alreadyLoaded = alreadyLoaded;
     }
 
+    private volatile boolean loading = false;
 
+    public synchronized void loadImage(String image) {
+        if (loading)
+            return;
+
+        loading = true;
+        PreloadImageLoaderHandler preloadImageLoaderHandler = new PreloadImageLoaderHandler(this);
+
+        final ImageLoader loader = new ImageLoader(image, preloadImageLoaderHandler);
+        new Thread(loader).start();
+    }
+
+    public void loadImage() {
+        loadImage(getImageUrl().toExternalForm());
+    }
+
+    public void setLoading(boolean loading) {
+        this.loading = loading;
+    }
+
+    public boolean isLoading() {
+        return loading;
+    }
 }

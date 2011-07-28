@@ -8,21 +8,19 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 public class Page {
-    private int heightSum;
+    protected int heightSum;
 
-    private WeiboPageView weiboPageView;
+    protected WeiboPageView weiboPageView;
 
-    private List<Article> articleList;
-    private PageActivity activity;
+    protected List<Article> articleList;
 
     public Page(PageActivity activity) {
         this.articleList = new LinkedList<Article>();
 
         weiboPageView = new WeiboPageView(activity);
-        this.activity = activity;
     }
 
-    public List<Article> getArticleViewList() {
+    public List<Article> getArticleList() {
         return articleList;
     }
 

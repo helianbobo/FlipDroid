@@ -11,25 +11,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-public class SmartPage extends Page{
-    private int heightSum;
-
+public class SmartPage extends Page {
     private List<Integer> heights = new ArrayList();
-    private WeiboPageView weiboPageView;
-
-    private List<Article> articleList;
-    private PageActivity activity;
 
     public SmartPage(PageActivity activity) {
         super(activity);
         this.articleList = new LinkedList<Article>();
-
-        weiboPageView = new WeiboPageView(activity);
-        this.activity = activity;
-    }
-
-    public List<Article> getArticleViewList() {
-        return articleList;
     }
 
     boolean addResult;

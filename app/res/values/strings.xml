@@ -69,5 +69,6 @@
     <string name="custom">Custom</string>
     <string name="keywordhere">Keywords here</string>
     <string name="nodata">No source added, Click button above to add sources</string>
+    <string name="latest">Latest</string>
 
 </resources>

@@ -1,10 +1,8 @@
 package com.goal98.flipdroid.view;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,14 +14,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
-import com.goal98.flipdroid.activity.IndexActivity;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.activity.SinaAccountActivity;
-import com.goal98.flipdroid.activity.WeiPaiWebViewClient;
-import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.exception.NoSinaAccountBindedException;
 import com.goal98.flipdroid.model.Article;
-import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 import weibo4j.WeiboException;
@@ -71,18 +65,18 @@ public class WeiboPageView extends FrameLayout {
         this.page = page;
 
         this.contentLayout.removeAllViews();
-        List<Article> articleList = this.page.getArticleViewList();
+        List<Article> articleList = this.page.getArticleList();
         //System.out.println("articleList:" + articleList.size());
 
-        int heightSum = 0 ;
+        int heightSum = 0;
         for (int i = 0; i < articleList.size(); i++) {
-            heightSum+=articleList.get(i).getHeight();
+            heightSum += articleList.get(i).getHeight();
         }
 
         for (int i = 0; i < articleList.size(); i++) {
             Article article = articleList.get(i);
             boolean isLastArticle = i == articleList.size() - 1;
-            article.setHeight((int) ((article.getHeight()* DeviceInfo.displayHeight)/(float)heightSum));
+            article.setHeight((int) ((article.getHeight() * DeviceInfo.displayHeight) / (float) heightSum));
             addArticleView(article, isLastArticle);
         }
     }
@@ -113,12 +107,12 @@ public class WeiboPageView extends FrameLayout {
 
         LayoutParams wrapperLayoutParam = null;
 //        if (last)
-            wrapperLayoutParam = new LayoutParams(DeviceInfo.width, article.getHeight());
+        wrapperLayoutParam = new LayoutParams(DeviceInfo.width, article.getHeight());
 //        else {
 //            wrapperLayoutParam = new LayoutParams(DeviceInfo.width, LayoutParams.WRAP_CONTENT);
 //        }
 
-        if(last)//分割线
+        if (last)//分割线
             articleWrapper.setPadding(0, 0, 0, 0);
         else
             articleWrapper.setPadding(0, 0, 0, 1);
@@ -188,7 +182,7 @@ public class WeiboPageView extends FrameLayout {
 
         retweetButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
-                if(!pageActivity.sinaAlreadyBinded()){
+                if (!pageActivity.sinaAlreadyBinded()) {
                     pageActivity.showDialog(PageActivity.PROMPT_OAUTH);
                     return;
                 }
@@ -295,7 +289,6 @@ public class WeiboPageView extends FrameLayout {
     }
 
 
-
     private void closeEnlargedView(ExpandableArticleView weiboArticleView) {
         if (commentShadowLayer != null)
             this.removeView(commentShadowLayer);
@@ -354,4 +347,11 @@ public class WeiboPageView extends FrameLayout {
             headerImage.loadImage();
     }
 
+    public void releaseResource() {
+        for (int i = 0; i < page.getArticleList().size(); i++) {
+            Article article = page.getArticleList().get(i);
+            System.out.println("release image...");
+            article.setImageBitmap(null);
+        }
+    }
 }

@@ -44,8 +44,8 @@ public class ThumbnailArticleView extends ExpandableArticleView {
     private WebImageView imageView;
     volatile boolean isLoading = false;
 
-    public ThumbnailArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom,ExecutorService executor) {
-        super(context, article, pageView, placedAtBottom,executor);
+    public ThumbnailArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom, ExecutorService executor) {
+        super(context, article, pageView, placedAtBottom, executor);
     }
 
     protected String getPrefix() {
@@ -55,7 +55,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
     public void displayLoadedThumbnail() {
         try {
             //System.out.println("taking content");
-            if (!article.isAlreadyLoaded()){
+            if (!article.isAlreadyLoaded()) {
                 article = future.get();
 //                executor.shutdown();
             }
@@ -111,8 +111,13 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                         //System.out.println("article.getImage()" + article.getImage());
                         if (article.getImage() != null)
                             imageView.handleImageLoaded(article.getImage(), null);
-                        else
+                        else {
                             article.addNotifier(new Notifier());
+                            if (!article.isLoading()) {
+                                System.out.println("reloading..." + article.getImageUrl().toExternalForm());
+                                article.loadImage();
+                            }
+                        }
 
 //                        article.getImage().recycle();
                         LayoutParams layoutParamsText = new LayoutParams(0, LayoutParams.FILL_PARENT);

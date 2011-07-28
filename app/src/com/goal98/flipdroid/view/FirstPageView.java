@@ -66,4 +66,8 @@ public class FirstPageView extends WeiboPageView {
     public boolean isFirstPage() {
         return true;  //To change body of created methods use File | Settings | File Templates.
     }
+
+    public void releaseResource() {
+
+    }
 }

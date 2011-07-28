@@ -24,6 +24,7 @@ public class PreloadImageLoaderHandler implements MyHandler {
     }
 
     public boolean handleImageLoaded(Bitmap bitmap) {
+        article.setLoading(false);
         if (bitmap != null) {
 
             if (bitmap == null)

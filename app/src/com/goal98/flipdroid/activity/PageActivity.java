@@ -158,8 +158,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         System.out.println("debug on create");
 
         executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
-                                      10L, TimeUnit.SECONDS,
-                                      new SynchronousQueue<Runnable>());
+                10L, TimeUnit.SECONDS,
+                new SynchronousQueue<Runnable>());
         sourceDB = new SourceDB(this);
         alarmSender = new AlarmSender(this);
 
@@ -204,7 +204,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         this.browseMode = getBrowseMode();
 //        this.animationMode = getAnimationMode();
         refreshingSemaphore = new Semaphore(1, true);
-        Log.v("accountType",accountType);
+        Log.v("accountType", accountType);
         if (accountType.equals(Constants.TYPE_SINA_WEIBO) || accountType.equals(Constants.TYPE_MY_SINA_WEIBO)) {
             ////System.out.println("accountType" + accountType);
             if (isWeiboMode())
@@ -230,7 +230,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
             source = new SinaArticleSource(true, sinaToken.getToken(), sinaToken.getTokenSecret(), sourceId, filter);
 
-        } else if (accountType.equals(Constants.TYPE_RSS) ||accountType.equals(Constants.TYPE_BAIDUSEARCH)  ) {
+        } else if (accountType.equals(Constants.TYPE_RSS) || accountType.equals(Constants.TYPE_BAIDUSEARCH)) {
             pagingStrategy = new FixedPagingStrategy(this, 2);
             pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
                 public void onNoMoreArticle() throws NoMoreStatusException {
@@ -253,7 +253,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             });
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
             source = new GoogleReaderArticleSource(sid, auth);
-        }else if (accountType.equals(Constants.TYPE_TAOBAO ) ){
+        } else if (accountType.equals(Constants.TYPE_TAOBAO)) {
 
             pagingStrategy = new FixedPagingStrategy(this, 2);
             pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
@@ -263,20 +263,20 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             });
 
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            source = new TaobaoArticleSource(sourceName,this.getApplicationContext());
+            source = new TaobaoArticleSource(sourceName, this.getApplicationContext());
         }
 
         repo.setArticleSource(source);
 
         headerText.setText(sourceName);
-        if (sourceImageURL != null && sourceImageURL.length()!=0) {
+        if (sourceImageURL != null && sourceImageURL.length() != 0) {
             headerImageView.setImageUrl(sourceImageURL);
             headerImageView.loadImage();
-        }else{
+        } else {
             headerImageView.setVisibility(View.GONE);
         }
 
-        slidingWindows = new PageViewSlidingWindows(20, repo, pageViewFactory, 3);
+        slidingWindows = new PageViewSlidingWindows(10, repo, pageViewFactory, 3);
         current = pageViewFactory.createFirstPage();
 
         shadow = new LinearLayout(PageActivity.this);
@@ -601,7 +601,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
         public WeiboPageView createFirstPage() {
             WeiboPageView pageView = null;
-            pageView = new FirstPageView(PageActivity.this, slidingWindows,executor);
+            pageView = new FirstPageView(PageActivity.this, slidingWindows, executor);
             return pageView;
         }
 
@@ -617,6 +617,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     @Override
     protected void onResume() {
         super.onResume();
+//        current.setVisibility(View.VISIBLE);
         registerShakeListener();
         accountDB = new AccountDB(this);
     }
@@ -929,11 +930,15 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     private void switchViews(boolean forward) {
         if (forward) {
+            if (previous != null)
+                previous.releaseResource();
             WeiboPageView tmp = current;
             previous = current;
             current = next;
             next = tmp;
         } else {
+            if (next != null)
+                next.releaseResource();
             WeiboPageView tmp = current;
             next = current;
             current = previous;
