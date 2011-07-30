@@ -15,4 +15,6 @@ public interface ArticleSource {
     boolean isNoMoreToLoad();
 
     boolean getForceMagzine();
+
+    boolean reset();
 }

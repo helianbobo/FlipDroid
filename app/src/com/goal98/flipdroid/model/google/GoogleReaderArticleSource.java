@@ -76,4 +76,8 @@ public class GoogleReaderArticleSource implements ArticleSource {
     public boolean getForceMagzine() {
         return true;
     }
+
+    public boolean reset() {
+        return false;
+    }
 }

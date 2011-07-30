@@ -35,6 +35,7 @@ import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.exception.NoSinaAccountBindedException;
 import com.goal98.flipdroid.model.*;
 import com.goal98.flipdroid.model.cachesystem.CacheSystem;
+import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.google.GoogleReaderArticleSource;
 import com.goal98.flipdroid.model.rss.RSSArticleSource;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
@@ -239,7 +240,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             });
 
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            source = new RSSArticleSource(contentUrl, sourceName, sourceImageURL);
+            source = new CachedArticleSource(new RSSArticleSource(contentUrl, sourceName, sourceImageURL), this);
         } else if (accountType.equals(Constants.TYPE_GOOGLE_READER)) {
 
             String sid = preferences.getString(GoogleAccountActivity.GOOGLE_ACCOUNT_SID, "");

@@ -137,4 +137,8 @@ public class SinaArticleSource extends AbstractArticleSource {
     public boolean getForceMagzine() {
         return false;
     }
+
+    public boolean reset() {
+        return false;
+    }
 }

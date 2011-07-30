@@ -80,21 +80,20 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int roundtop=0x7f020011;
         public static final int rss=0x7f020012;
         public static final int send=0x7f020013;
-        public static final int shadow=0x7f020014;
-        public static final int share=0x7f020015;
-        public static final int sina=0x7f020016;
-        public static final int tencent=0x7f020017;
-        public static final int tips_1=0x7f020018;
-        public static final int tips_10=0x7f020019;
-        public static final int tips_2=0x7f02001a;
-        public static final int tips_3=0x7f02001b;
-        public static final int tips_4=0x7f02001c;
-        public static final int tips_5=0x7f02001d;
-        public static final int tips_6=0x7f02001e;
-        public static final int tips_7=0x7f02001f;
-        public static final int tips_8=0x7f020020;
-        public static final int tips_9=0x7f020021;
-        public static final int twitter=0x7f020022;
+        public static final int share=0x7f020014;
+        public static final int sina=0x7f020015;
+        public static final int tencent=0x7f020016;
+        public static final int tips_1=0x7f020017;
+        public static final int tips_10=0x7f020018;
+        public static final int tips_2=0x7f020019;
+        public static final int tips_3=0x7f02001a;
+        public static final int tips_4=0x7f02001b;
+        public static final int tips_5=0x7f02001c;
+        public static final int tips_6=0x7f02001d;
+        public static final int tips_7=0x7f02001e;
+        public static final int tips_8=0x7f02001f;
+        public static final int tips_9=0x7f020020;
+        public static final int twitter=0x7f020021;
     }
     public static final class id {
         public static final int accoount_title=0x7f0a0000;
@@ -230,6 +229,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int key_browse_mode_preference=0x7f080010;
         public static final int key_load_image_preference=0x7f080017;
         public static final int keywordhere=0x7f080037;
+        public static final int latest=0x7f080039;
         public static final int loading=0x7f08001f;
         public static final int locale=0x7f080025;
         public static final int msg_no_more_page=0x7f08001d;

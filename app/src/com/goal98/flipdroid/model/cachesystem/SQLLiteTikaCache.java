@@ -15,13 +15,11 @@ import java.net.URL;
  * To change this template use File | Settings | File Templates.
  */
 public class SQLLiteTikaCache implements TikaCache {
-    private Context context;
     private URLDB urldb;
     private static SQLLiteTikaCache cache;
     private static volatile boolean shutdown;
 
     private SQLLiteTikaCache(Context context) {
-        this.context = context;
         urldb = new URLDB(context);
     }
 

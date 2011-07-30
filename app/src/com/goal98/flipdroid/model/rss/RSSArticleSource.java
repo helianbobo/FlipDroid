@@ -1,9 +1,16 @@
 package com.goal98.flipdroid.model.rss;
 
+import com.goal98.flipdroid.exception.NoNetworkException;
 import com.goal98.flipdroid.model.Article;
-import com.goal98.flipdroid.model.ArticleSource;
+import com.goal98.flipdroid.model.OnSourceLoadedListener;
+import com.goal98.flipdroid.model.cachesystem.CacheToken;
+import com.goal98.flipdroid.model.cachesystem.CacheableArticleSource;
+import com.goal98.flipdroid.model.cachesystem.SourceCacheObject;
 import com.goal98.flipdroid.util.Constants;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -17,15 +24,23 @@ import java.util.*;
  * Time: 1:12 PM
  * To change this template use File | Settings | File Templates.
  */
-public class RSSArticleSource implements ArticleSource {
+public class RSSArticleSource implements CacheableArticleSource {
     private String contentUrl;
     private String sourceName;
     private boolean loaded;
     private String sourceImage;
     private LinkedList list = new LinkedList<Article>();
+    private InputStream content;
+    private OnSourceLoadedListener listener;
 
     public RSSArticleSource(String contentUrl, String sourceName, String sourceImage) {
         this.contentUrl = contentUrl;
+        this.sourceName = sourceName;
+        this.sourceImage = sourceImage;
+    }
+
+    public RSSArticleSource(InputStream content, String sourceName, String sourceImage) {
+        this.content = content;
         this.sourceName = sourceName;
         this.sourceImage = sourceImage;
     }
@@ -35,25 +50,27 @@ public class RSSArticleSource implements ArticleSource {
     }
 
     public List<Article> getArticleList() {
-        //System.out.println("getting article list");
-
-
         return list;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public static long cachedTime = -1;
 
     public boolean loadMore() {
-        //System.out.println("this.contentUrl" + this.contentUrl);
-        RssParser rp = new RssParser(this.contentUrl);
+        RssParser rp;
+        if (content == null) {
+            rp = new RssParser(this.contentUrl);
+            if (listener != null) {
+                rp.addOnLoadListener(listener);
+            }
+        } else
+            rp = new RssParser(this.content);
+
         try {
             rp.parse();
         } catch (Exception e) {
             return false;
         }
         RssParser.RssFeed feed = rp.getFeed();
-        //System.out.println("this.contentUrl" + this.contentUrl);
-        //System.out.println("sourceImage:" + sourceImage);
         ArrayList<RssParser.Item> items = feed.getItems();
         for (int i = 0; i < items.size(); i++) {
             RssParser.Item item = items.get(i);
@@ -77,7 +94,7 @@ public class RSSArticleSource implements ArticleSource {
             article.setStatus(item.link);
             //System.out.println("item.pubDate " + item.pubDate);
             Date date = new Date();
-            if (item.pubDate != null){
+            if (item.pubDate != null) {
                 item.pubDate = preFormat(item.pubDate);
                 try {
                     date = new SimpleDateFormat("dd MM yyyy HH:mm:ss").parse(item.pubDate);
@@ -111,25 +128,25 @@ public class RSSArticleSource implements ArticleSource {
     }
 
     private String preFormat(String pubDate) {
-        return pubDate.replace("Jan","01")
-                .replace("Feb","02")
-                .replace("Mar","03")
-                .replace("Apr","04")
-                .replace("May","05")
-                .replace("Jun","06")
-                .replace("Jul","07")
-                .replace("Aug","08")
-                .replace("Sep","09")
-                .replace("Oct","10")
-                .replace("Nov","11")
-                .replace("Dec","12")
-                .replace("Sun, ","")
-                .replace("Mon, ","")
-                .replace("Tue, ","")
-                .replace("Wen, ","")
-                .replace("Thu, ","")
-                .replace("Fri, ","")
-                .replace("Sat, ","");
+        return pubDate.replace("Jan", "01")
+                .replace("Feb", "02")
+                .replace("Mar", "03")
+                .replace("Apr", "04")
+                .replace("May", "05")
+                .replace("Jun", "06")
+                .replace("Jul", "07")
+                .replace("Aug", "08")
+                .replace("Sep", "09")
+                .replace("Oct", "10")
+                .replace("Nov", "11")
+                .replace("Dec", "12")
+                .replace("Sun, ", "")
+                .replace("Mon, ", "")
+                .replace("Tue, ", "")
+                .replace("Wen, ", "")
+                .replace("Thu, ", "")
+                .replace("Fri, ", "")
+                .replace("Sat, ", "");
     }
 
     public boolean isNoMoreToLoad() {
@@ -141,5 +158,41 @@ public class RSSArticleSource implements ArticleSource {
 
     public boolean getForceMagzine() {
         return true;
+    }
+
+    public boolean reset() {
+        list.clear();
+        loaded = false;
+        return true;
+    }
+
+    public CacheToken getCacheToken() {
+        CacheToken token = new CacheToken();
+        token.setType(Constants.TYPE_RSS);
+        token.setToken(this.contentUrl);
+        return token;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void fromCache(SourceCacheObject cachedObject) {
+        this.content = new ByteArrayInputStream(cachedObject.getContent().getBytes());
+    }
+
+    public void registerOnLoadListener(OnSourceLoadedListener listener) {
+        this.listener = listener;
+    }
+
+    public boolean loadLatestSource() throws NoNetworkException {
+        RssParser rp = new RssParser(this.contentUrl);
+        try {
+            final String rpContent = rp.getContent();
+            if(!rpContent.equals(content)){
+               this.content = rpContent;
+
+               return true;
+           }
+        } catch (IOException e) {
+            throw new NoNetworkException();
+        }
+
     }
 }

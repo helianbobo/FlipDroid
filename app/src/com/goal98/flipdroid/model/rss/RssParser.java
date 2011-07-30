@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.model.rss;
 
 import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.model.OnSourceLoadedListener;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.EncodingDetector;
 import org.apache.commons.io.FileUtils;
@@ -27,6 +28,7 @@ public class RssParser extends DefaultHandler {
     private Item item;
     private boolean imgStatus;
     private InputStream urlInputStream;
+    private OnSourceLoadedListener listener;
 
     public RssParser(String url) {
         this.urlString = url;
@@ -41,9 +43,7 @@ public class RssParser extends DefaultHandler {
     public void parse() {
         try {
             if (this.urlInputStream == null) {
-                URL url = new URL(this.urlString);
-                _setProxy(); // Set the proxy if needed
-                urlInputStream = url.openConnection().getInputStream();
+                this.urlInputStream = createURLInputStream();
             }
             SAXParserFactory spf = null;
             SAXParser sp = null;
@@ -58,14 +58,15 @@ public class RssParser extends DefaultHandler {
 //                inputSource.setSystemId(urlString);
 //                sp.parse(inputSource, this);
 //            }
-             if (spf != null) {
+            if (spf != null) {
                 sp = spf.newSAXParser();
-                byte[] contents = IOUtils.toByteArray(urlInputStream);
+                byte[] contents = getContentInBytes(this.urlInputStream);
 
-                 String encoding = EncodingDetector.detect(new ByteArrayInputStream(contents));
-
+                String encoding = EncodingDetector.detect(new ByteArrayInputStream(contents));
+                if (listener != null)
+                    listener.onLoaded(new String(contents, encoding));
 //                String content = new String(contents, encoding);
-                InputStreamReader streamReader = new InputStreamReader(new ByteArrayInputStream(contents),encoding);
+                InputStreamReader streamReader = new InputStreamReader(new ByteArrayInputStream(contents), encoding);
                 InputSource inputSource = new InputSource(streamReader);
                 inputSource.setSystemId(urlString);
                 sp.parse(inputSource, this);
@@ -81,6 +82,23 @@ public class RssParser extends DefaultHandler {
             } catch (Exception e) {
             }
         }
+    }
+
+    public byte[] getContentInBytes(InputStream is) throws IOException {
+        return IOUtils.toByteArray(is);
+    }
+
+    public String getContent() throws IOException {
+        InputStream is = createURLInputStream();
+        byte[] contentInBytes = getContentInBytes(is);
+        String encoding = EncodingDetector.detect(new ByteArrayInputStream(contentInBytes));
+        return new String(contentInBytes, encoding);
+    }
+
+    public InputStream createURLInputStream() throws IOException {
+        URL url = new URL(this.urlString);
+        _setProxy(); // Set the proxy if needed
+        return url.openConnection().getInputStream();
     }
 
     public RssFeed getFeed() {
@@ -155,6 +173,10 @@ public class RssParser extends DefaultHandler {
         sysProperties.put("proxyHost", "<Proxy IP Address>");
         sysProperties.put("proxyPort", "<Proxy Port Number>");
         System.setProperties(sysProperties);
+    }
+
+    public void addOnLoadListener(OnSourceLoadedListener listener) {
+        this.listener = listener;
     }
 
     public static class RssFeed {

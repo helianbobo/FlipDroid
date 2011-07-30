@@ -262,4 +262,8 @@ public class TaobaoArticleSource implements ArticleSource {
     public boolean getForceMagzine() {
 	return false;
     }
+
+    public boolean reset() {
+        return false;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

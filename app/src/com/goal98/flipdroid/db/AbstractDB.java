@@ -99,6 +99,15 @@ public abstract class AbstractDB {
                         "PRIMARY KEY (" + URLDB.URL + ")" +
                         ");";
 
+        private static final String SOURCE_CONTENT_TABLE_CREATE =
+                "CREATE TABLE " + SourceContentDB.TABLE_NAME + " (" +
+                        BaseColumns._ID + " INTEGER," +
+                        SourceContentDB.URL + " TEXT, " +
+                        SourceContentDB.TYPE + " TEXT, " +
+                        SourceContentDB.CONTENT + " TEXT, " +
+                        "PRIMARY KEY (" + SourceContentDB.URL + ")" +
+                        ");";
+
         private static final String SOURCE_INIT_DATA = "INSERT INTO " + Source.TABLE_NAME +
                 " (" + Source.KEY_SOURCE_NAME + "," + Source.KEY_SOURCE_ID + "," + Source.KEY_ACCOUNT_TYPE + ")" +
                 " values ('FAKE', 'FAKE', '" + Constants.TYPE_FAKE + "');";
@@ -113,12 +122,22 @@ public abstract class AbstractDB {
             createAccountTable(sqLiteDatabase);
             createSourceTable(sqLiteDatabase);
             createURLTable(sqLiteDatabase);
+            createSourceContentTable(sqLiteDatabase);
         }
 
         private void createURLTable(SQLiteDatabase sqLiteDatabase) {
             Log.w(this.getClass().getName(), "Creating table " + URLDB.TABLE_NAME);
             try {
                 sqLiteDatabase.execSQL(URL_TABLE_CREATE);
+            } catch (SQLException e) {
+                Log.e(this.getClass().getName(), e.getMessage(), e);
+            }
+        }
+
+        private void createSourceContentTable(SQLiteDatabase sqLiteDatabase) {
+            Log.w(this.getClass().getName(), "Creating table " + URLDB.TABLE_NAME);
+            try {
+                sqLiteDatabase.execSQL(SOURCE_CONTENT_TABLE_CREATE);
             } catch (SQLException e) {
                 Log.e(this.getClass().getName(), e.getMessage(), e);
             }
@@ -150,6 +169,7 @@ public abstract class AbstractDB {
             db.execSQL("DROP TABLE IF EXISTS " + Account.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + Source.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + URLDB.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + SourceContentDB.TABLE_NAME);
             onCreate(db);
 
         }
