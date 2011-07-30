@@ -73,10 +73,10 @@ public class CoverActivity extends Activity {
                 DeviceInfo.height = CoverActivity.this.getWindowManager().getDefaultDisplay().getHeight();
             }
         });
-        if (!NetworkUtil.isNetworkAvailable(CoverActivity.this)) {
-            showDialog(WIRELESS_SETTING);
-            return;
-        }
+//        if (!NetworkUtil.isNetworkAvailable(CoverActivity.this)) {
+//            showDialog(WIRELESS_SETTING);
+//            return;
+//        }
         new AccountDB(getApplicationContext());
 
         TelephonyManager tManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
