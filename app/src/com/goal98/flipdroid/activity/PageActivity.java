@@ -587,6 +587,14 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         weibo.setPassword(basicPassword);
     }
 
+    public void notifyHasNew() {
+        handler.post(new Runnable() {
+            public void run() {
+                pageIndexView.setHasUpdate(true);
+            }
+        });
+    }
+
 
     public class WeiboPageViewFactory {
         public WeiboPageView createPageView() {

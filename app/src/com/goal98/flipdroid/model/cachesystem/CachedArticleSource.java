@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.model.cachesystem;
 
 import android.content.Context;
+import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.db.SourceContentDB;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.ArticleSource;
@@ -22,21 +23,27 @@ import java.util.List;
 public class CachedArticleSource implements ArticleSource {
     private CacheableArticleSource articleSource;
     private SourceCache dbCache;
+    private PageActivity pageActivity;
+    private boolean cacheFound;
 
-    public CachedArticleSource(final CacheableArticleSource articleSource, Context context) {
-        this.dbCache = new SourceCache(context);
+    public CachedArticleSource(final CacheableArticleSource articleSource, PageActivity pageActivity) {
+        this.dbCache = new SourceCache(pageActivity);
+        this.pageActivity = pageActivity;
         this.articleSource = articleSource;
         final SourceCacheObject cacheObject = dbCache.find(articleSource.getCacheToken().getType(), articleSource.getCacheToken().getToken());
 
-        if (cacheObject != null)
+        if (cacheObject != null){
             this.articleSource.fromCache(cacheObject);
-        else
-            articleSource.registerOnLoadListener(new OnSourceLoadedListener() {
-                public String onLoaded(String s) {
-                    dbCache.put(articleSource.getCacheToken().getType(), articleSource.getCacheToken().getToken(), s);
-                    return s;
-                }
-            });
+            cacheFound = true;
+        }
+
+        articleSource.registerOnLoadListener(new OnSourceLoadedListener() {
+            public String onLoaded(String s) {
+                dbCache.put(articleSource.getCacheToken().getType(), articleSource.getCacheToken().getToken(), s);
+                return s;
+            }
+        });
+
     }
 
     public Date lastModified() {
@@ -47,17 +54,37 @@ public class CachedArticleSource implements ArticleSource {
         return articleSource.getArticleList();
     }
 
-    public boolean loadMore() {
+    volatile  boolean updating = false;
+    volatile  boolean updated = false;
+
+    public synchronized boolean loadMore() {
+        if (!updating && !updated && cacheFound) {
+            new Thread(new Runnable() {
+                public void run() {
+                    updating = true;
+                    checkUpdate();
+                }
+            }).start();
+        }
         return articleSource.loadMore();
     }
 
     public boolean isNoMoreToLoad() {
-        checkUpdate();
         return articleSource.isNoMoreToLoad();
     }
 
     private void checkUpdate() {
-        articleSource.loadLatestSource();
+        boolean hasUpdates = articleSource.loadLatestSource();
+        this.updated = true;
+        System.out.println("has update:" + hasUpdates);
+        if (hasUpdates) {
+            pageActivity.notifyHasNew();
+            this.updating = false;
+        }
+    }
+
+    public void setUpdating(boolean updating) {
+        this.updating = updating;
     }
 
     public boolean getForceMagzine() {

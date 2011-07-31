@@ -22,6 +22,9 @@ import java.util.Date;
  */
 public class PageIndexView extends LinearLayout {
     private Date latestUpdateDate = new Date();
+    private int total;
+    private int current;
+    private boolean hasUpdate;
 
     public void setLatestUpdateDate(Date latestUpdateDate) {
         this.latestUpdateDate = latestUpdateDate;
@@ -40,11 +43,17 @@ public class PageIndexView extends LinearLayout {
     }
 
     public void setDot(int total, int current) {
-        this.removeAllViews();
-        if (total >= 15) {
-            current = (int) ((current / (float) total) * 15);
-            total = 15;
+        this.total = total;
+        if (this.total >= 15) {
+            this.current = current;
+            this.current = (int) ((current / (float) total) * 15);
+            this.total = 15;
         }
+        updateView();
+    }
+
+    private void updateView() {
+        this.removeAllViews();
         TextView latest = new TextView(this.getContext());
         latest.setText(R.string.latest);
         latest.setTextColor(Color.parseColor("#CCCCCC"));
@@ -52,8 +61,8 @@ public class PageIndexView extends LinearLayout {
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.setMargins(5, 0, 5, 2);
 
-        this.addView(latest,params);
-        for (int i = 0; i < total; i++) {
+        this.addView(latest, params);
+        for (int i = 0; i < this.total; i++) {
             ImageView greyDot = new ImageView(this.getContext());
             if (i + 1 == current)
                 greyDot.setBackgroundResource(R.drawable.dotblue);
@@ -64,11 +73,25 @@ public class PageIndexView extends LinearLayout {
             paramsDot.setMargins(2, 0, 2, 0);
             this.addView(greyDot, paramsDot);
         }
-        
+
         TextView latestUpdate = new TextView(this.getContext());
         latestUpdate.setText(new SimpleDateFormat("MMM dd").format(latestUpdateDate));
         latestUpdate.setTextColor(Color.parseColor("#CCCCCC"));
         latestUpdate.setTextSize(14);
-        this.addView(latestUpdate,params);
+        this.addView(latestUpdate, params);
+
+        if (hasUpdate) {
+            TextView update = new TextView(this.getContext());
+            update.setText("New!!!");
+            update.setTextColor(Color.parseColor("#CCCCCC"));
+            update.setTextSize(14);
+            this.addView(update, params);
+        }
+    }
+
+    public void setHasUpdate(boolean hasUpdate) {
+        this.hasUpdate = hasUpdate;
+        System.out.println("updating view");
+        updateView();
     }
 }

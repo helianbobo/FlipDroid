@@ -27,7 +27,7 @@ import com.goal98.flipdroid.util.DeviceInfo;
  */
 public class HeaderView extends LinearLayout {
     private ListView sourceList;
-//    private LinearLayout navigatorFrame;
+    //    private LinearLayout navigatorFrame;
     private boolean sourceSelectMode;
     private PageActivity pageActivity;
     private LayoutInflater inflater;
@@ -35,17 +35,17 @@ public class HeaderView extends LinearLayout {
 
     public HeaderView(Context context) {
         super(context);
-        this.pageActivity  = (PageActivity) context;
+        this.pageActivity = (PageActivity) context;
         buildHeaderText();
     }
 
     public HeaderView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.pageActivity  = (PageActivity) context;
+        this.pageActivity = (PageActivity) context;
         buildHeaderText();
     }
 
-    public void setPageView(WeiboPageView pageView){
+    public void setPageView(WeiboPageView pageView) {
         this.pageView = pageView;
     }
 
@@ -58,12 +58,11 @@ public class HeaderView extends LinearLayout {
 //        navigatorFrame.setVisibility(GONE);
 //    }
 
-     public boolean isSourceSelectMode() {
+    public boolean isSourceSelectMode() {
         return sourceSelectMode;
     }
 
     private void buildHeaderText() {
-
 
 
 //        navigatorFrame = new LinearLayout(pageActivity);
@@ -97,7 +96,13 @@ public class HeaderView extends LinearLayout {
 //        navigatorShadow.addView(navigator, layoutParams);
 
         TextView headerText = (TextView) frameLayout.findViewById(R.id.headerText);
-
+        boolean largeScreen = false;
+        if (DeviceInfo.height == 800) {
+            largeScreen = true;
+        }
+        if (largeScreen) {
+            headerText.setTextSize(22);
+        }
         headerText.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 //System.out.println("sourceSelectMode:"+sourceSelectMode);

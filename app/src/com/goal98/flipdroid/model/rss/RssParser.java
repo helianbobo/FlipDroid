@@ -65,7 +65,6 @@ public class RssParser extends DefaultHandler {
                 String encoding = EncodingDetector.detect(new ByteArrayInputStream(contents));
                 if (listener != null)
                     listener.onLoaded(new String(contents, encoding));
-//                String content = new String(contents, encoding);
                 InputStreamReader streamReader = new InputStreamReader(new ByteArrayInputStream(contents), encoding);
                 InputSource inputSource = new InputSource(streamReader);
                 inputSource.setSystemId(urlString);
@@ -97,7 +96,6 @@ public class RssParser extends DefaultHandler {
 
     public InputStream createURLInputStream() throws IOException {
         URL url = new URL(this.urlString);
-        _setProxy(); // Set the proxy if needed
         return url.openConnection().getInputStream();
     }
 

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import com.goal98.android.MyHandler;
+import com.goal98.flipdroid.util.DeviceInfo;
 
 /**
  * Created by IntelliJ IDEA.
@@ -36,24 +37,33 @@ public class PreloadImageLoaderHandler implements MyHandler {
 
             //缩放图片的尺寸
 
-            float scaleWidth = 0.3f;     //按固定大小缩放  sWidth 写多大就多大
 
-            float scaleHeight = 0.3f;  //
-
+            float scale = 0.0f;
+            boolean largeScreen = false;
+            if (DeviceInfo.height == 800) {
+                largeScreen = true;
+                scale = 0.6f;
+            } else {
+                scale = 0.4f;
+            }
 
             Matrix matrix = new Matrix();
 
-            matrix.postScale(scaleWidth, scaleHeight);
+            matrix.postScale(scale, scale);
 
 
             //产生缩放后的Bitmap对象
-
-            Bitmap resizeBitmap = Bitmap.createBitmap(
-
-                    bitmap, 0, 0, bmpWidth, bmpHeight, matrix, false);
-//            bitmap.recycle();
-            article.setImageBitmap(bitmap);
-            return true;
+            if (bmpWidth > 0 && bmpHeight > 0) {
+                try {
+                    Bitmap resizeBitmap = Bitmap.createBitmap(
+                            bitmap, 0, 0, bmpWidth, bmpHeight, matrix, false);
+                    bitmap.recycle();
+                    article.setImageBitmap(resizeBitmap);
+                } catch (Exception e) {
+                    return false;
+                }
+                return true;
+            }
         }
 
         return false;

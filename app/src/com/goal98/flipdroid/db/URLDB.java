@@ -46,7 +46,7 @@ public class URLDB extends AbstractDB {
             String imageURL = response.getImages().get(i);
             images = images.concat(imageURL + ";");
         }
-        if(images.length() >= 1)
+        if (images.length() >= 1)
             values.put(URLDB.IMAGES, images.substring(0, images.length() - 1));
         else
             values.put(URLDB.IMAGES, "");
@@ -64,22 +64,28 @@ public class URLDB extends AbstractDB {
         String[] selectionArgs = {url};
 
         Cursor cursor = query(projection, selection, selectionArgs, null);
-        if (cursor.getCount() == 0) {
-            return null;
-        }
         TikaExtractResponse response = new TikaExtractResponse();
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
 
-        cursor.moveToFirst();
-        response.setContent(cursor.getString(2));
-        response.setTitle(cursor.getString(3));
-        List<String> images = new ArrayList<String>();
-        String imageString = cursor.getString(4);
-        String[] imageArr = imageString.split(";");
-        for (int i = 0; i < imageArr.length; i++) {
-            String image = imageArr[i];
-            images.add(image);
+
+            cursor.moveToFirst();
+            response.setContent(cursor.getString(2));
+            response.setTitle(cursor.getString(3));
+            List<String> images = new ArrayList<String>();
+            String imageString = cursor.getString(4);
+            String[] imageArr = imageString.split(";");
+            for (int i = 0; i < imageArr.length; i++) {
+                String image = imageArr[i];
+                images.add(image);
+            }
+            response.setImages(images);
+        } finally {
+            cursor.close();
+
         }
-        response.setImages(images);
         return response;
     }
 }

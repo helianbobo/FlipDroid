@@ -64,12 +64,16 @@ public class SourceContentDB extends AbstractDB {
         String[] selectionArgs = {sourceCacheObject.getUrl(), sourceCacheObject.getType()};
 
         Cursor cursor = query(projection, selection, selectionArgs, null);
-        if (cursor.getCount() == 0) {
-            return null;
-        }
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
 
-        cursor.moveToFirst();
-        sourceCacheObject.setContent(cursor.getString(3));
+            cursor.moveToFirst();
+            sourceCacheObject.setContent(cursor.getString(3));
+        } finally {
+            cursor.close();
+        }
 
         return sourceCacheObject;
     }

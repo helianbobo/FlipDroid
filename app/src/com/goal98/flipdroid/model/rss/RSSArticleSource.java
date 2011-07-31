@@ -7,6 +7,8 @@ import com.goal98.flipdroid.model.cachesystem.CacheToken;
 import com.goal98.flipdroid.model.cachesystem.CacheableArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCacheObject;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.flipdroid.util.EncodingDetector;
+import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -17,13 +19,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Administrator
- * Date: 6/6/11
- * Time: 1:12 PM
- * To change this template use File | Settings | File Templates.
- */
 public class RSSArticleSource implements CacheableArticleSource {
     private String contentUrl;
     private String sourceName;
@@ -32,6 +27,8 @@ public class RSSArticleSource implements CacheableArticleSource {
     private LinkedList list = new LinkedList<Article>();
     private InputStream content;
     private OnSourceLoadedListener listener;
+    private byte[] cachedBytes;
+    private byte[] loadedBytes;
 
     public RSSArticleSource(String contentUrl, String sourceName, String sourceImage) {
         this.contentUrl = contentUrl;
@@ -57,13 +54,13 @@ public class RSSArticleSource implements CacheableArticleSource {
 
     public boolean loadMore() {
         RssParser rp;
-        if (content == null) {
-            rp = new RssParser(this.contentUrl);
-            if (listener != null) {
-                rp.addOnLoadListener(listener);
-            }
-        } else
-            rp = new RssParser(this.content);
+        if (content == null)
+            if (!loadFromSource())
+                return false;
+            else
+                content = new ByteArrayInputStream(loadedBytes);
+
+        rp = new RssParser(this.content);
 
         try {
             rp.parse();
@@ -127,6 +124,35 @@ public class RSSArticleSource implements CacheableArticleSource {
         return true;
     }
 
+    private boolean loadFromSource() {
+        URL url = null;
+        InputStream is = null;
+        try {
+            url = new URL(this.contentUrl);
+            is = url.openConnection().getInputStream();
+
+
+            loadedBytes = IOUtils.toByteArray(is);
+
+            String encoding = EncodingDetector.detect(new ByteArrayInputStream(loadedBytes));
+            if (listener != null)
+                listener.onLoaded(new String(loadedBytes, encoding));
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (is != null)
+                try {
+                    is.close();
+                } catch (IOException e) {
+
+                }
+        }
+        return true;
+    }
+
     private String preFormat(String pubDate) {
         return pubDate.replace("Jan", "01")
                 .replace("Feb", "02")
@@ -174,7 +200,8 @@ public class RSSArticleSource implements CacheableArticleSource {
     }
 
     public void fromCache(SourceCacheObject cachedObject) {
-        this.content = new ByteArrayInputStream(cachedObject.getContent().getBytes());
+        cachedBytes = cachedObject.getContent().getBytes();
+        this.content = new ByteArrayInputStream(cachedBytes);
     }
 
     public void registerOnLoadListener(OnSourceLoadedListener listener) {
@@ -182,17 +209,25 @@ public class RSSArticleSource implements CacheableArticleSource {
     }
 
     public boolean loadLatestSource() throws NoNetworkException {
-        RssParser rp = new RssParser(this.contentUrl);
-        try {
-            final String rpContent = rp.getContent();
-            if(!rpContent.equals(content)){
-               this.content = rpContent;
-
-               return true;
-           }
-        } catch (IOException e) {
-            throw new NoNetworkException();
+        if (!loadFromSource())
+            return false;
+        byte[] latestSource = this.loadedBytes;
+        boolean needUpdate = false;
+        for (int i = 0; i < latestSource.length; i++) {
+            if (i >= cachedBytes.length) {
+                needUpdate = true;
+                break;
+            }
+            if (latestSource[i] != cachedBytes[i]) {
+                needUpdate = true;
+                break;
+            }
         }
 
+        if (needUpdate) {
+            this.cachedBytes = loadedBytes;
+            return true;
+        }
+        return false;
     }
 }
