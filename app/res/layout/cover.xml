@@ -4,20 +4,20 @@
              style="@style/Cover">
 
 
-    <ImageView android:src="@drawable/logo"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"/>
+    <ImageView android:src="@drawable/thecover" android:id="@+id/flipbar" android:scaleType="fitXY"
+               android:layout_width="fill_parent"
+               android:layout_height="fill_parent"/>
 
     <!--<TextView android:textColor="#000"
    android:layout_width="fill_parent"
    android:text="@string/app_name" android:textSize="40px"/>-->
 
 
-    <TextView android:id="@+id/flipbar" android:textSize="48dp"
+    <!--<TextView android:id="@+id/flipbar" android:textSize="48dp"
               android:paddingBottom="100dp"
               android:paddingRight="50dp"
               android:paddingLeft="5dp"
-              android:text="FLIP &gt;&gt;"/>
+              android:text="FLIP &gt;&gt;"/>-->
 
 
 </TableLayout>

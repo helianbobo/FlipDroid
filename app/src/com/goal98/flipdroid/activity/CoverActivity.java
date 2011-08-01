@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -82,6 +83,13 @@ public class CoverActivity extends Activity {
         TelephonyManager tManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         deviceId = tManager.getDeviceId();
         Log.v(this.getClass().getName(), "deviceId="+deviceId);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                goToNextActivity();
+            }
+        }, 2000);
     }
 
     @Override
