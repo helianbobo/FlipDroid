@@ -6,12 +6,12 @@
 
     <com.goal98.flipdroid.view.HeaderView android:background="#FFFFFF" android:id="@+id/header"
                                           android:layout_width="match_parent"
-                                          android:layout_weight="30"
+                                          android:layout_weight="40"
                                           android:layout_height="0dip" android:gravity="center">
 
     </com.goal98.flipdroid.view.HeaderView>
     <FrameLayout android:background="#f0f0f0" android:id="@+id/pageContainer" android:layout_width="match_parent"
-                 android:layout_weight="420"
+                 android:layout_weight="410"
                  android:layout_height="0dip" android:gravity="center" android:orientation="horizontal">
 
     </FrameLayout>

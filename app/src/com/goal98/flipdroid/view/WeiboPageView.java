@@ -20,6 +20,7 @@ import com.goal98.flipdroid.exception.NoSinaAccountBindedException;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
+import com.goal98.flipdroid.util.StopWatch;
 import weibo4j.WeiboException;
 
 import java.util.ArrayList;
@@ -30,8 +31,11 @@ public class WeiboPageView extends FrameLayout {
     private Page page;
 
     protected LinearLayout frame;
-    public LayoutInflater inflater;
     protected ExecutorService executor;
+    private Animation fadeinArticle;
+    private Animation fadeinBoard;
+    private LinearLayout content;
+    private LayoutInflater inflater;
 
     public LinearLayout getContentLayout() {
         return contentLayout;
@@ -121,13 +125,47 @@ public class WeiboPageView extends FrameLayout {
         return articleWrapper;
     }
 
-    public WeiboPageView(PageActivity pageActivity) {
+    public WeiboPageView(final PageActivity pageActivity) {
         super(pageActivity);
         this.pageActivity = pageActivity;
         this.sourceName = pageActivity.getSourceName();
         this.sourceImageURL = pageActivity.getSourceImageURL();
         this.executor = pageActivity.getExecutor();
         setDynamicLayout(pageActivity);
+
+        fadeinArticle = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
+        fadeinBoard = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
+
+        fadeinArticle.setDuration(400);
+        fadeinBoard.setDuration(450);
+
+        fadeinBoard.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+
+            public void onAnimationEnd(Animation animation) {
+                content.setVisibility(VISIBLE);
+                articleView.startAnimation(fadeinArticle);
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+
+
+        fadeinArticle.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            public void onAnimationEnd(Animation animation) {
+                articleView.setVisibility(VISIBLE);
+                WeiboPageView.this.pageActivity.setEnlargedMode(true);
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
     }
 
 
@@ -141,14 +179,13 @@ public class WeiboPageView extends FrameLayout {
         this.addView(this.frame, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
     }
 
+    private ArticleView articleView;
 
     public void enlarge(final ArticleView articleView, final ExpandableArticleView weiboArticleView) {
-        pageActivity.setEnlargedMode(true);
-        final Animation fadeinArticle = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
-        final Animation fadeinBoard = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
-        fadeinArticle.setDuration(1000);
-        fadeinBoard.setDuration(700);
-        final LayoutInflater inflater = LayoutInflater.from(WeiboPageView.this.getContext());
+        StopWatch sw = new StopWatch();
+        sw.start("enlarge");
+        this.articleView = articleView;
+        inflater = LayoutInflater.from(WeiboPageView.this.getContext());
         if (enlargedViewWrapper == null) {
 
             enlargedViewWrapper = (LinearLayout) inflater.inflate(R.layout.enlarged, null);
@@ -169,8 +206,24 @@ public class WeiboPageView extends FrameLayout {
         wrapperll.addView(articleView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
         articleView.setVisibility(INVISIBLE);
         WeiboPageView.this.removeView(enlargedViewWrapper);
-        WeiboPageView.this.addView(enlargedViewWrapper);
-        ImageView closeButton = (ImageView) enlargedViewWrapper.findViewById(R.id.close);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(DeviceInfo.width, DeviceInfo.height);
+        WeiboPageView.this.addView(enlargedViewWrapper, params);
+        sw.stopPrintReset();
+        sw.start("enlarge till tool bar");
+        setupToolBar(articleView, weiboArticleView,pageActivity.getHeader());
+         sw.stopPrintReset();
+        content = (LinearLayout) enlargedViewWrapper.findViewById(R.id.content);
+        final LinearLayout contentWrapper = (LinearLayout) enlargedViewWrapper.findViewById(R.id.contentWrapper);
+
+        content.setVisibility(INVISIBLE);
+
+
+        contentWrapper.startAnimation(fadeinBoard);
+
+    }
+
+    private void setupToolBar(final ArticleView articleView, final ExpandableArticleView weiboArticleView, HeaderView header) {
+        ImageView closeButton = (ImageView) header.findViewById(R.id.close);
 
         closeButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
@@ -178,7 +231,7 @@ public class WeiboPageView extends FrameLayout {
             }
         });
 
-        ImageView retweetButton = (ImageView) enlargedViewWrapper.findViewById(R.id.retweet);
+        ImageView retweetButton = (ImageView) header.findViewById(R.id.retweet);
 
         retweetButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
@@ -251,41 +304,6 @@ public class WeiboPageView extends FrameLayout {
                 WeiboPageView.this.addView(commentShadowLayer);
             }
         });
-        final LinearLayout content = (LinearLayout) enlargedViewWrapper.findViewById(R.id.content);
-        final LinearLayout contentWrapper = (LinearLayout) enlargedViewWrapper.findViewById(R.id.contentWrapper);
-
-        content.setVisibility(INVISIBLE);
-
-        fadeinBoard.setAnimationListener(new Animation.AnimationListener() {
-            public void onAnimationStart(Animation animation) {
-            }
-
-            public void onAnimationEnd(Animation animation) {
-                content.setVisibility(VISIBLE);
-                articleView.startAnimation(fadeinArticle);
-            }
-
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-
-
-        fadeinArticle.setAnimationListener(new Animation.AnimationListener() {
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            public void onAnimationEnd(Animation animation) {
-
-                articleView.setVisibility(VISIBLE);
-            }
-
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-
-        contentWrapper.startAnimation(fadeinBoard);
-
     }
 
 
@@ -295,7 +313,7 @@ public class WeiboPageView extends FrameLayout {
         weiboArticleView.getContentView().setVisibility(VISIBLE);
         weiboArticleView.enlargedView = enlargedViewWrapper;
         final Animation fadeout = AnimationUtils.loadAnimation(pageActivity, R.anim.fade);
-        fadeout.setDuration(500);
+        fadeout.setDuration(450);
         fadeout.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
             }
@@ -303,13 +321,15 @@ public class WeiboPageView extends FrameLayout {
             public void onAnimationEnd(Animation animation) {
                 enlargedViewWrapper.setVisibility(INVISIBLE);
                 WeiboPageView.this.removeView(enlargedViewWrapper);
+                pageActivity.setEnlargedMode(false);
             }
 
             public void onAnimationRepeat(Animation animation) {
+
             }
         });
         enlargedViewWrapper.startAnimation(fadeout);
-        pageActivity.setEnlargedMode(false);
+
     }
 
     public void showLoading() {

@@ -31,6 +31,6 @@ public class StopWatch {
     }
 
     public void report() {
-        //System.out.println(event == null ? "No name event" : event + " cost " + (end - start) + "ms");
+        System.out.println(event == null ? "No name event" : event + " cost " + (end - start) + "ms");
     }
 }

@@ -50,6 +50,23 @@ public abstract class ExpandableArticleView extends ArticleView {
             if (toLoadImage(context))
                 article.loadImage();
         }
+        fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+
+            public void onAnimationEnd(Animation animation) {
+                fadeOutAni.setAnimationListener(null);
+                switcher.setDisplayedChild(1);
+                new Thread(new Runnable() {
+                    public void run() {
+                        enlargeLoadedView();
+                    }
+                }).start();
+            }
+
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
     }
 
     public void preload() {
@@ -77,7 +94,8 @@ public abstract class ExpandableArticleView extends ArticleView {
                             }
                             //Log.d("Weibo view", "preloading " + url + " done");
                             responseToArticle(extractResponse);
-                            tikaCache.put(url, extractResponse);
+                            if (extractResponse.getContent() != null && extractResponse.getContent().trim().length() != 0)
+                                tikaCache.put(url, extractResponse);
                             return article;
                         }
                     } catch (Exception e) {
@@ -180,23 +198,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                     }
 
                     isLoading = true;
-                    fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
-                        public void onAnimationStart(Animation animation) {
-                        }
 
-                        public void onAnimationEnd(Animation animation) {
-                            fadeOutAni.setAnimationListener(null);
-                            switcher.setDisplayedChild(1);
-                            new Thread(new Runnable() {
-                                public void run() {
-                                    enlargeLoadedView();
-                                }
-                            }).start();
-                        }
-
-                        public void onAnimationRepeat(Animation animation) {
-                        }
-                    });
                     ExpandableArticleView.this.contentViewWrapper.startAnimation(fadeOutAni);
                     return;
                 }

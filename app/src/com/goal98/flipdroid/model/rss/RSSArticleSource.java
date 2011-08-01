@@ -8,6 +8,7 @@ import com.goal98.flipdroid.model.cachesystem.CacheableArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCacheObject;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.EncodingDetector;
+import com.goal98.flipdroid.util.StopWatch;
 import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayInputStream;
@@ -67,6 +68,8 @@ public class RSSArticleSource implements CacheableArticleSource {
         } catch (Exception e) {
             return false;
         }
+        StopWatch sw = new StopWatch();
+        sw.start("parse rss...");
         RssParser.RssFeed feed = rp.getFeed();
         ArrayList<RssParser.Item> items = feed.getItems();
         for (int i = 0; i < items.size(); i++) {
@@ -119,6 +122,7 @@ public class RSSArticleSource implements CacheableArticleSource {
             article.setSourceType(Constants.TYPE_RSS);
             list.add(article);
         }
+        sw.stopPrintReset();
         loaded = true;
         ////System.out.println("LOADED" + loaded);
         return true;

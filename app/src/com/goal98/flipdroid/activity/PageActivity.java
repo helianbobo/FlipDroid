@@ -41,10 +41,7 @@ import com.goal98.flipdroid.model.rss.RSSArticleSource;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.model.sina.SinaToken;
 import com.goal98.flipdroid.model.taobao.TaobaoArticleSource;
-import com.goal98.flipdroid.util.AlarmSender;
-import com.goal98.flipdroid.util.Constants;
-import com.goal98.flipdroid.util.GestureUtil;
-import com.goal98.flipdroid.util.SinaAccountUtil;
+import com.goal98.flipdroid.util.*;
 import com.goal98.flipdroid.view.*;
 import weibo4j.Weibo;
 import weibo4j.WeiboException;
@@ -54,6 +51,8 @@ import java.util.concurrent.*;
 public class PageActivity extends Activity implements com.goal98.flipdroid.model.Window.OnLoadListener {
 
     static final private int CONFIG_ID = Menu.FIRST;
+    private Animation fadeInPageView;
+    private Animation fadeOutPageView;
 
     public ExecutorService getExecutor() {
         return executor;
@@ -144,15 +143,23 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
 
+    public HeaderView getHeader() {
+        return header;
+    }
+
     /**
      * Called when the activity is first created.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StopWatch sw = new StopWatch();
+        sw.start("create activity");
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         createAnimation();
+        buildFadeInPageViewAnimation();
+        buildFadeOutPageViewAnimation();
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(false);
@@ -193,6 +200,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         setContentView(R.layout.main);
         container = (ViewGroup) findViewById(R.id.pageContainer);
         pageIndexView = (PageIndexView) findViewById(R.id.pageIndex);
+        ViewSwitcher headerSwitcher = (ViewSwitcher) findViewById(R.id.flipper);
         header = (HeaderView) findViewById(R.id.header);
 //        pageInfo = (TextView)header.findViewById(R.id.pageInfo);
         headerText = (TextView) findViewById(R.id.headerText);
@@ -289,17 +297,21 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         shadowParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
         pageViewLayoutParamsFront = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT);
         pageViewLayoutParamsBack = pageViewLayoutParamsFront;
+        sw.stopPrintReset();
+        sw.start("flip...");
         flipPage(true);
+        sw.stopPrintReset();
+
     }
 
     private void createAnimation() {
         fadeOutAnimationListener = new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
-
+                current.setVisibility(View.VISIBLE);
             }
 
             public void onAnimationEnd(Animation animation) {
-                current.setVisibility(View.VISIBLE);
+
             }
 
             public void onAnimationRepeat(Animation animation) {
@@ -344,7 +356,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             public void onAnimationStart(Animation animation) {
                 if (forward)
                     container.bringChildToFront(current);
-                next.setVisibility(View.INVISIBLE);
+                next.setVisibility(View.VISIBLE);
             }
 
             public void onAnimationEnd(Animation animation) {
@@ -365,8 +377,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                     overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
                     PageActivity.this.finish();
                 }
-                Animation fadeOutAnimation = buildFadeOutAnimation(true);
-                current.startAnimation(fadeOutAnimation);
+//                current.startAnimation(fadeOutPageView);
             }
 
             public void onAnimationRepeat(Animation animation) {
@@ -590,7 +601,16 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     public void notifyHasNew() {
         handler.post(new Runnable() {
             public void run() {
+                setProgressBarIndeterminateVisibility(false);
                 pageIndexView.setHasUpdate(true);
+            }
+        });
+    }
+
+    public void notifyUpdating() {
+        handler.post(new Runnable() {
+            public void run() {
+                setProgressBarIndeterminateVisibility(true);
             }
         });
     }
@@ -635,6 +655,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     public void setEnlargedMode(boolean enlargedMode) {
         this.enlargedMode = enlargedMode;
+        if(enlargedMode){
+            header.showToolBar();
+        }else{
+            header.showTitleBar();
+        }
     }
 
 
@@ -722,29 +747,28 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         if (currentPageIndex == -1 && forward) {//we are first timer
             currentPageIndex++;
             container.addView(current, pageViewLayoutParamsFront);
-            new Thread(new Runnable() {
-                public void run() {
-                    slideToNextPage();
-                }
-            }).start();
+            slideToNextPageAsynchronized();
         } else if (nextPageIndex > 0) {
             if (current.isLastPage() && forward) {
-                overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                finish();
+                finishActivity();
             }
-            try {
-                new Thread(new Runnable() {
-                    public void run() {
-                        slideToNextPage();
-                    }
-                }).start();
-            } catch (Exception e) {
-                executionFailed();
-            }
+            slideToNextPageAsynchronized();
         } else {
-            overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-            finish();
+            finishActivity();
         }
+    }
+
+    private void finishActivity() {
+        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+        finish();
+    }
+
+    private void slideToNextPageAsynchronized() {
+        new Thread(new Runnable() {
+            public void run() {
+                slideToNextPage();
+            }
+        }).start();
     }
 
     private void slideToNextPage() {
@@ -756,8 +780,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 if (previousDirection != forward) {
                     if (previousDirection) {
                         if (currentPageIndex == 0) {
-                            overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                            finish();
+                            finishActivity();
                             return;
                         }
                         preparingWindow = slidingWindows.getPreviousWindow();
@@ -993,12 +1016,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         //Log.d("ANI", "start animation");
         container.removeAllViews();
         if (current.isFirstPage()) {
-            Animation fadeIn = buildFadeInAnimation(forward);
             next.setVisibility(View.VISIBLE);
             currentPageIndex++;
             container.addView(current, pageViewLayoutParamsBack);
             container.addView(next, pageViewLayoutParamsFront);
-            current.startAnimation(fadeIn);
+            current.startAnimation(fadeInPageView);
         } else if (isWeiboMode() || next.isLastPage() || next.getWrapperViews().size() < 2 || lastFlipDirection == ACTION_HORIZONTAL) {
 
             Animation rotation = buildFlipHorizonalAnimation(forward);
@@ -1048,16 +1070,14 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     }
 
-    private Animation buildFadeInAnimation(boolean forward) {
-        final Animation fadeoutAnimation = AnimationUtils.loadAnimation(this, R.anim.fade);
-        fadeoutAnimation.setAnimationListener(fadeInAnimationListener);
-        return fadeoutAnimation;  //To change body of created methods use File | Settings | File Templates.
+    private void buildFadeInPageViewAnimation() {
+        fadeInPageView = AnimationUtils.loadAnimation(this, R.anim.fadeout);
+        fadeInPageView.setAnimationListener(fadeInAnimationListener);
     }
 
-    private Animation buildFadeOutAnimation(boolean forward) {
-        final Animation fadeoutArticle = AnimationUtils.loadAnimation(this, R.anim.fadein);
-        fadeoutArticle.setAnimationListener(fadeOutAnimationListener);
-        return fadeoutArticle;  //To change body of created methods use File | Settings | File Templates.
+    private void buildFadeOutPageViewAnimation() {
+        fadeOutPageView = AnimationUtils.loadAnimation(this, R.anim.left_in);
+        fadeOutPageView.setAnimationListener(fadeOutAnimationListener);
     }
 
     private Animation buildFlipAnimation(final LinearLayout currentUpper, final LinearLayout currentBottom, final LinearLayout nextUpper, final LinearLayout nextBottom, final boolean forward) {
@@ -1122,8 +1142,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                         if (dialog != null)
                             dialog.dismiss();
                         startActivity(intent);
-                        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                        finish();
+                        finishActivity();
                     }
                 });
 

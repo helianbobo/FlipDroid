@@ -2,49 +2,54 @@
 <LinearLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
               xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent" android:background="#F7F7F7"
-              android:layout_height="fill_parent" android:orientation="vertical">
+              android:layout_height="fill_parent" android:orientation="vertical" android:gravity="center">
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content">
-        <TextView android:id="@+id/title" android:layout_width="fill_parent" android:textSize="19dip"
+        <TextView android:id="@+id/title" android:layout_width="fill_parent" android:textSize="20dip"
                   android:textColor="#1A1A1A" android:textStyle="bold" android:gravity="center"
                   android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="2dip"
                   android:paddingTop="2dip" android:paddingBottom="5dip"></TextView>
     </LinearLayout>
-    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent"
-                  android:layout_height="fill_parent">
-        <LinearLayout android:layout_width="fill_parent" android:paddingLeft="5dip"
-                      android:layout_height="wrap_content" android:gravity="center" android:orientation="horizontal">
-            <TextView android:text="@string/sharedBy" android:id="@+id/title" android:layout_width="wrap_content"
-                      android:textSize="14dip"
-                      android:textColor="#AAAAAA" android:textStyle="bold" android:gravity="center"
-                      android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="5dip"
-                      android:paddingTop="2dip" android:paddingBottom="2dip"></TextView>
-            <com.goal98.android.WebImageView android:id="@+id/portrait" webimage:autoLoad="false"
-                                             android:layout_height="16dip" webimage:defaultWidth="16"
-                                             webimage:defaultHeight="16"
-                                             android:layout_width="16dip"
-                                             android:layout_marginBottom="2dip"></com.goal98.android.WebImageView>
-            <TextView android:id="@+id/author" android:layout_width="wrap_content"
-                      android:textSize="14dip"
-                      android:textColor="#AAAAAA" android:textStyle="bold" android:gravity="center"
-                      android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="2dip"
-                      android:paddingTop="2dip" android:paddingBottom="2dip"></TextView>
-            <TextView android:id="@+id/createdDate" android:layout_width="wrap_content"
-                      android:textSize="10dip"
-                      android:textColor="#AAAAAA" android:textStyle="bold" android:gravity="center"
-                      android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="2dip"
-                      android:paddingTop="2dip" android:paddingBottom="2dip"></TextView>
-        </LinearLayout>
+    <ScrollView android:id="@+id/wrapper" android:layout_width="288dip" android:layout_margin="4dip"
+                android:layout_height="fill_parent" android:scrollbars="vertical"
+                android:scrollbarStyle="insideOverlay">
         <LinearLayout android:orientation="vertical" android:layout_width="fill_parent"
                       android:layout_height="fill_parent">
-            <ScrollView android:id="@+id/wrapper" android:layout_width="288dip" android:layout_margin="4dip"
-                        android:layout_height="fill_parent" android:scrollbars="vertical"
-                        android:scrollbarStyle="insideOverlay">
+
+            <LinearLayout android:layout_width="fill_parent" android:paddingLeft="5dip"
+                          android:layout_height="wrap_content" android:gravity="center"
+                          android:orientation="horizontal">
+                <TextView android:text="@string/sharedBy" android:id="@+id/sharedBy" android:layout_width="wrap_content"
+                          android:textSize="15dip"
+                          android:textColor="#AAAAAA" android:textStyle="bold" android:gravity="center"
+                          android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="5dip"
+                          android:paddingTop="2dip" android:paddingBottom="2dip"></TextView>
+                <com.goal98.android.WebImageView android:id="@+id/portrait" webimage:autoLoad="false"
+                                                 android:layout_height="16dip" webimage:defaultWidth="16"
+                                                 webimage:defaultHeight="16"
+                                                 android:layout_width="16dip"
+                                                 android:layout_marginBottom="2dip"></com.goal98.android.WebImageView>
+                <TextView android:id="@+id/author" android:layout_width="wrap_content"
+                          android:textSize="15dip"
+                          android:textColor="#AAAAAA" android:textStyle="bold" android:gravity="center"
+                          android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="2dip"
+                          android:paddingTop="2dip" android:paddingBottom="2dip"></TextView>
+                <TextView android:id="@+id/createdDate" android:layout_width="wrap_content"
+                          android:textSize="12dip"
+                          android:textColor="#AAAAAA" android:textStyle="bold" android:gravity="center"
+                          android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="2dip"
+                          android:paddingTop="3dip" android:paddingBottom="2dip"></TextView>
+            </LinearLayout>
+            <LinearLayout android:orientation="vertical" android:layout_width="fill_parent"
+                          android:layout_height="fill_parent">
+
                 <TextView android:id="@+id/content" android:layout_width="fill_parent"
-                          android:textSize="17dip"
+                          android:textSize="18dip"
                           android:textColor="#232323" android:gravity="left"
                           android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="2dip"
                           android:paddingTop="10dip" android:paddingBottom="10dip"></TextView>
-            </ScrollView>
+
+            </LinearLayout>
+
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

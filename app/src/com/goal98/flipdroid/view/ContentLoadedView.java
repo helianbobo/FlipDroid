@@ -16,6 +16,7 @@ import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.PrettyTimeUtil;
 
 /**
@@ -94,9 +95,10 @@ public class ContentLoadedView extends ArticleView {
         LinearLayout layout = (LinearLayout) inflator.inflate(R.layout.enlarged_content, this);
 
         ScrollView wrapper = (ScrollView) layout.findViewById(R.id.wrapper);
-        wrapper.setVerticalScrollBarEnabled(false);
+        wrapper.setVerticalScrollBarEnabled(true);
 
         this.authorView = (TextView) layout.findViewById(R.id.author);
+        TextView sharedBy = (TextView) layout.findViewById(R.id.sharedBy);
         this.titleView = (TextView) layout.findViewById(R.id.title);
         authorView.setText(article.getAuthor());
         titleView.setText(article.getTitle());
@@ -114,6 +116,13 @@ public class ContentLoadedView extends ArticleView {
         }
 
         this.contentView = (TextView) layout.findViewById(R.id.content);
+        if(DeviceInfo.displayHeight==800){
+            contentView.setTextSize(20);
+            authorView.setTextSize(16);
+            createDateView.setTextSize(16);
+            sharedBy.setTextSize(16);
+            titleView.setTextSize(20);
+        }
         new ArticleTextViewRender(getPrefix()).renderTextView(contentView, article);
     }
 

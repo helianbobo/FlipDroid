@@ -74,6 +74,7 @@ public class CachedArticleSource implements ArticleSource {
     }
 
     private void checkUpdate() {
+        pageActivity.notifyUpdating();
         boolean hasUpdates = articleSource.loadLatestSource();
         this.updated = true;
         System.out.println("has update:" + hasUpdates);

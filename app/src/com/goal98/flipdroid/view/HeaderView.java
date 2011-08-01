@@ -1,21 +1,13 @@
 package com.goal98.flipdroid.view;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Color;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
-import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
-import com.goal98.flipdroid.activity.IndexActivity;
 import com.goal98.flipdroid.activity.PageActivity;
-import com.goal98.flipdroid.db.SourceDB;
-import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.util.DeviceInfo;
 
 /**
@@ -32,6 +24,7 @@ public class HeaderView extends LinearLayout {
     private PageActivity pageActivity;
     private LayoutInflater inflater;
     private WeiboPageView pageView;
+    private ViewSwitcher viewSwitcher;
 
     public HeaderView(Context context) {
         super(context);
@@ -82,7 +75,7 @@ public class HeaderView extends LinearLayout {
 //        });
         inflater = LayoutInflater.from(pageActivity);
         sourceList = (ListView) inflater.inflate(R.layout.navigator, null);
-        LinearLayout frameLayout = (LinearLayout) inflater.inflate(R.layout.header, null);
+        viewSwitcher = (ViewSwitcher) inflater.inflate(R.layout.header, null);
 
 //        final LinearLayout navigator = new LinearLayout(pageActivity);
 //        navigator.setOrientation(LinearLayout.VERTICAL);
@@ -94,14 +87,17 @@ public class HeaderView extends LinearLayout {
 //                (DeviceInfo.width * 0.8), (int) (DeviceInfo.height * 0.5));
 //        layoutParams.gravity = Gravity.CENTER;
 //        navigatorShadow.addView(navigator, layoutParams);
+        showTitleBar();
 
-        TextView headerText = (TextView) frameLayout.findViewById(R.id.headerText);
+        viewSwitcher.setInAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.fadein));
+        viewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.fade));
+        TextView headerText = (TextView) viewSwitcher.findViewById(R.id.headerText);
         boolean largeScreen = false;
         if (DeviceInfo.height == 800) {
             largeScreen = true;
         }
         if (largeScreen) {
-            headerText.setTextSize(22);
+            headerText.setTextSize(24);
         }
         headerText.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
@@ -148,6 +144,15 @@ public class HeaderView extends LinearLayout {
 //        navigatorFrame.addView(navigatorShadow, new LayoutParams
 //                (LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
-        this.addView(frameLayout);
+        this.addView(viewSwitcher, new LayoutParams
+                (LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+    }
+
+    public void showToolBar() {
+        viewSwitcher.setDisplayedChild(1);
+    }
+
+    public void showTitleBar() {
+        viewSwitcher.setDisplayedChild(0);
     }
 }

@@ -44,8 +44,8 @@ public class PageIndexView extends LinearLayout {
 
     public void setDot(int total, int current) {
         this.total = total;
+        this.current = current;
         if (this.total >= 15) {
-            this.current = current;
             this.current = (int) ((current / (float) total) * 15);
             this.total = 15;
         }
