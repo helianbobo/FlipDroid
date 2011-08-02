@@ -282,7 +282,14 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             headerImageView.setImageUrl(sourceImageURL);
             headerImageView.loadImage();
         } else {
-            headerImageView.setVisibility(View.GONE);
+            int maxTitle = 7;
+            if(DeviceInfo.displayHeight==800){
+               maxTitle = 7;
+            }
+            if(sourceName!=null && sourceName.length()>=maxTitle)
+                headerImageView.setVisibility(View.GONE);
+            else
+                headerImageView.setVisibility(View.INVISIBLE);
         }
 
         slidingWindows = new PageViewSlidingWindows(10, repo, pageViewFactory, 3);
