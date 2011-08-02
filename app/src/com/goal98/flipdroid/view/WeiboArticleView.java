@@ -35,49 +35,6 @@ public class WeiboArticleView extends ExpandableArticleView {
         return Constants.WITHURLPREFIX;
     }
 
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//
-//        if (handler == null)
-//            handler = new Handler();
-//
-//        if (!isLoading && !this.getPageView().loadingNext && article.hasLink() && event.getAction() == MotionEvent.ACTION_UP) {
-//            if (enlargedView != null) {//以前打开过的，直接显示
-//                WeiboArticleView.this.getPageView().enlarge(loadedArticleView, WeiboArticleView.this);
-//                return true;
-//            }
-//
-//            if (future.isDone()) { //如果加载好了，直接显示
-//                enlargeLoadedView();
-//                return true;
-//            }
-//
-//
-//            fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
-//                public void onAnimationStart(Animation animation) {
-//                }
-//
-//                public void onAnimationEnd(Animation animation) {
-//                    fadeOutAni.setAnimationListener(null);
-//                    switcher.setDisplayedChild(1);
-//                    new Thread(new Runnable() {
-//                        public void run() {
-//                            enlargeLoadedView();
-//                        }
-//                    }).start();
-//                }
-//
-//                public void onAnimationRepeat(Animation animation) {
-//                }
-//            });
-//            WeiboArticleView.this.contentViewWrapper.startAnimation(fadeOutAni);
-//            return true;
-//        }
-//        if (event.getAction() == MotionEvent.ACTION_DOWN)//don't swallow action down event,or PageActivity won't handle it
-//            return true;
-//
-//        return false;
-//    }
 
     protected void reloadOriginalView() {
         switcher.setDisplayedChild(0);
@@ -104,8 +61,6 @@ public class WeiboArticleView extends ExpandableArticleView {
 
 
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
-//        this.setBackgroundColor(0xff000000);//分割线颜色
-//        progressBar = (LinearLayout) inflater.inflate(R.layout.progressbar, null);
         switcher = (ViewSwitcher) inflater.inflate(R.layout.weibo_article_view, null);
         switcher.setDisplayedChild(0);
         contentView = (TextView) switcher.findViewById(R.id.content);

@@ -7,7 +7,7 @@
         <TextView android:id="@+id/title" android:layout_width="fill_parent" android:textSize="20dip"
                   android:textColor="#1A1A1A" android:textStyle="bold" android:gravity="center"
                   android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="2dip"
-                  android:paddingTop="2dip" android:paddingBottom="5dip"></TextView>
+                  android:paddingTop="2dip"></TextView>
     </LinearLayout>
     <ScrollView android:id="@+id/wrapper" android:layout_width="288dip" android:layout_margin="4dip"
                 android:layout_height="fill_parent" android:scrollbars="vertical"

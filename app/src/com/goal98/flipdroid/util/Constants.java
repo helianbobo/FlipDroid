@@ -29,4 +29,5 @@ public class Constants {
     public static final String TYPE_BAIDUSEARCH="BAIDUSEARCH";
     public static final String TYPE_TAOBAO="TAOBAO";
     public static final String TIKA_HOST="www.tika.it";
+    public static final int LINE_COLOR=0xffDDDDDD;
 }

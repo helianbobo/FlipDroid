@@ -5,6 +5,7 @@ import android.view.Gravity;
 import android.widget.LinearLayout;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.model.Article;
+import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 
 import java.util.concurrent.ExecutorService;
@@ -17,7 +18,7 @@ public class MagzinePageView extends WeiboPageView {
         if (!last) {
             LinearLayout articleWrapper = new LinearLayout(this.getContext());
             articleWrapper.setOrientation(LinearLayout.VERTICAL);
-            articleWrapper.setBackgroundColor(0xffDDDDDD);//分割线颜色
+            articleWrapper.setBackgroundColor(Constants.LINE_COLOR);//分割线颜色
             LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
             articleWrapper.addView(thumnnailView, layoutParams);
             articleWrapper.setGravity(Gravity.TOP);

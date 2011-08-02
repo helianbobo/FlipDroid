@@ -119,7 +119,10 @@ public class DensityRulesClassifier implements
                 }
             }
         } else {
-            isContent = false;
+            if(curr.getLinkDensity()==1.0f && curr.isImage()){
+                isContent = true;
+            }else
+                isContent = false;
         }
 
         return curr.setIsContent(isContent && !curr.hasLabel(DefaultLabels.INDICATES_END_OF_TEXT));

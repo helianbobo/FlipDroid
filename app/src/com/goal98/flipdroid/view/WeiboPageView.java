@@ -103,7 +103,7 @@ public class WeiboPageView extends FrameLayout {
 
         LinearLayout articleWrapper = new LinearLayout(this.getContext());
         wrapperViews.add(articleWrapper);
-        articleWrapper.setBackgroundColor(0xffDDDDDD);//分割线颜色
+        articleWrapper.setBackgroundColor(Constants.LINE_COLOR);//分割线颜色
         articleWrapper.setGravity(Gravity.TOP);
         LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 
@@ -313,7 +313,7 @@ public class WeiboPageView extends FrameLayout {
         weiboArticleView.getContentView().setVisibility(VISIBLE);
         weiboArticleView.enlargedView = enlargedViewWrapper;
         final Animation fadeout = AnimationUtils.loadAnimation(pageActivity, R.anim.fade);
-        fadeout.setDuration(450);
+        fadeout.setDuration(250);
         fadeout.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
             }

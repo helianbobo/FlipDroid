@@ -53,6 +53,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     static final private int CONFIG_ID = Menu.FIRST;
     private Animation fadeInPageView;
     private Animation fadeOutPageView;
+    private ImageButton contentImageButton;
 
     public ExecutorService getExecutor() {
         return executor;
@@ -202,6 +203,13 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         pageIndexView = (PageIndexView) findViewById(R.id.pageIndex);
         ViewSwitcher headerSwitcher = (ViewSwitcher) findViewById(R.id.flipper);
         header = (HeaderView) findViewById(R.id.header);
+        contentImageButton = (ImageButton) findViewById(R.id.content);
+        contentImageButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                PageActivity.this.finish();
+            }
+        });
 //        pageInfo = (TextView)header.findViewById(R.id.pageInfo);
         headerText = (TextView) findViewById(R.id.headerText);
         headerImageView = (WebImageView) findViewById(R.id.headerImage);
@@ -283,10 +291,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             headerImageView.loadImage();
         } else {
             int maxTitle = 7;
-            if(DeviceInfo.displayHeight==800){
-               maxTitle = 7;
+            if (DeviceInfo.displayHeight == 800) {
+                maxTitle = 7;
             }
-            if(sourceName!=null && sourceName.length()>=maxTitle)
+            if (sourceName != null && sourceName.length() >= maxTitle)
                 headerImageView.setVisibility(View.GONE);
             else
                 headerImageView.setVisibility(View.INVISIBLE);
@@ -662,9 +670,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     public void setEnlargedMode(boolean enlargedMode) {
         this.enlargedMode = enlargedMode;
-        if(enlargedMode){
+        if (enlargedMode) {
             header.showToolBar();
-        }else{
+        } else {
             header.showTitleBar();
         }
     }
