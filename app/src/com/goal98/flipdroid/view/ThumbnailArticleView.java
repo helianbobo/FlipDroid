@@ -1,11 +1,7 @@
 package com.goal98.flipdroid.view;
 
 import android.content.Context;
-import android.graphics.Paint;
 import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.text.Html;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +20,6 @@ import com.goal98.flipdroid.util.PrettyTimeUtil;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-//import com.goal98.flipdroid.client.TikaClient;
-//import com.goal98.flipdroid.client.TikaClientException;
-//import com.goal98.flipdroid.client.TikaExtractResponse;
 
 /**
  * Created by IntelliJ IDEA.
@@ -115,7 +105,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                             article.addNotifier(new Notifier());
                             if (!article.isLoading()) {
                                 System.out.println("reloading..." + article.getImageUrl().toExternalForm());
-                                article.loadImage();
+                                article.loadPrimaryImage();
                             }
                         }
 

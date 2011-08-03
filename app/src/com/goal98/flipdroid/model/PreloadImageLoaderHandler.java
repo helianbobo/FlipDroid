@@ -2,34 +2,20 @@ package com.goal98.flipdroid.model;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.drawable.Drawable;
 import com.goal98.android.MyHandler;
 import com.goal98.flipdroid.util.DeviceInfo;
 
 /**
  * Created by IntelliJ IDEA.
  * User: Administrator
- * Date: 6/10/11
- * Time: 5:06 PM
+ * Date: 8/3/11
+ * Time: 10:53 AM
  * To change this template use File | Settings | File Templates.
  */
-public class PreloadImageLoaderHandler implements MyHandler {
-    private Article article;
-    private Drawable errorDrawable;
-    private int height = 0;
-    private int width = 0;
-
-
-    public PreloadImageLoaderHandler(Article article) {
-        this.article = article;
-    }
-
-    public boolean handleImageLoaded(Bitmap bitmap) {
-        article.setLoading(false);
+public abstract class PreloadImageLoaderHandler implements MyHandler {
+    protected Bitmap scale(Bitmap bitmap) {
         if (bitmap != null) {
 
-            if (bitmap == null)
-                return false;
 
             int bmpWidth = bitmap.getWidth();
 
@@ -58,24 +44,15 @@ public class PreloadImageLoaderHandler implements MyHandler {
                     Bitmap resizeBitmap = Bitmap.createBitmap(
                             bitmap, 0, 0, bmpWidth, bmpHeight, matrix, false);
                     bitmap.recycle();
-                    article.setImageBitmap(resizeBitmap);
+                    return resizeBitmap;
                 } catch (Error e) {
                     e.printStackTrace();
-                    return false;
+                    return null;
                 }
-                return true;
+
             }
-        }
-
-        return false;
+            return null;
+        } else return null;
     }
 
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
 }

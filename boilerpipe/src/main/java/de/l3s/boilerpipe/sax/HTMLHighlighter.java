@@ -101,7 +101,7 @@ public final class HTMLHighlighter {
      * @param images
      * @throws BoilerpipeProcessingException
      */
-    public String process(final TextDocument doc, final InputSource is, List<TextBlock> images)
+    public String process(final TextDocument doc, final InputSource is, List<String> images)
             throws BoilerpipeProcessingException {
         final Implementation implementation = new Implementation();
         implementation.process(doc, is, images);
@@ -122,10 +122,10 @@ public final class HTMLHighlighter {
         final TextDocument doc = new BoilerpipeSAXInput(htmlDoc.toInputSource())
                 .getTextDocument(forChinese);  //for chinese
 
-        Map<Integer, TextBlock> images = new HashMap<Integer, TextBlock>();
+        Map<Integer, String> images = new HashMap<Integer, String>();
         for (TextBlock text : doc.getTextBlocks()) {
             if (text.isImage()) {
-                images.put(text.getOffsetBlocksStart(), text);
+                images.put(text.getOffsetBlocksStart(), text.getText());
             }
         }
 
@@ -143,13 +143,19 @@ public final class HTMLHighlighter {
             }
 
         }
-        List<TextBlock> result = JaneSort.findBetween(images, contentArr, 4);
+        List<String> result = JaneSort.findBetween(images, contentArr, 4);
         this.title = doc.getTitle();
 
         final InputSource is = htmlDoc.toInputSource();
 
-        return process(doc, is, result);
+        return postProcess(process(doc, is, result));
     }
+
+    private String postProcess(String process) {
+        return process.replace("<p><img>","<img>");
+    }
+
+
 
     private String title = null;
 
@@ -351,7 +357,7 @@ public final class HTMLHighlighter {
             setContentHandler(this);
         }
 
-        void process(final TextDocument doc, final InputSource is, List<TextBlock> images)
+        void process(final TextDocument doc, final InputSource is, List<String> images)
                 throws BoilerpipeProcessingException {
             HTMLHighlighter.this.doc = doc;
             for (TextBlock block : doc.getTextBlocks()) {
@@ -362,11 +368,14 @@ public final class HTMLHighlighter {
                     }
                 }
             }
-            List<String> imagesSet = new ArrayList<String>();
-            for (TextBlock text : images)
-                imagesSet.add(text.getText());
+            List<String> imageList = new ArrayList<String>();
+            List<Integer> imagesPositionSet = new ArrayList<Integer>();
+            for (String text : images) {
+                imageList.add(text);
+//                imagesPositionSet.add(text.get)
+            }
 
-            HTMLHighlighter.this.images = imagesSet;
+            HTMLHighlighter.this.images = imageList;
             try {
                 parse(is);
             } catch (SAXException e) {
@@ -428,6 +437,27 @@ public final class HTMLHighlighter {
                         if (!html.toString().endsWith("<p>"))
                             html.append("<p>");
                     }
+                    if (qName.equalsIgnoreCase("img") || qName.equalsIgnoreCase("image")) {
+
+                        int length = atts.getLength();
+                        String image = null;
+                        // Process each attribute
+                        for (int i = 0; i < length; i++) {
+                            // Get names and values for each attribute
+                            String name = atts.getQName(i);
+                            if (name.equalsIgnoreCase("src")) {
+                                image = atts.getValue(i);
+                                break;
+                            }
+                        }
+                        if (image != null && image.trim().length() != 0)
+                            for (int i = 0; i < HTMLHighlighter.this.images.size(); i++) {
+                                String s = HTMLHighlighter.this.images.get(i);
+                                if (s.indexOf(image) != -1) {
+                                    html.append("<img>");
+                                }
+                            }
+                    }
                 }
             } finally {
                 if (ta != null) {
@@ -467,6 +497,7 @@ public final class HTMLHighlighter {
                         if (!html.toString().endsWith("</p>"))
                             html.append("</p>");
                     }
+
                 }
             } finally {
                 if (ta != null) {
@@ -488,6 +519,7 @@ public final class HTMLHighlighter {
                 if (highlight) {
                     html.append(preHighlight);
                 }
+
                 html.append(xmlEncode(String.valueOf(ch, start, length).replace("\n", "")));
                 if (highlight) {
                     html.append(postHighlight);

@@ -8,18 +8,17 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.ViewSwitcher;
-import com.goal98.android.ImageLoader;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.client.TikaClient;
 import com.goal98.flipdroid.client.TikaExtractResponse;
 import com.goal98.flipdroid.model.Article;
-import com.goal98.flipdroid.model.PreloadImageLoaderHandler;
 import com.goal98.flipdroid.model.cachesystem.CacheSystem;
 import com.goal98.flipdroid.model.cachesystem.TikaCache;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 
 import java.net.URL;
+import java.util.List;
 import java.util.concurrent.*;
 
 /**
@@ -48,7 +47,7 @@ public abstract class ExpandableArticleView extends ArticleView {
             preload();
         } else {
             if (toLoadImage(context))
-                article.loadImage();
+                article.loadPrimaryImage();
         }
         fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
@@ -119,11 +118,20 @@ public abstract class ExpandableArticleView extends ArticleView {
         if (toLoadImage(this.getContext())) {
             try {
                 if (!extractResponse.getImages().isEmpty()) {
-                    String image = extractResponse.getImages().get(0);
-                    if (image != null && image.length() != 0) {
-                        article.setImageUrl(new URL(image));
-                        article.loadImage(image);
+                    List<String> responsedImages = extractResponse.getImages();
+                    for (int i = 0; i < responsedImages.size(); i++) {
+                        String imageURL = responsedImages.get(i);
+                        if (imageURL != null && imageURL.length() != 0) {
+                            if (i == 0) {//primary image
+                                article.setImageUrl(new URL(imageURL));
+                                article.loadPrimaryImage(imageURL);
+                            }else{
+                                article.getImagesMap().put(imageURL,null);
+                                article.loadSecondaryImages();
+                            }
+                        }
                     }
+
                 }
 
             } catch (Exception e) {

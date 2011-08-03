@@ -1,20 +1,20 @@
 package com.goal98.flipdroid.model;
 
 import android.graphics.Bitmap;
-import android.text.Html;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 import com.goal98.android.ImageLoader;
-import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.view.ThumbnailArticleView;
 
 import java.net.URL;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Article {
+    public Map<String, Bitmap> getImagesMap() {
+        return imagesMap;
+    }
 
     private String title;
     private URL portraitImageUrl;
@@ -27,6 +27,7 @@ public class Article {
     private Bitmap image;
     private ThumbnailArticleView.Notifier notifier;
     private int height;
+    private Map<String, Bitmap> imagesMap = new HashMap<String, Bitmap>();
 
     public boolean isAlreadyLoaded() {
         return alreadyLoaded;
@@ -185,6 +186,9 @@ public class Article {
     }
 
     public void setImageBitmap(Bitmap image) {
+        if (image == null)
+            return;
+
         this.image = image;
         //Log.d("imageLoading","loaded");
         if (notifier != null && image != null)
@@ -205,19 +209,19 @@ public class Article {
 
     private volatile boolean loading = false;
 
-    public synchronized void loadImage(String image) {
+    public synchronized void loadPrimaryImage(String image) {
         if (loading)
             return;
 
         loading = true;
-        PreloadImageLoaderHandler preloadImageLoaderHandler = new PreloadImageLoaderHandler(this);
+        PreloadPrimaryImageLoaderHandler preloadPrimaryImageLoaderHandler = new PreloadPrimaryImageLoaderHandler(this);
 
-        final ImageLoader loader = new ImageLoader(image, preloadImageLoaderHandler);
+        final ImageLoader loader = new ImageLoader(image, preloadPrimaryImageLoaderHandler);
         new Thread(loader).start();
     }
 
-    public void loadImage() {
-        loadImage(getImageUrl().toExternalForm());
+    public void loadPrimaryImage() {
+        loadPrimaryImage(getImageUrl().toExternalForm());
     }
 
     public void setLoading(boolean loading) {
@@ -226,5 +230,22 @@ public class Article {
 
     public boolean isLoading() {
         return loading;
+    }
+
+    public void loadSecondaryImages() {
+        for (String url : imagesMap.keySet()) {
+            loadSecondaryImage(url);
+        }
+    }
+
+    public synchronized void loadSecondaryImage(String image) {
+        PreloadSecondaryImageLoaderHandler preloadSecondaryImageLoaderHandler = new PreloadSecondaryImageLoaderHandler(this, image);
+
+        final ImageLoader loader = new ImageLoader(image, preloadSecondaryImageLoaderHandler);
+        new Thread(loader).start();
+    }
+
+    public void onSecondaryImageLoaded(Bitmap bitmap, String url) {
+        this.getImagesMap().put(url, bitmap);
     }
 }

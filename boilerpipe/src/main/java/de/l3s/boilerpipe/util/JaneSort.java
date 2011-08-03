@@ -15,9 +15,9 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 public class JaneSort {
-    public static List<TextBlock> findBetween(Map<Integer, TextBlock> map, List<HTMLHighlighter.Block> list, int range) {
+    public static List<String> findBetween(Map<Integer, String> map, List<HTMLHighlighter.Block> list, int range) {
 
-        List<TextBlock> result = new ArrayList<TextBlock>();
+        List<String> result = new ArrayList<String>();
 
         Integer[] keyArray = map.keySet().toArray(new Integer[0]);
 

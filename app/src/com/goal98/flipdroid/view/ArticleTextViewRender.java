@@ -1,5 +1,7 @@
 package com.goal98.flipdroid.view;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.Html;
@@ -23,12 +25,9 @@ public class ArticleTextViewRender {
         this.prefix = prefix;
     }
 
-    public void renderTextView(TextView tv, Article article) {
+    public void renderTextView(TextView tv, final Article article) {
         if (article != null && article.getContent() != null) {
-//            if (article.getSourceType() != null && article.getSourceType().equals(Constants.TYPE_TAOBAO)) {
-                tv.setText(Html.fromHtml(article.getContent()));
-//            } else
-//                tv.setText(prefix + (article.getContent().trim().concat("\n")).replaceAll("\n+", prefix + "\n"));
+            tv.setText(Html.fromHtml(article.getContent()));
         } else {
             tv.setVisibility(View.GONE);
             tv.setTextSize(25);
