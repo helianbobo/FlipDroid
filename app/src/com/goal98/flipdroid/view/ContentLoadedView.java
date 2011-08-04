@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.text.Html;
+import android.text.style.ParagraphStyle;
 import android.util.FloatMath;
 import android.util.Log;
 import android.view.Gravity;
@@ -20,6 +21,7 @@ import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.PrettyTimeUtil;
+import com.goal98.tika.common.Paragraphs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,55 +131,40 @@ public class ContentLoadedView extends ArticleView {
             createDateView.setTextSize(16);
             sharedBy.setTextSize(16);
             titleView.setTextSize(20);
-        }else{
+        } else {
             txtSize = 18;
         }
-
-        List<String> paragraphs = toParagraph(article.getContent());
+        Paragraphs paragraphs = new Paragraphs();
+        paragraphs.toParagraph(article.getContent());
         LayoutParams textLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-        for (int i = 0; i < paragraphs.size(); i++) {
-            String paragraph =  paragraphs.get(i);
-            if(paragraph.startsWith("<p>")){
+
+        int imageIndex = 0;
+        for (int i = 0; i < paragraphs.getParagraphs().size(); i++) {
+            String paragraph = paragraphs.getParagraphs().get(i);
+            if (paragraph.startsWith("<p>")) {
                 TextView tv = new TextView(this.getContext());
                 tv.setTextSize(txtSize);
                 tv.setTextColor(Constants.LOADED_TEXT_COLOR);
-                tv.setGravity(Gravity.LEFT);
-                tv.setPadding(2,3,2,3);
+                tv.setGravity(Gravity.LEFT|Gravity.TOP);
+                tv.setPadding(2, 3, 2, 3);
+                tv.setText(paragraph.replaceAll("[(<p>)(</p>)]",""));
                 contentHolderView.addView(tv, textLayoutParams);
             }
-            if(paragraph.equals("<img>")){
-                WebImageView imageView = new WebImageView(this.getContext());
+            if (paragraph.startsWith("<img")) {
+                String url = paragraphs.getImageSrc(paragraph);
+                WebImageView imageView = new WebImageView(this.getContext(), url, false);
+                imageView.loadImage();
+                imageIndex++;
+                contentHolderView.addView(imageView, new LayoutParams(240,320));
             }
         }
-
-        new ArticleTextViewRender(getPrefix()).renderTextView(contentView, article);
     }
 
     public void renderBeforeLayout() {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public static List toParagraph(String articleContent) {
-        List<String> paragraphs = new ArrayList<String>();
-        if (articleContent == null)
-            return paragraphs;
 
-        int cutAt = 0;
-        while ((cutAt = articleContent.indexOf("</p>")) != -1) {
-            String paragraph = articleContent.substring(0, cutAt + 4);
-            while (paragraph.startsWith("<img>")) {
-                paragraphs.add("<img>");
-                paragraph = paragraph.substring("<img>".length());
-            }
-            paragraphs.add(paragraph);
-            articleContent = articleContent.substring(cutAt + 4);
-        }
-        while (articleContent.startsWith("<img>")) {
-            paragraphs.add("<img>");
-            articleContent = articleContent.substring("<img>".length());
-        }
-        return paragraphs;
-    }
 
 
 }

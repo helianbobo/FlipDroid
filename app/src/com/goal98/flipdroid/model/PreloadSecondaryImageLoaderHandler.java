@@ -14,11 +14,9 @@ import com.goal98.flipdroid.util.DeviceInfo;
  * To change this template use File | Settings | File Templates.
  */
 public class PreloadSecondaryImageLoaderHandler extends PreloadImageLoaderHandler implements MyHandler {
-    private Article article;
     private Drawable errorDrawable;
     private int height = 0;
     private int width = 0;
-    private String url;
 
 
     public PreloadSecondaryImageLoaderHandler(Article article, String url) {

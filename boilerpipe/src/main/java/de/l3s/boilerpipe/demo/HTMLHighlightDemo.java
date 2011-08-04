@@ -18,7 +18,7 @@ import de.l3s.boilerpipe.sax.HTMLHighlighter;
  */
 public class HTMLHighlightDemo {
     public static void main(String[] args) throws Exception {
-//        URL url = new URL("http://www.ifanr.com/48042");
+//        URL url = new URL("http://www.36kr.com/google-apple-attempting-to-%E2%80%9Cstrangle%E2%80%9D-android/");
 //
 //        final BoilerpipeExtractor extractor = CommonExtractors.CHINESE_ARTICLE_EXTRACTOR;
 //        final HTMLHighlighter hh = HTMLHighlighter.newExtractingInstanceForChinese();
@@ -27,9 +27,11 @@ public class HTMLHighlightDemo {
 //
 //        System.out.println(process);
 
-        String a = "<p></p><img><p></p>";
-        List<String> result = toParagraph(a);
-        System.out.println(result.size());
+        String a = "<img src=http://www.36kr.com/wp-content/themes/36kr/images/share/sina.gif?20X20/>ssss";
+//        List<String> result = toParagraph(a);
+//        System.out.println(result.size());
+
+        System.out.println(a.replaceAll("<img src=[.]+]",""));
     }
 
     public static List toParagraph(String articleContent) {
@@ -38,20 +40,24 @@ public class HTMLHighlightDemo {
             return paragraphs;
 
         int cutAt = 0;
+        articleContent = parseImg(paragraphs, articleContent);
         while ((cutAt = articleContent.indexOf("</p>")) != -1) {
             String paragraph = articleContent.substring(0, cutAt + 4);
-            while (paragraph.startsWith("<img>")) {
-                paragraphs.add("<img>");
-                paragraph = paragraph.substring("<img>".length());
-            }
+            paragraph = parseImg(paragraphs, paragraph);
             paragraphs.add(paragraph);
             articleContent = articleContent.substring(cutAt + 4);
         }
-        while (articleContent.startsWith("<img>")) {
-            paragraphs.add("<img>");
-            articleContent = articleContent.substring("<img>".length());
-        }
+        articleContent = parseImg(paragraphs, articleContent);
         return paragraphs;
+    }
+
+    private static String parseImg(List<String> paragraphs, String paragraph) {
+        while (paragraph.startsWith("<img")) {
+            int endOfImg = paragraph.indexOf("/>");
+            paragraphs.add(paragraph.substring(0,endOfImg+2));
+            paragraph = paragraph.substring(endOfImg+2);
+        }
+        return paragraph;
     }
 
 

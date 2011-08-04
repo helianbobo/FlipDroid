@@ -14,20 +14,22 @@ import com.goal98.flipdroid.util.DeviceInfo;
  * To change this template use File | Settings | File Templates.
  */
 public class PreloadPrimaryImageLoaderHandler extends PreloadImageLoaderHandler implements MyHandler {
-    private Article article;
+
     private Drawable errorDrawable;
     private int height = 0;
     private int width = 0;
 
 
-    public PreloadPrimaryImageLoaderHandler(Article article) {
+    public PreloadPrimaryImageLoaderHandler(Article article, String url) {
         this.article = article;
+        this.url = url;
     }
 
     public boolean handleImageLoaded(Bitmap bitmap) {
         article.setLoading(false);
         Bitmap scaledBitmap = scale(bitmap);
         article.setImageBitmap(scaledBitmap);
+        article.getImagesMap().put(url, scaledBitmap);
         return scaledBitmap != null;
     }
 

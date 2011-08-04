@@ -13,6 +13,9 @@ import com.goal98.flipdroid.util.DeviceInfo;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class PreloadImageLoaderHandler implements MyHandler {
+    protected Article article;
+    protected String url;
+
     protected Bitmap scale(Bitmap bitmap) {
         if (bitmap != null) {
 

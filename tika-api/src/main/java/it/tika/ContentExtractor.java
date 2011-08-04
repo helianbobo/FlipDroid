@@ -1,5 +1,6 @@
 package it.tika;
 
+import com.goal98.tika.common.Paragraphs;
 import flipdroid.grepper.GrepperException;
 import flipdroid.grepper.pipe.PipeContentExtractor;
 import it.tika.blacklist.BlacklistedImageDBMongoDB;
@@ -169,10 +170,12 @@ public class ContentExtractor implements Extractor {
                 } catch (Exception e) {
 
                 }
-
-                if (fileSize < 5000 && height < 130 && width < 130) {
+                if (height * width < 2500) {
+                    imagesIterator.remove();
+                } else if (fileSize < 5000 && height < 130 && width < 130) {
                     imagesIterator.remove();
                 } else {
+
                     filteredImages.add(queryURL);
                     final int fileArea = ii.getWidth() * ii.getHeight();
                     if (fileArea > largestArea) {
@@ -184,6 +187,11 @@ public class ContentExtractor implements Extractor {
             }
             if (largestAreaIndex >= 0 && filteredImages.size() > largestAreaIndex)
                 Collections.swap(filteredImages, 0, largestAreaIndex);
+
+            Paragraphs paragraphs = new Paragraphs();
+            paragraphs.toParagraph(content);
+            paragraphs.retain(filteredImages);
+            urlAbstract.setContent(paragraphs.toContent());
             urlAbstract.setImages(filteredImages);
         } catch (GrepperException e) {
             throw new ExtractorException(e);
@@ -196,7 +204,7 @@ public class ContentExtractor implements Extractor {
         URL touchingImageURL = new URL(imageURL);
         HttpURLConnection httpConnection = (HttpURLConnection) (touchingImageURL
                 .openConnection());
-        httpConnection.setRequestProperty("User-Agent","Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
+        httpConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
         int responseCode = httpConnection.getResponseCode();
         if (responseCode < 200 || responseCode > 299) {
             ImageInfo ii = new InvalidImageInfo();
@@ -224,7 +232,7 @@ public class ContentExtractor implements Extractor {
         try {
             HttpURLConnection httpConnection = (HttpURLConnection) (url
                     .openConnection());
-            httpConnection.setRequestProperty("User-Agent","Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
+            httpConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
             int responseCode = httpConnection.getResponseCode();
             if (responseCode < 200 || responseCode > 299) {
                 return -1;

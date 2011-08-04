@@ -125,10 +125,12 @@ public abstract class ExpandableArticleView extends ArticleView {
                             if (i == 0) {//primary image
                                 article.setImageUrl(new URL(imageURL));
                                 article.loadPrimaryImage(imageURL);
-                            }else{
-                                article.getImagesMap().put(imageURL,null);
-                                article.loadSecondaryImages();
                             }
+                            article.getImagesMap().put(imageURL, null);
+                            article.getImages().add(imageURL);
+                            if (i != 0)
+                                article.loadSecondaryImages();
+
                         }
                     }
 

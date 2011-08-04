@@ -5,9 +5,7 @@ import com.goal98.android.ImageLoader;
 import com.goal98.flipdroid.view.ThumbnailArticleView;
 
 import java.net.URL;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +26,11 @@ public class Article {
     private ThumbnailArticleView.Notifier notifier;
     private int height;
     private Map<String, Bitmap> imagesMap = new HashMap<String, Bitmap>();
+    private List<String> images = new ArrayList<String>();
+
+    public List<String> getImages() {
+        return images;
+    }
 
     public boolean isAlreadyLoaded() {
         return alreadyLoaded;
@@ -214,7 +217,7 @@ public class Article {
             return;
 
         loading = true;
-        PreloadPrimaryImageLoaderHandler preloadPrimaryImageLoaderHandler = new PreloadPrimaryImageLoaderHandler(this);
+        PreloadPrimaryImageLoaderHandler preloadPrimaryImageLoaderHandler = new PreloadPrimaryImageLoaderHandler(this,image);
 
         final ImageLoader loader = new ImageLoader(image, preloadPrimaryImageLoaderHandler);
         new Thread(loader).start();

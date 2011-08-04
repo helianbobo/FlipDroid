@@ -152,7 +152,7 @@ public final class HTMLHighlighter {
     }
 
     private String postProcess(String process) {
-        return process.replace("<p><img>","<img>");
+        return process.replace("<p><img","<img");
     }
 
 
@@ -454,7 +454,7 @@ public final class HTMLHighlighter {
                             for (int i = 0; i < HTMLHighlighter.this.images.size(); i++) {
                                 String s = HTMLHighlighter.this.images.get(i);
                                 if (s.indexOf(image) != -1) {
-                                    html.append("<img>");
+                                    html.append("<img src="+image+"/>");
                                 }
                             }
                     }

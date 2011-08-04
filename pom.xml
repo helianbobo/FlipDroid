@@ -12,6 +12,7 @@
         <module>boilerpipe</module>
         <module>grepper</module>
         <module>tika-api</module>
+        <module>tika-common</module>
     </modules>
 
     <build>
