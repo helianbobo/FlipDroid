@@ -55,7 +55,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                 public void run() {
                     boolean scaled = false;
                     boolean largeScreen = false;
-                    if (DeviceInfo.height == 800) {
+                    if (DeviceInfo.isLargeScreen()) {
                         largeScreen = true;
                     }
                     int titleSize = 18;
@@ -63,7 +63,11 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                         titleSize = 15;
                         scaled = true;
                         if (largeScreen) {
-                            titleSize = 15;
+                            titleSize = 16;
+                        }
+                    }else{
+                        if(largeScreen){
+                            titleSize = 21;
                         }
                     }
                     titleView.setTextSize(titleSize);

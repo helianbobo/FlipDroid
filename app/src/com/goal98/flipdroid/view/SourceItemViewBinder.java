@@ -8,6 +8,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.util.DeviceInfo;
 
 import java.net.URL;
 
@@ -50,6 +51,10 @@ public class SourceItemViewBinder implements SimpleAdapter.ViewBinder, SimpleCur
 
                 if (value != null) {
                     WebImageView sourceImageView = (WebImageView) view;
+                    if(DeviceInfo.isLargeScreen()){
+                        sourceImageView.setDefaultHeight(75);
+                        sourceImageView.setDefaultWidth(75);
+                    }
                     try {
                         if (value != null)
                             sourceImageView.setImageUrl(value);

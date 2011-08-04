@@ -54,7 +54,7 @@ public class HeaderView extends LinearLayout {
         viewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.fade));
         TextView headerText = (TextView) viewSwitcher.findViewById(R.id.headerText);
         boolean largeScreen = false;
-        if (DeviceInfo.height == 800) {
+        if (DeviceInfo.isLargeScreen()) {
             largeScreen = true;
         }
         if (largeScreen) {

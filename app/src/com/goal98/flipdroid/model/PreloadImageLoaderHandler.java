@@ -29,7 +29,7 @@ public abstract class PreloadImageLoaderHandler implements MyHandler {
 
             float scale = 0.0f;
             boolean largeScreen = false;
-            if (DeviceInfo.height == 800) {
+            if (DeviceInfo.isLargeScreen()) {
                 largeScreen = true;
                 scale = 0.6f;
             } else {

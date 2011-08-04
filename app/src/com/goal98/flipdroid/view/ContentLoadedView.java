@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
@@ -8,10 +9,7 @@ import android.text.Html;
 import android.text.style.ParagraphStyle;
 import android.util.FloatMath;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -167,9 +165,21 @@ public class ContentLoadedView extends ArticleView {
             if (paragraph.startsWith("<img")) {
                 String url = paragraphs.getImageSrc(paragraph);
                 WebImageView imageView = new WebImageView(this.getContext(), url, false);
-                imageView.loadImage();
+
+                imageView.imageView.setTag(url);
+
+                imageView.setDefaultWidth(DeviceInfo.width / 2 - 8);
+                imageView.setDefaultHeight(DeviceInfo.width * 3 / 8);
+
+                final Bitmap bitmap = article.getImagesMap().get(url);
+                if (bitmap != null) {
+                    imageView.handleImageLoaded(bitmap, null);
+                }else{
+                    imageView.loadImage();
+                }
+
                 imageIndex++;
-                contentHolderView.addView(imageView, new LayoutParams(240, 320));
+                contentHolderView.addView(imageView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             }
         }
     }

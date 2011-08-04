@@ -13,4 +13,7 @@ public class DeviceInfo {
     public static int width;
     public static int height;
 
+    public static boolean isLargeScreen(){
+        return height >= 800;
+    }
 }
