@@ -170,7 +170,9 @@ public class ContentExtractor implements Extractor {
                 } catch (Exception e) {
 
                 }
-                if (height * width < 2500) {
+                height = ii.getHeight();
+                width = ii.getWidth();
+                if (height * width < 3000) {
                     imagesIterator.remove();
                 } else if (fileSize < 5000 && height < 130 && width < 130) {
                     imagesIterator.remove();

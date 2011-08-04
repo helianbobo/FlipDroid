@@ -64,7 +64,13 @@ public class ImageCache extends com.goal98.android.AbstractCache<String, byte[]>
         if (imageData == null) {
             return null;
         }
-        return BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+        try {
+            final Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+            return bitmap;
+        } catch (Throwable e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return null;
     }
 
     @Override

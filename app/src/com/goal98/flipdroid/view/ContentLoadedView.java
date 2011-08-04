@@ -139,15 +139,29 @@ public class ContentLoadedView extends ArticleView {
         LayoutParams textLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 
         int imageIndex = 0;
-        for (int i = 0; i < paragraphs.getParagraphs().size(); i++) {
-            String paragraph = paragraphs.getParagraphs().get(i);
+        final List<String> paragraphsList = paragraphs.getParagraphs();
+        for (int i = 0; i < paragraphsList.size(); i++) {
+            String paragraph = paragraphsList.get(i);
             if (paragraph.startsWith("<p>")) {
                 TextView tv = new TextView(this.getContext());
                 tv.setTextSize(txtSize);
                 tv.setTextColor(Constants.LOADED_TEXT_COLOR);
-                tv.setGravity(Gravity.LEFT|Gravity.TOP);
+                tv.setGravity(Gravity.LEFT | Gravity.TOP);
                 tv.setPadding(2, 3, 2, 3);
-                tv.setText(paragraph.replaceAll("[(<p>)(</p>)]",""));
+                StringBuilder sb = new StringBuilder();
+                sb.append(paragraph.replaceAll("[(<p>)(</p>)]", ""));
+
+                while (i + 1 < paragraphsList.size()) {
+                    final String nextParagraph = paragraphsList.get(i + 1);
+                    if (nextParagraph.startsWith("<p>")) {
+                        sb.append("\n");
+                        sb.append(nextParagraph.replaceAll("[(<p>)(</p>)]", ""));
+                        i++;
+                    } else {
+                        break;
+                    }
+                }
+                tv.setText(sb.toString());
                 contentHolderView.addView(tv, textLayoutParams);
             }
             if (paragraph.startsWith("<img")) {
@@ -155,7 +169,7 @@ public class ContentLoadedView extends ArticleView {
                 WebImageView imageView = new WebImageView(this.getContext(), url, false);
                 imageView.loadImage();
                 imageIndex++;
-                contentHolderView.addView(imageView, new LayoutParams(240,320));
+                contentHolderView.addView(imageView, new LayoutParams(240, 320));
             }
         }
     }
@@ -163,8 +177,6 @@ public class ContentLoadedView extends ArticleView {
     public void renderBeforeLayout() {
         //To change body of implemented methods use File | Settings | File Templates.
     }
-
-
 
 
 }

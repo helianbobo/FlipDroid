@@ -18,6 +18,9 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
+                android:ellipsize="marquee"
+android:marqueeRepeatLimit="marquee_forever"
+android:scrollHorizontally="true"
                 android:paddingLeft="5dip"
                 android:singleLine="true"
                 />

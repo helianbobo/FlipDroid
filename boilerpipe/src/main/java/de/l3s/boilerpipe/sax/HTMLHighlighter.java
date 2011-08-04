@@ -152,10 +152,8 @@ public final class HTMLHighlighter {
     }
 
     private String postProcess(String process) {
-        return process.replace("<p><img","<img");
+        return process.replace("<p></p>","").replace("<p><img","<img");
     }
-
-
 
     private String title = null;
 
@@ -434,6 +432,8 @@ public final class HTMLHighlighter {
                             )
 //                        html.append('\n');
                     {
+                        if(html.toString().length()!=0 && !html.toString().endsWith("</p>") && !html.toString().endsWith("/>"))
+                            html.append("</p>");
                         if (!html.toString().endsWith("<p>"))
                             html.append("<p>");
                     }
@@ -454,6 +454,9 @@ public final class HTMLHighlighter {
                             for (int i = 0; i < HTMLHighlighter.this.images.size(); i++) {
                                 String s = HTMLHighlighter.this.images.get(i);
                                 if (s.indexOf(image) != -1) {
+                                    if(html.toString().length()!=0 && !html.toString().endsWith("</p>") && !html.toString().endsWith("/>")){
+                                       html.append("</p>");
+                                    }
                                     html.append("<img src="+image+"/>");
                                 }
                             }
@@ -494,7 +497,7 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("br") ||
                             qName.equalsIgnoreCase("li")
                             ) {
-                        if (!html.toString().endsWith("</p>"))
+                        if (html.toString().length()!=0&&!html.toString().endsWith("</p>"))
                             html.append("</p>");
                     }
 

@@ -10,7 +10,7 @@ import org.restlet.resource.Directory;
 
 public class APIServer {
 
-    public static final String ROOT_URI = "file:///G:\\androidprj\\FlipDroid\\tika-ui";
+    public static final String ROOT_URI = "file:///d:\\myprojects\\android\\FlipDroid\\tika-ui";
     public static final String CURRENT_VERSION = "v1";
 
     public static void main(String[] args) throws Exception {
