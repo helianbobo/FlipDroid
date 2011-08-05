@@ -17,6 +17,7 @@ import com.goal98.flipdroid.model.cachesystem.TikaCache;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.*;
@@ -31,7 +32,8 @@ import java.util.concurrent.*;
 public abstract class ExpandableArticleView extends ArticleView {
     protected ViewSwitcher switcher;
     protected ArticleView loadedArticleView;
-    protected LinearLayout enlargedView;
+//    protected LinearLayout enlargedView;
+    protected WeakReference<LinearLayout>  enlargedView;
     protected final Animation fadeOutAni = AnimationUtils.loadAnimation(this.getContext(), R.anim.fade);
     protected final Animation fadeInAni = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
     protected Handler handler;
@@ -128,12 +130,11 @@ public abstract class ExpandableArticleView extends ArticleView {
                             }
                             article.getImagesMap().put(imageURL, null);
                             article.getImages().add(imageURL);
-                            if (i != 0)
-                                article.loadSecondaryImages();
+//                            if(i!=0)
+//                                article.loadSecondaryImage(imageURL);
 
                         }
                     }
-
                 }
 
             } catch (Exception e) {
@@ -191,13 +192,13 @@ public abstract class ExpandableArticleView extends ArticleView {
     }
 
     protected void addOnClickListener() {
-        contentView.setOnClickListener(new OnClickListener() {
+        contentViewWrapper.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 if (handler == null)
                     handler = new Handler();
                 if (!isLoading && !ExpandableArticleView.this.getPageView().loadingNext && article.hasLink()) {
 
-                    if (enlargedView != null) {//以前打开过的，直接显示
+                    if (enlargedView!=null && enlargedView.get() != null) {//以前打开过的，直接显示
                         ExpandableArticleView.this.getPageView().enlarge(loadedArticleView, ExpandableArticleView.this);
                         return;
                     }

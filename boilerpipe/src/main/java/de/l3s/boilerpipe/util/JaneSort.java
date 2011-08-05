@@ -29,7 +29,8 @@ public class JaneSort {
 
             for (int i = 0; i < length; i++) {
                 if (keyArray[i] >= min && keyArray[i] <= max) {
-                    result.add(map.get(keyArray[i]));
+                    if (!result.contains(map.get(keyArray[i])))
+                        result.add(map.get(keyArray[i]));
                 }
             }
         }

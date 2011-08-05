@@ -26,7 +26,7 @@ public class PreloadSecondaryImageLoaderHandler extends PreloadImageLoaderHandle
 
     public boolean handleImageLoaded(Bitmap bitmap) {
         Bitmap scaledBitmap = scale(bitmap);
-        article.onSecondaryImageLoaded(bitmap,url);
+        article.onSecondaryImageLoaded(scaledBitmap,url);
         return scaledBitmap != null;
     }
 

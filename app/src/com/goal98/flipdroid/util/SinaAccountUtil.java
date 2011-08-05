@@ -39,14 +39,17 @@ public class SinaAccountUtil {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         String userId = preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null);
-        if(userId == null)
+        if (userId == null)
             userId = preferences.getString(WeiPaiWebViewClient.PREVIOUS_SINA_ACCOUNT_PREF_KEY, null);
 
         Cursor cursor = accountDB.findByTypeAndUsername(Constants.TYPE_MY_SINA_WEIBO, userId);
-        cursor.moveToFirst();
-        token = cursor.getString(cursor.getColumnIndex(Account.KEY_PASSWORD));
-        tokenSecret = cursor.getString(cursor.getColumnIndex(Account.KEY_PASSWORD_SECRET));
-        cursor.close();
+        try {
+            cursor.moveToFirst();
+            token = cursor.getString(cursor.getColumnIndex(Account.KEY_PASSWORD));
+            tokenSecret = cursor.getString(cursor.getColumnIndex(Account.KEY_PASSWORD_SECRET));
+        } finally {
+            cursor.close();
+        }
 
         SinaToken sinaToken = new SinaToken();
         sinaToken.setToken(token);

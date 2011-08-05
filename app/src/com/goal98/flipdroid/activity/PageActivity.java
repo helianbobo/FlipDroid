@@ -118,9 +118,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private float last_x, last_y, last_z;
     private static final int SHAKE_THRESHOLD = 900;
 
-    public SensorManager sm;
-    public Sensor acceleromererSensor;
-    public SensorEventListener acceleromererListener;
+//    public SensorManager sm;
+//    public Sensor acceleromererSensor;
+//    public SensorEventListener acceleromererListener;
     public Animation.AnimationListener flipAnimationListener;
     public Animation.AnimationListener fadeInAnimationListener;
     public Animation.AnimationListener verticalAnimationListenerStep1;
@@ -172,10 +172,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         sourceDB = new SourceDB(this);
         alarmSender = new AlarmSender(this);
 
-        sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        acceleromererSensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+//        sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+//        acceleromererSensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+//        createShakeListener();
 
-        createShakeListener();
 
         accountDB = new AccountDB(this);
 
@@ -459,48 +459,48 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         };
     }
 
-    private void createShakeListener() {
-        acceleromererListener = new SensorEventListener() {
-
-            public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            }
-
-            public synchronized void onSensorChanged(SensorEvent event) {
-                long curTime = System.currentTimeMillis();
-                // only allow one update every 100ms.
-                if ((curTime - lastUpdate) > 80) {
-                    long diffTime = (curTime - lastUpdate);
-                    lastUpdate = curTime;
-
-                    x = event.values[SensorManager.DATA_X];
-                    y = event.values[SensorManager.DATA_Y];
-                    z = event.values[SensorManager.DATA_Z];
-
-                    float speed = Math.abs(x + y + z - last_x - last_y - last_z)
-                            / diffTime * 10000;
-
-                    if (speed > SHAKE_THRESHOLD) {
-                        ////System.out.println("sensored" + dialog);
-                        if (dialog == null)
-                            PageActivity.this.showDialog(NAVIGATION);
-                        else {
-                            dialog.dismiss();
-                        }
-                    }
-                    last_x = x;
-                    last_y = y;
-                    last_z = z;
-                }
-
-            }
-
-        };
-    }
-
-
-    private void registerShakeListener() {
-        sm.registerListener(acceleromererListener, acceleromererSensor, SensorManager.SENSOR_DELAY_UI);
-    }
+//    private void createShakeListener() {
+//        acceleromererListener = new SensorEventListener() {
+//
+//            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+//            }
+//
+//            public synchronized void onSensorChanged(SensorEvent event) {
+//                long curTime = System.currentTimeMillis();
+//                // only allow one update every 100ms.
+//                if ((curTime - lastUpdate) > 80) {
+//                    long diffTime = (curTime - lastUpdate);
+//                    lastUpdate = curTime;
+//
+//                    x = event.values[SensorManager.DATA_X];
+//                    y = event.values[SensorManager.DATA_Y];
+//                    z = event.values[SensorManager.DATA_Z];
+//
+//                    float speed = Math.abs(x + y + z - last_x - last_y - last_z)
+//                            / diffTime * 10000;
+//
+//                    if (speed > SHAKE_THRESHOLD) {
+//                        ////System.out.println("sensored" + dialog);
+//                        if (dialog == null)
+//                            PageActivity.this.showDialog(NAVIGATION);
+//                        else {
+//                            dialog.dismiss();
+//                        }
+//                    }
+//                    last_x = x;
+//                    last_y = y;
+//                    last_z = z;
+//                }
+//
+//            }
+//
+//        };
+//    }
+//
+//
+//    private void registerShakeListener() {
+//        sm.registerListener(acceleromererListener, acceleromererSensor, SensorManager.SENSOR_DELAY_UI);
+//    }
 
     private int getAnimationMode() {
         String key = getString(R.string.key_animation_mode_preference);
@@ -513,7 +513,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     protected void onDestroy() {
         super.onDestroy();
         accountDB.close();
-        sm.unregisterListener(acceleromererListener);
+//        sm.unregisterListener(acceleromererListener);
     }
 
     @Override
@@ -521,7 +521,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         super.onDestroy();
         CacheSystem.getTikaCache(this).shutdown();
         accountDB.close();
-        sm.unregisterListener(acceleromererListener);
+//        sm.unregisterListener(acceleromererListener);
     }
 
     @Override
@@ -594,10 +594,16 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     private void initSinaWeibo(String userId) {
         weibo = new WeiboExt();
-        Cursor cursor = accountDB.findByTypeAndUsername(Constants.TYPE_SINA_WEIBO, userId);
-        cursor.moveToFirst();
-        String password = cursor.getString(cursor.getColumnIndex(Account.KEY_PASSWORD));
-        cursor.close();
+        Cursor cursor = null;
+        String password;
+        try {
+            cursor = accountDB.findByTypeAndUsername(Constants.TYPE_SINA_WEIBO, userId);
+            cursor.moveToFirst();
+            password = cursor.getString(cursor.getColumnIndex(Account.KEY_PASSWORD));
+        } finally {
+            cursor.close();
+        }
+
 
         System.setProperty("weibo4j.oauth.consumerKey", Constants.CONSUMER_KEY);
         System.setProperty("weibo4j.oauth.consumerSecret", Constants.CONSUMER_SECRET);
@@ -662,7 +668,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     protected void onResume() {
         super.onResume();
 //        current.setVisibility(View.VISIBLE);
-        registerShakeListener();
+//        registerShakeListener();
         accountDB = new AccountDB(this);
     }
 

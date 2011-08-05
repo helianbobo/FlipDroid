@@ -14,6 +14,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Window;
+import com.goal98.android.ImageLoader;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.util.DeviceInfo;
@@ -72,6 +73,8 @@ public class CoverActivity extends Activity {
                 DeviceInfo.displayWidth = (int) (CoverActivity.this.getWindowManager().getDefaultDisplay().getWidth()) - 20;
                 DeviceInfo.width = CoverActivity.this.getWindowManager().getDefaultDisplay().getWidth();
                 DeviceInfo.height = CoverActivity.this.getWindowManager().getDefaultDisplay().getHeight();
+
+//                ImageLoader.setDeviceInfo(DeviceInfo.displayWidth, DeviceInfo.displayHeight);
             }
         });
 //        if (!NetworkUtil.isNetworkAvailable(CoverActivity.this)) {

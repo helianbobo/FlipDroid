@@ -23,6 +23,7 @@ import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.StopWatch;
 import weibo4j.WeiboException;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -43,8 +44,8 @@ public class WeiboPageView extends FrameLayout {
 
     protected LinearLayout contentLayout; //this layout is supposed to be dynamic, depending on the Articles on this smartPage
 
-
-    protected LinearLayout enlargedViewWrapper;
+    protected WeakReference<LinearLayout> enlargedViewWrapperWr;
+//    protected LinearLayout enlargedViewWrapper;
     //    protected ScrollView wrapper;
     protected String sourceName;
     protected String sourceImageURL;
@@ -186,13 +187,13 @@ public class WeiboPageView extends FrameLayout {
         sw.start("enlarge");
         this.articleView = articleView;
         inflater = LayoutInflater.from(WeiboPageView.this.getContext());
-        if (enlargedViewWrapper == null) {
+        if (enlargedViewWrapperWr==null || enlargedViewWrapperWr.get() == null) {
 
-            enlargedViewWrapper = (LinearLayout) inflater.inflate(R.layout.enlarged, null);
+            enlargedViewWrapperWr = new WeakReference(inflater.inflate(R.layout.enlarged, null));
 
-            wrapperll = (LinearLayout) enlargedViewWrapper.findViewById(R.id.wrapperll);
+            wrapperll = (LinearLayout) (enlargedViewWrapperWr.get().findViewById(R.id.wrapperll));
 
-            LinearLayout shadowlayer = (LinearLayout) enlargedViewWrapper.findViewById(R.id.shadowlayer);
+            LinearLayout shadowlayer = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.shadowlayer);
             shadowlayer.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {
                     if (!weiboArticleView.isLoading)
@@ -201,19 +202,19 @@ public class WeiboPageView extends FrameLayout {
             });
 
         }
-        enlargedViewWrapper.setVisibility(VISIBLE);
+        enlargedViewWrapperWr.get().setVisibility(VISIBLE);
         wrapperll.removeAllViews();
         wrapperll.addView(articleView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
         articleView.setVisibility(INVISIBLE);
-        WeiboPageView.this.removeView(enlargedViewWrapper);
+        WeiboPageView.this.removeView(enlargedViewWrapperWr.get());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(DeviceInfo.width, DeviceInfo.height);
-        WeiboPageView.this.addView(enlargedViewWrapper, params);
+        WeiboPageView.this.addView(enlargedViewWrapperWr.get(), params);
         sw.stopPrintReset();
         sw.start("enlarge till tool bar");
         setupToolBar(articleView, weiboArticleView,pageActivity.getHeader());
          sw.stopPrintReset();
-        content = (LinearLayout) enlargedViewWrapper.findViewById(R.id.content);
-        final LinearLayout contentWrapper = (LinearLayout) enlargedViewWrapper.findViewById(R.id.contentWrapper);
+        content = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.content);
+        final LinearLayout contentWrapper = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.contentWrapper);
 
         content.setVisibility(INVISIBLE);
 
@@ -311,7 +312,7 @@ public class WeiboPageView extends FrameLayout {
         if (commentShadowLayer != null)
             this.removeView(commentShadowLayer);
         weiboArticleView.getContentView().setVisibility(VISIBLE);
-        weiboArticleView.enlargedView = enlargedViewWrapper;
+        weiboArticleView.enlargedView = new WeakReference(enlargedViewWrapperWr.get());
         final Animation fadeout = AnimationUtils.loadAnimation(pageActivity, R.anim.fade);
         fadeout.setDuration(250);
         fadeout.setAnimationListener(new Animation.AnimationListener() {
@@ -319,8 +320,8 @@ public class WeiboPageView extends FrameLayout {
             }
 
             public void onAnimationEnd(Animation animation) {
-                enlargedViewWrapper.setVisibility(INVISIBLE);
-                WeiboPageView.this.removeView(enlargedViewWrapper);
+                enlargedViewWrapperWr.get().setVisibility(INVISIBLE);
+                WeiboPageView.this.removeView(enlargedViewWrapperWr.get());
                 pageActivity.setEnlargedMode(false);
             }
 
@@ -328,7 +329,7 @@ public class WeiboPageView extends FrameLayout {
 
             }
         });
-        enlargedViewWrapper.startAnimation(fadeout);
+        enlargedViewWrapperWr.get().startAnimation(fadeout);
 
     }
 

@@ -226,51 +226,35 @@ public class ThumbnailArticleView extends ExpandableArticleView {
         else
             portraitView.setVisibility(GONE);
 
-        contentViewWrapper.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                if (isLoading)
-                    return;
-
-                if (article.hasLink() && !ThumbnailArticleView.this.getPageView().loadingNext) {
-                    //Log.d("scale", ThumbnailArticleView.this.getLeft() + ":" + ThumbnailArticleView.this.getRight() + ":" + ThumbnailArticleView.this.getTop() + ":" + ThumbnailArticleView.this.getBottom());
-                    if (enlargedView != null) {//以前打开过的，直接显示
-                        //Log.d("scale", ThumbnailArticleView.this.getLeft() + ":" + ThumbnailArticleView.this.getRight() + ":" + ThumbnailArticleView.this.getTop() + ":" + ThumbnailArticleView.this.getBottom());
-                        ThumbnailArticleView.this.getPageView().enlarge(loadedArticleView, ThumbnailArticleView.this);
-
-                        return;
-                    }
-
-                    if (article.isAlreadyLoaded() || future.isDone()) { //如果加载好了，直接显示
-                        enlargeLoadedView();
-                        return;
-                    }
-
-                    fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
-                        public void onAnimationStart(Animation animation) {
-                        }
-
-                        public void onAnimationEnd(Animation animation) {
-                            fadeOutAni.setAnimationListener(null);
-                            switcher.setDisplayedChild(1);
-                            new Thread(new Runnable() {
-                                public void run() {
-                                    enlargeLoadedView();
-                                }
-                            }).start();
-                        }
-
-                        public void onAnimationRepeat(Animation animation) {
-                        }
-                    });
-                    ThumbnailArticleView.this.thumbnailViewWrapper.startAnimation(fadeOutAni);
-                    return;
-                }
-//                if (event.getAction() == MotionEvent.ACTION_DOWN)//don't swallow action down event,or PageActivity won't handle it
+//        contentViewWrapper.setOnClickListener(new OnClickListener() {
+//            public void onClick(View view) {
+//                if (isLoading)
 //                    return;
-
-                return;
-            }
-        });
+//
+//                if (article.hasLink() && !ThumbnailArticleView.this.getPageView().loadingNext) {
+//                    //Log.d("scale", ThumbnailArticleView.this.getLeft() + ":" + ThumbnailArticleView.this.getRight() + ":" + ThumbnailArticleView.this.getTop() + ":" + ThumbnailArticleView.this.getBottom());
+//                    if (enlargedView != null) {//以前打开过的，直接显示
+//                        //Log.d("scale", ThumbnailArticleView.this.getLeft() + ":" + ThumbnailArticleView.this.getRight() + ":" + ThumbnailArticleView.this.getTop() + ":" + ThumbnailArticleView.this.getBottom());
+//                        ThumbnailArticleView.this.getPageView().enlarge(loadedArticleView, ThumbnailArticleView.this);
+//
+//                        return;
+//                    }
+//
+//                    if (article.isAlreadyLoaded() || future.isDone()) { //如果加载好了，直接显示
+//                        enlargeLoadedView();
+//                        return;
+//                    }
+//
+//                    ThumbnailArticleView.this.thumbnailViewWrapper.startAnimation(fadeOutAni);
+//                    return;
+//                }
+////                if (event.getAction() == MotionEvent.ACTION_DOWN)//don't swallow action down event,or PageActivity won't handle it
+////                    return;
+//
+//                return;
+//            }
+//        });
+        addOnClickListener();
     }
 
     public void renderBeforeLayout() {

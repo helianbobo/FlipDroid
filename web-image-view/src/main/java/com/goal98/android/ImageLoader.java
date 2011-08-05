@@ -68,6 +68,7 @@ public class ImageLoader implements Runnable {
         this.preloadImageLoaderHandler = preloadImageLoaderHandler;
     }
 
+
     /**
      * @param numThreads the maximum number of threads that will be started to read images in parallel
      */
@@ -200,7 +201,15 @@ public class ImageLoader implements Runnable {
 
         if (imageCache.containsKeyInMemory(imageUrl)) {
             // do not go through message passing, handle directly instead
-            handler.handleImageLoaded(imageCache.getBitmap(imageUrl), null);
+            byte[] bitmapBytes = imageCache.getBitmapBytes(imageUrl);
+            Bitmap bitmap = null;
+            try {
+                bitmap = BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
+            } catch (Throwable e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            handler.handleImageLoaded(bitmap, null);
+
         } else {
             executor.execute(new ImageLoader(imageUrl, handler));
         }
@@ -230,50 +239,41 @@ public class ImageLoader implements Runnable {
     public void run() {
         // TODO: if we had a way to check for in-memory hits, we could improve performance by
         // fetching an image from the in-memory cache on the main thread
-        Bitmap bitmap = imageCache.getBitmap(imageUrl);
+        byte[] bitmapBytes = imageCache.getBitmapBytes(imageUrl);
 
-        if (bitmap == null) {
-            bitmap = downloadImage();
+        if (bitmapBytes == null) {
+            bitmapBytes = downloadImage();
+            if (bitmapBytes != null) {
+                imageCache.put(imageUrl, bitmapBytes);
+            }
         }
+        Bitmap image = null;
+        if (bitmapBytes != null) {
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bitmapBytes);
 
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inPurgeable = true;
+
+
+            try {
+                image = BitmapFactory.decodeStream(byteArrayInputStream, null, o2);
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
         // TODO: gracefully handle this case.
-        notifyImageLoaded(imageUrl, bitmap);
-
+        notifyImageLoaded(imageUrl, image);
     }
 
     // TODO: we could probably improve performance by re-using connections instead of closing them
     // after each and every read
-    protected Bitmap downloadImage() {
+    protected byte[] downloadImage() {
         int timesTried = 1;
 
         while (timesTried <= numRetries) {
             try {
                 byte[] imageData = retrieveImageData();
-                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageData);
-
-                BitmapFactory.Options o = new BitmapFactory.Options();
-                o.inJustDecodeBounds = true;
-
-
-                BitmapFactory.decodeStream(byteArrayInputStream, null, o);
-                byteArrayInputStream.close();
-
-                int scale = 1;
-                if (o.outHeight > 300 || o.outWidth > 300) {
-                    scale = (int) Math.pow(2, (int) Math.round(Math.log(300 / (double) Math.max(o.outHeight, o.outWidth)) / Math.log(0.5)));
-                }
-
-                //Decode with inSampleSize
-                BitmapFactory.Options o2 = new BitmapFactory.Options();
-                o2.inSampleSize = scale;
-                byteArrayInputStream = new ByteArrayInputStream(imageData);
-
-                if (imageData != null) {
-                    imageCache.put(imageUrl, imageData);
-                } else {
-                    break;
-                }
-                return BitmapFactory.decodeStream(byteArrayInputStream, null, o2);
+                return imageData;
             } catch (Throwable e) {
                 Log.w(LOG_TAG, "read for " + imageUrl + " failed (attempt " + timesTried + ")");
                 e.printStackTrace();
@@ -291,14 +291,14 @@ public class ImageLoader implements Runnable {
 
         // determine the image size and allocate a buffer
         int fileSize = connection.getContentLength();
-        if (fileSize < 0) {
+        if (fileSize <= 0) {
             return null;
         }
         byte[] imageData = new byte[fileSize];
 
         // read the file
         Log.d(LOG_TAG, "fetching image " + imageUrl + " (" + fileSize + ")");
-        BufferedInputStream istream = new BufferedInputStream(connection.getInputStream());
+        BufferedInputStream istream = new BufferedInputStream(connection.getInputStream(), 32768);
         int bytesRead = 0;
         int offset = 0;
         while (bytesRead != -1 && offset < fileSize) {
@@ -324,7 +324,6 @@ public class ImageLoader implements Runnable {
 
         if (handler != null)
             handler.sendMessage(message);
-
         if (preloadImageLoaderHandler != null)
             preloadImageLoaderHandler.handleImageLoaded(image);
     }

@@ -31,7 +31,7 @@ import de.l3s.boilerpipe.labels.DefaultLabels;
  * been determined using the C4.8 machine learning algorithm, as described in the
  * paper "Boilerplate Detection using Shallow Text Features", particularly using
  * text densities and link densities.
- * 
+ *
  * @author Christian Kohlschütter
  */
 public class DensityRulesClassifier implements
@@ -66,8 +66,8 @@ public class DensityRulesClassifier implements
                 currentBlock = nextBlock;
                 nextBlock = it.next();
                 String trimmedText = nextBlock.getText().trim();
-                while(trimmedText.length()==0 || trimmedText.length()==1 && trimmedText.charAt(0)==160){
-                    if(!it.hasNext())
+                while (trimmedText.length() == 0 || trimmedText.length() == 1 && trimmedText.charAt(0) == 160) {
+                    if (!it.hasNext())
                         break;
                     nextBlock = it.next();
                     trimmedText = nextBlock.getText().trim();
@@ -86,7 +86,7 @@ public class DensityRulesClassifier implements
     }
 
     protected boolean classify(final TextBlock prev, final TextBlock curr,
-            final TextBlock next) {
+                               final TextBlock next) {
         final boolean isContent;
 
         if (curr.getLinkDensity() <= 0.333333) {
@@ -110,18 +110,27 @@ public class DensityRulesClassifier implements
                 }
             } else {
                 if (next.getTextDensity() <= 11) {
-                    if(curr.getNumWords() > 200){
+                    if (curr.getNumWords() > 128) {
                         isContent = true;
-                    }else
-                        isContent = false;
+                    } else {
+                        if (prev.getLinkDensity() == 1.0f && prev.isImage()) {
+                            if (next.getLinkDensity() == 1.0f && next.isImage()) {
+                                isContent = true;
+                            }
+                            else
+                               isContent = false;
+                        } else {
+                            isContent = false;
+                        }
+                    }
                 } else {
                     isContent = true;
                 }
             }
         } else {
-            if(curr.getLinkDensity()==1.0f && curr.isImage()){
-                isContent = true;
-            }else
+            if (curr.getLinkDensity() == 1.0f && curr.isImage()) {
+                isContent = prev.isContent();
+            } else
                 isContent = false;
         }
 

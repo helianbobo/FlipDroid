@@ -239,19 +239,7 @@ public class ContentExtractor implements Extractor {
             if (responseCode < 200 || responseCode > 299) {
                 return -1;
             }
-            String sHeader;
-            for (int i = 1; ; i++) {
-                sHeader = httpConnection.getHeaderFieldKey(i);
-                if (sHeader != null) {
-                    if (sHeader.equals("Content-Length")) {
-                        fileLength = Integer.parseInt(httpConnection
-                                .getHeaderField(sHeader));
-                        break;
-                    }
-                } else {
-                    break;
-                }
-            }
+            fileLength = httpConnection.getContentLength();
             if (fileLength == -1) {
                 InputStream is = httpConnection.getInputStream();
                 int i;

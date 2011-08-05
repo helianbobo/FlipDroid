@@ -458,6 +458,7 @@ public final class HTMLHighlighter {
                                        html.append("</p>");
                                     }
                                     html.append("<img src="+image+"/>");
+                                    break;
                                 }
                             }
                     }

@@ -162,14 +162,19 @@ public class ContentLoadedView extends ArticleView {
                 tv.setText(sb.toString());
                 contentHolderView.addView(tv, textLayoutParams);
             }
+            TextView tv = new TextView(this.getContext());
+            tv.setText("\n");
+
+            contentHolderView.addView(tv, textLayoutParams);
             if (paragraph.startsWith("<img")) {
                 String url = paragraphs.getImageSrc(paragraph);
                 WebImageView imageView = new WebImageView(this.getContext(), url, false);
 
                 imageView.imageView.setTag(url);
 
-                imageView.setDefaultWidth(DeviceInfo.width / 2 - 8);
-                imageView.setDefaultHeight(DeviceInfo.width * 3 / 8);
+                imageView.setDefaultWidth(DeviceInfo.width*3/4);
+                imageView.setDefaultHeight(DeviceInfo.height*3/4);
+                contentHolderView.addView(imageView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
                 final Bitmap bitmap = article.getImagesMap().get(url);
                 if (bitmap != null) {
@@ -179,7 +184,7 @@ public class ContentLoadedView extends ArticleView {
                 }
 
                 imageIndex++;
-                contentHolderView.addView(imageView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
             }
         }
     }

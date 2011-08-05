@@ -62,7 +62,10 @@ public final class ExpandTitleToContentFilter implements BoilerpipeFilter {
             return false;
         }
         boolean changes = false;
-        for (TextBlock tb : doc.getTextBlocks().subList(title, contentStart)) {
+        if(doc.getTextBlocks().size()-1==title){
+            return changes;
+        }
+        for (TextBlock tb : doc.getTextBlocks().subList(title+1, contentStart)) {
             if (tb.hasLabel(DefaultLabels.MIGHT_BE_CONTENT)) {
                 changes = tb.setIsContent(true) | changes;
             }

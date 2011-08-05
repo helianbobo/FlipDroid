@@ -2,6 +2,8 @@ package com.goal98.flipdroid.model;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.util.DisplayMetrics;
+import com.goal98.android.ImageLoader;
 import com.goal98.android.MyHandler;
 import com.goal98.flipdroid.util.DeviceInfo;
 
@@ -27,19 +29,21 @@ public abstract class PreloadImageLoaderHandler implements MyHandler {
             //缩放图片的尺寸
 
 
-            float scale = 0.0f;
-            boolean largeScreen = false;
-            if (DeviceInfo.isLargeScreen()) {
-                largeScreen = true;
-                scale = 0.6f;
+            int heightDip = 160 * bmpHeight / DisplayMetrics.DENSITY_DEFAULT;
+            int widthDip = 160 * bmpWidth / DisplayMetrics.DENSITY_DEFAULT;
+
+            float scale = 1;
+            if (heightDip >= widthDip) {
+                if (DeviceInfo.height < (4 * heightDip / 3f)) {
+                    scale = DeviceInfo.height/(4 * heightDip / 3f)  ;
+                }
             } else {
-                scale = 0.4f;
+                if (DeviceInfo.width < widthDip) {
+                    scale = DeviceInfo.width/(float) widthDip  ;
+                }
             }
-
             Matrix matrix = new Matrix();
-
             matrix.postScale(scale, scale);
-
 
             //产生缩放后的Bitmap对象
             if (bmpWidth > 0 && bmpHeight > 0) {

@@ -36,6 +36,10 @@ public class TextBlock implements Cloneable {
     private CharSequence text;
     Set<String> labels = null;
 
+    public int getNumSegment() {
+        return numSegment;
+    }
+
     int offsetBlocksStart;
     int offsetBlocksEnd;
 
