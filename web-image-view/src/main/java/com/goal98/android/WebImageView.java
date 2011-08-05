@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
@@ -261,6 +262,9 @@ public class WebImageView extends ViewSwitcher {
             int width = WebImageView.this.getWidth() == 0 ? WebImageView.this.defaultWidth : WebImageView.this.getWidth();
             int height = WebImageView.this.getHeight() == 0 ? WebImageView.this.defaultHeight : WebImageView.this.getHeight();
 
+            int heightDip = 160 * bmpHeight / DisplayMetrics.DENSITY_DEFAULT;
+            int widthDip = 160 * bmpWidth / DisplayMetrics.DENSITY_DEFAULT;
+
             System.out.println("bmpWidth" + bmpWidth);
             System.out.println("bmpHeight" + bmpHeight);
             System.out.println("width" + width);
@@ -268,14 +272,14 @@ public class WebImageView extends ViewSwitcher {
 
             float scale = 0.0f;
             if (bmpWidth > bmpHeight * 1.15) {
-                scale = (float) width / bmpWidth;
+                scale = (float) width / widthDip;
                 fatOrSlim = FAT;
             } else {
-                scale = (float) height / bmpHeight;
+                scale = (float) height / heightDip;
                 fatOrSlim = SLIM;
                 percentageInWidth = 50 * (bmpWidth / bmpHeight);
             }
-
+            System.out.println("scale" + scale);
             Matrix matrix = new Matrix();
 
             matrix.postScale(scale, scale);
@@ -286,14 +290,14 @@ public class WebImageView extends ViewSwitcher {
             Bitmap resizeBitmap = null;
             try {
                 resizeBitmap = Bitmap.createBitmap(
-
                         bitmap, 0, 0, bmpWidth, bmpHeight, matrix, false);
+                if(preloadImageLoaderHandler!=null)
+                    preloadImageLoaderHandler.onImageResized(resizeBitmap,imageUrl);
+                bitmap.recycle();
             } catch (Throwable error) {
                 error.printStackTrace();
                 System.out.println("out of memory...skipped");
             }
-
-//            bitmap.recycle();
 
             boolean result = false;
             String forUrl = (String) imageView.getTag();

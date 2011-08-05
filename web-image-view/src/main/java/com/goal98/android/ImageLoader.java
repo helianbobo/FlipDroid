@@ -320,10 +320,18 @@ public class ImageLoader implements Runnable {
         data.putString(IMAGE_URL_EXTRA, url);
         Bitmap image = bitmap;
         data.putParcelable(BITMAP_EXTRA, image);
+
+
         message.setData(data);
 
-        if (handler != null)
+        if (preloadImageLoaderHandler != null) {
+            if (handler != null) {
+                handler.setCustomImageLoaderHandler(preloadImageLoaderHandler);
+            }
+        }
+        if (handler != null) {
             handler.sendMessage(message);
+        }
         if (preloadImageLoaderHandler != null)
             preloadImageLoaderHandler.handleImageLoaded(image);
     }

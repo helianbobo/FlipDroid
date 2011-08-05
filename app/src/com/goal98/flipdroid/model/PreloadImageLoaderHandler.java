@@ -3,7 +3,6 @@ package com.goal98.flipdroid.model;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.util.DisplayMetrics;
-import com.goal98.android.ImageLoader;
 import com.goal98.android.MyHandler;
 import com.goal98.flipdroid.util.DeviceInfo;
 
@@ -50,6 +49,7 @@ public abstract class PreloadImageLoaderHandler implements MyHandler {
                 try {
                     Bitmap resizeBitmap = Bitmap.createBitmap(
                             bitmap, 0, 0, bmpWidth, bmpHeight, matrix, false);
+                    onImageResized(resizeBitmap,url);
                     bitmap.recycle();
                     return resizeBitmap;
                 } catch (Error e) {
@@ -62,4 +62,7 @@ public abstract class PreloadImageLoaderHandler implements MyHandler {
         } else return null;
     }
 
+    public void onImageResized(Bitmap resizeBitmap, String imageUrl){
+        article.getImagesMap().put(imageUrl,resizeBitmap);
+    }
 }

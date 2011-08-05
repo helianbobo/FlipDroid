@@ -28,6 +28,7 @@ public class ImageLoaderHandler extends Handler {
     private ImageView imageView;
     private String imageUrl;
     private Drawable errorDrawable;
+    protected MyHandler preloadImageLoaderHandler;
 
     public ImageLoaderHandler(ImageView imageView, String imageUrl) {
         this.imageView = imageView;
@@ -94,5 +95,9 @@ public class ImageLoaderHandler extends Handler {
 
     public void setImageView(ImageView imageView) {
         this.imageView = imageView;
+    }
+
+    public void setCustomImageLoaderHandler(MyHandler preloadImageLoaderHandler) {
+        this.preloadImageLoaderHandler = preloadImageLoaderHandler;
     }
 }

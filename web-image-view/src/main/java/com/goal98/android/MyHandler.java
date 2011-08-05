@@ -11,4 +11,6 @@ import android.graphics.Bitmap;
  */
 public interface MyHandler {
     public boolean handleImageLoaded(Bitmap bitmap);
+
+    void onImageResized(Bitmap resizeBitmap, String imageUrl);
 }

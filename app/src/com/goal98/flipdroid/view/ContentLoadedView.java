@@ -170,18 +170,19 @@ public class ContentLoadedView extends ArticleView {
                 String url = paragraphs.getImageSrc(paragraph);
                 WebImageView imageView = new WebImageView(this.getContext(), url, false);
 
-                imageView.imageView.setTag(url);
+//                imageView.imageView.setTag(url);
 
                 imageView.setDefaultWidth(DeviceInfo.width*3/4);
                 imageView.setDefaultHeight(DeviceInfo.height*3/4);
-                contentHolderView.addView(imageView, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+                contentHolderView.addView(imageView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
-                final Bitmap bitmap = article.getImagesMap().get(url);
-                if (bitmap != null) {
-                    imageView.handleImageLoaded(bitmap, null);
-                }else{
+//                final Bitmap bitmap = article.getImagesMap().get(url);
+//                if (bitmap != null) {
+//                    imageView.imageView.setTag(url);
+//                    imageView.handleImageLoaded(bitmap, null);
+//                }else{
                     imageView.loadImage();
-                }
+//                }
 
                 imageIndex++;
 
