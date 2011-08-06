@@ -262,6 +262,7 @@ public class WebImageView extends ViewSwitcher {
 
             int width = WebImageView.this.getWidth() == 0 ? WebImageView.this.defaultWidth : WebImageView.this.getWidth();
             int height = WebImageView.this.getHeight() == 0 ? WebImageView.this.defaultHeight : WebImageView.this.getHeight();
+//            int height = width * bmpHeight / bmpWidth;
 
             int heightDip = 160 * bmpHeight / DisplayMetrics.DENSITY_DEFAULT;
             int widthDip = 160 * bmpWidth / DisplayMetrics.DENSITY_DEFAULT;
@@ -292,8 +293,8 @@ public class WebImageView extends ViewSwitcher {
             try {
                 resizeBitmap = Bitmap.createBitmap(
                         bitmap, 0, 0, bmpWidth, bmpHeight, matrix, false);
-                if(preloadImageLoaderHandler!=null)
-                    preloadImageLoaderHandler.onImageResized(resizeBitmap,imageUrl);
+                if (preloadImageLoaderHandler != null)
+                    preloadImageLoaderHandler.onImageResized(resizeBitmap, imageUrl);
                 bitmap.recycle();
             } catch (Throwable error) {
                 error.printStackTrace();

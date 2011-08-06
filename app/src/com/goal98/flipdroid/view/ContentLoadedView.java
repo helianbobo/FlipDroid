@@ -180,7 +180,7 @@ public class ContentLoadedView extends ArticleView {
                 imageView.setDefaultWidth(DeviceInfo.width - 60);
                 imageView.setDefaultHeight(DeviceInfo.height - 80);
 
-                final LayoutParams imageLayoutParams = new LayoutParams(DeviceInfo.width - 60, LayoutParams.FILL_PARENT);
+                final LayoutParams imageLayoutParams = new LayoutParams(DeviceInfo.width - 60, DeviceInfo.height * 1 / 3);
                 imageLayoutParams.gravity = Gravity.CENTER;
                 if (DeviceInfo.isLargeScreen()) {
                     if (imageIndex != 0)
