@@ -282,26 +282,31 @@ public class WebImageView extends ViewSwitcher {
                 percentageInWidth = 50 * (bmpWidth / bmpHeight);
             }
             System.out.println("scale" + scale);
-            Matrix matrix = new Matrix();
-
-            matrix.postScale(scale, scale);
-
-
-            //产生缩放后的Bitmap对象
 
             Bitmap resizeBitmap = null;
-            try {
-                resizeBitmap = Bitmap.createBitmap(
-                        bitmap, 0, 0, bmpWidth, bmpHeight, matrix, false);
+            if (scale != 1.0) {
+                Matrix matrix = new Matrix();
 
-                if (preloadImageLoaderHandler != null)
-                    preloadImageLoaderHandler.onImageResized(resizeBitmap, imageUrl);
-                bitmap.recycle();
-            } catch (Throwable error) {
-                error.printStackTrace();
-                System.out.println("out of memory...skipped");
+                matrix.postScale(scale, scale);
+
+
+                //产生缩放后的Bitmap对象
+
+
+                try {
+                    resizeBitmap = Bitmap.createBitmap(
+                            bitmap, 0, 0, bmpWidth, bmpHeight, matrix, false);
+
+                    if (preloadImageLoaderHandler != null)
+                        preloadImageLoaderHandler.onImageResized(resizeBitmap, imageUrl);
+                    bitmap.recycle();
+                } catch (Throwable error) {
+                    error.printStackTrace();
+                    System.out.println("out of memory...skipped");
+                }
+            }else {
+                 resizeBitmap = bitmap;
             }
-
             boolean result = false;
             String forUrl = (String) imageView.getTag();
             if (imageUrl.equals(forUrl)) {
