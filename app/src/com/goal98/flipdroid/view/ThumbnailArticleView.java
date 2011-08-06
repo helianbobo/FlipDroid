@@ -65,8 +65,8 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                         if (largeScreen) {
                             titleSize = 16;
                         }
-                    }else{
-                        if(largeScreen){
+                    } else {
+                        if (largeScreen) {
                             titleSize = 21;
                         }
                     }
@@ -103,27 +103,35 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                         imageView.setDefaultWidth(DeviceInfo.width / 2 - 8);
                         imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : 5)) * maxLine);
                         //System.out.println("article.getImage()" + article.getImage());
-                        if (article.getImage() != null)
+                        boolean imageHandled = false;
+                        if (article.getImage() != null) {
                             imageView.handleImageLoaded(article.getImage(), null);
-                        else {
+                            imageHandled = true;
+                        } else {
                             article.addNotifier(new Notifier());
                             if (!article.isLoading()) {
                                 System.out.println("reloading..." + article.getImageUrl().toExternalForm());
                                 article.loadPrimaryImage();
                             }
+                            imageHandled = false;
                         }
 
 //                        article.getImage().recycle();
                         LayoutParams layoutParamsText = new LayoutParams(0, LayoutParams.FILL_PARENT);
                         LayoutParams layoutParamsImage = new LayoutParams(0, LayoutParams.FILL_PARENT);
-                        if (imageView.getFatOrSlim() == WebImageView.FAT) {
+//                        if (imageView.getFatOrSlim() == WebImageView.FAT) {
                             layoutParamsText.weight = 50;
                             layoutParamsImage.weight = 50;
-                        } else {
-                            layoutParamsText.weight = 50;
-                            layoutParamsImage.weight = 50;
-                            //System.out.println("imageView.getPercentageInWidth()"+imageView.getPercentageInWidth());
-                        }
+//                        } else {
+//                            if (imageHandled) {
+//                                contentViewWrapper.setWeightSum(100);
+//                                layoutParamsText.weight = 100 - imageView.getPercentageInWidth();
+//                                layoutParamsImage.weight = imageView.getPercentageInWidth();
+//                            } else {
+//                                layoutParamsText.weight = 50;
+//                                layoutParamsImage.weight = 50;
+//                            }
+//                        }
 
                         Random random = new Random();
                         random.setSeed(System.currentTimeMillis());

@@ -25,7 +25,7 @@ public class WebImageView extends ViewSwitcher {
 
     public ImageView imageView;
 
-    private ScaleType scaleType = ScaleType.CENTER_CROP;
+    private ScaleType scaleType = ScaleType.CENTER_INSIDE;
 
     private Drawable progressDrawable, errorDrawable;
 
@@ -164,6 +164,7 @@ public class WebImageView extends ViewSwitcher {
         imageView = new ImageView(context);
         imageView.setScaleType(scaleType);
         imageView.setAdjustViewBounds(true);
+
         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         lp.gravity = Gravity.CENTER;
         addView(imageView, 1, lp);

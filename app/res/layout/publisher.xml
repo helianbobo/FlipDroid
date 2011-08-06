@@ -5,9 +5,9 @@
               android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="bottom">
 
     <com.goal98.android.WebImageView android:id="@+id/portrait2" webimage:autoLoad="false"
-                                     android:layout_height="27dip" webimage:defaultWidth="27"
-                                     webimage:defaultHeight="27"
-                                     android:layout_width="27dip"></com.goal98.android.WebImageView>
+                                     android:layout_height="25dip" webimage:defaultWidth="25"
+                                     webimage:defaultHeight="25"
+                                     android:layout_width="25dip"></com.goal98.android.WebImageView>
 
     <TextView android:layout_marginLeft="3dip" android:id="@+id/author" android:layout_width="wrap_content"
               android:layout_height="wrap_content" android:textSize="16dip" android:gravity="center"></TextView>

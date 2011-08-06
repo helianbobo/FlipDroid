@@ -63,6 +63,7 @@ public abstract class PreloadImageLoaderHandler implements MyHandler {
     }
 
     public void onImageResized(Bitmap resizeBitmap, String imageUrl){
+        System.out.println("image " + url + " resized");
         article.getImagesMap().put(imageUrl,resizeBitmap);
     }
 }

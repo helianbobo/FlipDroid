@@ -163,6 +163,11 @@ public class ContentLoadedView extends ArticleView {
                 contentHolderView.addView(tv, textLayoutParams);
             }
             TextView tv = new TextView(this.getContext());
+            if (DeviceInfo.isLargeScreen()) {
+                tv.setPadding(0, 15, 0, 0);
+            } else {
+                tv.setPadding(0, 10, 0, 0);
+            }
             tv.setText("\n");
 
             contentHolderView.addView(tv, textLayoutParams);
@@ -172,16 +177,30 @@ public class ContentLoadedView extends ArticleView {
 
 //                imageView.imageView.setTag(url);
 
-                imageView.setDefaultWidth(DeviceInfo.width*3/4);
-                imageView.setDefaultHeight(DeviceInfo.height*3/4);
-                contentHolderView.addView(imageView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+                imageView.setDefaultWidth(DeviceInfo.width - 60);
+                imageView.setDefaultHeight(DeviceInfo.height - 80);
+
+                final LayoutParams imageLayoutParams = new LayoutParams(DeviceInfo.width - 60, LayoutParams.FILL_PARENT);
+                imageLayoutParams.gravity = Gravity.CENTER;
+                if (DeviceInfo.isLargeScreen()) {
+                    if (imageIndex != 0)
+                        imageLayoutParams.setMargins(0, -120, 0, 0);
+                    else
+                        imageLayoutParams.setMargins(0, -60, 0, 0);
+                } else{
+                    if (imageIndex != 0)
+                        imageLayoutParams.setMargins(0, -80, 0, 0);
+                    else
+                       imageLayoutParams.setMargins(0, -40, 0, 0);
+                }
+                contentHolderView.addView(imageView, imageLayoutParams);
 
 //                final Bitmap bitmap = article.getImagesMap().get(url);
 //                if (bitmap != null) {
 //                    imageView.imageView.setTag(url);
 //                    imageView.handleImageLoaded(bitmap, null);
 //                }else{
-                    imageView.loadImage();
+                imageView.loadImage();
 //                }
 
                 imageIndex++;
