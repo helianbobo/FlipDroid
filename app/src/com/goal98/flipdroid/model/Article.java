@@ -218,7 +218,6 @@ public class Article {
 
         loading = true;
         PreloadPrimaryImageLoaderHandler preloadPrimaryImageLoaderHandler = new PreloadPrimaryImageLoaderHandler(this,image);
-
         final ImageLoader loader = new ImageLoader(image, preloadPrimaryImageLoaderHandler);
         new Thread(loader).start();
     }

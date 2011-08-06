@@ -293,6 +293,7 @@ public class WebImageView extends ViewSwitcher {
             try {
                 resizeBitmap = Bitmap.createBitmap(
                         bitmap, 0, 0, bmpWidth, bmpHeight, matrix, false);
+
                 if (preloadImageLoaderHandler != null)
                     preloadImageLoaderHandler.onImageResized(resizeBitmap, imageUrl);
                 bitmap.recycle();
