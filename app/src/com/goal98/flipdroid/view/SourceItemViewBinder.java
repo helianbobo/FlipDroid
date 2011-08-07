@@ -54,6 +54,9 @@ public class SourceItemViewBinder implements SimpleAdapter.ViewBinder, SimpleCur
                     if(DeviceInfo.isLargeScreen()){
                         sourceImageView.setDefaultHeight(75);
                         sourceImageView.setDefaultWidth(75);
+                    }else if(DeviceInfo.isSmallScreen()){
+                        sourceImageView.setDefaultHeight(30);
+                        sourceImageView.setDefaultWidth(30);
                     }
                     try {
                         if (value != null)

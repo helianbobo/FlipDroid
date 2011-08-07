@@ -53,12 +53,11 @@ public class HeaderView extends LinearLayout {
         viewSwitcher.setInAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.fadein));
         viewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.fade));
         TextView headerText = (TextView) viewSwitcher.findViewById(R.id.headerText);
-        boolean largeScreen = false;
+
         if (DeviceInfo.isLargeScreen()) {
-            largeScreen = true;
-        }
-        if (largeScreen) {
             headerText.setTextSize(24);
+        } else if (DeviceInfo.isSmallScreen()) {
+            headerText.setTextSize(18);
         }
         headerText.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {

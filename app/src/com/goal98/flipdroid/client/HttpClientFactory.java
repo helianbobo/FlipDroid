@@ -24,7 +24,7 @@ import org.apache.http.params.HttpParams;
 public class HttpClientFactory {
     static HttpClient client;
     public static final int MAX_TOTAL_CONNECTIONS = 15;
-    public static final int MAX_PER_ROUTE = 6;
+    public static final int MAX_PER_ROUTE = 1;
 
     public static synchronized HttpClient getHttpClient() {
         if (client == null) {

@@ -123,7 +123,7 @@ public class ContentLoadedView extends ArticleView {
 
         this.contentHolderView = (LinearLayout) layout.findViewById(R.id.contentHolder);
         int txtSize = 0;
-        if (DeviceInfo.displayHeight == 800) {
+        if (DeviceInfo.isLargeScreen()) {
             txtSize = 20;
             authorView.setTextSize(16);
             createDateView.setTextSize(16);
@@ -165,7 +165,7 @@ public class ContentLoadedView extends ArticleView {
             TextView tv = new TextView(this.getContext());
             if (DeviceInfo.isLargeScreen()) {
                 tv.setPadding(0, 15, 0, 0);
-            } else {
+            }else {
                 tv.setPadding(0, 10, 0, 0);
             }
             tv.setText("\n");
@@ -187,11 +187,11 @@ public class ContentLoadedView extends ArticleView {
                         imageLayoutParams.setMargins(0, -120, 0, 0);
                     else
                         imageLayoutParams.setMargins(0, -60, 0, 0);
-                } else{
+                } else {
                     if (imageIndex != 0)
                         imageLayoutParams.setMargins(0, -80, 0, 0);
                     else
-                       imageLayoutParams.setMargins(0, -40, 0, 0);
+                        imageLayoutParams.setMargins(0, -40, 0, 0);
                 }
                 contentHolderView.addView(imageView, imageLayoutParams);
 

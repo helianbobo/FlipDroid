@@ -299,16 +299,20 @@ public class ImageLoader implements Runnable {
         // read the file
         Log.d(LOG_TAG, "fetching image " + imageUrl + " (" + fileSize + ")");
         BufferedInputStream istream = new BufferedInputStream(connection.getInputStream(), 32768);
-        int bytesRead = 0;
-        int offset = 0;
-        while (bytesRead != -1 && offset < fileSize) {
-            bytesRead = istream.read(imageData, offset, fileSize - offset);
-            offset += bytesRead;
+        try {
+            int bytesRead = 0;
+            int offset = 0;
+            while (bytesRead != -1 && offset < fileSize) {
+                bytesRead = istream.read(imageData, offset, fileSize - offset);
+                offset += bytesRead;
+            }
+        } finally {
+            istream.close();
+            connection.disconnect();
         }
 
         // clean up
-        istream.close();
-        connection.disconnect();
+
 
         return imageData;
     }

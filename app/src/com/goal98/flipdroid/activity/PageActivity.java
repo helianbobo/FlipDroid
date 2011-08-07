@@ -291,9 +291,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             headerImageView.loadImage();
         } else {
             int maxTitle = 7;
-            if (DeviceInfo.displayHeight == 800) {
-                maxTitle = 7;
-            }
+
             if (sourceName != null && sourceName.length() >= maxTitle)
                 headerImageView.setVisibility(View.GONE);
             else

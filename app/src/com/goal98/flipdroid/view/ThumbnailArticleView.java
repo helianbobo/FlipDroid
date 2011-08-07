@@ -55,19 +55,32 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                 public void run() {
                     boolean scaled = false;
                     boolean largeScreen = false;
+                    boolean smallScreen = false;
                     if (DeviceInfo.isLargeScreen()) {
                         largeScreen = true;
+                    }else if (DeviceInfo.isSmallScreen()) {
+                        smallScreen = true;
                     }
                     int titleSize = 18;
-                    if (article.getTitle() != null && article.getTitleLength() >= 50) {
+                    int maxTitleLength = 0;
+                    if(!smallScreen){
+                        maxTitleLength = 50;
+                    }else{
+                        maxTitleLength = 20;
+                    }
+                    if (article.getTitle() != null && article.getTitleLength() >= maxTitleLength) {
                         titleSize = 15;
                         scaled = true;
                         if (largeScreen) {
                             titleSize = 16;
+                        }else if(smallScreen){
+                            titleSize = 15;
                         }
                     } else {
                         if (largeScreen) {
                             titleSize = 21;
+                        }else if (smallScreen) {
+                            titleSize = 17;
                         }
                     }
                     titleView.setTextSize(titleSize);
@@ -79,15 +92,21 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                     if (largeScreen) {
                         maxLines = 6;
                         textSize = 18;
+                    }else if (smallScreen) {
+                        maxLines = 4;
+                        textSize = 18;
                     }
 
                     TextView t = new TextView(ThumbnailArticleView.this.getContext());
                     t.getPaint().setAntiAlias(true);
                     int scaleTextSize = scaled ? textSize - 3 : textSize;
                     t.setTextSize(scaleTextSize);
-                    t.setPadding(2, 8, 2, 8);
+                    if(!smallScreen)
+                        t.setPadding(2, 8, 2, 8);
+                    else
+                        t.setPadding(2, 4, 2, 4);
                     t.setTextColor(0xff232323);
-                    int maxLine = scaled ? maxLines + (largeScreen ? 1 : 1) : maxLines;
+                    int maxLine = scaled ? maxLines + (smallScreen ? 0 : 1) : maxLines;
                     t.setMaxLines(maxLine);
 
                     new ArticleTextViewRender(getPrefix()).renderTextView(t, article);
@@ -101,7 +120,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                         imageView = new WebImageView(ThumbnailArticleView.this.getContext(), article.getImageUrl().toExternalForm(), false);
                         imageView.imageView.setTag(article.getImageUrl().toExternalForm());
                         imageView.setDefaultWidth(DeviceInfo.width / 2 - 8);
-                        imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : 5)) * maxLine);
+                        imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen?0:5)) * maxLine);
                         //System.out.println("article.getImage()" + article.getImage());
                         boolean imageHandled = false;
                         if (article.getImage() != null) {
