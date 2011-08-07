@@ -25,20 +25,21 @@ import java.util.List;
 public class TikaClient {
     private String host;
 
-    public TikaClient(String host){
+    public TikaClient(String host) {
         this.host = host;
     }
+
     public List<TikaSourceResponse> searchSource(String keyword) throws TikaClientException {
         String url = null;
         String requestURL = null;
         try {
-            requestURL = "http://"+host+"/v1/sources/search?kw=" + URLEncoder.encode(keyword.trim(), "utf-8");
+            requestURL = "http://" + host + "/v1/sources/search?kw=" + URLEncoder.encode(keyword.trim(), "utf-8");
         } catch (UnsupportedEncodingException e) {
 
         }
         String tikaResponse = read(requestURL);
         List<TikaSourceResponse> sourceResponses = new ArrayList<TikaSourceResponse>();
-        if("{}".equals(tikaResponse)){
+        if ("{}".equals(tikaResponse)) {
             return sourceResponses;
         }
         try {
@@ -51,11 +52,11 @@ public class TikaClient {
                 String cat = object.getString("cat");
 
                 String imageURL = "";
-                if(object.has("image_url"))
+                if (object.has("image_url"))
                     object.getString("image_url");
                 String desc = object.getString("desc");
                 String contentURL = "";
-                if(object.has("content_url"))
+                if (object.has("content_url"))
                     contentURL = object.getString("content_url");
 
                 TikaSourceResponse response = new TikaSourceResponse();
@@ -109,7 +110,7 @@ public class TikaClient {
     private JSONObject toJSONObject(String url) throws TikaClientException {
         String tikeResponse = null;
         try {
-            tikeResponse = read("http://"+host+"/v1/url/abstract?url=" + URLEncoder.encode(url.trim(), "utf-8") + "&nocache=false");
+            tikeResponse = read("http://" + host + "/v1/url/abstract?url=" + URLEncoder.encode(url.trim(), "utf-8") + "&nocache=false");
         } catch (UnsupportedEncodingException e) {
 
         }
@@ -123,24 +124,29 @@ public class TikaClient {
     }
 
     public String read(String url) throws TikaClientException {
-        HttpClient client = new DefaultHttpClient();
+        HttpClient client =HttpClientFactory.getHttpClient();
         HttpGet request = new HttpGet(url);
+
         try {
             HttpResponse response = client.execute(request);
             if (response.getStatusLine().getStatusCode() >= 200 && response.getStatusLine().getStatusCode() <= 299) {
                 InputStream is = response.getEntity().getContent();
 
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                int i;
-                byte[] bytes = new byte[1024];
-                while ((i = is.read(bytes)) != -1) {
-                    baos.write(bytes, 0, i);
-                    bytes = new byte[1024];
-                }
+                try {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    int i;
+                    byte[] bytes = new byte[1024];
+                    while ((i = is.read(bytes)) != -1) {
+                        baos.write(bytes, 0, i);
+                        bytes = new byte[1024];
+                    }
 
-                String s = new String(baos.toByteArray(), "utf-8");
-                ////System.out.println(s);
-                return s;
+                    String s = new String(baos.toByteArray(), "utf-8");
+                    ////System.out.println(s);
+                    return s;
+                } finally {
+                    is.close();
+                }
             } else {
                 throw new TikaClientException();
             }
