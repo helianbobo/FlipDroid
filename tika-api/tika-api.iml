@@ -45,10 +45,10 @@
     <orderEntry type="library" name="Maven: net.sourceforge.jchardet:jchardet:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.gpars:gpars:0.11" level="project" />
     <orderEntry type="library" name="Maven: org.coconut.forkjoin:jsr166y:070108" level="project" />
+    <orderEntry type="module" module-name="boilerpipe" />
+    <orderEntry type="module" module-name="tika-common" />
     <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.4.1" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:1.4" level="project" />
-    <orderEntry type="module" module-name="tika-common" />
-    <orderEntry type="module" module-name="boilerpipe" />
   </component>
 </module>
 

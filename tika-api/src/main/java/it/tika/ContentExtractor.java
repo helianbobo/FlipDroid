@@ -214,7 +214,12 @@ public class ContentExtractor implements Extractor {
         }
         InputStream is = httpConnection.getInputStream();
 
-        byte[] image = IOUtils.toByteArray(is);
+        byte[] image;
+        try {
+            image = IOUtils.toByteArray(is);
+        } finally {
+            is.close();
+        }
         ImageInfo ii = new ImageInfo();
 
         ii.setSize(image.length);
@@ -231,6 +236,8 @@ public class ContentExtractor implements Extractor {
 
     private int getFileSize(URL url) {
         int fileLength = -1;
+
+        InputStream is = null;
         try {
             HttpURLConnection httpConnection = (HttpURLConnection) (url
                     .openConnection());
@@ -240,8 +247,9 @@ public class ContentExtractor implements Extractor {
                 return -1;
             }
             fileLength = httpConnection.getContentLength();
+            is = httpConnection.getInputStream();
             if (fileLength == -1) {
-                InputStream is = httpConnection.getInputStream();
+
                 int i;
                 int sum = 0;
                 byte[] bytes = new byte[1024];
@@ -253,6 +261,13 @@ public class ContentExtractor implements Extractor {
             }
         } catch (Exception ex) {
             return -1;
+        } finally {
+            if (is != null)
+                try {
+                    is.close();
+                } catch (IOException e) {
+
+                }
         }
 
         return fileLength;
