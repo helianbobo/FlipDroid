@@ -117,8 +117,12 @@ public class DensityRulesClassifier implements
                             if (next.getLinkDensity() == 1.0f && next.isImage()) {
                                 isContent = true;
                             }
-                            else
-                               isContent = false;
+                            else{
+                                if(curr.getTextDensity()>30){
+                                    isContent = true;
+                                }else
+                                isContent = false;
+                            }
                         } else {
                             isContent = false;
                         }

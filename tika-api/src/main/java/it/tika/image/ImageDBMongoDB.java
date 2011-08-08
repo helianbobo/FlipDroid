@@ -1,7 +1,7 @@
 package it.tika.image;
 
 import com.mongodb.*;
-import it.tika.URLAbstract;
+import flipdroid.grepper.TikaImage;
 import it.tika.exception.DBNotAvailableException;
 
 import java.net.UnknownHostException;

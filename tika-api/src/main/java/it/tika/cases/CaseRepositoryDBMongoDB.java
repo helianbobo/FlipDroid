@@ -4,8 +4,6 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
-import it.tika.URLAbstract;
-import it.tika.URLDBInterface;
 import it.tika.exception.DBNotAvailableException;
 
 import java.net.UnknownHostException;

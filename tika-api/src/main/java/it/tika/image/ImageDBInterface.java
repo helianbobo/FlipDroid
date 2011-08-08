@@ -1,5 +1,7 @@
 package it.tika.image;
 
+import flipdroid.grepper.TikaImage;
+
 /**
  * Created by IntelliJ IDEA.
  * User: jleo

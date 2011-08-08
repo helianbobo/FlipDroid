@@ -1,8 +1,12 @@
 package it.tika;
 
+import flipdroid.grepper.Extractor;
+import flipdroid.grepper.URLAbstract;
+import flipdroid.grepper.pipe.ImageFilter;
 import flipdroid.grepper.pipe.PipeContentExtractor;
 import flipdroid.grepper.pipe.TitleExtractorImpl;
 import it.tika.exception.ExtractorException;
+import it.tika.image.TikaImageService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +35,7 @@ public class WebpageExtractor {
 
         extractors.add(extractor);
         extractors.add(contentExtractor);
+        extractors.add(new ImageFilter(new TikaImageService()));
 
     }
 

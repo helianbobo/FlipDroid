@@ -1,8 +1,11 @@
 package it.tika;
 
 import com.mongodb.*;
+import flipdroid.grepper.URLAbstract;
 import it.tika.exception.DBNotAvailableException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,11 +46,17 @@ public class URLDBMongoDB implements URLDBInterface {
         try {
             DBObject urlFromDB = db.getCollection(urlCollectionName).findOne(query);
             if (urlFromDB != null) {
+                List<String> imageList = new ArrayList<String>();
+                BasicDBList images = (BasicDBList) urlFromDB.get("images");
+                if (images != null)
+                    for (int i = 0; i < images.size(); i++)
+                        imageList.add((String) images.get(i));
+
                 urlAbstract = new URLAbstract(
                         url,
                         (String) urlFromDB.get("title"),
                         (String) urlFromDB.get("content"),
-                        (BasicDBList) urlFromDB.get("images"));
+                        imageList);
             }
         } catch (MongoException e) {
             logger.log(Level.INFO, e.getMessage(), e);

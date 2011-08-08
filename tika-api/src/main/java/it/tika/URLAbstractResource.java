@@ -2,8 +2,7 @@ package it.tika;
 
 
 import flipdroid.grepper.EncodingDetector;
-import it.tika.cases.Case;
-import it.tika.cases.CaseRepositoryDBMongoDB;
+import flipdroid.grepper.URLAbstract;
 import it.tika.exception.DBNotAvailableException;
 import it.tika.exception.ExtractorException;
 import it.tika.exception.URLRepoException;
@@ -13,17 +12,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
-import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 
 public class URLAbstractResource extends ServerResource {

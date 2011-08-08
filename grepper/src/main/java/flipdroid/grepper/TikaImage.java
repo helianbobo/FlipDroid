@@ -1,4 +1,4 @@
-package it.tika.image;
+package flipdroid.grepper;
 
 /**
  * Created by IntelliJ IDEA.

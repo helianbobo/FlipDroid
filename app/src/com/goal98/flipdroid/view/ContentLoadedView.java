@@ -165,7 +165,7 @@ public class ContentLoadedView extends ArticleView {
             TextView tv = new TextView(this.getContext());
             if (DeviceInfo.isLargeScreen()) {
                 tv.setPadding(0, 15, 0, 0);
-            }else {
+            } else {
                 tv.setPadding(0, 10, 0, 0);
             }
             tv.setText("\n");
@@ -183,14 +183,22 @@ public class ContentLoadedView extends ArticleView {
                 final LayoutParams imageLayoutParams = new LayoutParams(DeviceInfo.width - 60, DeviceInfo.height * 1 / 3);
                 imageLayoutParams.gravity = Gravity.CENTER;
                 if (DeviceInfo.isLargeScreen()) {
-                    if (imageIndex != 0)
-                        imageLayoutParams.setMargins(0, -120, 0, 0);
-                    else
+                    if (imageIndex != 0) {
+                        if (paragraphsList.get(i - 1).startsWith("<img")) {
+                            imageLayoutParams.setMargins(0, -40, 0, 0);
+                        } else {
+                            imageLayoutParams.setMargins(0, -120, 0, 0);
+                        }
+                    } else
                         imageLayoutParams.setMargins(0, -60, 0, 0);
                 } else {
-                    if (imageIndex != 0)
-                        imageLayoutParams.setMargins(0, -100, 0, 0);
-                    else
+                    if (imageIndex != 0) {
+                        if (paragraphsList.get(i - 1).startsWith("<img")) {
+                            imageLayoutParams.setMargins(0, -30, 0, 0);
+                        } else {
+                            imageLayoutParams.setMargins(0, -85, 0, 0);
+                        }
+                    } else
                         imageLayoutParams.setMargins(0, -40, 0, 0);
                 }
                 contentHolderView.addView(imageView, imageLayoutParams);

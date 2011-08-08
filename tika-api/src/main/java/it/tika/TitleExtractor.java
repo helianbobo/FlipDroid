@@ -1,5 +1,8 @@
 package it.tika;
 
+import flipdroid.grepper.Extractor;
+import flipdroid.grepper.URLAbstract;
+
 /**
  * Created by IntelliJ IDEA.
  * User: jleo
@@ -7,7 +10,7 @@ package it.tika;
  * Time: 12:24 PM
  * To change this template use File | Settings | File Templates.
  */
-public class TitleExtractor implements Extractor{
+public class TitleExtractor implements Extractor {
     public void setTitleExtractor(flipdroid.grepper.TitleExtractor titleExtractor) {
         this.titleExtractor = titleExtractor;
     }

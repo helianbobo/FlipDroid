@@ -1,6 +1,8 @@
 package it.tika;
 
 
+import flipdroid.grepper.URLAbstract;
+
 public interface URLDBInterface {
     public URLAbstract find(String url);
 

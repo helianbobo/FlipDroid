@@ -1,5 +1,6 @@
 package it.tika;
 
+import flipdroid.grepper.URLAbstract;
 import it.tika.util.Util;
 import org.json.JSONArray;
 import org.json.JSONException;

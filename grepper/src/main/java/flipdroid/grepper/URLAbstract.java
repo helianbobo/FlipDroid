@@ -1,6 +1,5 @@
-package it.tika;
+package flipdroid.grepper;
 
-import com.mongodb.BasicDBList;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ public class URLAbstract {
     private String content;
     private Charset charset;
     private String base;
+    private List<String> images = new ArrayList<String>();
 
     public String getBase() {
         return base;
@@ -21,7 +21,7 @@ public class URLAbstract {
         this.base = base;
     }
 
-    private List<String> images = new ArrayList<String>();
+
 
     public List<String> getImages() {
         return images;
@@ -72,13 +72,11 @@ public class URLAbstract {
         this.title = title;
     }
 
-    public URLAbstract(String url, String title, String content, BasicDBList images) {
+    public URLAbstract(String url, String title, String content, List<String> images) {
         this.url = url;
         this.title = title;
         this.content = content;
-        if (images != null)
-            for (int i = 0; i < images.size(); i++)
-                this.images.add((String) images.get(i));
+        this.images = images;
     }
 
     public Charset getCharset() {

@@ -36,6 +36,7 @@ public abstract class PreloadImageLoaderHandler implements MyHandler {
                 scale = DeviceInfo.width / (float) widthDip;
             }
         }
+        System.out.println(scale);
         if(scale == 1.0)
             return bitmap;
 
