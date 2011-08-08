@@ -1,15 +1,14 @@
-package it.tika;
+package flipdroid.grepper.pipe;
 
 import flipdroid.grepper.Extractor;
+import flipdroid.grepper.ExtractorException;
 import flipdroid.grepper.GrepperException;
 import flipdroid.grepper.URLAbstract;
-import flipdroid.grepper.pipe.PipeContentExtractor;
-import it.tika.exception.ExtractorException;
 
-public class ContentExtractor implements Extractor {
-    PipeContentExtractor extractor;
+public class GrepperContentExtractor implements Extractor {
+    PipeGrepperContentExtractor extractor;
 
-    public void setExtractor(PipeContentExtractor extractor) {
+    public void setExtractor(PipeGrepperContentExtractor extractor) {
         this.extractor = extractor;
     }
 

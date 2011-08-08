@@ -2,10 +2,12 @@ package it.tika;
 
 
 import flipdroid.grepper.EncodingDetector;
+import flipdroid.grepper.ExtractorException;
 import flipdroid.grepper.URLAbstract;
+import flipdroid.grepper.WebpageExtractor;
 import it.tika.exception.DBNotAvailableException;
-import it.tika.exception.ExtractorException;
 import it.tika.exception.URLRepoException;
+import it.tika.image.TikaImageService;
 import it.tika.util.Util;
 import net.sf.json.JSONArray;
 import org.json.JSONException;
@@ -77,7 +79,7 @@ public class URLAbstractResource extends ServerResource {
                     result = new URLAbstract(rawBytes, cs);
                     result.setUrl(urlDecoded);
                     sw.start("Content Extraction");
-                    result = WebpageExtractor.getInstance().extract(result);
+                    result = new WebpageExtractor(new TikaImageService()).extract(result);
                     sw.stopPrintReset();
                     if (result != null) {
                         try {

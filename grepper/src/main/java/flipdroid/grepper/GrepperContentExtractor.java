@@ -9,6 +9,6 @@ import java.nio.charset.Charset;
  * Time: 11:18 AM
  * To change this template use File | Settings | File Templates.
  */
-public interface ContentExtractor {
+public interface GrepperContentExtractor {
     String fireAbstract(byte[] data, Charset charset) throws GrepperException;
 }

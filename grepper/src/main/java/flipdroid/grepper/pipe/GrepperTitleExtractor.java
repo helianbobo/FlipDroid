@@ -1,4 +1,4 @@
-package it.tika;
+package flipdroid.grepper.pipe;
 
 import flipdroid.grepper.Extractor;
 import flipdroid.grepper.URLAbstract;
@@ -10,7 +10,7 @@ import flipdroid.grepper.URLAbstract;
  * Time: 12:24 PM
  * To change this template use File | Settings | File Templates.
  */
-public class TitleExtractor implements Extractor {
+public class GrepperTitleExtractor implements Extractor {
     public void setTitleExtractor(flipdroid.grepper.TitleExtractor titleExtractor) {
         this.titleExtractor = titleExtractor;
     }

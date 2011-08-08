@@ -1,12 +1,7 @@
-package it.tika;
+package flipdroid.grepper;
 
-import flipdroid.grepper.Extractor;
-import flipdroid.grepper.URLAbstract;
-import flipdroid.grepper.pipe.ImageFilter;
-import flipdroid.grepper.pipe.PipeContentExtractor;
-import flipdroid.grepper.pipe.TitleExtractorImpl;
-import it.tika.exception.ExtractorException;
-import it.tika.image.TikaImageService;
+import flipdroid.grepper.pipe.*;
+import flipdroid.grepper.pipe.GrepperContentExtractor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,38 +15,27 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class WebpageExtractor {
-    private static WebpageExtractor instance;
-
     private List<Extractor> extractors;
 
-    private WebpageExtractor() {
+    public WebpageExtractor(ImageService tikaImageService) {
         extractors = new ArrayList<Extractor>();
-        //todo extract the list initialization to other classes
-        TitleExtractor extractor = new TitleExtractor();
-        extractor.setTitleExtractor(new TitleExtractorImpl());
+        GrepperTitleExtractor titleExtractor = new GrepperTitleExtractor();
+        titleExtractor.setTitleExtractor(new TitleExtractorImpl());
 
-        ContentExtractor contentExtractor = new ContentExtractor();
-        contentExtractor.setExtractor(new PipeContentExtractor());
+        GrepperContentExtractor grepperContentExtractor = new GrepperContentExtractor();
+        grepperContentExtractor.setExtractor(new PipeGrepperContentExtractor());
 
-        extractors.add(extractor);
-        extractors.add(contentExtractor);
-        extractors.add(new ImageFilter(new TikaImageService()));
+        extractors.add(titleExtractor);
+        extractors.add(grepperContentExtractor);
+        extractors.add(new ImageFilter(tikaImageService));
 
     }
 
-    public static WebpageExtractor getInstance() {
-        if (instance == null) {
-            instance = new WebpageExtractor();
-        }
-        return instance;
-    }
-
-    URLAbstract extract(URLAbstract urlAbstract) {
+    public URLAbstract extract(URLAbstract urlAbstract) {
         if (urlAbstract == null || urlAbstract.getRawContent() == null || urlAbstract.getRawContent().length == 0) {
             return urlAbstract;
         }
         if (extractors == null || extractors.isEmpty()) {
-            //TODO add log
             return urlAbstract;
         }
         try {
