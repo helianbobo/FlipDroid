@@ -26,6 +26,7 @@ import de.l3s.boilerpipe.util.JaneSort;
 import org.apache.xerces.parsers.AbstractSAXParser;
 import org.cyberneko.html.HTMLConfiguration;
 import org.xml.sax.*;
+import sun.misc.IOUtils;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -374,6 +375,7 @@ public final class HTMLHighlighter {
             }
 
             HTMLHighlighter.this.images = imageList;
+
             try {
                 parse(is);
             } catch (SAXException e) {

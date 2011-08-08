@@ -189,7 +189,7 @@ public class ContentLoadedView extends ArticleView {
                         imageLayoutParams.setMargins(0, -60, 0, 0);
                 } else {
                     if (imageIndex != 0)
-                        imageLayoutParams.setMargins(0, -80, 0, 0);
+                        imageLayoutParams.setMargins(0, -100, 0, 0);
                     else
                         imageLayoutParams.setMargins(0, -40, 0, 0);
                 }

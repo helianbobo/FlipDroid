@@ -33,6 +33,19 @@ public class ContentExtractor implements Extractor {
         try {
             String content = extractor.fireAbstract(urlAbstract.getRawContent(), urlAbstract.getCharset());
             urlAbstract.setContent(content);
+
+            String string = new String(urlAbstract.getRawContent(), urlAbstract.getCharset());
+            String baseURL = "";
+            int pos = string.indexOf("<base href=\"");
+            if (pos != -1) {
+                pos += "<base href=\"".length();
+                int pos2 = string.indexOf("\"", pos);
+                baseURL = string.substring(pos, pos2).trim();
+                if(baseURL.endsWith("/")){
+                    baseURL = baseURL.substring(0,baseURL.length()-1);
+                }
+            }
+
             if (urlAbstract.getTitle() == null || urlAbstract.getTitle().length() == 0)//in case title fetcher failed
                 urlAbstract.setTitle(extractor.getTitle());
             URL url = null;
@@ -67,8 +80,15 @@ public class ContentExtractor implements Extractor {
                     if (imageURL.startsWith("/")) {
                         imageURL = url.getProtocol() + "://" + url.getHost() + imageURL;
                     } else {
-                        String upOneLevel = url.getPath().substring(0, url.getPath().lastIndexOf("/"));
-                        imageURL = url.getProtocol() + "://" + url.getHost() + upOneLevel + imageURL;
+//                        String upOneLevel = url.getPath().substring(0, url.getPath().lastIndexOf("/"));
+                        if (baseURL.length() != 0) {
+                            imageURL = baseURL + "/" + imageURL;
+                        } else{
+                            if(!imageURL.startsWith("/"))
+                                imageURL = url.getProtocol() + "://" + url.getHost() + "/" + imageURL;
+                            else
+                                imageURL = url.getProtocol() + "://" + url.getHost() + imageURL;
+                        }
                     }
                 }
                 int hashIndex = imageURL.lastIndexOf("#");

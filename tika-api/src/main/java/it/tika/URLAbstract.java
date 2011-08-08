@@ -11,6 +11,16 @@ public class URLAbstract {
     private String title;
     private String content;
     private Charset charset;
+    private String base;
+
+    public String getBase() {
+        return base;
+    }
+
+    public void setBase(String base) {
+        this.base = base;
+    }
+
     private List<String> images = new ArrayList<String>();
 
     public List<String> getImages() {
