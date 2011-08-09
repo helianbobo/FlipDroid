@@ -49,7 +49,7 @@ public abstract class ExpandableArticleView extends ArticleView {
             preload();
         } else {
             if (toLoadImage(context))
-                article.loadPrimaryImage();
+                article.loadPrimaryImage(deviceInfo);
         }
         fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
@@ -124,9 +124,9 @@ public abstract class ExpandableArticleView extends ArticleView {
                     for (int i = 0; i < responsedImages.size(); i++) {
                         String imageURL = responsedImages.get(i);
                         if (imageURL != null && imageURL.length() != 0) {
-                            if (i == 0) {//primary image
+                            if (i == 0) {//primary it.tika.mongodb.image
                                 article.setImageUrl(new URL(imageURL));
-                                article.loadPrimaryImage(imageURL);
+                                article.loadPrimaryImage(imageURL,deviceInfo);
                             }
                             article.getImagesMap().put(imageURL, null);
                             article.getImages().add(imageURL);

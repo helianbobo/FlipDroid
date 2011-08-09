@@ -78,9 +78,9 @@ public class PostParameter implements java.io.Serializable, Comparable {
         return null != file;
     }
     
-    private static final String JPEG = "image/jpeg";
-    private static final String GIF = "image/gif";
-    private static final String PNG = "image/png";
+    private static final String JPEG = "it.tika.mongodb.image/jpeg";
+    private static final String GIF = "it.tika.mongodb.image/gif";
+    private static final String PNG = "it.tika.mongodb.image/png";
     private static final String OCTET = "application/octet-stream";
 
     /**

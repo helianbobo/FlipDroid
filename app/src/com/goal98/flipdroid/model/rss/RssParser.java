@@ -111,7 +111,7 @@ public class RssParser extends DefaultHandler {
         else if (qName.equalsIgnoreCase("item") && (this.rssFeed != null)) {
             this.item = new Item();
             this.rssFeed.addItem(this.item);
-        } else if (qName.equalsIgnoreCase("image") && (this.rssFeed != null))
+        } else if (qName.equalsIgnoreCase("it.tika.mongodb.image") && (this.rssFeed != null))
             this.imgStatus = true;
     }
 
@@ -122,7 +122,7 @@ public class RssParser extends DefaultHandler {
         if (qName.equalsIgnoreCase("item"))
             this.item = null;
 
-        else if (qName.equalsIgnoreCase("image"))
+        else if (qName.equalsIgnoreCase("it.tika.mongodb.image"))
             this.imgStatus = false;
 
         else if (qName.equalsIgnoreCase("title")) {
@@ -226,8 +226,8 @@ public class RssParser extends DefaultHandler {
 
     public static void main(String[] args) {
         String url = "\t\n" +
-                "http://news.baidu.com/ns?word=%D7%E3%C7%F2&tn=newsrss&sr=0&cl=1&rn=20&ct=0";
-        String cat = "手机";
+                "http://tech2ipo.com/feed/rss/";
+        String cat = "互联网";
 
         String template = ",{\n" +
                 "        \"name\": \"$name\",\n" +
@@ -251,7 +251,7 @@ public class RssParser extends DefaultHandler {
             System.out.println(json);
 
 
-            File f = new File("D:\\myprojects\\android\\helianbobo-FlipDroid\\app\\assets\\RSS_RECOMMAND_SOURCE_DATA.json");
+            File f = new File("G:\\androidprj\\FlipDroid\\app\\assets\\RSS_RECOMMAND_SOURCE_DATA.json");
             String content = FileUtils.readFileToString(f);
             JSONArray array = new JSONArray(content);
             int id = 0;

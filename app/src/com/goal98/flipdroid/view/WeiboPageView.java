@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.activity.FlipdroidApplications;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.activity.SinaAccountActivity;
 import com.goal98.flipdroid.exception.NoSinaAccountBindedException;
@@ -37,6 +38,7 @@ public class WeiboPageView extends FrameLayout {
     private Animation fadeinBoard;
     private LinearLayout content;
     private LayoutInflater inflater;
+    protected DeviceInfo deviceInfo;
 
     public LinearLayout getContentLayout() {
         return contentLayout;
@@ -81,9 +83,14 @@ public class WeiboPageView extends FrameLayout {
         for (int i = 0; i < articleList.size(); i++) {
             Article article = articleList.get(i);
             boolean isLastArticle = i == articleList.size() - 1;
-            article.setHeight((int) ((article.getHeight() * DeviceInfo.displayHeight) / (float) heightSum));
+            article.setHeight((int) ((article.getHeight() * deviceInfo.getDisplayHeight()) / (float) heightSum));
             addArticleView(article, isLastArticle);
         }
+    }
+
+    public DeviceInfo getDeviceInfoFromApplicationContext(){
+        FlipdroidApplications fa = (FlipdroidApplications) this.getContext().getApplicationContext();
+        return fa.getDeviceInfo();
     }
 
     public List<ArticleView> getWeiboViews() {
@@ -112,7 +119,8 @@ public class WeiboPageView extends FrameLayout {
 
         LayoutParams wrapperLayoutParam = null;
 //        if (last)
-        wrapperLayoutParam = new LayoutParams(DeviceInfo.width, article.getHeight());
+        wrapperLayoutParam = new LayoutParams(deviceInfo.getWidth(), article.getHeight());
+        wrapperLayoutParam = new LayoutParams(deviceInfo.getWidth(), article.getHeight());
 //        else {
 //            wrapperLayoutParam = new LayoutParams(DeviceInfo.width, LayoutParams.WRAP_CONTENT);
 //        }
@@ -132,6 +140,7 @@ public class WeiboPageView extends FrameLayout {
         this.sourceName = pageActivity.getSourceName();
         this.sourceImageURL = pageActivity.getSourceImageURL();
         this.executor = pageActivity.getExecutor();
+        this.deviceInfo = this.getDeviceInfoFromApplicationContext();
         setDynamicLayout(pageActivity);
 
         fadeinArticle = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
@@ -207,7 +216,7 @@ public class WeiboPageView extends FrameLayout {
         wrapperll.addView(articleView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
         articleView.setVisibility(INVISIBLE);
         WeiboPageView.this.removeView(enlargedViewWrapperWr.get());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(DeviceInfo.width, DeviceInfo.height);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(deviceInfo.getWidth(), deviceInfo.getHeight());
         WeiboPageView.this.addView(enlargedViewWrapperWr.get(), params);
         sw.stopPrintReset();
         sw.start("enlarge till tool bar");
@@ -371,7 +380,7 @@ public class WeiboPageView extends FrameLayout {
     public void releaseResource() {
         for (int i = 0; i < page.getArticleList().size(); i++) {
             Article article = page.getArticleList().get(i);
-            System.out.println("release image...");
+            System.out.println("release it.tika.mongodb.image...");
             article.setImageBitmap(null);
         }
     }

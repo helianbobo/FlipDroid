@@ -1291,7 +1291,7 @@ public class Weibo extends WeiboSupport implements java.io.Serializable {
     /**
      * upload the user's status.
      * The text will be trimed if the length of the text is exceeding 160 characters.
-     * The image suport.
+     * The it.tika.mongodb.image suport.
      * <br>This method calls http://api.t.sina.com.cn/statuses/upload.format
      *
      * @param status the text of your status update
@@ -2457,7 +2457,7 @@ public class Weibo extends WeiboSupport implements java.io.Serializable {
      * @throws WeiboException
      */
     public User updateProfileImage(File image)throws WeiboException {
-    	return new User(http.multPartURL("image",getBaseURL() + "account/update_profile_image.json",
+    	return new User(http.multPartURL("it.tika.mongodb.image",getBaseURL() + "account/update_profile_image.json",
                 null,image, true).asJSONObject());
     }
 

@@ -24,13 +24,13 @@ public class MagzinePageView extends WeiboPageView {
             articleWrapper.setGravity(Gravity.TOP);
             articleWrapper.setPadding(0, 0, 0, 1);
             wrapperViews.add(articleWrapper);
-            LayoutParams wrapperLayoutParams = new LayoutParams(DeviceInfo.width, DeviceInfo.displayHeight / 2);
+            LayoutParams wrapperLayoutParams = new LayoutParams(deviceInfo.getWidth(), deviceInfo.getDisplayHeight() / 2);
 
             contentLayout.addView(articleWrapper, wrapperLayoutParams);
 
         } else {
             wrapperViews.add(thumnnailView);
-            LayoutParams layoutParams = new LayoutParams(DeviceInfo.width, LayoutParams.MATCH_PARENT);
+            LayoutParams layoutParams = new LayoutParams(deviceInfo.getWidth(), LayoutParams.MATCH_PARENT);
             contentLayout.addView(thumnnailView, layoutParams);
         }
         return thumnnailView;

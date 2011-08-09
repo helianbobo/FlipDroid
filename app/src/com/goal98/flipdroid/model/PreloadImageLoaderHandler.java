@@ -16,7 +16,11 @@ import com.goal98.flipdroid.util.DeviceInfo;
 public abstract class PreloadImageLoaderHandler implements MyHandler {
     protected Article article;
     protected String url;
+    private DeviceInfo deviceInfo;
 
+    public PreloadImageLoaderHandler(DeviceInfo deviceInfo){
+        this.deviceInfo = deviceInfo;
+    }
     protected Bitmap scale(Bitmap bitmap) {
         if (bitmap == null)
             return null;
@@ -28,12 +32,12 @@ public abstract class PreloadImageLoaderHandler implements MyHandler {
 
         float scale = 1;
         if (heightDip >= widthDip) {
-            if (DeviceInfo.height < (4 * heightDip / 3f)) {
-                scale = DeviceInfo.height / (4 * heightDip / 3f);
+            if (deviceInfo.getHeight() < (4 * heightDip / 3f)) {
+                scale = deviceInfo.getHeight() / (4 * heightDip / 3f);
             }
         } else {
-            if (DeviceInfo.width < widthDip) {
-                scale = DeviceInfo.width / (float) widthDip;
+            if (deviceInfo.getWidth() < widthDip) {
+                scale = deviceInfo.getWidth() / (float) widthDip;
             }
         }
         System.out.println(scale);
@@ -62,7 +66,7 @@ public abstract class PreloadImageLoaderHandler implements MyHandler {
     }
 
     public void onImageResized(Bitmap resizeBitmap, String imageUrl) {
-        System.out.println("image " + url + " resized");
+        System.out.println("it.tika.mongodb.image " + url + " resized");
         article.getImagesMap().put(imageUrl, resizeBitmap);
     }
 }

@@ -56,9 +56,9 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                     boolean scaled = false;
                     boolean largeScreen = false;
                     boolean smallScreen = false;
-                    if (DeviceInfo.isLargeScreen()) {
+                    if (deviceInfo.isLargeScreen()) {
                         largeScreen = true;
-                    }else if (DeviceInfo.isSmallScreen()) {
+                    }else if (deviceInfo.isSmallScreen()) {
                         smallScreen = true;
                     }
                     int titleSize = 18;
@@ -85,7 +85,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                     }
                     titleView.setTextSize(titleSize);
                     titleView.setText(article.getTitle());
-                    titleView.setWidth(DeviceInfo.width);
+                    titleView.setWidth(deviceInfo.getWidth());
 
                     int maxLines = 5;
                     int textSize = 16;
@@ -119,7 +119,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                     } else {
                         imageView = new WebImageView(ThumbnailArticleView.this.getContext(), article.getImageUrl().toExternalForm(), false);
                         imageView.imageView.setTag(article.getImageUrl().toExternalForm());
-                        imageView.setDefaultWidth(DeviceInfo.width / 2 - 8);
+                        imageView.setDefaultWidth(deviceInfo.getWidth() / 2 - 8);
                         imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen?0:5)) * maxLine);
                         //System.out.println("article.getImage()" + article.getImage());
                         boolean imageHandled = false;
@@ -130,7 +130,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                             article.addNotifier(new Notifier());
                             if (!article.isLoading()) {
                                 System.out.println("reloading..." + article.getImageUrl().toExternalForm());
-                                article.loadPrimaryImage();
+                                article.loadPrimaryImage(deviceInfo);
                             }
                             imageHandled = false;
                         }

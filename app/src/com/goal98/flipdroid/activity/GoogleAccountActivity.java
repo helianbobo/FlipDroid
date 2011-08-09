@@ -24,6 +24,11 @@ public class GoogleAccountActivity extends SinaAccountActivity {
     public static final String GOOGLE_ACCOUNT_SID = "GOOGLE_ACCOUNT_SID";
     public static final String GOOGLE_ACCOUNT_AUTH = "GOOGLE_ACCOUNT_AUTH";
 
+    public DeviceInfo getDeviceInfoFromApplicationContext(){
+        FlipdroidApplications fa = (FlipdroidApplications) this.getApplicationContext();
+        return fa.getDeviceInfo();
+    }
+
     protected void initView() {
         setContentView(R.layout.google_account);
 
@@ -35,7 +40,7 @@ public class GoogleAccountActivity extends SinaAccountActivity {
 
         usernameView.setText("@gmail.com");
         ImageView logo = (ImageView) findViewById(R.id.logo);
-        logo.setMaxWidth(DeviceInfo.width);
+        logo.setMaxWidth(getDeviceInfoFromApplicationContext().getWidth());
         Button button = (Button) findViewById(R.id.sina_login);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {

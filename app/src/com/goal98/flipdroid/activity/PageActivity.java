@@ -117,7 +117,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private float x, y, z;
     private float last_x, last_y, last_z;
     private static final int SHAKE_THRESHOLD = 900;
-
+    private DeviceInfo deviceInfo;
 //    public SensorManager sm;
 //    public Sensor acceleromererSensor;
 //    public SensorEventListener acceleromererListener;
@@ -148,12 +148,19 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         return header;
     }
 
+
+     public DeviceInfo getDeviceInfoFromApplicationContext(){
+        FlipdroidApplications fa = (FlipdroidApplications) this.getApplicationContext();
+        return fa.getDeviceInfo();
+    }
+
     /**
      * Called when the activity is first created.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.deviceInfo = getDeviceInfoFromApplicationContext();
         StopWatch sw = new StopWatch();
         sw.start("create activity");
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -186,7 +193,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         sourceAdapter = new SimpleCursorAdapter(PageActivity.this, R.layout.source_selection_item, sourceCursor,
                 new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL},
                 new int[]{R.id.source_name, R.id.source_desc, R.id.source_image});
-        sourceAdapter.setViewBinder(new SourceItemViewBinder());
+        sourceAdapter.setViewBinder(new SourceItemViewBinder(deviceInfo));
 
         TelephonyManager tManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         deviceId = tManager.getDeviceId();

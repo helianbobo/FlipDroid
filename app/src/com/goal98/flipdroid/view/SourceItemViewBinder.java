@@ -1,5 +1,6 @@
 package com.goal98.flipdroid.view;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 import android.view.View;
@@ -8,12 +9,17 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.activity.FlipdroidApplications;
 import com.goal98.flipdroid.util.DeviceInfo;
 
 import java.net.URL;
 
 public class SourceItemViewBinder implements SimpleAdapter.ViewBinder, SimpleCursorAdapter.ViewBinder {
+    private DeviceInfo deviceInfo;
 
+    public SourceItemViewBinder(DeviceInfo deviceInfo){
+       this.deviceInfo = deviceInfo;
+    }
     public boolean setViewValue(View view, Cursor cursor, int i) {
 
         boolean binded = true;
@@ -51,10 +57,10 @@ public class SourceItemViewBinder implements SimpleAdapter.ViewBinder, SimpleCur
 
                 if (value != null) {
                     WebImageView sourceImageView = (WebImageView) view;
-                    if(DeviceInfo.isLargeScreen()){
+                    if(deviceInfo.isLargeScreen()){
                         sourceImageView.setDefaultHeight(75);
                         sourceImageView.setDefaultWidth(75);
-                    }else if(DeviceInfo.isSmallScreen()){
+                    }else if(deviceInfo.isSmallScreen()){
                         sourceImageView.setDefaultHeight(30);
                         sourceImageView.setDefaultWidth(30);
                     }

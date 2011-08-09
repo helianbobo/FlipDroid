@@ -482,10 +482,10 @@ Effect.Highlight = Class.create(Effect.Base, {
   setup: function() {
     // Prevent executing on elements not in the layout flow
     if (this.element.getStyle('display')=='none') { this.cancel(); return; }
-    // Disable background image during the effect
+    // Disable background it.tika.mongodb.image during the effect
     this.oldStyle = { };
     if (!this.options.keepBackgroundImage) {
-      this.oldStyle.backgroundImage = this.element.getStyle('background-image');
+      this.oldStyle.backgroundImage = this.element.getStyle('background-it.tika.mongodb.image');
       this.element.setStyle({backgroundImage: 'none'});
     }
     if (!this.options.endcolor)

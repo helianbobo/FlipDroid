@@ -22,8 +22,8 @@ import com.goal98.android.CacheHelper;
 import java.io.*;
 
 /**
- * Implements a cache capable of caching image files. It exposes helper methods to immediately
- * access binary image data as {@link android.graphics.Bitmap} objects.
+ * Implements a cache capable of caching it.tika.mongodb.image files. It exposes helper methods to immediately
+ * access binary it.tika.mongodb.image data as {@link android.graphics.Bitmap} objects.
  *
  * @author Matthias Kaeppler
  */

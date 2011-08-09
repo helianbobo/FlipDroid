@@ -2,6 +2,7 @@ package com.goal98.flipdroid.activity;
 
 import android.app.Application;
 import com.goal98.flipdroid.client.OAuth;
+import com.goal98.flipdroid.util.DeviceInfo;
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,6 +12,8 @@ import com.goal98.flipdroid.client.OAuth;
  * To change this template use File | Settings | File Templates.
  */
 public class FlipdroidApplications extends Application {
+    private DeviceInfo deviceInfo;
+
     public OAuth getOauth() {
         return oauth;
     }
@@ -22,4 +25,11 @@ public class FlipdroidApplications extends Application {
     private OAuth oauth;
 
 
+    public void setDeviceInfo(DeviceInfo deviceInfo) {
+        this.deviceInfo = deviceInfo;
+    }
+
+    public DeviceInfo getDeviceInfo() {
+        return deviceInfo;
+    }
 }

@@ -19,7 +19,8 @@ public class PreloadSecondaryImageLoaderHandler extends PreloadImageLoaderHandle
     private int width = 0;
 
 
-    public PreloadSecondaryImageLoaderHandler(Article article, String url) {
+    public PreloadSecondaryImageLoaderHandler(Article article, String url,DeviceInfo deviceInfo) {
+        super(deviceInfo);
         this.article = article;
         this.url = url;
     }

@@ -118,7 +118,7 @@ public class DensityRulesClassifier implements
                                 isContent = true;
                             }
                             else{
-                                if(curr.getTextDensity()>30){
+                                if(curr.getTextDensity()>20){
                                     isContent = true;
                                 }else
                                 isContent = false;

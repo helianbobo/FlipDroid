@@ -6,6 +6,7 @@ import android.graphics.Paint.Align;
 import android.text.TextPaint;
 import android.util.Log;
 import android.view.View;
+import com.goal98.flipdroid.activity.FlipdroidApplications;
 import com.goal98.flipdroid.util.DeviceInfo;
 
 import java.util.ArrayList;
@@ -462,15 +463,16 @@ class DimensionMeasureTool {
     private LineBreaker mBreakerExpanded;
     private LineBreaker mBreakerCollapsed;
     private String ellipsisMore;
+    private DeviceInfo deviceInfo;
 
-    public DimensionMeasureTool() {
+    public DimensionMeasureTool(DeviceInfo deviceInfo) {
         mTextPaint = new TextPaint();
         mTextPaint.setAntiAlias(true);
         mTextPaint.setTextSize(13);
         mTextPaint.setColor(0xFF000000);
         mTextPaint.setTextAlign(Align.LEFT);
-
         mExpanded = false;
+        this.deviceInfo = deviceInfo;
         mDrawEllipsizeMoreString = true;
         mRightAlignEllipsizeMoreString = false;
         mMaxLines = -1;
@@ -491,10 +493,11 @@ class DimensionMeasureTool {
         return result;
     }
 
+
     private int measureWidth() {
         int result = 0;
         int specMode = View.MeasureSpec.EXACTLY;
-        int specSize = DeviceInfo.displayWidth;
+        int specSize = deviceInfo.getDisplayWidth();
 
         if (specMode == View.MeasureSpec.EXACTLY) {
             // We were told how big to be.

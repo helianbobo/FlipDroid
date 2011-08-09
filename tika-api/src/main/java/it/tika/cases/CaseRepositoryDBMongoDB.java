@@ -4,7 +4,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
-import it.tika.exception.DBNotAvailableException;
+import flipdroid.grepper.exception.DBNotAvailableException;
 
 import java.net.UnknownHostException;
 import java.util.logging.Level;

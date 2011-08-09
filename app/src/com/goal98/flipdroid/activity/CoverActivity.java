@@ -28,7 +28,7 @@ public class CoverActivity extends Activity {
 
     private String deviceId;
     public static final int WIRELESS_SETTING = 1;
-     public static int statusBarHeight;
+    public static int statusBarHeight;
     public static int titleBarHeight;
 
     protected Dialog onCreateDialog(int id) {
@@ -69,12 +69,14 @@ public class CoverActivity extends Activity {
                 int contentViewTop =
                         window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
                 titleBarHeight = contentViewTop - statusBarHeight;
-                DeviceInfo.displayHeight = (int) ((int) (CoverActivity.this.getWindowManager().getDefaultDisplay().getHeight()) - statusBarHeight - titleBarHeight * 2.2);
-                DeviceInfo.displayWidth = (int) (CoverActivity.this.getWindowManager().getDefaultDisplay().getWidth()) - 20;
-                DeviceInfo.width = CoverActivity.this.getWindowManager().getDefaultDisplay().getWidth();
-                DeviceInfo.height = CoverActivity.this.getWindowManager().getDefaultDisplay().getHeight();
+                DeviceInfo deviceInfo = new DeviceInfo();
 
-//                ImageLoader.setDeviceInfo(DeviceInfo.displayWidth, DeviceInfo.displayHeight);
+                deviceInfo.setDisplayHeight((int) ((CoverActivity.this.getWindowManager().getDefaultDisplay().getHeight()) - statusBarHeight - titleBarHeight * 2.2));
+                deviceInfo.setDisplayWidth((CoverActivity.this.getWindowManager().getDefaultDisplay().getWidth()) - 20);
+                deviceInfo.setWidth(CoverActivity.this.getWindowManager().getDefaultDisplay().getWidth());
+                deviceInfo.setHeight(CoverActivity.this.getWindowManager().getDefaultDisplay().getHeight());
+                FlipdroidApplications application = (FlipdroidApplications) getApplication();
+                application.setDeviceInfo(deviceInfo);
             }
         });
 //        if (!NetworkUtil.isNetworkAvailable(CoverActivity.this)) {
@@ -85,7 +87,7 @@ public class CoverActivity extends Activity {
 
         TelephonyManager tManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         deviceId = tManager.getDeviceId();
-        Log.v(this.getClass().getName(), "deviceId="+deviceId);
+        Log.v(this.getClass().getName(), "deviceId=" + deviceId);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

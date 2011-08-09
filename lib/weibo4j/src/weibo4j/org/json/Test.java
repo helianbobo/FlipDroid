@@ -294,7 +294,7 @@ public class Test {
             System.out.println(XML.toString(j));
             System.out.println("");
 
-            j = HTTP.toJSONObject("GET / HTTP/1.0\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/vnd.ms-powerpoint, application/vnd.ms-excel, application/msword, */*\nAccept-Language: en-us\nUser-Agent: Mozilla/4.0 (compatible; MSIE 5.5; Windows 98; Win 9x 4.90; T312461; Q312461)\nHost: www.nokko.com\nConnection: keep-alive\nAccept-encoding: gzip, deflate\n");
+            j = HTTP.toJSONObject("GET / HTTP/1.0\nAccept: it.tika.mongodb.image/gif, it.tika.mongodb.image/x-xbitmap, it.tika.mongodb.image/jpeg, it.tika.mongodb.image/pjpeg, application/vnd.ms-powerpoint, application/vnd.ms-excel, application/msword, */*\nAccept-Language: en-us\nUser-Agent: Mozilla/4.0 (compatible; MSIE 5.5; Windows 98; Win 9x 4.90; T312461; Q312461)\nHost: www.nokko.com\nConnection: keep-alive\nAccept-encoding: gzip, deflate\n");
             System.out.println(j.toString(2));
             System.out.println(HTTP.toString(j));
             System.out.println("");

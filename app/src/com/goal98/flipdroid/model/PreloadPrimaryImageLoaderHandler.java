@@ -20,7 +20,8 @@ public class PreloadPrimaryImageLoaderHandler extends PreloadImageLoaderHandler 
     private int width = 0;
 
 
-    public PreloadPrimaryImageLoaderHandler(Article article, String url) {
+    public PreloadPrimaryImageLoaderHandler(Article article, String url,DeviceInfo deviceInfo) {
+        super(deviceInfo);
         this.article = article;
         this.url = url;
     }

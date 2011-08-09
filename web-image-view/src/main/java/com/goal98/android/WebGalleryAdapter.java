@@ -50,7 +50,7 @@ public class WebGalleryAdapter extends BaseAdapter {
      * @param context
      *            the current context
      * @param imageUrls
-     *            the set of image URLs which are to be loaded and displayed
+     *            the set of it.tika.mongodb.image URLs which are to be loaded and displayed
      */
     public WebGalleryAdapter(Context context, List<String> imageUrls) {
         initialize(context, imageUrls, null, null);
@@ -60,7 +60,7 @@ public class WebGalleryAdapter extends BaseAdapter {
      * @param context
      *            the current context
      * @param imageUrls
-     *            the set of image URLs which are to be loaded and displayed
+     *            the set of it.tika.mongodb.image URLs which are to be loaded and displayed
      * @param progressDrawableResId
      *            the resource ID of the drawable that will be used for rendering progress
      */
@@ -73,7 +73,7 @@ public class WebGalleryAdapter extends BaseAdapter {
      * @param context
      *            the current context
      * @param imageUrls
-     *            the set of image URLs which are to be loaded and displayed
+     *            the set of it.tika.mongodb.image URLs which are to be loaded and displayed
      * @param progressDrawableResId
      *            the resource ID of the drawable that will be used for rendering progress
      * @param errorDrawableId
@@ -134,7 +134,7 @@ public class WebGalleryAdapter extends BaseAdapter {
         WebImageView webImageView = null;
 
         if (convertView == null) {
-            // create the image view
+            // create the it.tika.mongodb.image view
             webImageView = new WebImageView(context, null, progressDrawable,
                     errorDrawable, false);
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
@@ -142,7 +142,7 @@ public class WebGalleryAdapter extends BaseAdapter {
             lp.gravity = Gravity.CENTER;
             webImageView.setLayoutParams(lp);
 
-            // create the container layout for the image view
+            // create the container layout for the it.tika.mongodb.image view
             FrameLayout container = new FrameLayout(context);
             container.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
                     LayoutParams.FILL_PARENT));

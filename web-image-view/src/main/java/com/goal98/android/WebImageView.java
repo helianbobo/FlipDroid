@@ -38,9 +38,9 @@ public class WebImageView extends ViewSwitcher {
 
     /**
      * @param context  the view's current context
-     * @param imageUrl the URL of the image to read and show
+     * @param imageUrl the URL of the it.tika.mongodb.image to read and show
      * @param autoLoad Whether the read should start immediately after creating the view. If set to
-     *                 false, use {@link #loadImage()} to manually trigger the image read.
+     *                 false, use {@link #loadImage()} to manually trigger the it.tika.mongodb.image read.
      */
     public WebImageView(Context context, String imageUrl, boolean autoLoad) {
         super(context);
@@ -49,11 +49,11 @@ public class WebImageView extends ViewSwitcher {
 
     /**
      * @param context          the view's current context
-     * @param imageUrl         the URL of the image to read and show
+     * @param imageUrl         the URL of the it.tika.mongodb.image to read and show
      * @param progressDrawable the drawable to be used for the {@link android.widget.ProgressBar} which is displayed while the
-     *                         image is loading
+     *                         it.tika.mongodb.image is loading
      * @param autoLoad         Whether the read should start immediately after creating the view. If set to
-     *                         false, use {@link #loadImage()} to manually trigger the image read.
+     *                         false, use {@link #loadImage()} to manually trigger the it.tika.mongodb.image read.
      */
     public WebImageView(Context context, String imageUrl, Drawable progressDrawable,
                         boolean autoLoad) {
@@ -63,12 +63,12 @@ public class WebImageView extends ViewSwitcher {
 
     /**
      * @param context          the view's current context
-     * @param imageUrl         the URL of the image to read and show
+     * @param imageUrl         the URL of the it.tika.mongodb.image to read and show
      * @param progressDrawable the drawable to be used for the {@link android.widget.ProgressBar} which is displayed while the
-     *                         image is loading
+     *                         it.tika.mongodb.image is loading
      * @param errorDrawable    the drawable to be used if a read error occurs
      * @param autoLoad         Whether the read should start immediately after creating the view. If set to
-     *                         false, use {@link #loadImage()} to manually trigger the image read.
+     *                         false, use {@link #loadImage()} to manually trigger the it.tika.mongodb.image read.
      */
     public WebImageView(Context context, String imageUrl, Drawable progressDrawable,
                         Drawable errorDrawable, boolean autoLoad) {
@@ -171,7 +171,7 @@ public class WebImageView extends ViewSwitcher {
     }
 
     /**
-     * Use this method to trigger the image read if you had previously set autoLoad to false.
+     * Use this method to trigger the it.tika.mongodb.image read if you had previously set autoLoad to false.
      */
     public void loadImage() {
         if (imageUrl == null) {
@@ -194,10 +194,10 @@ public class WebImageView extends ViewSwitcher {
     }
 
     /**
-     * Often you have resources which usually have an image, but some don't. For these cases, use
-     * this method to supply a placeholder drawable which will be loaded instead of a web image.
+     * Often you have resources which usually have an it.tika.mongodb.image, but some don't. For these cases, use
+     * this method to supply a placeholder drawable which will be loaded instead of a web it.tika.mongodb.image.
      *
-     * @param imageResourceId the resource of the placeholder image drawable
+     * @param imageResourceId the resource of the placeholder it.tika.mongodb.image drawable
      */
     public void setNoImageDrawable(int imageResourceId) {
         imageView.setImageDrawable(getContext().getResources().getDrawable(imageResourceId));
@@ -333,7 +333,7 @@ public class WebImageView extends ViewSwitcher {
     }
 
     /**
-     * Returns the URL of the image to show
+     * Returns the URL of the it.tika.mongodb.image to show
      *
      * @return
      */

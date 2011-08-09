@@ -34,6 +34,7 @@ public class IndexActivity extends ListActivity {
     private AccountDB accountDB;
     private SourceDB sourceDB;
     private Cursor sourceCursor;
+    private DeviceInfo deviceInfo;
 
     private BaseAdapter adapter;
 
@@ -43,8 +44,16 @@ public class IndexActivity extends ListActivity {
         super.onNewIntent(intent);
     }
 
+
+    public DeviceInfo getDeviceInfoFromApplicationContext(){
+        FlipdroidApplications fa = (FlipdroidApplications) this.getApplicationContext();
+        return fa.getDeviceInfo();
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        deviceInfo = getDeviceInfoFromApplicationContext();
+
 //        accountDB = new AccountDB(getApplicationContext());
         sourceDB = new SourceDB(getApplicationContext());
 
@@ -109,7 +118,7 @@ public class IndexActivity extends ListActivity {
             adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
                     new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_ACCOUNT_TYPE},
                     new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type});
-            ((SimpleCursorAdapter) adapter).setViewBinder(new SourceItemViewBinder());
+            ((SimpleCursorAdapter) adapter).setViewBinder(new SourceItemViewBinder(deviceInfo));
         }
 
         setListAdapter(adapter);

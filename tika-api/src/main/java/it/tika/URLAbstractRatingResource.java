@@ -2,7 +2,7 @@ package it.tika;
 
 import it.tika.cases.Case;
 import it.tika.cases.CaseRepositoryDBMongoDB;
-import it.tika.exception.DBNotAvailableException;
+import flipdroid.grepper.exception.DBNotAvailableException;
 import it.tika.util.Util;
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -111,7 +111,7 @@ public class RssParser extends DefaultHandler {
             this.item = new Item();
             this.rssFeed.addItem(this.item);
             this.attributes = attributes;
-        } else if (qName.equalsIgnoreCase("image") && (this.rssFeed != null))
+        } else if (qName.equalsIgnoreCase("it.tika.mongodb.image") && (this.rssFeed != null))
             this.imgStatus = true;
         else if (qName.equalsIgnoreCase("source") && (this.rssFeed != null))
             this.item = null;
@@ -148,7 +148,7 @@ public class RssParser extends DefaultHandler {
                 this.item.id = this.text.toString();
                 // //System.out.println(this.item.id);
             }
-        } else if (qName.equalsIgnoreCase("image"))
+        } else if (qName.equalsIgnoreCase("it.tika.mongodb.image"))
             this.imgStatus = false;
 
         else if (qName.equalsIgnoreCase("title")) {

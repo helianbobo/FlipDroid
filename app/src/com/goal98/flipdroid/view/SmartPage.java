@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.view;
 
 import android.util.Log;
+import com.goal98.flipdroid.activity.FlipdroidApplications;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.Constants;
@@ -19,10 +20,12 @@ public class SmartPage extends Page {
         this.articleList = new LinkedList<Article>();
     }
 
+
+
     boolean addResult;
 
     public boolean addArticle(final Article article) {
-        DimensionMeasureTool dmt = new DimensionMeasureTool();
+        DimensionMeasureTool dmt = new DimensionMeasureTool(deviceInfo);
         dmt.setText(Constants.WITHURLPREFIX + article.getStatus());
         dmt.setTextSize(17);
         dmt.setMaxLines(18);
@@ -48,7 +51,7 @@ public class SmartPage extends Page {
         result.height = height;
         dryRunSumHeight += height;
         //Log.d("height measure sum", dryRunSumHeight + "");
-        if (dryRunSumHeight > DeviceInfo.displayHeight) {
+        if (dryRunSumHeight > deviceInfo.getDisplayHeight()) {
             result.overflow = true;
         } else {
             result.overflow = false;

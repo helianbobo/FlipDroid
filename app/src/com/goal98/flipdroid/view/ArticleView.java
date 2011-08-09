@@ -14,8 +14,10 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.activity.FlipdroidApplications;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.AlarmSender;
+import com.goal98.flipdroid.util.DeviceInfo;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -36,6 +38,7 @@ public abstract class ArticleView extends LinearLayout {
     protected WeiboPageView pageView;
     public PaintFlagsDrawFilter pfd;
     protected boolean placedAtBottom;
+    protected DeviceInfo deviceInfo;
 
     public WeiboPageView getPageView() {
         return pageView;
@@ -55,9 +58,14 @@ public abstract class ArticleView extends LinearLayout {
 
     protected abstract String getPrefix();
 
+    public DeviceInfo getDeviceInfoFromApplicationContext(){
+        FlipdroidApplications fa = (FlipdroidApplications) this.getContext().getApplicationContext();
+        return fa.getDeviceInfo();
+    }
 
     public ArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
         super(context);
+        this.deviceInfo = getDeviceInfoFromApplicationContext();
         this.setOrientation(VERTICAL);
         this.placedAtBottom = placedAtBottom;
         pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG);

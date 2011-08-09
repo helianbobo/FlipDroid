@@ -240,9 +240,9 @@ public class User extends WeiboResponse implements java.io.Serializable {
     }
 
     /**
-     * Returns the profile image url of the user
+     * Returns the profile it.tika.mongodb.image url of the user
      *
-     * @return the profile image url of the user
+     * @return the profile it.tika.mongodb.image url of the user
      */
     public URL getProfileImageURL() {
         try {

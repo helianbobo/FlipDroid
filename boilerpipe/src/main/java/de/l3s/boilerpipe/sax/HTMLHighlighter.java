@@ -288,21 +288,21 @@ public final class HTMLHighlighter {
 //        void beforeStart(final Implementation instance, final String localName, Attributes atts) {
 //            int length = atts.getLength();
 //
-//            String image = null;
+//            String it.tika.mongodb.image = null;
 //            // Process each attribute
 //            for (int i = 0; i < length; i++) {
 //                // Get names and values for each attribute
 //                String name = atts.getQName(i);
 //                if (name.toUpperCase().equals("SRC")) {
-//                    image = atts.getValue(i);
+//                    it.tika.mongodb.image = atts.getValue(i);
 //                    break;
 //                }
 //            }
-//            if (image != null)
+//            if (it.tika.mongodb.image != null)
 //                for (TextBlock block : doc.getTextBlocks()) {
 //                    if (block.getText() != null)
-//                        if (block.getText().contains(image)) {
-//                            images.add(image);
+//                        if (block.getText().contains(it.tika.mongodb.image)) {
+//                            images.add(it.tika.mongodb.image);
 //                            break;
 //                        }
 //                }
@@ -439,7 +439,7 @@ public final class HTMLHighlighter {
                         if (!html.toString().endsWith("<p>"))
                             html.append("<p>");
                     }
-                    if (qName.equalsIgnoreCase("img") || qName.equalsIgnoreCase("image")) {
+                    if (qName.equalsIgnoreCase("img") || qName.equalsIgnoreCase("it.tika.mongodb.image")) {
 
                         int length = atts.getLength();
                         String image = null;

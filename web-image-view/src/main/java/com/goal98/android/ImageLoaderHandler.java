@@ -58,13 +58,13 @@ public class ImageLoaderHandler extends Handler {
      * Override this method if you need custom handler logic. Note that this method can actually be
      * called directly for performance reasons, in which case the message will be null
      *
-     * @param bitmap the bitmap returned from the image loader
+     * @param bitmap the bitmap returned from the it.tika.mongodb.image loader
      * @param msg    the handler message; can be null
-     * @return true if the view was updated with the new image, false if it was discarded
+     * @return true if the view was updated with the new it.tika.mongodb.image, false if it was discarded
      */
     protected boolean handleImageLoaded(Bitmap bitmap, Message msg) {
         // If this handler is used for loading images in a ListAdapter,
-        // the thread will set the image only if it's the right position,
+        // the thread will set the it.tika.mongodb.image only if it's the right position,
         // otherwise it won't do anything.
         String forUrl = (String) imageView.getTag();
         if (imageUrl.equals(forUrl)) {

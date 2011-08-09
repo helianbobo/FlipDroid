@@ -1,13 +1,13 @@
 package it.tika;
 
 
-import flipdroid.grepper.EncodingDetector;
-import flipdroid.grepper.ExtractorException;
+import flipdroid.grepper.*;
 import flipdroid.grepper.URLAbstract;
-import flipdroid.grepper.WebpageExtractor;
-import it.tika.exception.DBNotAvailableException;
-import it.tika.exception.URLRepoException;
-import it.tika.image.TikaImageService;
+import flipdroid.grepper.exception.DBNotAvailableException;
+import flipdroid.grepper.extractor.ExtractorException;
+import flipdroid.grepper.extractor.image.TikaImageService;
+import flipdroid.grepper.extractor.raw.URLRawRepo;
+import flipdroid.grepper.extractor.raw.URLRepoException;
 import it.tika.util.Util;
 import net.sf.json.JSONArray;
 import org.json.JSONException;

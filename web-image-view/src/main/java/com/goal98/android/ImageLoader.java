@@ -34,9 +34,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * Realizes an background image loader backed by a two-level FIFO cache. If the image to be loaded
+ * Realizes an background it.tika.mongodb.image loader backed by a two-level FIFO cache. If the it.tika.mongodb.image to be loaded
  * is present in the cache, it is set immediately on the given view. Otherwise, a thread from a
- * thread pool will be used to read the image in the background and set the image on the view as
+ * thread pool will be used to read the it.tika.mongodb.image in the background and set the it.tika.mongodb.image on the view as
  * soon as it completes.
  *
  * @author Matthias Kaeppler
@@ -77,7 +77,7 @@ public class ImageLoader implements Runnable {
     }
 
     /**
-     * @param numAttempts how often the image loader should retry the image read if network connection
+     * @param numAttempts how often the it.tika.mongodb.image loader should retry the it.tika.mongodb.image read if network connection
      *                    fails
      */
     public static void setMaxDownloadAttempts(int numAttempts) {
@@ -118,26 +118,26 @@ public class ImageLoader implements Runnable {
     }
 
     /**
-     * Triggers the image loader for the given image and view. The image loading will be performed
-     * concurrently to the UI main thread, using a fixed size thread pool. The loaded image will be
+     * Triggers the it.tika.mongodb.image loader for the given it.tika.mongodb.image and view. The it.tika.mongodb.image loading will be performed
+     * concurrently to the UI main thread, using a fixed size thread pool. The loaded it.tika.mongodb.image will be
      * posted back to the given ImageView upon completion.
      *
-     * @param imageUrl  the URL of the image to read
-     * @param imageView the ImageView which should be updated with the new image
+     * @param imageUrl  the URL of the it.tika.mongodb.image to read
+     * @param imageView the ImageView which should be updated with the new it.tika.mongodb.image
      */
     public static void start(String imageUrl, ImageView imageView) {
         start(imageUrl, imageView, new ImageLoaderHandler(imageView, imageUrl), null, null);
     }
 
     /**
-     * Triggers the image loader for the given image and view and sets a dummy image while waiting
-     * for the read to finish. The image loading will be performed concurrently to the UI main
-     * thread, using a fixed size thread pool. The loaded image will be posted back to the given
+     * Triggers the it.tika.mongodb.image loader for the given it.tika.mongodb.image and view and sets a dummy it.tika.mongodb.image while waiting
+     * for the read to finish. The it.tika.mongodb.image loading will be performed concurrently to the UI main
+     * thread, using a fixed size thread pool. The loaded it.tika.mongodb.image will be posted back to the given
      * ImageView upon completion.
      *
-     * @param imageUrl      the URL of the image to read
-     * @param imageView     the ImageView which should be updated with the new image
-     * @param dummyDrawable the Drawable set to the ImageView while waiting for the image to be downloaded
+     * @param imageUrl      the URL of the it.tika.mongodb.image to read
+     * @param imageView     the ImageView which should be updated with the new it.tika.mongodb.image
+     * @param dummyDrawable the Drawable set to the ImageView while waiting for the it.tika.mongodb.image to be downloaded
      * @param errorDrawable the Drawable set to the ImageView if a read error occurs
      */
     public static void start(String imageUrl, ImageView imageView, Drawable dummyDrawable,
@@ -148,29 +148,29 @@ public class ImageLoader implements Runnable {
     }
 
     /**
-     * Triggers the image loader for the given image and handler. The image loading will be
+     * Triggers the it.tika.mongodb.image loader for the given it.tika.mongodb.image and handler. The it.tika.mongodb.image loading will be
      * performed concurrently to the UI main thread, using a fixed size thread pool. The loaded
-     * image will not be automatically posted to an ImageView; instead, you can pass a custom
-     * {@link ImageLoaderHandler} and handle the loaded image yourself (e.g. cache it for later
+     * it.tika.mongodb.image will not be automatically posted to an ImageView; instead, you can pass a custom
+     * {@link ImageLoaderHandler} and handle the loaded it.tika.mongodb.image yourself (e.g. cache it for later
      * use).
      *
-     * @param imageUrl the URL of the image to read
-     * @param handler  the handler which is used to handle the downloaded image
+     * @param imageUrl the URL of the it.tika.mongodb.image to read
+     * @param handler  the handler which is used to handle the downloaded it.tika.mongodb.image
      */
     public static void start(String imageUrl, ImageLoaderHandler handler) {
         start(imageUrl, handler.getImageView(), handler, null, null);
     }
 
     /**
-     * Triggers the image loader for the given image and handler. The image loading will be
+     * Triggers the it.tika.mongodb.image loader for the given it.tika.mongodb.image and handler. The it.tika.mongodb.image loading will be
      * performed concurrently to the UI main thread, using a fixed size thread pool. The loaded
-     * image will not be automatically posted to an ImageView; instead, you can pass a custom
-     * {@link ImageLoaderHandler} and handle the loaded image yourself (e.g. cache it for later
+     * it.tika.mongodb.image will not be automatically posted to an ImageView; instead, you can pass a custom
+     * {@link ImageLoaderHandler} and handle the loaded it.tika.mongodb.image yourself (e.g. cache it for later
      * use).
      *
-     * @param imageUrl      the URL of the image to read
-     * @param handler       the handler which is used to handle the downloaded image
-     * @param dummyDrawable the Drawable set to the ImageView while waiting for the image to be downloaded
+     * @param imageUrl      the URL of the it.tika.mongodb.image to read
+     * @param handler       the handler which is used to handle the downloaded it.tika.mongodb.image
+     * @param dummyDrawable the Drawable set to the ImageView while waiting for the it.tika.mongodb.image to be downloaded
      * @param errorDrawable the Drawable set to the ImageView if a read error occurs
      */
     public static void start(String imageUrl, ImageLoaderHandler handler, Drawable dummyDrawable,
@@ -183,7 +183,7 @@ public class ImageLoader implements Runnable {
         if (imageView != null) {
             if (imageUrl == null) {
                 // In a ListView views are reused, so we must be sure to remove the tag that could
-                // have been set to the ImageView to prevent that the wrong image is set.
+                // have been set to the ImageView to prevent that the wrong it.tika.mongodb.image is set.
                 imageView.setTag(null);
                 imageView.setImageDrawable(dummyDrawable);
                 return;
@@ -193,7 +193,7 @@ public class ImageLoader implements Runnable {
                 // nothing to do
                 return;
             } else {
-                // Set the dummy image while waiting for the actual image to be downloaded.
+                // Set the dummy it.tika.mongodb.image while waiting for the actual it.tika.mongodb.image to be downloaded.
                 imageView.setImageDrawable(dummyDrawable);
                 imageView.setTag(imageUrl);
             }
@@ -224,7 +224,7 @@ public class ImageLoader implements Runnable {
     }
 
     /**
-     * Returns the image cache backing this image loader.
+     * Returns the it.tika.mongodb.image cache backing this it.tika.mongodb.image loader.
      *
      * @return the {@link ImageCache}
      */
@@ -233,12 +233,12 @@ public class ImageLoader implements Runnable {
     }
 
     /**
-     * The job method run on a worker thread. It will first query the image cache, and on a miss,
-     * read the image from the Web.
+     * The job method run on a worker thread. It will first query the it.tika.mongodb.image cache, and on a miss,
+     * read the it.tika.mongodb.image from the Web.
      */
     public void run() {
         // TODO: if we had a way to check for in-memory hits, we could improve performance by
-        // fetching an image from the in-memory cache on the main thread
+        // fetching an it.tika.mongodb.image from the in-memory cache on the main thread
         byte[] bitmapBytes = imageCache.getBitmapBytes(imageUrl);
 
         if (bitmapBytes == null) {
@@ -289,7 +289,7 @@ public class ImageLoader implements Runnable {
         URL url = new URL(imageUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        // determine the image size and allocate a buffer
+        // determine the it.tika.mongodb.image size and allocate a buffer
         int fileSize = connection.getContentLength();
         if (fileSize <= 0) {
             return null;
@@ -297,7 +297,7 @@ public class ImageLoader implements Runnable {
         byte[] imageData = new byte[fileSize];
 
         // read the file
-        Log.d(LOG_TAG, "fetching image " + imageUrl + " (" + fileSize + ")");
+        Log.d(LOG_TAG, "fetching it.tika.mongodb.image " + imageUrl + " (" + fileSize + ")");
         BufferedInputStream istream = new BufferedInputStream(connection.getInputStream(), 32768);
         try {
             int bytesRead = 0;

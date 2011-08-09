@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.activity.FlipdroidApplications;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
@@ -27,6 +28,7 @@ public class HeaderView extends LinearLayout {
     private WeiboPageView pageView;
     private ViewSwitcher viewSwitcher;
 
+
     public HeaderView(Context context) {
         super(context);
         this.pageActivity = (PageActivity) context;
@@ -37,6 +39,11 @@ public class HeaderView extends LinearLayout {
         super(context, attrs);
         this.pageActivity = (PageActivity) context;
         buildHeaderText();
+    }
+
+    public DeviceInfo getDeviceInfoFromApplicationContext(){
+        FlipdroidApplications fa = (FlipdroidApplications) this.getContext().getApplicationContext();
+        return fa.getDeviceInfo();
     }
 
     public void setPageView(WeiboPageView pageView) {
@@ -53,10 +60,10 @@ public class HeaderView extends LinearLayout {
         viewSwitcher.setInAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.fadein));
         viewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.fade));
         TextView headerText = (TextView) viewSwitcher.findViewById(R.id.headerText);
-
-        if (DeviceInfo.isLargeScreen()) {
+        DeviceInfo deviceInfo = getDeviceInfoFromApplicationContext();
+        if (deviceInfo.isLargeScreen()) {
             headerText.setTextSize(24);
-        } else if (DeviceInfo.isSmallScreen()) {
+        } else if (deviceInfo.isSmallScreen()) {
             headerText.setTextSize(18);
         }
         headerText.setOnClickListener(new OnClickListener() {

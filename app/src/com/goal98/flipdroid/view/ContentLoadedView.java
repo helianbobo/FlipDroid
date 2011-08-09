@@ -43,7 +43,7 @@ public class ContentLoadedView extends ArticleView {
         return "            ";
     }
 
-    // These matrices will be used to move and zoom image
+    // These matrices will be used to move and zoom it.tika.mongodb.image
     Matrix matrix = new Matrix();
     Matrix savedMatrix = new Matrix();
 
@@ -123,7 +123,7 @@ public class ContentLoadedView extends ArticleView {
 
         this.contentHolderView = (LinearLayout) layout.findViewById(R.id.contentHolder);
         int txtSize = 0;
-        if (DeviceInfo.isLargeScreen()) {
+        if (deviceInfo.isLargeScreen()) {
             txtSize = 20;
             authorView.setTextSize(16);
             createDateView.setTextSize(16);
@@ -163,7 +163,7 @@ public class ContentLoadedView extends ArticleView {
                 contentHolderView.addView(tv, textLayoutParams);
             }
             TextView tv = new TextView(this.getContext());
-            if (DeviceInfo.isLargeScreen()) {
+            if (deviceInfo.isLargeScreen()) {
                 tv.setPadding(0, 15, 0, 0);
             } else {
                 tv.setPadding(0, 10, 0, 0);
@@ -177,12 +177,12 @@ public class ContentLoadedView extends ArticleView {
 
 //                imageView.imageView.setTag(url);
 
-                imageView.setDefaultWidth(DeviceInfo.width - 60);
-                imageView.setDefaultHeight(DeviceInfo.height - 80);
+                imageView.setDefaultWidth(deviceInfo.getWidth() - 60);
+                imageView.setDefaultHeight(deviceInfo.getHeight() - 80);
 
-                final LayoutParams imageLayoutParams = new LayoutParams(DeviceInfo.width - 60, DeviceInfo.height * 1 / 3);
+                final LayoutParams imageLayoutParams = new LayoutParams(deviceInfo.getWidth() - 60, deviceInfo.getHeight() * 1 / 3);
                 imageLayoutParams.gravity = Gravity.CENTER;
-                if (DeviceInfo.isLargeScreen()) {
+                if (deviceInfo.isLargeScreen()) {
                     if (imageIndex != 0) {
                         if (paragraphsList.get(i - 1).startsWith("<img")) {
                             imageLayoutParams.setMargins(0, -40, 0, 0);

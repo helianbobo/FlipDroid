@@ -2,6 +2,7 @@ package com.goal98.flipdroid.model;
 
 import android.graphics.Bitmap;
 import com.goal98.android.ImageLoader;
+import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.view.ThumbnailArticleView;
 
 import java.net.URL;
@@ -212,18 +213,18 @@ public class Article {
 
     private volatile boolean loading = false;
 
-    public synchronized void loadPrimaryImage(String image) {
+    public synchronized void loadPrimaryImage(String image,DeviceInfo deviceInfo) {
         if (loading)
             return;
 
         loading = true;
-        PreloadPrimaryImageLoaderHandler preloadPrimaryImageLoaderHandler = new PreloadPrimaryImageLoaderHandler(this,image);
+        PreloadPrimaryImageLoaderHandler preloadPrimaryImageLoaderHandler = new PreloadPrimaryImageLoaderHandler(this,image,deviceInfo);
         final ImageLoader loader = new ImageLoader(image, preloadPrimaryImageLoaderHandler);
         new Thread(loader).start();
     }
 
-    public void loadPrimaryImage() {
-        loadPrimaryImage(getImageUrl().toExternalForm());
+    public void loadPrimaryImage(DeviceInfo deviceInfo) {
+        loadPrimaryImage(getImageUrl().toExternalForm(),deviceInfo);
     }
 
     public void setLoading(boolean loading) {
@@ -234,14 +235,14 @@ public class Article {
         return loading;
     }
 
-    public void loadSecondaryImages() {
+    public void loadSecondaryImages(DeviceInfo deviceInfo) {
         for (String url : imagesMap.keySet()) {
-            loadSecondaryImage(url);
+            loadSecondaryImage(url,deviceInfo);
         }
     }
 
-    public synchronized void loadSecondaryImage(String image) {
-        PreloadSecondaryImageLoaderHandler preloadSecondaryImageLoaderHandler = new PreloadSecondaryImageLoaderHandler(this, image);
+    public synchronized void loadSecondaryImage(String image,DeviceInfo deviceInfo) {
+        PreloadSecondaryImageLoaderHandler preloadSecondaryImageLoaderHandler = new PreloadSecondaryImageLoaderHandler(this, image,deviceInfo);
 
         final ImageLoader loader = new ImageLoader(image, preloadSecondaryImageLoaderHandler);
         new Thread(loader).start();

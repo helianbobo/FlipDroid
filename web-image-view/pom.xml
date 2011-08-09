@@ -5,7 +5,7 @@
     <artifactId>web-image-view</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>web-image-view</name>
+    <name>web-it.tika.mongodb.image-view</name>
 
 
     <dependencies>

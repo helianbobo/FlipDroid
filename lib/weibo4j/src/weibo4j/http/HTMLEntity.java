@@ -246,7 +246,7 @@ public class HTMLEntity {
                         , {"&frasl;", "&#8260;"/* fraction slash */, "\u2044"}
 /* Letterlike Symbols */
                         , {"&weierp;", "&#8472;"/* script capital P = power set = Weierstrass p */, "\u2118"}
-                        , {"&image;", "&#8465;"/* blackletter capital I = imaginary part */, "\u2111"}
+                        , {"&it.tika.mongodb.image;", "&#8465;"/* blackletter capital I = imaginary part */, "\u2111"}
                         , {"&real;", "&#8476;"/* blackletter capital R = real part symbol */, "\u211C"}
                         , {"&trade;", "&#8482;"/* trade mark sign */, "\u2122"}
                         , {"&alefsym;", "&#8501;"/* alef symbol = first transfinite cardinal */, "\u2135"}
