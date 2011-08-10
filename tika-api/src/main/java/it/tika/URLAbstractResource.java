@@ -8,6 +8,7 @@ import flipdroid.grepper.extractor.ExtractorException;
 import flipdroid.grepper.extractor.image.TikaImageService;
 import flipdroid.grepper.extractor.raw.URLRawRepo;
 import flipdroid.grepper.extractor.raw.URLRepoException;
+import it.tika.util.StopWatch;
 import it.tika.util.Util;
 import net.sf.json.JSONArray;
 import org.json.JSONException;
@@ -180,40 +181,5 @@ public class URLAbstractResource extends ServerResource {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         return jsonObject;
-    }
-}
-
-class StopWatch {
-    long start = 0;
-    long end = 0;
-    String event;
-
-    public void start() {
-        start = System.currentTimeMillis();
-    }
-
-    public void start(String event) {
-        start();
-        this.event = event;
-    }
-
-    public void stop() {
-        end = System.currentTimeMillis();
-    }
-
-    public void stopPrintReset() {
-        stop();
-        report();
-        reset();
-    }
-
-    public void reset() {
-        start = 0;
-        end = 0;
-        event = null;
-    }
-
-    public void report() {
-        System.out.println(event == null ? "No name event" : event + " cost " + (end - start) + "ms");
     }
 }

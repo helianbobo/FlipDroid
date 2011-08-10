@@ -67,32 +67,6 @@ public class WebpageExtractor {
     }
 
     public static void main(String[] args) throws IOException {
-        WebpageExtractor extractor = new WebpageExtractor(null);
-        String urlDecoded = "http://software.intel.com/zh-cn/blogs/2011/04/25/ipad-nook-color3/?prcthreading015";
-        byte[] rawBytes = URLRawRepo.getInstance().fetch(urlDecoded);
-        String charset = EncodingDetector.detect(new BufferedInputStream(new ByteArrayInputStream(rawBytes)));
-//                String charset = EncodingDetector.detect(urlDecoded);
-        Charset cs = null;
-        if (charset != null)
-            cs = Charset.forName(charset);
-        else {
-            try {
-                cs = Charset.forName("utf-8");
-            } catch (UnsupportedCharsetException e) {
-                // keep default
-            }
-        }
 
-        if (rawBytes == null) {
-//            System.out.println("Can't fetch document from url:" + urlDecoded);
-        } else {
-            URLAbstract result = new URLAbstract(rawBytes, cs);
-            result.setUrl(urlDecoded);
-            result = extractor.extract(result);
-            System.out.println(result.getTitle());
-            System.out.println(result.getContent());
-            System.out.println(result.getImages());
-
-        }
     }
 }
