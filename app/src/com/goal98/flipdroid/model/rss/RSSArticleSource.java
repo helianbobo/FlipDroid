@@ -217,15 +217,19 @@ public class RSSArticleSource implements CacheableArticleSource {
             return false;
         byte[] latestSource = this.loadedBytes;
         boolean needUpdate = false;
-        for (int i = 0; i < latestSource.length; i++) {
-            if (i >= cachedBytes.length) {
-                needUpdate = true;
-                break;
+        if (cachedBytes != null) {
+            for (int i = 0; i < latestSource.length; i++) {
+                if (i >= cachedBytes.length) {
+                    needUpdate = true;
+                    break;
+                }
+                if (latestSource[i] != cachedBytes[i]) {
+                    needUpdate = true;
+                    break;
+                }
             }
-            if (latestSource[i] != cachedBytes[i]) {
-                needUpdate = true;
-                break;
-            }
+        }else{
+            needUpdate = true;
         }
 
         if (needUpdate) {

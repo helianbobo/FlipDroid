@@ -59,9 +59,6 @@ public class CachedArticleSource implements ArticleSource {
     volatile boolean updated = false;
 
     public synchronized boolean loadMore() {
-//        if (!updating && !updated && fromCache) {
-//            checkUpdate();
-//        }
         return articleSource.loadMore();
     }
 

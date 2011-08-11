@@ -297,7 +297,19 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     public void notifyHasNew
             (CachedArticleSource
                      cachedArticleSource) {
+          final CacheToken token = cachedArticleSource.getToken();
 
+        final Cursor c = sourceDB.findAll();
+        hander.post(new Runnable() {
+            public void run() {
+                ManagedCursor mc = new ManagedCursor(c);
+                mc.each(new EachCursor() {
+                    public void call(Cursor cursor, int index) {
+                        IndexActivity.this.getListView().getChildAt(index).findViewById(R.id.loadingbar).setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
     }
 
     Handler hander = new Handler();
@@ -313,7 +325,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 ManagedCursor mc = new ManagedCursor(c);
                 mc.each(new EachCursor() {
                     public void call(Cursor cursor, int index) {
-                        IndexActivity.this.getListView().getChildAt(index).findViewById(R.id.loadingbar).setVisibility(View.VISIBLE);
+                        IndexActivity.this.getListView().getChildAt(index).findViewById(R.id.loadingbar).setVisibility(View.GONE);
                     }
                 });
             }
