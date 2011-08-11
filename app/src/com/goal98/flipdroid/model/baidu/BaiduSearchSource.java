@@ -34,7 +34,7 @@ public class BaiduSearchSource implements SearchSource {
                 result.put(Source.KEY_SOURCE_NAME, queryStr);
                 result.put(Source.KEY_SOURCE_ID, "Baidu_"+queryStr);
                 result.put(Source.KEY_SOURCE_DESC, queryStr);
-                result.put(Source.KEY_ACCOUNT_TYPE, Constants.TYPE_BAIDUSEARCH);
+                result.put(Source.KEY_SOURCE_TYPE, Constants.TYPE_BAIDUSEARCH);
                 result.put(Source.KEY_IMAGE_URL, "");
                 result.put(Source.KEY_CONTENT_URL, uri );
                 result.put(Source.KEY_CAT, queryStr);

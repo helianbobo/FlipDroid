@@ -8,7 +8,7 @@ public class Source {
     public static final String KEY_SOURCE_ID = "source_id";
     public static final String KEY_IMAGE_URL = "image_url";
     public static final String KEY_CONTENT_URL = "content_url";
-    public static final String KEY_ACCOUNT_TYPE = "account_type";
+    public static final String KEY_SOURCE_TYPE = "source_type";
     public static final String KEY_CAT = "cat";
     private String name;
     private String id;

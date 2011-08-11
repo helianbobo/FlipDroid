@@ -41,5 +41,14 @@ android:scrollHorizontally="true"
                 android:singleLine="true"
                 android:visibility="gone"
                 />
+        <TextView
+                android:id="@+id/source_url"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="@color/gray"
+                android:paddingLeft="5dip"
+                android:singleLine="true"
+                android:visibility="gone"
+                />
     </LinearLayout>
 </LinearLayout>

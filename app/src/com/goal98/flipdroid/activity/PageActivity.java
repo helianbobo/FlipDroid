@@ -9,10 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -1159,7 +1155,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent(PageActivity.this, PageActivity.class);
                         Cursor cursor = (Cursor) sourceAdapter.getItem(i);
-                        intent.putExtra("type", cursor.getString(cursor.getColumnIndex(Source.KEY_ACCOUNT_TYPE)));
+                        intent.putExtra("type", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_TYPE)));
                         intent.putExtra("sourceId", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_ID)));
                         intent.putExtra("sourceImage", cursor.getString(cursor.getColumnIndex(Source.KEY_IMAGE_URL)));
                         intent.putExtra("sourceName", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_NAME)));

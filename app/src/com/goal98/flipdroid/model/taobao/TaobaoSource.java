@@ -1,13 +1,9 @@
 package com.goal98.flipdroid.model.taobao;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import android.util.Log;
 
 
 import com.goal98.flipdroid.model.GroupedSource;
@@ -38,7 +34,7 @@ public class TaobaoSource {
                 result.put(Source.KEY_SOURCE_NAME, queryStr);
                 result.put(Source.KEY_SOURCE_ID, Constants.TYPE_TAOBAO+queryStr);
                 result.put(Source.KEY_SOURCE_DESC, "淘宝搜索商品");
-                result.put(Source.KEY_ACCOUNT_TYPE, Constants.TYPE_TAOBAO);
+                result.put(Source.KEY_SOURCE_TYPE, Constants.TYPE_TAOBAO);
                 result.put(Source.KEY_IMAGE_URL, "");
                 result.put(Source.KEY_CONTENT_URL, "" );
                 result.put(Source.KEY_CAT, "淘宝");

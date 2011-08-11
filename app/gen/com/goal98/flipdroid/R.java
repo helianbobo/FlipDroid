@@ -122,12 +122,12 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int headerImage=0x7f0a0022;
         public static final int headerText=0x7f0a0023;
         public static final int like=0x7f0a0024;
-        public static final int loadImage=0x7f0a0044;
-        public static final int loadedView=0x7f0a0041;
+        public static final int loadImage=0x7f0a0045;
+        public static final int loadedView=0x7f0a0042;
         public static final int loading=0x7f0a0036;
         public static final int loadinglayer=0x7f0a0030;
         public static final int logo=0x7f0a0019;
-        public static final int mode=0x7f0a0043;
+        public static final int mode=0x7f0a0044;
         public static final int page=0x7f0a0031;
         public static final int pageContainer=0x7f0a0032;
         public static final int pageIndex=0x7f0a0033;
@@ -140,7 +140,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int part2_3=0x7f0a002e;
         public static final int portrait=0x7f0a0013;
         public static final int portrait2=0x7f0a0039;
-        public static final int progressBar=0x7f0a0042;
+        public static final int progressBar=0x7f0a0043;
         public static final int publisherWrapper=0x7f0a0038;
         public static final int retweet=0x7f0a0025;
         public static final int send=0x7f0a0005;
@@ -156,9 +156,10 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int source_desc=0x7f0a003d;
         public static final int source_image=0x7f0a0006;
         public static final int source_name=0x7f0a0007;
-        public static final int source_query=0x7f0a003f;
-        public static final int source_search_button=0x7f0a0040;
+        public static final int source_query=0x7f0a0040;
+        public static final int source_search_button=0x7f0a0041;
         public static final int source_type=0x7f0a003e;
+        public static final int source_url=0x7f0a003f;
         public static final int status=0x7f0a0008;
         public static final int text=0x7f0a0035;
         public static final int tika=0x7f0a000b;

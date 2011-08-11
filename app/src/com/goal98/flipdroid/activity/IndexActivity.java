@@ -4,7 +4,6 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -14,6 +13,8 @@ import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.Source;
+import com.goal98.flipdroid.model.SourceUpdateManager;
+import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.view.SourceItemViewBinder;
@@ -29,13 +30,11 @@ public class IndexActivity extends ListActivity {
     static final private int CLEAR_ID = Menu.FIRST + 1;
     static final private int ACCOUNT_LIST_ID = Menu.FIRST + 2;
 
-    private ArrayAdapter<String> mAdapter;
-
     private AccountDB accountDB;
     private SourceDB sourceDB;
     private Cursor sourceCursor;
     private DeviceInfo deviceInfo;
-
+    private SourceCache sourceCache;
     private BaseAdapter adapter;
 
 
@@ -45,7 +44,7 @@ public class IndexActivity extends ListActivity {
     }
 
 
-    public DeviceInfo getDeviceInfoFromApplicationContext(){
+    public DeviceInfo getDeviceInfoFromApplicationContext() {
         FlipdroidApplications fa = (FlipdroidApplications) this.getApplicationContext();
         return fa.getDeviceInfo();
     }
@@ -56,7 +55,7 @@ public class IndexActivity extends ListActivity {
 
 //        accountDB = new AccountDB(getApplicationContext());
         sourceDB = new SourceDB(getApplicationContext());
-
+        sourceCache = new SourceCache(this);
         setContentView(R.layout.index);
 
         Button addSourceButton = (Button) findViewById(R.id.btn_add_source);
@@ -77,6 +76,8 @@ public class IndexActivity extends ListActivity {
                 menu.add(0, 1, 0, R.string.no);
             }
         });
+        SourceUpdateManager updateManager = new SourceUpdateManager(this);
+        updateManager.updateAll();
     }
 
     @Override
@@ -86,16 +87,21 @@ public class IndexActivity extends ListActivity {
                 .findViewById(R.id.source_name);
         TextView sourceTypeTextView = (TextView) info.targetView
                 .findViewById(R.id.source_type);
+        TextView sourceUrlTextView = (TextView) info.targetView
+                .findViewById(R.id.source_url);
+        String sourceUrl = sourceUrlTextView.getText().toString();
         String sourceName = sourceNameTextView.getText().toString();
         String sourceType = sourceTypeTextView.getText().toString();
         if (item.getItemId() == 0) {//delete
             sourceDB.removeSourceByName(sourceName);
+            sourceCache.clear(sourceType, sourceUrl);
             if (sourceType.equals(Constants.TYPE_MY_SINA_WEIBO)) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String sinaAccountId = preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null);
                 preferences.edit().putString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null).commit();
                 preferences.edit().putString(WeiPaiWebViewClient.PREVIOUS_SINA_ACCOUNT_PREF_KEY, sinaAccountId).commit();
             }
+
             sourceCursor.close();
             sourceCursor = sourceDB.findAll();
             ((SimpleCursorAdapter) adapter).changeCursor(sourceCursor);
@@ -105,7 +111,7 @@ public class IndexActivity extends ListActivity {
     }
 
     private void bindAdapter() {
-        if (sourceCursor.getCount()==0) {
+        if (sourceCursor.getCount() == 0) {
             sourceCursor.close();
             Map<String, String> noDate = new HashMap<String, String>();
             noDate.put("text", getString(R.string.nodata));
@@ -116,8 +122,8 @@ public class IndexActivity extends ListActivity {
                     new int[]{R.id.text});
         } else {
             adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
-                    new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_ACCOUNT_TYPE},
-                    new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type});
+                    new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_SOURCE_TYPE, Source.KEY_CONTENT_URL},
+                    new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type, R.id.source_url});
             ((SimpleCursorAdapter) adapter).setViewBinder(new SourceItemViewBinder(deviceInfo));
         }
 
@@ -166,14 +172,14 @@ public class IndexActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Intent intent = new Intent(this, PageActivity.class);
-        if(l.getItemAtPosition(position) instanceof Map){
+        if (l.getItemAtPosition(position) instanceof Map) {
             return;
         }
         Cursor cursor = (Cursor) l.getItemAtPosition(position);
 
 
         try {
-            intent.putExtra("type", cursor.getString(cursor.getColumnIndex(Source.KEY_ACCOUNT_TYPE)));
+            intent.putExtra("type", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_TYPE)));
             intent.putExtra("sourceId", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_ID)));
             intent.putExtra("sourceImage", cursor.getString(cursor.getColumnIndex(Source.KEY_IMAGE_URL)));
             intent.putExtra("sourceName", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_NAME)));

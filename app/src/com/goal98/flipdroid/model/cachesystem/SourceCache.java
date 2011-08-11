@@ -14,7 +14,7 @@ public class SourceCache {
     private Context context;
     private SourceContentDB contentDB;
 
-    SourceCache(Context context) {
+    public SourceCache(Context context) {
         this.context = context;
         contentDB = new SourceContentDB(context);
     }
@@ -37,5 +37,13 @@ public class SourceCache {
         if(cacheObject!=null)
             return cacheObject;
         return null;
+    }
+
+    public void clear(String type, String url){
+        SourceCacheObject cacheObject = new SourceCacheObject();
+        cacheObject.setType(type);
+        cacheObject.setUrl(url);
+
+        contentDB.clear(cacheObject);
     }
 }

@@ -1,10 +1,7 @@
 package com.goal98.flipdroid.model.flipdroid;
 
-import android.util.Log;
-
 import com.goal98.flipdroid.client.TikaClient;
 import com.goal98.flipdroid.client.TikaClientException;
-import com.goal98.flipdroid.client.TikaExtractResponse;
 import com.goal98.flipdroid.client.TikaSourceResponse;
 import com.goal98.flipdroid.model.GroupedSource;
 import com.goal98.flipdroid.model.SearchSource;
@@ -39,7 +36,7 @@ public class FlipdroidSearchSource implements SearchSource {
                 result.put(Source.KEY_SOURCE_NAME, tikaSourceResponse.getName());
                 result.put(Source.KEY_SOURCE_ID, tikaSourceResponse.getId());
                 result.put(Source.KEY_SOURCE_DESC, tikaSourceResponse.getDesc());
-                result.put(Source.KEY_ACCOUNT_TYPE, tikaSourceResponse.getAccountType());
+                result.put(Source.KEY_SOURCE_TYPE, tikaSourceResponse.getAccountType());
                 result.put(Source.KEY_IMAGE_URL, tikaSourceResponse.getImageURL());
                 result.put(Source.KEY_CONTENT_URL, tikaSourceResponse.getContentURL());
                 result.put(Source.KEY_CAT, tikaSourceResponse.getCat());
@@ -65,7 +62,7 @@ public class FlipdroidSearchSource implements SearchSource {
 	            result.put(Source.KEY_SOURCE_NAME, queryStr);
 	            result.put(Source.KEY_SOURCE_ID, Constants.TYPE_BAIDUSEARCH+queryStr);
 	            result.put(Source.KEY_SOURCE_DESC, "百度RSS新闻订阅");
-	            result.put(Source.KEY_ACCOUNT_TYPE, Constants.TYPE_BAIDUSEARCH);
+	            result.put(Source.KEY_SOURCE_TYPE, Constants.TYPE_BAIDUSEARCH);
 	            result.put(Source.KEY_IMAGE_URL, "");
 	            result.put(Source.KEY_CONTENT_URL, uri );
 	            result.put(Source.KEY_CAT, "百度");
@@ -80,7 +77,7 @@ public class FlipdroidSearchSource implements SearchSource {
             result.put(Source.KEY_SOURCE_NAME, queryStr);
             result.put(Source.KEY_SOURCE_ID, Constants.TYPE_TAOBAO+queryStr);
             result.put(Source.KEY_SOURCE_DESC, "淘宝搜索商品");
-            result.put(Source.KEY_ACCOUNT_TYPE, Constants.TYPE_TAOBAO);
+            result.put(Source.KEY_SOURCE_TYPE, Constants.TYPE_TAOBAO);
             result.put(Source.KEY_IMAGE_URL, "");
             result.put(Source.KEY_CONTENT_URL, "" );
             result.put(Source.KEY_CAT, "淘宝");

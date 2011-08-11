@@ -46,6 +46,7 @@ public class SourceItemViewBinder implements SimpleAdapter.ViewBinder, SimpleCur
             case R.id.source_name:
             case R.id.source_desc:
             case R.id.source_type:
+            case R.id.source_url:
 
                 TextView noteName = (TextView) view;
                 noteName.setText(value);

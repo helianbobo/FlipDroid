@@ -2,11 +2,9 @@ package com.goal98.flipdroid.activity;
 
 import android.app.AlertDialog;
 import android.app.ExpandableListActivity;
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import com.goal98.flipdroid.R;
@@ -50,7 +48,7 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        String[] from = new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_ACCOUNT_TYPE};
+        String[] from = new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_SOURCE_TYPE};
         int[] to = new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type, R.id.group_desc};
         ExpandableListAdapter adapter = new SourceExpandableListAdapter(this, groupedSource.getGroups(), R.layout.group, new String[]{SourceRepo.KEY_NAME_GROUP, SourceRepo.KEY_NAME_SAMPLES}, new int[]{R.id.txt_group, R.id.group_desc}, groupedSource.getChildren(), R.layout.source_item, from, to);
         setListAdapter(adapter);

@@ -68,7 +68,7 @@ public class SinaSearchSource implements SearchSource {
                     result.put(Source.KEY_SOURCE_NAME, user.getName());
                     result.put(Source.KEY_SOURCE_ID, String.valueOf(user.getId()));
                     result.put(Source.KEY_SOURCE_DESC, user.getDescription());
-                    result.put(Source.KEY_ACCOUNT_TYPE, Constants.TYPE_SINA_WEIBO);
+                    result.put(Source.KEY_SOURCE_TYPE, Constants.TYPE_SINA_WEIBO);
                     result.put(Source.KEY_IMAGE_URL, user.getProfileImageURL().toString());
                     result.put(Source.KEY_CAT, "新浪微博");
 

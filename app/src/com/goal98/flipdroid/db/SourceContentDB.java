@@ -68,13 +68,20 @@ public class SourceContentDB extends AbstractDB {
             if (cursor.getCount() == 0) {
                 return null;
             }
-
             cursor.moveToFirst();
             sourceCacheObject.setContent(cursor.getString(3));
         } finally {
             cursor.close();
         }
-
         return sourceCacheObject;
+    }
+
+    public void clear(SourceCacheObject cacheObject) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        String selection = SourceContentDB.TYPE + " = ? and " + SourceContentDB.URL + "= ?";
+        String[] selectionArgs = {cacheObject.getType(), cacheObject.getUrl()};
+
+        db.delete(getTableName(), selection, selectionArgs);
     }
 }
