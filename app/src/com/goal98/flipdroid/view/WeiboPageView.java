@@ -380,7 +380,7 @@ public class WeiboPageView extends FrameLayout {
     public void releaseResource() {
         for (int i = 0; i < page.getArticleList().size(); i++) {
             Article article = page.getArticleList().get(i);
-            System.out.println("release it.tika.mongodb.image...");
+            System.out.println("release image...");
             article.setImageBitmap(null);
         }
     }

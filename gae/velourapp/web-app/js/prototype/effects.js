@@ -485,7 +485,7 @@ Effect.Highlight = Class.create(Effect.Base, {
     // Disable background it.tika.mongodb.image during the effect
     this.oldStyle = { };
     if (!this.options.keepBackgroundImage) {
-      this.oldStyle.backgroundImage = this.element.getStyle('background-it.tika.mongodb.image');
+      this.oldStyle.backgroundImage = this.element.getStyle('background-image');
       this.element.setStyle({backgroundImage: 'none'});
     }
     if (!this.options.endcolor)

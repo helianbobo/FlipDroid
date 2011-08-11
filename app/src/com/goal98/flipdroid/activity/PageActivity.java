@@ -32,6 +32,7 @@ import com.goal98.flipdroid.exception.NoSinaAccountBindedException;
 import com.goal98.flipdroid.model.*;
 import com.goal98.flipdroid.model.cachesystem.CacheSystem;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
+import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
 import com.goal98.flipdroid.model.google.GoogleReaderArticleSource;
 import com.goal98.flipdroid.model.rss.RSSArticleSource;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
@@ -44,7 +45,7 @@ import weibo4j.WeiboException;
 
 import java.util.concurrent.*;
 
-public class PageActivity extends Activity implements com.goal98.flipdroid.model.Window.OnLoadListener {
+public class PageActivity extends Activity implements com.goal98.flipdroid.model.Window.OnLoadListener, SourceUpdateable {
 
     static final private int CONFIG_ID = Menu.FIRST;
     private Animation fadeInPageView;
@@ -114,7 +115,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private float last_x, last_y, last_z;
     private static final int SHAKE_THRESHOLD = 900;
     private DeviceInfo deviceInfo;
-//    public SensorManager sm;
+    //    public SensorManager sm;
 //    public Sensor acceleromererSensor;
 //    public SensorEventListener acceleromererListener;
     public Animation.AnimationListener flipAnimationListener;
@@ -145,7 +146,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
 
-     public DeviceInfo getDeviceInfoFromApplicationContext(){
+    public DeviceInfo getDeviceInfoFromApplicationContext() {
         FlipdroidApplications fa = (FlipdroidApplications) this.getApplicationContext();
         return fa.getDeviceInfo();
     }
@@ -259,7 +260,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             });
 
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            source = new CachedArticleSource(new RSSArticleSource(contentUrl, sourceName, sourceImageURL), this);
+            CachedArticleSource cachedArticleSource = new CachedArticleSource(new RSSArticleSource(contentUrl, sourceName, sourceImageURL), this, this);
+            cachedArticleSource.loadSourceFromCache();
+            source = cachedArticleSource;
         } else if (accountType.equals(Constants.TYPE_GOOGLE_READER)) {
 
             String sid = preferences.getString(GoogleAccountActivity.GOOGLE_ACCOUNT_SID, "");
@@ -620,7 +623,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         weibo.setPassword(basicPassword);
     }
 
-    public void notifyHasNew() {
+    public void notifyHasNew(CachedArticleSource cachedArticleSource) {
         handler.post(new Runnable() {
             public void run() {
                 setProgressBarIndeterminateVisibility(false);
@@ -629,7 +632,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         });
     }
 
-    public void notifyUpdating() {
+    public void notifyNoNew(CachedArticleSource cachedArticleSource) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void notifyUpdating(CachedArticleSource cachedArticleSource) {
         handler.post(new Runnable() {
             public void run() {
                 setProgressBarIndeterminateVisibility(true);

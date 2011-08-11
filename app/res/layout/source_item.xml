@@ -9,7 +9,7 @@
                                      android:layout_height="50dip" webimage:defaultWidth="50"
                                      webimage:defaultHeight="50" webimage:progressDrawable="@drawable/portrait"
                                      android:layout_width="50dip"></com.goal98.android.WebImageView>
-    <LinearLayout android:id="@+id/background" android:layout_width="fill_parent" android:layout_height="wrap_content"
+    <LinearLayout android:id="@+id/background" android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:orientation="vertical">
         <TextView
                 android:id="@+id/source_name"
@@ -19,8 +19,8 @@
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
                 android:ellipsize="marquee"
-android:marqueeRepeatLimit="marquee_forever"
-android:scrollHorizontally="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
                 android:paddingLeft="5dip"
                 android:singleLine="true"
                 />
@@ -32,6 +32,8 @@ android:scrollHorizontally="true"
                 android:paddingLeft="5dip"
                 android:singleLine="true"
                 />
+
+
         <TextView
                 android:id="@+id/source_type"
                 android:layout_width="fill_parent"
@@ -51,4 +53,13 @@ android:scrollHorizontally="true"
                 android:visibility="gone"
                 />
     </LinearLayout>
+    <ProgressBar android:id="@+id/loadingbar"
+                 android:layout_gravity="center"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:indeterminate="true"
+                 android:indeterminateOnly="true"
+                 android:visibility="gone"
+                 style="?android:attr/progressBarStyleSmall">
+    </ProgressBar>
 </LinearLayout>

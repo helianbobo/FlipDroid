@@ -16,10 +16,10 @@ public class TikaServiceTest
         extends TestCase {
 
     public void testApp() throws MalformedURLException, ParseException, TikaException {
-//        TikaService service = new TikaService();
-//        TikaRequest request = new TikaRequest();
-//        request.setUrl("http://www.ifanr.com/48882");
-//        TikaResponse response =
+        TikaService service = new TikaService();
+        TikaRequest request = new TikaRequest();
+        request.setUrl("http://www.ifanr.com/48882");
+//        TikaResponse response = service.
 //        assertTrue(response.isSuccess());
 //        assertNotNull(response.getContent());
 //        assertNotNull(response.getTitle());

@@ -43,7 +43,7 @@ public class ContentLoadedView extends ArticleView {
         return "            ";
     }
 
-    // These matrices will be used to move and zoom it.tika.mongodb.image
+    // These matrices will be used to move and zoom image
     Matrix matrix = new Matrix();
     Matrix savedMatrix = new Matrix();
 

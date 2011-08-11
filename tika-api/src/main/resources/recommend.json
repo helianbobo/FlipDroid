@@ -4,7 +4,7 @@
         "accountType": "RSS",
         "id":"9001",
         "desc": "发现创新价值的科技媒体。 全景关注移动互联网，集中报道创业团队、最潮的智能手持及最酷的互联网应用，致力于“独立，前瞻，深入”的分析评论",
-        "image_url": "http://bbs.ifanr.com/static/it.tika.mongodb.image/common/logo.png",
+        "image_url": "http://bbs.ifanr.com/static/image/common/logo.png",
         "content_url":"http://www.ifanr.com/feed/rss"
     },
     {

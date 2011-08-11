@@ -2,9 +2,20 @@ package com.goal98.flipdroid.model;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.view.View;
+import android.widget.BaseAdapter;
+import com.goal98.flipdroid.activity.IndexActivity;
 import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.model.cachesystem.CacheableArticleSource;
+import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
+import com.goal98.flipdroid.model.rss.RSSArticleSource;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.flipdroid.util.EachCursor;
+import com.goal98.flipdroid.util.ManagedCursor;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,29 +25,43 @@ import com.goal98.flipdroid.util.Constants;
  * To change this template use File | Settings | File Templates.
  */
 public class SourceUpdateManager {
-    private Context context;
-    public SourceDB sourceDB;
-    public SourceCache sourceCache;
+    private IndexActivity indexActivity;
+    private SourceDB sourceDB;
+    private SourceCache sourceCache;
+    private Map<String, CachedArticleSource> cachedArticleSourceMap = new HashMap<String, CachedArticleSource>();
+    private BaseAdapter adapter;
 
-    public SourceUpdateManager(Context context) {
-        this.context = context;
-        this.sourceDB = new SourceDB(context);
-        this.sourceCache = new SourceCache(context);
+    public SourceUpdateManager(IndexActivity indexActivity, BaseAdapter adapter) {
+        this.indexActivity = indexActivity;
+        this.sourceDB = new SourceDB(indexActivity);
+        this.sourceCache = new SourceCache(indexActivity);
+        this.adapter = adapter;
     }
 
-    public void updateAll() {
-        Cursor c = null;
-        try {
-            c = sourceDB.findAll();
-            while (c.moveToNext()) {
-                String sourceType = c.getString(c.getColumnIndex(Source.KEY_SOURCE_TYPE));
-                if (sourceType.equals(Constants.TYPE_RSS)) {
 
+    public void updateAll() {
+        Cursor c = sourceDB.findAll();
+        ManagedCursor mc = new ManagedCursor(c);
+        mc.each(new EachCursor() {
+            public void call(Cursor c, int index) {
+                String sourceType = c.getString(c.getColumnIndex(Source.KEY_SOURCE_TYPE));
+                String sourceContentUrl = c.getString(c.getColumnIndex(Source.KEY_CONTENT_URL));
+                String sourceName = c.getString(c.getColumnIndex(Source.KEY_SOURCE_NAME));
+                String sourceImage = c.getString(c.getColumnIndex(Source.KEY_IMAGE_URL));
+                String sourceID = c.getString(c.getColumnIndex(Source.KEY_SOURCE_ID));
+
+//                adapter.getItem()
+                CachedArticleSource cachedArticleSource = null;
+                if (sourceType.equals(Constants.TYPE_RSS)) {
+                    RSSArticleSource rssArticleSource = new RSSArticleSource(sourceContentUrl, sourceName, sourceImage);
+                    cachedArticleSource = new CachedArticleSource(rssArticleSource, indexActivity, indexActivity);
+                }
+
+                if (cachedArticleSource != null) {
+                    cachedArticleSource.checkUpdate();
+//                    cachedArticleSourceMap.put(sourceID, cachedArticleSource);
                 }
             }
-        } finally {
-            if (c != null)
-                c.close();
-        }
+        });
     }
 }

@@ -3,8 +3,11 @@ package flipdroid.grepper;
 import flipdroid.grepper.extractor.Extractor;
 import flipdroid.grepper.extractor.ExtractorException;
 import flipdroid.grepper.extractor.image.ImageService;
+import flipdroid.grepper.extractor.image.TikaImageService;
 import flipdroid.grepper.extractor.pipe.*;
 import flipdroid.grepper.extractor.raw.URLRawRepo;
+import it.tika.TikaException;
+import it.tika.TikaResponse;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -67,6 +70,35 @@ public class WebpageExtractor {
     }
 
     public static void main(String[] args) throws IOException {
+        WebpageExtractor extractor = new WebpageExtractor(null);
+        TikaResponse response = new TikaResponse();
+
+
+        String urlDecoded = java.net.URLDecoder.decode("http://www.ifanr.com/49120", "UTF-8");
+        byte[] rawBytes = URLRawRepo.getInstance().fetch(urlDecoded);
+        String charset = EncodingDetector.detect(new BufferedInputStream(new ByteArrayInputStream(rawBytes)));
+        Charset cs = null;
+        if (charset != null)
+            cs = Charset.forName(charset);
+        else {
+            try {
+                cs = Charset.forName("utf-8");
+            } catch (UnsupportedCharsetException e) {
+            }
+        }
+
+        if (rawBytes == null) {
+            response.setSuccess(false);
+        } else {
+            URLAbstract result = new URLAbstract(rawBytes, cs);
+            result.setUrl(urlDecoded);
+            result = extractor.extract(result);
+            response.setContent(result.getContent());
+            response.setImages(result.getImages());
+            response.setTitle(result.getTitle());
+            response.setSuccess(true);
+        }
+        System.out.println(response.getContent());
 
     }
 }

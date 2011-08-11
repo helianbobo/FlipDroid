@@ -297,7 +297,7 @@ public class ImageLoader implements Runnable {
         byte[] imageData = new byte[fileSize];
 
         // read the file
-        Log.d(LOG_TAG, "fetching it.tika.mongodb.image " + imageUrl + " (" + fileSize + ")");
+        Log.d(LOG_TAG, "fetching image " + imageUrl + " (" + fileSize + ")");
         BufferedInputStream istream = new BufferedInputStream(connection.getInputStream(), 32768);
         try {
             int bytesRead = 0;

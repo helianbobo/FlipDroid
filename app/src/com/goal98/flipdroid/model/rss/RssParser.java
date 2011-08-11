@@ -111,7 +111,7 @@ public class RssParser extends DefaultHandler {
         else if (qName.equalsIgnoreCase("item") && (this.rssFeed != null)) {
             this.item = new Item();
             this.rssFeed.addItem(this.item);
-        } else if (qName.equalsIgnoreCase("it.tika.mongodb.image") && (this.rssFeed != null))
+        } else if (qName.equalsIgnoreCase("image") && (this.rssFeed != null))
             this.imgStatus = true;
     }
 
@@ -122,7 +122,7 @@ public class RssParser extends DefaultHandler {
         if (qName.equalsIgnoreCase("item"))
             this.item = null;
 
-        else if (qName.equalsIgnoreCase("it.tika.mongodb.image"))
+        else if (qName.equalsIgnoreCase("image"))
             this.imgStatus = false;
 
         else if (qName.equalsIgnoreCase("title")) {

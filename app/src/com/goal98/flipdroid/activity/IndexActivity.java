@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.*;
@@ -14,9 +15,15 @@ import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.model.SourceUpdateManager;
+import com.goal98.flipdroid.model.cachesystem.CacheToken;
+import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
+import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
+import com.goal98.flipdroid.model.rss.RSSArticleSource;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
+import com.goal98.flipdroid.util.EachCursor;
+import com.goal98.flipdroid.util.ManagedCursor;
 import com.goal98.flipdroid.view.SourceItemViewBinder;
 
 import java.util.ArrayList;
@@ -24,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class IndexActivity extends ListActivity {
+public class IndexActivity extends ListActivity implements SourceUpdateable {
 
     static final private int CONFIG_ID = Menu.FIRST;
     static final private int CLEAR_ID = Menu.FIRST + 1;
@@ -36,6 +43,7 @@ public class IndexActivity extends ListActivity {
     private DeviceInfo deviceInfo;
     private SourceCache sourceCache;
     private BaseAdapter adapter;
+    private boolean updated;
 
 
     @Override
@@ -53,7 +61,6 @@ public class IndexActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         deviceInfo = getDeviceInfoFromApplicationContext();
 
-//        accountDB = new AccountDB(getApplicationContext());
         sourceDB = new SourceDB(getApplicationContext());
         sourceCache = new SourceCache(this);
         setContentView(R.layout.index);
@@ -69,15 +76,16 @@ public class IndexActivity extends ListActivity {
         this.getListView().setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             public void onCreateContextMenu(ContextMenu menu, View v,
                                             ContextMenu.ContextMenuInfo menuInfo) {
-
                 menu.setHeaderTitle(R.string.deletesource);
                 menu.setHeaderIcon(R.drawable.btndelete);
                 menu.add(0, 0, 0, R.string.yes);
                 menu.add(0, 1, 0, R.string.no);
             }
         });
-        SourceUpdateManager updateManager = new SourceUpdateManager(this);
-        updateManager.updateAll();
+        bindAdapter();
+
+        adapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -111,35 +119,59 @@ public class IndexActivity extends ListActivity {
     }
 
     private void bindAdapter() {
+        sourceCursor = sourceDB.findAll();
         if (sourceCursor.getCount() == 0) {
             sourceCursor.close();
-            Map<String, String> noDate = new HashMap<String, String>();
-            noDate.put("text", getString(R.string.nodata));
+            Map<String, String> noData = new HashMap<String, String>();
+            noData.put("text", getString(R.string.nodata));
             List emptyBlock = new ArrayList();
-            emptyBlock.add(noDate);
+            emptyBlock.add(noData);
             adapter = new SimpleAdapter(this, emptyBlock, R.layout.nodataitem,
                     new String[]{"text"},
                     new int[]{R.id.text});
         } else {
-            adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
-                    new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_SOURCE_TYPE, Source.KEY_CONTENT_URL},
-                    new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type, R.id.source_url});
-            ((SimpleCursorAdapter) adapter).setViewBinder(new SourceItemViewBinder(deviceInfo));
+//            adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
+//                    new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_SOURCE_TYPE, Source.KEY_CONTENT_URL},
+//                    new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type, R.id.source_url});
+//            ((SimpleCursorAdapter) adapter).setViewBinder(new SourceItemViewBinder(deviceInfo));
+            buildAdapter();
         }
 
         setListAdapter(adapter);
 
     }
 
+    private void buildAdapter() {
+        final List<SourceItem> items = new ArrayList<SourceItem>();
+        new ManagedCursor(sourceCursor).each(new EachCursor() {
+            public void call(Cursor cursor, int index) {
+                String sourceType = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_TYPE));
+                String sourceContentUrl = cursor.getString(cursor.getColumnIndex(Source.KEY_CONTENT_URL));
+                String sourceName = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_NAME));
+                String sourceImage = cursor.getString(cursor.getColumnIndex(Source.KEY_IMAGE_URL));
+                String sourceDesc = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_DESC));
+
+                SourceItem item = new SourceItem();
+                item.setSourceType(sourceType);
+                item.setSourceName(sourceName);
+                item.setSourceImage(sourceImage);
+                item.setSourceURL(sourceContentUrl);
+                item.setSourceDesc(sourceDesc);
+
+                items.add(item);
+            }
+        });
+
+        adapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item, items, deviceInfo);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        sourceCursor = sourceDB.findAll();
-        startManagingCursor(sourceCursor);
 
-        bindAdapter();
+//        startManagingCursor(sourceCursor);
 
-        adapter.notifyDataSetChanged();
+
     }
 
     private void openDatabase() {
@@ -161,6 +193,22 @@ public class IndexActivity extends ListActivity {
     protected void onResume() {
         super.onResume();
         openDatabase();
+        new Thread(new Runnable() {
+
+            public void run() {
+                if (!updated) {
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+
+                    }
+                    SourceUpdateManager updateManager = new SourceUpdateManager(IndexActivity.this, adapter);
+                    updateManager.updateAll();
+                    updated = true;
+                }
+            }
+        }).start();
+
     }
 
     @Override
@@ -175,18 +223,12 @@ public class IndexActivity extends ListActivity {
         if (l.getItemAtPosition(position) instanceof Map) {
             return;
         }
-        Cursor cursor = (Cursor) l.getItemAtPosition(position);
-
-
-        try {
-            intent.putExtra("type", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_TYPE)));
-            intent.putExtra("sourceId", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_ID)));
-            intent.putExtra("sourceImage", cursor.getString(cursor.getColumnIndex(Source.KEY_IMAGE_URL)));
-            intent.putExtra("sourceName", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_NAME)));
-            intent.putExtra("contentUrl", cursor.getString(cursor.getColumnIndex(Source.KEY_CONTENT_URL)));//for rss
-        } finally {
-            cursor.close();
-        }
+        SourceItem item = (SourceItem) l.getItemAtPosition(position);
+        intent.putExtra("type", item.getSourceType());
+        intent.putExtra("sourceId", item.getSourceId());
+        intent.putExtra("sourceImage", item.getSourceImage());
+        intent.putExtra("sourceName", item.getSourceName());
+        intent.putExtra("contentUrl", item.getSourceURL());//for rss
         startActivity(intent);
         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
     }
@@ -220,18 +262,14 @@ public class IndexActivity extends ListActivity {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 preferences.edit().putString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null).commit();
 
-                accountDB = new AccountDB(this);
                 int count = accountDB.deleteAll();
                 Log.e(this.getClass().getName(), count + " accounts are deleted.");
 
                 count = sourceDB.deleteAll();
                 Log.e(this.getClass().getName(), count + " sources are deleted.");
 
-                sourceCursor.close();
                 sourceCursor = sourceDB.findAll();
-                if (adapter instanceof SimpleCursorAdapter)
-                    ((SimpleCursorAdapter) adapter).changeCursor(sourceCursor);
-                sourceCursor.close();
+                buildAdapter();
                 return true;
             case ACCOUNT_LIST_ID:
                 startActivity(new Intent(this, AccountListActivity.class));
@@ -239,5 +277,47 @@ public class IndexActivity extends ListActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void notifyUpdating(final CachedArticleSource cachedArticleSource) {
+        final CacheToken token = cachedArticleSource.getToken();
+        hander.post(new Runnable() {
+            public void run() {
+                for (int i = 0; i < adapter.getCount(); i++) {
+                    SourceItem item = (SourceItem) adapter.getItem(i);
+                    if (token.match(item)) {
+                        item.getSourceItemView().findViewById(R.id.loadingbar).setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        }
+        );
+    }
+
+    public void notifyHasNew
+            (CachedArticleSource
+                     cachedArticleSource) {
+
+    }
+
+    Handler hander = new Handler();
+
+    public void notifyNoNew
+            (CachedArticleSource
+                     cachedArticleSource) {
+        final CacheToken token = cachedArticleSource.getToken();
+
+        final Cursor c = sourceDB.findAll();
+        hander.post(new Runnable() {
+            public void run() {
+                ManagedCursor mc = new ManagedCursor(c);
+                mc.each(new EachCursor() {
+                    public void call(Cursor cursor, int index) {
+                        IndexActivity.this.getListView().getChildAt(index).findViewById(R.id.loadingbar).setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        });
+
     }
 }

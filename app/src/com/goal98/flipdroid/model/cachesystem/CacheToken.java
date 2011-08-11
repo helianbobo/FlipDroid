@@ -1,5 +1,8 @@
 package com.goal98.flipdroid.model.cachesystem;
 
+import com.goal98.flipdroid.activity.SourceItem;
+import com.goal98.flipdroid.util.Constants;
+
 /**
  * Created by IntelliJ IDEA.
  * User: ITS
@@ -25,5 +28,12 @@ public class CacheToken {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean match(SourceItem item) {
+        if (Constants.TYPE_RSS.equals(item.getSourceType())) {
+            return item.getSourceURL().equals(token);
+        }
+        return false;  //To change body of created methods use File | Settings | File Templates.
     }
 }

@@ -1,15 +1,10 @@
 package com.goal98.flipdroid.model.cachesystem;
 
 import android.content.Context;
-import com.goal98.flipdroid.activity.PageActivity;
-import com.goal98.flipdroid.db.SourceContentDB;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.ArticleSource;
 import com.goal98.flipdroid.model.OnSourceLoadedListener;
-import com.goal98.flipdroid.model.rss.RSSArticleSource;
-import com.goal98.flipdroid.util.Constants;
 
-import java.io.ByteArrayInputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -23,18 +18,25 @@ import java.util.List;
 public class CachedArticleSource implements ArticleSource {
     private CacheableArticleSource articleSource;
     private SourceCache dbCache;
-    private PageActivity pageActivity;
-    private boolean cacheFound;
+    private SourceUpdateable sourceUpdateable;
+    private boolean fromCache;
 
-    public CachedArticleSource(final CacheableArticleSource articleSource, PageActivity pageActivity) {
-        this.dbCache = new SourceCache(pageActivity);
-        this.pageActivity = pageActivity;
+    public CachedArticleSource(final CacheableArticleSource articleSource, Context context, SourceUpdateable sourceUpdateable) {
+        this.dbCache = new SourceCache(context);
+        this.sourceUpdateable = sourceUpdateable;
         this.articleSource = articleSource;
+    }
+
+    public CacheToken getToken(){
+         return articleSource.getCacheToken();
+    }
+
+    public void loadSourceFromCache() {
         final SourceCacheObject cacheObject = dbCache.find(articleSource.getCacheToken().getType(), articleSource.getCacheToken().getToken());
 
-        if (cacheObject != null){
+        if (cacheObject != null) {
             this.articleSource.fromCache(cacheObject);
-            cacheFound = true;
+            fromCache = true;
         }
 
         articleSource.registerOnLoadListener(new OnSourceLoadedListener() {
@@ -43,7 +45,6 @@ public class CachedArticleSource implements ArticleSource {
                 return s;
             }
         });
-
     }
 
     public Date lastModified() {
@@ -54,18 +55,13 @@ public class CachedArticleSource implements ArticleSource {
         return articleSource.getArticleList();
     }
 
-    volatile  boolean updating = false;
-    volatile  boolean updated = false;
+    volatile boolean updating = false;
+    volatile boolean updated = false;
 
     public synchronized boolean loadMore() {
-        if (!updating && !updated && cacheFound) {
-            new Thread(new Runnable() {
-                public void run() {
-                    updating = true;
-                    checkUpdate();
-                }
-            }).start();
-        }
+//        if (!updating && !updated && fromCache) {
+//            checkUpdate();
+//        }
         return articleSource.loadMore();
     }
 
@@ -73,15 +69,25 @@ public class CachedArticleSource implements ArticleSource {
         return articleSource.isNoMoreToLoad();
     }
 
-    private void checkUpdate() {
-        pageActivity.notifyUpdating();
-        boolean hasUpdates = articleSource.loadLatestSource();
-        this.updated = true;
-        System.out.println("has update:" + hasUpdates);
-        if (hasUpdates) {
-            pageActivity.notifyHasNew();
-            this.updating = false;
-        }
+    public void checkUpdate() {
+        new Thread(new Runnable() {
+            public void run() {
+                updating = true;
+                try {
+                    sourceUpdateable.notifyUpdating(CachedArticleSource.this);
+                    boolean hasUpdates = articleSource.loadLatestSource();
+                    updated = true;
+                    System.out.println("has update:" + hasUpdates);
+                    if (hasUpdates) {
+                        sourceUpdateable.notifyHasNew(CachedArticleSource.this);
+                    }else{
+                        sourceUpdateable.notifyNoNew(CachedArticleSource.this);
+                    }
+                } finally {
+                    updating = false;
+                }
+            }
+        }).start();
     }
 
     public void setUpdating(boolean updating) {

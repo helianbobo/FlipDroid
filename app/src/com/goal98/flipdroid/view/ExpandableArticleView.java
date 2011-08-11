@@ -124,7 +124,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                     for (int i = 0; i < responsedImages.size(); i++) {
                         String imageURL = responsedImages.get(i);
                         if (imageURL != null && imageURL.length() != 0) {
-                            if (i == 0) {//primary it.tika.mongodb.image
+                            if (i == 0) {//primary image
                                 article.setImageUrl(new URL(imageURL));
                                 article.loadPrimaryImage(imageURL,deviceInfo);
                             }

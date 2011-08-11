@@ -1,6 +1,8 @@
 package com.goal98.flipdroid.model;
 
 
+import com.goal98.flipdroid.model.cachesystem.CacheToken;
+
 import java.util.Date;
 import java.util.List;
 
@@ -17,4 +19,5 @@ public interface ArticleSource {
     boolean getForceMagzine();
 
     boolean reset();
+
 }

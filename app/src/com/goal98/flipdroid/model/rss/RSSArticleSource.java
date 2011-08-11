@@ -200,7 +200,7 @@ public class RSSArticleSource implements CacheableArticleSource {
         CacheToken token = new CacheToken();
         token.setType(Constants.TYPE_RSS);
         token.setToken(this.contentUrl);
-        return token;  //To change body of implemented methods use File | Settings | File Templates.
+        return token;
     }
 
     public void fromCache(SourceCacheObject cachedObject) {

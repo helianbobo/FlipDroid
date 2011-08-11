@@ -439,7 +439,7 @@ public final class HTMLHighlighter {
                         if (!html.toString().endsWith("<p>"))
                             html.append("<p>");
                     }
-                    if (qName.equalsIgnoreCase("img") || qName.equalsIgnoreCase("it.tika.mongodb.image")) {
+                    if (qName.equalsIgnoreCase("img") || qName.equalsIgnoreCase("image")) {
 
                         int length = atts.getLength();
                         String image = null;

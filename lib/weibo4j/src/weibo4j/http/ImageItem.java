@@ -30,14 +30,14 @@ public class ImageItem {
 	public ImageItem(String name,byte[] content) throws Exception{
 		String imgtype=getContentType(content);
 		
-	    if(imgtype!=null&&(imgtype.equalsIgnoreCase("it.tika.mongodb.image/gif")||imgtype.equalsIgnoreCase("it.tika.mongodb.image/png")
-	            ||imgtype.equalsIgnoreCase("it.tika.mongodb.image/jpeg"))){
+	    if(imgtype!=null&&(imgtype.equalsIgnoreCase("image/gif")||imgtype.equalsIgnoreCase("image/png")
+	            ||imgtype.equalsIgnoreCase("image/jpeg"))){
 	    	this.content=content;
 	    	this.name=name;
 	    	this.content=content;
 	    }else{
 	    	throw new IllegalStateException(
-            "Unsupported it.tika.mongodb.image type, Only Suport JPG ,GIF,PNG!");
+            "Unsupported image type, Only Suport JPG ,GIF,PNG!");
 	    }
 	}
 	
@@ -63,11 +63,11 @@ public class ImageItem {
 			while (itr.hasNext()) {
 				ImageReader reader = (ImageReader) itr.next();
 				if (reader instanceof GIFImageReader) {
-					type = "it.tika.mongodb.image/gif";
+					type = "image/gif";
 				} else if (reader instanceof JPEGImageReader) {
-					type = "it.tika.mongodb.image/jpeg";
+					type = "image/jpeg";
 				} else if (reader instanceof PNGImageReader) {
-					type = "it.tika.mongodb.image/png";
+					type = "image/png";
 				} else if (reader instanceof BMPImageReader) {
 					type = "application/x-bmp";
 				}
