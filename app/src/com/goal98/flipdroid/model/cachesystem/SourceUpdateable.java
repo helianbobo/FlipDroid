@@ -13,4 +13,6 @@ public interface SourceUpdateable {
     void notifyHasNew(CachedArticleSource cachedArticleSource);
 
     void notifyNoNew(CachedArticleSource cachedArticleSource);
+
+    void notifyUpdateDone(CachedArticleSource cachedArticleSource);
 }

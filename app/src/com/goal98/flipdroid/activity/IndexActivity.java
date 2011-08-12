@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.activity;
 
 import android.app.ListActivity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -13,6 +14,7 @@ import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.model.Account;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.model.SourceUpdateManager;
 import com.goal98.flipdroid.model.cachesystem.CacheToken;
@@ -26,10 +28,7 @@ import com.goal98.flipdroid.util.EachCursor;
 import com.goal98.flipdroid.util.ManagedCursor;
 import com.goal98.flipdroid.view.SourceItemViewBinder;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class IndexActivity extends ListActivity implements SourceUpdateable {
 
@@ -76,15 +75,16 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         this.getListView().setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             public void onCreateContextMenu(ContextMenu menu, View v,
                                             ContextMenu.ContextMenuInfo menuInfo) {
+                if(v.findViewById(R.id.text)!=null)
+                    return;
+
                 menu.setHeaderTitle(R.string.deletesource);
                 menu.setHeaderIcon(R.drawable.btndelete);
                 menu.add(0, 0, 0, R.string.yes);
                 menu.add(0, 1, 0, R.string.no);
             }
         });
-        bindAdapter();
 
-        adapter.notifyDataSetChanged();
 
     }
 
@@ -110,9 +110,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 preferences.edit().putString(WeiPaiWebViewClient.PREVIOUS_SINA_ACCOUNT_PREF_KEY, sinaAccountId).commit();
             }
 
-            sourceCursor.close();
-            sourceCursor = sourceDB.findAll();
-            ((SimpleCursorAdapter) adapter).changeCursor(sourceCursor);
+            bindAdapter();
+            adapter.notifyDataSetChanged();
             return true;
         }
         return super.onContextItemSelected(item);
@@ -193,12 +192,15 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     protected void onResume() {
         super.onResume();
         openDatabase();
+        bindAdapter();
+
+        adapter.notifyDataSetChanged();
         new Thread(new Runnable() {
 
             public void run() {
                 if (!updated) {
                     try {
-                        Thread.sleep(3000);
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
 
                     }
@@ -297,7 +299,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     public void notifyHasNew
             (CachedArticleSource
                      cachedArticleSource) {
-          final CacheToken token = cachedArticleSource.getToken();
+        final CacheToken token = cachedArticleSource.getToken();
 
         final Cursor c = sourceDB.findAll();
         hander.post(new Runnable() {
@@ -331,5 +333,12 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
             }
         });
 
+    }
+
+    public void notifyUpdateDone(CachedArticleSource cachedArticleSource) {
+        ContentValues values = new ContentValues();
+        values.put(Source.KEY_UPDATE_TIME, new Date().getTime());
+
+        sourceDB.update(values, Source.KEY_SOURCE_TYPE + " = ? and " + Source.KEY_CONTENT_URL + " = ?", new String[]{cachedArticleSource.getToken().getType(), cachedArticleSource.getToken().getToken()});
     }
 }

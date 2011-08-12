@@ -4,7 +4,10 @@ import android.content.Context;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.ArticleSource;
 import com.goal98.flipdroid.model.OnSourceLoadedListener;
+import com.goal98.flipdroid.util.EncodingDetector;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +22,7 @@ public class CachedArticleSource implements ArticleSource {
     private CacheableArticleSource articleSource;
     private SourceCache dbCache;
     private SourceUpdateable sourceUpdateable;
-    private boolean fromCache;
+    private OnSourceLoadedListener listener;
 
     public CachedArticleSource(final CacheableArticleSource articleSource, Context context, SourceUpdateable sourceUpdateable) {
         this.dbCache = new SourceCache(context);
@@ -27,8 +30,8 @@ public class CachedArticleSource implements ArticleSource {
         this.articleSource = articleSource;
     }
 
-    public CacheToken getToken(){
-         return articleSource.getCacheToken();
+    public CacheToken getToken() {
+        return articleSource.getCacheToken();
     }
 
     public void loadSourceFromCache() {
@@ -36,15 +39,14 @@ public class CachedArticleSource implements ArticleSource {
 
         if (cacheObject != null) {
             this.articleSource.fromCache(cacheObject);
-            fromCache = true;
         }
 
-        articleSource.registerOnLoadListener(new OnSourceLoadedListener() {
+        this.listener = new OnSourceLoadedListener() {
             public String onLoaded(String s) {
                 dbCache.put(articleSource.getCacheToken().getType(), articleSource.getCacheToken().getToken(), s);
                 return s;
             }
-        });
+        };
     }
 
     public Date lastModified() {
@@ -72,14 +74,18 @@ public class CachedArticleSource implements ArticleSource {
                 updating = true;
                 try {
                     sourceUpdateable.notifyUpdating(CachedArticleSource.this);
-                    boolean hasUpdates = articleSource.loadLatestSource();
+                    byte[] updatedBytes = articleSource.loadLatestSource();
                     updated = true;
-                    System.out.println("has update:" + hasUpdates);
-                    if (hasUpdates) {
+                    System.out.println("has update:" + updatedBytes != null);
+                    if (updatedBytes != null) {
+                        String encoding = EncodingDetector.detect(new ByteArrayInputStream(updatedBytes));
+                        listener.onLoaded(new String(updatedBytes, encoding));
                         sourceUpdateable.notifyHasNew(CachedArticleSource.this);
-                    }else{
+                    } else {
                         sourceUpdateable.notifyNoNew(CachedArticleSource.this);
                     }
+                    sourceUpdateable.notifyUpdateDone(CachedArticleSource.this);
+                } catch (IOException e) {
                 } finally {
                     updating = false;
                 }

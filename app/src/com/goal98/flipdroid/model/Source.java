@@ -1,5 +1,7 @@
 package com.goal98.flipdroid.model;
 
+import java.util.Date;
+
 public class Source {
 
     public static final String TABLE_NAME = "source";
@@ -10,13 +12,23 @@ public class Source {
     public static final String KEY_CONTENT_URL = "content_url";
     public static final String KEY_SOURCE_TYPE = "source_type";
     public static final String KEY_CAT = "cat";
+    public static final String KEY_UPDATE_TIME = "update_on";
+
     private String name;
     private String id;
     private String desc;
     private String accountType;
     private String imageUrl;
     private String contentUrl;
+    private Date updateTime;
 
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 
     public String getContentUrl() {
         return contentUrl;

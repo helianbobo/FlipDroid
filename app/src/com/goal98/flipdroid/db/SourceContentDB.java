@@ -8,6 +8,7 @@ import com.goal98.flipdroid.client.TikaExtractResponse;
 import com.goal98.flipdroid.model.cachesystem.SourceCacheObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,6 +22,7 @@ public class SourceContentDB extends AbstractDB {
     public static final String URL = "url";
     public static final String TYPE = "type";
     public static final String CONTENT = "CONTENT";
+
     public static final String TABLE_NAME = "sourceContent";
 
     public SourceContentDB(Context context) {
@@ -32,15 +34,19 @@ public class SourceContentDB extends AbstractDB {
     }
 
     public long persist(SourceCacheObject sourceCacheObject) {
-        ContentValues values = new ContentValues();
-        values.put(SourceContentDB.URL, sourceCacheObject.getUrl());
-        values.put(SourceContentDB.CONTENT, sourceCacheObject.getContent());
-        values.put(SourceContentDB.TYPE, sourceCacheObject.getType());
 
-        if (findByURL(sourceCacheObject) != null) {
+        SourceCacheObject sample = new SourceCacheObject();
+        sample.setType(sourceCacheObject.getType());
+        sample.setUrl(sourceCacheObject.getUrl());
+        if (findByURL(sample) != null) {
             return update(sourceCacheObject);
-        } else
+        } else {
+            ContentValues values = new ContentValues();
+            values.put(SourceContentDB.URL, sourceCacheObject.getUrl());
+            values.put(SourceContentDB.CONTENT, sourceCacheObject.getContent());
+            values.put(SourceContentDB.TYPE, sourceCacheObject.getType());
             return insert(values);
+        }
     }
 
     public long update(SourceCacheObject sourceCacheObject) {
@@ -48,6 +54,7 @@ public class SourceContentDB extends AbstractDB {
         values.put(SourceContentDB.URL, sourceCacheObject.getUrl());
         values.put(SourceContentDB.CONTENT, sourceCacheObject.getContent());
         values.put(SourceContentDB.TYPE, sourceCacheObject.getType());
+
         String selection = SourceContentDB.URL + " = ? and " + SourceContentDB.TYPE + "= ?";
         String[] selectionArgs = {sourceCacheObject.getUrl(), sourceCacheObject.getType()};
         return update(values, selection, selectionArgs);

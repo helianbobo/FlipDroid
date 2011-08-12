@@ -50,16 +50,17 @@ public class SourceUpdateManager {
                 String sourceImage = c.getString(c.getColumnIndex(Source.KEY_IMAGE_URL));
                 String sourceID = c.getString(c.getColumnIndex(Source.KEY_SOURCE_ID));
 
+
 //                adapter.getItem()
                 CachedArticleSource cachedArticleSource = null;
                 if (sourceType.equals(Constants.TYPE_RSS)) {
                     RSSArticleSource rssArticleSource = new RSSArticleSource(sourceContentUrl, sourceName, sourceImage);
                     cachedArticleSource = new CachedArticleSource(rssArticleSource, indexActivity, indexActivity);
+                    cachedArticleSource.loadSourceFromCache();
                 }
 
                 if (cachedArticleSource != null) {
                     cachedArticleSource.checkUpdate();
-//                    cachedArticleSourceMap.put(sourceID, cachedArticleSource);
                 }
             }
         });

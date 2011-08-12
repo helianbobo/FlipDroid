@@ -1,5 +1,7 @@
 package com.goal98.flipdroid.model.cachesystem;
 
+import java.util.Date;
+
 /**
  * Created by IntelliJ IDEA.
  * User: ITS
@@ -11,6 +13,9 @@ public class SourceCacheObject {
     String url;
     String type;
     String content;
+
+
+
 
     public String getUrl() {
         return url;

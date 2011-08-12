@@ -636,6 +636,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    public void notifyUpdateDone(CachedArticleSource cachedArticleSource) {
+
+    }
+
     public void notifyUpdating(CachedArticleSource cachedArticleSource) {
         handler.post(new Runnable() {
             public void run() {

@@ -27,7 +27,7 @@ public class RSSArticleSource implements CacheableArticleSource {
     private String sourceImage;
     private LinkedList list = new LinkedList<Article>();
     private InputStream content;
-    private OnSourceLoadedListener listener;
+
     private byte[] cachedBytes;
     private byte[] loadedBytes;
 
@@ -56,7 +56,7 @@ public class RSSArticleSource implements CacheableArticleSource {
     public boolean loadMore() {
         RssParser rp;
         if (content == null)
-            if (!loadFromSource())
+            if (loadFromSource()==null)
                 return false;
             else
                 content = new ByteArrayInputStream(loadedBytes);
@@ -128,24 +128,18 @@ public class RSSArticleSource implements CacheableArticleSource {
         return true;
     }
 
-    private boolean loadFromSource() {
+    private byte[] loadFromSource() {
         URL url = null;
         InputStream is = null;
         try {
             url = new URL(this.contentUrl);
             is = url.openConnection().getInputStream();
 
-
             loadedBytes = IOUtils.toByteArray(is);
-
-            String encoding = EncodingDetector.detect(new ByteArrayInputStream(loadedBytes));
-            if (listener != null)
-                listener.onLoaded(new String(loadedBytes, encoding));
-
-
+            return loadedBytes;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            return null;
         } finally {
             if (is != null)
                 try {
@@ -154,7 +148,6 @@ public class RSSArticleSource implements CacheableArticleSource {
 
                 }
         }
-        return true;
     }
 
     private String preFormat(String pubDate) {
@@ -208,13 +201,11 @@ public class RSSArticleSource implements CacheableArticleSource {
         this.content = new ByteArrayInputStream(cachedBytes);
     }
 
-    public void registerOnLoadListener(OnSourceLoadedListener listener) {
-        this.listener = listener;
-    }
 
-    public boolean loadLatestSource() throws NoNetworkException {
-        if (!loadFromSource())
-            return false;
+    public byte[] loadLatestSource() throws NoNetworkException {
+        byte[] loadedBytes = loadFromSource();
+        if (loadedBytes == null)
+            return null;
         byte[] latestSource = this.loadedBytes;
         boolean needUpdate = false;
         if (cachedBytes != null) {
@@ -234,8 +225,8 @@ public class RSSArticleSource implements CacheableArticleSource {
 
         if (needUpdate) {
             this.cachedBytes = loadedBytes;
-            return true;
+            return loadedBytes;
         }
-        return false;
+        return null;
     }
 }

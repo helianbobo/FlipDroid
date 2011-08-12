@@ -84,6 +84,7 @@ public abstract class AbstractDB {
                         Source.KEY_IMAGE_URL + " TEXT, " +
                         Source.KEY_CONTENT_URL + " TEXT, " +
                         Source.KEY_CAT + " TEXT, " +
+                        Source.KEY_UPDATE_TIME + " LONG, " +
                         "PRIMARY KEY (" + Source.KEY_SOURCE_TYPE + "," + Source.KEY_SOURCE_NAME + ")" +
                         ");";
 
@@ -103,6 +104,7 @@ public abstract class AbstractDB {
                         SourceContentDB.URL + " TEXT, " +
                         SourceContentDB.TYPE + " TEXT, " +
                         SourceContentDB.CONTENT + " TEXT, " +
+
                         "PRIMARY KEY (" + SourceContentDB.URL + ")" +
                         ");";
 
