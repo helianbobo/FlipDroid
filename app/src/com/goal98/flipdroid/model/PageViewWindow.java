@@ -66,6 +66,8 @@ public class PageViewWindow extends Window {
                     try {
                         page = repo.getPage(pageNumber);
                         //Log.d("SLIDING", "page loaded: " + this);
+                    } catch (NoSuchPageException e) {
+                        page = onNoMorePage(page);
                     } catch (NoMorePageException e) {
                         page = onNoMorePage(page);
                     } catch (Exception e) {

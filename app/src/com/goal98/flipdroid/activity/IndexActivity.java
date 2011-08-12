@@ -40,7 +40,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     private SourceDB sourceDB;
     private Cursor sourceCursor;
     private DeviceInfo deviceInfo;
-    private SourceCache sourceCache;
+    //    private SourceCache sourceCache;
     private BaseAdapter adapter;
     private boolean updated;
 
@@ -61,7 +61,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         deviceInfo = getDeviceInfoFromApplicationContext();
 
         sourceDB = new SourceDB(getApplicationContext());
-        sourceCache = new SourceCache(this);
+
         setContentView(R.layout.index);
 
         Button addSourceButton = (Button) findViewById(R.id.btn_add_source);
@@ -75,7 +75,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         this.getListView().setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             public void onCreateContextMenu(ContextMenu menu, View v,
                                             ContextMenu.ContextMenuInfo menuInfo) {
-                if(v.findViewById(R.id.text)!=null)
+                if (v.findViewById(R.id.text) != null)
                     return;
 
                 menu.setHeaderTitle(R.string.deletesource);
@@ -102,7 +102,12 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         String sourceType = sourceTypeTextView.getText().toString();
         if (item.getItemId() == 0) {//delete
             sourceDB.removeSourceByName(sourceName);
-            sourceCache.clear(sourceType, sourceUrl);
+            SourceCache sourceCache = new SourceCache(this);
+            try {
+                sourceCache.clear(sourceType, sourceUrl);
+            } finally {
+                sourceCache.close();
+            }
             if (sourceType.equals(Constants.TYPE_MY_SINA_WEIBO)) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String sinaAccountId = preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null);
@@ -118,6 +123,9 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     }
 
     private void bindAdapter() {
+        if (deviceInfo == null)
+            deviceInfo = getDeviceInfoFromApplicationContext();
+
         sourceCursor = sourceDB.findAll();
         if (sourceCursor.getCount() == 0) {
             sourceCursor.close();
@@ -141,6 +149,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     }
 
     private void buildAdapter() {
+        sourceCursor = sourceDB.findAll();
         final List<SourceItem> items = new ArrayList<SourceItem>();
         new ManagedCursor(sourceCursor).each(new EachCursor() {
             public void call(Cursor cursor, int index) {
@@ -149,6 +158,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 String sourceName = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_NAME));
                 String sourceImage = cursor.getString(cursor.getColumnIndex(Source.KEY_IMAGE_URL));
                 String sourceDesc = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_DESC));
+                String sourceID = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_ID));
+                long sourceUpdateTime = cursor.getLong(cursor.getColumnIndex(Source.KEY_UPDATE_TIME));
 
                 SourceItem item = new SourceItem();
                 item.setSourceType(sourceType);
@@ -156,6 +167,10 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 item.setSourceImage(sourceImage);
                 item.setSourceURL(sourceContentUrl);
                 item.setSourceDesc(sourceDesc);
+                item.setSourceId(sourceID);
+                final Date date = new Date();
+                date.setTime(sourceUpdateTime);
+                item.setSourceUpdateTime(date);
 
                 items.add(item);
             }
@@ -176,7 +191,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     private void openDatabase() {
         sourceDB = new SourceDB(getApplicationContext());
         accountDB = new AccountDB(this);
-        sourceCursor = sourceDB.findAll();
+//        sourceCursor = sourceDB.findAll();
     }
 
     private void closeDB() {
@@ -270,7 +285,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 count = sourceDB.deleteAll();
                 Log.e(this.getClass().getName(), count + " sources are deleted.");
 
-                sourceCursor = sourceDB.findAll();
+
                 buildAdapter();
                 return true;
             case ACCOUNT_LIST_ID:
@@ -307,7 +322,10 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 ManagedCursor mc = new ManagedCursor(c);
                 mc.each(new EachCursor() {
                     public void call(Cursor cursor, int index) {
-                        IndexActivity.this.getListView().getChildAt(index).findViewById(R.id.loadingbar).setVisibility(View.GONE);
+                        SourceItem item = (SourceItem) adapter.getItem(index);
+                        if (token.match(item)) {
+                            IndexActivity.this.getListView().getChildAt(index).findViewById(R.id.loadingbar).setVisibility(View.GONE);
+                        }
                     }
                 });
             }
@@ -327,18 +345,19 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 ManagedCursor mc = new ManagedCursor(c);
                 mc.each(new EachCursor() {
                     public void call(Cursor cursor, int index) {
-                        IndexActivity.this.getListView().getChildAt(index).findViewById(R.id.loadingbar).setVisibility(View.GONE);
+                        SourceItem item = (SourceItem) adapter.getItem(index);
+                        if (token.match(item)) {
+                            IndexActivity.this.getListView().getChildAt(index).findViewById(R.id.loadingbar).setVisibility(View.GONE);
+                        }
                     }
                 });
             }
         });
-
     }
 
     public void notifyUpdateDone(CachedArticleSource cachedArticleSource) {
         ContentValues values = new ContentValues();
         values.put(Source.KEY_UPDATE_TIME, new Date().getTime());
-
         sourceDB.update(values, Source.KEY_SOURCE_TYPE + " = ? and " + Source.KEY_CONTENT_URL + " = ?", new String[]{cachedArticleSource.getToken().getType(), cachedArticleSource.getToken().getToken()});
     }
 }

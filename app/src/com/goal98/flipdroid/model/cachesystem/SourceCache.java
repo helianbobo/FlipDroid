@@ -19,7 +19,7 @@ public class SourceCache {
         contentDB = new SourceContentDB(context);
     }
 
-    public void put(String type, String url, String content) {
+    public synchronized void put(String type, String url, String content) {
         SourceCacheObject cacheObject = new SourceCacheObject();
         cacheObject.setType(type);
         cacheObject.setUrl(url);
@@ -28,7 +28,7 @@ public class SourceCache {
         contentDB.persist(cacheObject);
     }
 
-    public SourceCacheObject find(String type, String url) {
+    public synchronized SourceCacheObject find(String type, String url) {
         SourceCacheObject cacheObject = new SourceCacheObject();
         cacheObject.setType(type);
         cacheObject.setUrl(url);
@@ -39,11 +39,15 @@ public class SourceCache {
         return null;
     }
 
-    public void clear(String type, String url){
+    public synchronized void clear(String type, String url){
         SourceCacheObject cacheObject = new SourceCacheObject();
         cacheObject.setType(type);
         cacheObject.setUrl(url);
 
         contentDB.clear(cacheObject);
+    }
+
+    public void close() {
+        contentDB.close();
     }
 }

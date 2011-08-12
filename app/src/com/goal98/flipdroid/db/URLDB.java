@@ -58,7 +58,7 @@ public class URLDB extends AbstractDB {
         return db.insert(getTableName(), URLDB.URL, values);
     }
 
-    public TikaExtractResponse findByURL(String url) {
+    public  TikaExtractResponse findByURL(String url) {
         String[] projection = null;
         String selection = URLDB.URL + " = ?";
         String[] selectionArgs = {url};

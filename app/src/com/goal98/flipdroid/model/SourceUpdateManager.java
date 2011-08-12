@@ -14,8 +14,7 @@ import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.EachCursor;
 import com.goal98.flipdroid.util.ManagedCursor;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -27,21 +26,23 @@ import java.util.Map;
 public class SourceUpdateManager {
     private IndexActivity indexActivity;
     private SourceDB sourceDB;
-    private SourceCache sourceCache;
+//    private SourceCache sourceCache;
     private Map<String, CachedArticleSource> cachedArticleSourceMap = new HashMap<String, CachedArticleSource>();
-    private BaseAdapter adapter;
+//    private BaseAdapter adapter;
 
     public SourceUpdateManager(IndexActivity indexActivity, BaseAdapter adapter) {
         this.indexActivity = indexActivity;
         this.sourceDB = new SourceDB(indexActivity);
-        this.sourceCache = new SourceCache(indexActivity);
-        this.adapter = adapter;
+//        this.sourceCache = new SourceCache(indexActivity);
+//        this.adapter = adapter;
     }
 
 
     public void updateAll() {
         Cursor c = sourceDB.findAll();
         ManagedCursor mc = new ManagedCursor(c);
+        final SourceCache sourceCache = new SourceCache(indexActivity);
+        final List<CachedArticleSource> cachedArticleSources = new ArrayList<CachedArticleSource>();
         mc.each(new EachCursor() {
             public void call(Cursor c, int index) {
                 String sourceType = c.getString(c.getColumnIndex(Source.KEY_SOURCE_TYPE));
@@ -55,14 +56,21 @@ public class SourceUpdateManager {
                 CachedArticleSource cachedArticleSource = null;
                 if (sourceType.equals(Constants.TYPE_RSS)) {
                     RSSArticleSource rssArticleSource = new RSSArticleSource(sourceContentUrl, sourceName, sourceImage);
-                    cachedArticleSource = new CachedArticleSource(rssArticleSource, indexActivity, indexActivity);
-                    cachedArticleSource.loadSourceFromCache();
+                    cachedArticleSource = new CachedArticleSource(rssArticleSource, indexActivity, indexActivity, sourceCache);
                 }
 
                 if (cachedArticleSource != null) {
-                    cachedArticleSource.checkUpdate();
+                    cachedArticleSources.add(cachedArticleSource);
                 }
             }
         });
+        this.sourceDB.close();
+//        sourceCache.close();
+        for (int i = 0; i < cachedArticleSources.size(); i++) {
+            CachedArticleSource cachedArticleSource = cachedArticleSources.get(i);
+            cachedArticleSource.loadSourceFromCache();
+            cachedArticleSource.checkUpdate();
+        }
+
     }
 }

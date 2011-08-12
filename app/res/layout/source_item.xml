@@ -9,7 +9,7 @@
                                      android:layout_height="50dip" webimage:defaultWidth="50"
                                      webimage:defaultHeight="50" webimage:progressDrawable="@drawable/portrait"
                                      android:layout_width="50dip"></com.goal98.android.WebImageView>
-    <LinearLayout android:id="@+id/background" android:layout_width="wrap_content" android:layout_height="wrap_content"
+    <LinearLayout android:id="@+id/background" android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:orientation="vertical">
         <LinearLayout android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
@@ -28,8 +28,8 @@
                     android:singleLine="true"
                     />
             <LinearLayout android:layout_width="fill_parent"
-                          android:layout_height="fill_parent" android:paddingRight="15dip"
-                          android:orientation="horizontal" android:gravity="right">
+                          android:layout_height="fill_parent" android:paddingRight="10dip"
+                          android:orientation="horizontal" android:gravity="right|center_vertical">
                 <ProgressBar android:id="@+id/loadingbar"
                              android:layout_width="wrap_content"
                              android:layout_height="wrap_content"

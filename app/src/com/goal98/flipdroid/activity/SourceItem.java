@@ -4,6 +4,8 @@ import android.view.View;
 import android.view.ViewManager;
 import android.widget.LinearLayout;
 
+import java.util.Date;
+
 /**
  * Created by IntelliJ IDEA.
  * User: ITS
@@ -18,6 +20,15 @@ public class SourceItem {
     private String sourceType;
     private String sourceURL;
     private View sourceItemView;
+    private Date sourceUpdateTime;
+
+    public Date getSourceUpdateTime() {
+        return sourceUpdateTime;
+    }
+
+    public void setSourceUpdateTime(Date sourceUpdateTime) {
+        this.sourceUpdateTime = sourceUpdateTime;
+    }
 
     public String getSourceId() {
         return sourceId;

@@ -23,7 +23,7 @@ public class SQLLiteTikaCache implements TikaCache {
         urldb = new URLDB(context);
     }
 
-    public TikaExtractResponse load(URL url) {
+    public synchronized TikaExtractResponse load(URL url) {
         TikaExtractResponse response = urldb.findByURL(url.toExternalForm());
         return response;  //To change body of implemented methods use File | Settings | File Templates.
     }
