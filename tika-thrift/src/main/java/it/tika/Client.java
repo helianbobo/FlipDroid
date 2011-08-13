@@ -20,7 +20,7 @@ import javax.xml.ws.Response;
 public class Client {
     public static void main(String[] args) {
         try {
-			TTransport transport = new TSocket("localhost", 9090);
+			TTransport transport = new TSocket("127.0.0.1", 9090);
 			TProtocol protocol = new TBinaryProtocol(transport);
 			TikaService.Client client = new TikaService.Client(protocol);
 			transport.open();
