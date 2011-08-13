@@ -1,7 +1,7 @@
 package it.tika;
 
-import logger.Log;
-import logger.LogDBMongoDB;
+import it.tika.mongodb.logger.Log;
+import it.tika.mongodb.logger.LogDBMongoDB;
 import org.restlet.resource.ServerResource;
 
 import java.util.Date;

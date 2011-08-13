@@ -1,4 +1,4 @@
-package logger;
+package it.tika.mongodb.logger;
 
 /**
  * Created by IntelliJ IDEA.
