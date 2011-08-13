@@ -1,9 +1,7 @@
-package flipdroid.grepper.extractor.image;
+package it.tika.mongodb.image;
 
 import it.tika.mongodb.blacklist.BlacklistedImageDBMongoDB;
 import it.tika.mongodb.blacklist.BlacklistedTikaImage;
-import it.tika.mongodb.image.ImageDBMongoDB;
-import it.tika.mongodb.image.TikaImage;
 
 /**
  * Created by IntelliJ IDEA.

@@ -1,6 +1,4 @@
-package flipdroid.grepper.extractor.image;
-
-import it.tika.mongodb.image.TikaImage;
+package it.tika.mongodb.image;
 
 /**
  * Created by IntelliJ IDEA.

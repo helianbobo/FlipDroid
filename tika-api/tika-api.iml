@@ -18,7 +18,7 @@
     <orderEntry type="library" name="Maven: org.restlet.jse:org.restlet.ext.json:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.restlet.jse:org.restlet.lib.org.json:2.0" level="project" />
     <orderEntry type="library" name="Maven: org.mongodb:mongo-java-driver:2.4" level="project" />
-    <orderEntry type="module" module-name="grepper" />
+    <orderEntry type="module" module-name="tika-grepper" />
     <orderEntry type="library" name="Maven: org.codehaus.groovy:groovy-all:1.7.9" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.groovy.modules.http-builder:http-builder:0.5.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.0" level="project" />

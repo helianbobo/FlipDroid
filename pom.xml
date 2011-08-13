@@ -10,10 +10,11 @@
 
     <modules>
         <module>boilerpipe</module>
-        <module>grepper</module>
+        <module>tika-grepper</module>
         <module>tika-api</module>
         <module>tika-common</module>
         <module>tika-mongodb</module>
+        <module>tika-thrift</module>
     </modules>
 
     <build>

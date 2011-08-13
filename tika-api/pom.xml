@@ -42,7 +42,7 @@
 
         <dependency>
             <groupId>it.tika</groupId>
-            <artifactId>grepper</artifactId>
+            <artifactId>tika-grepper</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
