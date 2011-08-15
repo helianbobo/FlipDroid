@@ -105,7 +105,6 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                         t.setPadding(2, 8, 2, 8);
                     else
                         t.setPadding(2, 4, 2, 4);
-
                     t.setTextColor(0xff232323);
                     int maxLine = scaled ? maxLines + (smallScreen ? 0 : 1) : maxLines;
                     t.setMaxLines(maxLine);

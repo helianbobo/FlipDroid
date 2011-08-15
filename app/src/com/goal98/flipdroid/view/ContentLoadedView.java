@@ -195,34 +195,11 @@ public class ContentLoadedView extends ArticleView {
                 System.out.println("defaultHeight"+defaultHeight);
                 final LayoutParams imageLayoutParams = new LayoutParams(defaultWidth, defaultHeight);
                 imageLayoutParams.gravity = Gravity.CENTER;
-//                if (deviceInfo.isLargeScreen()) {
-//                    if (imageIndex != 0) {
-//                        if (paragraphsList.get(i - 1).startsWith("<img")) {
-//                            imageLayoutParams.setMargins(0, -40, 0, 0);
-//                        } else {
-//                            imageLayoutParams.setMargins(0, -120, 0, 0);
-//                        }
-//                    } else
-//                        imageLayoutParams.setMargins(0, -60, 0, 0);
-//                } else {
-//                    if (imageIndex != 0) {
-//                        if (paragraphsList.get(i - 1).startsWith("<img")) {
-//                            imageLayoutParams.setMargins(0, -30, 0, 0);
-//                        } else {
-//                            imageLayoutParams.setMargins(0, -85, 0, 0);
-//                        }
-//                    } else
-//                        imageLayoutParams.setMargins(0, -40, 0, 0);
-//                }
+
+                imageLayoutParams.setMargins(0,10,0,0);
                 contentHolderView.addView(imageView, imageLayoutParams);
 
-//                final Bitmap bitmap = article.getImagesMap().get(url);
-//                if (bitmap != null) {
-//                    imageView.imageView.setTag(url);
-//                    imageView.handleImageLoaded(bitmap, null);
-//                }else{
                 imageView.loadImage();
-//                }
 
                 imageIndex++;
 

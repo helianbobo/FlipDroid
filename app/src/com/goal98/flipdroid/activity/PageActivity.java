@@ -159,6 +159,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.deviceInfo = getDeviceInfoFromApplicationContext();
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         StopWatch sw = new StopWatch();
         sw.start("create activity");
 
@@ -167,7 +168,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         buildFadeInPageViewAnimation();
         buildFadeOutPageViewAnimation();
 
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
         setProgressBarIndeterminateVisibility(false);
         System.out.println("debug on create");
 

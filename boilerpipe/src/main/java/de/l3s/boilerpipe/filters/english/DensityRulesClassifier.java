@@ -94,7 +94,11 @@ public class DensityRulesClassifier implements
                 if (curr.getTextDensity() <= 7) {
                     if (next.getTextDensity() <= 8) {
                         if (prev.getTextDensity() <= 4) {
-                            isContent = false;
+                            if (prev.isImage() && curr.isImage()) {
+                                isContent = true;
+                            } else {
+                                isContent = false;
+                            }
                         } else {
                             isContent = true;
                         }
@@ -116,12 +120,11 @@ public class DensityRulesClassifier implements
                         if (prev.getLinkDensity() == 1.0f && prev.isImage()) {
                             if (next.getLinkDensity() == 1.0f && next.isImage()) {
                                 isContent = true;
-                            }
-                            else{
-                                if(curr.getTextDensity()>=18){
+                            } else {
+                                if (curr.getTextDensity() >= 18) {
                                     isContent = true;
-                                }else
-                                isContent = false;
+                                } else
+                                    isContent = false;
                             }
                         } else {
                             isContent = false;
