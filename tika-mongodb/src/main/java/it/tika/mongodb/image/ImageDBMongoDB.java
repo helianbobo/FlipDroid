@@ -24,8 +24,16 @@ public class ImageDBMongoDB implements ImageDBInterface {
     private Logger logger = Logger.getLogger(ImageDBMongoDB.class.getName());
 
     private ImageDBMongoDB() throws UnknownHostException {
-        Mongo mongo = new Mongo();
-        db = mongo.getDB("tika");
+        try {
+            Mongo mongo = new Mongo();
+            db = mongo.getDB("tika");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (MongoException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 
     public static ImageDBMongoDB getInstance() {

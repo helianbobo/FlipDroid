@@ -148,8 +148,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
 
     public DeviceInfo getDeviceInfoFromApplicationContext() {
-        FlipdroidApplications fa = (FlipdroidApplications) this.getApplicationContext();
-        return fa.getDeviceInfo();
+        return DeviceInfo.getInstance(this);
     }
 
     /**

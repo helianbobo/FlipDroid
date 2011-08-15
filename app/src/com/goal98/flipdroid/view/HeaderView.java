@@ -1,5 +1,6 @@
 package com.goal98.flipdroid.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -42,8 +43,7 @@ public class HeaderView extends LinearLayout {
     }
 
     public DeviceInfo getDeviceInfoFromApplicationContext(){
-        FlipdroidApplications fa = (FlipdroidApplications) this.getContext().getApplicationContext();
-        return fa.getDeviceInfo();
+        return DeviceInfo.getInstance(pageActivity);
     }
 
     public void setPageView(WeiboPageView pageView) {

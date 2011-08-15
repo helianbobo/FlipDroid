@@ -52,8 +52,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
 
 
     public DeviceInfo getDeviceInfoFromApplicationContext() {
-        FlipdroidApplications fa = (FlipdroidApplications) this.getApplicationContext();
-        return fa.getDeviceInfo();
+        return DeviceInfo.getInstance(this);
     }
 
     public void onCreate(Bundle savedInstanceState) {

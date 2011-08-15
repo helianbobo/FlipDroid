@@ -1,5 +1,6 @@
 package com.goal98.flipdroid.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -59,8 +60,7 @@ public abstract class ArticleView extends LinearLayout {
     protected abstract String getPrefix();
 
     public DeviceInfo getDeviceInfoFromApplicationContext(){
-        FlipdroidApplications fa = (FlipdroidApplications) this.getContext().getApplicationContext();
-        return fa.getDeviceInfo();
+        return DeviceInfo.getInstance((Activity) this.getContext());
     }
 
     public ArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {

@@ -62,21 +62,8 @@ public class CoverActivity extends Activity {
         setContentView(R.layout.cover);
         this.findViewById(R.id.flipbar).post(new Runnable() {
             public void run() {
-                Rect rect = new Rect();
-                Window window = getWindow();
-                window.getDecorView().getWindowVisibleDisplayFrame(rect);
-                statusBarHeight = rect.top;
-                int contentViewTop =
-                        window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
-                titleBarHeight = contentViewTop - statusBarHeight;
-                DeviceInfo deviceInfo = new DeviceInfo();
 
-                deviceInfo.setDisplayHeight((int) ((CoverActivity.this.getWindowManager().getDefaultDisplay().getHeight()) - statusBarHeight - titleBarHeight * 2.2));
-                deviceInfo.setDisplayWidth((CoverActivity.this.getWindowManager().getDefaultDisplay().getWidth()) - 20);
-                deviceInfo.setWidth(CoverActivity.this.getWindowManager().getDefaultDisplay().getWidth());
-                deviceInfo.setHeight(CoverActivity.this.getWindowManager().getDefaultDisplay().getHeight());
-                FlipdroidApplications application = (FlipdroidApplications) getApplication();
-                application.setDeviceInfo(deviceInfo);
+                DeviceInfo.getInstance(CoverActivity.this);
             }
         });
 //        if (!NetworkUtil.isNetworkAvailable(CoverActivity.this)) {

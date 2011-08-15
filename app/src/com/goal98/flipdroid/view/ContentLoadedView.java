@@ -147,19 +147,21 @@ public class ContentLoadedView extends ArticleView {
                 tv.setGravity(Gravity.LEFT | Gravity.TOP);
                 tv.setPadding(2, 3, 2, 3);
                 StringBuilder sb = new StringBuilder();
-                sb.append(paragraph.replaceAll("[(<p>)(</p>)]", ""));
+                String formatted = format(paragraph);
+                sb.append(formatted);
 
                 while (i + 1 < paragraphsList.size()) {
                     final String nextParagraph = paragraphsList.get(i + 1);
                     if (nextParagraph.startsWith("<p>")) {
-                        sb.append("\n");
-                        sb.append(nextParagraph.replaceAll("[(<p>)(</p>)]", ""));
+                        sb.append("<br>");
+                        formatted = format(paragraph);
+                        sb.append(formatted);
                         i++;
                     } else {
                         break;
                     }
                 }
-                tv.setText(sb.toString());
+                tv.setText(Html.fromHtml(sb.toString()));
                 contentHolderView.addView(tv, textLayoutParams);
             }
             TextView tv = new TextView(this.getContext());
@@ -215,6 +217,10 @@ public class ContentLoadedView extends ArticleView {
 
             }
         }
+    }
+
+    private String format(String paragraph) {
+        return paragraph.replaceAll("<p>", "<span>").replaceAll("</p>","</span>");
     }
 
     public void renderBeforeLayout() {

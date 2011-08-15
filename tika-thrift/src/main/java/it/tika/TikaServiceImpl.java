@@ -19,7 +19,7 @@ import java.nio.charset.UnsupportedCharsetException;
  * Time: 10:24 AM
  * To change this template use File | Settings | File Templates.
  */
-public class TikaServiceImpl implements TikaService.Iface{
+public class TikaServiceImpl implements TikaService.Iface {
     public TikaResponse fire(TikaRequest request) throws TikaException, TException {
         WebpageExtractor extractor = new WebpageExtractor(new TikaImageService());
         TikaResponse response = new TikaResponse();
@@ -51,7 +51,16 @@ public class TikaServiceImpl implements TikaService.Iface{
             }
             return response;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new TikaException(e.getMessage());
         }
+    }
+
+    public static void main(String[] args) throws TException, TikaException {
+        TikaServiceImpl tikaService = new TikaServiceImpl();
+        TikaRequest request = new TikaRequest();
+        request.setUrl("http://disease.39.net/xxg/gxz/ysbj/261739.html");
+        TikaResponse response = tikaService.fire(request);
+        System.out.println(response.getContent());
     }
 }

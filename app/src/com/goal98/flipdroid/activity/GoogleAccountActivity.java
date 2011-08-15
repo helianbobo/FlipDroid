@@ -25,8 +25,7 @@ public class GoogleAccountActivity extends SinaAccountActivity {
     public static final String GOOGLE_ACCOUNT_AUTH = "GOOGLE_ACCOUNT_AUTH";
 
     public DeviceInfo getDeviceInfoFromApplicationContext(){
-        FlipdroidApplications fa = (FlipdroidApplications) this.getApplicationContext();
-        return fa.getDeviceInfo();
+        return DeviceInfo.getInstance(this);
     }
 
     protected void initView() {

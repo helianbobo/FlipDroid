@@ -91,8 +91,8 @@ public class DensityRulesClassifier implements
 
         if (curr.getLinkDensity() <= 0.333333) {
             if (prev.getLinkDensity() <= 0.555556) {
-                if (curr.getTextDensity() <= 9) {
-                    if (next.getTextDensity() <= 10) {
+                if (curr.getTextDensity() <= 7) {
+                    if (next.getTextDensity() <= 8) {
                         if (prev.getTextDensity() <= 4) {
                             isContent = false;
                         } else {
@@ -118,7 +118,7 @@ public class DensityRulesClassifier implements
                                 isContent = true;
                             }
                             else{
-                                if(curr.getTextDensity()>20){
+                                if(curr.getTextDensity()>=18){
                                     isContent = true;
                                 }else
                                 isContent = false;

@@ -202,6 +202,7 @@ public class ImageFilter implements Extractor {
         if (largestAreaIndex >= 0 && filteredImages.size() > largestAreaIndex)
             Collections.swap(filteredImages, 0, largestAreaIndex);
 
+        System.out.println(urlAbstract.getContent());
         Paragraphs paragraphs = new Paragraphs();
         paragraphs.toParagraph(urlAbstract.getContent());
         paragraphs.retain(filteredImages);

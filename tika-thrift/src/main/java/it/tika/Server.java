@@ -10,27 +10,14 @@ import org.apache.thrift.transport.TServerTransport;
 
 public class Server {
     public static void main(String[] args) {
-       try {
-
+        System.out.println("Starting the server...");
+        try {
             TServerTransport serverTransport = new TServerSocket(9090);
-
             TThreadPoolServer.Args serverArgs = new TThreadPoolServer.Args(serverTransport);
             serverArgs.processor(new TikaService.Processor(new TikaServiceImpl()));
-            //serverArgs.transportFactory(new TFramedTransport.Factory());
-            //serverArgs.protocolFactory(new TBinaryProtocol.Factory(true, true));
-            TServer server = new TThreadPoolServer(serverArgs);
-
-             /*
-            TServerTransport serverTransport = new TServerSocket(9090);
-            Args serverArgs = new Args(serverTransport);
-            //TThreadPoolServer.Args serverArgs = new TThreadPoolServer.Args(serverTransport);
-            serverArgs.processor(new TikaService.Processor(new TikaServiceImpl()));
-            //serverArgs.transportFactory(new TFramedTransport.Factory());
+            serverArgs.transportFactory(new TFramedTransport.Factory());
             serverArgs.protocolFactory(new TBinaryProtocol.Factory(true, true));
-           // TServer server = new TThreadPoolServer(serverArgs);
-            TServer server = new TSimpleServer(serverArgs);
-            */
-
+            TServer server = new TThreadPoolServer(serverArgs);
             server.serve();
             System.out.println("Starting the server...");
 

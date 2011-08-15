@@ -1,5 +1,6 @@
 package com.goal98.flipdroid.view;
 
+import android.app.Activity;
 import com.goal98.flipdroid.activity.FlipdroidApplications;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.model.Article;
@@ -20,8 +21,7 @@ public class Page {
 
 
     public DeviceInfo getDeviceInfoFromApplicationContext(){
-        FlipdroidApplications fa = (FlipdroidApplications) activity.getApplicationContext();
-        return fa.getDeviceInfo();
+        return DeviceInfo.getInstance(activity);
     }
 
     public Page(PageActivity activity) {

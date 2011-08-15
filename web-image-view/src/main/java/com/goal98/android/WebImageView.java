@@ -1,15 +1,18 @@
 package com.goal98.android;
 
+import android.R;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.FaceDetector;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ProgressBar;
@@ -122,7 +125,7 @@ public class WebImageView extends ViewSwitcher {
         this.imageUrl = imageUrl;
         this.progressDrawable = progressDrawable;
         this.errorDrawable = errorDrawable;
-
+this.setInAnimation(this.getContext(), R.anim.fade_in);
         ImageLoader.initialize(context);
 
         // ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f,

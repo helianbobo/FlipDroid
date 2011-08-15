@@ -32,6 +32,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Highlights text blocks in an HTML document that have been marked as "content"
@@ -105,8 +107,35 @@ public final class HTMLHighlighter {
             throws BoilerpipeProcessingException {
         final Implementation implementation = new Implementation();
         implementation.process(doc, is, images);
-        return implementation.html.toString().replaceAll("[\\n]+", "\n");//replace multiple \n to a single \n
+
+        String html = implementation.html.toString();
+        if (outputHighlightOnly) {
+            Matcher m;
+
+            boolean repeat = true;
+            while (repeat) {
+                repeat = false;
+                m = PAT_TAG_NO_TEXT.matcher(html);
+                if (m.find()) {
+                    repeat = true;
+                    html = m.replaceAll("");
+                }
+
+                m = PAT_SUPER_TAG.matcher(html);
+                if (m.find()) {
+                    repeat = true;
+                    html = m.replaceAll(m.group(1));
+                }
+            }
+        }
+
+        return html;
+
+
     }
+
+    private static final Pattern PAT_TAG_NO_TEXT = Pattern.compile("<[^/][^>]*></[^>]*>");
+    private static final Pattern PAT_SUPER_TAG = Pattern.compile("^<[^>]*>(<.*?>)</[^>]*>$");
 
     public String process(final URL url, final BoilerpipeExtractor extractor)
             throws IOException, BoilerpipeProcessingException, SAXException {
@@ -152,7 +181,7 @@ public final class HTMLHighlighter {
     }
 
     private String postProcess(String process) {
-        return process.replace("<p></p>","").replace("<p><img","<img");
+        return process.replace("<p><img", "<img").replace("</img></p>", "</img>");
     }
 
     private String title = null;
@@ -349,6 +378,7 @@ public final class HTMLHighlighter {
         private int characterElementIdx = 0;
         private final BitSet contentBitSet = new BitSet();
         private final HTMLHighlighter hl = HTMLHighlighter.this;
+        private boolean inBlockQuote;
 
         Implementation() {
             super(new HTMLConfiguration());
@@ -420,23 +450,28 @@ public final class HTMLHighlighter {
 //            }
             try {
                 if (inIgnorableElement == 0) {
-
                     if (qName.equalsIgnoreCase("h1") ||
                             qName.equalsIgnoreCase("h2") ||
                             qName.equalsIgnoreCase("h3") ||
                             qName.equalsIgnoreCase("h4") ||
                             qName.equalsIgnoreCase("h5") ||
-                            qName.equalsIgnoreCase("h6") ||
+                            qName.equalsIgnoreCase("h6")||
+                            qName.equalsIgnoreCase("strong")) {
+                        html.append("<" + qName + ">");
+                    }
+                    if (
                             qName.equalsIgnoreCase("p") ||
-                            qName.equalsIgnoreCase("br") ||
-                            qName.equalsIgnoreCase("li")
-                            )
-//                        html.append('\n');
-                    {
-                        if(html.toString().length()!=0 && !html.toString().endsWith("</p>") && !html.toString().endsWith("/>"))
-                            html.append("</p>");
-                        if (!html.toString().endsWith("<p>"))
+                                    qName.equalsIgnoreCase("br") ||
+                                    qName.equalsIgnoreCase("li")
+                            ) {
+
+                        if (inBlockQuote) {
+                            html.append("<p><blockquote>");
+                        } else
                             html.append("<p>");
+                    }
+                    if (qName.equalsIgnoreCase("blockquote")) {
+                        inBlockQuote = true;
                     }
                     if (qName.equalsIgnoreCase("img") || qName.equalsIgnoreCase("image")) {
 
@@ -455,10 +490,10 @@ public final class HTMLHighlighter {
                             for (int i = 0; i < HTMLHighlighter.this.images.size(); i++) {
                                 String s = HTMLHighlighter.this.images.get(i);
                                 if (s.indexOf(image) != -1) {
-                                    if(html.toString().length()!=0 && !html.toString().endsWith("</p>") && !html.toString().endsWith("/>")){
-                                       html.append("</p>");
-                                    }
-                                    html.append("<img src="+image+"/>");
+//                                    if (html.toString().length() != 0 && !html.toString().endsWith("</p>") && !html.toString().endsWith("/>")) {
+//                                        html.append("</p>");
+//                                    }
+                                    html.append("<img src=" + image + ">hack</img>");
                                     break;
                                 }
                             }
@@ -474,6 +509,7 @@ public final class HTMLHighlighter {
 
         public void endElement(String uri, String localName, String qName)
                 throws SAXException {
+            System.out.println(qName);
             TagAction ta = TAG_ACTIONS.get(localName);
             if (ta != null) {
                 ta.beforeEnd(this, localName);
@@ -482,27 +518,34 @@ public final class HTMLHighlighter {
             try {
                 if (inIgnorableElement == 0) {
                     if (outputHighlightOnly) {
-                        boolean highlight = contentBitSet
-                                .get(characterElementIdx);
-
-                        if (!highlight) {
-                            return;
-                        }
+//                        boolean highlight = contentBitSet
+//                                .get(characterElementIdx);
+//
+//                        if (!highlight) {
+//                            return;
+//                        }
                     }
                     if (qName.equalsIgnoreCase("h1") ||
                             qName.equalsIgnoreCase("h2") ||
                             qName.equalsIgnoreCase("h3") ||
                             qName.equalsIgnoreCase("h4") ||
                             qName.equalsIgnoreCase("h5") ||
-                            qName.equalsIgnoreCase("h6") ||
-                            qName.equalsIgnoreCase("p") ||
-                            qName.equalsIgnoreCase("br") ||
-                            qName.equalsIgnoreCase("li")
+                            qName.equalsIgnoreCase("h6")||
+                            qName.equalsIgnoreCase("strong")) {
+                        html.append("</" + qName + ">");
+                    }
+                    if (qName.equalsIgnoreCase("p") ||
+                                    qName.equalsIgnoreCase("br") ||
+                                    qName.equalsIgnoreCase("li")
                             ) {
-                        if (html.toString().length()!=0&&!html.toString().endsWith("</p>"))
+                        if (inBlockQuote) {
+                            html.append("</blockquote></p>");
+                        } else
                             html.append("</p>");
                     }
-
+                    if (qName.equalsIgnoreCase("blockquote")) {
+                        inBlockQuote = false;
+                    }
                 }
             } finally {
                 if (ta != null) {

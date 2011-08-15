@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.view;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -89,8 +90,7 @@ public class WeiboPageView extends FrameLayout {
     }
 
     public DeviceInfo getDeviceInfoFromApplicationContext(){
-        FlipdroidApplications fa = (FlipdroidApplications) this.getContext().getApplicationContext();
-        return fa.getDeviceInfo();
+        return DeviceInfo.getInstance((Activity) this.getContext());
     }
 
     public List<ArticleView> getWeiboViews() {
