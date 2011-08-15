@@ -27,7 +27,7 @@ public class ArticleTextViewRender {
 
     public void renderTextView(TextView tv, final Article article) {
         if (article != null && article.getContent() != null) {
-            tv.setText(Html.fromHtml(article.getContent().replaceAll("<img.*?>","")));
+            tv.setText(Html.fromHtml(article.getContent().replaceAll("(<img.*?>)|(<blockquote>)|(</blockquote>)|(hack</img>)","")));
         } else {
             tv.setVisibility(View.GONE);
             tv.setTextSize(25);

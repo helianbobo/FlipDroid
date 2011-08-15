@@ -69,8 +69,24 @@ public class WebpageExtractor {
     }
 
     public static final Pattern PAT_TAG_NO_TEXT = Pattern.compile("<[^/][^>]*></[^>]*>");
+   public static final Pattern PAT_SUPER_TAG = Pattern.compile("^<[^>]*>(<.*?>)</[^>]*>$");
     public static void main(String[] args) {
-        Matcher m = PAT_TAG_NO_TEXT.matcher("<p><img src=http://www.ifanr.com/wp-content/uploads/2011/08/20110810_01-360x541.jpg></img></p>");
-        System.out.println(m.find());
+        String html = "<p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><p></p><H1></H1><p></p><p><p>";
+        boolean repeat = true;
+        while (repeat) {
+            repeat = false;
+            Matcher m = PAT_TAG_NO_TEXT.matcher(html);
+            if (m.find()) {
+                repeat = true;
+                html = m.replaceAll("");
+            }
+             m = PAT_SUPER_TAG.matcher(html);
+                if (m.find()) {
+                    repeat = true;
+                    html = m.replaceAll(m.group(1));
+                }
+
+        }
+        System.out.println(html);
     }
 }

@@ -276,13 +276,16 @@ this.setInAnimation(this.getContext(), R.anim.fade_in);
             System.out.println("height" + height);
 
             float scale = 0.0f;
-            if (bmpWidth > bmpHeight * 1.15) {
+            if (bmpWidth > bmpHeight * 1.25) {
                 scale = (float) width / widthDip;
                 fatOrSlim = FAT;
             } else {
                 scale = (float) height / heightDip;
                 fatOrSlim = SLIM;
                 percentageInWidth = 50 * (bmpWidth / bmpHeight);
+            }
+            if(scale>1){
+                scale=1;
             }
             System.out.println("scale" + scale);
 

@@ -121,11 +121,11 @@ public final class HTMLHighlighter {
                     html = m.replaceAll("");
                 }
 
-                m = PAT_SUPER_TAG.matcher(html);
-                if (m.find()) {
-                    repeat = true;
-                    html = m.replaceAll(m.group(1));
-                }
+//                m = PAT_SUPER_TAG.matcher(html);
+//                if (m.find()) {
+//                    repeat = true;
+//                    html = m.replaceAll(m.group(1));
+//                }
             }
         }
 
@@ -455,7 +455,7 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("h3") ||
                             qName.equalsIgnoreCase("h4") ||
                             qName.equalsIgnoreCase("h5") ||
-                            qName.equalsIgnoreCase("h6")||
+                            qName.equalsIgnoreCase("h6") ||
                             qName.equalsIgnoreCase("strong")) {
                         html.append("<" + qName + ">");
                     }
@@ -490,10 +490,15 @@ public final class HTMLHighlighter {
                             for (int i = 0; i < HTMLHighlighter.this.images.size(); i++) {
                                 String s = HTMLHighlighter.this.images.get(i);
                                 if (s.indexOf(image) != -1) {
-//                                    if (html.toString().length() != 0 && !html.toString().endsWith("</p>") && !html.toString().endsWith("/>")) {
-//                                        html.append("</p>");
-//                                    }
-                                    html.append("<img src=" + image + ">hack</img>");
+                                    if (html.toString().length() != 0 && !html.toString().endsWith("</p>") && !html.toString().endsWith("/>")) {
+                                        if (inBlockQuote) {
+                                            html.append("</blockquote></p>");
+                                        } else
+                                            html.append("</p>");
+                                    }
+                                    html.append("<img src=" + image + " >hack</img>");//there must be a blank after image for parsing purpose
+                                    if (inBlockQuote)
+                                        html.append("<blockquote><p>");
                                     break;
                                 }
                             }
@@ -509,7 +514,8 @@ public final class HTMLHighlighter {
 
         public void endElement(String uri, String localName, String qName)
                 throws SAXException {
-            System.out.println(qName);
+//            System.out.println(qName);
+
             TagAction ta = TAG_ACTIONS.get(localName);
             if (ta != null) {
                 ta.beforeEnd(this, localName);
@@ -530,13 +536,13 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("h3") ||
                             qName.equalsIgnoreCase("h4") ||
                             qName.equalsIgnoreCase("h5") ||
-                            qName.equalsIgnoreCase("h6")||
+                            qName.equalsIgnoreCase("h6") ||
                             qName.equalsIgnoreCase("strong")) {
                         html.append("</" + qName + ">");
                     }
                     if (qName.equalsIgnoreCase("p") ||
-                                    qName.equalsIgnoreCase("br") ||
-                                    qName.equalsIgnoreCase("li")
+                            qName.equalsIgnoreCase("br") ||
+                            qName.equalsIgnoreCase("li")
                             ) {
                         if (inBlockQuote) {
                             html.append("</blockquote></p>");

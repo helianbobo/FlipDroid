@@ -51,7 +51,7 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
         boolean changes = false;
 
         for (TextBlock tb : doc.getTextBlocks()) {
-            if (tb.getNumWords() <= 20 ) {
+            if (tb.getNumWords() <= 15 ) {
                 if(tb.isImage())
                     continue;
                 final String text = tb.getText().trim();

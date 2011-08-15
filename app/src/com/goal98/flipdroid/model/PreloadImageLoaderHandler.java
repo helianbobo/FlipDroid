@@ -18,30 +18,35 @@ public abstract class PreloadImageLoaderHandler implements MyHandler {
     protected String url;
     private DeviceInfo deviceInfo;
 
-    public PreloadImageLoaderHandler(DeviceInfo deviceInfo){
+    public PreloadImageLoaderHandler(DeviceInfo deviceInfo) {
         this.deviceInfo = deviceInfo;
     }
+
     protected Bitmap scale(Bitmap bitmap) {
         if (bitmap == null)
             return null;
 
         int bmpWidth = bitmap.getWidth();
         int bmpHeight = bitmap.getHeight();
-        int heightDip = 160 * bmpHeight / DisplayMetrics.DENSITY_DEFAULT;
-        int widthDip = 160 * bmpWidth / DisplayMetrics.DENSITY_DEFAULT;
+        int heightDip = (int) (160 * bmpHeight / deviceInfo.getDensity());
+        int widthDip = (int) (160 * bmpWidth / deviceInfo.getDensity());
 
         float scale = 1;
-        if (heightDip >= widthDip) {
-            if (deviceInfo.getHeight() < (4 * heightDip / 3f)) {
-                scale = deviceInfo.getHeight() / (4 * heightDip / 3f);
-            }
-        } else {
-            if (deviceInfo.getWidth() < widthDip) {
-                scale = deviceInfo.getWidth() / (float) widthDip;
-            }
+//        if (heightDip >= widthDip) {
+//            if (deviceInfo.getHeight() <= (4 * heightDip / 3f)) {
+//                scale = deviceInfo.getHeight() / (4 * heightDip / 3f);
+//            }
+//        } else {
+//            if (deviceInfo.getWidth() < widthDip) {
+//                scale = deviceInfo.getWidth() / (float) widthDip;
+//            }
+//        }
+        scale = (deviceInfo.getWidth()-60) / (float) widthDip;
+        if (scale > 1) {
+            scale = 1.0f;
         }
-        System.out.println(scale);
-        if(scale == 1.0)
+        System.out.println("scale"+scale);
+        if (scale == 1.0)
             return bitmap;
 
         Matrix matrix = new Matrix();

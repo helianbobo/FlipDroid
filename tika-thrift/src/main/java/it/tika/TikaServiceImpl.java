@@ -23,7 +23,6 @@ public class TikaServiceImpl implements TikaService.Iface {
     public TikaResponse fire(TikaRequest request) throws TikaException, TException {
         WebpageExtractor extractor = new WebpageExtractor(new TikaImageService());
         TikaResponse response = new TikaResponse();
-        System.out.println(request.getUrl());
         try {
             String urlDecoded = java.net.URLDecoder.decode(request.getUrl(), "UTF-8");
             byte[] rawBytes = URLRawRepo.getInstance().fetch(urlDecoded);
@@ -59,7 +58,7 @@ public class TikaServiceImpl implements TikaService.Iface {
     public static void main(String[] args) throws TException, TikaException {
         TikaServiceImpl tikaService = new TikaServiceImpl();
         TikaRequest request = new TikaRequest();
-        request.setUrl("http://disease.39.net/xxg/gxz/ysbj/261739.html");
+        request.setUrl("http://www.ifanr.com/48929");
         TikaResponse response = tikaService.fire(request);
         System.out.println(response.getContent());
     }

@@ -1,5 +1,6 @@
 package flipdroid.grepper.extractor.pipe;
 
+import com.goal98.tika.common.ImageInfo;
 import com.goal98.tika.common.Paragraphs;
 import flipdroid.grepper.URLAbstract;
 import flipdroid.grepper.extractor.Extractor;
@@ -14,10 +15,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -58,7 +56,7 @@ public class ImageFilter implements Extractor {
         } catch (MalformedURLException e) {
 
         }
-
+        Map<String, ImageInfo> imageInfoMap = new HashMap<String, ImageInfo>();
         int largestAreaIndex = -1;
         int largestArea = -1;
         int index = 0;
@@ -176,9 +174,11 @@ public class ImageFilter implements Extractor {
 
             TikaImage newImage = new TikaImage();
             newImage.setUrl(queryURL);
-            newImage.setSize(fileSize);
+            newImage.setSize(ii.getSize());
             newImage.setHeight(ii.getHeight());
             newImage.setWidth(ii.getWidth());
+
+
             if (tikaImageService != null) {
                 tikaImageService.cacheToDB(newImage);
             }
@@ -189,7 +189,7 @@ public class ImageFilter implements Extractor {
             } else if (fileSize < 5000 && height < 130 && width < 130) {
                 imagesIterator.remove();
             } else {
-
+                imageInfoMap.put(queryURL, ii);
                 filteredImages.add(queryURL);
                 final int fileArea = ii.getWidth() * ii.getHeight();
                 if (fileArea > largestArea) {
@@ -205,7 +205,7 @@ public class ImageFilter implements Extractor {
         System.out.println(urlAbstract.getContent());
         Paragraphs paragraphs = new Paragraphs();
         paragraphs.toParagraph(urlAbstract.getContent());
-        paragraphs.retain(filteredImages);
+        paragraphs.retain(filteredImages,imageInfoMap);
         urlAbstract.setContent(paragraphs.toContent());
         urlAbstract.setImages(filteredImages);
     }
@@ -282,35 +282,7 @@ public class ImageFilter implements Extractor {
         return fileLength;
     }
 
-    private class ImageInfo {
-        private int size;
-        private int width;
-        private int height;
 
-        public int getSize() {
-            return size;
-        }
-
-        public void setSize(int size) {
-            this.size = size;
-        }
-
-        public int getWidth() {
-            return width;
-        }
-
-        public void setWidth(int width) {
-            this.width = width;
-        }
-
-        public int getHeight() {
-            return height;
-        }
-
-        public void setHeight(int height) {
-            this.height = height;
-        }
-    }
 
     private class InvalidImageInfo extends ImageInfo {
         public int getSize() {

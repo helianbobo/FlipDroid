@@ -2,6 +2,7 @@ package com.goal98.flipdroid.util;
 
 import android.app.Activity;
 import android.graphics.Rect;
+import android.util.DisplayMetrics;
 import android.view.Window;
 import com.goal98.flipdroid.activity.FlipdroidApplications;
 
@@ -18,6 +19,7 @@ public class DeviceInfo {
     private int width;
     private int height;
     private static DeviceInfo deviceInfo;
+    private float density;
 
     private DeviceInfo() {
 
@@ -38,11 +40,20 @@ public class DeviceInfo {
             deviceInfo.setDisplayWidth((activity.getWindowManager().getDefaultDisplay().getWidth()) - 20);
             deviceInfo.setWidth(activity.getWindowManager().getDefaultDisplay().getWidth());
             deviceInfo.setHeight(activity.getWindowManager().getDefaultDisplay().getHeight());
+            deviceInfo.setDensityScale(activity.getResources().getDisplayMetrics().density);
             FlipdroidApplications application = (FlipdroidApplications) activity.getApplication();
             application.setDeviceInfo(deviceInfo);
         }
         return deviceInfo;
 
+    }
+
+    private void setDensityScale(float density) {
+        this.density = density;
+    }
+
+    public float getDensity() {
+        return DisplayMetrics.DENSITY_DEFAULT*density;
     }
 
     public int getDisplayHeight() {
@@ -84,5 +95,9 @@ public class DeviceInfo {
 
     public boolean isSmallScreen() {
         return height == 320;
+    }
+
+    public int getDipFromPixel(int px) {
+        return (int) (px*160/ this.getDensity());
     }
 }
