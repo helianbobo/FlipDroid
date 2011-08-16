@@ -34,15 +34,16 @@ public class DeviceInfo {
             int contentViewTop =
                     window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
             int titleBarHeight = contentViewTop - statusBarHeight;
-
+            System.out.println("creating new device info");
             deviceInfo = new DeviceInfo();
-            deviceInfo.setDisplayHeight((int) ((activity.getWindowManager().getDefaultDisplay().getHeight()) - statusBarHeight - titleBarHeight * 2.2));
+            deviceInfo.setDisplayHeight((int) ((activity.getWindowManager().getDefaultDisplay().getHeight())*5/6));
             deviceInfo.setDisplayWidth((activity.getWindowManager().getDefaultDisplay().getWidth()) - 20);
             deviceInfo.setWidth(activity.getWindowManager().getDefaultDisplay().getWidth());
             deviceInfo.setHeight(activity.getWindowManager().getDefaultDisplay().getHeight());
             deviceInfo.setDensityScale(activity.getResources().getDisplayMetrics().density);
             FlipdroidApplications application = (FlipdroidApplications) activity.getApplication();
             application.setDeviceInfo(deviceInfo);
+            System.out.println("creating new device info done" + deviceInfo);
         }
         return deviceInfo;
 
@@ -99,5 +100,10 @@ public class DeviceInfo {
 
     public int getDipFromPixel(int px) {
         return (int) (px*160/ this.getDensity());
+    }
+
+    @Override
+    public String toString() {
+        return "display:" + displayWidth + "," + displayHeight+", actual:"+width +"," + height+",scale:" + density;
     }
 }

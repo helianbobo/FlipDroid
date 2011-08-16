@@ -33,10 +33,13 @@ public class WeiboArticleView extends ExpandableArticleView {
         super(context, article, pageView, placedAtBottom, executor);
     }
 
+    public void setText() {
+        contentView.setText(article.getStatus());
+    }
+
     protected String getPrefix() {
         return Constants.WITHURLPREFIX;
     }
-
 
     protected void reloadOriginalView() {
         switcher.setDisplayedChild(0);
@@ -111,6 +114,4 @@ public class WeiboArticleView extends ExpandableArticleView {
             }
         }).start();
     }
-
-
 }

@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.text.Html;
+import android.text.TextUtils;
 import android.text.style.ParagraphStyle;
 import android.util.FloatMath;
 import android.util.Log;
@@ -102,35 +103,74 @@ public class ContentLoadedView extends ArticleView {
         LayoutInflater inflator = LayoutInflater.from(this.getContext());
         LinearLayout layout = (LinearLayout) inflator.inflate(R.layout.enlarged_content, this);
 
+        if (article.getSourceType().equals(Constants.TYPE_SINA_WEIBO) || article.getSourceType().equals(Constants.TYPE_MY_SINA_WEIBO)) {
+            LinearLayout reference = (LinearLayout) layout.findViewById(R.id.reference);
+            LinearLayout shareByll = (LinearLayout) layout.findViewById(R.id.shareByll);
+            shareByll.setVisibility(GONE);
+            reference.setVisibility(VISIBLE);
+            WebImageView icon = new WebImageView(this.getContext(), article.getPortraitImageUrl().toExternalForm(), true);
+            icon.setDefaultHeight(50);
+            icon.setDefaultWidth(50);
+            reference.addView(icon, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+
+            TextView author = new TextView(this.getContext());
+            author.setText(article.getAuthor());
+            if (deviceInfo.isLargeScreen())
+                author.setTextSize(24);
+            else if (deviceInfo.isSmallScreen())
+                author.setTextSize(16);
+            else
+                author.setTextSize(20);
+
+            author.setTextColor(Color.parseColor("#AAAAAA"));
+
+            TextView referenceText = new TextView(this.getContext());
+            referenceText.setSingleLine(false);
+            referenceText.setEllipsize(TextUtils.TruncateAt.END);
+            referenceText.setMaxLines(2);
+            referenceText.setText(article.getStatus());
+            if (deviceInfo.isLargeScreen())
+                referenceText.setTextSize(24);
+            else if (deviceInfo.isSmallScreen())
+                referenceText.setTextSize(16);
+            else
+                referenceText.setTextSize(20);
+
+            referenceText.setTextColor(Color.parseColor("#AAAAAA"));
+            reference.addView(author, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            reference.addView(referenceText, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        } else {
+            this.authorView = (TextView) layout.findViewById(R.id.author);
+            TextView sharedBy = (TextView) layout.findViewById(R.id.sharedBy);
+            this.titleView = (TextView) layout.findViewById(R.id.title);
+            authorView.setText(article.getAuthor());
+            titleView.setText(article.getTitle());
+            createDateView = (TextView) layout.findViewById(R.id.createdDate);
+
+            String time = PrettyTimeUtil.getPrettyTime(this.getContext(), article.getCreatedDate());
+            createDateView.setText(time);
+
+            this.portraitView = (WebImageView) layout.findViewById(R.id.portrait);
+            if (article.getPortraitImageUrl() != null) {
+                this.portraitView.setImageUrl(article.getPortraitImageUrl().toString());
+                this.portraitView.loadImage();
+            } else {
+                this.portraitView.setVisibility(View.GONE);
+            }
+            if (deviceInfo.isLargeScreen()) {
+                authorView.setTextSize(16);
+                createDateView.setTextSize(16);
+                sharedBy.setTextSize(16);
+                titleView.setTextSize(20);
+            }
+        }
         ScrollView wrapper = (ScrollView) layout.findViewById(R.id.wrapper);
         wrapper.setVerticalScrollBarEnabled(true);
-
-        this.authorView = (TextView) layout.findViewById(R.id.author);
-        TextView sharedBy = (TextView) layout.findViewById(R.id.sharedBy);
-        this.titleView = (TextView) layout.findViewById(R.id.title);
-        authorView.setText(article.getAuthor());
-        titleView.setText(article.getTitle());
-        createDateView = (TextView) layout.findViewById(R.id.createdDate);
-
-        String time = PrettyTimeUtil.getPrettyTime(this.getContext(), article.getCreatedDate());
-        createDateView.setText(time);
-
-        this.portraitView = (WebImageView) layout.findViewById(R.id.portrait);
-        if (article.getPortraitImageUrl() != null) {
-            this.portraitView.setImageUrl(article.getPortraitImageUrl().toString());
-            this.portraitView.loadImage();
-        } else {
-            this.portraitView.setVisibility(View.GONE);
-        }
 
         this.contentHolderView = (LinearLayout) layout.findViewById(R.id.contentHolder);
         int txtSize = 0;
         if (deviceInfo.isLargeScreen()) {
             txtSize = 20;
-            authorView.setTextSize(16);
-            createDateView.setTextSize(16);
-            sharedBy.setTextSize(16);
-            titleView.setTextSize(20);
         } else {
             txtSize = 18;
         }
@@ -176,27 +216,26 @@ public class ContentLoadedView extends ArticleView {
             }
 
 
-
             if (uiObject.getType().equals(TikaUIObject.TYPE_IMAGE)) {
-                ImageInfo imageInfo = ((ImageInfo)uiObject);
+                ImageInfo imageInfo = ((ImageInfo) uiObject);
                 String url = imageInfo.getUrl();
                 WebImageView imageView = new WebImageView(this.getContext(), url, false);
 
 //                imageView.imageView.setTag(url);
 
                 final DeviceInfo deviceInfo = getDeviceInfoFromApplicationContext();
-                final int picWidth = deviceInfo.getDipFromPixel(imageInfo.getWidth())-60;
-                final int defaultWidth = picWidth >deviceInfo.getDisplayWidth()-40?deviceInfo.getDisplayWidth()-40:picWidth;
+                final int picWidth = deviceInfo.getDipFromPixel(imageInfo.getWidth()) - 60;
+                final int defaultWidth = picWidth > deviceInfo.getDisplayWidth() - 40 ? deviceInfo.getDisplayWidth() - 40 : picWidth;
                 imageView.setDefaultWidth(defaultWidth);
-                final int defaultHeight = imageInfo.getHeight()*defaultWidth/imageInfo.getWidth();
+                final int defaultHeight = imageInfo.getHeight() * defaultWidth / imageInfo.getWidth();
                 imageView.setDefaultHeight(defaultHeight);
 
-                System.out.println("defaultWidth"+defaultWidth);
-                System.out.println("defaultHeight"+defaultHeight);
+                System.out.println("defaultWidth" + defaultWidth);
+                System.out.println("defaultHeight" + defaultHeight);
                 final LayoutParams imageLayoutParams = new LayoutParams(defaultWidth, defaultHeight);
                 imageLayoutParams.gravity = Gravity.CENTER;
 
-                imageLayoutParams.setMargins(0,10,0,0);
+                imageLayoutParams.setMargins(0, 10, 0, 0);
                 contentHolderView.addView(imageView, imageLayoutParams);
 
                 imageView.loadImage();
@@ -220,7 +259,7 @@ public class ContentLoadedView extends ArticleView {
     }
 
     public void renderBeforeLayout() {
-        //To change body of implemented methods use File | Settings | File Templates.
+
     }
 
 

@@ -3,6 +3,7 @@ package com.goal98.flipdroid.view;
 import android.content.Context;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -116,9 +117,9 @@ public abstract class ExpandableArticleView extends ArticleView {
 
         contentView.setTextColor(0xff232323);
         int maxLine = scaled ? maxLines + (smallScreen ? 0 : 1) : maxLines;
-        contentView.setMaxLines(maxLine);
 
-        new ArticleTextViewRender(getPrefix()).renderTextView(contentView, article);
+        contentView.setGravity(Gravity.CENTER_VERTICAL);
+        setText();
 
         //System.out.println("article.getImageUrl()" + article.getImageUrl());
         if (article.getImageUrl() == null || !toLoadImage(getContext())) {
@@ -129,7 +130,16 @@ public abstract class ExpandableArticleView extends ArticleView {
             imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), false);
             imageView.imageView.setTag(article.getImageUrl().toExternalForm());
             imageView.setDefaultWidth(deviceInfo.getWidth() / 2 - 8);
-            imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine);
+            if(article.getHeight() == 0){
+                contentView.setMaxLines(maxLine);
+                imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine);
+            }
+            else{
+                contentView.setMaxLines((article.getHeight()/scaleTextSize)-5);
+                imageView.setDefaultHeight(article.getHeight()-40);
+            }
+
+//            imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine);
             boolean imageHandled = false;
             if (article.getImage() != null) {
                 imageView.handleImageLoaded(article.getImage(), null);
@@ -161,6 +171,9 @@ public abstract class ExpandableArticleView extends ArticleView {
             }
         }
     }
+
+    public abstract void setText();
+
     public void preload() {
         if (article.hasLink()) {
             isLoading = true;

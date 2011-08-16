@@ -117,13 +117,7 @@ public class WeiboPageView extends FrameLayout {
 
         articleWrapper.addView(withoutURLArticleView, layoutParams);
 
-        LayoutParams wrapperLayoutParam = null;
-//        if (last)
-        wrapperLayoutParam = new LayoutParams(deviceInfo.getWidth(), article.getHeight());
-        wrapperLayoutParam = new LayoutParams(deviceInfo.getWidth(), article.getHeight());
-//        else {
-//            wrapperLayoutParam = new LayoutParams(DeviceInfo.width, LayoutParams.WRAP_CONTENT);
-//        }
+        LayoutParams wrapperLayoutParam = new LayoutParams(deviceInfo.getWidth(), article.getHeight());
 
         if (last)//分割线
             articleWrapper.setPadding(0, 0, 0, 0);

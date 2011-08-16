@@ -49,6 +49,7 @@ public class SinaAccountUtil {
             tokenSecret = cursor.getString(cursor.getColumnIndex(Account.KEY_PASSWORD_SECRET));
         } finally {
             cursor.close();
+            accountDB.close();
         }
 
         SinaToken sinaToken = new SinaToken();

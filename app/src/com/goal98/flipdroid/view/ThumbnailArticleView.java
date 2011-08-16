@@ -38,6 +38,10 @@ public class ThumbnailArticleView extends ExpandableArticleView {
         super(context, article, pageView, placedAtBottom, executor);
     }
 
+    public void setText() {
+        new ArticleTextViewRender("").renderTextView(contentView, article);
+    }
+
     protected String getPrefix() {
         return Constants.INDENT;
     }
