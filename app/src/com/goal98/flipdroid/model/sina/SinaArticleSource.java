@@ -81,7 +81,9 @@ public class SinaArticleSource extends AbstractArticleSource {
                 Article article = new Article();
                 article.setSourceType(Constants.TYPE_SINA_WEIBO);
                 try {
-                    article.setImageUrl(new URL(status.getThumbnail_pic()));
+                    String original_pic = status.getOriginal_pic();
+                    if (original_pic != null && original_pic.length() != 0)
+                        article.setImageUrl(new URL(original_pic));
                 } catch (MalformedURLException e) {
 
                 }

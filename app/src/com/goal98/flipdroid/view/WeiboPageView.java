@@ -197,7 +197,6 @@ public class WeiboPageView extends FrameLayout {
         this.articleView = articleView;
         inflater = LayoutInflater.from(WeiboPageView.this.getContext());
         if (enlargedViewWrapperWr==null || enlargedViewWrapperWr.get() == null) {
-
             enlargedViewWrapperWr = new WeakReference(inflater.inflate(R.layout.enlarged, null));
 
             wrapperll = (LinearLayout) (enlargedViewWrapperWr.get().findViewById(R.id.wrapperll));

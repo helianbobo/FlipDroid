@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.view;
 
 import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
@@ -13,6 +14,7 @@ import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.PrettyTimeUtil;
 
 import java.net.URL;
+import java.util.Random;
 import java.util.concurrent.*;
 
 //import com.goal98.flipdroid.client.TikaClient;
@@ -61,16 +63,18 @@ public class WeiboArticleView extends ExpandableArticleView {
 
 
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
+
+
         switcher = (ViewSwitcher) inflater.inflate(R.layout.weibo_article_view, null);
         switcher.setDisplayedChild(0);
-        contentView = (TextView) switcher.findViewById(R.id.content);
-        contentView.setText(getPrefix() + article.getStatus());
+
 
         this.titleView = (TextView) switcher.findViewById(R.id.title);
         this.authorView = (TextView) switcher.findViewById(R.id.author);
         this.createDateView = (TextView) switcher.findViewById(R.id.createDate);
         this.contentViewWrapper = (LinearLayout) switcher.findViewById(R.id.contentll);
 
+//        buildImageAndContent();
         this.portraitView = (WebImageView) switcher.findViewById(R.id.portrait2);
 
         authorView.setText(article.getAuthor());
@@ -80,13 +84,32 @@ public class WeiboArticleView extends ExpandableArticleView {
             portraitView.setImageUrl(article.getPortraitImageUrl().toString());
 
         addOnClickListener();
-        LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 
-        this.addView(switcher, layoutParams);
+        LayoutParams switcherLayoutParam = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+        this.addView(switcher, switcherLayoutParam);
     }
 
     public void renderBeforeLayout() {
+        if (handler == null)
+            handler = new Handler();
+
         portraitView.loadImage();
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    isLoading = true;
+                    handler.post(new Runnable() {
+                        public void run() {
+                            buildImageAndContent();
+                        }
+
+                    });
+                } finally {
+                    isLoading = false;
+                }
+
+            }
+        }).start();
     }
 
 

@@ -3,11 +3,14 @@ package com.goal98.flipdroid.view;
 import android.content.Context;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.ViewSwitcher;
+import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.client.TikaClient;
 import com.goal98.flipdroid.client.TikaExtractResponse;
@@ -20,6 +23,7 @@ import com.goal98.flipdroid.util.Constants;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.*;
 
 /**
@@ -41,6 +45,17 @@ public abstract class ExpandableArticleView extends ArticleView {
     public volatile boolean isLoading = false;
     protected ExecutorService executor;
     private TikaCache tikaCache;
+    protected WebImageView imageView;
+
+    public class Notifier {
+        public void notifyImageLoaded() {
+            handler.post(new Runnable() {
+                public void run() {
+                    imageView.handleImageLoaded(article.getImage(), null);
+                }
+            });
+        }
+    }
 
     public ExpandableArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom, ExecutorService executor) {
         super(context, article, pageView, placedAtBottom);
@@ -69,7 +84,83 @@ public abstract class ExpandableArticleView extends ArticleView {
             }
         });
     }
+    protected void buildImageAndContent() {
+        boolean scaled = false;
+        boolean largeScreen = false;
+        boolean smallScreen = false;
+        if (deviceInfo.isLargeScreen()) {
+            largeScreen = true;
+        } else if (deviceInfo.isSmallScreen()) {
+            smallScreen = true;
+        }
 
+
+        int maxLines = 5;
+        int textSize = 16;
+        if (largeScreen) {
+            maxLines = 6;
+            textSize = 18;
+        } else if (smallScreen) {
+            maxLines = 4;
+            textSize = 18;
+        }
+
+        contentView = new TextView(this.getContext());
+        contentView.getPaint().setAntiAlias(true);
+        int scaleTextSize = scaled ? textSize - 3 : textSize;
+        contentView.setTextSize(scaleTextSize);
+        if (!smallScreen)
+            contentView.setPadding(2, 8, 2, 8);
+        else
+            contentView.setPadding(2, 4, 2, 4);
+
+        contentView.setTextColor(0xff232323);
+        int maxLine = scaled ? maxLines + (smallScreen ? 0 : 1) : maxLines;
+        contentView.setMaxLines(maxLine);
+
+        new ArticleTextViewRender(getPrefix()).renderTextView(contentView, article);
+
+        //System.out.println("article.getImageUrl()" + article.getImageUrl());
+        if (article.getImageUrl() == null || !toLoadImage(getContext())) {
+            LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
+            layoutParams.weight = 100;
+            contentViewWrapper.addView(contentView, layoutParams);
+        } else {
+            imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), false);
+            imageView.imageView.setTag(article.getImageUrl().toExternalForm());
+            imageView.setDefaultWidth(deviceInfo.getWidth() / 2 - 8);
+            imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine);
+            boolean imageHandled = false;
+            if (article.getImage() != null) {
+                imageView.handleImageLoaded(article.getImage(), null);
+                imageHandled = true;
+            } else {
+                article.addNotifier(new Notifier());
+                if (!article.isLoading()) {
+                    System.out.println("reloading..." + article.getImageUrl().toExternalForm());
+                    article.loadPrimaryImage(deviceInfo);
+                }
+                imageHandled = false;
+            }
+
+            LayoutParams layoutParamsText = new LayoutParams(0, LayoutParams.FILL_PARENT);
+            LayoutParams layoutParamsImage = new LayoutParams(0, LayoutParams.FILL_PARENT);
+            layoutParamsText.weight = 50;
+            layoutParamsImage.weight = 50;
+
+            Random random = new Random();
+            random.setSeed(System.currentTimeMillis());
+            if (random.nextBoolean()) {
+                contentViewWrapper.addView(contentView, layoutParamsText);
+                layoutParamsImage.gravity = Gravity.RIGHT;
+                contentViewWrapper.addView(imageView, layoutParamsImage);
+            } else {
+                layoutParamsImage.gravity = Gravity.LEFT;
+                contentViewWrapper.addView(imageView, layoutParamsImage);
+                contentViewWrapper.addView(contentView, layoutParamsText);
+            }
+        }
+    }
     public void preload() {
         if (article.hasLink()) {
             isLoading = true;

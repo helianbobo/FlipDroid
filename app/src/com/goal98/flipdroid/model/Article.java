@@ -3,6 +3,7 @@ package com.goal98.flipdroid.model;
 import android.graphics.Bitmap;
 import com.goal98.android.ImageLoader;
 import com.goal98.flipdroid.util.DeviceInfo;
+import com.goal98.flipdroid.view.ExpandableArticleView;
 import com.goal98.flipdroid.view.ThumbnailArticleView;
 
 import java.net.URL;
@@ -203,7 +204,7 @@ public class Article {
         return image;
     }
 
-    public void addNotifier(ThumbnailArticleView.Notifier notifier) {
+    public void addNotifier(ExpandableArticleView.Notifier notifier) {
         this.notifier = notifier;
     }
 

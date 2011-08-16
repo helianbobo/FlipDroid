@@ -21,15 +21,19 @@ public class SmartPage extends Page {
     }
 
 
-
     boolean addResult;
 
     public boolean addArticle(final Article article) {
-        DimensionMeasureTool dmt = new DimensionMeasureTool(deviceInfo);
-        dmt.setText(Constants.WITHURLPREFIX + article.getStatus());
-        dmt.setTextSize(17);
-        dmt.setMaxLines(18);
-        int height = dmt.onMeasure()[1] + 29;
+        int height = 0;
+        if (article.getImageUrl() == null) {
+            DimensionMeasureTool dmt = new DimensionMeasureTool(deviceInfo);
+            dmt.setText(Constants.WITHURLPREFIX + article.getStatus());
+            dmt.setTextSize(17);
+            dmt.setMaxLines(18);
+            height = dmt.onMeasure()[1] + 29;
+        } else {
+            height = deviceInfo.getDisplayHeight() / 2;
+        }
         DryRunResult result = overflowIfPut(height);
         if (!result.overflow) {
             article.setHeight(height);
