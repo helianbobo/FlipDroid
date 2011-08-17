@@ -25,15 +25,18 @@ public class SmartPage extends Page {
 
     public boolean addArticle(final Article article) {
         int height = 0;
-        if (article.getImageUrl() == null) {
-            DimensionMeasureTool dmt = new DimensionMeasureTool(deviceInfo);
-            dmt.setText(Constants.WITHURLPREFIX + article.getStatus());
-            dmt.setTextSize(17);
-            dmt.setMaxLines(18);
-            height = dmt.onMeasure()[1] + 29;
-        } else {
-            height = deviceInfo.getDisplayHeight() / 2;
+
+        DimensionMeasureTool dmt = new DimensionMeasureTool(deviceInfo);
+        dmt.setText(Constants.WITHURLPREFIX + article.getStatus());
+        dmt.setTextSize(17);
+        dmt.setMaxLines(18);
+        height = dmt.onMeasure()[1] + 29;
+
+        if (article.getImageUrl() != null){
+           height = Math.max(article.getImageHeight(),2*height-29);
         }
+
+
         DryRunResult result = overflowIfPut(height);
         if (!result.overflow) {
             article.setHeight(height);

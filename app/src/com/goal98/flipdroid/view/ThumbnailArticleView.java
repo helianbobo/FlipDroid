@@ -39,7 +39,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
     }
 
     public void setText() {
-        new ArticleTextViewRender("").renderTextView(contentView, article);
+        new ArticleTextViewRender(getPrefix()).renderTextView(contentView, article);
     }
 
     protected String getPrefix() {
@@ -61,6 +61,12 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                     boolean scaled = false;
                     boolean largeScreen = false;
                     boolean smallScreen = false;
+
+                    if (deviceInfo.isLargeScreen()) {
+                        largeScreen = true;
+                    }else if (deviceInfo.isSmallScreen()) {
+                        smallScreen = true;
+                    }
 
                     int titleSize = 18;
                     int maxTitleLength = 0;

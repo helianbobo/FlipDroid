@@ -37,8 +37,8 @@ import java.util.concurrent.*;
 public abstract class ExpandableArticleView extends ArticleView {
     protected ViewSwitcher switcher;
     protected ArticleView loadedArticleView;
-//    protected LinearLayout enlargedView;
-    protected WeakReference<LinearLayout>  enlargedView;
+    //    protected LinearLayout enlargedView;
+    protected WeakReference<LinearLayout> enlargedView;
     protected final Animation fadeOutAni = AnimationUtils.loadAnimation(this.getContext(), R.anim.fade);
     protected final Animation fadeInAni = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
     protected Handler handler;
@@ -85,6 +85,7 @@ public abstract class ExpandableArticleView extends ArticleView {
             }
         });
     }
+
     protected void buildImageAndContent() {
         boolean scaled = false;
         boolean largeScreen = false;
@@ -121,6 +122,12 @@ public abstract class ExpandableArticleView extends ArticleView {
         contentView.setGravity(Gravity.CENTER_VERTICAL);
         setText();
 
+        if (article.getHeight() == 0) {
+            contentView.setMaxLines(maxLine);
+        } else {
+            contentView.setMaxLines((article.getHeight() / scaleTextSize) - 5);
+        }
+
         //System.out.println("article.getImageUrl()" + article.getImageUrl());
         if (article.getImageUrl() == null || !toLoadImage(getContext())) {
             LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
@@ -130,13 +137,10 @@ public abstract class ExpandableArticleView extends ArticleView {
             imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), false);
             imageView.imageView.setTag(article.getImageUrl().toExternalForm());
             imageView.setDefaultWidth(deviceInfo.getWidth() / 2 - 8);
-            if(article.getHeight() == 0){
-                contentView.setMaxLines(maxLine);
+            if (article.getHeight() == 0) {
                 imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine);
-            }
-            else{
-                contentView.setMaxLines((article.getHeight()/scaleTextSize)-5);
-                imageView.setDefaultHeight(article.getHeight()-40);
+            } else {
+                imageView.setDefaultHeight(article.getHeight() - 40);
             }
 
 //            imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine);
@@ -216,7 +220,7 @@ public abstract class ExpandableArticleView extends ArticleView {
 
     private void responseToArticle(TikaExtractResponse extractResponse) {
         if (extractResponse.getContent() != null)
-            article.setContent(extractResponse.getContent().replaceFirst("\n", "\n      "));
+            article.setContent(extractResponse.getContent());
         else
             article.setContent("");
         article.setTitle(extractResponse.getTitle());
@@ -228,9 +232,18 @@ public abstract class ExpandableArticleView extends ArticleView {
                     for (int i = 0; i < responsedImages.size(); i++) {
                         String imageURL = responsedImages.get(i);
                         if (imageURL != null && imageURL.length() != 0) {
+                            int sizeInfoBeginAt = imageURL.lastIndexOf("#");
+                            String sizeInfoStr = imageURL.substring(sizeInfoBeginAt + 1);
+                            imageURL = imageURL.substring(0, sizeInfoBeginAt);
+
                             if (i == 0) {//primary image
+                                String[] sizeInfo = sizeInfoStr.split(",");
+                                int width = Integer.valueOf(sizeInfo[0]);
+                                int height = Integer.valueOf(sizeInfo[1]);
+                                article.setImageWidth(width);
+                                article.setImageHeight(height);
                                 article.setImageUrl(new URL(imageURL));
-                                article.loadPrimaryImage(imageURL,deviceInfo);
+                                article.loadPrimaryImage(imageURL, deviceInfo);
                             }
                             article.getImagesMap().put(imageURL, null);
                             article.getImages().add(imageURL);
@@ -302,7 +315,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                     handler = new Handler();
                 if (!isLoading && !ExpandableArticleView.this.getPageView().loadingNext && article.hasLink()) {
 
-                    if (enlargedView!=null && enlargedView.get() != null) {//以前打开过的，直接显示
+                    if (enlargedView != null && enlargedView.get() != null) {//以前打开过的，直接显示
                         ExpandableArticleView.this.getPageView().enlarge(loadedArticleView, ExpandableArticleView.this);
                         return;
                     }

@@ -189,23 +189,26 @@ public class ImageFilter implements Extractor {
             } else if (fileSize < 5000 && height < 130 && width < 130) {
                 imagesIterator.remove();
             } else {
-                imageInfoMap.put(queryURL, ii);
-                filteredImages.add(queryURL);
-                final int fileArea = ii.getWidth() * ii.getHeight();
-                if (fileArea > largestArea) {
-                    largestArea = fileArea;
-                    largestAreaIndex = filteredImages.size() - 1;
-                }
+                if (ii.getWidth() != 0 && ii.getHeight() != 0) {
+                    imageInfoMap.put(queryURL, ii);
+                    filteredImages.add(queryURL + "#" + ii.getWidth() + "," + ii.getHeight());
+                    final int fileArea = ii.getWidth() * ii.getHeight();
+                    if (fileArea > largestArea) {
+                        largestArea = fileArea;
+                        largestAreaIndex = filteredImages.size() - 1;
+                    }
+                } else
+                    imagesIterator.remove();
             }
             index++;
         }
         if (largestAreaIndex >= 0 && filteredImages.size() > largestAreaIndex)
             Collections.swap(filteredImages, 0, largestAreaIndex);
 
-        System.out.println("urlAbstract.getContent()"+urlAbstract.getContent());
+        System.out.println("urlAbstract.getContent()" + urlAbstract.getContent());
         Paragraphs paragraphs = new Paragraphs();
         paragraphs.toParagraph(urlAbstract.getContent());
-        paragraphs.retain(filteredImages,imageInfoMap);
+        paragraphs.retain(filteredImages, imageInfoMap);
         urlAbstract.setContent(paragraphs.toContent());
         urlAbstract.setImages(filteredImages);
     }
@@ -281,7 +284,6 @@ public class ImageFilter implements Extractor {
 
         return fileLength;
     }
-
 
 
     private class InvalidImageInfo extends ImageInfo {

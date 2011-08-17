@@ -29,6 +29,8 @@ public class Article {
     private int height;
     private Map<String, Bitmap> imagesMap = new HashMap<String, Bitmap>();
     private List<String> images = new ArrayList<String>();
+    private int imageWidth;
+    private int imageHeight;
 
     public List<String> getImages() {
         return images;
@@ -251,5 +253,21 @@ public class Article {
 
     public void onSecondaryImageLoaded(Bitmap bitmap, String url) {
         this.getImagesMap().put(url, bitmap);
+    }
+
+    public int getImageHeight() {
+        return imageHeight;
+    }
+
+    public void setImageHeight(int imageHeight) {
+        this.imageHeight = imageHeight;
+    }
+
+    public int getImageWidth() {
+        return imageWidth;
+    }
+
+    public void setImageWidth(int imageWidth) {
+        this.imageWidth = imageWidth;
     }
 }

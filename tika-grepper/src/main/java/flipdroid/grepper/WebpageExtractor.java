@@ -61,7 +61,7 @@ public class WebpageExtractor {
 
         if (title != null)
             if (content.length() > title.length() * 2 && content.indexOf(title) != -1) {
-                urlAbstract.setContent(content.replaceFirst(title, ""));
+                urlAbstract.setContent(content.replaceFirst(title.replace("\\","\\\\").replace(")","\\)").replace("(","\\(").replace("$","\\$"), ""));
             }
 
 
