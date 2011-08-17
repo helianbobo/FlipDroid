@@ -31,6 +31,33 @@ public class Article {
     private List<String> images = new ArrayList<String>();
     private int imageWidth;
     private int imageHeight;
+    private boolean layoutVertical;
+    private float suggestScale;
+    private int textHeight;
+
+    public int getTextHeight() {
+        return textHeight;
+    }
+
+    public void setTextHeight(int textHeight) {
+        this.textHeight = textHeight;
+    }
+
+    public float getSuggestScale() {
+        return suggestScale;
+    }
+
+    public void setSuggestScale(float suggestScale) {
+        this.suggestScale = suggestScale;
+    }
+
+    public boolean isLayoutVertical() {
+        return layoutVertical;
+    }
+
+    public void setLayoutVertical(boolean layoutVertical) {
+        this.layoutVertical = layoutVertical;
+    }
 
     public List<String> getImages() {
         return images;

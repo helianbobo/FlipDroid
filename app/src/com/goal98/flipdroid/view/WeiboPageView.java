@@ -316,7 +316,7 @@ public class WeiboPageView extends FrameLayout {
         weiboArticleView.getContentView().setVisibility(VISIBLE);
         weiboArticleView.enlargedView = new WeakReference(enlargedViewWrapperWr.get());
         final Animation fadeout = AnimationUtils.loadAnimation(pageActivity, R.anim.fade);
-        fadeout.setDuration(250);
+        fadeout.setDuration(150);
         fadeout.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
             }
@@ -324,6 +324,7 @@ public class WeiboPageView extends FrameLayout {
             public void onAnimationEnd(Animation animation) {
                 enlargedViewWrapperWr.get().setVisibility(INVISIBLE);
                 WeiboPageView.this.removeView(enlargedViewWrapperWr.get());
+                //TODO TEST
                 pageActivity.setEnlargedMode(false);
             }
 

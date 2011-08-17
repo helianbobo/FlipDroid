@@ -125,7 +125,8 @@ public abstract class ExpandableArticleView extends ArticleView {
         if (article.getHeight() == 0) {
             contentView.setMaxLines(maxLine);
         } else {
-            contentView.setMaxLines((article.getHeight() / scaleTextSize) - 5);
+            maxLine = (article.getHeight() / scaleTextSize) - 5;
+            contentView.setMaxLines(maxLine);
         }
 
         //System.out.println("article.getImageUrl()" + article.getImageUrl());
@@ -136,11 +137,13 @@ public abstract class ExpandableArticleView extends ArticleView {
         } else {
             imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), false);
             imageView.imageView.setTag(article.getImageUrl().toExternalForm());
-            imageView.setDefaultWidth(deviceInfo.getWidth() / 2 - 8);
+
             if (article.getHeight() == 0) {
+                imageView.setDefaultWidth(deviceInfo.getWidth() / 2 - 8);
                 imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine);
             } else {
-                imageView.setDefaultHeight(article.getHeight() - 40);
+                imageView.setDefaultWidth(deviceInfo.getWidth());
+                imageView.setDefaultHeight(article.getHeight() - article.getTextHeight()-30);
             }
 
 //            imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine);
@@ -156,22 +159,30 @@ public abstract class ExpandableArticleView extends ArticleView {
                 }
                 imageHandled = false;
             }
+            if (article.getHeight() == 0) {
+                LayoutParams layoutParamsText = new LayoutParams(0, LayoutParams.FILL_PARENT);
+                LayoutParams layoutParamsImage = new LayoutParams(0, LayoutParams.FILL_PARENT);
+                layoutParamsText.weight = 50;
+                layoutParamsImage.weight = 50;
 
-            LayoutParams layoutParamsText = new LayoutParams(0, LayoutParams.FILL_PARENT);
-            LayoutParams layoutParamsImage = new LayoutParams(0, LayoutParams.FILL_PARENT);
-            layoutParamsText.weight = 50;
-            layoutParamsImage.weight = 50;
-
-            Random random = new Random();
-            random.setSeed(System.currentTimeMillis());
-            if (random.nextBoolean()) {
-                contentViewWrapper.addView(contentView, layoutParamsText);
-                layoutParamsImage.gravity = Gravity.RIGHT;
-                contentViewWrapper.addView(imageView, layoutParamsImage);
+                Random random = new Random();
+                random.setSeed(System.currentTimeMillis());
+                if (random.nextBoolean()) {
+                    contentViewWrapper.addView(contentView, layoutParamsText);
+                    layoutParamsImage.gravity = Gravity.RIGHT;
+                    contentViewWrapper.addView(imageView, layoutParamsImage);
+                } else {
+                    layoutParamsImage.gravity = Gravity.LEFT;
+                    contentViewWrapper.addView(imageView, layoutParamsImage);
+                    contentViewWrapper.addView(contentView, layoutParamsText);
+                }
             } else {
-                layoutParamsImage.gravity = Gravity.LEFT;
-                contentViewWrapper.addView(imageView, layoutParamsImage);
+                LayoutParams layoutParamsText = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+                LayoutParams layoutParamsImage = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+                contentViewWrapper.setOrientation(VERTICAL);
                 contentViewWrapper.addView(contentView, layoutParamsText);
+                layoutParamsImage.gravity = Gravity.TOP;
+                contentViewWrapper.addView(imageView, layoutParamsImage);
             }
         }
     }

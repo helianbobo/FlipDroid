@@ -69,7 +69,15 @@ public class Paragraphs {
             if (tikaUIObject.getType().equals(TikaUIObject.TYPE_IMAGE)) {
                 final ImageInfo tikaImage = (ImageInfo) tikaUIObject;
                 String src = tikaImage.getUrl();
-                if (filteredImages.indexOf(src) == -1) {
+                boolean found = false;
+                for (int i = 0; i < filteredImages.size(); i++) {
+                    String s =  filteredImages.get(i);
+                    if(s.indexOf(src)!=-1){
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
                     iter.remove();
                 } else {
                     ImageInfo imageInfo = imageInfoMap.get(src);

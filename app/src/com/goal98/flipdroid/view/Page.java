@@ -16,7 +16,7 @@ public class Page {
     protected WeiboPageView weiboPageView;
 
     protected List<Article> articleList;
-    private PageActivity activity;
+    protected PageActivity activity;
     protected DeviceInfo deviceInfo;
 
 

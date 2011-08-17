@@ -32,11 +32,11 @@ public class SmartPage extends Page {
         dmt.setMaxLines(18);
         height = dmt.onMeasure()[1] + 29;
 
-        if (article.getImageUrl() != null){
-           height = Math.max(article.getImageHeight(),2*height-29);
+        if (article.getImageUrl() != null) {
+            article.setTextHeight(height);
+            height = deviceInfo.getDisplayHeight()-1;
         }
-
-
+        System.out.println("view height" + height);
         DryRunResult result = overflowIfPut(height);
         if (!result.overflow) {
             article.setHeight(height);
@@ -53,11 +53,10 @@ public class SmartPage extends Page {
     private DryRunResult overflowIfPut(int height) {
         int dryRunSumHeight = heightSum;
 
-        //Log.d("height measure single", height + "");
         DryRunResult result = new DryRunResult();
         result.height = height;
         dryRunSumHeight += height;
-        //Log.d("height measure sum", dryRunSumHeight + "");
+
         if (dryRunSumHeight > deviceInfo.getDisplayHeight()) {
             result.overflow = true;
         } else {
