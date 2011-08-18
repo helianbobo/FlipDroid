@@ -330,6 +330,7 @@ public abstract class CommonTagActions {
 
     public static final TagAction TA_IMAGE = new TagAction() {
         public boolean start(BoilerpipeHTMLContentHandler instance, String localName, String qName, Attributes atts) throws SAXException {
+            instance.flushBlock();
             int length = atts.getLength();
 
             String image = "";

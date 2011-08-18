@@ -189,7 +189,9 @@ public class ImageFilter implements Extractor {
             } else if (fileSize < 5000 && height < 130 && width < 130) {
                 imagesIterator.remove();
             } else {
-                if (ii.getWidth() != 0 && ii.getHeight() != 0) {
+                if (height / width >= 9 || width / height >= 9)
+                    imagesIterator.remove();
+                else if (ii.getWidth() != 0 && ii.getHeight() != 0) {
                     imageInfoMap.put(queryURL, ii);
                     filteredImages.add(queryURL + "#" + ii.getWidth() + "," + ii.getHeight());
                     final int fileArea = ii.getWidth() * ii.getHeight();
@@ -205,12 +207,13 @@ public class ImageFilter implements Extractor {
         if (largestAreaIndex >= 0 && filteredImages.size() > largestAreaIndex)
             Collections.swap(filteredImages, 0, largestAreaIndex);
 
-        System.out.println("urlAbstract.getContent()" + urlAbstract.getContent());
+
         Paragraphs paragraphs = new Paragraphs();
         paragraphs.toParagraph(urlAbstract.getContent());
         paragraphs.retain(filteredImages, imageInfoMap);
         urlAbstract.setContent(paragraphs.toContent());
         urlAbstract.setImages(filteredImages);
+        System.out.println("urlAbstract.getContent()" + urlAbstract.getContent());
     }
 
 

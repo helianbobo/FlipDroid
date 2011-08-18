@@ -161,7 +161,6 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 	// @Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
-        System.out.println(localName);
 		TagAction ta = tagActions.get(localName);
 		if (ta != null) {
 			flush = ta.start(this, localName, qName, atts) | flush;

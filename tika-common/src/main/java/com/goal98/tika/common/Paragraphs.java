@@ -44,6 +44,7 @@ public class Paragraphs {
             String paragraph = articleContent.substring(0, endAt + 1);
 
             paragraph = parseImg(paragraph);
+
             paragraphs.add(new Text(paragraph));
             articleContent = articleContent.substring(endAt + 1);
         }

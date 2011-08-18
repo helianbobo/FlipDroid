@@ -459,12 +459,10 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("strong")) {
                         html.append("<" + qName + ">");
                     }
-                    if (
-                            qName.equalsIgnoreCase("p") ||
-                                    qName.equalsIgnoreCase("br") ||
-                                    qName.equalsIgnoreCase("li")
+                    if (qName.equalsIgnoreCase("p") ||
+                            qName.equalsIgnoreCase("br") ||
+                            qName.equalsIgnoreCase("li")
                             ) {
-
                         if (inBlockQuote) {
                             html.append("<p><blockquote>");
                         } else
@@ -490,15 +488,17 @@ public final class HTMLHighlighter {
                             for (int i = 0; i < HTMLHighlighter.this.images.size(); i++) {
                                 String s = HTMLHighlighter.this.images.get(i);
                                 if (s.indexOf(image) != -1) {
-                                    if (html.toString().length() != 0 && !html.toString().endsWith("</p>") && !html.toString().endsWith("/>")) {
-                                        if (inBlockQuote) {
-                                            html.append("</blockquote></p>");
-                                        } else
-                                            html.append("</p>");
-                                    }
-                                    html.append("<img src=" + image + " >hack</img>");//there must be a blank after image for parsing purpose
+//                                    if (html.toString().length() != 0 && !html.toString().endsWith("</p>") && !html.toString().endsWith("/>")) {
+                                    if (inBlockQuote) {
+                                        html.append("</blockquote></p>");
+                                    } else
+                                        html.append("</p>");
+//                                    }
+                                    html.append("<p><img src=" + image + " >hack</img></p>");//there must be a blank after image for parsing purpose
                                     if (inBlockQuote)
                                         html.append("<blockquote><p>");
+                                    else
+                                        html.append("<p>");
                                     break;
                                 }
                             }

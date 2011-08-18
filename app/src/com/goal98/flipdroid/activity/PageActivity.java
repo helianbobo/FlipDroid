@@ -158,8 +158,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.deviceInfo = getDeviceInfoFromApplicationContext();
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        this.deviceInfo = getDeviceInfoFromApplicationContext();
+
         StopWatch sw = new StopWatch();
         sw.start("create activity");
 
