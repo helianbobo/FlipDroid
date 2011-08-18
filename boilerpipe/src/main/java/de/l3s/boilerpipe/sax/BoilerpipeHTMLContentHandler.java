@@ -26,6 +26,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -68,7 +69,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 
 	LinkedList<LabelAction> labelStack = new LinkedList<LabelAction>();
 	LinkedList<Integer> fontSizeStack = new LinkedList<Integer>();
-    public static boolean LOOKING_FOR_IMAGE = false;
+    public boolean LOOKING_FOR_IMAGE = false;
 
     /**
 	 * Recycles this instance.
@@ -160,6 +161,7 @@ public class BoilerpipeHTMLContentHandler implements ContentHandler {
 	// @Override
 	public void startElement(String uri, String localName, String qName,
 			Attributes atts) throws SAXException {
+        System.out.println(localName);
 		TagAction ta = tagActions.get(localName);
 		if (ta != null) {
 			flush = ta.start(this, localName, qName, atts) | flush;

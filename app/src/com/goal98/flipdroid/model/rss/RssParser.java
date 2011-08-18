@@ -28,7 +28,6 @@ public class RssParser extends DefaultHandler {
     private Item item;
     private boolean imgStatus;
     private InputStream urlInputStream;
-    private OnSourceLoadedListener listener;
 
     public RssParser(String url) {
         this.urlString = url;
@@ -49,22 +48,11 @@ public class RssParser extends DefaultHandler {
             SAXParser sp = null;
 
             spf = SAXParserFactory.newInstance();
-//            if (spf != null) {
-//                sp = spf.newSAXParser();
-//                String raw = IOUtils.toString(urlInputStream);
-//                String encoding = EncodingDetector.detect(new ByteArrayInputStream(raw.getBytes()));
-//                InputSource inputSource = new InputSource();
-//                inputSource.setByteStream(new ByteArrayInputStream(raw.getBytes(encoding)));
-//                inputSource.setSystemId(urlString);
-//                sp.parse(inputSource, this);
-//            }
             if (spf != null) {
                 sp = spf.newSAXParser();
                 byte[] contents = getContentInBytes(this.urlInputStream);
 
                 String encoding = EncodingDetector.detect(new ByteArrayInputStream(contents));
-                if (listener != null)
-                    listener.onLoaded(new String(contents, encoding));
                 InputStreamReader streamReader = new InputStreamReader(new ByteArrayInputStream(contents), encoding);
                 InputSource inputSource = new InputSource(streamReader);
                 inputSource.setSystemId(urlString);
@@ -173,9 +161,6 @@ public class RssParser extends DefaultHandler {
         System.setProperties(sysProperties);
     }
 
-    public void addOnLoadListener(OnSourceLoadedListener listener) {
-        this.listener = listener;
-    }
 
     public static class RssFeed {
         public String title;

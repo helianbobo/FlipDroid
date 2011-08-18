@@ -28,6 +28,15 @@ public class CachedArticleSource implements ArticleSource {
         this.dbCache = dbCache;
         this.sourceUpdateable = sourceUpdateable;
         this.articleSource = articleSource;
+        this.listener = new OnSourceLoadedListener() {
+            public String onLoaded(byte[] updatedBytes) throws IOException {
+                String encoding = EncodingDetector.detect(new ByteArrayInputStream(updatedBytes));
+                String content = new String(updatedBytes, encoding);
+                CachedArticleSource.this.dbCache.put(articleSource.getCacheToken().getType(), articleSource.getCacheToken().getToken(), content);
+                return content;
+            }
+        };
+        articleSource.registerOnLoadListener(listener);
     }
 
     public CacheToken getToken() {
@@ -41,12 +50,7 @@ public class CachedArticleSource implements ArticleSource {
             this.articleSource.fromCache(cacheObject);
         }
 
-        this.listener = new OnSourceLoadedListener() {
-            public String onLoaded(String s) {
-                dbCache.put(articleSource.getCacheToken().getType(), articleSource.getCacheToken().getToken(), s);
-                return s;
-            }
-        };
+
     }
 
     public Date lastModified() {
@@ -78,8 +82,7 @@ public class CachedArticleSource implements ArticleSource {
                     updated = true;
                     System.out.println("has update:" + updatedBytes != null);
                     if (updatedBytes != null) {
-                        String encoding = EncodingDetector.detect(new ByteArrayInputStream(updatedBytes));
-                        listener.onLoaded(new String(updatedBytes, encoding));
+                        listener.onLoaded(updatedBytes);
                         sourceUpdateable.notifyHasNew(CachedArticleSource.this);
                     } else {
                         sourceUpdateable.notifyNoNew(CachedArticleSource.this);

@@ -41,7 +41,7 @@ public class SourceUpdateManager {
     public void updateAll() {
         Cursor c = sourceDB.findAll();
         ManagedCursor mc = new ManagedCursor(c);
-        final SourceCache sourceCache = new SourceCache(indexActivity);
+        final SourceCache sourceCache = SourceCache.getInstance(indexActivity);
         final List<CachedArticleSource> cachedArticleSources = new ArrayList<CachedArticleSource>();
         mc.each(new EachCursor() {
             public void call(Cursor c, int index) {

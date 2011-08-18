@@ -1,5 +1,7 @@
 package com.goal98.flipdroid.model;
 
+import java.io.IOException;
+
 /**
  * Created by IntelliJ IDEA.
  * User: ITS
@@ -8,5 +10,5 @@ package com.goal98.flipdroid.model;
  * To change this template use File | Settings | File Templates.
  */
 public interface OnSourceLoadedListener {
-    public String onLoaded(String s);
+    public String onLoaded(byte[] s) throws IOException;
 }

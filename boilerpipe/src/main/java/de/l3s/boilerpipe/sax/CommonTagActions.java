@@ -352,9 +352,6 @@ public abstract class CommonTagActions {
                 }
             }
             if (image != null) {
-
-//                instance.tokenBuffer
-//                        .append(BoilerpipeHTMLContentHandler.ANCHOR_TEXT_START);
                 instance.LOOKING_FOR_IMAGE = true;
                 instance.textBuffer.append(image + "#" + width + "," + height);
                 instance.tokenBuffer.append(image + "#" + width + "," + height);

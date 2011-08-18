@@ -101,7 +101,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         String sourceType = sourceTypeTextView.getText().toString();
         if (item.getItemId() == 0) {//delete
             sourceDB.removeSourceByName(sourceName);
-            SourceCache sourceCache = new SourceCache(this);
+            SourceCache sourceCache = SourceCache.getInstance(this);
             try {
                 sourceCache.clear(sourceType, sourceUrl);
             } finally {

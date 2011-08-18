@@ -143,7 +143,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                 imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine);
             } else {
                 imageView.setDefaultWidth(deviceInfo.getWidth());
-                imageView.setDefaultHeight(article.getHeight() - article.getTextHeight()-30);
+                imageView.setDefaultHeight(article.getHeight() - article.getTextHeight() - 30);
             }
 
 //            imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine);
@@ -253,14 +253,16 @@ public abstract class ExpandableArticleView extends ArticleView {
                                 int height = Integer.valueOf(sizeInfo[1]);
                                 article.setImageWidth(width);
                                 article.setImageHeight(height);
-                                article.setImageUrl(new URL(imageURL));
-                                article.loadPrimaryImage(imageURL, deviceInfo);
+                                try {
+                                    URL url = new URL(imageURL);
+                                    article.setImageUrl(url);
+                                    article.loadPrimaryImage(imageURL, deviceInfo);
+                                } catch (Exception e) {
+                                    continue;
+                                }
                             }
                             article.getImagesMap().put(imageURL, null);
                             article.getImages().add(imageURL);
-//                            if(i!=0)
-//                                article.loadSecondaryImage(imageURL);
-
                         }
                     }
                 }

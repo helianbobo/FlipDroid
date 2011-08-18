@@ -15,7 +15,7 @@ public interface CacheableArticleSource extends ArticleSource {
 
     void fromCache(SourceCacheObject cachedObject);
 
-//    void registerOnLoadListener(OnSourceLoadedListener listener);
+    void registerOnLoadListener(OnSourceLoadedListener listener);
 
     byte[] loadLatestSource();
 }

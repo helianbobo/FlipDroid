@@ -13,8 +13,16 @@ import com.goal98.flipdroid.db.SourceContentDB;
 public class SourceCache {
     private Context context;
     private SourceContentDB contentDB;
+    private static SourceCache sourceCache;
 
-    public SourceCache(Context context) {
+    public synchronized static SourceCache getInstance(Context context) {
+        if (sourceCache == null) {
+            sourceCache = new SourceCache(context);
+        }
+        return sourceCache;
+    }
+
+    private SourceCache(Context context) {
         this.context = context;
         contentDB = new SourceContentDB(context);
     }
@@ -34,12 +42,12 @@ public class SourceCache {
         cacheObject.setUrl(url);
 
         cacheObject = contentDB.findByURL(cacheObject);
-        if(cacheObject!=null)
+        if (cacheObject != null)
             return cacheObject;
         return null;
     }
 
-    public synchronized void clear(String type, String url){
+    public synchronized void clear(String type, String url) {
         SourceCacheObject cacheObject = new SourceCacheObject();
         cacheObject.setType(type);
         cacheObject.setUrl(url);

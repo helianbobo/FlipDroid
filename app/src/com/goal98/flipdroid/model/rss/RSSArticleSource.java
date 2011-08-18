@@ -55,11 +55,18 @@ public class RSSArticleSource implements CacheableArticleSource {
 
     public boolean loadMore() {
         RssParser rp;
-        if (content == null)
-            if (loadFromSource()==null)
+        if (content == null) {
+            if (loadFromSource() == null)
                 return false;
-            else
+            else {
                 content = new ByteArrayInputStream(loadedBytes);
+                try {
+                    listener.onLoaded(loadedBytes);
+                } catch (IOException e) {
+                    //ignore
+                }
+            }
+        }
 
         rp = new RssParser(this.content);
 
@@ -129,10 +136,9 @@ public class RSSArticleSource implements CacheableArticleSource {
     }
 
     private byte[] loadFromSource() {
-        URL url = null;
         InputStream is = null;
         try {
-            url = new URL(this.contentUrl);
+            URL url = new URL(this.contentUrl);
             is = url.openConnection().getInputStream();
 
             loadedBytes = IOUtils.toByteArray(is);
@@ -201,11 +207,17 @@ public class RSSArticleSource implements CacheableArticleSource {
         this.content = new ByteArrayInputStream(cachedBytes);
     }
 
+    OnSourceLoadedListener listener;
+
+    public void registerOnLoadListener(OnSourceLoadedListener listener) {
+        this.listener = listener;
+    }
 
     public byte[] loadLatestSource() throws NoNetworkException {
         byte[] loadedBytes = loadFromSource();
         if (loadedBytes == null)
             return null;
+
         byte[] latestSource = this.loadedBytes;
         boolean needUpdate = false;
         if (cachedBytes != null) {
@@ -219,7 +231,7 @@ public class RSSArticleSource implements CacheableArticleSource {
                     break;
                 }
             }
-        }else{
+        } else {
             needUpdate = true;
         }
 

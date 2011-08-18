@@ -35,17 +35,17 @@ public class Paragraphs {
         int cutAt = 0;
         articleContent = parseImg(articleContent);
         while ((cutAt = articleContent.indexOf("</")) != -1) {
-            if(cutAt==0){
-               int endAt = articleContent.indexOf(">");
-                articleContent = articleContent.substring(endAt+1);
+            if (cutAt == 0) {
+                int endAt = articleContent.indexOf(">");
+                articleContent = articleContent.substring(endAt + 1);
                 continue;
             }
-            int endAt = articleContent.indexOf(">",cutAt);
-            String paragraph = articleContent.substring(0, endAt+1);
+            int endAt = articleContent.indexOf(">", cutAt);
+            String paragraph = articleContent.substring(0, endAt + 1);
 
             paragraph = parseImg(paragraph);
             paragraphs.add(new Text(paragraph));
-            articleContent = articleContent.substring(endAt+1);
+            articleContent = articleContent.substring(endAt + 1);
         }
         articleContent = parseImg(articleContent);
     }
@@ -71,8 +71,8 @@ public class Paragraphs {
                 String src = tikaImage.getUrl();
                 boolean found = false;
                 for (int i = 0; i < filteredImages.size(); i++) {
-                    String s =  filteredImages.get(i);
-                    if(s.indexOf(src)!=-1){
+                    String s = filteredImages.get(i);
+                    if (s.indexOf(src) != -1) {
                         found = true;
                         break;
                     }
@@ -81,8 +81,12 @@ public class Paragraphs {
                     iter.remove();
                 } else {
                     ImageInfo imageInfo = imageInfoMap.get(src);
-                    tikaImage.setWidth(imageInfo.getWidth());
-                    tikaImage.setHeight(imageInfo.getHeight());
+                    if (imageInfo != null) {
+                        tikaImage.setWidth(imageInfo.getWidth());
+                        tikaImage.setHeight(imageInfo.getHeight());
+                    } else {
+                        iter.remove();
+                    }
                 }
             }
         }
