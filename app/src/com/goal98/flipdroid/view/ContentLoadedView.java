@@ -224,9 +224,13 @@ public class ContentLoadedView extends ArticleView {
 //                imageView.imageView.setTag(url);
 
                 final DeviceInfo deviceInfo = getDeviceInfoFromApplicationContext();
+                final int picWidth = deviceInfo.getDipFromPixel(imageInfo.getWidth());
 
-                final int picWidth = deviceInfo.getDipFromPixel(imageInfo.getWidth()) - 60;
-                final int defaultWidth = Math.min(deviceInfo.getDisplayWidth() - 40, picWidth);
+                int crop = 0;
+                if(deviceInfo.getDipFromPixel(imageInfo.getWidth()) > deviceInfo.getDisplayWidth())
+                      crop = 40;
+
+                final int defaultWidth = picWidth > deviceInfo.getDisplayWidth() - crop ? deviceInfo.getDisplayWidth() - crop : picWidth;
                 imageView.setDefaultWidth(defaultWidth);
                 final int defaultHeight = imageInfo.getHeight() * defaultWidth / imageInfo.getWidth();
                 imageView.setDefaultHeight(defaultHeight);
