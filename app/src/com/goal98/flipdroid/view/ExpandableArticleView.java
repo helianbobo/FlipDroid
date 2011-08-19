@@ -126,6 +126,7 @@ public abstract class ExpandableArticleView extends ArticleView {
             contentView.setMaxLines(maxLine);
         } else {
             maxLine = (article.getHeight() / scaleTextSize) - 5;
+            maxLine = Math.max(maxLine,5);
             contentView.setMaxLines(maxLine);
         }
 
@@ -222,6 +223,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                         e.printStackTrace();
                         return article;
                     } finally {
+                        tikaCache.shutdown();
                         isLoading = false;
                     }
                 }

@@ -114,35 +114,36 @@ public class ContentLoadedView extends ArticleView {
             reference.setVisibility(VISIBLE);
             referenceContent.setVisibility(VISIBLE);
             WebImageView icon = new WebImageView(this.getContext(), article.getPortraitImageUrl().toExternalForm(), true);
-            icon.setDefaultHeight(30);
-            icon.setDefaultWidth(30);
+            icon.setDefaultHeight(25);
+            icon.setDefaultWidth(25);
             reference.addView(icon, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
             TextView author = new TextView(this.getContext());
             author.setText(article.getAuthor());
             if (deviceInfo.isLargeScreen())
-                author.setTextSize(24);
+                author.setTextSize(21);
             else if (deviceInfo.isSmallScreen())
-                author.setTextSize(16);
+                author.setTextSize(14);
             else
-                author.setTextSize(20);
+                author.setTextSize(17);
 
             author.setTextColor(Color.parseColor("#AAAAAA"));
 
             TextView referenceText = new TextView(this.getContext());
             referenceText.setSingleLine(false);
-            referenceText.setEllipsize(TextUtils.TruncateAt.END);
-            referenceText.setMaxLines(2);
+            referenceText.setMaxLines(5);
             referenceText.setText(article.getStatus());
             if (deviceInfo.isLargeScreen())
-                referenceText.setTextSize(24);
+                referenceText.setTextSize(22);
             else if (deviceInfo.isSmallScreen())
-                referenceText.setTextSize(16);
+                referenceText.setTextSize(15);
             else
-                referenceText.setTextSize(20);
+                referenceText.setTextSize(18);
 
             referenceText.setTextColor(Color.parseColor("#AAAAAA"));
-            reference.addView(author, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            final LayoutParams authorLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            authorLayoutParams.gravity = Gravity.CENTER;
+            reference.addView(author, authorLayoutParams);
             referenceContent.addView(referenceText, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         } else {
             this.authorView = (TextView) layout.findViewById(R.id.author);
@@ -231,8 +232,8 @@ public class ContentLoadedView extends ArticleView {
                 final int picWidth = deviceInfo.getDipFromPixel(imageInfo.getWidth());
 
                 int crop = 0;
-                if(deviceInfo.getDipFromPixel(imageInfo.getWidth()) > deviceInfo.getDisplayWidth())
-                      crop = 40;
+                if (deviceInfo.getDipFromPixel(imageInfo.getWidth()) > deviceInfo.getDisplayWidth())
+                    crop = 40;
 
                 final int defaultWidth = picWidth > deviceInfo.getDisplayWidth() - crop ? deviceInfo.getDisplayWidth() - crop : picWidth;
                 imageView.setDefaultWidth(defaultWidth);

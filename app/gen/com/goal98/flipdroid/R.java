@@ -83,22 +83,21 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int roundtop=0x7f020012;
         public static final int rss=0x7f020013;
         public static final int send=0x7f020014;
-        public static final int shadow=0x7f020015;
-        public static final int share=0x7f020016;
-        public static final int sina=0x7f020017;
-        public static final int tencent=0x7f020018;
-        public static final int thecover=0x7f020019;
-        public static final int tips_1=0x7f02001a;
-        public static final int tips_10=0x7f02001b;
-        public static final int tips_2=0x7f02001c;
-        public static final int tips_3=0x7f02001d;
-        public static final int tips_4=0x7f02001e;
-        public static final int tips_5=0x7f02001f;
-        public static final int tips_6=0x7f020020;
-        public static final int tips_7=0x7f020021;
-        public static final int tips_8=0x7f020022;
-        public static final int tips_9=0x7f020023;
-        public static final int twitter=0x7f020024;
+        public static final int share=0x7f020015;
+        public static final int sina=0x7f020016;
+        public static final int tencent=0x7f020017;
+        public static final int thecover=0x7f020018;
+        public static final int tips_1=0x7f020019;
+        public static final int tips_10=0x7f02001a;
+        public static final int tips_2=0x7f02001b;
+        public static final int tips_3=0x7f02001c;
+        public static final int tips_4=0x7f02001d;
+        public static final int tips_5=0x7f02001e;
+        public static final int tips_6=0x7f02001f;
+        public static final int tips_7=0x7f020020;
+        public static final int tips_8=0x7f020021;
+        public static final int tips_9=0x7f020022;
+        public static final int twitter=0x7f020023;
     }
     public static final class id {
         public static final int accoount_title=0x7f0a0000;
@@ -143,8 +142,8 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int portrait2=0x7f0a003c;
         public static final int progressBar=0x7f0a0047;
         public static final int publisherWrapper=0x7f0a003b;
-        public static final int reference=0x7f0a0010;
-        public static final int referenceContent=0x7f0a0011;
+        public static final int reference=0x7f0a0012;
+        public static final int referenceContent=0x7f0a0013;
         public static final int retweet=0x7f0a0028;
         public static final int send=0x7f0a0005;
         public static final int shadowlayer=0x7f0a000c;
@@ -169,11 +168,11 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int tika=0x7f0a000b;
         public static final int tipImage=0x7f0a001a;
         public static final int tips=0x7f0a001b;
-        public static final int title=0x7f0a0012;
+        public static final int title=0x7f0a0010;
         public static final int toolbar=0x7f0a0003;
         public static final int txt_group=0x7f0a0021;
         public static final int widget108=0x7f0a003a;
-        public static final int wrapper=0x7f0a0013;
+        public static final int wrapper=0x7f0a0011;
         public static final int wrapperll=0x7f0a000f;
     }
     public static final class layout {

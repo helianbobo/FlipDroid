@@ -1136,7 +1136,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     public boolean sinaAlreadyBinded() {
-        return accountDB.hasAccount(Constants.TYPE_SINA_WEIBO) && preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null) != null;
+        return accountDB.hasAccount(Constants.TYPE_MY_SINA_WEIBO) && preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null) != null;
     }
 
     public static final int PROMPT_OAUTH = 1;
