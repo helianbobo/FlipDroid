@@ -26,6 +26,9 @@ public class TikaServiceImpl implements TikaService.Iface {
         try {
             String urlDecoded = java.net.URLDecoder.decode(request.getUrl(), "UTF-8");
             byte[] rawBytes = URLRawRepo.getInstance().fetch(urlDecoded);
+            if (rawBytes == null)
+                throw new TikaException("cannot fetch html:"+urlDecoded);
+
             String charset = EncodingDetector.detect(new BufferedInputStream(new ByteArrayInputStream(rawBytes)));
             Charset cs = null;
             if (charset != null)

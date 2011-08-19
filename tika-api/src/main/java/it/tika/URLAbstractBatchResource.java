@@ -17,6 +17,7 @@ public class URLAbstractBatchResource extends URLAbstractResource {
 
     /**
      * Examle v1/url/abstract/batch?urlList=[{"url":"http://www.ifanr.com/35935"},{"url":"http://www.ifanr.com/36970"},{"url":"http://www.ifanr.com/36928"}]
+     *
      * @return
      */
 
@@ -56,6 +57,9 @@ public class URLAbstractBatchResource extends URLAbstractResource {
 
                         }
                         URLAbstract urlAbstract = find(url, nocache);
+                        if (urlAbstract == null) {
+                            return null;
+                        }
                         return convertURLAbstractToJSON(urlAbstract);
 
 
@@ -70,7 +74,7 @@ public class URLAbstractBatchResource extends URLAbstractResource {
 
             try {
                 Object result = future.get();
-                if(result != null)
+                if (result != null)
                     resultList.put(result);
             } catch (InterruptedException e) {
 

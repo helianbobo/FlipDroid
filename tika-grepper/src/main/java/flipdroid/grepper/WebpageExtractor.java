@@ -54,7 +54,7 @@ public class WebpageExtractor {
             }
         } catch (ExtractorException e) {
             e.printStackTrace();
-            return urlAbstract;//returns the urlAbstract so far
+            return null;
         }
         String title = urlAbstract.getTitle();
         String content = urlAbstract.getContent();

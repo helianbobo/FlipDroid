@@ -26,30 +26,39 @@ public class URLRawRepo {
 
     public byte[] fetch(String urlStr) throws URLRepoException, IOException {
         URL url = new URL(urlStr);
-        final URLConnection conn = url.openConnection();
-        conn.setRequestProperty("User-Agent","Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
-        InputStream in = conn.getInputStream();
-
-        final String encoding = conn.getContentEncoding();
-        if (encoding != null) {
-            if ("gzip".equalsIgnoreCase(encoding)) {
-                in = new GZIPInputStream(in);
-            } else {
-                System.err.println("WARN: unsupported Content-Encoding: " + encoding);
-            }
-        }
-
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        byte[] buf = new byte[4096];
-        int r;
+        ByteArrayOutputStream bos = null;
+        int retryCount = 0;
         try {
-            while ((r = in.read(buf)) != -1) {
-                bos.write(buf, 0, r);
-            }
-        } finally {
-            in.close();
-        }
+            if (retryCount >= 3)
+                return null;
 
+            retryCount++;
+            final URLConnection conn = url.openConnection();
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
+            InputStream in = conn.getInputStream();
+
+            final String encoding = conn.getContentEncoding();
+            if (encoding != null) {
+                if ("gzip".equalsIgnoreCase(encoding)) {
+                    in = new GZIPInputStream(in);
+                } else {
+                    System.err.println("WARN: unsupported Content-Encoding: " + encoding);
+                }
+            }
+
+            bos = new ByteArrayOutputStream();
+            byte[] buf = new byte[4096];
+            int r;
+            try {
+                while ((r = in.read(buf)) != -1) {
+                    bos.write(buf, 0, r);
+                }
+            } finally {
+                in.close();
+            }
+        } catch (IOException e) {
+            retryCount++;
+        }
         return bos.toByteArray();
     }
 

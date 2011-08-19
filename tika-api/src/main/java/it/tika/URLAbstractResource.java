@@ -58,6 +58,9 @@ public class URLAbstractResource extends ServerResource {
             if (result == null) {
                 sw.start("Bytes Fetching");
                 byte[] rawBytes = URLRawRepo.getInstance().fetch(urlDecoded);
+                if (rawBytes == null)
+                    return null;
+                System.out.println("rawBytes length:" + rawBytes.length);
                 sw.stopPrintReset();
                 sw.start("Charset Detection");
                 String charset = EncodingDetector.detect(new BufferedInputStream(new ByteArrayInputStream(rawBytes)));
@@ -80,9 +83,10 @@ public class URLAbstractResource extends ServerResource {
                     result = new URLAbstract(rawBytes, cs);
                     result.setUrl(urlDecoded);
                     sw.start("Content Extraction");
+                    System.out.println("unextracted result:" + result.getRawContent());
                     result = new WebpageExtractor(new TikaImageService()).extract(result);
                     sw.stopPrintReset();
-                    if (result != null) {
+                    if (result != null && result.getContent() != null && result.getContent().length() != 0) {
                         try {
                             sw.start("Persist Result");
                             getDB().insertOrUpdate(result);

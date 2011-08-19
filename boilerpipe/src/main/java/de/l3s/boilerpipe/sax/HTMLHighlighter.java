@@ -181,7 +181,7 @@ public final class HTMLHighlighter {
     }
 
     private String postProcess(String process) {
-        return process.replace("<p><img", "<img").replace("</img></p>", "</img>");
+        return process;//.replace("<p><img", "<img").replace("</img></p>", "</img>");
     }
 
     private String title = null;
@@ -437,6 +437,9 @@ public final class HTMLHighlighter {
         public void startDocument() throws SAXException {
         }
 
+        private int blockLevel = 0;
+        private List<String> deferredImages = new ArrayList<String>();
+
         public void startElement(String uri, String localName, String qName,
                                  Attributes atts) throws SAXException {
 
@@ -463,6 +466,7 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("br") ||
                             qName.equalsIgnoreCase("li")
                             ) {
+                        blockLevel++;
                         if (inBlockQuote) {
                             html.append("<p><blockquote>");
                         } else
@@ -471,6 +475,7 @@ public final class HTMLHighlighter {
                     if (qName.equalsIgnoreCase("blockquote")) {
                         inBlockQuote = true;
                     }
+
                     if (qName.equalsIgnoreCase("img") || qName.equalsIgnoreCase("image")) {
 
                         int length = atts.getLength();
@@ -489,16 +494,20 @@ public final class HTMLHighlighter {
                                 String s = HTMLHighlighter.this.images.get(i);
                                 if (s.indexOf(image) != -1) {
 //                                    if (html.toString().length() != 0 && !html.toString().endsWith("</p>") && !html.toString().endsWith("/>")) {
-                                    if (inBlockQuote) {
-                                        html.append("</blockquote></p>");
-                                    } else
-                                        html.append("</p>");
+//                                    if (inBlockQuote) {
+//                                        html.append("</blockquote></p>");
+//                                    } else
+//                                        html.append("</p>");
 //                                    }
-                                    html.append("<p><img src=" + image + " >hack</img></p>");//there must be a blank after image for parsing purpose
-                                    if (inBlockQuote)
-                                        html.append("<blockquote><p>");
+                                    String img = "<img src=" + image + " >hack</img>";
+                                    if (blockLevel == 0)
+                                        html.append(img);//there must be a blank after image for parsing purpose
                                     else
-                                        html.append("<p>");
+                                        deferredImages.add(img);
+//                                    if (inBlockQuote)
+//                                        html.append("<blockquote><p>");
+//                                    else
+//                                        html.append("<p>");
                                     break;
                                 }
                             }
@@ -548,6 +557,14 @@ public final class HTMLHighlighter {
                             html.append("</blockquote></p>");
                         } else
                             html.append("</p>");
+                        blockLevel--;
+                        if (blockLevel == 0) {
+                            for (int i = 0; i < deferredImages.size(); i++) {
+                                String image = deferredImages.get(i);
+                                html.append(image);
+                            }
+                            deferredImages.clear();
+                        }
                     }
                     if (qName.equalsIgnoreCase("blockquote")) {
                         inBlockQuote = false;
@@ -573,8 +590,14 @@ public final class HTMLHighlighter {
                 if (highlight) {
                     html.append(preHighlight);
                 }
-
-                html.append(xmlEncode(String.valueOf(ch, start, length).replace("\n", "")));
+                boolean addTag = false;
+                if (blockLevel == 0)
+                    addTag = true;
+                if (addTag) {
+                    String text = xmlEncode(String.valueOf(ch, start, length).replace("\n", ""));
+                    html.append("<p>" + text + "</p>");
+                } else
+                    html.append(xmlEncode(String.valueOf(ch, start, length).replace("\n", "")));
                 if (highlight) {
                     html.append(postHighlight);
                 }

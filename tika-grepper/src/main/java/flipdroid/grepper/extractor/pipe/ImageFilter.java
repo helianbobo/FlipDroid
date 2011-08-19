@@ -213,7 +213,7 @@ public class ImageFilter implements Extractor {
         paragraphs.retain(filteredImages, imageInfoMap);
         urlAbstract.setContent(paragraphs.toContent());
         urlAbstract.setImages(filteredImages);
-        System.out.println("urlAbstract.getContent()" + urlAbstract.getContent());
+//        System.out.println("urlAbstract.getContent()" + urlAbstract.getContent());
     }
 
 
