@@ -15,7 +15,7 @@ import java.net.URL;
  * To change this template use File | Settings | File Templates.
  */
 public class SQLLiteTikaCache implements TikaCache {
-    private URLDB urldb;
+    private static URLDB urldb;
     private static SQLLiteTikaCache cache;
     private static volatile boolean shutdown;
 
@@ -28,7 +28,7 @@ public class SQLLiteTikaCache implements TikaCache {
         return response;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void put(String url, TikaExtractResponse extractResponse) {
+    public synchronized void put(String url, TikaExtractResponse extractResponse) {
         urldb.insert(url, extractResponse);
     }
 
@@ -38,8 +38,11 @@ public class SQLLiteTikaCache implements TikaCache {
     }
 
     public static synchronized TikaCache getInstance(Context context) {
-        if (cache == null || shutdown) {
+        if (cache == null) {
             cache = new SQLLiteTikaCache(context);
+        }
+        if(shutdown){
+            urldb = new URLDB(context);
         }
         return cache;
     }

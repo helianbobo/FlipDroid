@@ -102,15 +102,20 @@ public class ContentLoadedView extends ArticleView {
     public void buildView() {
         LayoutInflater inflator = LayoutInflater.from(this.getContext());
         LinearLayout layout = (LinearLayout) inflator.inflate(R.layout.enlarged_content, this);
+        this.titleView = (TextView) layout.findViewById(R.id.title);
+        titleView.setText(article.getTitle());
+        titleView.setTextSize(20);
 
         if (article.getSourceType().equals(Constants.TYPE_SINA_WEIBO) || article.getSourceType().equals(Constants.TYPE_MY_SINA_WEIBO)) {
             LinearLayout reference = (LinearLayout) layout.findViewById(R.id.reference);
+            LinearLayout referenceContent = (LinearLayout) layout.findViewById(R.id.referenceContent);
             LinearLayout shareByll = (LinearLayout) layout.findViewById(R.id.shareByll);
             shareByll.setVisibility(GONE);
             reference.setVisibility(VISIBLE);
+            referenceContent.setVisibility(VISIBLE);
             WebImageView icon = new WebImageView(this.getContext(), article.getPortraitImageUrl().toExternalForm(), true);
-            icon.setDefaultHeight(50);
-            icon.setDefaultWidth(50);
+            icon.setDefaultHeight(30);
+            icon.setDefaultWidth(30);
             reference.addView(icon, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
             TextView author = new TextView(this.getContext());
@@ -138,13 +143,12 @@ public class ContentLoadedView extends ArticleView {
 
             referenceText.setTextColor(Color.parseColor("#AAAAAA"));
             reference.addView(author, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-            reference.addView(referenceText, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            referenceContent.addView(referenceText, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         } else {
             this.authorView = (TextView) layout.findViewById(R.id.author);
             TextView sharedBy = (TextView) layout.findViewById(R.id.sharedBy);
-            this.titleView = (TextView) layout.findViewById(R.id.title);
             authorView.setText(article.getAuthor());
-            titleView.setText(article.getTitle());
+
             createDateView = (TextView) layout.findViewById(R.id.createdDate);
 
             String time = PrettyTimeUtil.getPrettyTime(this.getContext(), article.getCreatedDate());
@@ -161,7 +165,7 @@ public class ContentLoadedView extends ArticleView {
                 authorView.setTextSize(16);
                 createDateView.setTextSize(16);
                 sharedBy.setTextSize(16);
-                titleView.setTextSize(20);
+
             }
         }
         ScrollView wrapper = (ScrollView) layout.findViewById(R.id.wrapper);
