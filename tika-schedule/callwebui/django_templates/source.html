@@ -1,0 +1,37 @@
+<html>
+<head><title>Source</title></head>
+<body>
+
+<a href="/urls/">goto url_abstract</a>
+<ul>
+{% for item in item_list %}
+    <li>
+     <form action="updatesource" method="post"  >
+     {% for k,v in item.items %}
+     <input name={{k}} type="text" value={{v}} >
+	{% endfor %}
+    <input name="update" type="submit" value="update">
+    <input name="update" type="submit" value="delete">
+    </form>
+    </li>
+{% endfor %}
+
+ <li>
+     <form action="updatesource" method="post"  >
+      
+     <input name="url" type="text" value="url" >
+     <select name="type">
+	<option value="rss" selected="selected">rss</option>
+	<option value="weibo">weibo</option>
+	</select>
+     
+ 	 
+    <input name="update" type="submit" value="add">
+ 
+    </form>
+    </li>
+
+
+</ul>
+</body>
+</html>

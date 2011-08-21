@@ -1,0 +1,19 @@
+<html>
+<head><title>Source</title></head>
+<body>
+
+<a href="/source/">goto source</a>
+<ul>
+{% for item in item_list %}
+    <li>
+     <form action="updatesource" method="post"  >
+     {% for k,v in item.items %}
+     <input name={{k}} type="text" value={{v}} >
+	{% endfor %}
+   
+    </form>
+    </li>
+{% endfor %}
+
+</body>
+</html>
