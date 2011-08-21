@@ -392,6 +392,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                         prepareNextPage();
                     }
                 }).start();
+
+
                 pageIndexView.setDot(repo.getTotal(), currentPageIndex);
                 header.setPageView(current);
                 ////System.out.println("last page" + current.isLastPage());

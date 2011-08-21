@@ -1,5 +1,10 @@
 package com.goal98.tika.common;
 
+import com.sun.xml.internal.ws.wsdl.writer.document.OpenAtts;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ImageInfo implements TikaUIObject {
 
     public static final String HACK_IMG = ">hack</img>";
@@ -69,14 +74,23 @@ public class ImageInfo implements TikaUIObject {
 
     public void setUnparsedInfo(String paragraph) {
         final int srcStarts = paragraph.indexOf("src=");
-        this.url = paragraph.substring(srcStarts + 4, paragraph.indexOf(" ",srcStarts));
-        if(paragraph.indexOf("width")!=-1){
+        this.url = paragraph.substring(srcStarts + 4, paragraph.indexOf(" ", srcStarts));
+        if (paragraph.indexOf("width") != -1) {
             final int widthStarts = paragraph.indexOf("width=");
-            this.width = Integer.valueOf(paragraph.substring(widthStarts + 6, paragraph.indexOf(" ",widthStarts)));
+            this.width = Integer.valueOf(paragraph.substring(widthStarts + 6, paragraph.indexOf(" ", widthStarts)));
         }
-        if(paragraph.indexOf("height")!=-1){
+        if (paragraph.indexOf("height") != -1) {
             final int heightStarts = paragraph.indexOf("height=");
-            this.height = Integer.valueOf(paragraph.substring(heightStarts + 7, paragraph.indexOf(" ",heightStarts)));
+            this.height = Integer.valueOf(paragraph.substring(heightStarts + 7, paragraph.indexOf(" ", heightStarts)));
         }
+    }
+
+    public static void main(String[] args) {
+        String regEx = "[\u4e00-\u9fa5]";
+        Pattern pat = Pattern.compile(regEx);
+
+        String dot = "，";
+        Matcher m = pat.matcher(dot);
+        System.out.println(m.matches());
     }
 }

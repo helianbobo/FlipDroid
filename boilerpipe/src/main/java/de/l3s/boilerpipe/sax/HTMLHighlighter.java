@@ -593,17 +593,19 @@ public final class HTMLHighlighter {
                 boolean addTag = false;
                 if (blockLevel == 0)
                     addTag = true;
-                if (addTag) {
-                    String text = xmlEncode(String.valueOf(ch, start, length).replace("\n", ""));
+                String t = String.valueOf(ch, start, length);
+                boolean isPunctuation = chinesePunctuation.indexOf(t)!=-1;
+                if (addTag && !isPunctuation ){
+                    String text = xmlEncode(t.replace("\n", ""));
                     html.append("<p>" + text + "</p>");
                 } else
-                    html.append(xmlEncode(String.valueOf(ch, start, length).replace("\n", "")));
+                    html.append(xmlEncode(t.replace("\n", "")));
                 if (highlight) {
                     html.append(postHighlight);
                 }
             }
         }
-
+        public String chinesePunctuation = "，。！￥（）“”‘；：· 《》、";
         public void startPrefixMapping(String prefix, String uri)
                 throws SAXException {
         }

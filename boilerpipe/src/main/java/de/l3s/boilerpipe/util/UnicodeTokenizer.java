@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
 public class UnicodeTokenizer {
     private static final Pattern PAT_WORD_BOUNDARY = Pattern.compile("\\b");
     private static final Pattern PAT_NOT_WORD_BOUNDARY = Pattern
-            .compile("[\u2063]*([\\\"'\\.,\\!\\@\\-\\:\\;\\$\\?\\(\\)/])[\u2063]*");
+            .compile("[\u2063]*([\\\"'\\.,，。！￥（）“”‘；：· 《》、\\!\\@\\-\\:\\;\\$\\?\\(\\)/])[\u2063]*");
 
     /**
      * Tokenizes the text and returns an array of tokens.
@@ -44,5 +44,16 @@ public class UnicodeTokenizer {
                     .replaceAll("$1").replaceAll("[ \u2063]+", " ").trim().split(
                             "[ ]+");
 
+    }
+
+    public static void main(String[] args) {
+        String str = "\n" +
+                "一个大盒子包住“前、后、左、右、上、下”6个面，因为定位产生层高的关系，所以它的顺序其实是“后、下、左、前、上、右”，下面的div就会自然的叠在上面，就可以不写z-index了。";
+        String[] strArr = UnicodeTokenizer.tokenize(str);
+        System.out.println(strArr);
+        for (int i = 0; i < strArr.length; i++) {
+            String s = strArr[i];
+            System.out.println(s);
+        }
     }
 }

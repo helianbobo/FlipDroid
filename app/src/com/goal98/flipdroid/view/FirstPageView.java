@@ -23,19 +23,19 @@ import java.util.concurrent.ExecutorService;
  */
 public class FirstPageView extends WeiboPageView {
     private LinearLayout frame;
-    private FromFileJSONReader jsonReader;
+    private TipsRepo tipsRepo;
 
     public FirstPageView(PageActivity context, PageViewSlidingWindows windows,ExecutorService executor) {
         super(context);
-        jsonReader = new FromFileJSONReader(context);
     }
 
     protected void setDynamicLayout(Context context) {
+        tipsRepo = new TipsRepo(context);
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
         this.frame = (LinearLayout) inflater.inflate(R.layout.first_page_view, null);
         TextView textView = (TextView) this.frame.findViewById(R.id.tips);
 
-        TipsRepo tipsRepo = new TipsRepo(context);
+
         List<Tip> tips = tipsRepo.getTips();
         int size = tips.size();
         if (size > 0) {

@@ -92,7 +92,16 @@
           <root url="jar://$MODULE_DIR$/../lib/signpost-commonshttp4-1.2.1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-jetty6/src/test/java" />
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-commonshttp4/src/main/java" />
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-jetty6/src/main/java" />
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-core/src/test/java" />
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-commonshttp3/src/test/java" />
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-core/src/main/java" />
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-commonshttp4/src/test/java" />
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-commonshttp3/src/main/java" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
@@ -101,7 +110,16 @@
           <root url="jar://$MODULE_DIR$/../lib/signpost-core-1.2.1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-jetty6/src/test/java" />
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-commonshttp4/src/main/java" />
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-jetty6/src/main/java" />
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-core/src/test/java" />
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-commonshttp3/src/test/java" />
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-core/src/main/java" />
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-commonshttp4/src/test/java" />
+          <root url="file://$USER_HOME$/Downloads/kaeppler-signpost-1.2.1.1-5-gd608820/kaeppler-signpost-d608820/signpost-commonshttp3/src/main/java" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
@@ -131,7 +149,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="jdk" jdkName="Android 2.3.3 Platform" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="Android 2.2 Platform" jdkType="Android SDK" />
     <orderEntry type="module" module-name="tika-common" />
     <orderEntry type="module" module-name="web-image-view" />
   </component>
