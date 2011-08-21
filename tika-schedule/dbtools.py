@@ -71,15 +71,15 @@ class DBreader(object):
         return self.mydb.tika.url_abstract
     
     def updateTarget(self,items):
-        muser=self.mydb.tika
-        if not isinstance(items,list):
-            items=[items]
+#        muser=self.mydb.tika
+#       if not isinstance(items,list):
+#            items=[items]
         
-        for item in items:
-            muser.url_abstract.save({"time":time.strftime( ISOTIMEFORMAT, time.gmtime()),linkitem.KEYURL:item.url,linkitem.KEYTYPE:item.type,
-                                 linkitem.KEYSTATE:item.state})
-            muser.url_abstract.save({"time":time.strftime( ISOTIMEFORMAT, time.gmtime()),linkitem.KEYURL:item.url,linkitem.KEYTYPE:item.type,linkitem.KEYSTATE:item.state,
-                                     linkitem.KEYCONTENT:item.content,linkitem.KEYTITLE:item.title,linkitem.KEYIMAGES:item.images})
+#        for item in items:
+#            muser.url_abstract.save({"time":time.strftime( ISOTIMEFORMAT, time.gmtime()),linkitem.KEYURL:item.url,linkitem.KEYTYPE:item.type,
+#                                 linkitem.KEYSTATE:item.state})
+#            muser.url_abstract.save({"time":time.strftime( ISOTIMEFORMAT, time.gmtime()),linkitem.KEYURL:item.url,linkitem.KEYTYPE:item.type,linkitem.KEYSTATE:item.state,
+#                                    linkitem.KEYCONTENT:item.content,linkitem.KEYTITLE:item.title,linkitem.KEYIMAGES:item.images})
         return True
 
     def updateSourceRssMD5(self,theid,md5):
