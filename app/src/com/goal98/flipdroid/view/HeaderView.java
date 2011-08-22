@@ -57,8 +57,8 @@ public class HeaderView extends LinearLayout {
 
         showTitleBar();
 
-        viewSwitcher.setInAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.fadein));
-        viewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.fade));
+        viewSwitcher.setInAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.fadeinfast));
+        viewSwitcher.setOutAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.fadefast));
         TextView headerText = (TextView) viewSwitcher.findViewById(R.id.headerText);
         DeviceInfo deviceInfo = getDeviceInfoFromApplicationContext();
         if (deviceInfo.isLargeScreen()) {

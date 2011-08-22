@@ -189,7 +189,7 @@ public class ImageFilter implements Extractor {
             } else if (fileSize < 5000 && height < 130 && width < 130) {
                 imagesIterator.remove();
             } else {
-                if (height / width >= 9 || width / height >= 9)
+                if (height / width >= 8 || width / height >= 8)
                     imagesIterator.remove();
                 else if (ii.getWidth() != 0 && ii.getHeight() != 0) {
                     imageInfoMap.put(queryURL, ii);

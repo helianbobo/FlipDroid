@@ -20,6 +20,7 @@ public class URLAbstractBatchResource extends URLAbstractResource {
      *
      * @return
      */
+    private Tika tikaService = Tika.getInstance();
 
     @Post("JSON")
     @Get("JSON")
@@ -56,7 +57,7 @@ public class URLAbstractBatchResource extends URLAbstractResource {
                         } catch (JSONException e) {
 
                         }
-                        URLAbstract urlAbstract = find(url, nocache);
+                        URLAbstract urlAbstract = tikaService.extract(url, nocache);
                         if (urlAbstract == null) {
                             return null;
                         }

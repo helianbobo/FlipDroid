@@ -605,7 +605,7 @@ public final class HTMLHighlighter {
                 }
             }
         }
-        public String chinesePunctuation = "，。！￥（）“”‘；：· 《》、";
+        public String chinesePunctuation = "，。！￥（）“”‘；：· 《》、？";
         public void startPrefixMapping(String prefix, String uri)
                 throws SAXException {
         }

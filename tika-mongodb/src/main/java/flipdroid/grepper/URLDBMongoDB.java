@@ -4,6 +4,7 @@ import com.mongodb.*;
 import flipdroid.grepper.exception.DBNotAvailableException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,7 +12,7 @@ import java.util.logging.Logger;
 public class URLDBMongoDB implements URLDBInterface {
 
     private static URLDBInterface instance;
-    public static final String urlCollectionName = "url";
+    public static final String urlCollectionName = "url_abstract";
     private Logger logger = Logger.getLogger(URLDBMongoDB.class.getName());
 
     private DB db;
@@ -69,6 +70,9 @@ public class URLDBMongoDB implements URLDBInterface {
         urlAbstractObj.put("title", urlAbstract.getTitle());
         urlAbstractObj.put("content", urlAbstract.getContent());
         urlAbstractObj.put("images", urlAbstract.getImages());
+        urlAbstractObj.put("type", "user");
+        urlAbstractObj.put("time", new Date());
+        urlAbstractObj.put("state", "success");
 
         try {
             db.getCollection(urlCollectionName).insert(urlAbstractObj);
@@ -90,6 +94,7 @@ public class URLDBMongoDB implements URLDBInterface {
             urlFromDB.put("title", urlAbstract.getTitle());
             urlFromDB.put("content", urlAbstract.getContent());
             urlFromDB.put("images", urlAbstract.getImages());
+            urlFromDB.put("time", new Date());
             db.getCollection(urlCollectionName).update(query, urlFromDB);
         } catch (MongoException e) {
             logger.log(Level.INFO, e.getMessage(), e);

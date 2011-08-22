@@ -27,89 +27,7 @@ import java.util.logging.Level;
 
 public class URLAbstractResource extends ServerResource {
 
-    private URLDBInterface getDB() {
-        return URLDBMongoDB.getInstance();
-    }
-
-    public void setDB(URLDBInterface db) {
-        //TODO: database implementation injection
-    }
-
-    protected URLAbstract find(String url, boolean nocache) {
-
-        URLAbstract result = null;
-
-        StopWatch sw = new StopWatch();
-        try {
-            boolean bypassCache = nocache;
-
-            String urlDecoded = java.net.URLDecoder.decode(url, "UTF-8");
-
-            if (!bypassCache) {
-                try {
-                    sw.start("DB Cache Query");
-                    result = getDB().find(urlDecoded);
-                    sw.stopPrintReset();
-                } catch (DBNotAvailableException e) {
-                    getLogger().log(Level.INFO, e.getMessage(), e);
-                }
-            }
-
-            if (result == null) {
-                sw.start("Bytes Fetching");
-                byte[] rawBytes = URLRawRepo.getInstance().fetch(urlDecoded);
-                if (rawBytes == null)
-                    return null;
-                System.out.println("rawBytes length:" + rawBytes.length);
-                sw.stopPrintReset();
-                sw.start("Charset Detection");
-                String charset = EncodingDetector.detect(new BufferedInputStream(new ByteArrayInputStream(rawBytes)));
-//                String charset = EncodingDetector.detect(urlDecoded);
-                sw.stopPrintReset();
-                Charset cs = null;
-                if (charset != null)
-                    cs = Charset.forName(charset);
-                else {
-                    try {
-                        cs = Charset.forName("utf-8");
-                    } catch (UnsupportedCharsetException e) {
-                        // keep default
-                    }
-                }
-
-                if (rawBytes == null) {
-                    getLogger().log(Level.INFO, "Can't fetch document from url:" + urlDecoded);
-                } else {
-                    result = new URLAbstract(rawBytes, cs);
-                    result.setUrl(urlDecoded);
-                    sw.start("Content Extraction");
-                    System.out.println("unextracted result:" + result.getRawContent());
-                    result = new WebpageExtractor(new TikaImageService()).extract(result);
-                    sw.stopPrintReset();
-                    if (result != null && result.getContent() != null && result.getContent().length() != 0) {
-                        try {
-                            sw.start("Persist Result");
-                            getDB().insertOrUpdate(result);
-                            sw.stopPrintReset();
-                        } catch (DBNotAvailableException e) {
-                            getLogger().log(Level.INFO, e.getMessage(), e);
-                        }
-                    }
-                }
-            }
-        } catch (UnsupportedEncodingException e) {
-            getLogger().log(Level.INFO, e.getMessage(), e);
-        } catch (NullPointerException ne) {
-            getLogger().log(Level.SEVERE, ne.getMessage(), ne);
-        } catch (URLRepoException urle) {
-            getLogger().log(Level.SEVERE, urle.getMessage(), urle);
-        } catch (ExtractorException ee) {
-            getLogger().log(Level.SEVERE, ee.getMessage(), ee);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        return result;
-    }
+    private Tika tikaService = Tika.getInstance();
 
     @Get("JSON")
     public String toJson() {
@@ -129,22 +47,21 @@ public class URLAbstractResource extends ServerResource {
             nocache = Boolean.valueOf(form.getFirst("nocache").getValue());
         }
 
-
-        String result = "";
         URLAbstract urlAbstract = null;
+        String urlDecoded = null;
+        try {
+            urlDecoded = java.net.URLDecoder.decode(url, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
 
-
-        urlAbstract = find(url, nocache);
-
+        urlAbstract = tikaService.extract(urlDecoded, nocache);
 
         if (urlAbstract == null) {
             getResponse().setStatus(Status.CLIENT_ERROR_NOT_FOUND);
             return null;
         }
-
-
         return Util.writeJSON(convertURLAbstractToJSON(urlAbstract));
-
     }
 
     private void onRequestResource() {

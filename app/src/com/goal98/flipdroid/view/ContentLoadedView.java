@@ -131,7 +131,7 @@ public class ContentLoadedView extends ArticleView {
 
             TextView referenceText = new TextView(this.getContext());
             referenceText.setSingleLine(false);
-            referenceText.setMaxLines(5);
+            referenceText.setMaxLines(10);
             referenceText.setText(article.getStatus());
             if (deviceInfo.isLargeScreen())
                 referenceText.setTextSize(22);

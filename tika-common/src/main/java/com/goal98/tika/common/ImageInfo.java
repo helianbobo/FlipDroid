@@ -1,6 +1,5 @@
 package com.goal98.tika.common;
 
-import com.sun.xml.internal.ws.wsdl.writer.document.OpenAtts;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
