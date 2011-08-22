@@ -7,7 +7,7 @@ from django.http import HttpResponse
  
 urlpatterns = patterns('',
     ('^source/$', views.showSource),
-    ('^scorce/updatesource', views.updateSource),
+    ('^source/updatesource', views.updateSource),
     ('^urls/$', views.showUrls),
     
  
