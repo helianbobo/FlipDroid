@@ -8,16 +8,31 @@
 {% for item in items.object_list %}
   
     <li>
-     <form action="updateurls" method="post"  >
+     <form action="updateurls" method="get"  >
      {% for k,v in item.items %}
      {% ifequal k 'title' %}
-     	<input name={{k}} type="text" value={{v}}>
+     	 <p><font size="1">{{v}}</font> </p>
      {% else %}
      	{% ifequal k  'content' %}
+     	<input name={{k}} type="text" value={{v}}>
      		{% else %}
+     		{% ifequal k 'url' %}
+     		 
+    <p> <a href="{{v}}"> {{v}} </a></p>
+     
+      {% else %}
+     		{% ifequal k  'time' %}
+     		<input name={{k}} type="text" value="{{v}}">
+     		{% else %}
+     		{% ifequal k '_id' %}
+     	 
+     	<input name={{k}} type="text" value= {{v}} readonly="readonly" style="background-color: #999999">
+     {% else %}
      		<input name={{k}} type="text" value={{v}}>
+     		{% endifequal %}
      	{% endifequal %}
-
+     	{% endifequal %}
+{% endifequal %}
      {% endifequal %}
 	{% endfor %}
  <input name="update" type="submit" value="delete">
