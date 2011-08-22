@@ -15,8 +15,9 @@ def updateSource(request):
          
         x["url"]=request.POST['url']
         x["type"]=request.POST['type']
+        x["md5"] = u"1"
         x["time"]=unicode(time.strftime(ISOTIMEFORMAT, time.gmtime()))
-  
+         
         x.save()
         return HttpResponseRedirect("/source/")
         

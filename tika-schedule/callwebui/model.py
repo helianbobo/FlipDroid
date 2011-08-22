@@ -30,7 +30,9 @@ class Source(Document):
     structure = {
                  'url':unicode,
                  'type':unicode,
+                 'md5':unicode,
                  'time':unicode,
+                  
                  }
     required_fields = ['url' ]
     
