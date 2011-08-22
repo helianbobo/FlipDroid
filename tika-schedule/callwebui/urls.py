@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     ('^source/$', views.showSource),
     ('^source/updatesource', views.updateSource),
     ('^urls/$', views.showUrls),
+    ('^urls/updateurls', views.updateUrls),
     
  
 )
