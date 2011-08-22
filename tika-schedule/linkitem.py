@@ -18,13 +18,13 @@ KEYIMAGES="images"
 
 
 class LinkItem():
-    def __init__(self,url,content,title,images,type=KEYTYPE_RSS,state=KEYSTATE_NOREAD):
+    def __init__(self,url,type=KEYTYPE_RSS,state=KEYSTATE_NOREAD):
         self.url=url
         self.type=type
         self.state=state
-        self.content=content
-        self.images=images
-        self.title=title
+        #self.content=content
+        #self.images=images
+        #self.title=title
 
     def __repr__(self):
         return  self.url
