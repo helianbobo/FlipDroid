@@ -1,6 +1,7 @@
 easy_install django
 easy_install mongokit
-python manage.py server
+python manage.py runserver
 默认8000
-python manage.py server 9999
 http://localhost:8000/source/
+如果用其他端口 python manage.py runserver 9999
+ 

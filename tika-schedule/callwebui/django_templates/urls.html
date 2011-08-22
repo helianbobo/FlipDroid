@@ -1,19 +1,31 @@
-<html>
-<head><title>Source</title></head>
-<body>
+{% extends "base.html" %}  
+{% block title %}Url_abstract{% endblock %}  
+{% block content %}  
+ 
+<a href="/source/">goto source!!!!</a>
 
-<a href="/source/">goto source</a>
 <ul>
-{% for item in item_list %}
+{% for item in items.object_list %}
+  
     <li>
-     <form action="updatesource" method="post"  >
+     <form action="updateurls" method="post"  >
      {% for k,v in item.items %}
-     <input name={{k}} type="text" value={{v}} >
+     {% ifequal k 'title' %}
+     	<input name={{k}} type="text" value={{v}}>
+     {% else %}
+     	{% ifequal k  'content' %}
+     		{% else %}
+     		<input name={{k}} type="text" value={{v}}>
+     	{% endifequal %}
+
+     {% endifequal %}
 	{% endfor %}
-   
+ <input name="update" type="submit" value="delete">
+  <input name="update" type="submit" value="show">
     </form>
     </li>
 {% endfor %}
+ 
+{% endblock %} 
 
-</body>
-</html>
+
