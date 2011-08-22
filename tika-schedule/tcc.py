@@ -31,23 +31,25 @@ class TCC(object):
     
     def start(self):
         print "**********\n"+"###start tcc now!!!\n"+"**********\n"
-        self.lm=self.LmClass()
-        self.lm.start()
+        #self.lm=self.LmClass
+        #self.lm.start()
        #time.sleep(2)
         i=0
+        #self.rm = rssmanager.RssManager()
+        #self.rm.handleLinksFromAllRss(self.lm)
+        #self.lm.close()
         while True:
             i += 1
             print 
             print "##########\n"+"###start onece !!!"+str(i)+"\n"
              
             self.rm = rssmanager.RssManager()
-            t = threading.Thread(target=self.rm.handleLinksFromAllRss,args=(self.lm,))
-            t.start()
-            t.join()
-            
+            #t = threading.Thread(target=self.rm.handleLinksFromAllRss,args=(self.lm,))
+            #t.start()
+            #t.join()
+            self.rm.handleLinksFromAllRss(self.LmClass)
             print "##########\n"+"###fininsh onece!!!\n""##########\n"
             print "##########\n"+"###to sleep %s  seconds!!!\n"%self.interval+"##########\n" 
-             
             time.sleep(self.interval)
             
         

@@ -1,7 +1,7 @@
 # Django settings for callwebui project.
 DB_HOST='localhost'
 DB_PORT=27017
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -12,7 +12,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': '', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': '',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
@@ -103,9 +103,10 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'callwebui.urls'
-
+import os
+ROOTDIR = os.path.abspath(os.path.dirname(__file__)) 
 TEMPLATE_DIRS = (
-                 './django_templates',
+                ROOTDIR +'/django_templates',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.

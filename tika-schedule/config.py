@@ -8,7 +8,7 @@ DBPOST=27017
 TIKAHOST='localhost'
 TIKAPOST=9090
 INTERVAL=60*30 #second
-THRIFTTIMEOUT = 5 #second
+THRIFTTIMEOUT = 60 #second
 RSSTIMEOUT = 60
 
 if __name__ == "__main__":

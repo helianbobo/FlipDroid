@@ -5,9 +5,20 @@
 <ul>
 {% for item in items.object_list %}
     <li>
-     <form action="updatesource" method="post"  >
+     <form action="updatesource" method="get"  >
      {% for k,v in item.items %}
-     <input name={{k}} type="text" value={{v}} >
+     {% ifequal k '_id' %}
+     	 
+     	<input name={{k}} type="text" value= {{v}} readonly="readonly" style="background-color: #999999">
+     {% else %}
+     {% ifequal k 'url' %}
+     <input name={{k}} type="text" value= {{v}}  style= "WIDTH: 300px">
+     
+      {% else %}
+     
+     <input name={{k}} type="text" value= {{v}} >
+     {% endifequal %}
+     {% endifequal %}
 	{% endfor %}
     <input name="update" type="submit" value="update">
     <input name="update" type="submit" value="delete">
@@ -15,7 +26,7 @@
     </li>
 {% endfor %}
  <li>
-     <form action="updatesource" method="post"  >   
+     <form action="updatesource" method="get"  >   
      <input name="url" type="text" value="url" >
      <select name="type">
 	<option value="rss" selected="selected">rss</option>
