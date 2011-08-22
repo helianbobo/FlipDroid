@@ -464,7 +464,8 @@ public final class HTMLHighlighter {
                     }
                     if (qName.equalsIgnoreCase("p") ||
                             qName.equalsIgnoreCase("br") ||
-                            qName.equalsIgnoreCase("li")
+                            qName.equalsIgnoreCase("li") ||
+                            qName.equalsIgnoreCase("div")
                             ) {
                         blockLevel++;
                         if (inBlockQuote) {
@@ -551,7 +552,8 @@ public final class HTMLHighlighter {
                     }
                     if (qName.equalsIgnoreCase("p") ||
                             qName.equalsIgnoreCase("br") ||
-                            qName.equalsIgnoreCase("li")
+                            qName.equalsIgnoreCase("li") ||
+                            qName.equalsIgnoreCase("div")
                             ) {
                         if (inBlockQuote) {
                             html.append("</blockquote></p>");
@@ -594,8 +596,8 @@ public final class HTMLHighlighter {
                 if (blockLevel == 0)
                     addTag = true;
                 String t = String.valueOf(ch, start, length);
-                boolean isPunctuation = chinesePunctuation.indexOf(t)!=-1;
-                if (addTag && !isPunctuation ){
+                boolean isPunctuation = chinesePunctuation.indexOf(t) != -1;
+                if (addTag && !isPunctuation) {
                     String text = xmlEncode(t.replace("\n", ""));
                     html.append("<p>" + text + "</p>");
                 } else
@@ -605,7 +607,9 @@ public final class HTMLHighlighter {
                 }
             }
         }
+
         public String chinesePunctuation = "，。！￥（）“”‘；：· 《》、？";
+
         public void startPrefixMapping(String prefix, String uri)
                 throws SAXException {
         }
