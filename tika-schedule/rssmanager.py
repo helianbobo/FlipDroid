@@ -76,7 +76,7 @@ class RssManager(object):
                 print "len links in url_abstract ",self.links_db_target.find().count()
                 links_old = [item[KEYURL] for item in self.links_db_target.find()]
                 links_new = [item for item in links_now if item[0] not in links_old]
-                self.alllinksnum+=len(links_new)
+                self.alllinksnum+=len(links_new)	
                 partnewlinkitems=[LinkItem(url=item[0],type=item[1]) for item in links_new]
                 self.linkitems+=partnewlinkitems
                 r = self.callLinksManager(partnewlinkitems,linksmanager)
@@ -148,7 +148,8 @@ class RssManager(object):
     linksmanager=None
     event=threading.Event()
     def handleLinksFromAllRss(self,linksmanager=None):
-        self.linksmanager=linksmanager
+        self.linksmanager=linksmanager()
+        self.linksmanager.start()
         ts=[]
         for i,rssitem in enumerate(self.yieldLinkFromAllRss()):
             #links_now = self.getLinksItems(rssitem)
@@ -161,11 +162,12 @@ class RssManager(object):
             t.join()
         #self.linksmanager.close()
         self.linksmanager.join()
+        #self.db.close()
         self.event.wait()
-        
+        self.close()
        
         #self.linksmanager.close()
-        self.db.close()
+        #self.db.close()
         print "rssmanger once send over!!!!\n"
         
 

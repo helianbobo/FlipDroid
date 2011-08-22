@@ -36,8 +36,10 @@ def test_save_to_mdb():
     
 
     if muser.source.find().count() <> 0:
+         
         con.disconnect()
         return None
+    
     muser.source.save({linkitem.KEYTIME:time.strftime( ISOTIMEFORMAT, time.gmtime()),
                        linkitem.KEYURL:"http://www.36kr.com/feed/",linkitem.KEYTYPE:linkitem.KEYTYPE_RSS,'md5':'1'})
     muser.source.save({linkitem.KEYTIME:time.strftime( ISOTIMEFORMAT, time.gmtime()),
