@@ -110,23 +110,7 @@ public final class HTMLHighlighter {
 
         String html = implementation.html.toString();
         if (outputHighlightOnly) {
-            Matcher m;
-
-            boolean repeat = true;
-            while (repeat) {
-                repeat = false;
-                m = PAT_TAG_NO_TEXT.matcher(html);
-                if (m.find()) {
-                    repeat = true;
-                    html = m.replaceAll("");
-                }
-
-//                m = PAT_SUPER_TAG.matcher(html);
-//                if (m.find()) {
-//                    repeat = true;
-//                    html = m.replaceAll(m.group(1));
-//                }
-            }
+            html = html.replaceAll("<p></p>","").replaceAll("<strong></strong>","").replaceAll("<h[1-9]+></h[1-9]+>","");
         }
 
         return html;
@@ -455,6 +439,7 @@ public final class HTMLHighlighter {
 //            }
             try {
                 if (inIgnorableElement == 0) {
+                    System.out.println(qName);
                     if (qName.equalsIgnoreCase("h1") ||
                             qName.equalsIgnoreCase("h2") ||
                             qName.equalsIgnoreCase("h3") ||
@@ -462,13 +447,12 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("h5") ||
                             qName.equalsIgnoreCase("h6") ||
                             qName.equalsIgnoreCase("strong")) {
-                        html.append("<" + qName + ">");
+                        html.append("<" + qName.toLowerCase() + ">");
                     }
                     if (qName.equalsIgnoreCase("div")) {
                         blockLevel++;
                     }
                     if (qName.equalsIgnoreCase("p") ||
-                            qName.equalsIgnoreCase("br") ||
                             qName.equalsIgnoreCase("li")) {
 
                         if (inBlockQuote) {
@@ -476,6 +460,9 @@ public final class HTMLHighlighter {
                         } else
                             html.append("<p>");
                         blockLevel++;
+                    }
+                    if (qName.equalsIgnoreCase("br")) {
+                        html.append("<br/>");
                     }
                     if (qName.equalsIgnoreCase("blockquote")) {
                         inBlockQuote = true;
@@ -545,6 +532,7 @@ public final class HTMLHighlighter {
 //                            return;
 //                        }
                     }
+
                     if (qName.equalsIgnoreCase("h1") ||
                             qName.equalsIgnoreCase("h2") ||
                             qName.equalsIgnoreCase("h3") ||
@@ -552,21 +540,20 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("h5") ||
                             qName.equalsIgnoreCase("h6") ||
                             qName.equalsIgnoreCase("strong")) {
-                        html.append("</" + qName + ">");
+                        html.append("</" + qName.toLowerCase() + ">");
                     }
                     if (qName.equalsIgnoreCase("div")) {
                         blockLevel--;
                     }
                     if (qName.equalsIgnoreCase("p") ||
-                            qName.equalsIgnoreCase("br") ||
                             qName.equalsIgnoreCase("li")) {
                         if (inBlockQuote) {
                             html.append("</blockquote></p>");
                         } else
                             html.append("</p>");
-                        blockLevel--;
 
                     }
+
                     for (int i = 0; i < deferredImages.size(); i++) {
                         String image = deferredImages.get(i);
                         html.append(image);

@@ -69,7 +69,12 @@ public class Paragraphs {
         int level = 0;
         while (startMatcher.find()) {
 //            System.out.println(startMatcher.group());
-            if (startMatcher.group().indexOf("</") == -1) {
+
+            final String group = startMatcher.group();
+            if (group.indexOf("<br/>") != -1) {
+                 continue;
+            }
+            if (group.indexOf("</") == -1) {
                 level++;
             } else {
                 level--;
