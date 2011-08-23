@@ -11,6 +11,9 @@ urlpatterns = patterns('',
     ('^urls/$', views.showUrls),
     ('^urls/updateurls', views.updateUrls),
     ('^test/', views.test),
+    ('^login/', views.login),
+    ('$', views.loginPage),
+     
     
  
 )

@@ -23,14 +23,18 @@ class Tika(object):
         self.transport.open()
 
     def handleUrl(self,url):
-        tr = TikaRequest(url)
-        print url,"###befor fire"
-        aa = self.client.fire(tr)
-        print url,"###after fire"
-        if aa.success:
-            print "success",tr.url
+        try:
+            tr = TikaRequest(url)
+            print url,"###befor fire"
+            aa = self.client.fire(tr)
+            print url,"###after fire"
+            if aa.success:
+                print "success",tr.url
+        except Exception,e:
+            print "!!!!!errorurl!!!!:"+url
+            print e
         #self.transport.close()
-	return aa.success
+        return True
     
     def close(self):
         self.transport.close()
