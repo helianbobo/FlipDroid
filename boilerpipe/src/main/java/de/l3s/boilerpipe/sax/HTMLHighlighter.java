@@ -181,6 +181,8 @@ public final class HTMLHighlighter {
     }
 
     private String postProcess(String process) {
+        if (!process.startsWith("<") && !process.endsWith(">"))
+            return "<p>" + process + "</p>";
         return process;//.replace("<p><img", "<img").replace("</img></p>", "</img>");
     }
 
@@ -462,16 +464,18 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("strong")) {
                         html.append("<" + qName + ">");
                     }
+                    if (qName.equalsIgnoreCase("div")) {
+                        blockLevel++;
+                    }
                     if (qName.equalsIgnoreCase("p") ||
                             qName.equalsIgnoreCase("br") ||
-                            qName.equalsIgnoreCase("li") ||
-                            qName.equalsIgnoreCase("div")
-                            ) {
-                        blockLevel++;
+                            qName.equalsIgnoreCase("li")) {
+
                         if (inBlockQuote) {
                             html.append("<p><blockquote>");
                         } else
                             html.append("<p>");
+                        blockLevel++;
                     }
                     if (qName.equalsIgnoreCase("blockquote")) {
                         inBlockQuote = true;
@@ -550,24 +554,24 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("strong")) {
                         html.append("</" + qName + ">");
                     }
+                    if (qName.equalsIgnoreCase("div")) {
+                        blockLevel--;
+                    }
                     if (qName.equalsIgnoreCase("p") ||
                             qName.equalsIgnoreCase("br") ||
-                            qName.equalsIgnoreCase("li") ||
-                            qName.equalsIgnoreCase("div")
-                            ) {
+                            qName.equalsIgnoreCase("li")) {
                         if (inBlockQuote) {
                             html.append("</blockquote></p>");
                         } else
                             html.append("</p>");
                         blockLevel--;
-                        if (blockLevel == 0) {
-                            for (int i = 0; i < deferredImages.size(); i++) {
-                                String image = deferredImages.get(i);
-                                html.append(image);
-                            }
-                            deferredImages.clear();
-                        }
+
                     }
+                    for (int i = 0; i < deferredImages.size(); i++) {
+                        String image = deferredImages.get(i);
+                        html.append(image);
+                    }
+                    deferredImages.clear();
                     if (qName.equalsIgnoreCase("blockquote")) {
                         inBlockQuote = false;
                     }

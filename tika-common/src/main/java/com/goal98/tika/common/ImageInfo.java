@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 public class ImageInfo implements TikaUIObject {
 
     public static final String HACK_IMG = ">hack</img>";
-
+    public static final String IMG_START = "<img";
     private int size;
     private int width;
     private int height;

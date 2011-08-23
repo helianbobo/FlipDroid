@@ -130,8 +130,6 @@ public class ContentLoadedView extends ArticleView {
             author.setTextColor(Color.parseColor("#AAAAAA"));
 
             TextView referenceText = new TextView(this.getContext());
-            referenceText.setSingleLine(false);
-            referenceText.setMaxLines(10);
             referenceText.setText(article.getStatus());
             if (deviceInfo.isLargeScreen())
                 referenceText.setTextSize(22);

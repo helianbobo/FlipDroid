@@ -35,43 +35,46 @@ public class Paragraphs {
             return;
 //        System.out.println(articleContent.length());
         int cutAt = 0;
-        articleContent = parseImg(articleContent);
+//        articleContent = parseImg(articleContent);
         while ((cutAt = findNextClosingTag(articleContent)) != -1) {
-            if (cutAt == 0) {
-                int endAt = articleContent.indexOf(">");
-                articleContent = articleContent.substring(endAt + 1);
-                continue;
-            }
+//            if (cutAt == 0) {
+//                int endAt = articleContent.indexOf(">");
+//                articleContent = articleContent.substring(endAt + 1);
+//                continue;
+//            }
             int endAt = articleContent.indexOf(">", cutAt);
             String paragraph = articleContent.substring(0, endAt + 1);
+//            toParagraph(paragraph);
+            if (paragraph.indexOf(ImageInfo.IMG_START) != -1)
+                paragraph = parseImg(paragraph);
+            else
+                paragraphs.add(new Text(paragraph));
 
-            paragraph = parseImg(paragraph);
-
-            paragraphs.add(new Text(paragraph));
             articleContent = articleContent.substring(endAt + 1);
         }
-        articleContent = parseImg(articleContent);
+//        articleContent = parseImg(articleContent);
     }
+
     static Pattern startTag = Pattern.compile("(<[^>]+>)|</[^>]+>");
+
     private int findNextClosingTag(String articleContent) {
 //        articleContent = "<img src=http://www.ifanr.com/wp-content/uploads/avatar/1347.JPG >hack</img>";
-        if(articleContent.trim().startsWith("</"))
+        if (articleContent.trim().startsWith("</"))
             return 0;
-        if(articleContent.trim().length()==0)
+        if (articleContent.trim().length() == 0)
             return -1;
-
 
 
         Matcher startMatcher = startTag.matcher(articleContent);
         int level = 0;
-        while (startMatcher.find()){
+        while (startMatcher.find()) {
 //            System.out.println(startMatcher.group());
-            if(startMatcher.group().indexOf("</")==-1){
+            if (startMatcher.group().indexOf("</") == -1) {
                 level++;
-            }else{
+            } else {
                 level--;
             }
-            if(level==0){
+            if (level == 0) {
 //                System.out.println(startMatcher.start());
                 return startMatcher.start();
             }
@@ -81,11 +84,13 @@ public class Paragraphs {
     }
 
     private String parseImg(String paragraph) {
-        while (paragraph.startsWith("<img")) {
+        while (paragraph.indexOf(ImageInfo.IMG_START) != -1) {
+            int startOfImg = paragraph.indexOf(ImageInfo.IMG_START);
             int endOfImg = paragraph.indexOf(ImageInfo.HACK_IMG);
+
             int endIndex = endOfImg + ImageInfo.HACK_IMG.length();
             final ImageInfo imageInfo = new ImageInfo();
-            imageInfo.setUnparsedInfo(paragraph.substring(0, endIndex));
+            imageInfo.setUnparsedInfo(paragraph.substring(startOfImg, endIndex));
             paragraphs.add(imageInfo);
             paragraph = paragraph.substring(endIndex);
         }
@@ -134,7 +139,7 @@ public class Paragraphs {
 
     public static void main(String[] args) {
         Paragraphs p = new Paragraphs();
-        p.toParagraph("<img src=http://www.ifanr.com/wp-content/uploads/2011/08/App-Store-001.jpg >hack</img><p><STRONG>ifanr</STRONG><STRONG>：请介绍一下你对苹果应用市场（</STRONG><STRONG>Apple App Store</STRONG><STRONG>）发展过程、现状和趋势的看法。</STRONG></p><p>洪亮：Apple App Store发展到现在已经有40多万款应用，期间经历了许多变化，但总体趋势是一直在规范化的过程中。一个应用（产品）如何在众多的应用中脱颖而出，现在的难度越来越大。回顾在2007年，一款现在看起来很普通的应用，很容易就出现在排行榜的高位上，那时可以说是蓝海，而现在已经接近成为红海市场了。</p><p>但它依然是开发和创业者最好的平台，Apple App Store不断规范市场规则，提升应用品质，使得更好的产品出现在用户面前。</p><p>Apple App Store的封闭也有好处，就是开发者在一个公平的平台上展开竞争。当然随着竞争的加剧，对于个人工作室、小型开发团队来说，再出一款红遍全球的《愤怒的小鸟》的可能性虽然还有，但确实已经越来越小了。</p><p><STRONG>ifanr</STRONG><STRONG>：我们知道在</STRONG><STRONG>Apple App Store</STRONG><STRONG>的平台上，开发、推广产品并获得盈利是一个复杂的工程，这其中有哪些经验可以分享？</STRONG></p><p>洪亮：是的，我相信许多iPhone应用开发者都希望自己能开发出一款《愤怒的小鸟》。但现实是，许多应用在上线之后，获得了几百、几千的下载，然后就沦落到了Apple App Store几十万款应用的汪洋大海之中，难得再有发光之时。</p><p>我从一款应用的设计开发、推广运营的时间顺序上梳理一下大家应当注意的关键点，最后再总结一下对待Apple App Store的基本理念。</p><p><STRONG>产品设计必须重视市场/文化差异</STRONG></p><p>产品在开发之前必须要有很好的定位，这个定位不仅要清晰，而且要注意目标市场和用户的差异。无论对游戏还是工具软件，都可能会遇到文化差异或是地域特征的问题。</p><p>具体情况要做细致的分析，比如叫《三国》的游戏，在中国就很容易得到用户的认可，但如果到了美国市场就会下载者寥寥。</p><p>不仅在文化层面的差异要注意，在心理和习惯上的差异也同样需要重视。比如我自己在2009年开发的一款名为《帮我做决定》（英文名称是iDecide）的应用。2009年9月在美国市场上线，但一直反应不佳，后来尝试免费，效果依然不好，当天全球只有2000不到的下载。而这个产品到了中国市场，就打入中国总榜前30名。</p><p>事后分析原因时发现，中国人在遇到选择时会犹豫不决，这款应用正好可以起到帮助作用。而美国人很少有这样的情况，所以习惯差异最终导致了这款应用在中国和美国市场不同的境遇。</p><p><STRONG>第一印象：产品名字和图标的重要性</STRONG></p><p>产品的第一印象包括名字、图标、截图和说明，而这些是用户是否下载的决定因素。</p><p>首先是名字和图标，用户在方寸之间的手机屏幕上看到许多应用软件，这时如何让给你的软件在用户的视线中跳出来，就要看名字和图标的设计功力了。</p><p>在美国Apple App Store中有一个产品叫10 Balls 7 Cups，并不出众，但当它改名为Skee-Ball之后，就蹿升到了美国游戏排名第一。如果你了解美国生活，就会发现Skee-Ball是个在欧美盛行的街机游戏，所以当人们看到这个名字，自然就知道这个产品是什么，也就顺理成章地下载、开始玩起来。</p><p>这个例子就说明了名字的重要性，原来的名字10 Balls 7 Cups，虽然说明了游戏方式，但是让人感觉含糊。类似例子在中国市场中有《捕鱼达人》，在中国的游戏厅、大型商场里，都会有抓取毛绒玩具的游戏机，因此当大家看到这样的应用时，自然知道这个游戏的大致情况。</p><p>题材也是重要的因素，命名时选用大家知晓的名称，更容易吸引用户的注意和理解。比如说《三国塔防》，中国的游戏玩家对三国、塔防都很熟悉，通过名字就对游戏有个大致的了解，容易使得用户下载。</p><p>图标设计的要特别精彩，第一要抢眼，要让你的图标在屏幕中最突出；但同时也要让用户能够理解你的应用，将这两者结合在一起的图标才是完美的设计。</p><p>在产品名称和图标之后，用户就会看到截图和文字说明。截图也是很关键的项目，要能把你的产品特性一目了然说出来，好的产品不会只是简单地放置手机截图，而是经过专业的PS处理，把产品的主要功能、最炫的部分集中呈现出来，吸引用户的下载欲望。文字说明也要写的足够吸引人，足够有诱惑力。如果是英文版，一定要避免语法错误。</p><p><STRONG>产品预热和发布：许多开发者忽视的重要工作</STRONG></p><p>许多开发者不重视产品的预热，甚至没有意识到还有预热这件事，这是非常令人遗憾的事情。在上线之前，不论大公司还是小工作室的产品，都应该做些预热推广工作，当然有足够资金的前期宣传是最好的，但是如果没有这样的预算费用，也应该在免费论坛中，预发布图片，吸引用户的注意。尤其是游戏产品，在预热时，最好采用图片加视频的形式。</p><p>产品的上线对一个产品来说也许是唯一一次出现在用户面前的机会。要把握好这个机会，在最开始就获得更多用户的下载和使用，并争取赢得Apple App Store推荐。在产品上线时，要调动所有的渠道把消息传播出去，可以利用PR公司、BBS、Twitter、Facebook等。</p><p>收费产品的定价要合理，例如可定为0.99美元这样符合用户的常规心理价位的价格。这里要特别需要注意，产品的价格不是由开发时间和成本决定的，而是由市场决定的。</p><p>Apple App Store推荐的规则和标准外界并不知晓，但大家都知道推荐对于一个产品的成败非常重要，上了推荐，就离产品成功大大接近了一步。而许多产品，从开始到最后开发者放弃，都没有得到过推荐。</p><p>每周都至少有一款中国人开发的产品上推荐；</p><p>上推荐是比任何广告都有效果的推广方式；</p><p>好的产品上推荐可能性就大，不好的产品也不一定没机会；</p><p>上推荐的有效期只有一周，要好好珍惜；</p><p>上了推荐，不同的位置效果也不一样，位置越靠前效果越好；</p><p>如果收费产品的价格超过$0.99，建议降价冲榜，但千万不要免费。</p><p><STRONG>排行榜：力争上游，学习优秀者</STRONG></p><p>Apple App Store排行榜对于一个产品来说是决定性的，这是用户用手机投票做出的选择，是一个产品从技术开发到推广宣传之后，最终的一个结果。</p><p>Apple App Store有3个排行榜单，不同榜单有着不同价值。收费和免费项目排行榜是用户最常看的榜单，而对开发者而言，畅销排名是最值得学习和借鉴的。</p><p>要争取上收费和免费项目排名榜，冲击榜单是每个产品完成上线之后的核心工作。要根据不同产品类型，制定具体的方式和做法。比如设计开发一个主题的系列产品，相互推荐；引导用户在Apple App Store上评价产品；利用限时免费、开发免费版等多种方式，都是为了达成这个目标。</p><p>对于开发者来说，最有学习价值的就是从畅销排名（Top Grossing）中汲取经验，比如分析排名靠前的产品，他们如何设计名称和标志、编辑截图和说明；以及通过分析排名靠前的应用软件类别，来了解用户现在关注什么类型、什么题材的产品，寻找自己开发的方向和灵感。</p><p><STRONG>免费版：够威够力</STRONG></p><p>对于收费的游戏或是工具类应用软件，免费版都是一个非常好的推广手段。</p><p>免费使用版是一定要制作的，在完整版之前还是之后推出都可以。因为在Apple App Store上，最良性的推广模式就是先在免费榜里有非常好的位置，那收费版一定会在收费榜里也会排到一个很好的位置。</p><p>当然在免费榜里的竞争是非常激烈的，有时尽管产品很出色，但仍没有受到足够的关注，这时可以把正式收费版进行免费。国内有个乒乓球类的应用软件就是这种情况，没有借助任何外力，把产品免费，成为免费榜第一，转回收费榜以后，也进到了收费榜前二百名。当然这招奏效的前提是，你的产品做的足够好。</p><p>关于免费版，有几个和大家分享的经验：</p><p>绝不无缘无故的免费（收费新产品在一开始不要免费上，即便想免费也不要一开始就free）；</p><p>免费要在最高点结束才会有效果，不要只免费一天；</p><p>同类型产品免费推广才有用，或者用1.0版免费推广2.0版；</p><p>免费榜竞争也很激烈，除非是精品，不然想冲高要借助外力；</p><p>同类型产品之间，相互免费推广才有用。</p><p><STRONG>付费推广，钱要花在刀刃上</STRONG></p><p>关于付费推广，有几个和大家分享的经验：</p><p>如果预算只有几百美金，不如不做付费推广；</p><p>我个人的经验看，Admob用来推free产品更有效，收费产品要慎重；</p><p>在Web广告要多面开花才可能有效果，投入产出比不一定好；</p><p>大公司可以使用PR公司推广；</p><p>游戏内置广告购买（tapjoy，flurry等，更适合推广免费的产品）；</p><p>广告是门学问，设计、广告词、版式等等，都需要专门的人来做。</p><p><STRONG>变化是绝对的，接受变化，适应变化！</STRONG></p><p>Apple App store一直在变化，这里我们可以回顾一下这几年的重大变化，也让大家更能理解“变化是绝对的”含义：</p><p>以前在产品更新之后，会出现在New中的，后来因为许多产品利用这个规则，不断进行产品更新以求在New中出现，才改变为更新不会出现在New里。但这些造成一个不好的影响，就是一个产品，除了在上线时有露脸的机会，之后就很难得再有出现的机会了；</p><p>以前应用的名称、类别都可以修改，现在已经不行了；</p><p>允许免费产品中内置收费点；</p><p>手机上Apple App store改版，原来的推荐页之前，多了一个分类页，造成推荐效果较原来大幅降低，而推荐的产品基本上每周下移，造成只有New and Noteworthy才有效果；</p><p>电脑上Apple App store改版，增加了很多推荐位置，但是效果不是很好，说明大多数用户还是手机上直接购买；</p><p>2010年7月推出了iAd；</p><p>2010年9月推出Game Center，现在的游戏应用如果不设置连接Game Center是不可想象的。</p><p>2011年 推出iCloud。</p><p>大家可以看到，每次Apple App store规则的变化，产品运营就都必须做出相应变化。同时我们在被动接受这些变化时，也可以主动利用这些变化。比如追踪、运用APPLE的最新技术，是获得Apple App store推荐的一个好方法，但最好是在新技术正式推出的1-2周之内。</p><p><STRONG>迭代更新，修补提升，反馈用户</STRONG></p><p>迭代开发是不断完善产品、维系发展用户的重要手段，而在每次版本更新之后，截图和说明也要与时俱进。让用户看到你的进展和提升。就像《愤怒的小鸟》这款产品，虽然是两年前开发上线的，但是在这两年中，他们不断更新内容、增加难度，所以今天大家看到的《愤怒的小鸟》，其实是一个新的产品。</p><p>关于迭代开发的时间间隔如何把握，要看各自的具体情况，主要是吸取用户意见、增加新功能，修改BUG的综合情况选择决定的。如果遇到非常严重的BUG，当然是越早修补越好。</p><p>在正常情况下，迭代升级不要太密（比如一周一次），会引起用户反感；但也不要间隔太长（比如半年都不更新一次），用户就会觉得开发者自己都不重视自己的产品，对用户的意见和建议也不进行有效及时的修补。</p><p><STRONG>最好的模式，是产品自己会说话，但产品运营的作用日益重要</STRONG></p><p>产品是第一位，是最重要的，只有你的产品足够好，才有可能有比较大的受众，如果真能够做到极致，这个产品自己能说话，比如放出一个免费版，让用户觉得真的不错的话，那它的收费版的确能冲到很高的位置。比如iFingter 1945，在2008年是免费排名第一，在收费排名是第二。</p><p>花钱推广，可以让产品一时冲到高位，但是否能够长久，就要看产品的质量了。免费收费的配合，需要注意度的把握，如果收费内容的吸引度不高，就会造成收益不高，达不到预期效果。</p><p>同时我们也看到，随着竞争的加剧，产品运营的重要性日益上升。在这样一个竞争激烈的市场，运营已经上升为产品成败的关键因素之一了。</p><p><STRONG>ifanr</STRONG><STRONG>：最后，请给准备创业的应用开发者一些建议？</STRONG></p><p>洪亮：第一，对于想要进行创业的朋友们，我的建议是，最好是先做一款产品上线尝试一下，体会一下整个过程。再决定是否辞职专心创业。有许多美好的一夜成名的创业故事，但是在Apple App store上的竞争已经不是很容易的事情了，创业不能仅仅有热情。</p><p>第二，关注用户的反馈意见，及时回复总结。用户的意见千差万别，开发者可以从用户的角度去看问题，但要知道自己其实并非真实用户。而用户提出的建议和意见，往往会开启新的思路或是以往没有意识到的问题。</p><p>第三，现在许多移动应用开发团队对于开发平台选择有些困惑。我的建议是，如果不是大公司能同时展开多平台开发，一般的小团队最好是先做好在一个平台的开发，之后再把成功经验移植到别的平台。当然，现在的移植平台技术，也会让这种移植更加迅速。</p><p>祝大家好运！</p><img src=http://www.ifanr.com/wp-content/uploads/avatar/1347.JPG >hack</img>");
+        p.toParagraph("<H3>Windows for Pen</H3><p>系统开机的模样：</p><p><img src=http://www.ifanr.com/wp-content/uploads/2011/08/wfp-480x360.gif >hack</img></p><p>用笔写字，在上面留下笔迹的情形：</p><p><img src=http://www.ifanr.com/wp-content/uploads/2011/08/wfp2-480x360.gif >hack</img></p><p>“笔势操作（就是用笔来作出动作就能完成一定的操作，和现在的触摸操作原理一样）”的说明：</p><p><img src=http://www.ifanr.com/wp-content/uploads/2011/08/wfp3-480x360.gif >hack</img></p><p>以下是操作视频：</p><p>早期搭载 Windows for Pen 1.0 的电脑有 Compaq Concerto，它拥有一颗 Intel 80486、一块 100 MB 的硬盘、3.5 寸磁盘、内存 1 MB、屏幕分辨率为 640×480，整机重量 2kg：</p><p><img src=http://www.ifanr.com/wp-content/uploads/2011/08/Concerto.png >hack</img></p><p>后来，微软还开发出基于 Windows 95 的 Windows for Pen 2.0。</p><H3>Tablet PC</H3><p><blockquote>一个基于全功能 Microsoft Windows 操作系统的 PC，整合了纸和笔方便直觉的体验。a full-function Microsoft Windows operating system-based PC incorporating the convenient and intuitive aspects of pencil and paper into the PC experience.</blockquote></p><p>随后在 WinHEC 2001 大会上，微软公布了大量 Tablet PC 的硬件，向全球 OEM 厂商讲述关于这个概念的技术方法、发展路线以及未来。在会上，微软展示了名为“Microsoft Notebook”的应用，可以抓捕人们写作的笔迹。微软认为 Tablet PC 将成为“知识工作者”的利器。</p><p>为了发展 Tablet PC，在这一年，微软除了发布 Windows XP 以外，还发布专门面对 Tablet PC 的系统 Windows XP Tablet PC Edition。2002 年，微软公布了“数字墨水（Digital Ink）”技术，让人能够在系统任何界面上进行手写，电子墨水技术会自动把你输入的内容转化为文字，或者以特定的格式保存。到 2005 年，微软发布 Windows XP Tablet PC Edition 2005，是上一代产品的改进版。</p><p><img src=http://www.ifanr.com/wp-content/uploads/2011/08/cp3d-480x333.jpg >hack</img></p><p>到 Windows Vista 微软直接把 Tablet PC 特性集成到系统之中，不再单独发布针对 Tablet PC 的操作系统。</p><p>2006 年，Tablet PC 迎来更加轻薄的家族成员 Ultra-mobile PC（UMPC）。除了体积更小之外，和传统的 Tablet PC 没有区别，运行的系统是 Windows Vista、用的芯片是基于 x86、用笔操作。UMPC 推出的机型不多，厂商反应不热烈，消费者也不买账。</p><p>第一款 UMPC 是三星的 Q1，运行低压版赛扬 M 处理器、内存 512 MB、：</p><p><img src=../wp-content/uploads/2011/08/samsung-q1-ultra.jpg >hack</img></p><p>以下是，Windows Vista 在 Tablet 下的操作视频：</p><p>2009 年，Windows 7 发布，它融合了微软开发的 Surface 技术，改善了对触摸操作的支持：</p><p>Windows 7 在 Tablet PC 上的表现：</p><p>在 CES 2010 大会上，鲍尔默展示了基于 Windows 7 的平板电脑，HP 的 Slate 500：</p><p><img src=../wp-content/uploads/2011/08/zdnet-rachel-king-hp-slate-500-004-480x360.jpg >hack</img></p><H3>神秘消失的 Courier</H3><p>我不得不提一下 Courier 这个微软神秘的平板项目。Courier 拥有两个屏幕，皆可进行触控操作，一个面板主要负责整理内容，包括图片、笔记、音乐等等，一个面板负责处理内容，包括让添加注释、新增内容等等。</p><p>Courier 同时支持用“笔”和“手指”进行操作。从公开的视频来看，不论是操作方式，还是系统界面，与以往的 Tablet PC 截然不同。很可惜，从公开到取消，从 2009 年 9 月 22 日到 2010 年 4 月 29 日，这个项目存活的时间不到一年。</p><H3>微软如何看待 Tablet PC</H3><p>平板电脑是一种 PC</p><p>这个观点不是 2001 年比尔盖茨的观点，而是 2011 年微软 Windows Phone 部门主席 Andrew Lees 的观点：</p><p><blockquote>我们把平板电脑视为一种 PC。我们要让人们在 PC 上希望能做到事情，在平板上也能做到，比如说与网络连接，上网冲浪，使用网络工具，连接 USB 硬盘等等，要把它们都整合在一块平板中去。提供一种混合的体验，让诸如打印这类事情，办公室里用到的所有的东西，所有你希望在 PC 上用到的东西，在平板电脑上都能做到。</blockquote></p><p>从 Tablet PC 提出到现在，微软认定 平板电脑就是一种 PC，而且他们还相信 PC 的优势不会消退。</p><p>基于“笔” 的操作系统</p><p>从 Windows for Pen、Windows XP Tablet Edition 到 Courier，再到 Windows Vista 和 Windows 7。微软推出的平板操作系统，都基于“笔”这个工具。即使是最激进的 Courise 项目，基本操作大多也依赖“笔”。</p><p>如果你对比一下，Windows Vista 的操作视频和 Windows for Pen 的“笔势操作”的说明，你会发现，“笔势操作”已经成为 Tablet PC 的操作基础。即使是 Courier 也不过是把“笔势操作”换了动作定义，原理和实质没有改变。</p><H3>Tablet PC 的教训</H3><p>虽然微软可能不是第一个推出平板电脑产品的公司，但它持续 20 年关注并投入平板电脑领域，却得不到像 iPad 这样的成就，其中的原因值得深思。</p><p><blockquote>传统的 Tablet PC 和手提电脑一般大，和手提电脑一般重，电力和手提电脑一样差，而价格，通常比手提电脑贵。</blockquote></p><p>除了大、重、贵外，Tablet PC 还缺乏专门为其开发的软件。上文中，有一段展示运行 Windows 7 的 Tablet PC 的操作视频，即便视频的作者打算宣传 Tablet PC 的便利，但在 PowerPoint 中新建幻灯片中还是遇到了麻烦。即使微软自己开发的软件都会存在问题，其它的软件开发商，可想而知。</p><H3>微软能转弯吗？</H3><p>瑞信（Credit Suisse）预测，到 2015 年，平板电脑将占个人电脑总量的 40%，能创造销售额 1200 亿美元的市场。微软若不能抓住机会，这个市场将被苹果、Google 吞食。</p><p>但，微软能转弯吗？</p><p>Peter Bright 认为微软能，因为下一代 Windows 8 具备不同以往的特性，它运用了和 Windows Phone 一样的“Metro”设计风格，优化了触摸的体验；而引入 ARM 硬件架构，也可保证运行 Windows 8 平板电脑的使用时间。</p><p>除了 Bright 所提出的这两点意外，最近微软还宣布新的开发框架 Jupiter，新的开发框架将统一桌面系统和移动系统，意味着一个应用能够运行在 Windows 8 桌面、平板和 Windows Phone 手机上。对平板而言，Jupiter 能让开发商能够顺利开发出针对平板的软件。</p><p>目前而言，Windows 8 一切还在扑朔迷离之中，已知 Windows 8 的开发团队要比 Windows 7 庞大。我希望微软这 20 年来的投入，都能有所回报。然而市场是不等人的，微软到底能够转身与否，你认为呢？</p><img src=http://www.ifanr.com/wp-content/uploads/avatar/243.jpg >hack</img><p><img src=http://www.ifanr.com/wp-content/uploads/avatar/243.jpg >hack</img></p>");
         List l = p.getParagraphs();
         System.out.println(p.toContent());
     }
