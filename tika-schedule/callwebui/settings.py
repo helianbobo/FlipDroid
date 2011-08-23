@@ -1,15 +1,15 @@
 # Django settings for callwebui project.
 DB_HOST='localhost'
 DB_PORT=27017
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+     ('shangrz', 'rzshang@gmail.com'),
 )
 APPEND_SLASH = False
 MANAGERS = ADMINS
-
+SESSION_EXPIRE_AT_BROWSER_CLOSE=False
 DATABASES = {
     'default': {
         'ENGINE': '', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
@@ -21,6 +21,8 @@ DATABASES = {
     }
 }
 
+
+SESSION_ENGINE='django.contrib.sessions.backends.cache'
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -100,6 +102,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfResponseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+     
 )
 
 ROOT_URLCONF = 'callwebui.urls'
@@ -120,7 +124,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )

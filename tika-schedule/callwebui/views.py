@@ -6,6 +6,18 @@ import model
 import time
 ISOTIMEFORMAT='%Y-%m-%d %X'
 
+PASSWD="qqwwee"
+SESSIONID="user"
+
+def islogin(func):
+    def fun(request):
+        #if args[].session['userid'] <> "user":
+        if request.session.get('userid')=="user":
+            return func(request)
+        return HttpResponseRedirect('/login/')
+    return fun
+
+
 def test(request):
     return HttpResponse('showtest')
 
@@ -22,12 +34,13 @@ def paging(request,item_list,per_page=10):
 
 
 
-
+@islogin
 def showSource(request):
     item_list = [item for item in model.con.Source.find()]
     items = paging(request,item_list) 
     return render_to_response('source.html', {'items': items})
 
+@islogin
 def updateSource(request):
     if request.GET['update']=='add':
         x = model.con.Source() 
@@ -55,14 +68,14 @@ def updateSource(request):
         return HttpResponseRedirect("/source/")
     
  
-
+@islogin
 def showUrls(request):
     item_list = [item for item in model.con.Url_abstract.find()]
     #itemcontent_list = [(item["title"],item["content"]) for item in item_list]
     items=paging(request,item_list) 
     return render_to_response('urls.html', { 'items': items})
 
-
+@islogin
 def updateUrls(request):        
    
     theid = request.GET['_id']
@@ -75,6 +88,36 @@ def updateUrls(request):
     if request.GET['update']=='delete':
         model.con.tika.url_abstract.remove({'_id':pymongo.objectid.ObjectId(theid)})
         return HttpResponseRedirect("/urls/")
-        
+    
+    
+
+    
+def loginPage(request):
+    return render_to_response('login.html') 
+
+def login(request):
+     
+    if request.method != 'POST':
+        from django.http import Http404
+        raise Http404('Only POSTs are allowed')
+    try:
+        pwd = request.REQUEST['password']
+        if pwd == PASSWD:
+            request.session['userid'] = SESSIONID
+            return HttpResponseRedirect('/source/')
+        return HttpResponse("password error")
+    except:
+        return HttpResponse("password error")
+
+def sessiontest(request):
+    if request.method == 'POST':
+        request.session.set_test_cookie()
+        if request.session.test_cookie_worked():
+            request.session.delete_test_cookie()
+            return login(request)
+        else:
+            return HttpResponse("Please enable cookies and try again.")
+    return sessiontest(request)  
+
  
     
