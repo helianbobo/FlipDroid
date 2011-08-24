@@ -110,7 +110,7 @@ public final class HTMLHighlighter {
 
         String html = implementation.html.toString();
         if (outputHighlightOnly) {
-            html = html.replaceAll("<p></p>","").replaceAll("<strong></strong>","").replaceAll("<h[1-9]+></h[1-9]+>","");
+            html = html.replaceAll("<p></p>", "").replaceAll("<strong></strong>", "").replaceAll("<h[1-9]+></h[1-9]+>", "");
         }
 
         return html;
@@ -165,7 +165,7 @@ public final class HTMLHighlighter {
     }
 
     private String postProcess(String process) {
-        process = process.replaceAll("(<br/>)+","<br/>");
+        process = process.replaceAll("(<br/>)+", "<br/>");
         if (!process.startsWith("<") && !process.endsWith(">"))
             return "<p>" + process + "</p>";
         return process;//.replace("<p><img", "<img").replace("</img></p>", "</img>");
@@ -551,7 +551,7 @@ public final class HTMLHighlighter {
                             html.append("</blockquote></p>");
                         } else
                             html.append("</p>");
-
+                        blockLevel--;
                     }
 
                     for (int i = 0; i < deferredImages.size(); i++) {
@@ -587,8 +587,15 @@ public final class HTMLHighlighter {
                 if (blockLevel == 0)
                     addTag = true;
                 String t = String.valueOf(ch, start, length);
+//                boolean noTag = false;
+//                if (html.toString().endsWith(">")) {
+//                    int p1 = html.toString().lastIndexOf("<");
+//                    int p2 = html.toString().lastIndexOf("/");
+//                    if (p1 < p2)
+//                        noTag = true;
+//                }
                 boolean isPunctuation = chinesePunctuation.indexOf(t) != -1;
-                if (addTag && !isPunctuation) {
+                if ((addTag && !isPunctuation)) {
                     String text = xmlEncode(t.replace("\n", ""));
                     html.append("<p>" + text + "</p>");
                 } else

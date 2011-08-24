@@ -205,14 +205,13 @@ public class ContentLoadedView extends ArticleView {
                 }
                 StringBuilder sb = new StringBuilder();
                 sb.append("<br/>");
-                sb.append("<br/>");
                 String formatted = format(uiObject.getObjectBody());
                 sb.append(formatted);
 
                 while (i + 1 < paragraphsList.size()) {
                     final String nextParagraph = paragraphsList.get(i + 1).getObjectBody();
                     if (nextParagraph.startsWith(style)) {
-                        sb.append("<br/><br/>");
+                        sb.append("<br/>");
                         formatted = format(nextParagraph);
                         sb.append(formatted);
                         i++;
