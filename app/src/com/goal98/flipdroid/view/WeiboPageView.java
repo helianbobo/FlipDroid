@@ -40,6 +40,7 @@ public class WeiboPageView extends FrameLayout {
     private LinearLayout content;
     private LayoutInflater inflater;
     protected DeviceInfo deviceInfo;
+    private ExpandableArticleView clickedArticleView;
 
     public LinearLayout getContentLayout() {
         return contentLayout;
@@ -48,7 +49,7 @@ public class WeiboPageView extends FrameLayout {
     protected LinearLayout contentLayout; //this layout is supposed to be dynamic, depending on the Articles on this smartPage
 
     protected WeakReference<LinearLayout> enlargedViewWrapperWr;
-//    protected LinearLayout enlargedViewWrapper;
+    //    protected LinearLayout enlargedViewWrapper;
     //    protected ScrollView wrapper;
     protected String sourceName;
     protected String sourceImageURL;
@@ -89,7 +90,7 @@ public class WeiboPageView extends FrameLayout {
         }
     }
 
-    public DeviceInfo getDeviceInfoFromApplicationContext(){
+    public DeviceInfo getDeviceInfoFromApplicationContext() {
         return DeviceInfo.getInstance((Activity) this.getContext());
     }
 
@@ -189,8 +190,9 @@ public class WeiboPageView extends FrameLayout {
         StopWatch sw = new StopWatch();
         sw.start("enlarge");
         this.articleView = articleView;
+        this.clickedArticleView = weiboArticleView;
         inflater = LayoutInflater.from(WeiboPageView.this.getContext());
-        if (enlargedViewWrapperWr==null || enlargedViewWrapperWr.get() == null) {
+        if (enlargedViewWrapperWr == null || enlargedViewWrapperWr.get() == null) {
             enlargedViewWrapperWr = new WeakReference(inflater.inflate(R.layout.enlarged, null));
 
             wrapperll = (LinearLayout) (enlargedViewWrapperWr.get().findViewById(R.id.wrapperll));
@@ -213,8 +215,8 @@ public class WeiboPageView extends FrameLayout {
         WeiboPageView.this.addView(enlargedViewWrapperWr.get(), params);
         sw.stopPrintReset();
         sw.start("enlarge till tool bar");
-        setupToolBar(articleView, weiboArticleView,pageActivity.getHeader());
-         sw.stopPrintReset();
+        setupToolBar(articleView, weiboArticleView, pageActivity.getHeader());
+        sw.stopPrintReset();
         content = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.content);
         final LinearLayout contentWrapper = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.contentWrapper);
 
@@ -309,10 +311,10 @@ public class WeiboPageView extends FrameLayout {
         });
     }
 
-
     private void closeEnlargedView(ExpandableArticleView weiboArticleView) {
         if (commentShadowLayer != null)
             this.removeView(commentShadowLayer);
+
         weiboArticleView.getContentView().setVisibility(VISIBLE);
         weiboArticleView.enlargedView = new WeakReference(enlargedViewWrapperWr.get());
         final Animation fadeout = AnimationUtils.loadAnimation(pageActivity, R.anim.fade);
@@ -376,6 +378,12 @@ public class WeiboPageView extends FrameLayout {
             Article article = page.getArticleList().get(i);
             System.out.println("release image...");
             article.setImageBitmap(null);
+        }
+    }
+
+    public void closeEnlargedView() {
+        if (this.clickedArticleView != null) {
+            this.closeEnlargedView(clickedArticleView);
         }
     }
 }

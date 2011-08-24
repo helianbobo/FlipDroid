@@ -1203,4 +1203,15 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (enlargedMode)
+            current.closeEnlargedView();
+        else {
+            overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+            PageActivity.this.finish();
+        }
+        return;
+    }
 }
