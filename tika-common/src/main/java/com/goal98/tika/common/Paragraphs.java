@@ -113,7 +113,8 @@ public class Paragraphs {
                 final ImageInfo tikaImage = (ImageInfo) tikaUIObject;
                 String src = tikaImage.getUrl();
                 boolean found = false;
-                for (int i = 0; i < filteredImages.size(); i++) {
+                int i = 0;
+                for (; i < filteredImages.size(); i++) {
                     String s = filteredImages.get(i);
                     if (s.indexOf(src) != -1) {
                         found = true;
@@ -123,8 +124,14 @@ public class Paragraphs {
                 if (!found) {
                     iter.remove();
                 } else {
-                    ImageInfo imageInfo = imageInfoMap.get(src);
+                    final String imageUrlWithInfo = filteredImages.get(i);
+                    if(imageUrlWithInfo.indexOf("#")==-1){
+                        iter.remove();
+                    }
+                    String url = imageUrlWithInfo.substring(0, imageUrlWithInfo.indexOf("#"));
+                    ImageInfo imageInfo = imageInfoMap.get(url);
                     if (imageInfo != null) {
+                        tikaImage.setUrl(url);
                         tikaImage.setWidth(imageInfo.getWidth());
                         tikaImage.setHeight(imageInfo.getHeight());
                     } else {
