@@ -52,6 +52,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private Animation fadeInPageView;
     private Animation fadeOutPageView;
     private ImageButton contentImageButton;
+    public SinaToken sinaToken;
 
     public ExecutorService getExecutor() {
         return executor;
@@ -245,7 +246,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
 
-            SinaToken sinaToken = SinaAccountUtil.getToken(PageActivity.this);
+            sinaToken = SinaAccountUtil.getToken(PageActivity.this);
             ArticleFilter filter;
             if (isWeiboMode())
                 filter = new NullArticleFilter();
@@ -585,7 +586,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             throw new NoSinaAccountBindedException();
 
         if (weibo == null) {
-            initSinaWeibo(userId);
+            initSinaWeibo();
         }
         weibo.updateStatus(comment, statusId);
     }
@@ -596,36 +597,18 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             throw new NoSinaAccountBindedException();
 
         if (weibo == null) {
-            initSinaWeibo(userId);
+            initSinaWeibo();
         }
         weibo.updateStatus(comment + " " + url);
     }
 
-    private void initSinaWeibo(String userId) {
+    private void initSinaWeibo() {
         weibo = new WeiboExt();
-        Cursor cursor = null;
-        String password;
-        try {
-            cursor = accountDB.findByTypeAndUsername(Constants.TYPE_SINA_WEIBO, userId);
-            cursor.moveToFirst();
-            password = cursor.getString(cursor.getColumnIndex(Account.KEY_PASSWORD));
-        } finally {
-            cursor.close();
-        }
-
-
-        System.setProperty("weibo4j.oauth.consumerKey", Constants.CONSUMER_KEY);
-        System.setProperty("weibo4j.oauth.consumerSecret", Constants.CONSUMER_SECRET);
-
-        Weibo.CONSUMER_KEY = Constants.CONSUMER_KEY;
-        Weibo.CONSUMER_SECRET = Constants.CONSUMER_SECRET;
-
-        String basicUser = userId;
-        String basicPassword = password;
         weibo.setHttpConnectionTimeout(5000);
+        if (sinaToken == null)
+            sinaToken = SinaAccountUtil.getToken(PageActivity.this);
 
-        weibo.setUserId(basicUser);
-        weibo.setPassword(basicPassword);
+        weibo.setToken(sinaToken.getToken(), sinaToken.getTokenSecret());
     }
 
     public void notifyHasNew(CachedArticleSource cachedArticleSource) {

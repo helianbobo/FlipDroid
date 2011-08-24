@@ -8,10 +8,10 @@
                   android:layout_height="wrap_content" android:background="#f7f7f7">
         <LinearLayout android:layout_width="0dip" android:layout_weight="2"
                       android:layout_height="wrap_content" android:gravity="left">
-            <ImageButton android:id="@+id/close" android:textSize="14px" android:background="@drawable/close"
-                         android:layout_width="wrap_content" android:maxHeight="25dip"
+            <ImageButton android:id="@+id/close" android:background="@drawable/close"
+                         android:layout_width="wrap_content"
                          android:adjustViewBounds="true" android:scaleType="centerInside"
-                         android:layout_height="fill_parent" android:layout_gravity="right"/>
+                         android:layout_height="35dip" android:layout_gravity="left"/>
         </LinearLayout>
         <TextView android:layout_width="0dip" android:padding="5dip" android:textStyle="bold" android:textSize="17dip"
                   android:layout_height="wrap_content" android:gravity="center"

@@ -21,14 +21,7 @@ import java.net.URL;
  */
 public class TikaOutputRegMatcherTest extends TestCase {
     public void testMatcher() throws IOException, BoilerpipeProcessingException, SAXException {
-        URL url = new URL("http://www.cnbeta.com/articles/152130.htm");
-
-        final BoilerpipeExtractor extractor = CommonExtractors.CHINESE_ARTICLE_EXTRACTOR;
-        final HTMLHighlighter hh = HTMLHighlighter.newExtractingInstanceForChinese();
-
-        String process = hh.process(url, extractor);
-        Paragraphs p = new Paragraphs();
-        p.toParagraph(process);
-        System.out.println(p.toContent());
+//
+        System.out.println("<br/><br/>".replaceAll("(<br/>)+", "<br/>"));
     }
 }

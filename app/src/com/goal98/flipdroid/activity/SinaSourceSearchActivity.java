@@ -21,12 +21,13 @@ public class SinaSourceSearchActivity extends SourceSearchActivity {
         String userId = preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null);
         Cursor cursor = null;
         try {
-            accountDB.findByTypeAndUsername(Constants.TYPE_MY_SINA_WEIBO, userId);
+            cursor = accountDB.findByTypeAndUsername(Constants.TYPE_MY_SINA_WEIBO, userId);
             cursor.moveToFirst();
             token = cursor.getString(cursor.getColumnIndex(Account.KEY_PASSWORD));
             tokenSecret = cursor.getString(cursor.getColumnIndex(Account.KEY_PASSWORD_SECRET));
         } finally {
-            cursor.close();
+            if (cursor != null)
+                cursor.close();
         }
 
         return new SinaSearchSource(true, token, tokenSecret, null);

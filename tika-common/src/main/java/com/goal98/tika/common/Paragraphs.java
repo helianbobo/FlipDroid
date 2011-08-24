@@ -33,18 +33,10 @@ public class Paragraphs {
     public void toParagraph(String articleContent) {
         if (articleContent == null)
             return;
-//        System.out.println(articleContent.length());
         int cutAt = 0;
-//        articleContent = parseImg(articleContent);
         while ((cutAt = findNextClosingTag(articleContent)) != -1) {
-//            if (cutAt == 0) {
-//                int endAt = articleContent.indexOf(">");
-//                articleContent = articleContent.substring(endAt + 1);
-//                continue;
-//            }
             int endAt = articleContent.indexOf(">", cutAt);
             String paragraph = articleContent.substring(0, endAt + 1);
-//            toParagraph(paragraph);
             if (paragraph.indexOf(ImageInfo.IMG_START) != -1)
                 paragraph = parseImg(paragraph);
             else
@@ -52,7 +44,6 @@ public class Paragraphs {
 
             articleContent = articleContent.substring(endAt + 1);
         }
-//        articleContent = parseImg(articleContent);
     }
 
     static Pattern startTag = Pattern.compile("(<[^>]+>)|</[^>]+>");
@@ -63,7 +54,8 @@ public class Paragraphs {
             return 0;
         if (articleContent.trim().length() == 0)
             return -1;
-
+        if (articleContent.replaceAll("<br/>", "").replaceAll("<p>", "").replaceAll("</p>", "").trim().length() == 0)
+            return -1;
 
         Matcher startMatcher = startTag.matcher(articleContent);
         int level = 0;
@@ -72,7 +64,7 @@ public class Paragraphs {
 
             final String group = startMatcher.group();
             if (group.indexOf("<br/>") != -1) {
-                 continue;
+                continue;
             }
             if (group.indexOf("</") == -1) {
                 level++;

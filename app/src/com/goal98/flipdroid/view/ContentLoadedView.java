@@ -37,6 +37,7 @@ import java.util.List;
 public class ContentLoadedView extends ArticleView {
     private float oldDist;
     private LinearLayout contentHolderView;
+    public WebImageView icon;
 
     public ContentLoadedView(Context context, Article article, WeiboPageView pageView) {
         super(context, article, pageView, true);
@@ -113,10 +114,14 @@ public class ContentLoadedView extends ArticleView {
             shareByll.setVisibility(GONE);
             reference.setVisibility(VISIBLE);
             referenceContent.setVisibility(VISIBLE);
-            WebImageView icon = new WebImageView(this.getContext(), article.getPortraitImageUrl().toExternalForm(), true);
-            icon.setDefaultHeight(25);
-            icon.setDefaultWidth(25);
-            reference.addView(icon, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            if (article.getPortraitImageUrl() != null) {
+                icon = new WebImageView(this.getContext(), article.getPortraitImageUrl().toExternalForm(), false);
+                icon.setDefaultHeight(25);
+                icon.setDefaultWidth(25);
+
+                reference.addView(icon, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            }
+
 
             TextView author = new TextView(this.getContext());
             author.setText(article.getAuthor());
@@ -156,7 +161,7 @@ public class ContentLoadedView extends ArticleView {
             this.portraitView = (WebImageView) layout.findViewById(R.id.portrait);
             if (article.getPortraitImageUrl() != null) {
                 this.portraitView.setImageUrl(article.getPortraitImageUrl().toString());
-                this.portraitView.loadImage();
+
             } else {
                 this.portraitView.setVisibility(View.GONE);
             }
@@ -200,13 +205,14 @@ public class ContentLoadedView extends ArticleView {
                 }
                 StringBuilder sb = new StringBuilder();
                 sb.append("<br/>");
+                sb.append("<br/>");
                 String formatted = format(uiObject.getObjectBody());
                 sb.append(formatted);
 
                 while (i + 1 < paragraphsList.size()) {
                     final String nextParagraph = paragraphsList.get(i + 1).getObjectBody();
                     if (nextParagraph.startsWith(style)) {
-                        sb.append("<br><br>");
+                        sb.append("<br/><br/>");
                         formatted = format(nextParagraph);
                         sb.append(formatted);
                         i++;
@@ -267,7 +273,8 @@ public class ContentLoadedView extends ArticleView {
     }
 
     public void renderBeforeLayout() {
-
+        icon.loadImage();
+        this.portraitView.loadImage();
     }
 
 

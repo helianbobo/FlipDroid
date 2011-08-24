@@ -302,7 +302,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 for (int i = 0; i < adapter.getCount(); i++) {
                     SourceItem item = (SourceItem) adapter.getItem(i);
                     if (token.match(item)) {
-                        item.getSourceItemView().findViewById(R.id.loadingbar).setVisibility(View.VISIBLE);
+                        if(item.getSourceItemView()!=null)
+                            item.getSourceItemView().findViewById(R.id.loadingbar).setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -323,7 +324,9 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                     public void call(Cursor cursor, int index) {
                         SourceItem item = (SourceItem) adapter.getItem(index);
                         if (token.match(item)) {
-                            IndexActivity.this.getListView().getChildAt(index).findViewById(R.id.loadingbar).setVisibility(View.GONE);
+                            View childAt = IndexActivity.this.getListView().getChildAt(index);
+                            if(childAt!=null)
+                                childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
                         }
                     }
                 });
@@ -346,7 +349,9 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                     public void call(Cursor cursor, int index) {
                         SourceItem item = (SourceItem) adapter.getItem(index);
                         if (token.match(item)) {
-                            IndexActivity.this.getListView().getChildAt(index).findViewById(R.id.loadingbar).setVisibility(View.GONE);
+                            View childAt = IndexActivity.this.getListView().getChildAt(index);
+                            if(childAt !=null)
+                            childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
                         }
                     }
                 });

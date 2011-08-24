@@ -244,21 +244,21 @@ public class WeiboPageView extends FrameLayout {
                 }
 
                 commentShadowLayer = new LinearLayout(WeiboPageView.this.getContext());
-                commentShadowLayer.setBackgroundColor(Color.parseColor("#00000000"));
+                commentShadowLayer.setBackgroundColor(Color.parseColor("#77000000"));
                 commentShadowLayer.setPadding(14, 20, 14, 20);
-                LinearLayout commandPad = (LinearLayout) inflater.inflate(R.layout.comment_pad, null);
-                WebImageView sourceImage = (WebImageView) commandPad.findViewById(R.id.source_image);
-                TextView sourceName = (TextView) commandPad.findViewById(R.id.source_name);
-                ImageView closeBtn = (ImageView) commandPad.findViewById(R.id.close);
-                ImageView sendBtn = (ImageView) commandPad.findViewById(R.id.send);
+                LinearLayout commentPad = (LinearLayout) inflater.inflate(R.layout.comment_pad, null);
+                WebImageView sourceImage = (WebImageView) commentPad.findViewById(R.id.source_image);
+                TextView sourceName = (TextView) commentPad.findViewById(R.id.source_name);
+                ImageView closeBtn = (ImageView) commentPad.findViewById(R.id.close);
+                ImageView sendBtn = (ImageView) commentPad.findViewById(R.id.send);
                 closeBtn.setOnClickListener(new OnClickListener() {
                     public void onClick(View view) {
                         WeiboPageView.this.removeView(commentShadowLayer);
                     }
                 });
 
-                TextView status = (TextView) commandPad.findViewById(R.id.status);
-                final EditText commentEditText = (EditText) commandPad.findViewById(R.id.comment);
+                TextView status = (TextView) commentPad.findViewById(R.id.status);
+                final EditText commentEditText = (EditText) commentPad.findViewById(R.id.comment);
                 commentEditText.addTextChangedListener(new TextWatcher() {
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                     }
@@ -303,7 +303,7 @@ public class WeiboPageView extends FrameLayout {
                 sourceName.setText(articleView.getArticle().getAuthor());
                 status.setText(articleView.getArticle().getStatus());
 
-                commentShadowLayer.addView(commandPad, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
+                commentShadowLayer.addView(commentPad, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
                 WeiboPageView.this.addView(commentShadowLayer);
             }
         });

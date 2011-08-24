@@ -165,6 +165,7 @@ public final class HTMLHighlighter {
     }
 
     private String postProcess(String process) {
+        process = process.replaceAll("(<br/>)+","<br/>");
         if (!process.startsWith("<") && !process.endsWith(">"))
             return "<p>" + process + "</p>";
         return process;//.replace("<p><img", "<img").replace("</img></p>", "</img>");
@@ -439,7 +440,6 @@ public final class HTMLHighlighter {
 //            }
             try {
                 if (inIgnorableElement == 0) {
-                    System.out.println(qName);
                     if (qName.equalsIgnoreCase("h1") ||
                             qName.equalsIgnoreCase("h2") ||
                             qName.equalsIgnoreCase("h3") ||
