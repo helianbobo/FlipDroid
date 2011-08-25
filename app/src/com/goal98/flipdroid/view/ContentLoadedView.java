@@ -204,8 +204,11 @@ public class ContentLoadedView extends ArticleView {
                     tv.setPadding(2, 3, 2, 3);
                 }
                 StringBuilder sb = new StringBuilder();
-                sb.append("<br/>");
-                String formatted = format(uiObject.getObjectBody());
+                String objectBody = uiObject.getObjectBody();
+                String formatted = format(objectBody);
+                if(formatted.trim().length()==0)
+                    continue;
+
                 sb.append(formatted);
 
                 while (i + 1 < paragraphsList.size()) {

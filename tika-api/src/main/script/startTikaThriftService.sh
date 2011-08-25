@@ -23,7 +23,7 @@ if [ "x$JAVA" = "x" ]; then
 fi
 
 # Setup the classpath
-runjar="$TIKA_API_HOME/tika-api.jar"
+runjar="$TIKA_API_HOME/lib/tika-thrift-1.0-SNAPSHOT.jar"
 if [ ! -f "$runjar" ]; then
     die "Missing required file: $runjar"
 fi
@@ -40,4 +40,4 @@ JAVA_OPTS="-Xmx256M -XX:PermSize=32M"
 
 nohup "$JAVA" $JAVA_OPTS \
          -classpath "$BOOT_CLASSPATH" \
-         it.tika.APIServer "$@" &
+         it.tika.Server "$@" &

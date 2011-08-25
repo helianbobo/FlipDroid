@@ -88,6 +88,7 @@ public class Paragraphs {
             }
 
         }
+        System.out.println(articleContent);
         throw new RuntimeException("not match");
     }
 
@@ -113,7 +114,8 @@ public class Paragraphs {
                 final ImageInfo tikaImage = (ImageInfo) tikaUIObject;
                 String src = tikaImage.getUrl();
                 boolean found = false;
-                for (int i = 0; i < filteredImages.size(); i++) {
+                int i = 0;
+                for (; i < filteredImages.size(); i++) {
                     String s = filteredImages.get(i);
                     if (s.indexOf(src) != -1) {
                         found = true;
@@ -123,8 +125,14 @@ public class Paragraphs {
                 if (!found) {
                     iter.remove();
                 } else {
-                    ImageInfo imageInfo = imageInfoMap.get(src);
+                    final String imageUrlWithInfo = filteredImages.get(i);
+                    if(imageUrlWithInfo.indexOf("#")==-1){
+                        iter.remove();
+                    }
+                    String url = imageUrlWithInfo.substring(0, imageUrlWithInfo.indexOf("#"));
+                    ImageInfo imageInfo = imageInfoMap.get(url);
                     if (imageInfo != null) {
+                        tikaImage.setUrl(url);
                         tikaImage.setWidth(imageInfo.getWidth());
                         tikaImage.setHeight(imageInfo.getHeight());
                     } else {
@@ -173,8 +181,31 @@ public class Paragraphs {
             if (!body.startsWith("<"))
                 return "<p>" + body + "</p>";
 
+            Matcher m;
+            String remains = body;
+			boolean repeat = true;
+			while(repeat) {
+				repeat = false;
+				m = PAT_TAG_NO_TEXT.matcher(remains);
+				if(m.find()) {
+					repeat = true;
+					remains = m.replaceAll("");
+				}
+
+				m = PAT_SUPER_TAG.matcher(remains);
+				if(m.find()) {
+					repeat = true;
+					remains = m.replaceAll(m.group(1));
+				}
+			}
+            if(remains.trim().length()==0)
+                return "";
+
             return body;  //To change body of implemented methods use File | Settings | File Templates.
         }
 
+
     }
+    private static final Pattern PAT_SUPER_TAG = Pattern.compile("^<[^>]*>(<.*?>)</[^>]*>$");
+    public static final Pattern PAT_TAG_NO_TEXT = Pattern.compile("<[^/][^>]*></[^>]*>");
 }

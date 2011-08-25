@@ -47,6 +47,7 @@ public class DefaultTagActionMap extends TagActionMap {
         setTagAction("IMG", CommonTagActions.TA_IMAGE);
 
         setTagAction("STRIKE", CommonTagActions.TA_INLINE_NO_WHITESPACE);
+        setTagAction("WBR", CommonTagActions.TA_INLINE_NO_WHITESPACE);
         setTagAction("U", CommonTagActions.TA_INLINE_NO_WHITESPACE);
         setTagAction("B", CommonTagActions.TA_INLINE_NO_WHITESPACE);
         setTagAction("I", CommonTagActions.TA_INLINE_NO_WHITESPACE);

@@ -373,4 +373,12 @@
         "image_url": "",
         "content_url":"http://tech2ipo.com/feed/rss/",
         "cat":"互联网"
+    }
+,{
+        "name": "互联网的那点事...",
+        "id": "49",
+        "desc": "隐居在沙漠里的blog，互联网的那点事......",
+        "image_url": "http://www.feedsky.com/feed/alibuybuy/sc/gif",
+        "content_url":"http://feed.feedsky.com/alibuybuy",
+        "cat":"互联网"
     }]

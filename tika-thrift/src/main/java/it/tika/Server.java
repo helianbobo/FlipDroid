@@ -19,7 +19,6 @@ public class Server {
             serverArgs.protocolFactory(new TBinaryProtocol.Factory(true, true));
             TServer server = new TThreadPoolServer(serverArgs);
             server.serve();
-            System.out.println("Starting the server...");
 
         } catch (Exception x) {
             x.printStackTrace();
