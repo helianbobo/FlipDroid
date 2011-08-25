@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.coconut.forkjoin:jsr166y:070108">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/coconut/forkjoin/jsr166y/070108/jsr166y-070108.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/coconut/forkjoin/jsr166y/070108/jsr166y-070108-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/coconut/forkjoin/jsr166y/070108/jsr166y-070108-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
