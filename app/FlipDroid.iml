@@ -133,6 +133,7 @@
     </orderEntry>
     <orderEntry type="jdk" jdkName="Android 2.2 Platform" jdkType="Android SDK" />
     <orderEntry type="module" module-name="tika-common" />
+    <orderEntry type="module" module-name="web-image-view" />
   </component>
 </module>
 
