@@ -8,7 +8,6 @@
     <name>tika-all</name>
     <url>http://maven.apache.org</url>
 
-
     <modules>
         <module>boilerpipe</module>
         <module>tika-grepper</module>
