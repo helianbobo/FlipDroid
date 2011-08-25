@@ -70,7 +70,7 @@ def updateSource(request):
  
 @islogin
 def showUrls(request):
-    item_list = [item for item in model.con.Url_abstract.find()]
+    item_list = [item for item in model.con.Url_abstract.find().sort('{time:-1}')]
     #itemcontent_list = [(item["title"],item["content"]) for item in item_list]
     items=paging(request,item_list) 
     return render_to_response('urls.html', { 'items': items})

@@ -180,8 +180,31 @@ public class Paragraphs {
             if (!body.startsWith("<"))
                 return "<p>" + body + "</p>";
 
+            Matcher m;
+            String remains = body;
+			boolean repeat = true;
+			while(repeat) {
+				repeat = false;
+				m = PAT_TAG_NO_TEXT.matcher(remains);
+				if(m.find()) {
+					repeat = true;
+					remains = m.replaceAll("");
+				}
+
+				m = PAT_SUPER_TAG.matcher(remains);
+				if(m.find()) {
+					repeat = true;
+					remains = m.replaceAll(m.group(1));
+				}
+			}
+            if(remains.trim().length()==0)
+                return "";
+
             return body;  //To change body of implemented methods use File | Settings | File Templates.
         }
 
+
     }
+    private static final Pattern PAT_SUPER_TAG = Pattern.compile("^<[^>]*>(<.*?>)</[^>]*>$");
+    public static final Pattern PAT_TAG_NO_TEXT = Pattern.compile("<[^/][^>]*></[^>]*>");
 }

@@ -211,7 +211,7 @@ public class RssParser extends DefaultHandler {
 
     public static void main(String[] args) {
         String url = "\t\n" +
-                "http://tech2ipo.com/feed/rss/";
+                "http://feed.feedsky.com/alibuybuy";
         String cat = "互联网";
 
         String template = ",{\n" +
