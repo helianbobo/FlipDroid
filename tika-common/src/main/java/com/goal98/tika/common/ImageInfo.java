@@ -74,13 +74,13 @@ public class ImageInfo implements TikaUIObject {
     public void setUnparsedInfo(String paragraph) {
         final int srcStarts = paragraph.indexOf("src=");
         this.url = paragraph.substring(srcStarts + 4, paragraph.indexOf(" ", srcStarts));
-        if (paragraph.indexOf("width") != -1) {
-            final int widthStarts = paragraph.indexOf(" width=");
-            this.width = Integer.valueOf(paragraph.substring(widthStarts + 7, paragraph.indexOf(" ", widthStarts)));
+        final int widthStarts = paragraph.indexOf(" width=");
+        if (widthStarts != -1) {
+            this.width = Integer.valueOf(paragraph.substring(widthStarts + 7, paragraph.indexOf(" ", widthStarts + 1)));
         }
-        if (paragraph.indexOf("height") != -1) {
-            final int heightStarts = paragraph.indexOf(" height=");
-            this.height = Integer.valueOf(paragraph.substring(heightStarts + 8, paragraph.indexOf(" ", heightStarts)));
+        final int heightStarts = paragraph.indexOf(" height=");
+        if (heightStarts != -1) {
+            this.height = Integer.valueOf(paragraph.substring(heightStarts + 8, paragraph.indexOf(" ", heightStarts+1)));
         }
     }
 
