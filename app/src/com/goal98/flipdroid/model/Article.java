@@ -86,7 +86,7 @@ public class Article {
     }
 
     static Pattern urlPattern = Pattern.compile(
-            "http://([\\w-]+\\.)+[\\w-]+(/[\\w\\-./?:~%&=]*)?",
+            "http://([\\w-]+\\.)+[\\w-]+(/[\\w\\-./?%:~%&=]*)?",
             Pattern.CASE_INSENSITIVE);
 
 

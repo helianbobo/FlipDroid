@@ -199,7 +199,7 @@ public class ContentLoadedView extends ArticleView {
                 if (uiObject.getObjectBody().startsWith("<p><blockquote>")) {
                     style = "<p><blockquote>";
                     tv.setPadding(2 + txtSize * 1, 3, 2 + txtSize * 1, 3);
-                    tv.setBackgroundColor(Color.parseColor("#EEEEEE"));
+                    tv.setBackgroundColor(Color.parseColor("#DDDDDD"));
                 } else {
                     tv.setPadding(2, 3, 2, 3);
                 }
