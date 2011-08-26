@@ -13,10 +13,8 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.animation.Animation;
-import android.widget.ImageView;
+import android.widget.*;
 import android.widget.ImageView.ScaleType;
-import android.widget.ProgressBar;
-import android.widget.ViewSwitcher;
 
 public class WebImageView extends ViewSwitcher {
 
@@ -125,7 +123,7 @@ public class WebImageView extends ViewSwitcher {
         this.imageUrl = imageUrl;
         this.progressDrawable = progressDrawable;
         this.errorDrawable = errorDrawable;
-this.setInAnimation(this.getContext(), R.anim.fade_in);
+        this.setInAnimation(this.getContext(), R.anim.fade_in);
         ImageLoader.initialize(context);
 
         // ScaleAnimation anim = new ScaleAnimation(0.0f, 1.0f, 0.0f, 1.0f,
@@ -147,17 +145,23 @@ this.setInAnimation(this.getContext(), R.anim.fade_in);
     private void addLoadingSpinnerView(Context context) {
         loadingSpinner = new ProgressBar(context);
         loadingSpinner.setIndeterminate(true);
+
+        LayoutParams lp = null;
+
         if (this.progressDrawable == null) {
             this.progressDrawable = loadingSpinner.getIndeterminateDrawable();
+            lp = new LayoutParams(progressDrawable.getIntrinsicWidth() / 2, progressDrawable
+                    .getIntrinsicHeight() / 2);
         } else {
             loadingSpinner.setIndeterminateDrawable(progressDrawable);
             if (progressDrawable instanceof AnimationDrawable) {
                 ((AnimationDrawable) progressDrawable).start();
             }
+            lp = new LayoutParams(progressDrawable.getIntrinsicWidth(), progressDrawable
+                    .getIntrinsicHeight());
         }
 
-        LayoutParams lp = new LayoutParams(progressDrawable.getIntrinsicWidth(), progressDrawable
-                .getIntrinsicHeight());
+
         lp.gravity = Gravity.CENTER;
 
         addView(loadingSpinner, 0, lp);
@@ -270,25 +274,41 @@ this.setInAnimation(this.getContext(), R.anim.fade_in);
             int heightDip = 160 * bmpHeight / DisplayMetrics.DENSITY_DEFAULT;
             int widthDip = 160 * bmpWidth / DisplayMetrics.DENSITY_DEFAULT;
 
-            System.out.println("bmpWidth" + bmpWidth);
-            System.out.println("bmpHeight" + bmpHeight);
-            System.out.println("width" + width);
-            System.out.println("height" + height);
+            boolean debug = false;
+            if (width == 320) {
+                debug = true;
+            }
+            if (debug) {
+                System.out.println("gaga bmpWidth" + bmpWidth);
+                System.out.println("gaga bmpHeight" + bmpHeight);
+                System.out.println("gaga width" + width);
+                System.out.println("gaga height" + height);
+            }
 
             float scale = 0.0f;
             if (bmpWidth > bmpHeight * 1.25) {
                 scale = (float) width / widthDip;
+
                 fatOrSlim = FAT;
             } else {
                 scale = (float) height / heightDip;
                 fatOrSlim = SLIM;
                 percentageInWidth = 50 * (bmpWidth / bmpHeight);
             }
-            if(scale>1){
-                scale=1;
+            if (scale > 1) {
+                scale = 1;
             }
-            System.out.println("scale" + scale);
 
+            if (fatOrSlim == FAT) {
+                height = (int) (heightDip * scale);
+            } else {
+                width = (int) (widthDip * scale);
+            }
+            if (debug) {
+                System.out.println("gaga final width in dip" + width);
+                System.out.println("gaga final height in dip" + height);
+                System.out.println("gaga scale" + scale);
+            }
             Bitmap resizeBitmap = null;
             if (scale != 1.0) {
                 Matrix matrix = new Matrix();
@@ -310,8 +330,8 @@ this.setInAnimation(this.getContext(), R.anim.fade_in);
                     error.printStackTrace();
                     System.out.println("out of memory...skipped");
                 }
-            }else {
-                 resizeBitmap = bitmap;
+            } else {
+                resizeBitmap = bitmap;
             }
             boolean result = false;
             String forUrl = (String) imageView.getTag();
@@ -327,10 +347,13 @@ this.setInAnimation(this.getContext(), R.anim.fade_in);
             } else {
                 result = false;
             }
-
-            System.out.println("RESULT" + result);
+//            LinearLayout.LayoutParams newParams = new LinearLayout.LayoutParams(width, height);
+//            if(WebImageView.this.getLayoutParams()!=null)
+//                newParams.gravity = ((LinearLayout.LayoutParams) WebImageView.this.getLayoutParams()).gravity;
+//            WebImageView.this.setLayoutParams(newParams);
             if (result) {
                 isLoaded = true;
+
                 setDisplayedChild(1);
             }
 

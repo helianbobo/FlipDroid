@@ -11,6 +11,8 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.logging.Level;
@@ -37,24 +39,30 @@ public class Tika {
         return URLDBMongoDB.getInstance();
     }
 
-    public URLAbstract extract(String url, boolean nocache) {
+    public URLAbstract extract(String urlString, boolean nocache) {
         URLAbstract result = null;
 
         try {
             boolean bypassCache = nocache;
 
+            URL url = new URL(urlString);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            final int responseCode = conn.getResponseCode();
+            if(responseCode<200 || responseCode>299){
+                return new URLAbstract();
+            }
 
-
+            urlString = conn.getURL().toString();
             if (!bypassCache) {
                 try {
-                    result = getDB().find(url);
+                    result = getDB().find(urlString);
                 } catch (DBNotAvailableException e) {
 //                    getLogger().log(Level.INFO, e.getMessage(), e);
                 }
             }
 
-            if (result == null  || (result!=null && result.getContent()==null)) {
-                byte[] rawBytes = URLRawRepo.getInstance().fetch(url);
+            if (result == null || (result != null && result.getContent() == null)) {
+                byte[] rawBytes = URLRawRepo.getInstance().fetch(urlString);
                 if (rawBytes == null)
                     return null;
                 System.out.println("rawBytes length:" + rawBytes.length);
@@ -75,7 +83,7 @@ public class Tika {
 //                    getLogger().log(Level.INFO, "Can't fetch document from url:" + urlDecoded);
                 } else {
                     result = new URLAbstract(rawBytes, cs);
-                    result.setUrl(url);
+                    result.setUrl(urlString);
                     System.out.println("unextracted result:" + result.getRawContent());
                     result = new WebpageExtractor(new TikaImageService()).extract(result);
                     if (result != null && result.getContent() != null && result.getContent().length() != 0) {

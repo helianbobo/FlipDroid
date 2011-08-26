@@ -26,6 +26,8 @@ public class TikaServiceImpl implements TikaService.Iface {
         }
 
         URLAbstract result = tika.extract(urlDecoded, false);
+        if (result == null)
+            throw new TikaException();
 
         result.setUrl(urlDecoded);
 

@@ -142,10 +142,12 @@ public abstract class ExpandableArticleView extends ArticleView {
 
             if (article.getHeight() == 0) {
                 imageView.setDefaultWidth(deviceInfo.getWidth() / 2 - 8);
+                System.out.println("gaga set height1"+((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine));
                 imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine);
             } else {
                 imageView.setDefaultWidth(deviceInfo.getWidth());
-                imageView.setDefaultHeight(article.getHeight() - article.getTextHeight() - 30);
+                System.out.println("gaga set height2"+(deviceInfo.getHeight() - article.getTextHeight() - 30));
+                imageView.setDefaultHeight(deviceInfo.getHeight() - article.getTextHeight() - 30);
             }
 
 //            imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine);
@@ -183,7 +185,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                 LayoutParams layoutParamsImage = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
                 contentViewWrapper.setOrientation(VERTICAL);
                 contentViewWrapper.addView(contentView, layoutParamsText);
-                layoutParamsImage.gravity = Gravity.TOP;
+                layoutParamsImage.gravity = Gravity.TOP|Gravity.CENTER_HORIZONTAL;
                 contentViewWrapper.addView(imageView, layoutParamsImage);
             }
         }

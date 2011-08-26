@@ -244,10 +244,6 @@ public class Article {
     private volatile boolean loading = false;
 
     public synchronized void loadPrimaryImage(String image,DeviceInfo deviceInfo) {
-        if (loading)
-            return;
-
-        loading = true;
         PreloadPrimaryImageLoaderHandler preloadPrimaryImageLoaderHandler = new PreloadPrimaryImageLoaderHandler(this,image,deviceInfo);
         final ImageLoader loader = new ImageLoader(image, preloadPrimaryImageLoaderHandler);
         new Thread(loader).start();
