@@ -48,7 +48,7 @@ import java.util.concurrent.*;
 
 public class PageActivity extends Activity implements com.goal98.flipdroid.model.Window.OnLoadListener, SourceUpdateable {
 
-    static final private int CONFIG_ID = Menu.FIRST;
+    private static final int CONFIG_ID = Menu.FIRST;
     private Animation fadeInPageView;
     private Animation fadeOutPageView;
     private ImageButton contentImageButton;
@@ -69,7 +69,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     private ContentRepo repo;
     private SharedPreferences preferences;
-    private AccountDB accountDB;
     private WeiboPagingStrategy weiboPagingStrategy;
     ExecutorService executor;
     private String deviceId;
@@ -184,8 +183,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 //        acceleromererSensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 //        createShakeListener();
 
-
-        accountDB = new AccountDB(this);
 
         Cursor sourceCursor = sourceDB.findAll();
 
@@ -522,25 +519,19 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        accountDB.close();
-//        sm.unregisterListener(acceleromererListener);
+        if(sourceDB!=null)
+            sourceDB.close();
     }
 
     @Override
     protected void onPause() {
         super.onDestroy();
         CacheSystem.getTikaCache(this).shutdown();
-        accountDB.close();
-//        sm.unregisterListener(acceleromererListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (accountDB != null)
-            accountDB.close();
-        if (sourceDB != null)
-            sourceDB.close();
     }
 
 
@@ -664,14 +655,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        current.setVisibility(View.VISIBLE);
-//        registerShakeListener();
-        accountDB = new AccountDB(this);
-    }
-
     boolean enlargedMode = false;
 
     public void setEnlargedMode(boolean enlargedMode) {
@@ -755,7 +738,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     Handler handler = new Handler();
 
     private void flipPage(final boolean forward) {
-        flipStarted = true;
+        if(!current.isFirstPage())
+            flipStarted = true;
 
         this.previousDirection = this.forward;
         this.forward = forward;
@@ -777,6 +761,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         } else {
             finishActivity();
         }
+        System.out.println("debug flip done");
     }
 
     private void finishActivity() {
@@ -1121,7 +1106,12 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     public boolean sinaAlreadyBinded() {
-        return accountDB.hasAccount(Constants.TYPE_MY_SINA_WEIBO) && preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null) != null;
+        AccountDB accountDB = new AccountDB(this);
+        try {
+            return accountDB.hasAccount(Constants.TYPE_MY_SINA_WEIBO) && preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null) != null;
+        } finally {
+            accountDB.close();
+        }
     }
 
     public static final int PROMPT_OAUTH = 1;

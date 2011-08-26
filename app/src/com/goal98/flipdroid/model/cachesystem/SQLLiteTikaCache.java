@@ -42,6 +42,7 @@ public class SQLLiteTikaCache implements TikaCache {
             cache = new SQLLiteTikaCache(context);
         }
         if(shutdown){
+            shutdown = false;
             urldb = new URLDB(context);
         }
         return cache;
