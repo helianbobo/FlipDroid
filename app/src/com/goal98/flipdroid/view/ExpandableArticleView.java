@@ -60,11 +60,12 @@ public abstract class ExpandableArticleView extends ArticleView {
 
     public ExpandableArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom, ExecutorService executor) {
         super(context, article, pageView, placedAtBottom);
+
         if (!article.isAlreadyLoaded()) {
             this.executor = executor;
             preload();
         } else {
-            if (toLoadImage(context))
+            if (toLoadImage)
                 article.loadPrimaryImage(deviceInfo);
         }
         fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
@@ -131,7 +132,7 @@ public abstract class ExpandableArticleView extends ArticleView {
         }
 
         //System.out.println("article.getImageUrl()" + article.getImageUrl());
-        if (article.getImageUrl() == null || !toLoadImage(getContext())) {
+        if (article.getImageUrl() == null || !toLoadImage) {
             LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
             layoutParams.weight = 100;
             contentViewWrapper.addView(contentView, layoutParams);
@@ -238,7 +239,7 @@ public abstract class ExpandableArticleView extends ArticleView {
             article.setContent("");
         article.setTitle(extractResponse.getTitle());
 
-        if (toLoadImage(this.getContext())) {
+        if (toLoadImage) {
             try {
                 if (!extractResponse.getImages().isEmpty()) {
                     List<String> responsedImages = extractResponse.getImages();
@@ -319,9 +320,7 @@ public abstract class ExpandableArticleView extends ArticleView {
 
     protected abstract void reloadOriginalView();
 
-    protected boolean toLoadImage(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getString(R.string.key_load_image_preference), true);
-    }
+
 
     protected void addOnClickListener() {
         contentViewWrapper.setOnClickListener(new OnClickListener() {

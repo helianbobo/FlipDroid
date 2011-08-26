@@ -51,7 +51,7 @@ public class ConfigActivity extends PreferenceActivity implements SharedPreferen
     private int findEntryIndex(SharedPreferences sharedPreferences, String key, ListPreference preference) {
         int index = 0;
 
-        while (preference.getEntryValues()[index] != sharedPreferences.getString(key, "0")) {
+        while (!preference.getEntryValues()[index].equals(sharedPreferences.getString(key, "0"))) {
             index++;
             if (index >= preference.getEntryValues().length) {
                 return 0;

@@ -37,7 +37,7 @@
             />
     <android.preference.CheckBoxPreference android:id="@+id/loadImage"
                                            android:key="@string/key_load_image_preference"
-                                           android:defaultValue="false"
+                                           android:defaultValue="true"
                                            android:title="@string/title_load_image_preference"
             ></android.preference.CheckBoxPreference>
     <!--<ListPreference android:id="@+id/animation"-->

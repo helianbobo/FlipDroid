@@ -519,7 +519,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(sourceDB!=null)
+        if (sourceDB != null)
             sourceDB.close();
     }
 
@@ -738,7 +738,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     Handler handler = new Handler();
 
     private void flipPage(final boolean forward) {
-        if(!current.isFirstPage())
+        if (!current.isFirstPage())
             flipStarted = true;
 
         this.previousDirection = this.forward;
@@ -1203,5 +1203,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             PageActivity.this.finish();
         }
         return;
+    }
+
+    public boolean toLoadImage() {
+        return PreferenceManager.getDefaultSharedPreferences(this).getBoolean(this.getString(R.string.key_load_image_preference), true);
     }
 }

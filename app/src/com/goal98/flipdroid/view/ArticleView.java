@@ -16,6 +16,7 @@ import android.widget.ViewSwitcher;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.activity.FlipdroidApplications;
+import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.DeviceInfo;
@@ -33,7 +34,7 @@ public abstract class ArticleView extends LinearLayout {
     protected TextView createDateView;
     protected WebImageView portraitView;
     protected LinearLayout contentViewWrapper;
-
+    protected boolean toLoadImage;
 
 
     protected WeiboPageView pageView;
@@ -65,6 +66,7 @@ public abstract class ArticleView extends LinearLayout {
 
     public ArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
         super(context);
+        toLoadImage = ((PageActivity)context).toLoadImage();
         this.deviceInfo = getDeviceInfoFromApplicationContext();
         this.setOrientation(VERTICAL);
         this.placedAtBottom = placedAtBottom;

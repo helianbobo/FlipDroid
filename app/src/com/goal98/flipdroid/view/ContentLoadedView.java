@@ -228,6 +228,8 @@ public class ContentLoadedView extends ArticleView {
 
 
             if (uiObject.getType().equals(TikaUIObject.TYPE_IMAGE)) {
+                if(!toLoadImage)
+                    continue;
                 ImageInfo imageInfo = ((ImageInfo) uiObject);
                 String url = imageInfo.getUrl();
                 WebImageView imageView = new WebImageView(this.getContext(), url, false);
