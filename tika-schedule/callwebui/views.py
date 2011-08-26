@@ -14,7 +14,7 @@ def islogin(func):
         #if args[].session['userid'] <> "user":
         if request.session.get('userid')=="user":
             return func(request)
-        return HttpResponseRedirect('/login/')
+        return HttpResponseRedirect('/')
     return fun
 
 
@@ -70,8 +70,12 @@ def updateSource(request):
  
 @islogin
 def showUrls(request):
-    item_list = [item for item in model.con.Url_abstract.find().sort('time', pymongo.DESCENDING)]
-    #itemcontent_list = [(item["title"],item["content"]) for item in item_list]
+    #item_list = [item for item in model.con.Url_abstract.find()]
+    #import re  
+    #q      = re.compile(r'.*')
+    #item_list = [item for item in model.con.Url_abstract.find( {'url' : { '$regex' : q } } )]
+    
+    item_list =model.con.Url_abstract.find().sort('time', pymongo.DESCENDING)
     items=paging(request,item_list) 
     return render_to_response('urls.html', { 'items': items})
 

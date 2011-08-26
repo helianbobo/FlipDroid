@@ -33,7 +33,7 @@ class Tika(object):
         except Exception,e:
             print "!!!!!errorurl!!!!:"+url
             print e
-        #self.transport.close()
+        
         return True
     
     def close(self):

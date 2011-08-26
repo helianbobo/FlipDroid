@@ -6,7 +6,7 @@ Created on 2011-8-21
 #from pymongo import Connection
 from mongokit import * 
 #db = Connection().tika
-from mongokit import *  
+ 
 con = Connection()
 
 
@@ -44,8 +44,9 @@ class Url_abstract(Document):
                  'url':unicode,
                  'type':unicode,
                  'time':unicode,
-                 }
+                 } 
     required_fields = ['url' ]
+    indexes = [{'fields':[('time',INDEX_DESCENDING)] },]
      
 
   

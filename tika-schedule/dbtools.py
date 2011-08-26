@@ -87,7 +87,7 @@ class DBreader(object):
     def updateSourceRssMD5(self,theid,md5):
         source = self.mydb.tika.source
         source.update({"_id":theid}, {"$set" : {"md5": md5}}, False)
-
+        self.con.disconnect()
     
     def close(self):
         print "close con"

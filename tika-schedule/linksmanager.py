@@ -9,7 +9,7 @@ import traceback
 import dbtools  
 #import testtools
 from linkitem import *
-import threading,time
+import threading
 import usethrift
 from Queue import Queue
 

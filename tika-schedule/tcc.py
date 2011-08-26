@@ -8,6 +8,7 @@ import rssmanager
 import threading
 import time
 import config
+from dbtools import ISOTIMEFORMAT
 
 class TCC(object):
     interval = config.INTERVAL #second  
@@ -48,7 +49,8 @@ class TCC(object):
             #t.start()
             #t.join()
             self.rm.handleLinksFromAllRss(self.LmClass)
-            print "##########\n"+"###fininsh onece!!!\n""##########\n"
+            ftime=time.strftime( ISOTIMEFORMAT, time.gmtime())
+            print "##########\n"+"###"+ftime+" the "+str(i)+" fininsh onece!!!\n""##########\n"
             print "##########\n"+"###to sleep %s  seconds!!!\n"%self.interval+"##########\n" 
             time.sleep(self.interval)
             
