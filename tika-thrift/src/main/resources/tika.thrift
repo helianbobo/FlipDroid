@@ -2,7 +2,8 @@ namespace java it.tika
 namespace py it.tika
 
 struct TikaRequest {  
-  1: string url 
+  1: string url
+  2: string referencedFrom
 }
 
 struct TikaResponse {  

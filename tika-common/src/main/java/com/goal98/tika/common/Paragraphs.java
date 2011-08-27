@@ -36,6 +36,11 @@ public class Paragraphs {
         int cutAt = 0;
         int endAt = -1;
         while ((cutAt = findNextClosingTag(articleContent)) != -1) {
+            if(cutAt==-2){
+                paragraphs.add(new Text(articleContent));
+                return;
+            }
+
             int startAt = articleContent.indexOf("<");
             int brAt = articleContent.indexOf("<br/>");
             while (brAt == startAt) {
@@ -57,6 +62,7 @@ public class Paragraphs {
 
             articleContent = articleContent.substring(endAt + 1);
         }
+
     }
 
     static Pattern startTag = Pattern.compile("(<[^>]+>)|</[^>]+>");
@@ -91,7 +97,7 @@ public class Paragraphs {
 
         }
         System.out.println(articleContent);
-        throw new RuntimeException("not match");
+        return -2;
     }
 
     private String parseImg(String paragraph) {
@@ -191,12 +197,6 @@ public class Paragraphs {
                 if (m.find()) {
                     repeat = true;
                     remains = m.replaceAll("");
-                }
-
-                m = PAT_SUPER_TAG.matcher(remains);
-                if (m.find()) {
-                    repeat = true;
-                    remains = m.replaceAll(m.group(1));
                 }
             }
             if (remains.trim().length() == 0)
