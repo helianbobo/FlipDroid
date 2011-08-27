@@ -2,9 +2,7 @@ ps -ef|grep java|grep it.tika.APIServer|awk '{print "kill -9 "$2}'|sh
 
 ps -ef|grep java|grep it.tika.Server|awk '{print "kill -9 "$2}'|sh
 
-#ps -ef|grep java|grep "python tcc.py"|awk '{print "kill -9 "$2}'|sh
 
-#ps -ef|grep java|grep "/user/bin/python manage.py"|awk '{print "kill -9 "$2}'|sh
 
 cd ~/tika-api
 . ./run.sh

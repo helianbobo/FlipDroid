@@ -13,7 +13,7 @@ public class APIServer {
     public static final String OFFICE = "D:\\myprojects\\android";
     public static final String HOME = "G:\\androidprj";
     public static final String HOME_2 = "D:\\Tools\\android-prj";
-    public static final String ROOT_URI = "file:///" + OFFICE + "\\FlipDroid\\tika-ui";
+    public static final String ROOT_URI = "file:///" + HOME_2 + "\\FlipDroid\\tika-ui";
     public static final String CURRENT_VERSION = "v1";
 
     public static void main(String[] args) throws Exception {

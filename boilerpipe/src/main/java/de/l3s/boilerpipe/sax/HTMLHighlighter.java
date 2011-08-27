@@ -110,7 +110,29 @@ public final class HTMLHighlighter {
 
         String html = implementation.html.toString();
         if (outputHighlightOnly) {
-            html = html.replaceAll("<p></p>", "").replaceAll("<strong></strong>", "").replaceAll("<h[1-9]+></h[1-9]+>", "");
+
+             Matcher m;
+			boolean repeat = true;
+			while(repeat) {
+				repeat = false;
+				m = PAT_TAG_P_NO_TEXT.matcher(html);
+				if(m.find()) {
+					repeat = true;
+					html = m.replaceAll("");
+				}
+
+                m = PAT_TAG_STRONG_NO_TEXT.matcher(html);
+				if(m.find()) {
+					repeat = true;
+					html = m.replaceAll("");
+				}
+
+                m = PAT_TAG_HEADER_NO_TEXT.matcher(html);
+				if(m.find()) {
+					repeat = true;
+					html = m.replaceAll("");
+				}
+			}
         }
 
         return html;
@@ -119,6 +141,9 @@ public final class HTMLHighlighter {
     }
 
     private static final Pattern PAT_TAG_NO_TEXT = Pattern.compile("<[^/][^>]*></[^>]*>");
+    private static final Pattern PAT_TAG_P_NO_TEXT = Pattern.compile("<p></p>");
+    private static final Pattern PAT_TAG_STRONG_NO_TEXT = Pattern.compile("<strong></strong>");
+    private static final Pattern PAT_TAG_HEADER_NO_TEXT = Pattern.compile("<h[1-6]+></h[1-6]+>");
     private static final Pattern PAT_SUPER_TAG = Pattern.compile("^<[^>]*>(<.*?>)</[^>]*>$");
 
     public String process(final URL url, final BoilerpipeExtractor extractor)
