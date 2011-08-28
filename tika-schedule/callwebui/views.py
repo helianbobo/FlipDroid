@@ -24,6 +24,7 @@ def test(request):
 def paging(request,item_list,per_page=10):
     paginator = Paginator(item_list,per_page)
     p = request.GET.get('page','')
+    
     try:
         items = paginator.page(p)
     except PageNotAnInteger:
@@ -32,7 +33,17 @@ def paging(request,item_list,per_page=10):
         items = paginator.page(paginator.num_pages)
     return items
 
-
+def pagingSearch(request,item_list,per_page=10):
+    paginator = Paginator(item_list,per_page)
+    p = request.GET.get('page','')
+    url=request.GET.get('url','')
+    try:
+        items = paginator.page(p)
+    except PageNotAnInteger:
+        items = paginator.page(1)
+    except EmptyPage:
+        items = paginator.page(paginator.num_pages)
+    return items
 
 @islogin
 def showSource(request):
@@ -68,7 +79,7 @@ def updateSource(request):
         return HttpResponseRedirect("/source/")
     
  
-@islogin
+#@islogin
 def showUrls(request):
     #item_list = [item for item in model.con.Url_abstract.find()]
     #import re  
@@ -78,6 +89,15 @@ def showUrls(request):
     item_list =model.con.Url_abstract.find().sort('time', pymongo.DESCENDING)
     items=paging(request,item_list) 
     return render_to_response('urls.html', { 'items': items})
+
+import re
+#@islogin
+def searchUrls(request):
+    url = request.GET['url']
+    url=re.escape(url)
+    item_list =[item for item in model.con.Url_abstract.find({"url":{'$regex': url}}).sort('time', pymongo.DESCENDING)]
+    items=paging(request,item_list) 
+    return render_to_response('urlssearch.html', {'items': items,'url':url})
 
 @islogin
 def updateUrls(request):        
