@@ -79,7 +79,7 @@ def updateSource(request):
         return HttpResponseRedirect("/source/")
     
  
-#@islogin
+@islogin
 def showUrls(request):
     #item_list = [item for item in model.con.Url_abstract.find()]
     #import re  
@@ -91,7 +91,7 @@ def showUrls(request):
     return render_to_response('urls.html', { 'items': items})
 
 import re
-#@islogin
+@islogin
 def searchUrls(request):
     url = request.GET['url']
     url=re.escape(url)
