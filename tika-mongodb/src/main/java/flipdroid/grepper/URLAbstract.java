@@ -12,6 +12,15 @@ public class URLAbstract {
     private Charset charset;
     private String base;
     private List<String> images = new ArrayList<String>();
+    private String referencedFrom;
+
+    public String getReferencedFrom() {
+        return referencedFrom;
+    }
+
+    public void setReferencedFrom(String referencedFrom) {
+        this.referencedFrom = referencedFrom;
+    }
 
     public String getBase() {
         return base;

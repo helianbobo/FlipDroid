@@ -43,6 +43,10 @@ public class Tika {
     }
 
     public URLAbstract extract(String urlString, boolean nocache) {
+        return extract(urlString, nocache, null);
+    }
+
+    public URLAbstract extract(String urlString, boolean nocache, String referencedFrom) {
         URLAbstract result = null;
         System.out.println("fetching " + urlString);
         try {
@@ -50,12 +54,12 @@ public class Tika {
 
             URL url = new URL(urlString);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestProperty("User-Agent","Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
             conn.setConnectTimeout(30000);
             conn.setReadTimeout(30000);
             final int responseCode = conn.getResponseCode();
             System.out.println("responseCode " + responseCode);
-            if(responseCode<200 || responseCode>299){
+            if (responseCode < 200 || responseCode > 299) {
                 return new URLAbstract();
             }
 
@@ -93,6 +97,7 @@ public class Tika {
                 } else {
                     result = new URLAbstract(rawBytes, cs);
                     result.setUrl(urlString);
+                    result.setReferencedFrom(referencedFrom);
                     System.out.println("unextracted result:" + result.getRawContent());
                     result = new WebpageExtractor(new TikaImageService()).extract(result);
                     if (result != null && result.getContent() != null && result.getContent().length() != 0) {
@@ -103,9 +108,9 @@ public class Tika {
                         }
                     }
                 }
-            }else{
+            } else {
                 System.out.println("db cache hit...");
-                System.out.println("db cache:"+result.getContent());
+                System.out.println("db cache:" + result.getContent());
             }
         } catch (UnsupportedEncodingException e) {
             getLogger().error(e.getMessage(), e);
@@ -120,6 +125,7 @@ public class Tika {
         }
         return result;
     }
+
     private Log logger = LogFactory.getLog(Tika.class);
 
     private Log getLogger() {

@@ -57,6 +57,7 @@ public class URLDBMongoDB implements URLDBInterface {
                         (String) urlFromDB.get("title"),
                         (String) urlFromDB.get("content"),
                         imageList);
+                urlAbstract.setReferencedFrom((String) urlFromDB.get("reference"));
             }
         } catch (MongoException e) {
             logger.log(Level.INFO, e.getMessage(), e);
@@ -73,6 +74,7 @@ public class URLDBMongoDB implements URLDBInterface {
         urlAbstractObj.put("type", "user");
         urlAbstractObj.put("time", new Date());
         urlAbstractObj.put("state", "success");
+        urlAbstractObj.put("reference", urlAbstract.getReferencedFrom());
 
         try {
             db.getCollection(urlCollectionName).insert(urlAbstractObj);
