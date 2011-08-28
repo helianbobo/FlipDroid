@@ -67,15 +67,4 @@ class TCC(object):
         
 
 
- 
 
- 
-            
- 
-
-if __name__ == '__main__':
- 
-    a=TCC()
-    a.start()
-     
-     

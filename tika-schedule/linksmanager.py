@@ -64,21 +64,25 @@ class LinksManagerUseCoroutine(threading.Thread):
         def callHandleTika(_linkitem):
             #issuccessed = usethrift.test(_linkitem.url)
             #tika=usethrift.Tika()
-            issuccessed=self.tika.handleUrl(_linkitem.url)
-            if issuccessed:
-                _linkitem.state=KEYSTATE_SUCCESS
-                self.updateDB(_linkitem)       
-            return True
+            try:
+                issuccessed=self.tika.handleUrl(_linkitem.url)
+                if issuccessed:
+                    _linkitem.state=KEYSTATE_SUCCESS
+                    self.updateDB(_linkitem)       
+                return issuccessed
+            except Exception,e:
+                print e
+                traceback.print_exc()
+                return False
 
          
         if linkitem.type == KEYTYPE_RSS:  
             print "theurl",linkitem.url
-            try:
-                result = callHandleTika(linkitem)
-                return True
-            except:
-                traceback.print_exc()
-                return False
+            result = callHandleTika(linkitem)
+               
+        else:
+            result = False
+        return result
                 
 
     def updateDB(self,linkitem):

@@ -12,6 +12,7 @@ from thrift.protocol import TBinaryProtocol
 import config
 HOST = config.TIKAHOST
 POST = config.TIKAPOST
+from checktimeout import timeout,Timeout
 
 class Tika(object):
     timeout = config.THRIFTTIMEOUT
@@ -21,20 +22,34 @@ class Tika(object):
         self.protocol = TBinaryProtocol.TBinaryProtocol(self.transport,self.timeout)
         self.client = TikaService.Client(self.protocol)
         self.transport.open()
-
+    
+    
     def handleUrl(self,url):
+        @timeout(20)
+        def _handleUrl(self,url):
+            r =False
+            try:
+                tr = TikaRequest(url)
+                print url,"###befor fire"
+                aa = self.client.fire(tr)
+                print url,"###after fire"
+                if aa.success:
+                    print "success",tr.url
+                    r = True
+            except Exception,e:
+                print "!!!!!errorurl!!!!:"+url
+                print e
+                r = False
+            finally:
+                return r
+            
         try:
-            tr = TikaRequest(url)
-            print url,"###befor fire"
-            aa = self.client.fire(tr)
-            print url,"###after fire"
-            if aa.success:
-                print "success",tr.url
-        except Exception,e:
-            print "!!!!!errorurl!!!!:"+url
-            print e
-        
-        return True
+            r = _handleUrl(self,url)
+        except Timeout, e:
+            print e,"TIMEOUT handleUrl:",url
+            r = False
+        finally:
+            return r
     
     def close(self):
         self.transport.close()
@@ -42,9 +57,10 @@ class Tika(object):
 def test(url):  
     transport = TSocket.TSocket(HOST, POST)
     transport = TTransport.TFramedTransport(transport)
-    protocol = TBinaryProtocol.TBinaryProtocol(transport)
+    protocol = TBinaryProtocol.TBinaryProtocol(transport,config.THRIFTTIMEOUT)
     client = TikaService.Client(protocol)
     transport.open()
+    r = False
     try:
         tr = TikaRequest(url)
         #tr.url=url
@@ -54,14 +70,15 @@ def test(url):
         
         if aa.success:
             print "success",tr.url
-            transport.close()
-            return True
+            r = True
+
     except TikaException,e:
         import traceback
         traceback.print_exc()
         print e
+    finally:
         transport.close()
-    transport.close()
+        return r
 
 def test2(url):
     tr = TikaRequest(url)

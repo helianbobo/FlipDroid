@@ -19,15 +19,18 @@ class TikaRequest:
   """
   Attributes:
    - url
+   - referencedFrom
   """
 
   thrift_spec = (
     None, # 0
     (1, TType.STRING, 'url', None, None, ), # 1
+    (2, TType.STRING, 'referencedFrom', None, None, ), # 2
   )
 
-  def __init__(self, url=None,):
+  def __init__(self, url=None, referencedFrom=None,):
     self.url = url
+    self.referencedFrom = referencedFrom
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -43,6 +46,11 @@ class TikaRequest:
           self.url = iprot.readString();
         else:
           iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.referencedFrom = iprot.readString();
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -56,6 +64,10 @@ class TikaRequest:
     if self.url != None:
       oprot.writeFieldBegin('url', TType.STRING, 1)
       oprot.writeString(self.url)
+      oprot.writeFieldEnd()
+    if self.referencedFrom != None:
+      oprot.writeFieldBegin('referencedFrom', TType.STRING, 2)
+      oprot.writeString(self.referencedFrom)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
