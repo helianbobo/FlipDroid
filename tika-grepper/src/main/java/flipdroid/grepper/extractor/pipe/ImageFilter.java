@@ -221,6 +221,9 @@ public class ImageFilter implements Extractor {
         URL touchingImageURL = new URL(imageURL);
         HttpURLConnection httpConnection = (HttpURLConnection) (touchingImageURL
                 .openConnection());
+        httpConnection.setConnectTimeout(30000);
+        httpConnection.setReadTimeout(30000);
+
         httpConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
         int responseCode = httpConnection.getResponseCode();
         if (responseCode < 200 || responseCode > 299) {
@@ -256,6 +259,8 @@ public class ImageFilter implements Extractor {
         try {
             HttpURLConnection httpConnection = (HttpURLConnection) (url
                     .openConnection());
+            httpConnection.setConnectTimeout(30000);
+            httpConnection.setReadTimeout(30000);
             httpConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
             int responseCode = httpConnection.getResponseCode();
             if (responseCode < 200 || responseCode > 299) {

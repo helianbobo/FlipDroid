@@ -54,7 +54,7 @@ public class URLAbstractResource extends ServerResource {
         } catch (UnsupportedEncodingException e) {
             return null;
         }
-
+        System.out.println(urlDecoded);
         urlAbstract = tikaService.extract(urlDecoded, nocache);
 
         if (urlAbstract == null) {

@@ -24,12 +24,15 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
   private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("TikaRequest");
 
   private static final org.apache.thrift.protocol.TField URL_FIELD_DESC = new org.apache.thrift.protocol.TField("url", org.apache.thrift.protocol.TType.STRING, (short)1);
+  private static final org.apache.thrift.protocol.TField REFERENCED_FROM_FIELD_DESC = new org.apache.thrift.protocol.TField("referencedFrom", org.apache.thrift.protocol.TType.STRING, (short)2);
 
   public String url;
+  public String referencedFrom;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-    URL((short)1, "url");
+    URL((short)1, "url"),
+    REFERENCED_FROM((short)2, "referencedFrom");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -46,6 +49,8 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
       switch(fieldId) {
         case 1: // URL
           return URL;
+        case 2: // REFERENCED_FROM
+          return REFERENCED_FROM;
         default:
           return null;
       }
@@ -92,6 +97,8 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
     tmpMap.put(_Fields.URL, new org.apache.thrift.meta_data.FieldMetaData("url", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.REFERENCED_FROM, new org.apache.thrift.meta_data.FieldMetaData("referencedFrom", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(TikaRequest.class, metaDataMap);
   }
@@ -100,10 +107,12 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
   }
 
   public TikaRequest(
-    String url)
+    String url,
+    String referencedFrom)
   {
     this();
     this.url = url;
+    this.referencedFrom = referencedFrom;
   }
 
   /**
@@ -112,6 +121,9 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
   public TikaRequest(TikaRequest other) {
     if (other.isSetUrl()) {
       this.url = other.url;
+    }
+    if (other.isSetReferencedFrom()) {
+      this.referencedFrom = other.referencedFrom;
     }
   }
 
@@ -122,6 +134,7 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
   @Override
   public void clear() {
     this.url = null;
+    this.referencedFrom = null;
   }
 
   public String getUrl() {
@@ -148,6 +161,30 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
     }
   }
 
+  public String getReferencedFrom() {
+    return this.referencedFrom;
+  }
+
+  public TikaRequest setReferencedFrom(String referencedFrom) {
+    this.referencedFrom = referencedFrom;
+    return this;
+  }
+
+  public void unsetReferencedFrom() {
+    this.referencedFrom = null;
+  }
+
+  /** Returns true if field referencedFrom is set (has been assigned a value) and false otherwise */
+  public boolean isSetReferencedFrom() {
+    return this.referencedFrom != null;
+  }
+
+  public void setReferencedFromIsSet(boolean value) {
+    if (!value) {
+      this.referencedFrom = null;
+    }
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case URL:
@@ -158,6 +195,14 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
       }
       break;
 
+    case REFERENCED_FROM:
+      if (value == null) {
+        unsetReferencedFrom();
+      } else {
+        setReferencedFrom((String)value);
+      }
+      break;
+
     }
   }
 
@@ -165,6 +210,9 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
     switch (field) {
     case URL:
       return getUrl();
+
+    case REFERENCED_FROM:
+      return getReferencedFrom();
 
     }
     throw new IllegalStateException();
@@ -179,6 +227,8 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
     switch (field) {
     case URL:
       return isSetUrl();
+    case REFERENCED_FROM:
+      return isSetReferencedFrom();
     }
     throw new IllegalStateException();
   }
@@ -202,6 +252,15 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
       if (!(this_present_url && that_present_url))
         return false;
       if (!this.url.equals(that.url))
+        return false;
+    }
+
+    boolean this_present_referencedFrom = true && this.isSetReferencedFrom();
+    boolean that_present_referencedFrom = true && that.isSetReferencedFrom();
+    if (this_present_referencedFrom || that_present_referencedFrom) {
+      if (!(this_present_referencedFrom && that_present_referencedFrom))
+        return false;
+      if (!this.referencedFrom.equals(that.referencedFrom))
         return false;
     }
 
@@ -231,6 +290,16 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetReferencedFrom()).compareTo(typedOther.isSetReferencedFrom());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetReferencedFrom()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.referencedFrom, typedOther.referencedFrom);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -255,6 +324,13 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 2: // REFERENCED_FROM
+          if (field.type == org.apache.thrift.protocol.TType.STRING) {
+            this.referencedFrom = iprot.readString();
+          } else { 
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
       }
@@ -275,6 +351,11 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
       oprot.writeString(this.url);
       oprot.writeFieldEnd();
     }
+    if (this.referencedFrom != null) {
+      oprot.writeFieldBegin(REFERENCED_FROM_FIELD_DESC);
+      oprot.writeString(this.referencedFrom);
+      oprot.writeFieldEnd();
+    }
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -289,6 +370,14 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
       sb.append("null");
     } else {
       sb.append(this.url);
+    }
+    first = false;
+    if (!first) sb.append(", ");
+    sb.append("referencedFrom:");
+    if (this.referencedFrom == null) {
+      sb.append("null");
+    } else {
+      sb.append(this.referencedFrom);
     }
     first = false;
     sb.append(")");

@@ -6,6 +6,9 @@ import flipdroid.grepper.extractor.ExtractorException;
 import flipdroid.grepper.extractor.raw.URLRawRepo;
 import flipdroid.grepper.extractor.raw.URLRepoException;
 import it.tika.mongodb.image.TikaImageService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -41,13 +44,17 @@ public class Tika {
 
     public URLAbstract extract(String urlString, boolean nocache) {
         URLAbstract result = null;
-
+        System.out.println("fetching " + urlString);
         try {
             boolean bypassCache = nocache;
 
             URL url = new URL(urlString);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("User-Agent","Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
+            conn.setConnectTimeout(30000);
+            conn.setReadTimeout(30000);
             final int responseCode = conn.getResponseCode();
+            System.out.println("responseCode " + responseCode);
             if(responseCode<200 || responseCode>299){
                 return new URLAbstract();
             }
@@ -57,11 +64,12 @@ public class Tika {
                 try {
                     result = getDB().find(urlString);
                 } catch (DBNotAvailableException e) {
-//                    getLogger().log(Level.INFO, e.getMessage(), e);
+                    getLogger().error(e.getMessage(), e);
                 }
             }
 
             if (result == null || (result != null && result.getContent() == null)) {
+                System.out.println("db cache miss...");
                 byte[] rawBytes = URLRawRepo.getInstance().fetch(urlString);
                 if (rawBytes == null)
                     return null;
@@ -80,7 +88,8 @@ public class Tika {
                 }
 
                 if (rawBytes == null) {
-//                    getLogger().log(Level.INFO, "Can't fetch document from url:" + urlDecoded);
+                    getLogger().info("Can't fetch document");
+                    System.out.println("can't fetch document");
                 } else {
                     result = new URLAbstract(rawBytes, cs);
                     result.setUrl(urlString);
@@ -90,22 +99,30 @@ public class Tika {
                         try {
                             getDB().insertOrUpdate(result);
                         } catch (DBNotAvailableException e) {
-//                            getLogger().log(Level.INFO, e.getMessage(), e);
+                            getLogger().error(e.getMessage(), e);
                         }
                     }
                 }
+            }else{
+                System.out.println("db cache hit...");
+                System.out.println("db cache:"+result.getContent());
             }
         } catch (UnsupportedEncodingException e) {
-//            getLogger().log(Level.INFO, e.getMessage(), e);
+            getLogger().error(e.getMessage(), e);
         } catch (NullPointerException ne) {
-//            getLogger().log(Level.SEVERE, ne.getMessage(), ne);
+            getLogger().error(ne.getMessage(), ne);
         } catch (URLRepoException urle) {
-//            getLogger().log(Level.SEVERE, urle.getMessage(), urle);
+            getLogger().error(urle.getMessage(), urle);
         } catch (ExtractorException ee) {
-//            getLogger().log(Level.SEVERE, ee.getMessage(), ee);
+            getLogger().error(ee.getMessage(), ee);
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            getLogger().error(e.getMessage(), e);
         }
         return result;
+    }
+    private Log logger = LogFactory.getLog(Tika.class);
+
+    private Log getLogger() {
+        return logger;  //To change body of created methods use File | Settings | File Templates.
     }
 }
