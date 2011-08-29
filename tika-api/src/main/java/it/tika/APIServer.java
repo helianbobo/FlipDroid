@@ -26,6 +26,7 @@ public class APIServer {
         c.getDefaultHost().attach("/"+CURRENT_VERSION+"/url/abstract/batch", URLAbstractBatchResource.class);
         c.getDefaultHost().attach("/"+CURRENT_VERSION+"/url/abstract/rating", URLAbstractRatingResource.class);
         c.getDefaultHost().attach("/"+CURRENT_VERSION+"/sources/search", SourcesResource.class);
+        c.getDefaultHost().attach("/"+CURRENT_VERSION+"/feed", FeedResource.class);
 
 
         // Create a component

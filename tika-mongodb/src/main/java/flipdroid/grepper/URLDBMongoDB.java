@@ -46,23 +46,49 @@ public class URLDBMongoDB implements URLDBInterface {
         try {
             DBObject urlFromDB = db.getCollection(urlCollectionName).findOne(query);
             if (urlFromDB != null) {
-                List<String> imageList = new ArrayList<String>();
-                BasicDBList images = (BasicDBList) urlFromDB.get("images");
-                if (images != null)
-                    for (int i = 0; i < images.size(); i++)
-                        imageList.add((String) images.get(i));
-
-                urlAbstract = new URLAbstract(
-                        url,
-                        (String) urlFromDB.get("title"),
-                        (String) urlFromDB.get("content"),
-                        imageList);
-                urlAbstract.setReferencedFrom((String) urlFromDB.get("reference"));
+                urlAbstract = fromDBObjectToURLAbstract(urlFromDB);
             }
         } catch (MongoException e) {
             logger.log(Level.INFO, e.getMessage(), e);
         }
         return urlAbstract;
+    }
+
+    private URLAbstract fromDBObjectToURLAbstract(DBObject urlFromDB) {
+        List<String> imageList = new ArrayList<String>();
+        BasicDBList images = (BasicDBList) urlFromDB.get("images");
+        if (images != null)
+            for (int i = 0; i < images.size(); i++)
+                imageList.add((String) images.get(i));
+
+        URLAbstract urlAbstract = new URLAbstract(
+                (String) urlFromDB.get("url"),
+                (String) urlFromDB.get("title"),
+                (String) urlFromDB.get("content"),
+                imageList);
+        urlAbstract.setReferencedFrom((String) urlFromDB.get("reference"));
+        return urlAbstract;
+    }
+
+    @Override
+    public List<URLAbstract> findBySource(String sourceId) {
+        BasicDBObject query = new BasicDBObject();
+
+        query.put("reference", sourceId);
+
+
+        List<URLAbstract> urlAbstracts = new ArrayList<URLAbstract>();
+        try {
+            DBCursor urlFromDB = db.getCollection(urlCollectionName).find(query);
+            while (urlFromDB.hasNext()) {
+                DBObject url = urlFromDB.next();
+                URLAbstract urlAbstract = fromDBObjectToURLAbstract(url);
+                urlAbstracts.add(urlAbstract);
+            }
+        } catch (MongoException e) {
+            logger.log(Level.INFO, e.getMessage(), e);
+        }
+        return urlAbstracts;
     }
 
     public void insert(URLAbstract urlAbstract) {
