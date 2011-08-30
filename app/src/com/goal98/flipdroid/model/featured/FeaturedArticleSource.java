@@ -1,15 +1,15 @@
 package com.goal98.flipdroid.model.featured;
 
+import android.app.Activity;
+import android.content.Context;
 import com.goal98.flipdroid.client.TikaClient;
 import com.goal98.flipdroid.client.TikaClientException;
 import com.goal98.flipdroid.client.TikaExtractResponse;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.cachesystem.BaseCacheableArticleSource;
 import com.goal98.flipdroid.model.cachesystem.CacheToken;
-import com.goal98.flipdroid.model.cachesystem.CacheableArticleSource;
-import com.goal98.flipdroid.model.cachesystem.SourceCacheObject;
 import com.goal98.flipdroid.util.Constants;
-import com.goal98.flipdroid.util.TikaResponse;
+import com.goal98.flipdroid.util.DeviceInfo;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -32,11 +32,13 @@ public class FeaturedArticleSource extends BaseCacheableArticleSource {
     private String sourceImage;
     TikaClient tikaClient;
     private List<TikaExtractResponse> responses = new ArrayList<TikaExtractResponse>();
+    private Activity activity;
 
-    public FeaturedArticleSource(String feedURL, String sourceName, String sourceImage) {
+    public FeaturedArticleSource(Activity activity, String feedURL, String sourceName, String sourceImage) {
         this.feedURL = feedURL;
         this.sourceName = sourceName;
         this.sourceImage = sourceImage;
+        this.activity = activity;
         tikaClient = new TikaClient(Constants.TIKA_HOST);
     }
 
@@ -88,6 +90,32 @@ public class FeaturedArticleSource extends BaseCacheableArticleSource {
                 if (tikaExtractResponse.getImages().size() != 0) {
                     article.setImageUrl(new URL(tikaExtractResponse.getImages().get(0)));
                 }
+                List<String> responsedImages = tikaExtractResponse.getImages();
+                    for (int j = 0; j < responsedImages.size(); j++) {
+                        String imageURL = responsedImages.get(j);
+                        if (imageURL != null && imageURL.length() != 0) {
+                            int sizeInfoBeginAt = imageURL.lastIndexOf("#");
+                            String sizeInfoStr = imageURL.substring(sizeInfoBeginAt + 1);
+                            imageURL = imageURL.substring(0, sizeInfoBeginAt);
+
+                            if (j == 0) {//primary image
+                                String[] sizeInfo = sizeInfoStr.split(",");
+                                int width = Integer.valueOf(sizeInfo[0]);
+                                int height = Integer.valueOf(sizeInfo[1]);
+                                article.setImageWidth(width);
+                                article.setImageHeight(height);
+                                try {
+                                    URL url = new URL(imageURL);
+                                    article.setImageUrl(url);
+//                                    article.loadPrimaryImage(imageURL, DeviceInfo.getInstance(activity));
+                                } catch (Exception e) {
+                                    continue;
+                                }
+                            }
+                            article.getImagesMap().put(imageURL, null);
+                            article.getImages().add(imageURL);
+                        }
+                    }
                 list.add(article);
             }
         } catch (IOException e) {

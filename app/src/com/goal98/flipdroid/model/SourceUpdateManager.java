@@ -56,7 +56,7 @@ public class SourceUpdateManager {
 //                adapter.getItem()
                 CachedArticleSource cachedArticleSource = null;
                 if (sourceType.equals(Constants.TYPE_RSS)) {
-                    FeaturedArticleSource featuredArticleSource = new FeaturedArticleSource(sourceContentUrl, sourceName, sourceImage);
+                    FeaturedArticleSource featuredArticleSource = new FeaturedArticleSource(indexActivity, sourceContentUrl, sourceName, sourceImage);
                     cachedArticleSource = new CachedArticleSource(featuredArticleSource, indexActivity, indexActivity, sourceCache);
                 }
 

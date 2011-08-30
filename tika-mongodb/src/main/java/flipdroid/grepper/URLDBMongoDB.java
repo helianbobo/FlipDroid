@@ -70,8 +70,7 @@ public class URLDBMongoDB implements URLDBInterface {
         return urlAbstract;
     }
 
-    @Override
-    public List<URLAbstract> findBySource(String sourceId) {
+    public List<URLAbstract> findBySource(String sourceId, int limit) {
         BasicDBObject query = new BasicDBObject();
 
         query.put("reference", sourceId);
@@ -79,7 +78,12 @@ public class URLDBMongoDB implements URLDBInterface {
 
         List<URLAbstract> urlAbstracts = new ArrayList<URLAbstract>();
         try {
-            DBCursor urlFromDB = db.getCollection(urlCollectionName).find(query);
+            DBCursor urlFromDB = null;
+            if(limit>0){
+                urlFromDB = db.getCollection(urlCollectionName).find(query).limit(limit);
+            }else{
+                urlFromDB = db.getCollection(urlCollectionName).find(query);
+            }
             while (urlFromDB.hasNext()) {
                 DBObject url = urlFromDB.next();
                 URLAbstract urlAbstract = fromDBObjectToURLAbstract(url);

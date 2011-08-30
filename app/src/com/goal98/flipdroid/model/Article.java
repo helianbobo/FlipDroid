@@ -256,7 +256,8 @@ public class Article {
     }
 
     public void loadPrimaryImage(DeviceInfo deviceInfo) {
-        loadPrimaryImage(getImageUrl().toExternalForm(),deviceInfo);
+        if(getImageUrl()!=null)
+            loadPrimaryImage(getImageUrl().toExternalForm(),deviceInfo);
     }
 
     public void setLoading(boolean loading) {

@@ -262,7 +262,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             });
 
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            CachedArticleSource cachedArticleSource = new CachedArticleSource(new FeaturedArticleSource(contentUrl, sourceName, sourceImageURL), this, this, SourceCache.getInstance(this));
+            CachedArticleSource cachedArticleSource = new CachedArticleSource(new FeaturedArticleSource(this, contentUrl, sourceName, sourceImageURL), this, this, SourceCache.getInstance(this));
             cachedArticleSource.loadSourceFromCache();
             source = cachedArticleSource;
         } else if (accountType.equals(Constants.TYPE_GOOGLE_READER)) {

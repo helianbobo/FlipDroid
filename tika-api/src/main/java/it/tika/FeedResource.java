@@ -42,7 +42,7 @@ public class FeedResource extends ServerResource {
         source = SourceDBMongoDB.getInstance().findByURL(source);
         List<URLAbstract> urlAbstracts = new ArrayList<URLAbstract>();
         if (source != null) {
-            urlAbstracts = URLDBMongoDB.getInstance().findBySource(source.getId());
+            urlAbstracts = URLDBMongoDB.getInstance().findBySource(source.getId(),20);
         }
 
         return Util.writeJSON(convertURLAbstractCollectionToJSON(urlAbstracts));
