@@ -76,8 +76,42 @@ public class TikaClient {
         return sourceResponses;
     }
 
+    public List<TikaExtractResponse> getFeedsFromFeedJSON(String feedJSON) throws TikaClientException {
+        List<TikaExtractResponse> sourceResponses = new ArrayList<TikaExtractResponse>();
+        if ("{}".equals(feedJSON)) {
+            return sourceResponses;
+        }
+        try {
+            JSONObject feedsJSON = new JSONObject(feedJSON);
+            JSONArray feeds = feedsJSON.getJSONArray("abstracts");
+            for (int i = 0; i < feeds.length(); i++) {
+                JSONObject object = (JSONObject) feeds.get(i);
+                TikaExtractResponse response = toTikaResponse(object);
+                sourceResponses.add(response);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return sourceResponses;
+    }
+
+    public String getFeedJSON(String sourceURL) throws TikaClientException {
+        String requestURL = null;
+        try {
+            requestURL = "http://" + host + "/v1/feed?source=" + URLEncoder.encode(sourceURL, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+
+        }
+        return read(requestURL);
+    }
+
     public TikaExtractResponse extract(String url) throws TikaClientException {
         JSONObject s = toJSONObject(url);
+        TikaExtractResponse tikaExtractResponse = toTikaResponse(s);
+        return tikaExtractResponse;
+    }
+
+    private TikaExtractResponse toTikaResponse(JSONObject s) {
         String title = "";
         try {
             title = (String) s.get("title");
@@ -124,7 +158,7 @@ public class TikaClient {
     }
 
     public String read(String url) throws TikaClientException {
-        HttpClient client =HttpClientFactory.getHttpClient();
+        HttpClient client = HttpClientFactory.getHttpClient();
         HttpGet request = new HttpGet(url);
 
         try {
@@ -155,6 +189,4 @@ public class TikaClient {
             throw new TikaClientException(url, e);  //To change body of catch statement use File | Settings | File Templates.
         }
     }
-
-
 }
