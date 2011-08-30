@@ -34,6 +34,7 @@ import com.goal98.flipdroid.model.cachesystem.CacheSystem;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
+import com.goal98.flipdroid.model.featured.FeaturedArticleSource;
 import com.goal98.flipdroid.model.google.GoogleReaderArticleSource;
 import com.goal98.flipdroid.model.rss.RSSArticleSource;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
@@ -261,7 +262,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             });
 
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            CachedArticleSource cachedArticleSource = new CachedArticleSource(new RSSArticleSource(contentUrl, sourceName, sourceImageURL), this, this, SourceCache.getInstance(this));
+            CachedArticleSource cachedArticleSource = new CachedArticleSource(new FeaturedArticleSource(contentUrl, sourceName, sourceImageURL), this, this, SourceCache.getInstance(this));
             cachedArticleSource.loadSourceFromCache();
             source = cachedArticleSource;
         } else if (accountType.equals(Constants.TYPE_GOOGLE_READER)) {

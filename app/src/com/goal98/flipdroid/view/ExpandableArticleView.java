@@ -329,14 +329,14 @@ public abstract class ExpandableArticleView extends ArticleView {
             public void onClick(View view) {
                 if (handler == null)
                     handler = new Handler();
-                if (!isLoading && !ExpandableArticleView.this.getPageView().loadingNext && article.hasLink()) {
+                if (!isLoading && !ExpandableArticleView.this.getPageView().loadingNext && (article.hasLink()||article.isExpandable())) {
 
                     if (enlargedView != null && enlargedView.get() != null) {//以前打开过的，直接显示
                         ExpandableArticleView.this.getPageView().enlarge(loadedArticleView, ExpandableArticleView.this);
                         return;
                     }
 
-                    if (future.isDone()) { //如果加载好了，直接显示
+                    if (article.isAlreadyLoaded() || future.isDone() ) { //如果加载好了，直接显示
                         enlargeLoadedView();
                         return;
                     }

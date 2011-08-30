@@ -17,7 +17,7 @@ public class Logger implements OnRequestListener {
     public void onRequest(ServerResource resource) {
         Log log = new Log();
         log.setCreatedDate(new Date());
-        log.setUrl(resource.getQuery().getFirst("url").getValue());
+        log.setUrl(resource.getQuery().getQueryString());
         LogDBMongoDB.getInstance().addLog(log);
     }
 }

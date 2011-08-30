@@ -3,6 +3,7 @@ package com.goal98.flipdroid.model.rss;
 import com.goal98.flipdroid.exception.NoNetworkException;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.OnSourceLoadedListener;
+import com.goal98.flipdroid.model.cachesystem.BaseCacheableArticleSource;
 import com.goal98.flipdroid.model.cachesystem.CacheToken;
 import com.goal98.flipdroid.model.cachesystem.CacheableArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCacheObject;
@@ -20,16 +21,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class RSSArticleSource implements CacheableArticleSource {
+public class RSSArticleSource extends BaseCacheableArticleSource {
     private String contentUrl;
     private String sourceName;
-    private boolean loaded;
-    private String sourceImage;
-    private LinkedList list = new LinkedList<Article>();
-    private InputStream content;
 
-    private byte[] cachedBytes;
-    private byte[] loadedBytes;
+    private String sourceImage;
 
     public RSSArticleSource(String contentUrl, String sourceName, String sourceImage) {
         this.contentUrl = contentUrl;
@@ -47,26 +43,11 @@ public class RSSArticleSource implements CacheableArticleSource {
         return new Date();  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public List<Article> getArticleList() {
-        return list;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
     public static long cachedTime = -1;
 
-    public boolean loadMore() {
+    public boolean load() {
         RssParser rp;
-        if (content == null) {
-            if (loadFromSource() == null)
-                return false;
-            else {
-                content = new ByteArrayInputStream(loadedBytes);
-                try {
-                    listener.onLoaded(loadedBytes);
-                } catch (IOException e) {
-                    //ignore
-                }
-            }
-        }
+
 
         rp = new RssParser(this.content);
 
@@ -135,7 +116,7 @@ public class RSSArticleSource implements CacheableArticleSource {
         return true;
     }
 
-    private byte[] loadFromSource() {
+    public byte[] getLatestSource() {
         InputStream is = null;
         try {
             URL url = new URL(this.contentUrl);
@@ -178,67 +159,11 @@ public class RSSArticleSource implements CacheableArticleSource {
                 .replace("Sat, ", "");
     }
 
-    public boolean isNoMoreToLoad() {
-        ////System.out.println("loaded--:" + loaded);
-        if (loaded)
-            return true;
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public boolean getForceMagzine() {
-        return true;
-    }
-
-    public boolean reset() {
-        list.clear();
-        loaded = false;
-        return true;
-    }
 
     public CacheToken getCacheToken() {
         CacheToken token = new CacheToken();
         token.setType(Constants.TYPE_RSS);
         token.setToken(this.contentUrl);
         return token;
-    }
-
-    public void fromCache(SourceCacheObject cachedObject) {
-        cachedBytes = cachedObject.getContent().getBytes();
-        this.content = new ByteArrayInputStream(cachedBytes);
-    }
-
-    OnSourceLoadedListener listener;
-
-    public void registerOnLoadListener(OnSourceLoadedListener listener) {
-        this.listener = listener;
-    }
-
-    public byte[] loadLatestSource() throws NoNetworkException {
-        byte[] loadedBytes = loadFromSource();
-        if (loadedBytes == null)
-            return null;
-
-        byte[] latestSource = this.loadedBytes;
-        boolean needUpdate = false;
-        if (cachedBytes != null) {
-            for (int i = 0; i < latestSource.length; i++) {
-                if (i >= cachedBytes.length) {
-                    needUpdate = true;
-                    break;
-                }
-                if (latestSource[i] != cachedBytes[i]) {
-                    needUpdate = true;
-                    break;
-                }
-            }
-        } else {
-            needUpdate = true;
-        }
-
-        if (needUpdate) {
-            this.cachedBytes = loadedBytes;
-            return loadedBytes;
-        }
-        return null;
     }
 }

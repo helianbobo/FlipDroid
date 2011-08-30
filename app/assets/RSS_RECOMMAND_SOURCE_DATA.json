@@ -28,7 +28,7 @@
         "id": "4",
         "desc": "关注互联网创业",
         "image_url": "http://www.36kr.com/wp-content/uploads/2011/04/36kr-Logo.png",
-        "content_url":"http://www.36kr.com/rss",
+        "content_url":"http://www.36kr.com/feed/",
         "cat":"互联网"
     },
     {
