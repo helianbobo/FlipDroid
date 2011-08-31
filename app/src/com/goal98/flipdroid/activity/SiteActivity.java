@@ -45,8 +45,22 @@ public class SiteActivity extends Activity {
 
         private Context mContext;
 
-        private String[] site_type_array = {Constants.TYPE_SINA_WEIBO, Constants.TYPE_RSS, Constants.TYPE_GOOGLE_READER, Constants.TYPE_FLIPDROID,Constants.TYPE_BAIDUSEARCH};
-        private int[] image_array = {R.drawable.sina, R.drawable.rss, R.drawable.greader, R.drawable.icon_large,R.drawable.baidu};
+        private String[] site_type_array = {Constants.TYPE_SINA_WEIBO,
+//                Constants.TYPE_RSS,
+                Constants.TYPE_GOOGLE_READER
+//                ,
+//                Constants.TYPE_FLIPDROID
+//                ,Constants.TYPE_BAIDUSEARCH
+        };
+
+        private int[] image_array = {
+                R.drawable.sina,
+//                R.drawable.rss,
+                R.drawable.greader
+//                ,
+//                R.drawable.icon_large,
+//                R.drawable.baidu
+        };
 
         public SiteAdapter(Context context) {
             this.mContext = context;
