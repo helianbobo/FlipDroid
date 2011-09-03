@@ -84,7 +84,7 @@ public class URLDBMongoDB implements URLDBInterface {
             }else{
                 urlFromDB = db.getCollection(urlCollectionName).find(query);
             }
-            while (urlFromDB.hasNext()) {
+            while (urlFromDB!=null && urlFromDB.hasNext()) {
                 DBObject url = urlFromDB.next();
                 URLAbstract urlAbstract = fromDBObjectToURLAbstract(url);
                 urlAbstracts.add(urlAbstract);
