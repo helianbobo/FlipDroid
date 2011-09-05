@@ -256,7 +256,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
 
         menu.add(0, CONFIG_ID, 0, R.string.config);
         menu.add(0, CLEAR_ID, 0, R.string.clear_all_account);
-        menu.add(0, ACCOUNT_LIST_ID, 0, "Accounts");
+        menu.add(0, ACCOUNT_LIST_ID, 0, R.string.accounts);
 
         return true;
     }

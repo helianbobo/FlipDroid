@@ -964,7 +964,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     private int getBrowseMode() {
         String key = getString(R.string.key_browse_mode_preference);
-        return Integer.parseInt(preferences.getString(key, "0"));
+        return Integer.parseInt(preferences.getString(key, "1"));
     }
 
     private void switchViews(boolean forward) {

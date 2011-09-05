@@ -94,7 +94,7 @@ public class SourceRepo {
         LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
         String sourceName = type.toUpperCase() + "_" + Constants.RECOMMAND_SOURCE_SUFFIX;
         JSONArray array = getSourceJSON(sourceName);
-        if (Constants.TYPE_SINA_WEIBO.equals(type)) {
+        if (array != null && Constants.TYPE_SINA_WEIBO.equals(type)) {
             int count = array.length();
             for (int i = 0; i < count; i++) {
                 JSONObject jsonObject = null;
@@ -112,7 +112,7 @@ public class SourceRepo {
                 }
             }
         }
-        if (Constants.TYPE_RSS.equals(type)) {
+        if (array != null && Constants.TYPE_RSS.equals(type)) {
             int count = array.length();
             for (int i = 0; i < count; i++) {
                 JSONObject jsonObject = null;
