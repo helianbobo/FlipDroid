@@ -27,11 +27,16 @@ public class ImageDBMongoDB implements ImageDBInterface {
         try {
             Mongo mongo = new Mongo();
             db = mongo.getDB("tika");
+
+            BasicDBObject index = new BasicDBObject();
+            index.put("url", 1);
+            db.getCollection(urlCollectionName).ensureIndex(index,"idx_image_url",true);
+
         } catch (UnknownHostException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (MongoException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
@@ -52,14 +57,18 @@ public class ImageDBMongoDB implements ImageDBInterface {
     }
 
     public void insert(TikaImage image) {
-        BasicDBObject sampleObject = new BasicDBObject();
-        sampleObject.put("size", image.getSize());
-        sampleObject.put("url", image.getUrl());
-        sampleObject.put("height", image.getHeight());
-        sampleObject.put("width", image.getWidth());
+        BasicDBObject queryObject = new BasicDBObject();
+        queryObject.put("url", image.getUrl());
+
+        BasicDBObject object = new BasicDBObject();
+        object.put("size", image.getSize());
+        object.put("url", image.getUrl());
+        object.put("height", image.getHeight());
+        object.put("width", image.getWidth());
 
         try {
-            db.getCollection(urlCollectionName).insert(sampleObject);
+            DBCollection collection = db.getCollection(urlCollectionName);
+            collection.update(queryObject, object, true, false);
         } catch (MongoException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
