@@ -106,11 +106,13 @@ public class ImageFilter implements Extractor {
             if (tikaImageService != null) {
                 tikaImage = tikaImageService.getImageInfoFromDBCache(queryURL);
             }
+            boolean fromCache = false;
             if (tikaImage != null) {
                 ii = new ImageInfo();
                 ii.setSize(tikaImage.getSize());
                 ii.setHeight(tikaImage.getHeight());
                 ii.setWidth(tikaImage.getWidth());
+                fromCache = true;
                 System.out.println("From Image DB Cache....");
             } else {
                 String dimensionInfo = imageURL.substring(hashIndex, imageURL.length());
@@ -179,7 +181,7 @@ public class ImageFilter implements Extractor {
             newImage.setWidth(ii.getWidth());
 
 
-            if (tikaImageService != null) {
+            if (tikaImageService != null && !fromCache) {
                 tikaImageService.cacheToDB(newImage);
             }
             height = ii.getHeight();
