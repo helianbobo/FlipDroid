@@ -5,7 +5,7 @@ Created on 2011-8-10
 @author: shang
 '''
 
-import traceback
+import traceback,time
 import dbtools  
 #import testtools
 from linkitem import *
@@ -16,7 +16,7 @@ from Queue import Queue
    
             
 class LinksManagerUseCoroutine(threading.Thread):
-    threadnum=6
+    threadnum=5
     alllinkitem=[]
     
     def __init__(self,*args,**kwargs):
@@ -39,6 +39,7 @@ class LinksManagerUseCoroutine(threading.Thread):
 
     def run(self):
         while True:
+            #time.sleep(1)
             item = self.input_queue.get()
             if item is None:
                 break
@@ -62,10 +63,10 @@ class LinksManagerUseCoroutine(threading.Thread):
         
     def callHandle(self,linkitem,entag=None):
         def callHandleTika(_linkitem):
-            #issuccessed = usethrift.test(_linkitem.url)
+            #issuccessed = True
             #tika=usethrift.Tika()
             try:
-                issuccessed=self.tika.handleUrl(_linkitem.url)
+                issuccessed=self.tika.handleUrl(_linkitem.url,_linkitem.referencedFrom)
                 if issuccessed:
                     _linkitem.state=KEYSTATE_SUCCESS
                     self.updateDB(_linkitem)       

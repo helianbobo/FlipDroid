@@ -9,6 +9,7 @@ import threading
 import time
 import config
 from dbtools import ISOTIMEFORMAT
+import gc
 
 class TCC(object):
     interval = config.INTERVAL #second  
@@ -40,18 +41,22 @@ class TCC(object):
         #self.rm.handleLinksFromAllRss(self.lm)
         #self.lm.close()
         while True:
+            gc.collect()
+            print "###thread active count:",threading.active_count()
             i += 1
             print 
             print "##########\n"+"###start onece !!!"+str(i)+"\n"
-             
-            self.rm = rssmanager.RssManager()
+            stime=time.strftime( ISOTIMEFORMAT, time.gmtime()) 
+            rm = rssmanager.RssManager()
             #t = threading.Thread(target=self.rm.handleLinksFromAllRss,args=(self.lm,))
             #t.start()
             #t.join()
-            self.rm.handleLinksFromAllRss(self.LmClass)
+            rm.handleLinksFromAllRss(self.LmClass)
             ftime=time.strftime( ISOTIMEFORMAT, time.gmtime())
-            print "##########\n"+"###"+ftime+" the "+str(i)+" fininsh onece!!!\n""##########\n"
+             
+            print "##########\n"+stime+" ###to### "+ftime+" the "+str(i)+" fininsh onece!!!\n""##########\n"
             print "##########\n"+"###to sleep %s  seconds!!!\n"%self.interval+"##########\n" 
+            
             time.sleep(self.interval)
             
         
@@ -67,4 +72,10 @@ class TCC(object):
         
 
 
+ 
 
+ 
+            
+ 
+
+     
