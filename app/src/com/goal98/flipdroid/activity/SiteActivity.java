@@ -46,7 +46,7 @@ public class SiteActivity extends Activity {
         private Context mContext;
 
         private String[] site_type_array = {Constants.TYPE_SINA_WEIBO,
-//                Constants.TYPE_RSS,
+                Constants.TYPE_RSS,
                 Constants.TYPE_GOOGLE_READER
 //                ,
 //                Constants.TYPE_FLIPDROID
@@ -55,7 +55,7 @@ public class SiteActivity extends Activity {
 
         private int[] image_array = {
                 R.drawable.sina,
-//                R.drawable.rss,
+                R.drawable.rss,
                 R.drawable.greader
 //                ,
 //                R.drawable.icon_large,

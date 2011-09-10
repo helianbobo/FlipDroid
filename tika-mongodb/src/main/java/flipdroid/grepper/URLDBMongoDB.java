@@ -75,16 +75,15 @@ public class URLDBMongoDB implements URLDBInterface {
 
         query.put("reference", sourceId);
 
-
         List<URLAbstract> urlAbstracts = new ArrayList<URLAbstract>();
         try {
             DBCursor urlFromDB = null;
-            if(limit>0){
-                urlFromDB = db.getCollection(urlCollectionName).find(query).limit(limit);
-            }else{
-                urlFromDB = db.getCollection(urlCollectionName).find(query);
+            if (limit > 0) {
+                urlFromDB = db.getCollection(urlCollectionName).find(query).sort(new BasicDBObject("time", -1)).limit(limit);
+            } else {
+                urlFromDB = db.getCollection(urlCollectionName).find(query).sort(new BasicDBObject("time", -1));
             }
-            while (urlFromDB!=null && urlFromDB.hasNext()) {
+            while (urlFromDB != null && urlFromDB.hasNext()) {
                 DBObject url = urlFromDB.next();
                 URLAbstract urlAbstract = fromDBObjectToURLAbstract(url);
                 urlAbstracts.add(urlAbstract);
