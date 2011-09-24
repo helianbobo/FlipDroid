@@ -782,7 +782,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             }
             slideToNextPageAsynchronized();
         } else {
-            if (pageIndexView.isHasUpdate()) {
+            if (true) {
                 this.reload();
                 return;
             } else {

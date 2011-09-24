@@ -4,7 +4,7 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-              android:gravity="center">
+              android:gravity="center" android:background="#FFFFFF">
     <TextView android:text="@string/loading" android:textSize="30dip" android:textStyle="bold"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent" android:gravity="center"></TextView>
