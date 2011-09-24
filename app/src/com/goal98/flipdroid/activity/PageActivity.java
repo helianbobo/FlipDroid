@@ -54,6 +54,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private Animation fadeOutPageView;
     private ImageButton contentImageButton;
     public SinaToken sinaToken;
+    private CachedArticleSource cachedArticleSource;
 
     public ExecutorService getExecutor() {
         return executor;
@@ -111,7 +112,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private SourceDB sourceDB;
     private LayoutInflater inflater;
     public SimpleCursorAdapter sourceAdapter;
-
+    private boolean updated;
     private long lastUpdate = -1;
     private float x, y, z;
     private float last_x, last_y, last_z;
@@ -220,7 +221,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         headerText = (TextView) findViewById(R.id.headerText);
         headerImageView = (WebImageView) findViewById(R.id.headerImage);
 
-        PagingStrategy pagingStrategy = null;
+
         pageViewFactory = new WeiboPageViewFactory();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -228,100 +229,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 //        this.animationMode = getAnimationMode();
         refreshingSemaphore = new Semaphore(1, true);
         Log.v("accountType", accountType);
-        if (accountType.equals(Constants.TYPE_SINA_WEIBO) || accountType.equals(Constants.TYPE_MY_SINA_WEIBO)) {
-            ////System.out.println("accountType" + accountType);
-            if (isWeiboMode())
-                pagingStrategy = new WeiboPagingStrategy(this);
-            else
-                pagingStrategy = new FixedPagingStrategy(this, 2);
-
-            pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
-                public void onNoMoreArticle() throws NoMoreStatusException {
-                    //Log.d("cache system", "no more articles, refreshing repo");
-                    repo.refresh(repo.getRefreshingToken());
-                }
-            });
-
-            repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-
-            sinaToken = SinaAccountUtil.getToken(PageActivity.this);
-            ArticleFilter filter;
-            if (isWeiboMode())
-                filter = new NullArticleFilter();
-            else
-                filter = new ContainsLinkFilter(new NullArticleFilter());
-
-            source = new SinaArticleSource(true, sinaToken.getToken(), sinaToken.getTokenSecret(), sourceId, filter);
-
-        } else if (accountType.equals(Constants.TYPE_RSS) || accountType.equals(Constants.TYPE_BAIDUSEARCH)) {
-            pagingStrategy = new FixedPagingStrategy(this, 2);
-            pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
-                public void onNoMoreArticle() throws NoMoreStatusException {
-                    throw new NoMoreStatusException();
-                }
-            });
-
-            repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            CachedArticleSource cachedArticleSource = new CachedArticleSource(new FeaturedArticleSource(this, contentUrl, sourceName, sourceImageURL), this, this, SourceCache.getInstance(this));
-            cachedArticleSource.loadSourceFromCache();
-            source = cachedArticleSource;
-        } else if (accountType.equals(Constants.TYPE_GOOGLE_READER)) {
-
-            String sid = preferences.getString(GoogleAccountActivity.GOOGLE_ACCOUNT_SID, "");
-            String auth = preferences.getString(GoogleAccountActivity.GOOGLE_ACCOUNT_AUTH, "");
-
-            pagingStrategy = new FixedPagingStrategy(this, 2);
-            pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
-                public void onNoMoreArticle() throws NoMoreStatusException {
-                    throw new NoMoreStatusException();
-                }
-            });
-            repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            source = new GoogleReaderArticleSource(sid, auth);
-        } else if (accountType.equals(Constants.TYPE_TAOBAO)) {
-
-            pagingStrategy = new FixedPagingStrategy(this, 2);
-            pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
-                public void onNoMoreArticle() throws NoMoreStatusException {
-                    throw new NoMoreStatusException();
-                }
-            });
-
-            repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            source = new TaobaoArticleSource(sourceName, this.getApplicationContext());
-        }
-
-        repo.setArticleSource(source);
-
-        headerText.setText(sourceName);
-        if (sourceImageURL != null && sourceImageURL.length() != 0) {
-            headerImageView.setImageUrl(sourceImageURL);
-            headerImageView.loadImage();
-        } else {
-            int maxTitle = 7;
-
-            if (sourceName != null && sourceName.length() >= maxTitle)
-                headerImageView.setVisibility(View.GONE);
-            else
-                headerImageView.setVisibility(View.INVISIBLE);
-        }
-
-        slidingWindows = new PageViewSlidingWindows(10, repo, pageViewFactory, 3);
-        current = pageViewFactory.createFirstPage();
-
-        shadow = new LinearLayout(PageActivity.this);
-        shadow.setBackgroundColor(Color.parseColor("#10999999"));
-
-        shadow2 = new LinearLayout(PageActivity.this);
-        shadow2.setBackgroundColor(Color.parseColor("#FFDDDDDD"));
-
-        shadowParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
-        pageViewLayoutParamsFront = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT);
-        pageViewLayoutParamsBack = pageViewLayoutParamsFront;
-        sw.stopPrintReset();
-        sw.start("flip...");
-        flipPage(true);
-        sw.stopPrintReset();
+        reload();
 
     }
 
@@ -392,6 +300,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                     }
                 }).start();
 
+                if (cachedArticleSource != null && !updated) {
+                    System.out.println("animation update");
+                    cachedArticleSource.checkUpdate();
+                }
 
                 pageIndexView.setDot(repo.getTotal(), currentPageIndex);
                 header.setPageView(current);
@@ -613,7 +525,12 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     public void notifyNoNew(CachedArticleSource cachedArticleSource) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        handler.post(new Runnable() {
+            public void run() {
+                setProgressBarIndeterminateVisibility(false);
+                pageIndexView.setHasUpdate(false);
+            }
+        });
     }
 
     public void notifyUpdateDone(CachedArticleSource cachedArticleSource) {
@@ -624,8 +541,105 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         handler.post(new Runnable() {
             public void run() {
                 setProgressBarIndeterminateVisibility(true);
+                pageIndexView.setUpdating(true);
             }
         });
+    }
+
+    public void reload() {
+        currentPageIndex = -1;
+        PagingStrategy pagingStrategy = null;
+        if (accountType.equals(Constants.TYPE_SINA_WEIBO) || accountType.equals(Constants.TYPE_MY_SINA_WEIBO)) {
+            ////System.out.println("accountType" + accountType);
+            if (isWeiboMode())
+                pagingStrategy = new WeiboPagingStrategy(this);
+            else
+                pagingStrategy = new FixedPagingStrategy(this, 2);
+
+            pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
+                public void onNoMoreArticle() throws NoMoreStatusException {
+                    //Log.d("cache system", "no more articles, refreshing repo");
+                    repo.refresh(repo.getRefreshingToken());
+                }
+            });
+
+            repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
+
+            sinaToken = SinaAccountUtil.getToken(PageActivity.this);
+            ArticleFilter filter;
+            if (isWeiboMode())
+                filter = new NullArticleFilter();
+            else
+                filter = new ContainsLinkFilter(new NullArticleFilter());
+
+            source = new SinaArticleSource(true, sinaToken.getToken(), sinaToken.getTokenSecret(), sourceId, filter);
+
+        } else if (accountType.equals(Constants.TYPE_RSS) || accountType.equals(Constants.TYPE_BAIDUSEARCH)) {
+            pagingStrategy = new FixedPagingStrategy(this, 2);
+            pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
+                public void onNoMoreArticle() throws NoMoreStatusException {
+                    throw new NoMoreStatusException();
+                }
+            });
+
+            repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
+            cachedArticleSource = new CachedArticleSource(new FeaturedArticleSource(this, contentUrl, sourceName, sourceImageURL), this, this, SourceCache.getInstance(this));
+            cachedArticleSource.loadSourceFromCache();
+            source = cachedArticleSource;
+        } else if (accountType.equals(Constants.TYPE_GOOGLE_READER)) {
+
+            String sid = preferences.getString(GoogleAccountActivity.GOOGLE_ACCOUNT_SID, "");
+            String auth = preferences.getString(GoogleAccountActivity.GOOGLE_ACCOUNT_AUTH, "");
+
+            pagingStrategy = new FixedPagingStrategy(this, 2);
+            pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
+                public void onNoMoreArticle() throws NoMoreStatusException {
+                    throw new NoMoreStatusException();
+                }
+            });
+            repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
+            source = new GoogleReaderArticleSource(sid, auth);
+        } else if (accountType.equals(Constants.TYPE_TAOBAO)) {
+
+            pagingStrategy = new FixedPagingStrategy(this, 2);
+            pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
+                public void onNoMoreArticle() throws NoMoreStatusException {
+                    throw new NoMoreStatusException();
+                }
+            });
+
+            repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
+            source = new TaobaoArticleSource(sourceName, this.getApplicationContext());
+        }
+
+        repo.setArticleSource(source);
+
+        headerText.setText(sourceName);
+        if (sourceImageURL != null && sourceImageURL.length() != 0) {
+            headerImageView.setImageUrl(sourceImageURL);
+            headerImageView.loadImage();
+        } else {
+            int maxTitle = 7;
+
+            if (sourceName != null && sourceName.length() >= maxTitle)
+                headerImageView.setVisibility(View.GONE);
+            else
+                headerImageView.setVisibility(View.INVISIBLE);
+        }
+
+        slidingWindows = new PageViewSlidingWindows(10, repo, pageViewFactory, 3);
+        current = pageViewFactory.createFirstPage();
+
+        shadow = new LinearLayout(PageActivity.this);
+        shadow.setBackgroundColor(Color.parseColor("#10999999"));
+
+        shadow2 = new LinearLayout(PageActivity.this);
+        shadow2.setBackgroundColor(Color.parseColor("#FFDDDDDD"));
+
+        shadowParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
+        pageViewLayoutParamsFront = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT);
+        pageViewLayoutParamsBack = pageViewLayoutParamsFront;
+        flipPage(true);
     }
 
 
@@ -677,6 +691,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         if (header.dispatchTouchEvent(event)) {
             return true;
         }
+//        if (pageIndexView.dispatchTouchEvent(event)) {
+//            return true;
+//        }
 //        }
         if (enlargedMode) {
             current.onTouchEvent(event);
@@ -707,6 +724,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         if (enlargedMode) {
             current.onTouchEvent(event);
         }
+
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
 
@@ -728,11 +747,13 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 } else {
 //                    if (header.isSourceSelectMode())
                     header.onTouchEvent(event);
+//                    pageIndexView.onTouchEvent(event);
                 }
                 break;
             default:
                 break;
         }
+
         return true;
     }
 
@@ -755,12 +776,18 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             container.addView(current, pageViewLayoutParamsFront);
             slideToNextPageAsynchronized();
         } else if (nextPageIndex > 0) {
+
             if (current.isLastPage() && forward) {
                 finishActivity();
             }
             slideToNextPageAsynchronized();
         } else {
-            finishActivity();
+            if (pageIndexView.isHasUpdate()) {
+                this.reload();
+                return;
+            } else {
+                finishActivity();
+            }
         }
         System.out.println("debug flip done");
     }

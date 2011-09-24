@@ -5,10 +5,14 @@ import android.graphics.Color;
 import android.text.AndroidCharacter;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.activity.PageActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +29,8 @@ public class PageIndexView extends LinearLayout {
     private int total;
     private int current;
     private boolean hasUpdate;
+    private boolean updating;
+    private PageActivity activity;
 
     public void setLatestUpdateDate(Date latestUpdateDate) {
         this.latestUpdateDate = latestUpdateDate;
@@ -37,6 +43,7 @@ public class PageIndexView extends LinearLayout {
 
     public PageIndexView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        activity = (PageActivity) context;
         this.setOrientation(HORIZONTAL);
         this.setGravity(Gravity.CENTER);
 //        setDot(8, 4);
@@ -82,16 +89,40 @@ public class PageIndexView extends LinearLayout {
 
         if (hasUpdate) {
             TextView update = new TextView(this.getContext());
-            update.setText("New!!!");
-            update.setTextColor(Color.parseColor("#CCCCCC"));
-            update.setTextSize(14);
+            update.setText("Reload");
+            update.setTextColor(Color.parseColor("#FF0000"));
+            update.setTextSize(15);
+            update.setOnClickListener(new OnClickListener() {
+                public void onClick(View view) {
+                    activity.reload();
+                }
+            });
             this.addView(update, params);
+        } else if (updating) {
+            LinearLayout progressBar = (LinearLayout) LayoutInflater.from(this.getContext()).inflate(R.layout.progressbar, null);
+            progressBar.findViewById(R.id.loading).setVisibility(GONE);
+            this.addView(progressBar, params);
         }
     }
 
     public void setHasUpdate(boolean hasUpdate) {
         this.hasUpdate = hasUpdate;
+        this.updating = false;
+        System.out.println("has update");
+        updateView();
+    }
+
+    public void setUpdating(boolean upading) {
+        this.updating = upading;
         System.out.println("updating view");
         updateView();
+    }
+
+    public boolean isHasUpdate() {
+        return hasUpdate;
+    }
+
+    public boolean isUpdating() {
+        return updating;
     }
 }

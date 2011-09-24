@@ -249,7 +249,6 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
