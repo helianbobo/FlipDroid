@@ -108,7 +108,7 @@ def updateUrls(request):
         item = model.con.tika.url_abstract.find({'_id':pymongo.objectid.ObjectId(theid)})
         html = item[0]['content']
         return HttpResponse(html)
-
+    
     if request.GET['update']=='delete':
         model.con.tika.url_abstract.remove({'_id':pymongo.objectid.ObjectId(theid)})
         return HttpResponseRedirect("/urls/")
@@ -141,7 +141,7 @@ def sessiontest(request):
             return login(request)
         else:
             return HttpResponse("Please enable cookies and try again.")
-    return sessiontest(request)  
+    return sessiontest(request) 
 
  
     
