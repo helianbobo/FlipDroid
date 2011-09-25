@@ -9,7 +9,7 @@ TIKAHOST='localhost'
 TIKAPOST=9090
 INTERVAL=60*60 #second
 THRIFTTIMEOUT = 15 #second
-RSSTIMEOUT = 30
+RSSTIMEOUT = 10
 
 if __name__ == "__main__":
   print 123

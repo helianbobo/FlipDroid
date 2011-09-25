@@ -46,17 +46,15 @@ class TCC(object):
             i += 1
             print 
             print "##########\n"+"###start onece !!!"+str(i)+"\n"
-            stime=time.strftime( ISOTIMEFORMAT, time.gmtime()) 
-            rm = rssmanager.RssManager()
+            stime=time.strftime( ISOTIMEFORMAT, time.gmtime())  
+            self.rm = rssmanager.RssManager()
             #t = threading.Thread(target=self.rm.handleLinksFromAllRss,args=(self.lm,))
             #t.start()
             #t.join()
-            rm.handleLinksFromAllRss(self.LmClass)
+            self.rm.handleLinksFromAllRss(self.LmClass)
             ftime=time.strftime( ISOTIMEFORMAT, time.gmtime())
-             
             print "##########\n"+stime+" ###to### "+ftime+" the "+str(i)+" fininsh onece!!!\n""##########\n"
             print "##########\n"+"###to sleep %s  seconds!!!\n"%self.interval+"##########\n" 
-            
             time.sleep(self.interval)
             
         
@@ -72,10 +70,4 @@ class TCC(object):
         
 
 
- 
 
- 
-            
- 
-
-     
