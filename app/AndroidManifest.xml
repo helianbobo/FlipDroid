@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.ConfigActivity" android:theme="@android:style/Theme.Light"/>
+<<<<<<< HEAD
         <activity android:name=".activity.PageActivity" android:theme="@android:style/Theme.Light">
          <intent-filter>
 
@@ -25,6 +26,9 @@
             </intent-filter>
         
         </activity>
+=======
+        <activity android:name=".activity.PageActivity" android:theme="@android:style/Theme.Light"/>
+>>>>>>> origin/master
         <activity android:name=".activity.IndexActivity" android:launchMode="singleTask"
                   android:theme="@android:style/Theme.Light"/>
         <activity android:name=".activity.SiteActivity" android:theme="@android:style/Theme.Light"/>

@@ -31,8 +31,9 @@ public class TikaImageService implements ImageService {
 
     public void cacheToDB(TikaImage newImage) {
         try {
-            if (dbInstance != null)
+            if (dbInstance != null){
                 dbInstance.insert(newImage);
+            }
         } catch (Exception e) {
 
         }
