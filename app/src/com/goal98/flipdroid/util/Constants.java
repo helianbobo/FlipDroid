@@ -15,6 +15,7 @@ public class Constants {
     public static final String TYPE_TENCENT_WEIBO = "TENCENT_WEIBO";
     public static final String TYPE_TWITTER = "TWITTER";
     public static final String TYPE_FAKE = "FAKE";
+    public static final String TYPE_FEATURED = "FEATURED";
 
     public static final String ADD_CUSTOME_SOURCE = "ADD_CUSTOME_SOURCE";
 

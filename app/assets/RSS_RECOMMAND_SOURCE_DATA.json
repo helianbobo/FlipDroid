@@ -3,8 +3,8 @@
         "name": "爱范儿",
         "id": "1",
         "desc": "发现创新价值的科技媒体。 全景关注移动互联网，集中报道创业团队、最潮的智能手持及最酷的互联网应用，致力于“独立，前瞻，深入”的分析评论",
-        "image_url": "http://bbs.ifanr.com/static/image/common/logo.png",
-        "content_url":"http://www.ifanr.com/feed/rss",
+        "image_url": "http://tp1.sinaimg.cn/1642720480/180/1279882934/1",
+        "content_url":"http://www.ifanr.com/feed",
         "cat":"互联网"
     },
     {
@@ -28,7 +28,7 @@
         "id": "4",
         "desc": "关注互联网创业",
         "image_url": "http://www.36kr.com/wp-content/uploads/2011/04/36kr-Logo.png",
-        "content_url":"http://www.36kr.com/rss",
+        "content_url":"http://www.36kr.com/feed/",
         "cat":"互联网"
     },
     {

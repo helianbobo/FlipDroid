@@ -9,6 +9,7 @@ import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.cachesystem.CacheableArticleSource;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
+import com.goal98.flipdroid.model.featured.FeaturedArticleSource;
 import com.goal98.flipdroid.model.rss.RSSArticleSource;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.EachCursor;
@@ -55,8 +56,8 @@ public class SourceUpdateManager {
 //                adapter.getItem()
                 CachedArticleSource cachedArticleSource = null;
                 if (sourceType.equals(Constants.TYPE_RSS)) {
-                    RSSArticleSource rssArticleSource = new RSSArticleSource(sourceContentUrl, sourceName, sourceImage);
-                    cachedArticleSource = new CachedArticleSource(rssArticleSource, indexActivity, indexActivity, sourceCache);
+                    FeaturedArticleSource featuredArticleSource = new FeaturedArticleSource(indexActivity, sourceContentUrl, sourceName, sourceImage);
+                    cachedArticleSource = new CachedArticleSource(featuredArticleSource, indexActivity, indexActivity, sourceCache);
                 }
 
                 if (cachedArticleSource != null) {

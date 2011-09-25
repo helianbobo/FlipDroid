@@ -5,7 +5,8 @@
     <string name="config">Config</string>
     <string name="password">Password</string>
     <string name="username">Username</string>
-    <string name="clear_all_account">Clear</string>
+    <string name="clear_all_account">Clear Accounts</string>
+    <string name="accounts">Accounts</string>
     <string name="search">Search</string>
     <string name="flip">FLIP >></string>
 
@@ -70,5 +71,8 @@
     <string name="keywordhere">Keywords here</string>
     <string name="nodata">No source added, Click button above to add sources</string>
     <string name="latest">Latest</string>
+
+    <string name="add_custom_source">Add Custom Source</string>
+    <string name="add_custom_source_desc">Add any weibo account to follow</string>
 
 </resources>

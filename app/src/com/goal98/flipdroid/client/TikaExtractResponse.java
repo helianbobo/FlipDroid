@@ -13,6 +13,15 @@ public class TikaExtractResponse {
     public String getContent() {
         return content;
     }
+    String author;
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
     String title;
 

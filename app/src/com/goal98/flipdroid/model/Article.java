@@ -12,6 +12,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Article {
+    public boolean isExpandable() {
+        return expandable;
+    }
+
+    private boolean expandable;
+
     public Map<String, Bitmap> getImagesMap() {
         return imagesMap;
     }
@@ -250,7 +256,8 @@ public class Article {
     }
 
     public void loadPrimaryImage(DeviceInfo deviceInfo) {
-        loadPrimaryImage(getImageUrl().toExternalForm(),deviceInfo);
+        if(getImageUrl()!=null)
+            loadPrimaryImage(getImageUrl().toExternalForm(),deviceInfo);
     }
 
     public void setLoading(boolean loading) {
@@ -292,5 +299,9 @@ public class Article {
 
     public void setImageWidth(int imageWidth) {
         this.imageWidth = imageWidth;
+    }
+
+    public void setExpandable(boolean expandable) {
+        this.expandable = expandable;
     }
 }

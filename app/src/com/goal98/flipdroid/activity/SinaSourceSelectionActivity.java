@@ -13,9 +13,9 @@ import java.util.Map;
 public class SinaSourceSelectionActivity extends RSSSourceSelectionActivity {
     protected void addExtraItem(GroupedSource groupedSource) {
         Map<String, String> customeSection = SourceDB.buildSource(Constants.TYPE_SINA_WEIBO,
-                "Add Custom Source",
+                getString(R.string.add_custom_source),
                 Constants.ADD_CUSTOME_SOURCE,
-                "Add any person.", null, this.getString(R.string.custom));
+                getString(R.string.add_custom_source_desc), null, this.getString(R.string.custom));
 
         groupedSource.addGroup(SourceRepo.KEY_NAME_GROUP,this.getString(R.string.custom));
         groupedSource.addChild(this.getString(R.string.custom), customeSection);

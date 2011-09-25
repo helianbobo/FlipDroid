@@ -127,7 +127,7 @@ public abstract class ExpandableArticleView extends ArticleView {
             contentView.setMaxLines(maxLine);
         } else {
             maxLine = (article.getHeight() / scaleTextSize) - 5;
-            maxLine = Math.max(maxLine,5);
+            maxLine = Math.max(maxLine, 5);
             contentView.setMaxLines(maxLine);
         }
 
@@ -142,11 +142,11 @@ public abstract class ExpandableArticleView extends ArticleView {
 
             if (article.getHeight() == 0) {
                 imageView.setDefaultWidth(deviceInfo.getWidth() / 2 - 8);
-                System.out.println("gaga set height1"+((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine));
+                System.out.println("gaga set height1" + ((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine));
                 imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine);
             } else {
                 imageView.setDefaultWidth(deviceInfo.getWidth());
-                System.out.println("gaga set height2"+(deviceInfo.getHeight() - article.getTextHeight() - 30));
+                System.out.println("gaga set height2" + (deviceInfo.getHeight() - article.getTextHeight() - 30));
                 imageView.setDefaultHeight(deviceInfo.getHeight() - article.getTextHeight() - 30);
             }
 
@@ -185,7 +185,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                 LayoutParams layoutParamsImage = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
                 contentViewWrapper.setOrientation(VERTICAL);
                 contentViewWrapper.addView(contentView, layoutParamsText);
-                layoutParamsImage.gravity = Gravity.TOP|Gravity.CENTER_HORIZONTAL;
+                layoutParamsImage.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
                 contentViewWrapper.addView(imageView, layoutParamsImage);
             }
         }
@@ -323,20 +323,19 @@ public abstract class ExpandableArticleView extends ArticleView {
     protected abstract void reloadOriginalView();
 
 
-
     protected void addOnClickListener() {
         contentViewWrapper.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 if (handler == null)
                     handler = new Handler();
-                if (!isLoading && !ExpandableArticleView.this.getPageView().loadingNext && article.hasLink()) {
+                if (!isLoading && !ExpandableArticleView.this.getPageView().loadingNext && (article.hasLink() || article.isExpandable())) {
 
                     if (enlargedView != null && enlargedView.get() != null) {//以前打开过的，直接显示
                         ExpandableArticleView.this.getPageView().enlarge(loadedArticleView, ExpandableArticleView.this);
                         return;
                     }
 
-                    if (future.isDone()) { //如果加载好了，直接显示
+                    if (article.isAlreadyLoaded() || future.isDone()) { //如果加载好了，直接显示
                         enlargeLoadedView();
                         return;
                     }
