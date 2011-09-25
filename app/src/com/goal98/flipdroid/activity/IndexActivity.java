@@ -14,19 +14,16 @@ import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
-import com.goal98.flipdroid.model.Account;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.model.SourceUpdateManager;
 import com.goal98.flipdroid.model.cachesystem.CacheToken;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
-import com.goal98.flipdroid.model.rss.RSSArticleSource;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.EachCursor;
 import com.goal98.flipdroid.util.ManagedCursor;
-import com.goal98.flipdroid.view.SourceItemViewBinder;
 
 import java.util.*;
 
@@ -140,57 +137,21 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
 //                    new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_SOURCE_TYPE, Source.KEY_CONTENT_URL},
 //                    new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type, R.id.source_url});
 //            ((SimpleCursorAdapter) adapter).setViewBinder(new SourceItemViewBinder(deviceInfo));
-            buildAdapter();
+            adapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item, sourceDB, deviceInfo);
         }
 
         setListAdapter(adapter);
 
     }
 
-    private void buildAdapter() {
-        sourceCursor = sourceDB.findAll();
-        final List<SourceItem> items = new ArrayList<SourceItem>();
-        new ManagedCursor(sourceCursor).each(new EachCursor() {
-            public void call(Cursor cursor, int index) {
-                String sourceType = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_TYPE));
-                String sourceContentUrl = cursor.getString(cursor.getColumnIndex(Source.KEY_CONTENT_URL));
-                String sourceName = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_NAME));
-                String sourceImage = cursor.getString(cursor.getColumnIndex(Source.KEY_IMAGE_URL));
-                String sourceDesc = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_DESC));
-                String sourceID = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_ID));
-                long sourceUpdateTime = cursor.getLong(cursor.getColumnIndex(Source.KEY_UPDATE_TIME));
-
-                SourceItem item = new SourceItem();
-                item.setSourceType(sourceType);
-                item.setSourceName(sourceName);
-                item.setSourceImage(sourceImage);
-                item.setSourceURL(sourceContentUrl);
-                item.setSourceDesc(sourceDesc);
-                item.setSourceId(sourceID);
-                final Date date = new Date();
-                date.setTime(sourceUpdateTime);
-                item.setSourceUpdateTime(date);
-
-                items.add(item);
-            }
-        });
-
-        adapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item, items, deviceInfo);
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
-
-//        startManagingCursor(sourceCursor);
-
-
     }
 
     private void openDatabase() {
         sourceDB = new SourceDB(getApplicationContext());
         accountDB = new AccountDB(this);
-//        sourceCursor = sourceDB.findAll();
     }
 
     private void closeDB() {
@@ -284,7 +245,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 Log.e(this.getClass().getName(), count + " sources are deleted.");
 
 
-                buildAdapter();
+                adapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item, sourceDB, deviceInfo);
                 return true;
             case ACCOUNT_LIST_ID:
                 startActivity(new Intent(this, AccountListActivity.class));

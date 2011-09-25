@@ -111,7 +111,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private PageIndexView pageIndexView;
     private SourceDB sourceDB;
     private LayoutInflater inflater;
-    public SimpleCursorAdapter sourceAdapter;
+    public SourceItemArrayAdapter sourceAdapter;
     private boolean updated;
     private long lastUpdate = -1;
     private float x, y, z;
@@ -190,10 +190,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
         startManagingCursor(sourceCursor);
 
-        sourceAdapter = new SimpleCursorAdapter(PageActivity.this, R.layout.source_selection_item, sourceCursor,
-                new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL},
-                new int[]{R.id.source_name, R.id.source_desc, R.id.source_image});
-        sourceAdapter.setViewBinder(new SourceItemViewBinder(deviceInfo));
+        sourceAdapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item, sourceDB, deviceInfo);
 
         TelephonyManager tManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         deviceId = tManager.getDeviceId();
@@ -782,7 +779,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             }
             slideToNextPageAsynchronized();
         } else {
-            if (true) {
+            if (pageIndexView.isHasUpdate()) {
                 this.reload();
                 return;
             } else {
@@ -1171,13 +1168,12 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent intent = new Intent(PageActivity.this, PageActivity.class);
-                        Cursor cursor = (Cursor) sourceAdapter.getItem(i);
-                        intent.putExtra("type", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_TYPE)));
-                        intent.putExtra("sourceId", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_ID)));
-                        intent.putExtra("sourceImage", cursor.getString(cursor.getColumnIndex(Source.KEY_IMAGE_URL)));
-                        intent.putExtra("sourceName", cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_NAME)));
-                        intent.putExtra("contentUrl", cursor.getString(cursor.getColumnIndex(Source.KEY_CONTENT_URL)));
-                        cursor.close();
+                        SourceItem cursor = sourceAdapter.getItem(i);
+                        intent.putExtra("type", cursor.getSourceType());
+                        intent.putExtra("sourceId", cursor.getSourceId());
+                        intent.putExtra("sourceImage", cursor.getSourceImage());
+                        intent.putExtra("sourceName", cursor.getSourceName());
+                        intent.putExtra("contentUrl", cursor.getSourceURL());
                         if (dialog != null)
                             dialog.dismiss();
                         startActivity(intent);

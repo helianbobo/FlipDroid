@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.activity;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +11,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.model.google.RssParser;
 import com.goal98.flipdroid.util.DeviceInfo;
+import com.goal98.flipdroid.util.EachCursor;
+import com.goal98.flipdroid.util.ManagedCursor;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,8 +34,35 @@ public class SourceItemArrayAdapter<T> extends ArrayAdapter<SourceItem> {
     private LayoutInflater inflator;
     private DeviceInfo deviceInfo;
 
-    public SourceItemArrayAdapter(Context indexActivity, int sourceItemLayoutResource, List<SourceItem> items, DeviceInfo deviceInfo) {
-        super(indexActivity, sourceItemLayoutResource, items);
+    public SourceItemArrayAdapter(Context indexActivity, int sourceItemLayoutResource,SourceDB sourceDB, DeviceInfo deviceInfo) {
+        super(indexActivity, sourceItemLayoutResource);
+
+        Cursor sourceCursor = sourceDB.findAll();
+        new ManagedCursor(sourceCursor).each(new EachCursor() {
+            public void call(Cursor cursor, int index) {
+                String sourceType = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_TYPE));
+                String sourceContentUrl = cursor.getString(cursor.getColumnIndex(Source.KEY_CONTENT_URL));
+                String sourceName = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_NAME));
+                String sourceImage = cursor.getString(cursor.getColumnIndex(Source.KEY_IMAGE_URL));
+                String sourceDesc = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_DESC));
+                String sourceID = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_ID));
+                long sourceUpdateTime = cursor.getLong(cursor.getColumnIndex(Source.KEY_UPDATE_TIME));
+
+                SourceItem item = new SourceItem();
+                item.setSourceType(sourceType);
+                item.setSourceName(sourceName);
+                item.setSourceImage(sourceImage);
+                item.setSourceURL(sourceContentUrl);
+                item.setSourceDesc(sourceDesc);
+                item.setSourceId(sourceID);
+                final Date date = new Date();
+                date.setTime(sourceUpdateTime);
+                item.setSourceUpdateTime(date);
+
+                SourceItemArrayAdapter.this.add(item);
+            }
+        });
+        this.notifyDataSetChanged();
         this.sourceItemLayoutResource = sourceItemLayoutResource;
         inflator = LayoutInflater.from(this.getContext());
         this.deviceInfo = deviceInfo;
