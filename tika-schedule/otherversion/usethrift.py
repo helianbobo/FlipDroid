@@ -12,6 +12,7 @@ from thrift.protocol import TBinaryProtocol
 import config
 HOST = config.TIKAHOST
 POST = config.TIKAPOST
+from checktimeout import timeout,Timeout
 
 class Tika(object):
     timeout = config.THRIFTTIMEOUT
@@ -21,20 +22,31 @@ class Tika(object):
         self.protocol = TBinaryProtocol.TBinaryProtocol(self.transport,self.timeout)
         self.client = TikaService.Client(self.protocol)
         self.transport.open()
-
-    def handleUrl(self,url,referencedFrom=None):
-        r =False
+    
+    
+    def handleUrl(self,url,referencedFrom):
+        @timeout(15)
+        def _handleUrl(self,url,referencedFrom):
+            r =False
+            try:
+                tr = TikaRequest(url,referencedFrom)
+                print url,"###befor fire"
+                aa = self.client.fire(tr)
+                print url,"###after fire"
+                if aa.success:
+                    print "success",tr.url
+                    r = True
+            except Exception,e:
+                print "!!!!!errorurl!!!!:"+url
+                print e
+                r = False
+            finally:
+                return r
+            
         try:
-            tr = TikaRequest(url,referencedFrom)
-            print url,"###befor fire"
-            aa = self.client.fire(tr)
-            print url,"###after fire"
-            if aa.success:
-                print "success",tr.url
-                r = True
-        except Exception,e:
-            print "!!!!!errorurl!!!!:"+url
-            print e
+            r = _handleUrl(self,url,referencedFrom)
+        except Timeout, e:
+            print e,"TIMEOUT handleUrl:",url
             r = False
         finally:
             return r
@@ -45,9 +57,10 @@ class Tika(object):
 def test(url,referencedFrom):  
     transport = TSocket.TSocket(HOST, POST)
     transport = TTransport.TFramedTransport(transport)
-    protocol = TBinaryProtocol.TBinaryProtocol(transport)
+    protocol = TBinaryProtocol.TBinaryProtocol(transport,config.THRIFTTIMEOUT)
     client = TikaService.Client(protocol)
     transport.open()
+    r = False
     try:
         tr = TikaRequest(url,referencedFrom)
         #tr.url=url
@@ -57,34 +70,14 @@ def test(url,referencedFrom):
         
         if aa.success:
             print "success",tr.url
-            transport.close()
-            return True
+            r = True
+
     except TikaException,e:
         import traceback
         traceback.print_exc()
         print e
+    finally:
         transport.close()
-    transport.close()
+        return r
 
-def test2(url):
-    tr = TikaRequest(url)
-    print "success",tr.url        
-    return True
-   
-    
-def trun(url):
-    t1=threading.Thread()
-    t=threading.Thread(target=test,args=(url,))
-    t.start()
-    t.join()
-     
 
-if __name__ == "__main__":
-    url=str("http://www.21jn.net/html/72/n-272.html")
-    #tika=Tika()
-    #tresponse=tika.handleUrl(url)
-    #print tresponse.success
-    test(url)
-#thrift.transport.TTransport.TTransportException: TSocket read 0 bytes
-
-    

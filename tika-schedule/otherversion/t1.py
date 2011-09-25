@@ -21,7 +21,7 @@ class RssManagerTest(object):
     TESTREPEAT=1
     isruned =0
     
-    semaphore = threading.Semaphore(4)
+    semaphore = threading.Semaphore(2)
     def __init__(self):
         self.links_db_target = self.getLinksFromDB()
     
@@ -60,29 +60,14 @@ class RssManagerTest(object):
 
                 else:
                     links_new = []
-                    stime=time.strftime( ISOTIMEFORMAT, time.gmtime())
-     
-                    
-                    print "start find newlinks in!!!!!! "+rssitem[KEYURL]
-                    '''
-                    links_old = [item[KEYURL] for item in self.links_db_target.find()]
-                    links_new = [item for item in links_now if item[0] not in links_old]
-                    '''
-                    url_list=[item[0] for item in links_now]
-                    print 'url_list',len(url_list)
-                    links_old = [item[KEYURL] for item in self.links_db_target.find({KEYURL:{'$in':url_list}})]
-                    print "links old:",len(links_old)
-                    links_new = [item for item in links_now if item[0] not in links_old]
-                    print 'links_new',len(links_new)
-                    self.alllinksnum+=len(links_new)
-                    partnewlinkitems=[LinkItem(url=item[0],type=item[1],referencedFrom=item[2]) for item in links_new]
-                    self.linkitems+=partnewlinkitems
-                    
-                    ftime=time.strftime( ISOTIMEFORMAT, time.gmtime())
-                    print "##########\n"+stime+" ###to### "+ftime+" the "+" fininsh find url!!!\n""##########\n"
-                    print "find newlinks finish!!!!!! "+rssitem[KEYURL]
+              
                 
-                print "********fininsh the rss: "+rssitem[KEYURL]
+                    #links_old = [item[KEYURL] for item in self.links_db_target.find()]
+                     
+                    #links_new = [item for item in links_now if item[0] not in links_old]
+                    #self.alllinksnum+=len(links_new)
+                    #partnewlinkitems=[LinkItem(url=item[0],type=item[1],referencedFrom=item[2]) for item in links_new]
+                    #self.linkitems+=partnewlinkitems
 
         except Exception , e:
             print e
@@ -128,20 +113,20 @@ class RssManagerTest(object):
     linksmanager=None
     event=threading.Event()
     def handleLinksFromAllRss(self,linksmanager=None):
-         
-        ts=[]
-        for i,rssitem in enumerate(self.yieldLinkFromAllRss()):
-            t=threading.Thread(target=self.getLinksItems,args=(rssitem,i))
-            t.setDaemon(True)
-            ts.append(t)
-            t.start()
-            
-        self.event.wait()  
-        for t in ts:
-            t.join()
-         
+        
+#        ts=[]
 #        for i,rssitem in enumerate(self.yieldLinkFromAllRss()):
-#            self.getLinksItems(rssitem,i)
+#            t=threading.Thread(target=self.getLinksItems,args=(rssitem,i))
+#            t.setDaemon(True)
+#            ts.append(t)
+#            t.start()
+#            
+#        self.event.wait()  
+#        for t in ts:
+#            t.join()
+        
+        for i,rssitem in enumerate(self.yieldLinkFromAllRss()):
+            self.getLinksItems(rssitem,i)
         
         print "#############\n#############\n#############\n"
         print "!!!counts:",len(self.linkitems)
@@ -168,7 +153,6 @@ def test2():
     t.join()
     ftime=time.strftime( ISOTIMEFORMAT, time.gmtime())
     print "##########\n"+stime+" ###to### "+ftime+" the "+" fininsh onece!!!\n""##########\n"
-    time.sleep(3000)
      
 
 

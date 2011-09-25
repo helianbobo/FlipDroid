@@ -39,7 +39,7 @@ def runTcc():
 import platform
 if __name__ == '__main__':
     #dbtools.test_save_to_mdb()
-    import platform
+     
     print platform.system()
     #if not platform.system() is "Windows":
         #Watcher()	

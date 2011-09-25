@@ -5,7 +5,7 @@ Created on 2011-8-10
 @author: shang
 '''
 
-import traceback,time
+import traceback
 import dbtools  
 #import testtools
 from linkitem import *
@@ -16,7 +16,7 @@ from Queue import Queue
    
             
 class LinksManagerUseCoroutine(threading.Thread):
-    threadnum=5
+    threadnum=3
     alllinkitem=[]
     
     def __init__(self,*args,**kwargs):
@@ -29,22 +29,29 @@ class LinksManagerUseCoroutine(threading.Thread):
         threading.Thread.start(self)
 
     def addTasks(self,linkitems): 
-        length=len(linkitems)
-        if length==0 or linkitems is None:
+        if linkitems is None:
             return False
-        for linkitem in linkitems:
-            self.input_queue.put(linkitem)
+        if type(linkitems)==list:
+            if len(linkitems) is 0:
+                return False
+            for linkitem in linkitems:
+                self.input_queue.put(linkitem)
+        else:
+            self.input_queue.put(linkitems)
+            
         return True
             
 
     def run(self):
+        i=0
         while True:
-            #time.sleep(1)
+            i+=1
+            print "****!!!!:"+str(i)
             item = self.input_queue.get()
             if item is None:
                 break
             r = self.callHandle(item)
-            print item.url,"*** writed to db"+str(r)
+            #print item.url,"*** writed to db"+str(r)
             self.input_queue.task_done()
         self.input_queue.task_done()
         return
@@ -63,7 +70,7 @@ class LinksManagerUseCoroutine(threading.Thread):
         
     def callHandle(self,linkitem,entag=None):
         def callHandleTika(_linkitem):
-            #issuccessed = True
+            #issuccessed = usethrift.test(_linkitem.url)
             #tika=usethrift.Tika()
             try:
                 issuccessed=self.tika.handleUrl(_linkitem.url,_linkitem.referencedFrom)
@@ -78,7 +85,7 @@ class LinksManagerUseCoroutine(threading.Thread):
 
          
         if linkitem.type == KEYTYPE_RSS:  
-            print "theurl",linkitem.url
+            #print "theurl",linkitem.url
             result = callHandleTika(linkitem)
                
         else:

@@ -3,10 +3,13 @@ package com.goal98.flipdroid.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent.ShortcutIconResource;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -45,6 +48,8 @@ import com.goal98.flipdroid.view.*;
 import weibo4j.Weibo;
 import weibo4j.WeiboException;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.*;
 
 public class PageActivity extends Activity implements com.goal98.flipdroid.model.Window.OnLoadListener, SourceUpdateable {
@@ -162,7 +167,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         this.deviceInfo = getDeviceInfoFromApplicationContext();
-
+        
+        
+  
+        
         StopWatch sw = new StopWatch();
         sw.start("create activity");
 
@@ -1164,6 +1172,15 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 this.dialog = builder.create();
                 break;
             case NAVIGATION:
+        	LayoutInflater li = LayoutInflater.from(this);
+                View v = li.inflate(R.layout.dialog_nav_title_view,null);
+                 
+               // builder.setView(v);
+                builder.setCustomTitle(v);
+                 
+                
+                
+                 
                 builder.setAdapter(sourceAdapter, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -1181,7 +1198,20 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                     }
                 });
 
+
                 this.dialog = builder.create();
+                Button btn_addshortcut =(Button) v.findViewById(R.id.btnaddshortcut);
+                btn_addshortcut.setText("add shortcut");
+                
+                btn_addshortcut.setOnClickListener(new Button.OnClickListener()
+                {
+                    public void onClick(View v)
+                    {
+                       addShortcut();
+                       dialog.cancel();  
+                    }
+                });
+                
                 dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
                     public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
                         if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_MENU) {
@@ -1231,5 +1261,28 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     public boolean toLoadImage() {
         return PreferenceManager.getDefaultSharedPreferences(this).getBoolean(this.getString(R.string.key_load_image_preference), true);
+    }
+    
+    private void addShortcut( ){
+    	Intent shortcut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+    	shortcut.putExtra("duplicate", false);
+    	ComponentName comp = new ComponentName(this.getPackageName(), "."+this.getLocalClassName());
+    	Intent intent=new Intent(Intent.ACTION_MAIN).setComponent(comp);
+    	//Bundle bundle = new Bundle();
+    	//bundle.putString("info", "infohahaha"+time);
+    	//bundle.putString("info", "infohahaha");
+    	//intent.putExtras(bundle);
+    	intent.putExtra("type", accountType );
+        intent.putExtra("sourceId", sourceId );
+        intent.putExtra("sourceImage", sourceImageURL);
+        intent.putExtra("sourceName", sourceName );
+        intent.putExtra("contentUrl", contentUrl );//for rss
+
+    	shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
+    	shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME,sourceName);
+    	
+    	ShortcutIconResource iconRes = Intent.ShortcutIconResource.fromContext(this, R.drawable.icon);
+    	shortcut.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconRes);	
+    	sendBroadcast(shortcut);
     }
 }
