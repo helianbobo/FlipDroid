@@ -133,10 +133,6 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                     new String[]{"text"},
                     new int[]{R.id.text});
         } else {
-//            adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
-//                    new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_SOURCE_TYPE, Source.KEY_CONTENT_URL},
-//                    new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type, R.id.source_url});
-//            ((SimpleCursorAdapter) adapter).setViewBinder(new SourceItemViewBinder(deviceInfo));
             adapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item, sourceDB, deviceInfo);
         }
 
@@ -179,7 +175,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                     } catch (InterruptedException e) {
 
                     }
-                    SourceUpdateManager updateManager = new SourceUpdateManager(IndexActivity.this, adapter);
+                    SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB,new SourceCache(IndexActivity.this),IndexActivity.this);
                     updateManager.updateAll();
                     updated = true;
                 }

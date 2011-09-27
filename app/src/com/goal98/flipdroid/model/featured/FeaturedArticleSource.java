@@ -31,14 +31,11 @@ public class FeaturedArticleSource extends BaseCacheableArticleSource {
     private String sourceName;
     private String sourceImage;
     TikaClient tikaClient;
-    private List<TikaExtractResponse> responses = new ArrayList<TikaExtractResponse>();
-    private Activity activity;
 
-    public FeaturedArticleSource(Activity activity, String feedURL, String sourceName, String sourceImage) {
+    public FeaturedArticleSource(String feedURL, String sourceName, String sourceImage) {
         this.feedURL = feedURL;
         this.sourceName = sourceName;
         this.sourceImage = sourceImage;
-        this.activity = activity;
         tikaClient = new TikaClient(Constants.TIKA_HOST);
     }
 

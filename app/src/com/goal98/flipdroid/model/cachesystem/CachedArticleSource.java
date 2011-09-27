@@ -24,7 +24,7 @@ public class CachedArticleSource implements ArticleSource {
     private SourceUpdateable sourceUpdateable;
     private OnSourceLoadedListener listener;
 
-    public CachedArticleSource(final CacheableArticleSource articleSource, Context context, SourceUpdateable sourceUpdateable, SourceCache dbCache) {
+    public CachedArticleSource(final CacheableArticleSource articleSource, SourceUpdateable sourceUpdateable, SourceCache dbCache) {
         this.dbCache = dbCache;
         this.sourceUpdateable = sourceUpdateable;
         this.articleSource = articleSource;

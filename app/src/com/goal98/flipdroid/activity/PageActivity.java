@@ -588,11 +588,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             });
 
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            cachedArticleSource = new CachedArticleSource(new FeaturedArticleSource(this, contentUrl, sourceName, sourceImageURL), this, this, SourceCache.getInstance(this));
+            cachedArticleSource = new CachedArticleSource(new FeaturedArticleSource(contentUrl, sourceName, sourceImageURL), this, SourceCache.getInstance(this));
             cachedArticleSource.loadSourceFromCache();
             source = cachedArticleSource;
         } else if (accountType.equals(Constants.TYPE_GOOGLE_READER)) {
-
             String sid = preferences.getString(GoogleAccountActivity.GOOGLE_ACCOUNT_SID, "");
             String auth = preferences.getString(GoogleAccountActivity.GOOGLE_ACCOUNT_AUTH, "");
 

@@ -17,6 +17,8 @@ import android.view.Window;
 import com.goal98.android.ImageLoader;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
+import com.goal98.flipdroid.model.SourceUpdateManager;
+import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.GestureUtil;
 import com.goal98.flipdroid.util.NetworkUtil;
@@ -28,8 +30,6 @@ public class CoverActivity extends Activity {
 
     private String deviceId;
     public static final int WIRELESS_SETTING = 1;
-    public static int statusBarHeight;
-    public static int titleBarHeight;
 
     protected Dialog onCreateDialog(int id) {
         Dialog dialog;
@@ -62,14 +62,9 @@ public class CoverActivity extends Activity {
         setContentView(R.layout.cover);
         this.findViewById(R.id.flipbar).post(new Runnable() {
             public void run() {
-
                 DeviceInfo.getInstance(CoverActivity.this);
             }
         });
-//        if (!NetworkUtil.isNetworkAvailable(CoverActivity.this)) {
-//            showDialog(WIRELESS_SETTING);
-//            return;
-//        }
         new AccountDB(getApplicationContext());
 
         TelephonyManager tManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
@@ -78,10 +73,10 @@ public class CoverActivity extends Activity {
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
-            public void run() {
-                goToNextActivity();
-            }
-        }, 2000);
+                    public void run() {
+                        goToNextActivity();
+                    }
+                }, 2000);
     }
 
     @Override

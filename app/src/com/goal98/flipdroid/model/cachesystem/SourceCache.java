@@ -11,7 +11,6 @@ import com.goal98.flipdroid.db.SourceContentDB;
  * To change this template use File | Settings | File Templates.
  */
 public class SourceCache {
-    private Context context;
     private SourceContentDB contentDB;
     private static SourceCache sourceCache;
 
@@ -22,8 +21,7 @@ public class SourceCache {
         return sourceCache;
     }
 
-    private SourceCache(Context context) {
-        this.context = context;
+    public SourceCache(Context context) {
         contentDB = new SourceContentDB(context);
     }
 
