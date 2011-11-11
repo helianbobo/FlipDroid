@@ -9,7 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
 
-public class MainActivity extends Activity  {
+public class VewPagerTestActivity extends Activity  {
 
     private static int NUM_AWESOME_VIEWS = 20;
 
@@ -42,7 +42,7 @@ public class MainActivity extends Activity  {
              */
             @Override
             public Object instantiateItem(View collection, int position) {
-                TextView tv = new TextView(MainActivity.this);
+                TextView tv = new TextView(VewPagerTestActivity.this);
                 tv.setText("Bonjour PAUG " + position);
                 tv.setTextColor(Color.WHITE);
                 tv.setTextSize(30);
