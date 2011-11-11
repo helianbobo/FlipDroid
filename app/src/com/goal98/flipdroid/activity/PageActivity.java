@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.view.ViewConfigurationCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.*;
@@ -139,6 +140,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     public Dialog dialog;
     private Animation.AnimationListener fadeOutAnimationListener;
 
+    private int mTouchSlop;
+
 
     public String getSourceImageURL() {
         return sourceImageURL;
@@ -164,6 +167,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final ViewConfiguration configuration = ViewConfiguration.get(this);
+        mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
+        GestureUtil.minDelta = mTouchSlop;
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         this.deviceInfo = getDeviceInfoFromApplicationContext();
