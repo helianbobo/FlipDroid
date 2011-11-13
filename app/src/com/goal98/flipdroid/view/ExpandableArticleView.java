@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -111,7 +112,7 @@ public abstract class ExpandableArticleView extends ArticleView {
         contentView = new TextView(this.getContext());
         contentView.getPaint().setAntiAlias(true);
         int scaleTextSize = scaled ? textSize - 3 : textSize;
-        contentView.setTextSize(scaleTextSize);
+        contentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, scaleTextSize);
         if (!smallScreen)
             contentView.setPadding(2, 8, 2, 8);
         else

@@ -3,6 +3,7 @@ package com.goal98.flipdroid.view;
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -62,9 +63,9 @@ public class HeaderView extends LinearLayout {
         TextView headerText = (TextView) viewSwitcher.findViewById(R.id.headerText);
         DeviceInfo deviceInfo = getDeviceInfoFromApplicationContext();
         if (deviceInfo.isLargeScreen()) {
-            headerText.setTextSize(24);
+            headerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 24);
         } else if (deviceInfo.isSmallScreen()) {
-            headerText.setTextSize(18);
+            headerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
         }
         headerText.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {

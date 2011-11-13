@@ -21,7 +21,7 @@
 
     <EditTextPreference
             android:key="@string/key_anim_flip_duration_preference"
-            android:defaultValue="700"
+            android:defaultValue="400"
             android:inputType="number"
             android:title="@string/title_anim_flip_duration_preference"
             android:summary="@string/summary_anim_flip_duration_preference"

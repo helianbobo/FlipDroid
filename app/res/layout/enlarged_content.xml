@@ -5,8 +5,8 @@
               android:layout_height="fill_parent" android:orientation="vertical" android:gravity="center">
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:orientation="vertical">
-        <TextView android:id="@+id/title" android:layout_width="fill_parent" android:textSize="20dip"
-                  android:textColor="#1A1A1A" android:textStyle="bold" android:gravity="center"
+        <TextView android:id="@+id/title" android:layout_width="fill_parent" style="@style/EnlargedTitle"
+                  android:gravity="center"
                   android:layout_height="wrap_content" android:paddingLeft="15dip" android:paddingRight="15dip"
                   android:paddingTop="2dip"></TextView>
     </LinearLayout>
@@ -31,8 +31,8 @@
                           android:layout_height="wrap_content" android:gravity="center"
                           android:orientation="horizontal" android:id="@+id/shareByll">
                 <TextView android:text="@string/sharedBy" android:id="@+id/sharedBy" android:layout_width="wrap_content"
-                          android:textSize="15dip"
-                          android:textColor="#AAAAAA" android:textStyle="bold" android:gravity="center"
+                          style="@style/ShareBy"
+                          android:gravity="center"
                           android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="5dip"
                           android:paddingTop="2dip" android:paddingBottom="2dip"></TextView>
                 <com.goal98.android.WebImageView android:id="@+id/portrait" webimage:autoLoad="false"
@@ -41,13 +41,11 @@
                                                  android:layout_width="16dip"
                                                  android:layout_marginBottom="2dip"></com.goal98.android.WebImageView>
                 <TextView android:id="@+id/author" android:layout_width="wrap_content"
-                          android:textSize="15dip"
-                          android:textColor="#AAAAAA" android:textStyle="bold" android:gravity="center"
+                          style="@style/ShareBy" android:gravity="center"
                           android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="2dip"
                           android:paddingTop="2dip" android:paddingBottom="2dip"></TextView>
                 <TextView android:id="@+id/createdDate" android:layout_width="wrap_content"
-                          android:textSize="12dip"
-                          android:textColor="#AAAAAA" android:textStyle="bold" android:gravity="center"
+                          style="@style/ShareBy" android:gravity="center"
                           android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="2dip"
                           android:paddingTop="3dip" android:paddingBottom="2dip"></TextView>
             </LinearLayout>

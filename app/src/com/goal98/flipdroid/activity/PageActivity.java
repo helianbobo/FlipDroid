@@ -244,6 +244,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     }
 
+
     private void createAnimation() {
         fadeOutAnimationListener = new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
@@ -709,60 +710,111 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             current.onTouchEvent(event);
         }
         switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                mLastMotionX = mInitialMotionX = event.getX();
+                mLastMotionY = mInitialMotionY = event.getY();
+                break;
+            }
             case MotionEvent.ACTION_UP:
+                Log.v(TAG, "** dispatchTouchEvent() event.getAction()=" + MotionEvent.ACTION_UP);
                 return current.dispatchTouchEvent(event);
             case MotionEvent.ACTION_MOVE: {
-                if (!enlargedMode)
+
+                mLastMotionX = event.getX();
+                mLastMotionY = event.getY();
+
+                if (!enlargedMode) {
+                    Log.v(TAG, "** dispatchTouchEvent() event.getAction()=" + MotionEvent.ACTION_MOVE + " enlargedMode=" + enlargedMode + " --> onTouchEvent(event)");
                     onTouchEvent(event);
-                else
+                } else {
+                    Log.v(TAG, "** dispatchTouchEvent() event.getAction()=" + MotionEvent.ACTION_MOVE + " enlargedMode=" + enlargedMode + " --> current.onTouchEvent(event);");
                     current.onTouchEvent(event);
+                }
 
             }
         }
+
+        Log.v("PageActivity", "** dispatchTouchEvent() event.getAction()=" + event.getAction() + " enlargedMode=" + enlargedMode + " --> super.dispatchTouchEvent(event);");
         return super.dispatchTouchEvent(event);
     }
+
+    private final String TAG = "PageActivity";
+    private float mLastMotionX, mLastMotionY, mInitialMotionX, mInitialMotionY;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         ////System.out.println("flipStarted" + flipStarted);
+
         if (flipStarted) {
+            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> return false;");
             return false;
         }
 //        if (header.isSourceSelectMode()) {
 //            header.onTouchEvent(event);
 //        }
         if (enlargedMode) {
+            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " enlargedMode=" + enlargedMode + " -->  current.onTouchEvent(event);");
             current.onTouchEvent(event);
         }
 
 
         switch (event.getAction()) {
+
+            case MotionEvent.ACTION_DOWN: {
+                mLastMotionX = mInitialMotionX = event.getX();
+                mLastMotionY = mInitialMotionY = event.getY();
+                break;
+            }
+
             case MotionEvent.ACTION_MOVE:
 
-                if (event.getHistorySize() > 0 && !flipStarted) {
-                    if (GestureUtil.flipRight(event)) {
-                        lastFlipDirection = ACTION_HORIZONTAL;
-                        flipPage(false);
-                    } else if (GestureUtil.flipUp(event)) {
-                        lastFlipDirection = ACTION_VERTICAL;
-                        flipPage(false);
-                    } else if (GestureUtil.flipLeft(event)) {
-                        lastFlipDirection = ACTION_HORIZONTAL;
-                        flipPage(true);
-                    } else if (GestureUtil.flipDown(event)) {
-                        lastFlipDirection = ACTION_VERTICAL;
-                        flipPage(true);
+                mLastMotionX = event.getX();
+                mLastMotionY = event.getY();
+
+                if (!flipStarted) {
+
+                    final GestureUtil.FlipDirection flipDirection = GestureUtil.checkFlipDirection(mInitialMotionX, mInitialMotionY, mLastMotionX, mLastMotionY);
+
+                    switch (flipDirection) {
+                        case RIGHT:
+                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> RIGHT;");
+                            lastFlipDirection = ACTION_HORIZONTAL;
+                            flipPage(false);
+                            break;
+                        case UP:
+                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> UP;");
+                            lastFlipDirection = ACTION_VERTICAL;
+                            flipPage(true);
+                            break;
+                        case LEFT:
+                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> LEFT;");
+                            lastFlipDirection = ACTION_HORIZONTAL;
+                            flipPage(true);
+                            break;
+                        case DOWN:
+                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> DOWN;");
+                            lastFlipDirection = ACTION_VERTICAL;
+                            flipPage(false);
+                            break;
+                        case NONE:
+                            break;
+
                     }
 
+                    Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> No Gesture matched");
+
                 } else {
+                    Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " event.getHistorySize()" + event.getHistorySize() + " --> header.onTouchEvent(event);");
 //                    if (header.isSourceSelectMode())
                     header.onTouchEvent(event);
 //                    pageIndexView.onTouchEvent(event);
                 }
                 break;
             default:
+                Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> default;");
                 break;
         }
+        Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> return true;");
 
         return true;
     }
@@ -987,16 +1039,17 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         final float centerX = 0;
         long duration = getFlipDurationFromPreference();
 
-        Animation rotation = AnimationFactory.buildHorizontalFlipAnimation(forward, duration, centerX, centerY);
+        int animation = forward ? R.anim.left_out : R.anim.left_in;
+        Animation result = AnimationUtils.loadAnimation(this, animation);//AnimationFactory.buildHorizontalFlipAnimation(forward, duration, centerX, centerY);
 
-
-        rotation.setAnimationListener(flipAnimationListener);
-        return rotation;
+        result.setDuration(duration);
+        result.setAnimationListener(flipAnimationListener);
+        return result;
     }
 
     private long getFlipDurationFromPreference() {
         String key = getString(R.string.key_anim_flip_duration_preference);
-        return Long.parseLong(preferences.getString(key, "500"));
+        return Long.parseLong(preferences.getString(key, "400"));
     }
 
     private int getBrowseMode() {
@@ -1132,8 +1185,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private Animation buildFlipAnimation(final LinearLayout currentUpper, final LinearLayout currentBottom, final LinearLayout nextUpper, final LinearLayout nextBottom, final boolean forward) {
-        final float centerY = 240;
+        final float centerY = getWindowManager().getDefaultDisplay().getHeight()/2;
         final float centerX = 160;
+
+        getWindowManager().getDefaultDisplay().getHeight();
 
         long duration = getFlipDurationFromPreference();
 

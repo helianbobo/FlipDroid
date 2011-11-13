@@ -2,6 +2,7 @@ package com.goal98.flipdroid.view;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,7 +91,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                             titleSize = 17;
                         }
                     }
-                    titleView.setTextSize(titleSize);
+                    titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
                     titleView.setText(article.getTitle());
                     titleView.setWidth(deviceInfo.getWidth());
 

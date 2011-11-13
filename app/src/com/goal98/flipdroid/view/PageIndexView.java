@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.AndroidCharacter;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,7 +65,7 @@ public class PageIndexView extends LinearLayout {
         TextView latest = new TextView(this.getContext());
         latest.setText(R.string.latest);
         latest.setTextColor(Color.parseColor("#CCCCCC"));
-        latest.setTextSize(14);
+        latest.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.setMargins(5, 0, 5, 2);
 
@@ -84,14 +85,14 @@ public class PageIndexView extends LinearLayout {
         TextView latestUpdate = new TextView(this.getContext());
         latestUpdate.setText(new SimpleDateFormat("MMM dd").format(latestUpdateDate));
         latestUpdate.setTextColor(Color.parseColor("#CCCCCC"));
-        latestUpdate.setTextSize(14);
+        latestUpdate.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         this.addView(latestUpdate, params);
 
         if (hasUpdate) {
             TextView update = new TextView(this.getContext());
             update.setText("Reload");
             update.setTextColor(Color.parseColor("#FF0000"));
-            update.setTextSize(15);
+            update.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             update.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {
                     activity.reload();

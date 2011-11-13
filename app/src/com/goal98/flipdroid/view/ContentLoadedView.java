@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.text.style.ParagraphStyle;
 import android.util.FloatMath;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.*;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -105,7 +106,7 @@ public class ContentLoadedView extends ArticleView {
         LinearLayout layout = (LinearLayout) inflator.inflate(R.layout.enlarged_content, this);
         this.titleView = (TextView) layout.findViewById(R.id.title);
         titleView.setText(article.getTitle());
-        titleView.setTextSize(20);
+        titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
 
         if (article.getSourceType().equals(Constants.TYPE_SINA_WEIBO) || article.getSourceType().equals(Constants.TYPE_MY_SINA_WEIBO)) {
             LinearLayout reference = (LinearLayout) layout.findViewById(R.id.reference);
@@ -126,22 +127,22 @@ public class ContentLoadedView extends ArticleView {
             TextView author = new TextView(this.getContext());
             author.setText(article.getAuthor());
             if (deviceInfo.isLargeScreen())
-                author.setTextSize(21);
+                author.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
             else if (deviceInfo.isSmallScreen())
-                author.setTextSize(14);
+                author.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
             else
-                author.setTextSize(17);
+                author.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
 
             author.setTextColor(Color.parseColor("#AAAAAA"));
 
             TextView referenceText = new TextView(this.getContext());
             referenceText.setText(article.getStatus());
             if (deviceInfo.isLargeScreen())
-                referenceText.setTextSize(22);
+                referenceText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
             else if (deviceInfo.isSmallScreen())
-                referenceText.setTextSize(15);
+                referenceText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             else
-                referenceText.setTextSize(18);
+                referenceText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
 
             referenceText.setTextColor(Color.parseColor("#AAAAAA"));
             final LayoutParams authorLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -166,9 +167,9 @@ public class ContentLoadedView extends ArticleView {
                 this.portraitView.setVisibility(View.GONE);
             }
             if (deviceInfo.isLargeScreen()) {
-                authorView.setTextSize(16);
-                createDateView.setTextSize(16);
-                sharedBy.setTextSize(16);
+                authorView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+                createDateView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+                sharedBy.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
 
             }
         }
@@ -178,9 +179,9 @@ public class ContentLoadedView extends ArticleView {
         this.contentHolderView = (LinearLayout) layout.findViewById(R.id.contentHolder);
         int txtSize = 0;
         if (deviceInfo.isLargeScreen()) {
-            txtSize = 20;
+            txtSize = 16;
         } else {
-            txtSize = 18;
+            txtSize = 16;
         }
         Paragraphs paragraphs = new Paragraphs();
         paragraphs.toParagraph(article.getContent());
@@ -193,7 +194,8 @@ public class ContentLoadedView extends ArticleView {
             if (uiObject.getType().equals(TikaUIObject.TYPE_TEXT)) {
                 String style = "<p>";
                 TextView tv = new TextView(this.getContext());
-                tv.setTextSize(txtSize);
+
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, txtSize);
                 tv.setTextColor(Constants.LOADED_TEXT_COLOR);
                 tv.setGravity(Gravity.LEFT | Gravity.TOP);
                 if (uiObject.getObjectBody().startsWith("<p><blockquote>")) {

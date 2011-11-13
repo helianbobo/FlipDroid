@@ -2,4 +2,5 @@
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
     <color name="gray">#ffaaaaaa</color>
+    <color name="blue">#ff0066cc</color>
 </resources>
