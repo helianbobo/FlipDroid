@@ -106,7 +106,7 @@ public class ContentLoadedView extends ArticleView {
         LinearLayout layout = (LinearLayout) inflator.inflate(R.layout.enlarged_content, this);
         this.titleView = (TextView) layout.findViewById(R.id.title);
         titleView.setText(article.getTitle());
-        titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
+        titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_TITLE);
 
         if (article.getSourceType().equals(Constants.TYPE_SINA_WEIBO) || article.getSourceType().equals(Constants.TYPE_MY_SINA_WEIBO)) {
             LinearLayout reference = (LinearLayout) layout.findViewById(R.id.reference);
@@ -126,23 +126,13 @@ public class ContentLoadedView extends ArticleView {
 
             TextView author = new TextView(this.getContext());
             author.setText(article.getAuthor());
-            if (deviceInfo.isLargeScreen())
-                author.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 21);
-            else if (deviceInfo.isSmallScreen())
-                author.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-            else
-                author.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+            author.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_AUTHOR);
 
             author.setTextColor(Color.parseColor("#AAAAAA"));
 
             TextView referenceText = new TextView(this.getContext());
             referenceText.setText(article.getStatus());
-            if (deviceInfo.isLargeScreen())
-                referenceText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
-            else if (deviceInfo.isSmallScreen())
-                referenceText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            else
-                referenceText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+            referenceText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_REFERENCE);
 
             referenceText.setTextColor(Color.parseColor("#AAAAAA"));
             final LayoutParams authorLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -167,9 +157,9 @@ public class ContentLoadedView extends ArticleView {
                 this.portraitView.setVisibility(View.GONE);
             }
             if (deviceInfo.isLargeScreen()) {
-                authorView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-                createDateView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
-                sharedBy.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
+                authorView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_AUTHOR);
+                createDateView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_AUTHOR);
+                sharedBy.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_AUTHOR);
 
             }
         }
@@ -177,12 +167,7 @@ public class ContentLoadedView extends ArticleView {
         wrapper.setVerticalScrollBarEnabled(true);
 
         this.contentHolderView = (LinearLayout) layout.findViewById(R.id.contentHolder);
-        int txtSize = 0;
-        if (deviceInfo.isLargeScreen()) {
-            txtSize = 16;
-        } else {
-            txtSize = 16;
-        }
+        int txtSize = Constants.TEXT_SIZE_CONTENT;
         Paragraphs paragraphs = new Paragraphs();
         paragraphs.toParagraph(article.getContent());
         LayoutParams textLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);

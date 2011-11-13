@@ -112,7 +112,7 @@ public abstract class ExpandableArticleView extends ArticleView {
         contentView = new TextView(this.getContext());
         contentView.getPaint().setAntiAlias(true);
         int scaleTextSize = scaled ? textSize - 3 : textSize;
-        contentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, scaleTextSize);
+        contentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_CONTENT);
         if (!smallScreen)
             contentView.setPadding(2, 8, 2, 8);
         else

@@ -91,7 +91,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                             titleSize = 17;
                         }
                     }
-                    titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
+                    titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_TITLE);
                     titleView.setText(article.getTitle());
                     titleView.setWidth(deviceInfo.getWidth());
 

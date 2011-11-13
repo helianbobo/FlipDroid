@@ -32,4 +32,9 @@ public class Constants {
     public static final String TIKA_HOST="www.tika.it";
     public static final int LINE_COLOR=0xffDDDDDD;
     public static final int LOADED_TEXT_COLOR=0xff232323;
+
+    public static final int TEXT_SIZE_TITLE = 18;
+    public static final int TEXT_SIZE_AUTHOR = 16;
+    public static final int TEXT_SIZE_REFERENCE = 16;
+    public static final int TEXT_SIZE_CONTENT = 16;
 }
