@@ -191,7 +191,7 @@ public class ContentLoadedView extends ArticleView {
                 } else {
                     tv.setPadding(2, 3, 2, 3);
                 }
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new StringBuilder("<br/>");
                 String objectBody = uiObject.getObjectBody();
                 String formatted = format(objectBody);
                 if(formatted.trim().length()==0)
@@ -210,6 +210,7 @@ public class ContentLoadedView extends ArticleView {
                         break;
                     }
                 }
+                sb.append("<br/>");
                 tv.setText(Html.fromHtml(sb.toString()));
                 contentHolderView.addView(tv, textLayoutParams);
             }
