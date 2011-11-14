@@ -2,8 +2,21 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" style="@style/Index" android:orientation="vertical">
 
-    <Button android:layout_width="fill_parent" android:layout_height="wrap_content"
-            android:text="@string/button_add_new_source" android:id="@+id/btn_add_source"/>
+    <Button android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/add_button"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            android:textStyle="bold"
+
+            android:shadowColor="@color/blue"
+            android:shadowDx="1"
+            android:shadowDy="2"
+            android:shadowRadius="4"
+
+            android:layout_margin="5dp"
+            android:text="@string/button_add_new_source"
+            android:id="@+id/btn_add_source"/>
 
     <ListView android:layout_height="fill_parent" android:layout_width="fill_parent"
               android:id="@android:id/list"/>

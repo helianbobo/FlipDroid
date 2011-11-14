@@ -61,13 +61,25 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         setContentView(R.layout.index);
 
         Button addSourceButton = (Button) findViewById(R.id.btn_add_source);
-        addSourceButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent intent = new Intent(IndexActivity.this, SiteActivity.class);
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+        addSourceButton.setOnTouchListener(new View.OnTouchListener() {
+
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        Intent intent = new Intent(IndexActivity.this, SiteActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                        break;
+                    default:
+                        break;
+                }
+
+                return false;
             }
+
         });
+
         this.getListView().setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             public void onCreateContextMenu(ContextMenu menu, View v,
                                             ContextMenu.ContextMenuInfo menuInfo) {
@@ -175,7 +187,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                     } catch (InterruptedException e) {
 
                     }
-                    SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB,new SourceCache(IndexActivity.this),IndexActivity.this);
+                    SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, new SourceCache(IndexActivity.this), IndexActivity.this);
                     updateManager.updateAll();
                     updated = true;
                 }
@@ -258,7 +270,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 for (int i = 0; i < adapter.getCount(); i++) {
                     SourceItem item = (SourceItem) adapter.getItem(i);
                     if (token.match(item)) {
-                        if(item.getSourceItemView()!=null)
+                        if (item.getSourceItemView() != null)
                             item.getSourceItemView().findViewById(R.id.loadingbar).setVisibility(View.VISIBLE);
                     }
                 }
@@ -281,7 +293,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                         SourceItem item = (SourceItem) adapter.getItem(index);
                         if (token.match(item)) {
                             View childAt = IndexActivity.this.getListView().getChildAt(index);
-                            if(childAt!=null)
+                            if (childAt != null)
                                 childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
                         }
                     }
@@ -306,8 +318,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                         SourceItem item = (SourceItem) adapter.getItem(index);
                         if (token.match(item)) {
                             View childAt = IndexActivity.this.getListView().getChildAt(index);
-                            if(childAt !=null)
-                            childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
+                            if (childAt != null)
+                                childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
                         }
                     }
                 });
