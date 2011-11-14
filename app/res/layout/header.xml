@@ -18,7 +18,7 @@
                          android:layout_height="wrap_content" android:layout_gravity="left" android:gravity="left|center_vertical"/>
         </LinearLayout>
         <com.goal98.android.WebImageView android:id="@+id/headerImage" webimage:autoLoad="false"
-                                         android:src="@drawable/portrait"
+                                         android:src="@drawable/portrait" webimage:roundImage="true"
                                          android:layout_height="50dip" webimage:defaultWidth="50"
                                          webimage:defaultHeight="50" android:layout_margin="2dip"
                                          android:layout_width="0dip" android:layout_weight="10"></com.goal98.android.WebImageView>

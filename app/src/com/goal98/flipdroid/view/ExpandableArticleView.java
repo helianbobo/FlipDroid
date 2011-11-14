@@ -139,6 +139,7 @@ public abstract class ExpandableArticleView extends ArticleView {
             contentViewWrapper.addView(contentView, layoutParams);
         } else {
             imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), false);
+            imageView.setRoundImage(true);
             imageView.imageView.setTag(article.getImageUrl().toExternalForm());
 
             if (article.getHeight() == 0) {

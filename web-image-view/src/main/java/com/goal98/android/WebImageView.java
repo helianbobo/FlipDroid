@@ -38,6 +38,13 @@ public class WebImageView extends ViewSwitcher {
     private int defaultHeight;
     private boolean roundImage;
 
+    public boolean isRoundImage() {
+        return roundImage;
+    }
+
+    public void setRoundImage(boolean roundImage) {
+        this.roundImage = roundImage;
+    }
 
     /**
      * @param context  the view's current context

@@ -35,7 +35,7 @@
                           android:gravity="center"
                           android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="5dip"
                           android:paddingTop="2dip" android:paddingBottom="2dip"></TextView>
-                <com.goal98.android.WebImageView android:id="@+id/portrait" webimage:autoLoad="false"
+                <com.goal98.android.WebImageView android:id="@+id/portrait" webimage:autoLoad="false" webimage:roundImage="true"
                                                  android:layout_height="16dip" webimage:defaultWidth="16"
                                                  webimage:defaultHeight="16"
                                                  android:layout_width="16dip"

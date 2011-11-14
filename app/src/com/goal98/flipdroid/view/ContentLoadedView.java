@@ -117,6 +117,7 @@ public class ContentLoadedView extends ArticleView {
             referenceContent.setVisibility(VISIBLE);
             if (article.getPortraitImageUrl() != null) {
                 icon = new WebImageView(this.getContext(), article.getPortraitImageUrl().toExternalForm(), false);
+                icon.setRoundImage(true);
                 icon.setDefaultHeight(25);
                 icon.setDefaultWidth(25);
 
@@ -220,7 +221,7 @@ public class ContentLoadedView extends ArticleView {
                 ImageInfo imageInfo = ((ImageInfo) uiObject);
                 String url = imageInfo.getUrl();
                 WebImageView imageView = new WebImageView(this.getContext(), url, false);
-
+                imageView.setRoundImage(true);
 //                imageView.imageView.setTag(url);
 
                 final DeviceInfo deviceInfo = getDeviceInfoFromApplicationContext();

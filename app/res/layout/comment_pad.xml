@@ -29,7 +29,7 @@
 
     <LinearLayout android:layout_width="match_parent" android:padding="5dip"
                   android:layout_height="wrap_content" android:orientation="horizontal">
-        <com.goal98.android.WebImageView android:id="@+id/source_image" webimage:autoLoad="false"
+        <com.goal98.android.WebImageView android:id="@+id/source_image" webimage:autoLoad="false" webimage:roundImage="true"
                                          android:src="@drawable/portrait" webimage:errorDrawable="@drawable/portrait"
                                          android:layout_height="40dip" webimage:defaultWidth="40"
                                          webimage:defaultHeight="40" webimage:progressDrawable="@drawable/portrait"
