@@ -42,7 +42,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int defaultHeight=0x7f010002;
+        public static final int defaultHeight=0x7f010003;
         /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -50,15 +50,23 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int defaultWidth=0x7f010001;
+        public static final int defaultWidth=0x7f010002;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int errorDrawable=0x7f010003;
+        public static final int errorDrawable=0x7f010004;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int progressDrawable=0x7f010004;
+        public static final int progressDrawable=0x7f010005;
+        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int roundImage=0x7f010001;
     }
     public static final class color {
         public static final int black=0x7f070001;
@@ -322,16 +330,18 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
            <tr><td><code>{@link #webimage_defaultWidth com.goal98.flipdroid:defaultWidth}</code></td><td></td></tr>
            <tr><td><code>{@link #webimage_errorDrawable com.goal98.flipdroid:errorDrawable}</code></td><td></td></tr>
            <tr><td><code>{@link #webimage_progressDrawable com.goal98.flipdroid:progressDrawable}</code></td><td></td></tr>
+           <tr><td><code>{@link #webimage_roundImage com.goal98.flipdroid:roundImage}</code></td><td></td></tr>
            </table>
            @see #webimage_autoLoad
            @see #webimage_defaultHeight
            @see #webimage_defaultWidth
            @see #webimage_errorDrawable
            @see #webimage_progressDrawable
+           @see #webimage_roundImage
          */
         public static final int[] webimage = {
             0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003,
-            0x7f010004
+            0x7f010004, 0x7f010005
         };
         /**
           <p>This symbol is the offset where the {@link com.goal98.flipdroid.R.attr#autoLoad}
@@ -360,7 +370,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name android:defaultHeight
         */
-        public static final int webimage_defaultHeight = 2;
+        public static final int webimage_defaultHeight = 3;
         /**
           <p>This symbol is the offset where the {@link com.goal98.flipdroid.R.attr#defaultWidth}
           attribute's value can be found in the {@link #webimage} array.
@@ -374,7 +384,7 @@ theme attribute (in the form
 containing a value of this type.
           @attr name android:defaultWidth
         */
-        public static final int webimage_defaultWidth = 1;
+        public static final int webimage_defaultWidth = 2;
         /**
           <p>This symbol is the offset where the {@link com.goal98.flipdroid.R.attr#errorDrawable}
           attribute's value can be found in the {@link #webimage} array.
@@ -384,7 +394,7 @@ containing a value of this type.
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
           @attr name android:errorDrawable
         */
-        public static final int webimage_errorDrawable = 3;
+        public static final int webimage_errorDrawable = 4;
         /**
           <p>This symbol is the offset where the {@link com.goal98.flipdroid.R.attr#progressDrawable}
           attribute's value can be found in the {@link #webimage} array.
@@ -394,6 +404,20 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
           @attr name android:progressDrawable
         */
-        public static final int webimage_progressDrawable = 4;
+        public static final int webimage_progressDrawable = 5;
+        /**
+          <p>This symbol is the offset where the {@link com.goal98.flipdroid.R.attr#roundImage}
+          attribute's value can be found in the {@link #webimage} array.
+
+
+          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:roundImage
+        */
+        public static final int webimage_roundImage = 1;
     };
 }

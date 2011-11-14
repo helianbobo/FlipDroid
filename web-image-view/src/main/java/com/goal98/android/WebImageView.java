@@ -11,6 +11,7 @@ import android.media.FaceDetector;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.animation.Animation;
 import android.widget.*;
@@ -35,6 +36,7 @@ public class WebImageView extends ViewSwitcher {
     private int height;
     private int defaultWidth;
     private int defaultHeight;
+    private boolean roundImage;
 
 
     /**
@@ -77,6 +79,14 @@ public class WebImageView extends ViewSwitcher {
         initialize(context, imageUrl, progressDrawable, errorDrawable, autoLoad);
     }
 
+    public WebImageView(Context context, String imageUrl, Drawable progressDrawable,
+                        Drawable errorDrawable, boolean autoLoad, boolean roundImage) {
+        super(context);
+        this.roundImage = roundImage;
+        initialize(context, imageUrl, progressDrawable, errorDrawable, autoLoad);
+
+    }
+
     public WebImageView(Context context, AttributeSet attributes) {
         super(context, attributes);
         // TypedArray styles = context.obtainStyledAttributes(attributes,
@@ -94,6 +104,8 @@ public class WebImageView extends ViewSwitcher {
         defaultHeight = attributes.getAttributeIntValue(XMLNS, "defaultHeight",
                 0);
 
+        roundImage = attributes.getAttributeBooleanValue(XMLNS, "roundImage",false);
+
         Drawable progressDrawable = null;
         if (progressDrawableId > 0) {
             progressDrawable = context.getResources().getDrawable(progressDrawableId);
@@ -102,10 +114,11 @@ public class WebImageView extends ViewSwitcher {
         if (errorDrawableId > 0) {
             errorDrawable = context.getResources().getDrawable(errorDrawableId);
         }
-        initialize(context, attributes.getAttributeValue(XMLNS, "imageUrl"),
-                progressDrawable, errorDrawable, attributes.getAttributeBooleanValue(
-                XMLNS, "autoLoad",
-                true));
+        initialize(context,
+                attributes.getAttributeValue(XMLNS, "imageUrl"),
+                progressDrawable,
+                errorDrawable,
+                attributes.getAttributeBooleanValue(XMLNS, "autoLoad",true));
         // styles.recycle();
     }
 
@@ -259,6 +272,13 @@ public class WebImageView extends ViewSwitcher {
 
             if (bitmap == null)
                 return false;
+
+            try {
+                if(roundImage)
+                    bitmap = ImageHelper.getRoundedCornerBitmap(bitmap, 3);
+            } catch (Exception e) {
+                Log.w(this.getClass().getName(), "Failed to round image.", e);
+            }
 
             int bmpWidth = bitmap.getWidth();
 
