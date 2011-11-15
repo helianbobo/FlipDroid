@@ -64,4 +64,5 @@
 
     <string name="add_custom_source">手工添加关注源</string>
     <string name="add_custom_source_desc">搜索并添加微博用户到关注源</string>
+    <string name="view_source">查看源链接</string>
 </resources>

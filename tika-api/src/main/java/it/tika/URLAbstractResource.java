@@ -88,6 +88,7 @@ public class URLAbstractResource extends ServerResource {
         try {
             jsonObject.accumulate("title", urlAbstract.getTitle());
             jsonObject.accumulate("content", urlAbstract.getContent());
+            jsonObject.accumulate("sourceURL", urlAbstract.getUrl());
             JSONArray jsonArray = new JSONArray();
             List<String> images = urlAbstract.getImages();
             if (images != null) {

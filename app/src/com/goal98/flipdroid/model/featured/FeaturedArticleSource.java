@@ -84,6 +84,7 @@ public class FeaturedArticleSource extends BaseCacheableArticleSource {
                 article.setExpandable(true);
                 article.setContent(tikaExtractResponse.getContent());
                 article.setTitle(tikaExtractResponse.getTitle());
+                article.setSourceURL(tikaExtractResponse.getSourceURL());
                 if (tikaExtractResponse.getImages().size() != 0) {
                     article.setImageUrl(new URL(tikaExtractResponse.getImages().get(0)));
                 }

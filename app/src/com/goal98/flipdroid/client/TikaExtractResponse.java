@@ -10,6 +10,12 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class TikaExtractResponse {
+    public String getSourceURL() {
+        return sourceURL;
+    }
+
+    private String sourceURL;
+
     public String getContent() {
         return content;
     }
@@ -47,5 +53,9 @@ public class TikaExtractResponse {
 
     public void setImages(List<String> images) {
         this.images = images;
+    }
+
+    public void setSourceURL(String sourceURL) {
+        this.sourceURL = sourceURL;
     }
 }

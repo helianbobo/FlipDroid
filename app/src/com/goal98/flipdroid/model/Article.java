@@ -40,6 +40,15 @@ public class Article {
     private boolean layoutVertical;
     private float suggestScale;
     private int textHeight;
+    private String sourceURL;
+
+    public String getSourceURL() {
+        return sourceURL;
+    }
+
+    public void setSourceURL(String sourceURL) {
+        this.sourceURL = sourceURL;
+    }
 
     public int getTextHeight() {
         return textHeight;

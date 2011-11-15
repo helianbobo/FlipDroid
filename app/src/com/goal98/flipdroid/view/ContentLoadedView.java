@@ -1,17 +1,21 @@
 package com.goal98.flipdroid.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
+import android.net.Uri;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.style.ParagraphStyle;
+import android.text.util.Linkify;
 import android.util.FloatMath;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.*;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -194,7 +198,7 @@ public class ContentLoadedView extends ArticleView {
                 StringBuilder sb = new StringBuilder("<br/>");
                 String objectBody = uiObject.getObjectBody();
                 String formatted = format(objectBody);
-                if(formatted.trim().length()==0)
+                if (formatted.trim().length() == 0)
                     continue;
 
                 sb.append(formatted);
@@ -212,12 +216,13 @@ public class ContentLoadedView extends ArticleView {
                 }
                 sb.append("<br/>");
                 tv.setText(Html.fromHtml(sb.toString()));
+                tv.setAutoLinkMask(Linkify.WEB_URLS);
                 contentHolderView.addView(tv, textLayoutParams);
             }
 
 
             if (uiObject.getType().equals(TikaUIObject.TYPE_IMAGE)) {
-                if(!toLoadImage)
+                if (!toLoadImage)
                     continue;
                 ImageInfo imageInfo = ((ImageInfo) uiObject);
                 String url = imageInfo.getUrl();
@@ -251,14 +256,24 @@ public class ContentLoadedView extends ArticleView {
 
             }
         }
-        TextView tv = new TextView(this.getContext());
-        if (deviceInfo.isLargeScreen()) {
-            tv.setPadding(0, 15, 0, 0);
-        } else {
-            tv.setPadding(0, 10, 0, 0);
-        }
-        tv.setText(Html.fromHtml("<br>"));
-        contentHolderView.addView(tv, textLayoutParams);
+//        TextView tv = new TextView(this.getContext());
+//        if (deviceInfo.isLargeScreen()) {
+//            tv.setPadding(0, 15, 0, 0);
+//        } else {
+//            tv.setPadding(0, 10, 0, 0);
+//        }
+//        tv.setText(Html.fromHtml("<br>"));
+//        contentHolderView.addView(tv, textLayoutParams);
+        Button viewSource = (Button) layout.findViewById(R.id.viewSource);
+            viewSource.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, deviceInfo.getHeight()/12));
+        viewSource.setOnClickListener(new OnClickListener() {
+            public void onClick(View view) {
+                String url = article.getSourceURL();
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                ContentLoadedView.this.getContext().startActivity(intent);
+            }
+        });
     }
 
     private String format(String paragraph) {

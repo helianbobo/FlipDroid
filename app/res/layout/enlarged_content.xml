@@ -10,15 +10,19 @@
                   android:layout_height="wrap_content" android:paddingLeft="15dip" android:paddingRight="15dip"
                   android:paddingTop="2dip"></TextView>
     </LinearLayout>
-    <ScrollView android:id="@+id/wrapper" android:layout_width="fill_parent" android:layout_margin="4dip"
+    <ScrollView android:id="@+id/wrapper" android:layout_width="fill_parent" android:layout_marginTop="4dip"
+                android:layout_marginLeft="4dip"
+                android:layout_marginRight="4dip"
+                android:layout_marginBottom="40dip"
                 android:layout_height="wrap_content" android:scrollbars="none" android:paddingLeft="16dip"
                 android:paddingRight="16dip"
                 android:scrollbarStyle="outsideOverlay">
         <LinearLayout android:orientation="vertical" android:layout_width="fill_parent"
                       android:layout_height="wrap_content">
             <LinearLayout android:id="@+id/reference"
-                         android:visibility="gone" android:layout_width="fill_parent"
-                          android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="left|center_vertical">
+                          android:visibility="gone" android:layout_width="fill_parent"
+                          android:layout_height="wrap_content" android:orientation="horizontal"
+                          android:gravity="left|center_vertical">
 
             </LinearLayout>
             <LinearLayout android:gravity="top|center_horizontal" android:id="@+id/referenceContent"
@@ -35,7 +39,8 @@
                           android:gravity="center"
                           android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="5dip"
                           android:paddingTop="2dip" android:paddingBottom="2dip"></TextView>
-                <com.goal98.android.WebImageView android:id="@+id/portrait" webimage:autoLoad="false" webimage:roundImage="true"
+                <com.goal98.android.WebImageView android:id="@+id/portrait" webimage:autoLoad="false"
+                                                 webimage:roundImage="true"
                                                  android:layout_height="16dip" webimage:defaultWidth="16"
                                                  webimage:defaultHeight="16"
                                                  android:layout_width="16dip"
@@ -59,7 +64,23 @@
                 <!--android:paddingTop="10dip" android:paddingBottom="10dip"></TextView>-->
 
             </LinearLayout>
+            <Button android:id="@+id/viewSource"
+                    android:layout_width="fill_parent"
+                    android:layout_height="50dip"
+                    android:background="@drawable/add_button"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
 
+                    android:shadowColor="@color/blue"
+                    android:shadowDx="1"
+                    android:shadowDy="2"
+                    android:shadowRadius="4"
+
+                    android:paddingBottom="5dip"
+                    android:layout_margin="5dp"
+                    android:text="@string/view_source"/>
         </LinearLayout>
+
     </ScrollView>
 </LinearLayout>

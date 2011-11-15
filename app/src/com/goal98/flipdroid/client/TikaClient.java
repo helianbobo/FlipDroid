@@ -124,6 +124,12 @@ public class TikaClient {
         } catch (JSONException e) {
 
         }
+        String sourceURL = null;
+        try {
+            sourceURL = (String) s.get("sourceURL");
+        } catch (JSONException e) {
+
+        }
         List<String> images = new ArrayList<String>();
         try {
             JSONArray imagesArr = (JSONArray) s.get("images");
@@ -138,6 +144,7 @@ public class TikaClient {
         tikaExtractResponse.setContent(content);
         tikaExtractResponse.setTitle(title);
         tikaExtractResponse.setImages(images);
+        tikaExtractResponse.setSourceURL(sourceURL);
         return tikaExtractResponse;
     }
 
