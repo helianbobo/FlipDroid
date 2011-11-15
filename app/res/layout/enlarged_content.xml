@@ -67,16 +67,7 @@
             <Button android:id="@+id/viewSource"
                     android:layout_width="fill_parent"
                     android:layout_height="50dip"
-                    android:background="@drawable/add_button"
-                    android:textColor="@color/white"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
-
-                    android:shadowColor="@color/blue"
-                    android:shadowDx="1"
-                    android:shadowDy="2"
-                    android:shadowRadius="4"
-
+                    style="@style/Button"
                     android:paddingBottom="5dip"
                     android:layout_margin="5dp"
                     android:text="@string/view_source"/>

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.model.Article;
+import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.PrettyTimeUtil;
@@ -265,13 +266,17 @@ public class ContentLoadedView extends ArticleView {
 //        tv.setText(Html.fromHtml("<br>"));
 //        contentHolderView.addView(tv, textLayoutParams);
         Button viewSource = (Button) layout.findViewById(R.id.viewSource);
-            viewSource.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, deviceInfo.getHeight()/12));
+        viewSource.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, deviceInfo.getHeight() / 12));
         viewSource.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 String url = article.getSourceURL();
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(url));
-                ContentLoadedView.this.getContext().startActivity(intent);
+                if (url != null) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(url));
+                    ContentLoadedView.this.getContext().startActivity(intent);
+                }else{
+                    AlarmSender.sendInstantMessage(R.string.original_url_is_not_available, getContext());
+                }
             }
         });
     }
