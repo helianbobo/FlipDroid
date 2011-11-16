@@ -67,8 +67,10 @@
             <Button android:id="@+id/viewSource"
                     android:layout_width="fill_parent"
                     android:layout_height="50dip"
+                    android:drawableLeft="@drawable/ic_action_open_original_url"
                     style="@style/Button"
-                    android:paddingBottom="5dip"
+                    android:paddingLeft="80dp"
+                    android:paddingRight="80dp"
                     android:layout_margin="5dp"
                     android:text="@string/view_source"/>
         </LinearLayout>
