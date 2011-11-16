@@ -220,10 +220,7 @@ public class WeiboPageView extends FrameLayout {
         content = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.content);
         final LinearLayout contentWrapper = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.contentWrapper);
 
-        content.setVisibility(INVISIBLE);
-
-
-        contentWrapper.startAnimation(fadeinBoard);
+        articleView.startAnimation(fadeinArticle);
 
     }
 
