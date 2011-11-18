@@ -29,7 +29,7 @@ public class Constants {
     public static final String TYPE_FLIPDROID = "FLIPDROID";
     public static final String TYPE_BAIDUSEARCH="BAIDUSEARCH";
     public static final String TYPE_TAOBAO="TAOBAO";
-    public static final String TIKA_HOST="www.tika.it";
+    public static String TIKA_HOST="www.tika.it";
     public static final int LINE_COLOR=0xffDDDDDD;
     public static final int LOADED_TEXT_COLOR=0xff232323;
 

@@ -12,6 +12,8 @@
 
     <string name="sina_weibo">Sina Weibo</string>
 
+    <string name="key_tika_host">key_host</string>
+
     <string name="key_anim_flip_duration_preference">anim_flip_duration</string>
     <string name="title_anim_flip_duration_preference">Flip Duration</string>
     <string name="summary_anim_flip_duration_preference">Flip Duration(ms)</string>

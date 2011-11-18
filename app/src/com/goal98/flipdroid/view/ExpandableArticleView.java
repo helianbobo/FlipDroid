@@ -118,9 +118,9 @@ public abstract class ExpandableArticleView extends ArticleView {
         int scaleTextSize = scaled ? textSize - 3 : textSize;
         contentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_CONTENT);
         if (!smallScreen)
-            contentView.setPadding(2, 8, 2, 8);
+            contentView.setPadding(5, 8, 5, 8);
         else
-            contentView.setPadding(2, 4, 2, 4);
+            contentView.setPadding(5, 4, 5, 4);
 
         contentView.setTextColor(0xff232323);
         int maxLine = scaled ? maxLines + (smallScreen ? 0 : 1) : maxLines;
@@ -220,8 +220,8 @@ public abstract class ExpandableArticleView extends ArticleView {
                                 extractResponse = tc.extract(url);
                             } catch (Exception e) {
                                 Log.e(TAG, e.getMessage(), e);
-                                article.setTitle(url);
-                                article.setContent(getContext().getString(R.string.tikaservererror));
+                                article.setTitle(getContext().getString(R.string.tikaservererror) + " \n" + url);
+                                article.setContent(article.getStatus());
                                 return article;
                             }
                             //Log.d("Weibo view", "preloading " + url + " done");

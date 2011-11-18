@@ -6,22 +6,19 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Rect;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.Window;
-import com.goal98.android.ImageLoader;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
-import com.goal98.flipdroid.model.SourceUpdateManager;
-import com.goal98.flipdroid.model.cachesystem.SourceCache;
+import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.GestureUtil;
-import com.goal98.flipdroid.util.NetworkUtil;
 
 
 public class CoverActivity extends Activity {
@@ -60,6 +57,10 @@ public class CoverActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cover);
+
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Constants.TIKA_HOST = preferences.getString(getString(R.string.key_tika_host), Constants.TIKA_HOST);
+
         this.findViewById(R.id.flipbar).post(new Runnable() {
             public void run() {
                 DeviceInfo.getInstance(CoverActivity.this);
