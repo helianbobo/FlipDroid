@@ -65,7 +65,7 @@ public class Tika {
             }
 
             if (result == null || (result != null && result.getContent() == null)) {
-                System.out.println("db cache miss...");
+                System.out.println(Thread.currentThread().getName() +  " db cache miss...");
 
                 URL url = new URL(urlString);
                 HttpURLConnection conn = URLConnectionUtil.decorateURLConnection(url);
@@ -73,7 +73,7 @@ public class Tika {
                 final int responseCode = conn.getResponseCode();
                 System.out.println("responseCode " + responseCode);
                 if (responseCode < 200 || responseCode > 299) {
-                    return new URLAbstract();
+                    return null;
                 }
 
                 String originalURLString = conn.getURL().toString();

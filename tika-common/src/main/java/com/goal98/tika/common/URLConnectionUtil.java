@@ -15,8 +15,8 @@ public class URLConnectionUtil {
     public static HttpURLConnection decorateURLConnection(URL touchingImageURL) throws IOException {
         HttpURLConnection httpConnection = (HttpURLConnection) (touchingImageURL
                 .openConnection());
-        httpConnection.setConnectTimeout(30000);
-        httpConnection.setReadTimeout(30000);
+        httpConnection.setConnectTimeout(2000);
+        httpConnection.setReadTimeout(3000);
 
         httpConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
         return httpConnection;

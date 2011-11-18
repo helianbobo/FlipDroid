@@ -1,5 +1,6 @@
 package com.goal98.flipdroid.client;
 
+import android.util.Log;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -23,6 +24,9 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class TikaClient {
+
+    private String TAG = this.getClass().getName();
+
     private String host;
 
     public TikaClient(String host) {
@@ -192,7 +196,7 @@ public class TikaClient {
                 throw new TikaClientException();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
             throw new TikaClientException(url, e);  //To change body of catch statement use File | Settings | File Templates.
         }
     }

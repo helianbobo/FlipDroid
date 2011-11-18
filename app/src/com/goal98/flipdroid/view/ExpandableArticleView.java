@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -36,6 +37,9 @@ import java.util.concurrent.*;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class ExpandableArticleView extends ArticleView {
+
+    private String TAG = this.getClass().getName();
+
     protected ViewSwitcher switcher;
     protected ArticleView loadedArticleView;
     //    protected LinearLayout enlargedView;
@@ -215,7 +219,9 @@ public abstract class ExpandableArticleView extends ArticleView {
                             try {
                                 extractResponse = tc.extract(url);
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                Log.e(TAG, e.getMessage(), e);
+                                article.setTitle(url);
+                                article.setContent(getContext().getString(R.string.tikaservererror));
                                 return article;
                             }
                             //Log.d("Weibo view", "preloading " + url + " done");
