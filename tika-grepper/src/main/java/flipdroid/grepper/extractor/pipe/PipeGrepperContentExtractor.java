@@ -16,15 +16,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class PipeGrepperContentExtractor implements flipdroid.grepper.extractor.GrepperContentExtractor {
-
-    private List<String> images;
-    private String title;
-
-    public List<String> getImages() {
-        return images;
-    }
-
-    public String fireAbstract(byte[] data, Charset charset) throws GrepperException {
+    public ExtractResult fireAbstract(byte[] data, Charset charset) throws GrepperException {
         final BoilerpipeExtractor extractor;
         final HTMLHighlighter hh;
 
@@ -47,18 +39,14 @@ public class PipeGrepperContentExtractor implements flipdroid.grepper.extractor.
                 hh = HTMLHighlighter.newExtractingInstance();
             }
             String abstractText = hh.process(new HTMLDocument(data, charset), extractor).trim();
-            images = hh.images;
-            this.title = hh.getTitle();
-
-            return abstractText;
+            ExtractResult result = new ExtractResult();
+            result.images = hh.images;
+            result.title = hh.getTitle();
+            result.abstractText = abstractText;
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
             throw new GrepperException(e);
         }
-    }
-
-
-    public String getTitle() {
-        return title;
     }
 }

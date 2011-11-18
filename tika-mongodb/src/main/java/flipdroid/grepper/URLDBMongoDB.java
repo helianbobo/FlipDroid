@@ -40,7 +40,7 @@ public class URLDBMongoDB implements URLDBInterface {
     public URLAbstract find(String url) {
         BasicDBObject query = new BasicDBObject();
 
-        query.put("url", url);
+        query.put("indexURL", url);
 
         URLAbstract urlAbstract = null;
         try {
@@ -104,7 +104,7 @@ public class URLDBMongoDB implements URLDBInterface {
         urlAbstractObj.put("time", new Date());
         urlAbstractObj.put("state", "success");
         urlAbstractObj.put("reference", urlAbstract.getReferencedFrom());
-
+        urlAbstractObj.put("indexURL", urlAbstract.getIndexURL());
         try {
             db.getCollection(urlCollectionName).insert(urlAbstractObj);
         } catch (MongoException e) {
@@ -115,7 +115,7 @@ public class URLDBMongoDB implements URLDBInterface {
     public void insertOrUpdate(URLAbstract urlAbstract) {
         BasicDBObject query = new BasicDBObject();
 
-        query.put("url", urlAbstract.getUrl());
+        query.put("indexURL", urlAbstract.getUrl());
         try {
             DBObject urlFromDB = db.getCollection(urlCollectionName).findOne(query);
             if (urlFromDB == null) {

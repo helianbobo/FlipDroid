@@ -92,8 +92,11 @@ public class SinaArticleSource extends AbstractArticleSource {
                 article.setCreatedDate(status.getCreatedAt());
                 article.setPortraitImageUrl(status.getUser().getProfileImageURL());
                 article.setStatusId(status.getId());
-                if (filter.doFilter(article))
+
+                if (filter.doFilter(article)){
                     articleList.add(article);
+                    article.setSourceURL(article.extractURL());
+                }
             }
 
             pageLoaded++;

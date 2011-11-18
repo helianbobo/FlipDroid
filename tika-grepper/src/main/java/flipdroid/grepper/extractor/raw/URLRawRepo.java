@@ -1,6 +1,8 @@
 package flipdroid.grepper.extractor.raw;
 
 
+import com.goal98.tika.common.URLConnectionUtil;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +12,7 @@ import java.util.zip.GZIPInputStream;
 
 public class URLRawRepo {
 
-    private static URLRawRepo instance;
+    private static URLRawRepo instance = new URLRawRepo();
 
 
     private URLRawRepo() {
@@ -18,14 +20,10 @@ public class URLRawRepo {
     }
 
     public static URLRawRepo getInstance() {
-        if (instance == null) {
-            instance = new URLRawRepo();
-        }
         return instance;
     }
 
-    public byte[] fetch(String urlStr) throws URLRepoException, IOException {
-        URL url = new URL(urlStr);
+    public byte[] fetch(final URLConnection conn) throws URLRepoException, IOException {
         ByteArrayOutputStream bos = null;
         int retryCount = 0;
         try {
@@ -33,10 +31,6 @@ public class URLRawRepo {
                 return null;
 
             retryCount++;
-            final URLConnection conn = url.openConnection();
-            conn.setConnectTimeout(30000);
-            conn.setReadTimeout(30000);
-            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
             InputStream in = conn.getInputStream();
 
             final String encoding = conn.getContentEncoding();

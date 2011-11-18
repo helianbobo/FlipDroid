@@ -1,5 +1,6 @@
 package it.tika;
 
+import com.goal98.tika.common.URLConnectionUtil;
 import flipdroid.grepper.*;
 import flipdroid.grepper.exception.DBNotAvailableException;
 import flipdroid.grepper.extractor.ExtractorException;
@@ -28,8 +29,11 @@ import java.util.logging.Level;
  * To change this template use File | Settings | File Templates.
  */
 public class Tika {
-    private Tika() {
 
+    public WebpageExtractor webpageExtractor;
+
+    private Tika() {
+        webpageExtractor = new WebpageExtractor(new TikaImageService());
     }
 
     private static final Tika tika = new Tika();
@@ -46,24 +50,12 @@ public class Tika {
         return extract(urlString, nocache, null);
     }
 
-    public URLAbstract extract(String urlString, boolean nocache, String referencedFrom) {
+    public URLAbstract extract(final String urlString, boolean nocache, String referencedFrom) {
         URLAbstract result = null;
         System.out.println("fetching " + urlString);
         try {
             boolean bypassCache = nocache;
 
-            URL url = new URL(urlString);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
-            conn.setConnectTimeout(30000);
-            conn.setReadTimeout(30000);
-            final int responseCode = conn.getResponseCode();
-            System.out.println("responseCode " + responseCode);
-            if (responseCode < 200 || responseCode > 299) {
-                return new URLAbstract();
-            }
-
-            urlString = conn.getURL().toString();
             if (!bypassCache) {
                 try {
                     result = getDB().find(urlString);
@@ -74,7 +66,19 @@ public class Tika {
 
             if (result == null || (result != null && result.getContent() == null)) {
                 System.out.println("db cache miss...");
-                byte[] rawBytes = URLRawRepo.getInstance().fetch(urlString);
+
+                URL url = new URL(urlString);
+                HttpURLConnection conn = URLConnectionUtil.decorateURLConnection(url);
+
+                final int responseCode = conn.getResponseCode();
+                System.out.println("responseCode " + responseCode);
+                if (responseCode < 200 || responseCode > 299) {
+                    return new URLAbstract();
+                }
+
+                String originalURLString = conn.getURL().toString();
+
+                byte[] rawBytes = URLRawRepo.getInstance().fetch(conn);
                 if (rawBytes == null)
                     return null;
                 System.out.println("rawBytes length:" + rawBytes.length);
@@ -96,10 +100,15 @@ public class Tika {
                     System.out.println("can't fetch document");
                 } else {
                     result = new URLAbstract(rawBytes, cs);
-                    result.setUrl(urlString);
+                    result.setUrl(originalURLString);
                     result.setReferencedFrom(referencedFrom);
+                    result.getIndexURL().add(urlString);
+                    if (!urlString.equals(originalURLString))
+                        result.getIndexURL().add(originalURLString);
+
                     System.out.println("unextracted result:" + result.getRawContent());
-                    result = new WebpageExtractor(new TikaImageService()).extract(result);
+
+                    result = webpageExtractor.extract(result);
                     if (result != null && result.getContent() != null && result.getContent().length() != 0) {
                         try {
                             getDB().insertOrUpdate(result);

@@ -1,8 +1,10 @@
 package flipdroid.grepper.extractor;
 
 import flipdroid.grepper.extractor.pipe.GrepperException;
+import flipdroid.grepper.extractor.pipe.PipeGrepperContentExtractor;
 
 import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,5 +14,11 @@ import java.nio.charset.Charset;
  * To change this template use File | Settings | File Templates.
  */
 public interface GrepperContentExtractor {
-    String fireAbstract(byte[] data, Charset charset) throws GrepperException;
+    ExtractResult fireAbstract(byte[] data, Charset charset) throws GrepperException;
+
+    class ExtractResult {
+        public List<String> images;
+        public String title;
+        public String abstractText;
+    }
 }

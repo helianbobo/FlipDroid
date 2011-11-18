@@ -125,6 +125,17 @@ public class Article {
         return result;
     }
 
+//    public String extractLink() {
+//        if (status == null)
+//            return null;
+//        Matcher mat = urlPattern.matcher(status);
+//        boolean result = mat.find();
+//        if(result){
+//            return mat.group();
+//        }
+//       return null;
+//    }
+
     public String extractURL() {
         Matcher mat = urlPattern.matcher(status);
         mat.find();

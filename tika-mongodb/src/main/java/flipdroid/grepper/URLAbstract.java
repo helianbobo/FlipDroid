@@ -49,6 +49,16 @@ public class URLAbstract {
     public URLAbstract() {
     }
 
+    public List getIndexURL() {
+        return indexURL;
+    }
+
+    public void setIndexURL(List indexURL) {
+        this.indexURL = indexURL;
+    }
+
+    private List indexURL = new ArrayList();
+
     public URLAbstract(byte[] rawContent, Charset charset) {
         this.rawContent = rawContent;
         this.charset = charset;

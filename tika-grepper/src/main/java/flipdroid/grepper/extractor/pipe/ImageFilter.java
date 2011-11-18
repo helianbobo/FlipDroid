@@ -2,6 +2,7 @@ package flipdroid.grepper.extractor.pipe;
 
 import com.goal98.tika.common.ImageInfo;
 import com.goal98.tika.common.Paragraphs;
+import com.goal98.tika.common.URLConnectionUtil;
 import flipdroid.grepper.URLAbstract;
 import flipdroid.grepper.extractor.Extractor;
 import it.tika.mongodb.image.ImageService;
@@ -221,12 +222,7 @@ public class ImageFilter implements Extractor {
 
     private ImageInfo getImageInfo(String imageURL) throws IOException {
         URL touchingImageURL = new URL(imageURL);
-        HttpURLConnection httpConnection = (HttpURLConnection) (touchingImageURL
-                .openConnection());
-        httpConnection.setConnectTimeout(30000);
-        httpConnection.setReadTimeout(30000);
-
-        httpConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
+        HttpURLConnection httpConnection = URLConnectionUtil.decorateURLConnection(touchingImageURL);
         int responseCode = httpConnection.getResponseCode();
         if (responseCode < 200 || responseCode > 299) {
             ImageInfo ii = new InvalidImageInfo();
@@ -254,16 +250,14 @@ public class ImageFilter implements Extractor {
 
     }
 
+
+
     private int getFileSize(URL url) {
         int fileLength = -1;
 
         InputStream is = null;
         try {
-            HttpURLConnection httpConnection = (HttpURLConnection) (url
-                    .openConnection());
-            httpConnection.setConnectTimeout(30000);
-            httpConnection.setReadTimeout(30000);
-            httpConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6");
+            HttpURLConnection httpConnection = URLConnectionUtil.decorateURLConnection(url);
             int responseCode = httpConnection.getResponseCode();
             if (responseCode < 200 || responseCode > 299) {
                 return -1;
