@@ -10,14 +10,21 @@
                   android:layout_height="wrap_content" android:paddingLeft="15dip" android:paddingRight="15dip"
                   android:paddingTop="2dip"></TextView>
     </LinearLayout>
-    <ScrollView android:id="@+id/wrapper" android:layout_width="fill_parent" android:layout_marginTop="4dip"
+    <ScrollView android:id="@+id/wrapper" android:layout_width="fill_parent"
+                android:layout_marginTop="4dip"
                 android:layout_marginLeft="4dip"
                 android:layout_marginRight="4dip"
                 android:layout_marginBottom="40dip"
-                android:layout_height="wrap_content" android:scrollbars="none" android:paddingLeft="16dip"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:paddingLeft="16dip"
                 android:paddingRight="16dip"
+
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+
                 android:scrollbarStyle="outsideOverlay">
-        <LinearLayout android:orientation="vertical" android:layout_width="fill_parent"
+        <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_marginBottom="5dp"
                       android:layout_height="wrap_content">
             <LinearLayout android:id="@+id/reference"
                           android:visibility="gone" android:layout_width="fill_parent"
@@ -54,8 +61,15 @@
                           android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="2dip"
                           android:paddingTop="3dip" android:paddingBottom="2dip"></TextView>
             </LinearLayout>
-            <LinearLayout android:orientation="vertical" android:layout_width="fill_parent"
-                          android:layout_height="wrap_content" android:id="@+id/contentHolder" android:gravity="center">
+            <LinearLayout android:orientation="vertical"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/contentHolder"
+
+                          android:layout_marginTop="5dp"
+                          android:layout_marginBottom="10dp"
+
+                          android:gravity="center">
 
                 <!--<TextView android:id="@+id/content" android:layout_width="fill_parent"-->
                 <!--android:textSize="18dip"-->
@@ -64,6 +78,7 @@
                 <!--android:paddingTop="10dip" android:paddingBottom="10dip"></TextView>-->
 
             </LinearLayout>
+
             <Button android:id="@+id/viewSource"
                     android:layout_width="fill_parent"
                     android:layout_height="50dip"
@@ -71,7 +86,8 @@
                     style="@style/Button"
                     android:paddingLeft="80dp"
                     android:paddingRight="80dp"
-                    android:layout_margin="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
                     android:text="@string/view_source"/>
         </LinearLayout>
 

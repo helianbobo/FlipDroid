@@ -191,10 +191,10 @@ public class ContentLoadedView extends ArticleView {
                 tv.setGravity(Gravity.LEFT | Gravity.TOP);
                 if (uiObject.getObjectBody().startsWith("<p><blockquote>")) {
                     style = "<p><blockquote>";
-                    tv.setPadding(2 + txtSize * 1, 3, 2 + txtSize * 1, 3);
+                    tv.setPadding(2 + txtSize * 2, 3, 2 + txtSize * 2, 3);
                     tv.setBackgroundColor(Color.parseColor("#DDDDDD"));
                 } else {
-                    tv.setPadding(2, 3, 2, 3);
+                    tv.setPadding(2 + txtSize, 3, 2 + txtSize, 3);
                 }
                 StringBuilder sb = new StringBuilder("<br/>");
                 String objectBody = uiObject.getObjectBody();
@@ -207,7 +207,7 @@ public class ContentLoadedView extends ArticleView {
                 while (i + 1 < paragraphsList.size()) {
                     final String nextParagraph = paragraphsList.get(i + 1).getObjectBody();
                     if (nextParagraph.startsWith(style)) {
-                        sb.append("<br/>");
+                        sb.append("<br/><br/>");
                         formatted = format(nextParagraph);
                         sb.append(formatted);
                         i++;
@@ -215,7 +215,6 @@ public class ContentLoadedView extends ArticleView {
                         break;
                     }
                 }
-                sb.append("<br/>");
                 tv.setText(Html.fromHtml(sb.toString()));
                 tv.setAutoLinkMask(Linkify.WEB_URLS);
                 contentHolderView.addView(tv, textLayoutParams);
