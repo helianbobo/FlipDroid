@@ -21,7 +21,7 @@ public class SourceCache {
         return sourceCache;
     }
 
-    public SourceCache(Context context) {
+    private SourceCache(Context context) {
         contentDB = new SourceContentDB(context);
     }
 

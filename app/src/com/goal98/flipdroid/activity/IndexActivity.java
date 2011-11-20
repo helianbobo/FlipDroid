@@ -187,7 +187,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                     } catch (InterruptedException e) {
 
                     }
-                    SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, new SourceCache(IndexActivity.this), IndexActivity.this);
+                    SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this);
                     updateManager.updateAll();
                     updated = true;
                 }
