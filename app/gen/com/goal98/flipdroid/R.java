@@ -109,20 +109,21 @@ containing a value of this type.
         public static final int roundtop=0x7f02001b;
         public static final int rss=0x7f02001c;
         public static final int send=0x7f02001d;
-        public static final int share=0x7f02001e;
-        public static final int sina=0x7f02001f;
-        public static final int tencent=0x7f020020;
-        public static final int tips_1=0x7f020021;
-        public static final int tips_10=0x7f020022;
-        public static final int tips_2=0x7f020023;
-        public static final int tips_3=0x7f020024;
-        public static final int tips_4=0x7f020025;
-        public static final int tips_5=0x7f020026;
-        public static final int tips_6=0x7f020027;
-        public static final int tips_7=0x7f020028;
-        public static final int tips_8=0x7f020029;
-        public static final int tips_9=0x7f02002a;
-        public static final int twitter=0x7f02002b;
+        public static final int shadow=0x7f02001e;
+        public static final int share=0x7f02001f;
+        public static final int sina=0x7f020020;
+        public static final int tencent=0x7f020021;
+        public static final int tips_1=0x7f020022;
+        public static final int tips_10=0x7f020023;
+        public static final int tips_2=0x7f020024;
+        public static final int tips_3=0x7f020025;
+        public static final int tips_4=0x7f020026;
+        public static final int tips_5=0x7f020027;
+        public static final int tips_6=0x7f020028;
+        public static final int tips_7=0x7f020029;
+        public static final int tips_8=0x7f02002a;
+        public static final int tips_9=0x7f02002b;
+        public static final int twitter=0x7f02002c;
     }
     public static final class id {
         public static final int Button01=0x7f0a000c;
