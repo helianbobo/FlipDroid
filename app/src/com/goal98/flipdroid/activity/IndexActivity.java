@@ -20,10 +20,7 @@ import com.goal98.flipdroid.model.cachesystem.CacheToken;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
-import com.goal98.flipdroid.util.Constants;
-import com.goal98.flipdroid.util.DeviceInfo;
-import com.goal98.flipdroid.util.EachCursor;
-import com.goal98.flipdroid.util.ManagedCursor;
+import com.goal98.flipdroid.util.*;
 
 import java.util.*;
 
@@ -178,22 +175,23 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         bindAdapter();
 
         adapter.notifyDataSetChanged();
-        new Thread(new Runnable() {
+        if (NetworkUtil.isNetworkAvailable(this)) {
+            new Thread(new Runnable() {
 
-            public void run() {
-                if (!updated) {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
+                public void run() {
+                    if (!updated) {
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
 
+                        }
+                        SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this);
+                        updateManager.updateAll();
+                        updated = true;
                     }
-                    SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this);
-                    updateManager.updateAll();
-                    updated = true;
                 }
-            }
-        }).start();
-
+            }).start();
+        }
     }
 
     @Override

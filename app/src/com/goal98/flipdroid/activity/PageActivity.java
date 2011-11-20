@@ -312,14 +312,13 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                     }
                 }).start();
 
-                if (cachedArticleSource != null && !updated) {
-                    System.out.println("animation update");
+                if (cachedArticleSource != null && !updated && NetworkUtil.isNetworkAvailable(PageActivity.this)) {
+                    System.out.println("check update");
                     cachedArticleSource.checkUpdate();
                 }
 
                 pageIndexView.setDot(repo.getTotal(), currentPageIndex);
                 header.setPageView(current);
-                ////System.out.println("last page" + current.isLastPage());
                 if (current.isLastPage()) {
                     overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
                     PageActivity.this.finish();
