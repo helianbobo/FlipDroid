@@ -175,7 +175,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         bindAdapter();
 
         adapter.notifyDataSetChanged();
-        if (NetworkUtil.isNetworkAvailable(this)) {
+        if (NetworkUtil.isNetworkAvailable()) {
             new Thread(new Runnable() {
 
                 public void run() {

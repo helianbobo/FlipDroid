@@ -22,6 +22,7 @@ import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.GestureUtil;
+import com.goal98.flipdroid.util.NetworkUtil;
 
 
 public class CoverActivity extends Activity {
@@ -59,6 +60,9 @@ public class CoverActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        NetworkUtil.context = getApplicationContext();
+
         setContentView(R.layout.cover);
 
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
