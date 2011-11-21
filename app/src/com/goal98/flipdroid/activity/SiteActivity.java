@@ -83,6 +83,7 @@ public class SiteActivity extends Activity {
             if (convertView == null) {
                 imageButton = new ImageButton(mContext);
                 imageButton.setAdjustViewBounds(true);
+                imageButton.setBackgroundResource(R.drawable.site);
                 imageButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
             } else {
                 imageButton = (ImageButton) convertView;
