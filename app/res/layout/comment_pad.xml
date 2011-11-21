@@ -5,7 +5,7 @@
     <LinearLayout android:layout_marginTop="3dip" android:layout_marginRight="3dip"
                   android:layout_marginLeft="3dip" android:id="@+id/toolbar" android:orientation="horizontal"
                   android:layout_width="fill_parent" android:weightSum="7"
-                  android:layout_height="wrap_content" android:background="@color/lightgray">
+                  android:layout_height="wrap_content" android:background="@color/white">
         <LinearLayout android:layout_width="0dip" android:layout_weight="2"
                       android:layout_height="wrap_content" android:gravity="left">
             <ImageButton android:id="@+id/close" android:background="@drawable/close"

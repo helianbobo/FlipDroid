@@ -7,11 +7,11 @@
                   android:id="@+id/header"
                   android:layout_width="fill_parent"
                   android:layout_height="fill_parent" android:gravity="left|center_vertical"
-                  android:background="@color/lightgray" android:weightSum="100">
+                  android:background="@color/white" android:weightSum="100">
         <LinearLayout android:orientation="horizontal" android:paddingTop="2dip" android:paddingBottom="2dip"
                       android:layout_width="0dip" android:layout_weight="30"
                       android:layout_height="fill_parent" android:paddingLeft="5dip"
-                      android:background="@color/lightgray" android:layout_gravity="left" android:gravity="left">
+                      android:background="@color/white" android:layout_gravity="left" android:gravity="left">
             <ImageButton android:id="@+id/content" android:background="@drawable/ic_menu_home"
                          android:layout_width="wrap_content"
                          android:adjustViewBounds="true" android:scaleType="center"
@@ -19,7 +19,7 @@
         </LinearLayout>
         <com.goal98.android.WebImageView android:id="@+id/headerImage" webimage:autoLoad="false"
                                          android:src="@drawable/portrait" webimage:roundImage="true"
-                                         android:layout_height="50dip" webimage:defaultWidth="50"
+                                         android:layout_height="wrap_content" webimage:defaultWidth="50"
                                          webimage:defaultHeight="50" android:layout_margin="2dip"
                                          android:layout_width="0dip" android:layout_weight="10"></com.goal98.android.WebImageView>
 
@@ -34,9 +34,9 @@
 
     <LinearLayout android:id="@+id/toolbar" android:orientation="horizontal"
                   android:layout_width="fill_parent"
-                  android:layout_height="fill_parent" android:background="@color/lightgray" android:weightSum="100">
+                  android:layout_height="fill_parent" android:background="@color/white" android:weightSum="100">
         <LinearLayout android:layout_width="0dip" android:layout_weight="25" android:paddingLeft="5dip"  android:paddingTop="2dip" android:paddingBottom="2dip"
-                      android:layout_height="wrap_content" android:gravity="left" android:background="@color/lightgray">
+                      android:layout_height="wrap_content" android:gravity="left" android:background="@color/white">
             <ImageButton android:id="@+id/close" android:background="@drawable/close"
                          android:layout_width="fill_parent"  android:maxWidth="10dip"
                          android:adjustViewBounds="true" android:scaleType="center"

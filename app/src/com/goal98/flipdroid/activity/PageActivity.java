@@ -622,6 +622,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         if (sourceImageURL != null && sourceImageURL.length() != 0) {
             headerImageView.setImageUrl(sourceImageURL);
             headerImageView.loadImage();
+            headerImageView.setRoundImage(true);
+            headerImageView.setBackgroundResource(R.drawable.border);
         } else {
             int maxTitle = 7;
 

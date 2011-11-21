@@ -131,18 +131,10 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="jdk" jdkName="Android 2.3.3 Platform" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="Android 2.2 Platform" jdkType="Android SDK" />
     <orderEntry type="module" module-name="tika-common" />
     <orderEntry type="module" module-name="web-image-view" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://G:/android-sdk_r15-windows/android-sdk-windows/extras/android/support/v4/android-support-v4.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="android-support-v4" level="application" />
   </component>
 </module>
 
