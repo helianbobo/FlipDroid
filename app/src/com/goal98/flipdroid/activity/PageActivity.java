@@ -224,8 +224,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         contentImageButton = (ImageButton) findViewById(R.id.content);
         contentImageButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                PageActivity.this.finish();
+                finishActivity();
             }
         });
 //        pageInfo = (TextView)header.findViewById(R.id.pageInfo);
@@ -281,11 +280,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 }).start();
                 pageIndexView.setDot(repo.getTotal(), currentPageIndex);
                 header.setPageView(current);
-                ////System.out.println("last page" + current.isLastPage());
-                if (current.isLastPage()) {
-                    overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                    PageActivity.this.finish();
-                }
+
             }
 
             public void onAnimationRepeat(Animation animation) {
@@ -320,8 +315,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 pageIndexView.setDot(repo.getTotal(), currentPageIndex);
                 header.setPageView(current);
                 if (current.isLastPage()) {
-                    overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                    PageActivity.this.finish();
+                    finishActivity();
                 }
 //                current.startAnimation(fadeOutPageView);
             }
@@ -1315,8 +1309,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         if (enlargedMode)
             current.closeEnlargedView();
         else {
-            overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-            PageActivity.this.finish();
+            finishActivity();
         }
         return;
     }

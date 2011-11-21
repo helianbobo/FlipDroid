@@ -42,7 +42,7 @@
     <string name="my_timeline">My Timeline</string>
     <string name="my_timeline_desc">The tweets I am follwing.</string>
 
-    <string name="msg_no_more_page">No more smartPage to load.</string>
+    <string name="msg_no_more_page">No more article to load.</string>
 
     <string name="sinaweiboheader">Sina</string>
     <string name="loading">loading...</string>
