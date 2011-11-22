@@ -19,7 +19,7 @@
         "name": "新浪体育",
         "id": "3",
         "desc": "新浪体育新闻",
-        "image_url": "http://www.36kr.com/wp-content/uploads/2011/04/36kr-Logo.png",
+        "image_url": "http://i3.sinaimg.cn/ty/deco/2010/0601/logo_home_sports_nonike2.gif",
         "content_url":"http://rss.sina.com.cn/roll/sports/hot_roll.xml",
         "cat":"体育"
     },
@@ -27,7 +27,7 @@
         "name": "36氪",
         "id": "4",
         "desc": "关注互联网创业",
-        "image_url": "http://www.36kr.com/wp-content/uploads/2011/04/36kr-Logo.png",
+        "image_url": "http://www.36kr.com/static/image/logo.png",
         "content_url":"http://www.36kr.com/feed/",
         "cat":"互联网"
     },
@@ -143,7 +143,7 @@
         "name": "Leica中文摄影杂志",
         "id": "18",
         "desc": "...让你的摄影与众不同...",
-        "image_url": "http://www.feedsky.com/feed/leica/sc/gif",
+        "image_url": "http://www.leica.org.cn/template/leica/images/logo.gif",
         "content_url":"http://feed.feedsky.com/leica",
         "cat":"摄影"
     }
@@ -370,7 +370,7 @@
         "name": "Tech2IPO",
         "id": "48",
         "desc": "科技创新创业平台",
-        "image_url": "",
+        "image_url": "http://tech2ipo.com/wp-content/themes/newThemeBySeeker/images/logo-185-60.png",
         "content_url":"http://tech2ipo.com/feed/rss/",
         "cat":"互联网"
     }
@@ -378,7 +378,7 @@
         "name": "互联网的那点事...",
         "id": "49",
         "desc": "隐居在沙漠里的blog，互联网的那点事......",
-        "image_url": "http://www.feedsky.com/feed/alibuybuy/sc/gif",
+        "image_url": "http://www.alibuybuy.com/wp-content/themes/WPortal-Blue-abb/images/logo.gif",
         "content_url":"http://feed.feedsky.com/alibuybuy",
         "cat":"互联网"
     }]
