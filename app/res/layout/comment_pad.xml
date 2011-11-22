@@ -8,10 +8,16 @@
                   android:layout_height="wrap_content" android:background="@color/white">
         <LinearLayout android:layout_width="0dip" android:layout_weight="2"
                       android:layout_height="wrap_content" android:gravity="left">
-            <ImageButton android:id="@+id/close" android:background="@drawable/close"
-                         android:layout_width="wrap_content"
-                         android:adjustViewBounds="true" android:scaleType="centerInside"
-                         android:layout_height="35dip" android:layout_gravity="left"/>
+
+
+            <Button android:layout_width="fill_parent"
+                    android:layout_height="35dp"
+                    android:text="@string/button_close"
+                    style="@style/CloseButton"
+                    android:layout_margin="3dp"
+                    android:id="@+id/close"
+                    android:layout_gravity="left"/>
+
         </LinearLayout>
         <TextView android:layout_width="0dip" android:padding="5dip" android:textStyle="bold" android:textSize="17dip"
                   android:layout_height="wrap_content" android:gravity="center"
@@ -19,10 +25,15 @@
         <LinearLayout android:layout_width="0dip" android:layout_weight="2" android:orientation="horizontal"
                       android:layout_height="wrap_content" android:gravity="right|center_vertical"
                       android:layout_gravity="right|center_vertical">
-            <ImageButton android:id="@+id/send" android:background="@drawable/send"
-                         android:layout_width="wrap_content" android:maxHeight="25dip"
-                         android:adjustViewBounds="true" android:scaleType="centerInside"
-                         android:layout_height="fill_parent" android:layout_gravity="right"/>
+
+            <Button android:layout_width="fill_parent"
+                    android:layout_height="35dp"
+                    android:text="@string/button_send"
+                    style="@style/Button"
+                    android:layout_margin="3dp"
+                    android:id="@+id/send"
+                    android:layout_gravity="right"/>
+
         </LinearLayout>
     </LinearLayout>
 

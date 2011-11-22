@@ -82,4 +82,11 @@
         <item name="android:shadowRadius">4</item>
 
     </style>
+
+    <style name="CloseButton" parent="Button">
+        <item name="android:background">@drawable/close_button</item>
+
+        <item name="android:shadowColor">@color/red</item>
+
+    </style>
 </resources>

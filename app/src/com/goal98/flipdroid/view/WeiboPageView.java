@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -18,6 +19,7 @@ import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.activity.FlipdroidApplications;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.activity.SinaAccountActivity;
+import com.goal98.flipdroid.activity.SiteActivity;
 import com.goal98.flipdroid.exception.NoSinaAccountBindedException;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.Constants;
@@ -225,87 +227,135 @@ public class WeiboPageView extends FrameLayout {
     }
 
     private void setupToolBar(final ArticleView articleView, final ExpandableArticleView weiboArticleView, HeaderView header) {
-        ImageView closeButton = (ImageView) header.findViewById(R.id.close);
+        Button closeButton = (Button) header.findViewById(R.id.close);
 
-        closeButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                closeEnlargedView(weiboArticleView);
+        closeButton.setOnTouchListener(new View.OnTouchListener() {
+
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        closeEnlargedView(weiboArticleView);
+                        break;
+                    default:
+                        break;
+                }
+
+                return false;
             }
+
         });
 
         ImageView retweetButton = (ImageView) header.findViewById(R.id.retweet);
+        retweetButton.setOnTouchListener(new View.OnTouchListener() {
 
-        retweetButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                if (!pageActivity.sinaAlreadyBinded()) {
-                    pageActivity.showDialog(PageActivity.PROMPT_OAUTH);
-                    return;
-                }
+            public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                commentShadowLayer = new LinearLayout(WeiboPageView.this.getContext());
-                commentShadowLayer.setBackgroundColor(Color.parseColor("#77000000"));
-                commentShadowLayer.setPadding(14, 20, 14, 20);
-                LinearLayout commentPad = (LinearLayout) inflater.inflate(R.layout.comment_pad, null);
-                WebImageView sourceImage = (WebImageView) commentPad.findViewById(R.id.source_image);
-                TextView sourceName = (TextView) commentPad.findViewById(R.id.source_name);
-                ImageView closeBtn = (ImageView) commentPad.findViewById(R.id.close);
-                ImageView sendBtn = (ImageView) commentPad.findViewById(R.id.send);
-                closeBtn.setOnClickListener(new OnClickListener() {
-                    public void onClick(View view) {
-                        WeiboPageView.this.removeView(commentShadowLayer);
-                    }
-                });
-
-                TextView status = (TextView) commentPad.findViewById(R.id.status);
-                final EditText commentEditText = (EditText) commentPad.findViewById(R.id.comment);
-                commentEditText.addTextChangedListener(new TextWatcher() {
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
-
-                    public void beforeTextChanged(CharSequence s, int start, int count,
-                                                  int after) {
-                    }
-
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
-
-                sendBtn.setOnClickListener(new OnClickListener() {
-                    public void onClick(View view) {
-                        if (articleView.getArticle().getSourceType().equals(Constants.TYPE_SINA_WEIBO)) {
-                            try {
-                                pageActivity.comment(commentEditText.getText().toString(), articleView.getArticle().getStatusId());
-                            } catch (WeiboException e) {
-                                e.printStackTrace();
-                            } catch (NoSinaAccountBindedException e) {
-                                pageActivity.startActivity(new Intent(pageActivity, SinaAccountActivity.class));
-                            }
-                        } else {
-                            try {
-                                pageActivity.forward(commentEditText.getText().toString(), articleView.getArticle().extractURL());
-                            } catch (WeiboException e) {
-                                e.printStackTrace();
-                            } catch (NoSinaAccountBindedException e) {
-                                pageActivity.startActivity(new Intent(pageActivity, SinaAccountActivity.class));
-                            }
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        if (!pageActivity.sinaAlreadyBinded()) {
+                            pageActivity.showDialog(PageActivity.PROMPT_OAUTH);
+                            break;
                         }
 
-                        WeiboPageView.this.removeView(commentShadowLayer);
-                    }
-                });
-                if (articleView.getArticle().getPortraitImageUrl() != null) {
-                    sourceImage.setImageUrl(articleView.getArticle().getPortraitImageUrl().toExternalForm());
-                    sourceImage.loadImage();
+                        commentShadowLayer = new LinearLayout(WeiboPageView.this.getContext());
+                        commentShadowLayer.setBackgroundColor(Color.parseColor("#77000000"));
+                        commentShadowLayer.setPadding(14, 20, 14, 20);
+                        LinearLayout commentPad = (LinearLayout) inflater.inflate(R.layout.comment_pad, null);
+                        WebImageView sourceImage = (WebImageView) commentPad.findViewById(R.id.source_image);
+                        TextView sourceName = (TextView) commentPad.findViewById(R.id.source_name);
+                        Button closeBtn = (Button) commentPad.findViewById(R.id.close);
+                        Button sendBtn = (Button) commentPad.findViewById(R.id.send);
+
+                        closeBtn.setOnTouchListener(new View.OnTouchListener() {
+
+                            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                                switch (motionEvent.getAction()) {
+                                    case MotionEvent.ACTION_UP:
+                                        WeiboPageView.this.removeView(commentShadowLayer);
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                                return false;
+                            }
+
+                        });
+
+
+                        TextView status = (TextView) commentPad.findViewById(R.id.status);
+                        final EditText commentEditText = (EditText) commentPad.findViewById(R.id.comment);
+                        commentEditText.addTextChangedListener(new TextWatcher() {
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            }
+
+                            public void beforeTextChanged(CharSequence s, int start, int count,
+                                                          int after) {
+                            }
+
+                            public void afterTextChanged(Editable s) {
+
+                            }
+                        });
+
+                        sendBtn.setOnTouchListener(new View.OnTouchListener() {
+
+                            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                                switch (motionEvent.getAction()) {
+                                    case MotionEvent.ACTION_UP:
+                                        if (articleView.getArticle().getSourceType().equals(Constants.TYPE_SINA_WEIBO)) {
+                                            try {
+                                                pageActivity.comment(commentEditText.getText().toString(), articleView.getArticle().getStatusId());
+                                            } catch (WeiboException e) {
+                                                e.printStackTrace();
+                                            } catch (NoSinaAccountBindedException e) {
+                                                pageActivity.startActivity(new Intent(pageActivity, SinaAccountActivity.class));
+                                            }
+                                        } else {
+                                            try {
+                                                pageActivity.forward(commentEditText.getText().toString(), articleView.getArticle().extractURL());
+                                            } catch (WeiboException e) {
+                                                e.printStackTrace();
+                                            } catch (NoSinaAccountBindedException e) {
+                                                pageActivity.startActivity(new Intent(pageActivity, SinaAccountActivity.class));
+                                            }
+                                        }
+
+                                        WeiboPageView.this.removeView(commentShadowLayer);
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                                return false;
+                            }
+
+                        });
+
+                        if (articleView.getArticle().getPortraitImageUrl() != null) {
+                            sourceImage.setImageUrl(articleView.getArticle().getPortraitImageUrl().toExternalForm());
+                            sourceImage.loadImage();
+                        }
+
+                        sourceName.setText(articleView.getArticle().getAuthor());
+                        status.setText(articleView.getArticle().getStatus());
+
+                        commentShadowLayer.addView(commentPad, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
+                        WeiboPageView.this.addView(commentShadowLayer);
+                        break;
+                    default:
+                        break;
                 }
 
-                sourceName.setText(articleView.getArticle().getAuthor());
-                status.setText(articleView.getArticle().getStatus());
-
-                commentShadowLayer.addView(commentPad, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
-                WeiboPageView.this.addView(commentShadowLayer);
+                return false;
             }
+
         });
+
+
     }
 
     private void closeEnlargedView(ExpandableArticleView weiboArticleView) {

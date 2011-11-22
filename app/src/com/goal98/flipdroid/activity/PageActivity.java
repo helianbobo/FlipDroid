@@ -222,11 +222,23 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         ViewSwitcher headerSwitcher = (ViewSwitcher) findViewById(R.id.flipper);
         header = (HeaderView) findViewById(R.id.header);
         contentImageButton = (ImageButton) findViewById(R.id.content);
-        contentImageButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                finishActivity();
+        contentImageButton.setOnTouchListener(new View.OnTouchListener() {
+
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        finishActivity();
+                        break;
+                    default:
+                        break;
+                }
+
+                return false;
             }
+
         });
+
 //        pageInfo = (TextView)header.findViewById(R.id.pageInfo);
         headerText = (TextView) findViewById(R.id.headerText);
         headerImageView = (WebImageView) findViewById(R.id.headerImage);
@@ -850,7 +862,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private void finishActivity() {
-        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+        overridePendingTransition(R.anim.left_in, R.anim.fade);
         finish();
     }
 
@@ -1180,7 +1192,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private Animation buildFlipAnimation(final LinearLayout currentUpper, final LinearLayout currentBottom, final LinearLayout nextUpper, final LinearLayout nextBottom, final boolean forward) {
-        final float centerY = getWindowManager().getDefaultDisplay().getHeight()/2;
+        final float centerY = getWindowManager().getDefaultDisplay().getHeight() / 2;
         final float centerX = 160;
 
         getWindowManager().getDefaultDisplay().getHeight();

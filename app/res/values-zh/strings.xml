@@ -29,6 +29,8 @@
     <string name="button_add_new_account">添加新账户</string>
     <string name="button_add_new_source">添加新内容</string>
     <string name="button_login">登入</string>
+    <string name="button_close">关闭</string>
+    <string name="button_send">发送</string>
 
     <string name="my_timeline">我的微博</string>
     <string name="my_timeline_desc">我关注的微博</string>
