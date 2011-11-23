@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -128,6 +129,14 @@ public class TikaClient {
         } catch (JSONException e) {
 
         }
+        Date date = new Date();
+        try {
+            long time = s.getLong("createDate");
+            if(time!=0)
+                date =  new Date(time);
+        } catch (JSONException e) {
+
+        }
         String sourceURL = null;
         try {
             sourceURL = (String) s.get("sourceURL");
@@ -149,6 +158,7 @@ public class TikaClient {
         tikaExtractResponse.setTitle(title);
         tikaExtractResponse.setImages(images);
         tikaExtractResponse.setSourceURL(sourceURL);
+        tikaExtractResponse.setCreateDate(date);
         return tikaExtractResponse;
     }
 
