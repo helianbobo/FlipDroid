@@ -555,7 +555,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private void initSinaWeibo() {
+        System.setProperty("weibo4j.oauth.consumerKey", com.goal98.flipdroid.util.Constants.CONSUMER_KEY);
+        System.setProperty("weibo4j.oauth.consumerSecret", com.goal98.flipdroid.util.Constants.CONSUMER_SECRET);
+
         weibo = new WeiboExt();
+
         weibo.setHttpConnectionTimeout(5000);
         if (sinaToken == null)
             sinaToken = SinaAccountUtil.getToken(PageActivity.this);
