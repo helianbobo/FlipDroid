@@ -66,6 +66,7 @@ public class URLDBMongoDB implements URLDBInterface {
                 (String) urlFromDB.get("title"),
                 (String) urlFromDB.get("content"),
                 imageList);
+        urlAbstract.setCreateDate((Date) urlFromDB.get("time"));
         urlAbstract.setReferencedFrom((String) urlFromDB.get("reference"));
         return urlAbstract;
     }

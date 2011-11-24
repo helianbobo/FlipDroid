@@ -8,7 +8,7 @@ import java.util.Map;
 
 import com.goal98.flipdroid.model.GroupedSource;
 import com.goal98.flipdroid.model.Source;
-import com.goal98.flipdroid.model.SourceRepo;
+import com.goal98.flipdroid.model.RSSSourceRepo;
 import com.goal98.flipdroid.util.Constants;
 
 public class TaobaoSource {
@@ -42,7 +42,7 @@ public class TaobaoSource {
                 sourceList.add(result);
 
             
-            return SourceRepo.group(sourceList);
+            return RSSSourceRepo.group(sourceList);
 	} catch (Exception e) {
 	     
 	    e.printStackTrace();

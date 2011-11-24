@@ -1,5 +1,11 @@
 package com.goal98.tika.common;
 
+import sun.misc.IOUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -162,9 +168,6 @@ public class Paragraphs {
     }
 
     public static void main(String[] args) {
-        String a = "<p></p>";
-        Matcher m = PAT_TAG_P_NO_TEXT.matcher(a);
-        System.out.println(m.find());
     }
 
     class Text implements TikaUIObject {

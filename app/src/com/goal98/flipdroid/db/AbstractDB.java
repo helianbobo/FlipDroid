@@ -10,8 +10,11 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
 import android.util.Log;
 import com.goal98.flipdroid.model.Account;
+import com.goal98.flipdroid.model.RecommendSource;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.util.Constants;
+
+import java.util.Date;
 
 public abstract class AbstractDB {
 
@@ -98,6 +101,15 @@ public abstract class AbstractDB {
                         "PRIMARY KEY (" + URLDB.URL + ")" +
                         ");";
 
+        private static final String RECOMMAND_SOURCE_TABLE_CREATE =
+                "CREATE TABLE " + RecommendSource.TABLE_NAME + " (" +
+                        BaseColumns._ID + " INTEGER," +
+                        RecommendSource.KEY_BODY + " TEXT, " +
+                        RecommendSource.KEY_UPDATE_TIME + " LONG, " +
+                        RecommendSource.KEY_TYPE + " TEXT, " +
+                        "PRIMARY KEY (" + BaseColumns._ID + ")" +
+                        ");";
+
         private static final String SOURCE_CONTENT_TABLE_CREATE =
                 "CREATE TABLE " + SourceContentDB.TABLE_NAME + " (" +
                         BaseColumns._ID + " INTEGER," +
@@ -112,7 +124,6 @@ public abstract class AbstractDB {
                 " (" + Source.KEY_SOURCE_NAME + "," + Source.KEY_SOURCE_ID + "," + Source.KEY_SOURCE_TYPE + ")" +
                 " values ('FAKE', 'FAKE', '" + Constants.TYPE_FAKE + "');";
 
-
         public DBOpenHelper(Context context) {
             super(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);
         }
@@ -123,7 +134,18 @@ public abstract class AbstractDB {
             createSourceTable(sqLiteDatabase);
             createURLTable(sqLiteDatabase);
             createSourceContentTable(sqLiteDatabase);
+            createRecommandTable(sqLiteDatabase);
         }
+
+        private void createRecommandTable(SQLiteDatabase sqLiteDatabase) {
+            Log.w(this.getClass().getName(), "Creating table " + RecommendSource.TABLE_NAME);
+            try {
+                sqLiteDatabase.execSQL(RECOMMAND_SOURCE_TABLE_CREATE);
+            } catch (SQLException e) {
+                Log.e(this.getClass().getName(), e.getMessage(), e);
+            }
+        }
+
 
         private void createURLTable(SQLiteDatabase sqLiteDatabase) {
             Log.w(this.getClass().getName(), "Creating table " + URLDB.TABLE_NAME);
@@ -156,7 +178,6 @@ public abstract class AbstractDB {
             Log.w(this.getClass().getName(), "Creating table " + Source.TABLE_NAME);
             try {
                 sqLiteDatabase.execSQL(SOURCE_TABLE_CREATE);
-//                sqLiteDatabase.execSQL(SOURCE_INIT_DATA);
             } catch (SQLException e) {
                 Log.e(this.getClass().getName(), e.getMessage(), e);
             }
@@ -170,6 +191,7 @@ public abstract class AbstractDB {
             db.execSQL("DROP TABLE IF EXISTS " + Source.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + URLDB.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + SourceContentDB.TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + RecommendSource.TABLE_NAME);
             onCreate(db);
 
         }

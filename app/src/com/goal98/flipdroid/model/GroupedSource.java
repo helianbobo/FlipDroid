@@ -1,7 +1,5 @@
 package com.goal98.flipdroid.model;
 
-import com.goal98.flipdroid.R;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +35,7 @@ public class GroupedSource {
 
     public void addGroup(String keyName, String groupName) {
         Map<String, String> group = new HashMap<String, String>();
-        group.put(SourceRepo.KEY_NAME_GROUP, groupName);
+        group.put(RSSSourceRepo.KEY_NAME_GROUP, groupName);
         groups.add(group);
     }
 
