@@ -317,6 +317,7 @@ public class WeiboPageView extends FrameLayout {
                                         } else {
                                             try {
                                                 pageActivity.forward(commentEditText.getText().toString(), articleView.getArticle().getSourceURL());
+                                                Toast.makeText(pageActivity,R.string.share_success,2000).show();
                                             } catch (WeiboException e) {
                                                 e.printStackTrace();
                                             } catch (NoSinaAccountBindedException e) {

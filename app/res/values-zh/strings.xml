@@ -69,4 +69,5 @@
     <string name="view_source">查看源链接</string>
 
     <string name="original_url_is_not_available">源链接不存在。</string>
+    <string name="share_success">已分享到您的微博</string>
 </resources>
