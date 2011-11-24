@@ -127,6 +127,7 @@ containing a value of this type.
         public static final int tips_7=0x7f02002a;
         public static final int tips_8=0x7f02002b;
         public static final int tips_9=0x7f02002c;
+        public static final int tutorial_gesture=0x7f02002d;
     }
     public static final class id {
         public static final int Button01=0x7f0a000c;
@@ -143,7 +144,7 @@ containing a value of this type.
         public static final int contentHolder=0x7f0a001b;
         public static final int contentWrapper=0x7f0a000f;
         public static final int contentll=0x7f0a0033;
-        public static final int createDate=0x7f0a003e;
+        public static final int createDate=0x7f0a003f;
         public static final int createdDate=0x7f0a001a;
         public static final int flipbar=0x7f0a000a;
         public static final int flipper=0x7f0a0026;
@@ -151,13 +152,13 @@ containing a value of this type.
         public static final int header=0x7f0a0027;
         public static final int headerImage=0x7f0a0028;
         public static final int headerText=0x7f0a0029;
-        public static final int loadImage=0x7f0a004a;
-        public static final int loadedView=0x7f0a0047;
-        public static final int loading=0x7f0a003a;
-        public static final int loadingbar=0x7f0a0041;
+        public static final int loadImage=0x7f0a004b;
+        public static final int loadedView=0x7f0a0048;
+        public static final int loading=0x7f0a003b;
+        public static final int loadingbar=0x7f0a0042;
         public static final int loadinglayer=0x7f0a0034;
         public static final int logo=0x7f0a001f;
-        public static final int mode=0x7f0a0049;
+        public static final int mode=0x7f0a004a;
         public static final int page=0x7f0a0035;
         public static final int pageContainer=0x7f0a0037;
         public static final int pageIndex=0x7f0a0036;
@@ -169,9 +170,9 @@ containing a value of this type.
         public static final int part2_2=0x7f0a0031;
         public static final int part2_3=0x7f0a0032;
         public static final int portrait=0x7f0a0018;
-        public static final int portrait2=0x7f0a003d;
-        public static final int progressBar=0x7f0a0048;
-        public static final int publisherWrapper=0x7f0a003c;
+        public static final int portrait2=0x7f0a003e;
+        public static final int progressBar=0x7f0a0049;
+        public static final int publisherWrapper=0x7f0a003d;
         public static final int reference=0x7f0a0014;
         public static final int referenceContent=0x7f0a0015;
         public static final int retweet=0x7f0a002a;
@@ -182,26 +183,27 @@ containing a value of this type.
         public static final int sina_login=0x7f0a0022;
         public static final int sina_password=0x7f0a0021;
         public static final int sina_username=0x7f0a0020;
-        public static final int siteGrid=0x7f0a003f;
-        public static final int sourceGrid=0x7f0a0040;
-        public static final int sourceList=0x7f0a0038;
-        public static final int source_desc=0x7f0a0042;
+        public static final int siteGrid=0x7f0a0040;
+        public static final int sourceGrid=0x7f0a0041;
+        public static final int sourceList=0x7f0a0039;
+        public static final int source_desc=0x7f0a0043;
         public static final int source_image=0x7f0a0006;
         public static final int source_name=0x7f0a0007;
-        public static final int source_query=0x7f0a0045;
-        public static final int source_search_button=0x7f0a0046;
-        public static final int source_type=0x7f0a0043;
-        public static final int source_url=0x7f0a0044;
+        public static final int source_query=0x7f0a0046;
+        public static final int source_search_button=0x7f0a0047;
+        public static final int source_type=0x7f0a0044;
+        public static final int source_url=0x7f0a0045;
         public static final int status=0x7f0a0008;
-        public static final int text=0x7f0a0039;
+        public static final int text=0x7f0a003a;
         public static final int tika=0x7f0a000b;
         public static final int tipImage=0x7f0a001d;
         public static final int tips=0x7f0a001e;
         public static final int title=0x7f0a0012;
         public static final int toolbar=0x7f0a0003;
+        public static final int tutorial=0x7f0a0038;
         public static final int txt_group=0x7f0a0024;
         public static final int viewSource=0x7f0a001c;
-        public static final int widget108=0x7f0a003b;
+        public static final int widget108=0x7f0a003c;
         public static final int wrapper=0x7f0a0013;
         public static final int wrapperll=0x7f0a0011;
     }
@@ -243,7 +245,8 @@ containing a value of this type.
         public static final int source_search=0x7f030022;
         public static final int source_selection_item=0x7f030023;
         public static final int thumbnail=0x7f030024;
-        public static final int weibo_article_view=0x7f030025;
+        public static final int tutorial=0x7f030025;
+        public static final int weibo_article_view=0x7f030026;
     }
     public static final class string {
         public static final int accounts=0x7f080005;
