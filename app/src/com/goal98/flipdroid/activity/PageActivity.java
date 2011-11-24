@@ -142,6 +142,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     private int mTouchSlop;
 
+    private View tutorial;
+
 
     public String getSourceImageURL() {
         return sourceImageURL;
@@ -187,7 +189,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
 
         setProgressBarIndeterminateVisibility(false);
-        System.out.println("debug on create");
+        Log.v(TAG, "debug on create");
 
         executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
                 10L, TimeUnit.SECONDS,
@@ -215,9 +217,16 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         sourceName = (String) getIntent().getExtras().get("sourceName");
         contentUrl = (String) getIntent().getExtras().get("contentUrl");
 
-        ////System.out.println("sourceImageURL:" + sourceImageURL);
+        ////Log.v(TAG, "sourceImageURL:" + sourceImageURL);
         setContentView(R.layout.main);
         container = (ViewGroup) findViewById(R.id.pageContainer);
+
+        /*container.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+            }
+        });*/
+
         pageIndexView = (PageIndexView) findViewById(R.id.pageIndex);
         ViewSwitcher headerSwitcher = (ViewSwitcher) findViewById(R.id.flipper);
         header = (HeaderView) findViewById(R.id.header);
@@ -251,8 +260,24 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 //        this.animationMode = getAnimationMode();
         refreshingSemaphore = new Semaphore(1, true);
         Log.v("accountType", accountType);
+
+        initTutorialView();
+
         reload();
 
+
+
+    }
+
+    private void initTutorialView() {
+        tutorial = findViewById(R.id.tutorial);
+        tutorial.setVisibility(View.GONE);
+        tutorial.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                tutorial.setVisibility(View.GONE);
+                preferences.edit().putBoolean("TUTORIAL_READ", true).commit();
+            }
+        });
     }
 
 
@@ -320,7 +345,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 }).start();
 
                 if (cachedArticleSource != null && !updated && NetworkUtil.isNetworkAvailable()) {
-                    System.out.println("check update");
+                    Log.v(TAG, "check update");
                     cachedArticleSource.checkUpdate();
                 }
 
@@ -396,6 +421,12 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         };
     }
 
+    private void displayTutorial() {
+        final boolean tutorial_read = preferences.getBoolean("TUTORIAL_READ", false);
+        if(!tutorial_read)
+            tutorial.setVisibility(View.VISIBLE);
+    }
+
 //    private void createShakeListener() {
 //        acceleromererListener = new SensorEventListener() {
 //
@@ -417,7 +448,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 //                            / diffTime * 10000;
 //
 //                    if (speed > SHAKE_THRESHOLD) {
-//                        ////System.out.println("sensored" + dialog);
+//                        ////Log.v(TAG, "sensored" + dialog);
 //                        if (dialog == null)
 //                            PageActivity.this.showDialog(NAVIGATION);
 //                        else {
@@ -567,7 +598,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         currentPageIndex = -1;
         PagingStrategy pagingStrategy = null;
         if (accountType.equals(Constants.TYPE_SINA_WEIBO) || accountType.equals(Constants.TYPE_MY_SINA_WEIBO)) {
-            ////System.out.println("accountType" + accountType);
+            ////Log.v(TAG, "accountType" + accountType);
             if (isWeiboMode())
                 pagingStrategy = new WeiboPagingStrategy(this);
             else
@@ -702,7 +733,13 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        ////System.out.println("flipStarted" + flipStarted);
+        ////Log.v(TAG, "flipStarted" + flipStarted);
+
+        if(tutorial.getVisibility() == View.VISIBLE){
+            tutorial.dispatchTouchEvent(event);
+            return true;
+        }
+
         if (flipStarted)
             return true;
 //        if (header.isSourceSelectMode()) {
@@ -750,7 +787,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        ////System.out.println("flipStarted" + flipStarted);
+        ////Log.v(TAG, "flipStarted" + flipStarted);
 
         if (flipStarted) {
             Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> return false;");
@@ -829,6 +866,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     Handler handler = new Handler();
 
     private void flipPage(final boolean forward) {
+
         if (!current.isFirstPage())
             flipStarted = true;
 
@@ -839,7 +877,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             decreasePageNo();
 
         int nextPageIndex = forward ? currentPageIndex + 1 : currentPageIndex;
-        System.out.println("debug flip");
+        Log.v(TAG, "debug flip");
         if (currentPageIndex == -1 && forward) {//we are first timer
             currentPageIndex++;
             container.addView(current, pageViewLayoutParamsFront);
@@ -858,7 +896,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 finishActivity();
             }
         }
-        System.out.println("debug flip done");
+        Log.v(TAG, "debug flip done");
     }
 
     private void finishActivity() {
@@ -875,7 +913,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private void slideToNextPage() {
-        System.out.println("debug slide to next");
+        Log.v(TAG, "debug slide to next");
         try {
             if (preparingWindow == null && !prepareFail)
                 preparingWindow = forward ? slidingWindows.getNextWindow() : slidingWindows.getPreviousWindow();
@@ -931,7 +969,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 return;
             } else {
                 if (next.isLastPage()) {
-                    ////System.out.println("lastpage");
+                    ////Log.v(TAG, "lastpage");
                 } else {
                     if (forward)
                         next = nextWindow.get();
@@ -966,7 +1004,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private void prepareNextPage() {
         try {
             preparingWindow = forward ? slidingWindows.getNextWindow() : slidingWindows.getPreviousWindow();
-            ////System.out.println("preparingWindow" + preparingWindow);
+            ////Log.v(TAG, "preparingWindow" + preparingWindow);
             if (preparingWindow.isLoading()) {
                 //Log.d("SLIDING", "register on load listener...");
 
@@ -1007,6 +1045,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                             next.removeLoadingIfNecessary();
                         else
                             previous.removeLoadingIfNecessary();
+
+                        displayTutorial();
                     }
                 });
                 prepareFail = false;
@@ -1120,6 +1160,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         //Log.d("ANI", "start animation");
         container.removeAllViews();
         if (current.isFirstPage()) {
+
             next.setVisibility(View.VISIBLE);
             currentPageIndex++;
             container.addView(current, pageViewLayoutParamsBack);
@@ -1152,6 +1193,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 previous.startAnimation(rotation);
             }
         } else {
+
             if (forward) {
                 currentPageIndex++;
                 container.addView(next, pageViewLayoutParamsFront);
@@ -1235,7 +1277,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                                 FlipdroidApplications application = (FlipdroidApplications) getApplication();
                                 OAuth oauth = new OAuth();
                                 application.setOauth(oauth);
-                                ////System.out.println("OAuthHolder.oauth" + application + oauth);
+                                ////Log.v(TAG, "OAuthHolder.oauth" + application + oauth);
                                 oauth.RequestAccessToken(PageActivity.this, "flipdroid://SinaAccountSaver");
                             }
                         })
