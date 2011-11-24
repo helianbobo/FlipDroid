@@ -84,8 +84,8 @@
                     android:layout_height="50dip"
                     android:drawableLeft="@drawable/ic_action_open_original_url"
                     style="@style/Button"
-                    android:paddingLeft="80dp"
-                    android:paddingRight="80dp"
+                    android:paddingLeft="70dp"
+                    android:paddingRight="70dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"
                     android:text="@string/view_source"/>
