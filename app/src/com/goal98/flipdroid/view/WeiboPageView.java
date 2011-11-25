@@ -265,7 +265,7 @@ public class WeiboPageView extends FrameLayout {
                         WebImageView sourceImage = (WebImageView) commentPad.findViewById(R.id.source_image);
                         TextView sourceName = (TextView) commentPad.findViewById(R.id.source_name);
                         Button closeBtn = (Button) commentPad.findViewById(R.id.close);
-                        Button sendBtn = (Button) commentPad.findViewById(R.id.send);
+                        ImageButton sendBtn = (ImageButton) commentPad.findViewById(R.id.send);
 
                         closeBtn.setOnTouchListener(new View.OnTouchListener() {
 
