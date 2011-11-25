@@ -56,7 +56,6 @@ public abstract class AbstractDB {
     }
 
     public int deleteAll() {
-
         SQLiteDatabase db = helper.getWritableDatabase();
         return db.delete(getTableName(), null, null);
     }

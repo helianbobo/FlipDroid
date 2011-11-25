@@ -6,7 +6,7 @@
 
     <com.goal98.android.WebImageView android:id="@+id/portrait2" webimage:autoLoad="false"
                                      android:layout_height="25dip" webimage:defaultWidth="25"
-                                     webimage:defaultHeight="25"
+                                     webimage:defaultHeight="25" webimage:progressDrawable="@drawable/portrait"
                                      android:layout_width="25dip"></com.goal98.android.WebImageView>
 
     <TextView android:layout_marginLeft="3dip" android:id="@+id/author" android:layout_width="wrap_content"
