@@ -46,6 +46,8 @@ import com.goal98.flipdroid.model.sina.SinaToken;
 import com.goal98.flipdroid.model.taobao.TaobaoArticleSource;
 import com.goal98.flipdroid.util.*;
 import com.goal98.flipdroid.view.*;
+import com.goal98.tika.common.Paragraphs;
+import com.goal98.tika.common.TikaUIObject;
 import weibo4j.Weibo;
 import weibo4j.WeiboException;
 
@@ -197,11 +199,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         sourceDB = new SourceDB(this);
         alarmSender = new AlarmSender(this);
 
-//        sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-//        acceleromererSensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-//        createShakeListener();
-
-
         Cursor sourceCursor = sourceDB.findAll();
 
         startManagingCursor(sourceCursor);
@@ -264,7 +261,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         initTutorialView();
 
         reload();
-
 
 
     }
@@ -423,52 +419,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     private void displayTutorial() {
         final boolean tutorial_read = preferences.getBoolean("TUTORIAL_READ", false);
-        if(!tutorial_read)
+        if (!tutorial_read)
             tutorial.setVisibility(View.VISIBLE);
     }
-
-//    private void createShakeListener() {
-//        acceleromererListener = new SensorEventListener() {
-//
-//            public void onAccuracyChanged(Sensor sensor, int accuracy) {
-//            }
-//
-//            public synchronized void onSensorChanged(SensorEvent event) {
-//                long curTime = System.currentTimeMillis();
-//                // only allow one update every 100ms.
-//                if ((curTime - lastUpdate) > 80) {
-//                    long diffTime = (curTime - lastUpdate);
-//                    lastUpdate = curTime;
-//
-//                    x = event.values[SensorManager.DATA_X];
-//                    y = event.values[SensorManager.DATA_Y];
-//                    z = event.values[SensorManager.DATA_Z];
-//
-//                    float speed = Math.abs(x + y + z - last_x - last_y - last_z)
-//                            / diffTime * 10000;
-//
-//                    if (speed > SHAKE_THRESHOLD) {
-//                        ////Log.v(TAG, "sensored" + dialog);
-//                        if (dialog == null)
-//                            PageActivity.this.showDialog(NAVIGATION);
-//                        else {
-//                            dialog.dismiss();
-//                        }
-//                    }
-//                    last_x = x;
-//                    last_y = y;
-//                    last_z = z;
-//                }
-//
-//            }
-//
-//        };
-//    }
-//
-//
-//    private void registerShakeListener() {
-//        sm.registerListener(acceleromererListener, acceleromererSensor, SensorManager.SENSOR_DELAY_UI);
-//    }
 
     private int getAnimationMode() {
         String key = getString(R.string.key_animation_mode_preference);
@@ -514,7 +467,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             next = window.get();
         else
             previous = window.get();
-        //Log.d("SLIDING", "on windows loaded");
         handler.post(new Runnable() {
             public void run() {
                 showAnimation();
@@ -532,7 +484,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     }
 
-    public void comment(String comment, long statusId) throws WeiboException, NoSinaAccountBindedException {
+    public void comment(String comment, Article article) throws WeiboException, NoSinaAccountBindedException {
         String userId = preferences.getString("sina_account", null);
         if (userId == null)
             throw new NoSinaAccountBindedException();
@@ -540,10 +492,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         if (weibo == null) {
             initSinaWeibo();
         }
-        weibo.updateStatus(comment, statusId);
+        weibo.updateStatus(comment, article.getStatusId());
     }
 
-    public void forward(String comment, String url) throws WeiboException, NoSinaAccountBindedException {
+    public void forward(String comment, Article article) throws WeiboException, NoSinaAccountBindedException {
         String userId = preferences.getString("sina_account", null);
         if (userId == null)
             throw new NoSinaAccountBindedException();
@@ -551,7 +503,24 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         if (weibo == null) {
             initSinaWeibo();
         }
-        weibo.updateStatus(comment + " " + url);
+        Paragraphs paragraphs = new Paragraphs();
+        paragraphs.toParagraph(article.getContent());
+        String paragraph1 = "";
+        if(paragraphs.getParagraphs()!=null && paragraphs.getParagraphs().size()!=0){
+            for (int i = 0; i < paragraphs.getParagraphs().size(); i++) {
+                TikaUIObject uiObject =  paragraphs.getParagraphs().get(i);
+                if(!uiObject.getType().equals(TikaUIObject.TYPE_TEXT))
+                    continue;
+
+                paragraph1 = uiObject.getObjectBody().replaceAll("\\<[/]?.+?\\>","");
+                if(paragraph1.length() < 40)
+                    continue;
+                else
+                    break;
+            }
+        }
+
+        weibo.updateStatus(comment + "| [" +article.getTitle() +"] "+ paragraph1.substring(0,40) +" "+article.getSourceURL());
     }
 
     private void initSinaWeibo() {
@@ -599,6 +568,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     public void reload() {
+        current = null;
+        next = null;
+        previous = null;
+
         currentPageIndex = -1;
         PagingStrategy pagingStrategy = null;
         if (accountType.equals(Constants.TYPE_SINA_WEIBO) || accountType.equals(Constants.TYPE_MY_SINA_WEIBO)) {
@@ -739,7 +712,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     public boolean dispatchTouchEvent(MotionEvent event) {
         ////Log.v(TAG, "flipStarted" + flipStarted);
 
-        if(tutorial.getVisibility() == View.VISIBLE){
+        if (tutorial.getVisibility() == View.VISIBLE) {
             tutorial.dispatchTouchEvent(event);
             return true;
         }

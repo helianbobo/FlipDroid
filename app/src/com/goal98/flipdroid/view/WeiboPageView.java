@@ -308,7 +308,7 @@ public class WeiboPageView extends FrameLayout {
                                     case MotionEvent.ACTION_UP:
                                         if (articleView.getArticle().getSourceType().equals(Constants.TYPE_SINA_WEIBO)) {
                                             try {
-                                                pageActivity.comment(commentEditText.getText().toString(), articleView.getArticle().getStatusId());
+                                                pageActivity.comment(commentEditText.getText().toString(), articleView.getArticle());
                                             } catch (WeiboException e) {
                                                 e.printStackTrace();
                                             } catch (NoSinaAccountBindedException e) {
@@ -316,7 +316,7 @@ public class WeiboPageView extends FrameLayout {
                                             }
                                         } else {
                                             try {
-                                                pageActivity.forward(commentEditText.getText().toString(), articleView.getArticle().getSourceURL());
+                                                pageActivity.forward(commentEditText.getText().toString(), articleView.getArticle());
 
                                             } catch (WeiboException e) {
                                                 e.printStackTrace();
