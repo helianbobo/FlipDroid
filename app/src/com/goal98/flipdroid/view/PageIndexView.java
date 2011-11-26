@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.activity.PageActivity;
+import com.goal98.flipdroid.util.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -91,7 +92,7 @@ public class PageIndexView extends LinearLayout {
         if (hasUpdate) {
             TextView update = new TextView(this.getContext());
             update.setText("Reload");
-            update.setTextColor(Color.parseColor("#FF0000"));
+            update.setTextColor(Color.parseColor(Constants.COLOR_RED));
             update.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             update.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {

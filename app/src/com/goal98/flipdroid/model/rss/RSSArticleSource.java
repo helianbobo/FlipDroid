@@ -9,6 +9,7 @@ import com.goal98.flipdroid.model.cachesystem.CacheableArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCacheObject;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.EncodingDetector;
+import com.goal98.flipdroid.util.NetworkUtil;
 import com.goal98.flipdroid.util.StopWatch;
 import org.apache.commons.io.IOUtils;
 
@@ -117,6 +118,11 @@ public class RSSArticleSource extends BaseCacheableArticleSource {
     }
 
     public byte[] getLatestSource() {
+
+        if(!NetworkUtil.isNetworkAvailable()) {
+            return null;
+        }
+
         InputStream is = null;
         try {
             URL url = new URL(this.contentUrl);

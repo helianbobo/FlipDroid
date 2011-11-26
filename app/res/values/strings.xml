@@ -38,11 +38,13 @@
     <string name="button_add_new_account">Add New Account</string>
     <string name="button_add_new_source">Add New Source</string>
     <string name="button_login">Login</string>
+    <string name="button_close">Close</string>
+    <string name="button_send">Send</string>
 
     <string name="my_timeline">My Timeline</string>
     <string name="my_timeline_desc">The tweets I am follwing.</string>
 
-    <string name="msg_no_more_page">No more smartPage to load.</string>
+    <string name="msg_no_more_page">No more article to load.Flip left to go back.Flip right to return.</string>
 
     <string name="sinaweiboheader">Sina</string>
     <string name="loading">loading...</string>
@@ -79,5 +81,8 @@
     <string name="view_source">View Source</string>
 
     <string name="original_url_is_not_available">Original URL is not available.</string>
+     <string name="share_success">Shared to your Weibo</string>
+     <string name="inprogress">In Progress</string>
+     <string name="toolong">No more than 140 words</string>
 
 </resources>

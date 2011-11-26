@@ -5,25 +5,37 @@
     <LinearLayout android:layout_marginTop="3dip" android:layout_marginRight="3dip"
                   android:layout_marginLeft="3dip" android:id="@+id/toolbar" android:orientation="horizontal"
                   android:layout_width="fill_parent" android:weightSum="7"
-                  android:layout_height="wrap_content" android:background="@color/lightgray">
-        <LinearLayout android:layout_width="0dip" android:layout_weight="2"
-                      android:layout_height="wrap_content" android:gravity="left">
-            <ImageButton android:id="@+id/close" android:background="@drawable/close"
-                         android:layout_width="wrap_content"
-                         android:adjustViewBounds="true" android:scaleType="centerInside"
-                         android:layout_height="35dip" android:layout_gravity="left"/>
-        </LinearLayout>
-        <TextView android:layout_width="0dip" android:padding="5dip" android:textStyle="bold" android:textSize="17dip"
-                  android:layout_height="wrap_content" android:gravity="center"
-                  android:text="@string/comment" android:layout_weight="3"></TextView>
-        <LinearLayout android:layout_width="0dip" android:layout_weight="2" android:orientation="horizontal"
-                      android:layout_height="wrap_content" android:gravity="right|center_vertical"
-                      android:layout_gravity="right|center_vertical">
-            <ImageButton android:id="@+id/send" android:background="@drawable/send"
-                         android:layout_width="wrap_content" android:maxHeight="25dip"
-                         android:adjustViewBounds="true" android:scaleType="centerInside"
-                         android:layout_height="fill_parent" android:layout_gravity="right"/>
-        </LinearLayout>
+                  android:gravity="center_horizontal"
+                  android:layout_height="wrap_content" android:background="@color/white">
+
+
+
+            <Button android:layout_width="56dp"
+                    android:layout_height="26dp"
+                    android:text="@string/button_close"
+                    android:textSize="16dp"
+                    style="@style/CloseButton"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginRight="50dp"
+                    android:id="@+id/close"
+                    android:layout_gravity="left"/>
+
+
+
+
+            <ImageButton android:layout_width="115dp"
+                    android:layout_height="26dp"
+                    android:adjustViewBounds="true"
+                    android:background="@color/white"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/sina_publish_button"
+                    android:id="@+id/send"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginLeft="55dp"
+                    android:layout_gravity="right"/>
+
     </LinearLayout>
 
 
@@ -49,6 +61,15 @@
     <LinearLayout android:layout_width="match_parent" android:padding="5dip"
                   android:layout_height="wrap_content">
         <TextView android:id="@+id/status" android:layout_width="wrap_content"
+                  android:layout_height="fill_parent"
+                  android:textAppearance="?android:attr/textAppearanceSmall"
+                  android:textColor="#232323"
+                  android:paddingLeft="5dip"
+                  android:gravity="center"></TextView>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:padding="5dip"
+                  android:layout_height="wrap_content">
+        <TextView android:id="@+id/wordCount" android:layout_width="wrap_content"
                   android:layout_height="fill_parent"
                   android:textAppearance="?android:attr/textAppearanceSmall"
                   android:textColor="#232323"

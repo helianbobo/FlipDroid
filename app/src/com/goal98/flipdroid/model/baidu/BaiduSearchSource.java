@@ -13,7 +13,7 @@ import android.util.Log;
 import com.goal98.flipdroid.model.GroupedSource;
 import com.goal98.flipdroid.model.SearchSource;
 import com.goal98.flipdroid.model.Source;
-import com.goal98.flipdroid.model.SourceRepo;
+import com.goal98.flipdroid.model.RSSSourceRepo;
 import com.goal98.flipdroid.util.Constants;
 
 public class BaiduSearchSource implements SearchSource {
@@ -43,7 +43,7 @@ public class BaiduSearchSource implements SearchSource {
 
                 Log.v("uri:",uri);
             
-            return SourceRepo.group(sourceList);
+            return RSSSourceRepo.group(sourceList);
 	} catch (UnsupportedEncodingException e) {
 	     
 	    e.printStackTrace();

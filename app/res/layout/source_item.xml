@@ -9,6 +9,7 @@
                                      android:layout_height="50dip" webimage:defaultWidth="50"
                                      webimage:defaultHeight="50" webimage:progressDrawable="@drawable/portrait"
                                      webimage:roundImage="true"
+                                     android:background="@drawable/border"
                                      android:layout_width="50dip"></com.goal98.android.WebImageView>
     <LinearLayout android:id="@+id/background" android:layout_width="fill_parent"
                   android:layout_marginBottom="3dp" android:layout_marginTop="3dp"

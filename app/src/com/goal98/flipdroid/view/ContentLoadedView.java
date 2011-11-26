@@ -227,7 +227,8 @@ public class ContentLoadedView extends ArticleView {
                 ImageInfo imageInfo = ((ImageInfo) uiObject);
                 String url = imageInfo.getUrl();
                 WebImageView imageView = new WebImageView(this.getContext(), url, false);
-                imageView.setRoundImage(true);
+                imageView.setRoundImage(false);
+                imageView.setBackgroundResource(R.drawable.border);
 //                imageView.imageView.setTag(url);
 
                 final DeviceInfo deviceInfo = getDeviceInfoFromApplicationContext();

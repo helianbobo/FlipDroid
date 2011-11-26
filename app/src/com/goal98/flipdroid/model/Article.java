@@ -5,6 +5,8 @@ import com.goal98.android.ImageLoader;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.view.ExpandableArticleView;
 import com.goal98.flipdroid.view.ThumbnailArticleView;
+import com.goal98.tika.common.Paragraphs;
+import com.goal98.tika.common.TikaUIObject;
 
 import java.net.URL;
 import java.util.*;
@@ -137,9 +139,13 @@ public class Article {
 //    }
 
     public String extractURL() {
-        Matcher mat = urlPattern.matcher(status);
-        mat.find();
-        return mat.group();
+        if (status != null) {
+            Matcher mat = urlPattern.matcher(status);
+            mat.find();
+            return mat.group();
+        }else{
+            return null;
+        }
     }
 
     public int getWeight() {
@@ -269,15 +275,15 @@ public class Article {
 
     private volatile boolean loading = false;
 
-    public synchronized void loadPrimaryImage(String image,DeviceInfo deviceInfo) {
-        PreloadPrimaryImageLoaderHandler preloadPrimaryImageLoaderHandler = new PreloadPrimaryImageLoaderHandler(this,image,deviceInfo);
+    public synchronized void loadPrimaryImage(String image, DeviceInfo deviceInfo) {
+        PreloadPrimaryImageLoaderHandler preloadPrimaryImageLoaderHandler = new PreloadPrimaryImageLoaderHandler(this, image, deviceInfo);
         final ImageLoader loader = new ImageLoader(image, preloadPrimaryImageLoaderHandler);
         new Thread(loader).start();
     }
 
     public void loadPrimaryImage(DeviceInfo deviceInfo) {
-        if(getImageUrl()!=null)
-            loadPrimaryImage(getImageUrl().toExternalForm(),deviceInfo);
+        if (getImageUrl() != null)
+            loadPrimaryImage(getImageUrl().toExternalForm(), deviceInfo);
     }
 
     public void setLoading(boolean loading) {
@@ -290,12 +296,12 @@ public class Article {
 
     public void loadSecondaryImages(DeviceInfo deviceInfo) {
         for (String url : imagesMap.keySet()) {
-            loadSecondaryImage(url,deviceInfo);
+            loadSecondaryImage(url, deviceInfo);
         }
     }
 
-    public synchronized void loadSecondaryImage(String image,DeviceInfo deviceInfo) {
-        PreloadSecondaryImageLoaderHandler preloadSecondaryImageLoaderHandler = new PreloadSecondaryImageLoaderHandler(this, image,deviceInfo);
+    public synchronized void loadSecondaryImage(String image, DeviceInfo deviceInfo) {
+        PreloadSecondaryImageLoaderHandler preloadSecondaryImageLoaderHandler = new PreloadSecondaryImageLoaderHandler(this, image, deviceInfo);
 
         final ImageLoader loader = new ImageLoader(image, preloadSecondaryImageLoaderHandler);
         new Thread(loader).start();
@@ -323,5 +329,26 @@ public class Article {
 
     public void setExpandable(boolean expandable) {
         this.expandable = expandable;
+    }
+
+    public String getPreviewParagraph() {
+        String paragraph1 = "";
+        Paragraphs paragraphs = new Paragraphs();
+        paragraphs.toParagraph(getContent());
+
+        if (paragraphs.getParagraphs() != null && paragraphs.getParagraphs().size() != 0) {
+            for (int i = 0; i < paragraphs.getParagraphs().size(); i++) {
+                TikaUIObject uiObject = paragraphs.getParagraphs().get(i);
+                if (!uiObject.getType().equals(TikaUIObject.TYPE_TEXT))
+                    continue;
+
+                paragraph1 = uiObject.getObjectBody().replaceAll("\\<[/]?.+?\\>", "");
+                if (paragraph1.length() < 40)
+                    continue;
+                else
+                    break;
+            }
+        }
+        return paragraph1;
     }
 }

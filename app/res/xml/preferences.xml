@@ -43,7 +43,7 @@
 
     <EditTextPreference
             android:key="@string/key_tika_host"
-            android:defaultValue="www.tika.com"
+            android:defaultValue="www.tika.it"
             android:inputType="text"
             android:title="Host"
             android:summary="www.tika.com | 10.10.2.2:8182 | 192.168.1.100:8182"

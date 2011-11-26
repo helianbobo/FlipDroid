@@ -83,7 +83,7 @@ public class FeedResource extends ServerResource {
                     }
                 }
                 jsonObject.accumulate("images", jsonArray);
-
+                jsonObject.accumulate("createDate", urlAbstract.getCreateDate().getTime());
                 urlAbstracts.accumulate("abstracts", jsonObject);
             } catch (JSONException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

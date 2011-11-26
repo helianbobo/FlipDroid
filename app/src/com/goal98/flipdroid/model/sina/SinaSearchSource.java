@@ -5,7 +5,7 @@ import com.goal98.flipdroid.client.WeiboExt;
 import com.goal98.flipdroid.model.GroupedSource;
 import com.goal98.flipdroid.model.SearchSource;
 import com.goal98.flipdroid.model.Source;
-import com.goal98.flipdroid.model.SourceRepo;
+import com.goal98.flipdroid.model.RSSSourceRepo;
 import com.goal98.flipdroid.util.Constants;
 import weibo4j.Query;
 import weibo4j.User;
@@ -80,6 +80,6 @@ public class SinaSearchSource implements SearchSource {
             Log.e(this.getClass().getName(), e.getMessage(), e);
         }
 
-        return SourceRepo.group(sourceList);
+        return RSSSourceRepo.group(sourceList);
     }
 }

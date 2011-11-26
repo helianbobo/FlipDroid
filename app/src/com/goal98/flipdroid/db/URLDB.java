@@ -72,6 +72,7 @@ public class URLDB extends AbstractDB {
 
 
             cursor.moveToFirst();
+            response.setSourceURL(url);
             response.setContent(cursor.getString(2));
             response.setTitle(cursor.getString(3));
             List<String> images = new ArrayList<String>();

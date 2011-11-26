@@ -14,11 +14,15 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.GestureUtil;
+import com.goal98.flipdroid.util.NetworkUtil;
 
 
 public class CoverActivity extends Activity {
@@ -56,12 +60,17 @@ public class CoverActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        NetworkUtil.context = getApplicationContext();
+
         setContentView(R.layout.cover);
 
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Constants.TIKA_HOST = preferences.getString(getString(R.string.key_tika_host), Constants.TIKA_HOST);
 
-        this.findViewById(R.id.flipbar).post(new Runnable() {
+        final View view = this.findViewById(R.id.flipbar);
+        view.setVisibility(View.GONE);
+        view.post(new Runnable() {
             public void run() {
                 DeviceInfo.getInstance(CoverActivity.this);
             }
@@ -111,5 +120,17 @@ public class CoverActivity extends Activity {
     protected void onRestart() {
         super.onRestart();
         goingToSleep = false;
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        final View view = findViewById(R.id.flipbar);
+        view.setVisibility(View.VISIBLE);
+        final Animation animation = AnimationUtils.loadAnimation(this, R.anim.fadein);
+        animation.setDuration(1700);
+        view.startAnimation(animation);
     }
 }
