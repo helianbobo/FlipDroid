@@ -1,18 +1,14 @@
 package com.goal98.flipdroid.client;
 
 import android.util.Log;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import com.goal98.tika.common.URLRawRepo;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +28,16 @@ public class TikaClient {
 
     public TikaClient(String host) {
         this.host = host;
+    }
+
+    public String updateRecommendSource(String type) {
+        String requestURL = null;
+        requestURL = "http://" + host + "/v1/recommend?type=" + type;
+        try {
+            return read(requestURL);
+        } catch (TikaClientException e) {
+            return null;
+        }
     }
 
     public List<TikaSourceResponse> searchSource(String keyword) throws TikaClientException {
@@ -132,8 +138,8 @@ public class TikaClient {
         Date date = new Date();
         try {
             long time = s.getLong("createDate");
-            if(time!=0)
-                date =  new Date(time);
+            if (time != 0)
+                date = new Date(time);
         } catch (JSONException e) {
 
         }
@@ -179,29 +185,18 @@ public class TikaClient {
     }
 
     public String read(String url) throws TikaClientException {
-        HttpClient client = HttpClientFactory.getHttpClient();
-        HttpGet request = new HttpGet(url);
+        HttpURLConnection u = null;
+        try {
+            u = (HttpURLConnection) new URL(url).openConnection();
+        } catch (IOException e) {
+            return "";
+        }
 
         try {
-            HttpResponse response = client.execute(request);
-            if (response.getStatusLine().getStatusCode() >= 200 && response.getStatusLine().getStatusCode() <= 299) {
-                InputStream is = response.getEntity().getContent();
-
-                try {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    int i;
-                    byte[] bytes = new byte[1024];
-                    while ((i = is.read(bytes)) != -1) {
-                        baos.write(bytes, 0, i);
-                        bytes = new byte[1024];
-                    }
-
-                    String s = new String(baos.toByteArray(), "utf-8");
-                    ////System.out.println(s);
-                    return s;
-                } finally {
-                    is.close();
-                }
+            final int responseCode = u.getResponseCode();
+            if (responseCode >= 200 && responseCode <= 299) {
+                byte[] response = URLRawRepo.getInstance().fetch(u);
+                return new String(response, "utf-8");
             } else {
                 throw new TikaClientException();
             }

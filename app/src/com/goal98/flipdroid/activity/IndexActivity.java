@@ -13,6 +13,7 @@ import android.view.*;
 import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
+import com.goal98.flipdroid.db.RecommendSourceDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.model.SourceUpdateManager;
@@ -185,7 +186,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                         } catch (InterruptedException e) {
 
                         }
-                        SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this);
+                        SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
                         updateManager.updateAll();
                         updated = true;
                     }

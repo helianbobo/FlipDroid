@@ -1,14 +1,8 @@
 package it.tika;
 
 
-import flipdroid.grepper.*;
 import flipdroid.grepper.URLAbstract;
-import flipdroid.grepper.exception.DBNotAvailableException;
-import flipdroid.grepper.extractor.ExtractorException;
 import flipdroid.grepper.extractor.raw.URLRawRepo;
-import flipdroid.grepper.extractor.raw.URLRepoException;
-import it.tika.mongodb.image.TikaImageService;
-import it.tika.util.StopWatch;
 import it.tika.util.Util;
 import net.sf.json.JSONArray;
 import org.json.JSONException;
@@ -19,8 +13,6 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
 import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;

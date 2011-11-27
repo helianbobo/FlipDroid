@@ -1,15 +1,14 @@
 package it.tika;
 
 import com.goal98.tika.common.URLConnectionUtil;
+import com.goal98.tika.common.URLRawRepo;
+import com.goal98.tika.common.URLRepoException;
 import flipdroid.grepper.*;
 import flipdroid.grepper.exception.DBNotAvailableException;
 import flipdroid.grepper.extractor.ExtractorException;
-import flipdroid.grepper.extractor.raw.URLRawRepo;
-import flipdroid.grepper.extractor.raw.URLRepoException;
 import it.tika.mongodb.image.TikaImageService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Logger;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -19,7 +18,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
-import java.util.logging.Level;
 
 /**
  * Created by IntelliJ IDEA.
