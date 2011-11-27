@@ -63,17 +63,28 @@ public class Tika {
             }
 
             if (result == null || (result != null && result.getContent() == null)) {
-                System.out.println(Thread.currentThread().getName() +  " db cache miss...");
+                System.out.println(Thread.currentThread().getName() + " db cache miss...");
 
-                URL url = new URL(urlString);
-                HttpURLConnection conn = URLConnectionUtil.decorateURLConnection(url);
+                HttpURLConnection conn = null;
+                int count = 0;
+                int responseCode = 0;
+                while (count < 3) {
+                    try {
 
-                final int responseCode = conn.getResponseCode();
-                System.out.println("responseCode " + responseCode);
+                        URL url = new URL(urlString);
+                        conn = URLConnectionUtil.decorateURLConnection(url);
+
+                        responseCode = conn.getResponseCode();
+                        System.out.println("responseCode " + responseCode);
+
+                    } catch (IOException e) {
+                        count++;
+                        getLogger().error("tried " + count + " times, " + e.getMessage(), e);
+                    }
+                }
                 if (responseCode < 200 || responseCode > 299) {
                     return null;
                 }
-
                 String originalURLString = conn.getURL().toString();
 
                 byte[] rawBytes = URLRawRepo.getInstance().fetch(conn);
