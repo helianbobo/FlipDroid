@@ -22,7 +22,7 @@ public class RSSSourceRepo {
     public RSSSourceRepo(Context context) {
         this.context = context;
         fromFileSourceResolver = new FromFileJSONReader(context);
-        recommendSourceDB = new RecommendSourceDB(context);
+        recommendSourceDB = RecommendSourceDB.getInstance(context);
     }
 
     public static GroupedSource group(List<Map<String, String>> sourceList) {
