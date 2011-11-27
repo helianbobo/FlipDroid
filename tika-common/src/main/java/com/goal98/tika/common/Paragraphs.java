@@ -42,7 +42,7 @@ public class Paragraphs {
         int cutAt = 0;
         int endAt = -1;
         while ((cutAt = findNextClosingTag(articleContent)) != -1) {
-            if(cutAt==-2){
+            if (cutAt == -2) {
                 paragraphs.add(new Text(articleContent));
                 return;
             }
@@ -61,8 +61,33 @@ public class Paragraphs {
             String paragraph = articleContent.substring(startAt, endAt + 1);
             if (paragraph.indexOf(ImageInfo.IMG_START) != -1) {
                 paragraph = parseImg(paragraph);
-                if (paragraph.trim().length() != 0)
+
+
+                if (paragraph.trim().length() != 0) {
+                    Matcher m;
+                    boolean repeat = true;
+                    while (repeat) {
+                        repeat = false;
+                        m = PAT_TAG_A_NO_TEXT.matcher(paragraph);
+                        if (m.find()) {
+                            repeat = true;
+                            paragraph = m.replaceAll("");
+                        }
+
+                        m = PAT_TAG_STRONG_NO_TEXT.matcher(paragraph);
+                        if (m.find()) {
+                            repeat = true;
+                            paragraph = m.replaceAll("");
+                        }
+
+                        m = PAT_TAG_HEADER_NO_TEXT.matcher(paragraph);
+                        if (m.find()) {
+                            repeat = true;
+                            paragraph = m.replaceAll("");
+                        }
+                    }
                     toParagraph(paragraph);
+                }
             } else
                 paragraphs.add(new Text(paragraph));
 
@@ -168,6 +193,11 @@ public class Paragraphs {
     }
 
     public static void main(String[] args) {
+        String a = "<h1><a href=http://sports.sina.com.cn/><img src=http://i3.sinaimg.cn/ty/main/logo/logo_home_sports_nonike.gif >hack</img></a></h1><p>　　新浪体育讯　虽然临时协议达成，但对洛杉矶湖人<a href=http://weibo.com/lakersnews?zw=sports>(微博)</a>来说，他们的麻烦才刚刚开始。在洛杉矶当地媒体《洛杉矶时报》看来，湖人从阵容到教练组，都可以说是麻烦一堆。</p><p>　　33岁的科比-布莱恩特、31岁的保罗-加索尔、32岁的拉玛尔-奥多姆和24岁的安德鲁-拜纳姆<a href=http://weibo.com/andrewbynum?zw=sports>(微博)</a>，这四位是湖人最核心的家伙，但这四位的合同都将在两年内执行完毕。特别是奥多姆和拜纳姆，一个是万金油，一个是先发内线，合同都会在新赛季后就结束。对湖人来说，如果说这是个困扰，那好歹还有一年的潜伏期。</p><p><strong>相对来说，湖人现在的后场麻烦更大。德里克-费舍尔37岁了，还能指望他干嘛？史蒂夫-布雷克上赛季表现并不好，他有理由被换掉。湖人现在最希望的，大概就是骑士赶紧裁掉拜伦-戴维斯<a href=http://weibo.com/stevesnooker?zw=sports>(微博)</a>吧。此外，最好奇才还能裁掉拉沙德-刘易斯。这两人，虽然顶着高薪低能的恶名，但若能加盟湖人，都能起到立竿见影的效果。不过一位专家也暗示，这两人的年薪都已经超过千万，湖人想得到他们并不容易。</strong></p><p>　　湖人现在的薪金总额高达9000万美金，远超工资帽。在自由球员市场上，他们可用的就是中产特例了，一个大幅度缩水的签约工具。此外，湖人还有一个办法，那就是用升级版特赦令。不过，裁掉卢克-沃顿还是慈世平？这是个问题！</p><p>　　31岁的沃顿，合同上还剩2年1150万美金，32岁的慈世平还剩3年2150万美金。沃顿上赛季54场场均1.7分，慈世平数据稍好但场均8.5分也是生涯最低了。可以说，这两位都有被裁员的理由。但是，对杰里-巴斯来说，无论他裁掉哪位，该付的钱还是免不掉的。</p><p>　　在阵容之外，湖人另一大头疼的问题就是教练组。新上任的迈克-布朗铁定会抛弃在洛杉矶实行了十来年的三角进攻战术了，布朗的战术喜好从来都是以中锋唱主角的。不幸的是，尽管赛季缩水，但拜纳姆的五场停赛是逃不过的。上赛季季后赛，在和小牛的比赛中，拜纳姆因为不冷静而吃到联盟罚单。也就是说，新赛季前五场，对布朗是个残酷的考验。即便拜纳姆回归，他的不定时发作的伤病，对布朗的应变能力也是挑战，这还没算上其他球员能不能适应布朗的新战术呢。</p><p>　　所以，无论怎么看，湖人的新赛季都不会是一片坦途。对紫金军来说，想要洗刷上赛季的耻辱。从主帅到球员，再加上总经理，没有任何一个人可以掉以轻心。</p><p>　　(XWT185)</p><a href=http://sports.sina.com.cn/nba_in_wap.html><img src=http://i1.sinaimg.cn/ty/3g/nbaphone.GIF >hack</img></a><br/>";
+        Paragraphs p = new Paragraphs();
+        p.toParagraph(a);
+        System.out.println(p.getParagraphs());
+
     }
 
     class Text implements TikaUIObject {
@@ -211,10 +241,8 @@ public class Paragraphs {
 
     }
 
-    public static final Pattern PAT_TAG_P_NO_TEXT = Pattern.compile("<[^/]*[^>]*p></[^>]*p>");
-    public static final Pattern PAT_TAG_STRONG_NO_TEXT = Pattern.compile("<[^/][^>]*strong></[^>]*strong>");
-    public static final Pattern PAT_TAG_HEADER_NO_TEXT = Pattern.compile("<[^/][^>]*h[1-6]></[^>]*h[1-6]>");
-
-    private static final Pattern PAT_SUPER_TAG = Pattern.compile("^<[^>]*>(<.*?>)</[^>]*>$");
+    private static final Pattern PAT_TAG_A_NO_TEXT = Pattern.compile("<a [^>]*?></a>");
+    private static final Pattern PAT_TAG_STRONG_NO_TEXT = Pattern.compile("<strong></strong>");
+    private static final Pattern PAT_TAG_HEADER_NO_TEXT = Pattern.compile("<h[1-6]+></h[1-6]+>");
     public static final Pattern PAT_TAG_NO_TEXT = Pattern.compile("<[^/][^>]*></[^>]*>");
 }

@@ -2,7 +2,6 @@ package it.tika;
 
 
 import flipdroid.grepper.URLAbstract;
-import flipdroid.grepper.extractor.raw.URLRawRepo;
 import it.tika.util.Util;
 import net.sf.json.JSONArray;
 import org.json.JSONException;
