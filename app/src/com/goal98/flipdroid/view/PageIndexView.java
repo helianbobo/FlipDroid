@@ -121,7 +121,7 @@ public class PageIndexView extends LinearLayout {
     }
 
     public boolean isHasUpdate() {
-        return hasUpdate;
+        return true;
     }
 
     public boolean isUpdating() {

@@ -81,8 +81,5 @@
     <string name="view_source">View Source</string>
 
     <string name="original_url_is_not_available">Original URL is not available.</string>
-     <string name="share_success">Shared to your Weibo</string>
-     <string name="inprogress">In Progress</string>
-     <string name="toolong">No more than 140 words</string>
 
 </resources>
