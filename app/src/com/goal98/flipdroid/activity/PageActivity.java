@@ -890,7 +890,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                         preparingWindow = slidingWindows.getNextWindow();
                     }
                 }
-                if (next.isLastPage()) {
+                if (next.isLastPage() && forward) {
                     handler.post(new Runnable() {
                         public void run() {
                             showAnimation();
