@@ -343,7 +343,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
                 pageIndexView.setDot(repo.getTotal(), currentPageIndex);
 //                bottomBar.setPageView(current);
-                if (current.isLastPage()) {
+                if (current!=null && current.isLastPage()) {
                     finishActivity();
                 }
 //                current.startAnimation(fadeOutPageView);
@@ -388,7 +388,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         verticalAnimationListenerStep1 = new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
 
-                shadowParams.setMargins(0, (int) (0 - currentBottom.getHeight()), 0, 0);
+                shadowParams.setMargins(0, 0 - currentBottom.getHeight(), 0, 0);
                 //Log.d("ANI", "adding shadows " + currentBottom.getHeight() + "," + currentBottom.getChildCount());
 //                currentBottom.removeAllViews();
 
@@ -1026,6 +1026,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         } else {
             renderingPageView = previous;
         }
+        renderingPageView.setVisibility(View.VISIBLE);
         if (renderingPageView.isRendered())
             return;
 
@@ -1033,7 +1034,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             v.renderBeforeLayout();
         }
         renderingPageView.renderBeforeLayout();
-        renderingPageView.setVisibility(View.VISIBLE);
     }
 
     private void decreasePageNo() {
@@ -1128,7 +1128,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
             current.setAnimationCacheEnabled(true);
             current.startAnimation(fadeInPageView);
-        } else if (isWeiboMode() || next.isLastPage() || next.getWrapperViews().size() < 2 || lastFlipDirection == ACTION_HORIZONTAL) {
+        } else if (isWeiboMode() || (next.isLastPage()&&forward) || (next.getWrapperViews().size() < 2 &&forward) || lastFlipDirection == ACTION_HORIZONTAL) {
 
             Animation rotation = buildFlipHorizonalAnimation(forward);
             if (forward)
