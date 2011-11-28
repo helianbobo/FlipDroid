@@ -552,6 +552,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         current = null;
         next = null;
         previous = null;
+        preparingWindow = null;
 
         currentPageIndex = -1;
         PagingStrategy pagingStrategy = null;

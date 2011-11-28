@@ -110,18 +110,18 @@ public class PageIndexView extends LinearLayout {
     public void setHasUpdate(boolean hasUpdate) {
         this.hasUpdate = hasUpdate;
         this.updating = false;
-        System.out.println("has update");
+        System.out.println("has update" + hasUpdate);
         updateView();
     }
 
-    public void setUpdating(boolean upading) {
-        this.updating = upading;
+    public void setUpdating(boolean updating) {
+        this.updating = updating;
         System.out.println("updating view");
         updateView();
     }
 
     public boolean isHasUpdate() {
-        return true;
+        return hasUpdate;
     }
 
     public boolean isUpdating() {
