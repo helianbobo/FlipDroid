@@ -1128,7 +1128,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
             current.setAnimationCacheEnabled(true);
             current.startAnimation(fadeInPageView);
-        } else if (isWeiboMode() || (next.isLastPage()&&forward) || (next.getWrapperViews().size() < 2 &&forward) || lastFlipDirection == ACTION_HORIZONTAL) {
+        } else if (isWeiboMode()|| (current.isLastPage()&&!forward) || (next.isLastPage()&&forward) || (next.getWrapperViews().size() < 2 &&forward) || lastFlipDirection == ACTION_HORIZONTAL) {
 
             Animation rotation = buildFlipHorizonalAnimation(forward);
             if (forward)

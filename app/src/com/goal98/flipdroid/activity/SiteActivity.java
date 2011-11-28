@@ -110,6 +110,7 @@ public class SiteActivity extends Activity {
                             startActivity(intent);
                             overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
                         }
+                        finish();
                     }
                     if (Constants.TYPE_GOOGLE_READER.equals(type)) {
                         startActivity(new Intent(SiteActivity.this, GoogleAccountActivity.class));
