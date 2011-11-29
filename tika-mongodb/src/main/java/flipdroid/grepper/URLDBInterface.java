@@ -11,4 +11,6 @@ public interface URLDBInterface {
     void insertOrUpdate(URLAbstract urlAbstract);
 
     List<URLAbstract> findBySource(String sourceId,int limit);
+
+    List<URLAbstract> findByContainsImage(String image);
 }

@@ -61,6 +61,7 @@
     <orderEntry type="module" module-name="tika-common" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:1.4" level="project" />
     <orderEntry type="module" module-name="tika-thrift" />
+    <orderEntry type="module" module-name="tika-utils" />
     <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.4.1" level="project" />
   </component>
 </module>

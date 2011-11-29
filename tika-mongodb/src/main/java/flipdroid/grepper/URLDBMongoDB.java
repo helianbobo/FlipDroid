@@ -54,6 +54,12 @@ public class URLDBMongoDB implements URLDBInterface {
         return urlAbstract;
     }
 
+    private URLAbstract fromDBObjectToURLAbstractURLOnly(DBObject urlFromDB) {
+        URLAbstract urlAbstract = new URLAbstract();
+        urlAbstract.setUrl((String) urlFromDB.get("url"));
+        return urlAbstract;
+    }
+
     private URLAbstract fromDBObjectToURLAbstract(DBObject urlFromDB) {
         List<String> imageList = new ArrayList<String>();
         BasicDBList images = (BasicDBList) urlFromDB.get("images");
@@ -87,6 +93,25 @@ public class URLDBMongoDB implements URLDBInterface {
             while (urlFromDB != null && urlFromDB.hasNext()) {
                 DBObject url = urlFromDB.next();
                 URLAbstract urlAbstract = fromDBObjectToURLAbstract(url);
+                urlAbstracts.add(urlAbstract);
+            }
+        } catch (MongoException e) {
+            logger.log(Level.INFO, e.getMessage(), e);
+        }
+        return urlAbstracts;
+    }
+
+    public List<URLAbstract> findByContainsImage(String image) {
+        BasicDBObject query = new BasicDBObject();
+
+        query.put("content", "/" + image + "/");      //contains image
+
+        List<URLAbstract> urlAbstracts = new ArrayList<URLAbstract>();
+        try {
+            DBCursor urlFromDB = db.getCollection(urlCollectionName).find(query);
+            while (urlFromDB != null && urlFromDB.hasNext()) {
+                DBObject url = urlFromDB.next();
+                URLAbstract urlAbstract = fromDBObjectToURLAbstractURLOnly(url);
                 urlAbstracts.add(urlAbstract);
             }
         } catch (MongoException e) {

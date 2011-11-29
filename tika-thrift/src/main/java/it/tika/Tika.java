@@ -76,7 +76,9 @@ public class Tika {
 
                         responseCode = conn.getResponseCode();
                         System.out.println("responseCode " + responseCode);
-
+                        if (responseCode >= 200 && responseCode <= 299) {
+                            break;
+                        }
                     } catch (IOException e) {
                         count++;
                         getLogger().error("tried " + count + " times, " + e.getMessage(), e);
