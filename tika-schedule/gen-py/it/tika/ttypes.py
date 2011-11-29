@@ -20,17 +20,20 @@ class TikaRequest:
   Attributes:
    - url
    - referencedFrom
+   - useCache
   """
 
   thrift_spec = (
     None, # 0
     (1, TType.STRING, 'url', None, None, ), # 1
     (2, TType.STRING, 'referencedFrom', None, None, ), # 2
+    (3, TType.BOOL, 'useCache', None, None, ), # 3
   )
 
-  def __init__(self, url=None, referencedFrom=None,):
+  def __init__(self, url=None, referencedFrom=None, useCache=None,):
     self.url = url
     self.referencedFrom = referencedFrom
+    self.useCache = useCache
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -51,6 +54,11 @@ class TikaRequest:
           self.referencedFrom = iprot.readString();
         else:
           iprot.skip(ftype)
+      elif fid == 3:
+        if ftype == TType.BOOL:
+          self.useCache = iprot.readBool();
+        else:
+          iprot.skip(ftype)
       else:
         iprot.skip(ftype)
       iprot.readFieldEnd()
@@ -68,6 +76,10 @@ class TikaRequest:
     if self.referencedFrom != None:
       oprot.writeFieldBegin('referencedFrom', TType.STRING, 2)
       oprot.writeString(self.referencedFrom)
+      oprot.writeFieldEnd()
+    if self.useCache != None:
+      oprot.writeFieldBegin('useCache', TType.BOOL, 3)
+      oprot.writeBool(self.useCache)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
