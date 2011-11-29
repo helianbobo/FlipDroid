@@ -16,7 +16,7 @@ from Queue import Queue
    
             
 class LinksManagerUseCoroutine(threading.Thread):
-    threadnum=5
+    threadnum=0
     alllinkitem=[]
     
     def __init__(self,*args,**kwargs):

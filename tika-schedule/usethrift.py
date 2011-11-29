@@ -22,10 +22,10 @@ class Tika(object):
         self.client = TikaService.Client(self.protocol)
         self.transport.open()
 
-    def handleUrl(self,url,referencedFrom=None):
+    def handleUrl(self,url,referencedFrom=None,useCache = True):
         r =False
         try:
-            tr = TikaRequest(url,referencedFrom)
+            tr = TikaRequest(url,referencedFrom,useCache)
             print url,"###befor fire"
             aa = self.client.fire(tr)
             print url,"###after fire"
