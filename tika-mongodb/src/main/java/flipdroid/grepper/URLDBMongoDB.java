@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public class URLDBMongoDB implements URLDBInterface {
 
@@ -104,7 +105,9 @@ public class URLDBMongoDB implements URLDBInterface {
     public List<URLAbstract> findByContainsImage(String image) {
         BasicDBObject query = new BasicDBObject();
 
-        query.put("content", "/" + image + "/");      //contains image
+        Pattern p = Pattern.compile(image);
+
+        query.put("content", p);      //contains image
 
         List<URLAbstract> urlAbstracts = new ArrayList<URLAbstract>();
         try {

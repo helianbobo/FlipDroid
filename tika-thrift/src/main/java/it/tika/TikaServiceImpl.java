@@ -25,7 +25,7 @@ public class TikaServiceImpl implements TikaService.Iface {
             return null;
         }
 
-        URLAbstract result = tika.extract(urlDecoded, false,request.getReferencedFrom());
+        URLAbstract result = tika.extract(urlDecoded, !request.isUseCache(),request.getReferencedFrom());
         if (result == null)
             throw new TikaException();
 
