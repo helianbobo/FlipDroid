@@ -74,7 +74,7 @@ public class Tika {
                 int responseCode = 0;
                 while (count < 3) {
                     try {
-
+                        System.out.println("trying "+urlString);
                         URL url = new URL(urlString);
                         conn = URLConnectionUtil.decorateURLConnection(url);
 
@@ -82,6 +82,8 @@ public class Tika {
                         System.out.println("responseCode " + responseCode);
                         if (responseCode >= 200 && responseCode <= 299) {
                             break;
+                        }else{
+                            count++;
                         }
                     } catch (IOException e) {
                         count++;
