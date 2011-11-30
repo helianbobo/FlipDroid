@@ -53,17 +53,52 @@ public class WebpageExtractor {
         String title = urlAbstract.getTitle();
         String content = urlAbstract.getContent();
 
+
+
+
         if (title != null)
             if (content.length() > title.length() * 2 && content.indexOf(title) != -1) {
-                urlAbstract.setContent(content.replaceFirst(title.replace("\\","\\\\").replace(".","\\.").replace("?","\\?").replace(")","\\)").replace("(","\\(").replace("$","\\$"), ""));
+                content = content.replaceFirst(title.replace("\\", "\\\\").replace(".", "\\.").replace("?", "\\?").replace(")", "\\)").replace("(", "\\(").replace("$", "\\$"), "");
             }
 
+        Matcher m;
+        boolean repeat = true;
+        while (repeat) {
+            repeat = false;
+            m = PAT_TAG_A_NO_TEXT.matcher(content);
+            if (m.find()) {
+                repeat = true;
+                content = m.replaceAll("");
+            }
+            m = PAT_TAG_P_NO_TEXT.matcher(content);
+            if (m.find()) {
+                repeat = true;
+                content = m.replaceAll("");
+            }
 
+            m = PAT_TAG_STRONG_NO_TEXT.matcher(content);
+            if (m.find()) {
+                repeat = true;
+                content = m.replaceAll("");
+            }
+
+            m = PAT_TAG_HEADER_NO_TEXT.matcher(content);
+            if (m.find()) {
+                repeat = true;
+                content = m.replaceAll("");
+            }
+        }
+
+        urlAbstract.setContent(content);
         return urlAbstract;
     }
 
+    private static final Pattern PAT_TAG_P_NO_TEXT = Pattern.compile("<p></p>");
+    private static final Pattern PAT_TAG_STRONG_NO_TEXT = Pattern.compile("<strong></strong>");
+    private static final Pattern PAT_TAG_HEADER_NO_TEXT = Pattern.compile("<h[1-6]+></h[1-6]+>");
+
     public static final Pattern PAT_TAG_NO_TEXT = Pattern.compile("<[^/][^>]*></[^>]*>");
-   public static final Pattern PAT_SUPER_TAG = Pattern.compile("^<[^>]*>(<.*?>)</[^>]*>$");
+    public static final Pattern PAT_SUPER_TAG = Pattern.compile("^<[^>]*>(<.*?>)</[^>]*>$");
     private static final Pattern PAT_TAG_A_NO_TEXT = Pattern.compile("<a [^>]*?></a>");
 
     public static void main(String[] args) {
