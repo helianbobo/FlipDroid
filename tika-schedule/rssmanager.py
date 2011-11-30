@@ -20,6 +20,8 @@ from dbtools import ISOTIMEFORMAT
 USERAGENT = 'Mozilla/5.0 (Windows NT 6.0; WOW64) AppleWebKit/534.24 '\
             '(KHTML, like Gecko) Chrome/11.0.696.16 Safari/534.24'  
 
+TIMEOUT_JOIN = 60*2
+TIMEOUT_EVENT = 60*60
 
 class RssManager(object):
     """
@@ -176,17 +178,18 @@ class RssManager(object):
             ts.append(t)
             t.start()
             #t.join()
-        self.event.wait()  
+        self.event.wait(TIMEOUT_EVENT)  
         for t in ts:
             t.join()
         #self.linksmanager.close()
         #self.event.wait()
         print "#############\n#############\n#############\n"
         print "!!!counts:", len(self.linkitems)
-        self.linksmanager.join()
+        self.close()
+        #self.linksmanager.join()
         self.db.close()
         #self.event.wait()
-        self.close()
+        #self.close()
        
         #self.linksmanager.close()
         #self.db.close()

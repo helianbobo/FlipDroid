@@ -35,7 +35,7 @@
     <string name="my_timeline">我的微博</string>
     <string name="my_timeline_desc">我关注的微博</string>
 
-    <string name="msg_no_more_page">读不到内容了。</string>
+    <string name="msg_no_more_page">读不到内容了。向左划显示最后一页，向右划返回主选单</string>
     <string name="loading">加载中...</string>
     <string name="sharedBy">分享自</string>
     <string name="tikaservererror">获取内容不成功，等一下再试吧。</string>
@@ -69,4 +69,7 @@
     <string name="view_source">查看源链接</string>
 
     <string name="original_url_is_not_available">源链接不存在。</string>
+    <string name="share_success">已分享到您的微博</string>
+    <string name="inprogress">请稍候</string>
+    <string name="toolong">不能超过140字</string>
 </resources>

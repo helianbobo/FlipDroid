@@ -282,8 +282,8 @@ public class WebImageView extends ViewSwitcher {
 
             try {
                 if(roundImage)
-                    bitmap = ImageHelper.getRoundedCornerBitmap(bitmap, 5);
-            } catch (Exception e) {
+                    bitmap = ImageHelper.getRoundedCornerBitmap(bitmap, 3);
+            } catch (Throwable e) {
                 Log.w(this.getClass().getName(), "Failed to round image.", e);
             }
 

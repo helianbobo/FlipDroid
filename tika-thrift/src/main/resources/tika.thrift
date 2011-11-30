@@ -4,6 +4,7 @@ namespace py it.tika
 struct TikaRequest {  
   1: string url
   2: string referencedFrom
+  3: bool useCache
 }
 
 struct TikaResponse {  

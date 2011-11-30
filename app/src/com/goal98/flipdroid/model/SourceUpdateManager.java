@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.view.View;
 import android.widget.BaseAdapter;
 import com.goal98.flipdroid.activity.IndexActivity;
+import com.goal98.flipdroid.client.TikaClient;
+import com.goal98.flipdroid.db.RecommendSourceDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.cachesystem.CacheableArticleSource;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
@@ -29,11 +31,13 @@ public class SourceUpdateManager {
     private SourceDB sourceDB;
     private SourceCache sourceCache;
     private SourceUpdateable updateable;
+    private RecommendSourceDB recommendSourceDB;
 
-    public SourceUpdateManager(SourceDB sourceDB, SourceCache sourceCache, SourceUpdateable updateable) {
+    public SourceUpdateManager(SourceDB sourceDB, SourceCache sourceCache, SourceUpdateable updateable, RecommendSourceDB recommendSourceDB) {
         this.sourceDB = sourceDB;
         this.sourceCache = sourceCache;
         this.updateable = updateable;
+        this.recommendSourceDB = recommendSourceDB;
     }
 
     public void updateAll() {
@@ -65,5 +69,13 @@ public class SourceUpdateManager {
             cachedArticleSource.checkUpdate();
         }
 
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                String updatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(Constants.TYPE_RSS);
+                recommendSourceDB.insert(updatedSource, Constants.TYPE_RSS);
+                System.out.println("recommend source updated");
+            }
+        });
+        t.start();
     }
 }

@@ -19,7 +19,7 @@
         <activity android:name=".activity.ConfigActivity" android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Light.NoTitleBar"/>
         <activity android:name=".activity.PageActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar">
+                  android:theme="@android:style/Theme.Light.NoTitleBar" android:windowSoftInputMode="stateUnspecified|adjustPan">
 
         </activity>
         <activity android:name=".activity.IndexActivity" android:screenOrientation="portrait"

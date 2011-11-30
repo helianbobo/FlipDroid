@@ -2,7 +2,6 @@ package com.goal98.flipdroid.model;
 
 import android.content.Context;
 import android.util.Log;
-import com.goal98.flipdroid.db.RecommendSourceDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.util.Constants;
 import org.json.JSONArray;
@@ -11,18 +10,16 @@ import org.json.JSONObject;
 
 import java.util.*;
 
-public class RSSSourceRepo {
+public class SourceRepo {
 
     private Context context;
-    private FromFileJSONReader fromFileSourceResolver;
+    public FromFileJSONReader fromFileSourceResolver;
     public static final String KEY_NAME_SAMPLES = "samples";
     public static final String KEY_NAME_GROUP = "group";
-    private RecommendSourceDB recommendSourceDB;
 
-    public RSSSourceRepo(Context context) {
+    public SourceRepo(Context context) {
         this.context = context;
         fromFileSourceResolver = new FromFileJSONReader(context);
-        recommendSourceDB = new RecommendSourceDB(context);
     }
 
     public static GroupedSource group(List<Map<String, String>> sourceList) {
@@ -139,16 +136,7 @@ public class RSSSourceRepo {
 
     private JSONArray getSourceJSON(String sourceName) {
         try {
-            String sourceJsonStr = null;
-            RecommendSource recommendSource = recommendSourceDB.findSourceByType("RSS");
-
-            if (recommendSource == null) {//read local file as a failover process
-                sourceJsonStr = fromFileSourceResolver.resolve(sourceName);
-                recommendSourceDB.insert(sourceJsonStr, "RSS");
-            } else {
-                sourceJsonStr = recommendSource.getBody();
-            }
-
+            String sourceJsonStr = fromFileSourceResolver.resolve(sourceName);
             return new JSONArray(sourceJsonStr);
         } catch (Exception e) {
             Log.e(this.getClass().getName(), e.getMessage(), e);

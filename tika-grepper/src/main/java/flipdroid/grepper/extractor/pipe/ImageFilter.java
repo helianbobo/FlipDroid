@@ -98,8 +98,10 @@ public class ImageFilter implements Extractor {
             String queryURL = imageURL.substring(0, hashIndex);
             int first = queryURL.indexOf("http");
             queryURL = queryURL.substring(first);
-            if (tikaImageService != null && tikaImageService.isBlacklisted(queryURL))
+            if (tikaImageService != null && tikaImageService.isBlacklisted(queryURL)){
+                System.out.println("in black list:"+queryURL);
                 continue;
+            }
 
 
             ImageInfo ii = null;

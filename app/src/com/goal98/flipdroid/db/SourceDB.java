@@ -60,6 +60,7 @@ public class SourceDB extends AbstractDB {
         values.put(Source.KEY_SOURCE_DESC, sourceDesc);
         values.put(Source.KEY_CONTENT_URL, contentURL);
         values.put(Source.KEY_CAT, cat);
+//        values.put(Source.KEY_IMAGE_URL, imageURL);
         return insert(values);
     }
 

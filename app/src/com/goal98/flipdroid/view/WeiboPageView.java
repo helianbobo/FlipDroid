@@ -16,7 +16,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.*;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
-import com.goal98.flipdroid.activity.FlipdroidApplications;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.activity.SinaAccountActivity;
 import com.goal98.flipdroid.activity.SiteActivity;
@@ -217,7 +216,7 @@ public class WeiboPageView extends FrameLayout {
         WeiboPageView.this.addView(enlargedViewWrapperWr.get(), params);
         sw.stopPrintReset();
         sw.start("enlarge till tool bar");
-        setupToolBar(articleView, weiboArticleView, pageActivity.getHeader());
+        setupToolBar(articleView, weiboArticleView, pageActivity.getBottomBar());
         sw.stopPrintReset();
         content = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.content);
         final LinearLayout contentWrapper = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.contentWrapper);
@@ -257,15 +256,15 @@ public class WeiboPageView extends FrameLayout {
                             pageActivity.showDialog(PageActivity.PROMPT_OAUTH);
                             break;
                         }
-
+                        pageActivity.hideBottomBar();
                         commentShadowLayer = new LinearLayout(WeiboPageView.this.getContext());
-                        commentShadowLayer.setBackgroundColor(Color.parseColor("#77000000"));
+                        commentShadowLayer.setBackgroundColor(Color.parseColor(Constants.SHADOW_LAYER_COLOR));
                         commentShadowLayer.setPadding(14, 20, 14, 20);
                         LinearLayout commentPad = (LinearLayout) inflater.inflate(R.layout.comment_pad, null);
                         WebImageView sourceImage = (WebImageView) commentPad.findViewById(R.id.source_image);
                         TextView sourceName = (TextView) commentPad.findViewById(R.id.source_name);
                         Button closeBtn = (Button) commentPad.findViewById(R.id.close);
-                        Button sendBtn = (Button) commentPad.findViewById(R.id.send);
+                        ImageButton sendBtn = (ImageButton) commentPad.findViewById(R.id.send);
 
                         closeBtn.setOnTouchListener(new View.OnTouchListener() {
 
@@ -274,6 +273,7 @@ public class WeiboPageView extends FrameLayout {
                                 switch (motionEvent.getAction()) {
                                     case MotionEvent.ACTION_UP:
                                         WeiboPageView.this.removeView(commentShadowLayer);
+                                        pageActivity.showBottomBar();
                                         break;
                                     default:
                                         break;
@@ -286,6 +286,7 @@ public class WeiboPageView extends FrameLayout {
 
 
                         TextView status = (TextView) commentPad.findViewById(R.id.status);
+                        final TextView wordCount = (TextView) commentPad.findViewById(R.id.wordCount);
                         final EditText commentEditText = (EditText) commentPad.findViewById(R.id.comment);
                         commentEditText.addTextChangedListener(new TextWatcher() {
                             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -296,35 +297,53 @@ public class WeiboPageView extends FrameLayout {
                             }
 
                             public void afterTextChanged(Editable s) {
-
+                                setWordCountIndicator(wordCount, s.length());
                             }
                         });
 
+                        final Article article = articleView.getArticle();
                         sendBtn.setOnTouchListener(new View.OnTouchListener() {
 
                             public boolean onTouch(View view, MotionEvent motionEvent) {
 
                                 switch (motionEvent.getAction()) {
                                     case MotionEvent.ACTION_UP:
-                                        if (articleView.getArticle().getSourceType().equals(Constants.TYPE_SINA_WEIBO)) {
-                                            try {
-                                                pageActivity.comment(commentEditText.getText().toString(), articleView.getArticle().getStatusId());
-                                            } catch (WeiboException e) {
-                                                e.printStackTrace();
-                                            } catch (NoSinaAccountBindedException e) {
-                                                pageActivity.startActivity(new Intent(pageActivity, SinaAccountActivity.class));
-                                            }
-                                        } else {
-                                            try {
-                                                pageActivity.forward(commentEditText.getText().toString(), articleView.getArticle().extractURL());
-                                            } catch (WeiboException e) {
-                                                e.printStackTrace();
-                                            } catch (NoSinaAccountBindedException e) {
-                                                pageActivity.startActivity(new Intent(pageActivity, SinaAccountActivity.class));
-                                            }
+                                        if(commentEditText.getText().length() > 140){
+                                            wordCount.setText(R.string.toolong);
+                                            return true;
                                         }
+                                        Thread t = new Thread(new Runnable() {
+                                            public void run() {
+                                                if (article.getSourceType().equals(Constants.TYPE_SINA_WEIBO)) {
+                                                    try {
+                                                        pageActivity.comment(commentEditText.getText().toString(), article);
+                                                    } catch (WeiboException e) {
+                                                        e.printStackTrace();
+                                                    } catch (NoSinaAccountBindedException e) {
+                                                        pageActivity.startActivity(new Intent(pageActivity, SinaAccountActivity.class));
+                                                    }
+                                                } else {
+                                                    try {
+                                                        pageActivity.forward(commentEditText.getText().toString(), article);
 
-                                        WeiboPageView.this.removeView(commentShadowLayer);
+                                                    } catch (WeiboException e) {
+                                                        e.printStackTrace();
+                                                    } catch (NoSinaAccountBindedException e) {
+                                                        pageActivity.startActivity(new Intent(pageActivity, SinaAccountActivity.class));
+                                                    }
+                                                }
+                                                WeiboPageView.this.post(new Runnable() {
+                                                    public void run() {
+                                                        Toast.makeText(pageActivity, R.string.share_success, 2000).show();
+                                                        WeiboPageView.this.removeView(commentShadowLayer);
+                                                        pageActivity.dismissDialog(PageActivity.PROMPT_INPROGRESS);
+                                                        pageActivity.showBottomBar();
+                                                    }
+                                                });
+                                            }
+                                        });
+                                        t.start();
+                                        pageActivity.showDialog(PageActivity.PROMPT_INPROGRESS);
                                         break;
                                     default:
                                         break;
@@ -335,16 +354,39 @@ public class WeiboPageView extends FrameLayout {
 
                         });
 
-                        if (articleView.getArticle().getPortraitImageUrl() != null) {
-                            sourceImage.setImageUrl(articleView.getArticle().getPortraitImageUrl().toExternalForm());
+                        if (article.getPortraitImageUrl() != null) {
+                            sourceImage.setImageUrl(article.getPortraitImageUrl().toExternalForm());
                             sourceImage.loadImage();
                         }
 
-                        sourceName.setText(articleView.getArticle().getAuthor());
-                        status.setText(articleView.getArticle().getStatus());
+                        sourceName.setText(article.getAuthor());
+                        status.setText(article.getStatus());
+
+                        String paragraph1 = article.getPreviewParagraph();
+                        if (paragraph1.length() > 40) {
+                            paragraph1 = paragraph1.substring(0, 40);
+                        }
+//                        commentEditText.setFocusable(true);
+//                        commentEditText.requestFocus(1000);
+//                        commentEditText.setFocusableInTouchMode(true);
+                        final String templateText = "| [" + article.getTitle() + "] " + paragraph1 + " " + article.getSourceURL();
+                        commentEditText.setText(templateText);
+                        commentEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
+                            public void onFocusChange(View view, boolean b) {
+                                commentEditText.requestFocus();
+                                commentEditText.setSelection(0);
+                                commentEditText.setFocusable(true);
+                            }
+                        });
+
+
+                        int count = templateText.length();
+                        setWordCountIndicator(wordCount, count);
 
                         commentShadowLayer.addView(commentPad, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
                         WeiboPageView.this.addView(commentShadowLayer);
+
+
                         break;
                     default:
                         break;
@@ -357,6 +399,17 @@ public class WeiboPageView extends FrameLayout {
 
 
     }
+
+    private void setWordCountIndicator(TextView wordCount, int current) {
+        if(current > 140){
+            wordCount.setTextColor(Color.parseColor(Constants.COLOR_RED));
+        }else{
+            wordCount.setTextColor(Color.BLACK);
+        }
+
+        wordCount.setText(current + "/140");
+    }
+
 
     private void closeEnlargedView(ExpandableArticleView weiboArticleView) {
         if (commentShadowLayer != null)
@@ -432,5 +485,6 @@ public class WeiboPageView extends FrameLayout {
         if (this.clickedArticleView != null) {
             this.closeEnlargedView(clickedArticleView);
         }
+        pageActivity.showBottomBar();
     }
 }

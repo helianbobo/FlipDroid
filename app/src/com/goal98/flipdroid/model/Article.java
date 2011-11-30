@@ -5,6 +5,8 @@ import com.goal98.android.ImageLoader;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.view.ExpandableArticleView;
 import com.goal98.flipdroid.view.ThumbnailArticleView;
+import com.goal98.tika.common.Paragraphs;
+import com.goal98.tika.common.TikaUIObject;
 
 import java.net.URL;
 import java.util.*;
@@ -327,5 +329,26 @@ public class Article {
 
     public void setExpandable(boolean expandable) {
         this.expandable = expandable;
+    }
+
+    public String getPreviewParagraph() {
+        String paragraph1 = "";
+        Paragraphs paragraphs = new Paragraphs();
+        paragraphs.toParagraph(getContent());
+
+        if (paragraphs.getParagraphs() != null && paragraphs.getParagraphs().size() != 0) {
+            for (int i = 0; i < paragraphs.getParagraphs().size(); i++) {
+                TikaUIObject uiObject = paragraphs.getParagraphs().get(i);
+                if (!uiObject.getType().equals(TikaUIObject.TYPE_TEXT))
+                    continue;
+
+                paragraph1 = uiObject.getObjectBody().replaceAll("\\<[/]?.+?\\>", "");
+                if (paragraph1.length() < 40)
+                    continue;
+                else
+                    break;
+            }
+        }
+        return paragraph1;
     }
 }

@@ -80,11 +80,7 @@ public class CachedArticleSource implements ArticleSource {
                 try {
                     System.out.println("checking update");
                     sourceUpdateable.notifyUpdating(CachedArticleSource.this);
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                    }
+
                     byte[] updatedBytes = articleSource.loadLatestSource();
                     updated = true;
                     System.out.println("has update:" + updatedBytes != null);
