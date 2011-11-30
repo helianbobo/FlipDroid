@@ -71,10 +71,10 @@ public class ThumbnailArticleView extends ExpandableArticleView {
 
                     int titleSize = 18;
                     int maxTitleLength = 0;
-                    if (!smallScreen) {
-                        maxTitleLength = 50;
-                    } else {
+                    if (smallScreen) {
                         maxTitleLength = 20;
+                    } else {
+                        maxTitleLength = 35;
                     }
                     if (article.getTitle() != null && article.getTitleLength() >= maxTitleLength) {
                         titleSize = 15;
@@ -86,12 +86,12 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                         }
                     } else {
                         if (largeScreen) {
-                            titleSize = 21;
+                            titleSize = 18;
                         } else if (smallScreen) {
                             titleSize = 17;
                         }
                     }
-                    titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_TITLE);
+                    titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
                     titleView.setText(article.getTitle());
                     titleView.setWidth(deviceInfo.getWidth());
 

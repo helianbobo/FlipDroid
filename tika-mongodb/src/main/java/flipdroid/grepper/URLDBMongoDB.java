@@ -144,7 +144,17 @@ public class URLDBMongoDB implements URLDBInterface {
     public void insertOrUpdate(URLAbstract urlAbstract) {
         BasicDBObject query = new BasicDBObject();
 
-        query.put("indexURL", urlAbstract.getUrl());
+        BasicDBObject or1 = new BasicDBObject();
+        or1.put("indexURL", urlAbstract.getUrl());
+
+        BasicDBObject or2 = new BasicDBObject();
+        or2.put("url", urlAbstract.getUrl());
+
+        ArrayList<DBObject> list = new ArrayList<DBObject>();
+        list.add(or1);
+        list.add(or2);
+        query.put("$or", list);
+
         try {
             DBObject urlFromDB = db.getCollection(urlCollectionName).findOne(query);
             if (urlFromDB == null) {

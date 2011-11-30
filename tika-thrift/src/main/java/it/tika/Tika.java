@@ -63,7 +63,11 @@ public class Tika {
             }
 
             if (result == null || (result != null && result.getContent() == null)) {
-                System.out.println(Thread.currentThread().getName() + " db cache miss...");
+                if (nocache) {
+                    System.out.println(Thread.currentThread().getName() + " no cache flag");
+                } else {
+                    System.out.println(Thread.currentThread().getName() + " db cache miss...");
+                }
 
                 HttpURLConnection conn = null;
                 int count = 0;
