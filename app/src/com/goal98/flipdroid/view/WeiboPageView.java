@@ -7,10 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
+import android.view.*;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
@@ -187,8 +184,6 @@ public class WeiboPageView extends FrameLayout {
     private ArticleView articleView;
 
     public void enlarge(final ArticleView articleView, final ExpandableArticleView weiboArticleView) {
-        StopWatch sw = new StopWatch();
-        sw.start("enlarge");
         this.articleView = articleView;
         this.clickedArticleView = weiboArticleView;
         inflater = LayoutInflater.from(WeiboPageView.this.getContext());
@@ -197,8 +192,8 @@ public class WeiboPageView extends FrameLayout {
 
             wrapperll = (LinearLayout) (enlargedViewWrapperWr.get().findViewById(R.id.wrapperll));
 
-            LinearLayout shadowlayer = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.shadowlayer);
-            shadowlayer.setOnClickListener(new OnClickListener() {
+            LinearLayout shadowLayer = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.shadowlayer);
+            shadowLayer.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {
                     if (!weiboArticleView.isLoading)
                         closeEnlargedView(weiboArticleView);
@@ -213,13 +208,12 @@ public class WeiboPageView extends FrameLayout {
         WeiboPageView.this.removeView(enlargedViewWrapperWr.get());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(deviceInfo.getWidth(), deviceInfo.getHeight());
         WeiboPageView.this.addView(enlargedViewWrapperWr.get(), params);
-        sw.stopPrintReset();
-        sw.start("enlarge till tool bar");
         setupToolBar(articleView, weiboArticleView, pageActivity.getBottomBar());
-        sw.stopPrintReset();
-        content = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.content);
-        final LinearLayout contentWrapper = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.contentWrapper);
+        pageActivity.hideIndexView();
+//        pageActivity.getContainer().setLayoutParams();
 
+//        pageActivity.getBottomBar().setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        content = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.content);
         articleView.startAnimation(fadeinArticle);
 
     }
@@ -434,7 +428,7 @@ public class WeiboPageView extends FrameLayout {
             }
         });
         enlargedViewWrapperWr.get().startAnimation(fadeout);
-
+        pageActivity.showIndexView();
     }
 
     public void showLoading() {

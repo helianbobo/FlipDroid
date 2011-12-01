@@ -127,4 +127,12 @@ public class PageIndexView extends LinearLayout {
     public boolean isUpdating() {
         return updating;
     }
+
+    public void hide(){
+        this.setVisibility(GONE);
+    }
+
+     public void show(){
+        this.setVisibility(VISIBLE);
+    }
 }

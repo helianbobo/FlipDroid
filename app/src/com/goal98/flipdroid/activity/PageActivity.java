@@ -69,6 +69,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private boolean forward = false;
 
     private ViewGroup container;
+
+    public ViewGroup getContainer() {
+        return container;
+    }
+
     private WeiboPageView current;
     private WeiboPageView next;
     private WeiboPageView previous;
@@ -648,6 +653,18 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         pageViewLayoutParamsFront = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT);
         pageViewLayoutParamsBack = pageViewLayoutParamsFront;
         flipPage(true);
+    }
+
+    public void hideIndexView() {
+        this.pageIndexView.hide();
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0,440);
+        container.setLayoutParams(params);
+    }
+
+    public void showIndexView() {
+        this.pageIndexView.show();
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0,415);
+        container.setLayoutParams(params);
     }
 
 
