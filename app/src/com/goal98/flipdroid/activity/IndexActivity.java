@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.*;
@@ -128,6 +129,11 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         return super.onContextItemSelected(item);
     }
 
+    private boolean getAutoUpdateNonWIFIFromPreference() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        return PreferenceUtil.checkBooleanPreference(preferences,this,R.string.key_auto_check_update_nonwifi_preference);
+    }
+
     private void bindAdapter() {
         if (deviceInfo == null)
             deviceInfo = getDeviceInfoFromApplicationContext();
@@ -176,7 +182,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         bindAdapter();
 
         adapter.notifyDataSetChanged();
-        if (NetworkUtil.isNetworkAvailable()) {
+        boolean shallUpdate = NetworkUtil.toLoadImage(this);
+        if (shallUpdate) {
             new Thread(new Runnable() {
 
                 public void run() {

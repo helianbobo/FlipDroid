@@ -41,6 +41,12 @@
                                            android:title="@string/title_load_image_preference"
             />
 
+    <android.preference.CheckBoxPreference android:id="@+id/autoUpdateCheckNonWifi"
+                                           android:key="@string/key_auto_check_update_nonwifi_preference"
+                                           android:defaultValue="true"
+                                           android:title="@string/title_auto_check_update_nonwifi_preference"
+            />
+
     <EditTextPreference
             android:key="@string/key_tika_host"
             android:defaultValue="www.tika.it"

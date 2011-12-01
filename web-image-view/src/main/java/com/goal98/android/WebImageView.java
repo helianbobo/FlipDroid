@@ -37,6 +37,7 @@ public class WebImageView extends ViewSwitcher {
     private int defaultWidth;
     private int defaultHeight;
     private boolean roundImage;
+    private boolean loadFromInternetFlag;
 
     public boolean isRoundImage() {
         return roundImage;
@@ -52,8 +53,9 @@ public class WebImageView extends ViewSwitcher {
      * @param autoLoad Whether the read should start immediately after creating the view. If set to
      *                 false, use {@link #loadImage()} to manually trigger the it.tika.mongodb.image read.
      */
-    public WebImageView(Context context, String imageUrl, boolean autoLoad) {
+    public WebImageView(Context context, String imageUrl, boolean autoLoad,boolean loadFromInternetFlag) {
         super(context);
+        this.loadFromInternetFlag = loadFromInternetFlag;
         initialize(context, imageUrl, null, null, autoLoad);
     }
 
@@ -87,9 +89,10 @@ public class WebImageView extends ViewSwitcher {
     }
 
     public WebImageView(Context context, String imageUrl, Drawable progressDrawable,
-                        Drawable errorDrawable, boolean autoLoad, boolean roundImage) {
+                        Drawable errorDrawable, boolean autoLoad, boolean roundImage, boolean loadFromInternetFlag) {
         super(context);
         this.roundImage = roundImage;
+        this.loadFromInternetFlag = loadFromInternetFlag;
         initialize(context, imageUrl, progressDrawable, errorDrawable, autoLoad);
 
     }
@@ -207,7 +210,7 @@ public class WebImageView extends ViewSwitcher {
         if (imageUrl.length() == 0)
             return;
         handler = new DefaultImageLoaderHandler();
-        ImageLoader.start(imageUrl, handler);
+        ImageLoader.start(imageUrl, handler,loadFromInternetFlag);
     }
 
     public DefaultImageLoaderHandler handler;

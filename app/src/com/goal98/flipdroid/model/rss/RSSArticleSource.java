@@ -119,9 +119,7 @@ public class RSSArticleSource extends BaseCacheableArticleSource {
 
     public byte[] getLatestSource() {
 
-        if(!NetworkUtil.isNetworkAvailable()) {
-            return null;
-        }
+
 
         InputStream is = null;
         try {

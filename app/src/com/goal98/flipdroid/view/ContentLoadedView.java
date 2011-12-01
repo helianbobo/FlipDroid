@@ -121,7 +121,7 @@ public class ContentLoadedView extends ArticleView {
             reference.setVisibility(VISIBLE);
             referenceContent.setVisibility(VISIBLE);
             if (article.getPortraitImageUrl() != null) {
-                icon = new WebImageView(this.getContext(), article.getPortraitImageUrl().toExternalForm(), false);
+                icon = new WebImageView(this.getContext(), article.getPortraitImageUrl().toExternalForm(), false,toLoadImage);
                 icon.setRoundImage(true);
                 icon.setDefaultHeight(25);
                 icon.setDefaultWidth(25);
@@ -226,7 +226,7 @@ public class ContentLoadedView extends ArticleView {
                     continue;
                 ImageInfo imageInfo = ((ImageInfo) uiObject);
                 String url = imageInfo.getUrl();
-                WebImageView imageView = new WebImageView(this.getContext(), url, false);
+                WebImageView imageView = new WebImageView(this.getContext(), url, false,toLoadImage);
                 imageView.setRoundImage(false);
                 imageView.setBackgroundResource(R.drawable.border);
 //                imageView.imageView.setTag(url);

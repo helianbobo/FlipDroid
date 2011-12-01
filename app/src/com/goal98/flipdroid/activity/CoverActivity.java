@@ -61,7 +61,6 @@ public class CoverActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        NetworkUtil.context = getApplicationContext();
 
         setContentView(R.layout.cover);
 

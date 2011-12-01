@@ -72,4 +72,5 @@
     <string name="share_success">已分享到您的微博</string>
     <string name="inprogress">请稍候</string>
     <string name="toolong">不能超过140字</string>
+    <string name="title_auto_check_update_nonwifi_preference">非Wifi下自动更新</string>
 </resources>

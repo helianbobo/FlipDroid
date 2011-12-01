@@ -59,6 +59,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     public SinaToken sinaToken;
     private CachedArticleSource cachedArticleSource;
     public static final int PROMPT_INPROGRESS = 3;
+    private boolean toLoadImage;
 
     public ExecutorService getExecutor() {
         return executor;
@@ -224,7 +225,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
             }
         });*/
-
+        toLoadImage = NetworkUtil.toLoadImage(PageActivity.this);
         pageIndexView = (PageIndexView) findViewById(R.id.pageIndex);
         ViewSwitcher headerSwitcher = (ViewSwitcher) findViewById(R.id.flipper);
         bottomBar = (HeaderView) findViewById(R.id.header);
@@ -341,14 +342,15 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                     }
                 }).start();
 
-                if (cachedArticleSource != null && !updated && NetworkUtil.isNetworkAvailable()) {
+
+                if (cachedArticleSource != null && !updated && toLoadImage) {
                     Log.v(TAG, "check update");
                     cachedArticleSource.checkUpdate();
                 }
 
                 pageIndexView.setDot(repo.getTotal(), currentPageIndex);
 //                bottomBar.setPageView(current);
-                if (current!=null && current.isLastPage()) {
+                if (current != null && current.isLastPage()) {
                     finishActivity();
                 }
 //                current.startAnimation(fadeOutPageView);
@@ -657,14 +659,18 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     public void hideIndexView() {
         this.pageIndexView.hide();
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0,440);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 44040);
         container.setLayoutParams(params);
     }
 
     public void showIndexView() {
         this.pageIndexView.show();
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0,415);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 415);
         container.setLayoutParams(params);
+    }
+
+    public boolean isToLoadImage() {
+        return toLoadImage;
     }
 
 
@@ -1145,7 +1151,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
             current.setAnimationCacheEnabled(true);
             current.startAnimation(fadeInPageView);
-        } else if (isWeiboMode()|| (current.isLastPage()&&!forward) || (next.isLastPage()&&forward) || (next.getWrapperViews().size() < 2 &&forward) || lastFlipDirection == ACTION_HORIZONTAL) {
+        } else if (isWeiboMode() || (current.isLastPage() && !forward) || (next.isLastPage() && forward) || (next.getWrapperViews().size() < 2 && forward) || lastFlipDirection == ACTION_HORIZONTAL) {
 
             Animation rotation = buildFlipHorizonalAnimation(forward);
             if (forward)
@@ -1239,12 +1245,12 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         }
     }
 
-    public void hideBottomBar(){
+    public void hideBottomBar() {
         bottomBar.hide();
     }
 
-    public void showBottomBar(){
-        bottomBar. show();
+    public void showBottomBar() {
+        bottomBar.show();
     }
 
     public static final int PROMPT_OAUTH = 1;
@@ -1363,9 +1369,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         return;
     }
 
-    public boolean toLoadImage() {
-        return PreferenceManager.getDefaultSharedPreferences(this).getBoolean(this.getString(R.string.key_load_image_preference), true);
-    }
+
 
     private void addShortcut() {
         Intent shortcut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
