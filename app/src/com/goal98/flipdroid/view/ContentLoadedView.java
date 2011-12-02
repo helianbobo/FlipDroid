@@ -63,48 +63,7 @@ public class ContentLoadedView extends ArticleView {
     static final int ZOOM = 2;
     int mode = NONE;
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        int pointerCount = event.getPointerCount();
-        if (pointerCount <= 1)
-            return true;
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_POINTER_DOWN:
-                oldDist = spacing(event);
-                //Log.d("MTZ", "oldDist=" + oldDist);
 
-                if (oldDist > 10f) {
-                    mode = ZOOM;
-                    //Log.d("MTZ", "mode=ZOOM");
-                }
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-                if (mode == ZOOM) {
-                    float newDist = spacing(event);
-                    //Log.d("MTZ", "newDist=" + newDist);
-                    if (newDist > oldDist) {
-                        //Log.d("MTZ", "zoomout" + newDist);
-                    } else if (newDist < oldDist) {
-                        //Log.d("MTZ", "zoomin" + newDist);
-                    }
-                }
-                break;
-        }
-        return true;
-    }
-
-    private float spacing(MotionEvent event) {
-        float x = event.getX(0) - event.getX(1);
-        float y = event.getY(0) - event.getY(1);
-        return FloatMath.sqrt(x * x + y * y);
-    }
-
-    private void midPoint(PointF point, MotionEvent event) {
-        float x = event.getX(0) + event.getX(1);
-        float y = event.getY(0) + event.getY(1);
-        point.set(x / 2, y / 2);
-    }
 
     public void buildView() {
         LayoutInflater inflator = LayoutInflater.from(this.getContext());
@@ -191,10 +150,10 @@ public class ContentLoadedView extends ArticleView {
                 tv.setGravity(Gravity.LEFT | Gravity.TOP);
                 if (uiObject.getObjectBody().startsWith("<p><blockquote>")) {
                     style = "<p><blockquote>";
-                    tv.setPadding(2 + txtSize * 2, 3, 2 + txtSize * 2, 3);
+                    tv.setPadding(2 + txtSize , 3, 2 + txtSize , 3);
                     tv.setBackgroundColor(Color.parseColor("#DDDDDD"));
                 } else {
-                    tv.setPadding(2 + txtSize, 3, 2 + txtSize, 3);
+                    tv.setPadding(2 + txtSize/2, 3, 2 + txtSize/2, 3);
                 }
                 StringBuilder sb = new StringBuilder("<br/>");
                 String objectBody = uiObject.getObjectBody();

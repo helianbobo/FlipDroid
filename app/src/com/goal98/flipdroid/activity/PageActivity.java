@@ -659,8 +659,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     public void hideIndexView() {
         this.pageIndexView.hide();
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 440);
-        container.setLayoutParams(params);
+        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 440);
+        container.setLayoutParams(params1);
     }
 
     public void showIndexView() {
