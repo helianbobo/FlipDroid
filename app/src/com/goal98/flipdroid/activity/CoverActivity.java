@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -19,10 +20,17 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
+import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.model.FromFileJSONReader;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.GestureUtil;
 import com.goal98.flipdroid.util.NetworkUtil;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.Map;
 
 
 public class CoverActivity extends Activity {
@@ -58,6 +66,8 @@ public class CoverActivity extends Activity {
         return dialog;
     }
 
+    private String TAG = this.getClass().getName();
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -76,16 +86,50 @@ public class CoverActivity extends Activity {
         });
         new AccountDB(getApplicationContext());
 
+        initDefaultSource();
+
         TelephonyManager tManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         deviceId = tManager.getDeviceId();
         Log.v(this.getClass().getName(), "deviceId=" + deviceId);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
-                    public void run() {
-                        goToNextActivity();
-                    }
-                }, 2000);
+            public void run() {
+                goToNextActivity();
+            }
+        }, 2000);
+    }
+
+    private void initDefaultSource() {
+        SourceDB sourceDB = new SourceDB(getApplicationContext());
+
+        final Cursor cursor = sourceDB.findAll();
+        startManagingCursor(cursor);
+        if (cursor.getCount() == 0) {
+            FromFileJSONReader fromFileSourceResolver = new FromFileJSONReader(getApplicationContext());
+            try {
+                final String defaultSourceListJson = fromFileSourceResolver.resolve("DEFAULT_" + Constants.RECOMMAND_SOURCE_SUFFIX);
+                JSONArray defaultSourceList = new JSONArray(defaultSourceListJson);
+                for (int i = 0; i < defaultSourceList.length(); i++) {
+                    JSONObject defaultSource = (JSONObject) defaultSourceList.get(i);
+                    final Map<String, String> source = SourceDB.buildSource(Constants.TYPE_RSS,
+                            defaultSource.getString("name"),
+                            defaultSource.getString("id"),
+                            defaultSource.getString("desc"),
+                            defaultSource.getString("image_url"),
+                            defaultSource.getString("content_url"),
+                            "");
+                    sourceDB.insert(source);
+                }
+
+            } catch (Exception e) {
+                Log.w(TAG, e.getMessage(), e);
+            } finally {
+                sourceDB.close();
+            }
+        }
+
+
     }
 
     @Override
@@ -132,4 +176,6 @@ public class CoverActivity extends Activity {
         animation.setDuration(1700);
         view.startAnimation(animation);
     }
+
+
 }
