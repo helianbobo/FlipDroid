@@ -62,10 +62,12 @@ public class ImageLoader implements Runnable {
 
     private static long expirationInMinutes = DEFAULT_TTL_MINUTES;
     private MyHandler preloadImageLoaderHandler;
+    private boolean loadImageFromInternet;
 
-    public ImageLoader(String imageUrl, MyHandler preloadImageLoaderHandler) {
+    public ImageLoader(String imageUrl, MyHandler preloadImageLoaderHandler,boolean loadImageFromInternet) {
         this.imageUrl = imageUrl;
         this.preloadImageLoaderHandler = preloadImageLoaderHandler;
+        this.loadImageFromInternet =  loadImageFromInternet;
     }
 
 
@@ -112,9 +114,10 @@ public class ImageLoader implements Runnable {
 
     private ImageLoaderHandler handler;
 
-    public ImageLoader(String imageUrl, ImageLoaderHandler handler) {
+    public ImageLoader(String imageUrl, ImageLoaderHandler handler,boolean loadImageFromInternet) {
         this.imageUrl = imageUrl;
         this.handler = handler;
+        this.loadImageFromInternet = loadImageFromInternet;
     }
 
     /**
@@ -125,8 +128,8 @@ public class ImageLoader implements Runnable {
      * @param imageUrl  the URL of the it.tika.mongodb.image to read
      * @param imageView the ImageView which should be updated with the new it.tika.mongodb.image
      */
-    public static void start(String imageUrl, ImageView imageView) {
-        start(imageUrl, imageView, new ImageLoaderHandler(imageView, imageUrl), null, null);
+    public static void start(String imageUrl, ImageView imageView,boolean loadFromInternetFlag) {
+        start(imageUrl, imageView, new ImageLoaderHandler(imageView, imageUrl), null, null,loadFromInternetFlag);
     }
 
     /**
@@ -141,10 +144,10 @@ public class ImageLoader implements Runnable {
      * @param errorDrawable the Drawable set to the ImageView if a read error occurs
      */
     public static void start(String imageUrl, ImageView imageView, Drawable dummyDrawable,
-                             Drawable errorDrawable) {
+                             Drawable errorDrawable,boolean loadFromInternetFlag) {
         start(imageUrl, imageView, new ImageLoaderHandler(imageView, imageUrl,
                 errorDrawable),
-                dummyDrawable, errorDrawable);
+                dummyDrawable, errorDrawable,loadFromInternetFlag);
     }
 
     /**
@@ -157,8 +160,8 @@ public class ImageLoader implements Runnable {
      * @param imageUrl the URL of the it.tika.mongodb.image to read
      * @param handler  the handler which is used to handle the downloaded it.tika.mongodb.image
      */
-    public static void start(String imageUrl, ImageLoaderHandler handler) {
-        start(imageUrl, handler.getImageView(), handler, null, null);
+    public static void start(String imageUrl, ImageLoaderHandler handler,boolean loadFromInternetFlag) {
+        start(imageUrl, handler.getImageView(), handler, null, null,loadFromInternetFlag);
     }
 
     /**
@@ -174,12 +177,12 @@ public class ImageLoader implements Runnable {
      * @param errorDrawable the Drawable set to the ImageView if a read error occurs
      */
     public static void start(String imageUrl, ImageLoaderHandler handler, Drawable dummyDrawable,
-                             Drawable errorDrawable) {
-        start(imageUrl, handler.getImageView(), handler, dummyDrawable, errorDrawable);
+                             Drawable errorDrawable,boolean loadFromInternetFlag) {
+        start(imageUrl, handler.getImageView(), handler, dummyDrawable, errorDrawable,loadFromInternetFlag);
     }
 
     private static void start(String imageUrl, ImageView imageView, ImageLoaderHandler handler,
-                              Drawable dummyDrawable, Drawable errorDrawable) {
+                              Drawable dummyDrawable, Drawable errorDrawable,boolean loadFromInternetFlag) {
         if (imageView != null) {
             if (imageUrl == null) {
                 // In a ListView views are reused, so we must be sure to remove the tag that could
@@ -211,7 +214,7 @@ public class ImageLoader implements Runnable {
             handler.handleImageLoaded(bitmap, null);
 
         } else {
-            executor.execute(new ImageLoader(imageUrl, handler));
+                executor.execute(new ImageLoader(imageUrl, handler,loadFromInternetFlag));
         }
     }
 
@@ -241,7 +244,7 @@ public class ImageLoader implements Runnable {
         // fetching an it.tika.mongodb.image from the in-memory cache on the main thread
         byte[] bitmapBytes = imageCache.getBitmapBytes(imageUrl);
 
-        if (bitmapBytes == null) {
+        if (bitmapBytes == null && loadImageFromInternet) {
             bitmapBytes = downloadImage();
             if (bitmapBytes != null) {
                 imageCache.put(imageUrl, bitmapBytes);

@@ -275,15 +275,15 @@ public class Article {
 
     private volatile boolean loading = false;
 
-    public synchronized void loadPrimaryImage(String image, DeviceInfo deviceInfo) {
+    public synchronized void loadPrimaryImage(String image, DeviceInfo deviceInfo, boolean loadFromInternet) {
         PreloadPrimaryImageLoaderHandler preloadPrimaryImageLoaderHandler = new PreloadPrimaryImageLoaderHandler(this, image, deviceInfo);
-        final ImageLoader loader = new ImageLoader(image, preloadPrimaryImageLoaderHandler);
+        final ImageLoader loader = new ImageLoader(image, preloadPrimaryImageLoaderHandler,loadFromInternet);
         new Thread(loader).start();
     }
 
-    public void loadPrimaryImage(DeviceInfo deviceInfo) {
+    public void loadPrimaryImage(DeviceInfo deviceInfo, boolean loadFromInternet) {
         if (getImageUrl() != null)
-            loadPrimaryImage(getImageUrl().toExternalForm(), deviceInfo);
+            loadPrimaryImage(getImageUrl().toExternalForm(), deviceInfo,loadFromInternet);
     }
 
     public void setLoading(boolean loading) {
@@ -294,16 +294,16 @@ public class Article {
         return loading;
     }
 
-    public void loadSecondaryImages(DeviceInfo deviceInfo) {
-        for (String url : imagesMap.keySet()) {
-            loadSecondaryImage(url, deviceInfo);
-        }
-    }
+//    public void loadSecondaryImages(DeviceInfo deviceInfo) {
+//        for (String url : imagesMap.keySet()) {
+//            loadSecondaryImage(url, deviceInfo);
+//        }
+//    }
 
-    public synchronized void loadSecondaryImage(String image, DeviceInfo deviceInfo) {
+    public synchronized void loadSecondaryImage(String image, DeviceInfo deviceInfo,boolean loadFromInternet) {
         PreloadSecondaryImageLoaderHandler preloadSecondaryImageLoaderHandler = new PreloadSecondaryImageLoaderHandler(this, image, deviceInfo);
 
-        final ImageLoader loader = new ImageLoader(image, preloadSecondaryImageLoaderHandler);
+        final ImageLoader loader = new ImageLoader(image, preloadSecondaryImageLoaderHandler,loadFromInternet);
         new Thread(loader).start();
     }
 
