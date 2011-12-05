@@ -17,6 +17,7 @@ import com.goal98.flipdroid.model.rss.RSSArticleSource;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.EachCursor;
 import com.goal98.flipdroid.util.ManagedCursor;
+import com.goal98.tika.common.TikaConstants;
 
 import java.util.*;
 
@@ -52,7 +53,7 @@ public class SourceUpdateManager {
                 String sourceImage = c.getString(c.getColumnIndex(Source.KEY_IMAGE_URL));
 
                 CachedArticleSource cachedArticleSource = null;
-                if (sourceType.equals(Constants.TYPE_RSS)) {
+                if (sourceType.equals(TikaConstants.TYPE_RSS)) {
                     FeaturedArticleSource featuredArticleSource = new FeaturedArticleSource(sourceContentUrl, sourceName, sourceImage);
                     cachedArticleSource = new CachedArticleSource(featuredArticleSource, updateable, sourceCache);
                 }
@@ -71,8 +72,12 @@ public class SourceUpdateManager {
 
         Thread t = new Thread(new Runnable() {
             public void run() {
-                String updatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(Constants.TYPE_RSS);
-                recommendSourceDB.insert(updatedSource, Constants.TYPE_RSS);
+                String rssUpdatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(TikaConstants.TYPE_RSS);
+                recommendSourceDB.update(rssUpdatedSource, TikaConstants.TYPE_RSS);
+                System.out.println("recommend source updated");
+
+                String sinaWeiboUpdatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(TikaConstants.TYPE_SINA_WEIBO);
+                recommendSourceDB.update(sinaWeiboUpdatedSource, TikaConstants.TYPE_SINA_WEIBO);
                 System.out.println("recommend source updated");
             }
         });

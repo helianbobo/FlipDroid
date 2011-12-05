@@ -28,6 +28,7 @@ import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.PrettyTimeUtil;
 import com.goal98.tika.common.ImageInfo;
 import com.goal98.tika.common.Paragraphs;
+import com.goal98.tika.common.TikaConstants;
 import com.goal98.tika.common.TikaUIObject;
 
 import java.util.ArrayList;
@@ -72,7 +73,7 @@ public class ContentLoadedView extends ArticleView {
         titleView.setText(article.getTitle());
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_TITLE);
 
-        if (article.getSourceType().equals(Constants.TYPE_SINA_WEIBO) || article.getSourceType().equals(Constants.TYPE_MY_SINA_WEIBO)) {
+        if (article.getSourceType().equals(TikaConstants.TYPE_SINA_WEIBO) || article.getSourceType().equals(TikaConstants.TYPE_MY_SINA_WEIBO)) {
             LinearLayout reference = (LinearLayout) layout.findViewById(R.id.reference);
             LinearLayout referenceContent = (LinearLayout) layout.findViewById(R.id.referenceContent);
             LinearLayout shareByll = (LinearLayout) layout.findViewById(R.id.shareByll);

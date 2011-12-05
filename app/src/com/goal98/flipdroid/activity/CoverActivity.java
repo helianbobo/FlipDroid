@@ -26,6 +26,7 @@ import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.GestureUtil;
 import com.goal98.flipdroid.util.NetworkUtil;
+import com.goal98.tika.common.TikaConstants;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -112,7 +113,7 @@ public class CoverActivity extends Activity {
                 JSONArray defaultSourceList = new JSONArray(defaultSourceListJson);
                 for (int i = 0; i < defaultSourceList.length(); i++) {
                     JSONObject defaultSource = (JSONObject) defaultSourceList.get(i);
-                    final Map<String, String> source = SourceDB.buildSource(Constants.TYPE_RSS,
+                    final Map<String, String> source = SourceDB.buildSource(TikaConstants.TYPE_RSS,
                             defaultSource.getString("name"),
                             defaultSource.getString("id"),
                             defaultSource.getString("desc"),

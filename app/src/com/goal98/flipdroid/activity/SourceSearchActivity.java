@@ -16,6 +16,7 @@ import com.goal98.flipdroid.model.sina.SearchSourceTask;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.SinaAccountUtil;
 import com.goal98.flipdroid.view.SourceExpandableListAdapter;
+import com.goal98.tika.common.TikaConstants;
 
 import java.util.Map;
 
@@ -78,7 +79,7 @@ abstract public class SourceSearchActivity extends ExpandableListActivity {
         super.onChildClick(parent, v, groupPosition, childPosition, id);
         Map<String, String> source = (Map<String, String>) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
 
-        if (source.get(Source.KEY_SOURCE_TYPE).equals(Constants.TYPE_SINA_WEIBO)) {
+        if (source.get(Source.KEY_SOURCE_TYPE).equals(TikaConstants.TYPE_SINA_WEIBO)) {
             if (!SinaAccountUtil.alreadyBinded(this)) {
                 final Intent intent = new Intent(this, SinaAccountActivity.class);
                 intent.putExtra("PROMPTTEXT", this.getString(R.string.addsinamusthavesina));

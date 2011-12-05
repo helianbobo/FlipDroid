@@ -21,6 +21,7 @@ import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.StopWatch;
+import com.goal98.tika.common.TikaConstants;
 import weibo4j.WeiboException;
 
 import java.lang.ref.WeakReference;
@@ -308,7 +309,7 @@ public class WeiboPageView extends FrameLayout {
                                         }
                                         Thread t = new Thread(new Runnable() {
                                             public void run() {
-                                                if (article.getSourceType().equals(Constants.TYPE_SINA_WEIBO)) {
+                                                if (article.getSourceType().equals(TikaConstants.TYPE_SINA_WEIBO)) {
                                                     try {
                                                         pageActivity.comment(commentEditText.getText().toString(), article);
                                                     } catch (WeiboException e) {

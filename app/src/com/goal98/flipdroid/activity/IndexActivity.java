@@ -23,6 +23,7 @@ import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
 import com.goal98.flipdroid.util.*;
+import com.goal98.tika.common.TikaConstants;
 
 import java.util.*;
 
@@ -115,7 +116,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
             } finally {
                 sourceCache.close();
             }
-            if (sourceType.equals(Constants.TYPE_MY_SINA_WEIBO)) {
+            if (sourceType.equals(TikaConstants.TYPE_MY_SINA_WEIBO)) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String sinaAccountId = preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null);
                 preferences.edit().putString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null).commit();

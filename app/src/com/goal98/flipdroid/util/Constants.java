@@ -8,14 +8,7 @@ public class Constants {
 
     public static final String DATABASE_NAME = "VELOUR_DB";
 
-    public static final String TYPE_SINA_WEIBO = "SINA_WEIBO";
-    public static final String TYPE_MY_SINA_WEIBO = "MY_SINA_WEIBO";
-    public static final String TYPE_RSS = "RSS";
-    public static final String TYPE_GOOGLE_READER = "GOOGLE_READER";
-    public static final String TYPE_TENCENT_WEIBO = "TENCENT_WEIBO";
-    public static final String TYPE_TWITTER = "TWITTER";
-    public static final String TYPE_FAKE = "FAKE";
-    public static final String TYPE_FEATURED = "FEATURED";
+
 
     public static final String ADD_CUSTOME_SOURCE = "ADD_CUSTOME_SOURCE";
 

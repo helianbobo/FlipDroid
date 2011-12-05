@@ -5,6 +5,7 @@ import android.util.Log;
 import com.goal98.flipdroid.db.RecommendSourceDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.tika.common.TikaConstants;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -96,7 +97,7 @@ public class SourceRepo {
     public List<Map<String, String>> findSourceByType(String type) {
         LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
         JSONArray array = getSourceJSON(type);
-        if (array != null && Constants.TYPE_SINA_WEIBO.equals(type)) {
+        if (array != null && TikaConstants.TYPE_SINA_WEIBO.equals(type)) {
             int count = array.length();
             for (int i = 0; i < count; i++) {
                 JSONObject jsonObject = null;
@@ -114,7 +115,7 @@ public class SourceRepo {
                 }
             }
         }
-        if (array != null && Constants.TYPE_RSS.equals(type)) {
+        if (array != null && TikaConstants.TYPE_RSS.equals(type)) {
             int count = array.length();
             for (int i = 0; i < count; i++) {
                 JSONObject jsonObject = null;

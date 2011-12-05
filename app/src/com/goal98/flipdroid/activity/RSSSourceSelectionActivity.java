@@ -16,6 +16,8 @@ import com.goal98.flipdroid.model.rss.RssParser;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.view.SourceExpandableListAdapter;
+import com.goal98.tika.common.TikaConstants;
+
 import java.util.*;
 
 public class RSSSourceSelectionActivity extends ExpandableListActivity {
@@ -55,7 +57,7 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
     }
 
     protected void addExtraItem(GroupedSource groupedSource) {
-        Map<String, String> customeSection = SourceDB.buildSource(Constants.TYPE_RSS,
+        Map<String, String> customeSection = SourceDB.buildSource(TikaConstants.TYPE_RSS,
                 "Add Custom RSS Feed",
                 Constants.ADD_CUSTOME_SOURCE,
                 "Add any RSS URL here.", null, this.getString(R.string.custom));
@@ -107,7 +109,7 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
                                 try {
                                     rp.parse();
                                     RssParser.RssFeed feed = rp.getFeed();
-                                    Map<String, String> customeRSSFeed = SourceDB.buildSource(Constants.TYPE_RSS,
+                                    Map<String, String> customeRSSFeed = SourceDB.buildSource(TikaConstants.TYPE_RSS,
                                             feed.title,
                                             null,
                                             feed.description, feed.imageUrl, url,feedURL.getContext().getString(R.string.custom));

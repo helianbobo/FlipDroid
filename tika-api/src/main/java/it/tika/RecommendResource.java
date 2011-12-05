@@ -1,5 +1,6 @@
 package it.tika;
 
+import com.goal98.tika.common.TikaConstants;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,8 +23,11 @@ public class RecommendResource extends ServerResource {
     @Get("JSON")
     public String getRecommend() throws IOException, JSONException {
         String type = this.getQuery().getFirst("type").getValue();
-        if("RSS".equals(type)){
+        if(TikaConstants.TYPE_RSS.equals(type)){
             return IOUtils.toString(new FileInputStream("RSS_RECOMMAND_SOURCE_DATA.json"));
+        }
+        if(TikaConstants.TYPE_SINA_WEIBO.equals(type)){
+            return IOUtils.toString(new FileInputStream("SINA_WEIBO_RECOMMAND_SOURCE_DATA.json"));
         }
         return "not found...";
     }

@@ -45,6 +45,7 @@ import com.goal98.flipdroid.model.sina.SinaToken;
 import com.goal98.flipdroid.model.taobao.TaobaoArticleSource;
 import com.goal98.flipdroid.util.*;
 import com.goal98.flipdroid.view.*;
+import com.goal98.tika.common.TikaConstants;
 import weibo4j.Weibo;
 import weibo4j.WeiboException;
 
@@ -563,7 +564,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
         currentPageIndex = -1;
         PagingStrategy pagingStrategy = null;
-        if (accountType.equals(Constants.TYPE_SINA_WEIBO) || accountType.equals(Constants.TYPE_MY_SINA_WEIBO)) {
+        if (accountType.equals(TikaConstants.TYPE_SINA_WEIBO) || accountType.equals(TikaConstants.TYPE_MY_SINA_WEIBO)) {
             ////Log.v(TAG, "accountType" + accountType);
             if (isWeiboMode())
                 pagingStrategy = new WeiboPagingStrategy(this);
@@ -588,7 +589,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
             source = new SinaArticleSource(true, sinaToken.getToken(), sinaToken.getTokenSecret(), sourceId, filter);
 
-        } else if (accountType.equals(Constants.TYPE_RSS) || accountType.equals(Constants.TYPE_BAIDUSEARCH)) {
+        } else if (accountType.equals(TikaConstants.TYPE_RSS) || accountType.equals(Constants.TYPE_BAIDUSEARCH)) {
             pagingStrategy = new FixedPagingStrategy(this, 2);
             pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
                 public void onNoMoreArticle() throws NoMoreStatusException {
@@ -600,7 +601,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             cachedArticleSource = new CachedArticleSource(new FeaturedArticleSource(contentUrl, sourceName, sourceImageURL), this, SourceCache.getInstance(this));
             cachedArticleSource.loadSourceFromCache();
             source = cachedArticleSource;
-        } else if (accountType.equals(Constants.TYPE_GOOGLE_READER)) {
+        } else if (accountType.equals(TikaConstants.TYPE_GOOGLE_READER)) {
             String sid = preferences.getString(GoogleAccountActivity.GOOGLE_ACCOUNT_SID, "");
             String auth = preferences.getString(GoogleAccountActivity.GOOGLE_ACCOUNT_AUTH, "");
 
@@ -1239,7 +1240,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     public boolean sinaAlreadyBinded() {
         AccountDB accountDB = new AccountDB(this);
         try {
-            return accountDB.hasAccount(Constants.TYPE_MY_SINA_WEIBO) && preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null) != null;
+            return accountDB.hasAccount(TikaConstants.TYPE_MY_SINA_WEIBO) && preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null) != null;
         } finally {
             accountDB.close();
         }
