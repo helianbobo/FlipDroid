@@ -11,7 +11,7 @@ import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.GroupedSource;
 import com.goal98.flipdroid.model.Source;
-import com.goal98.flipdroid.model.RSSSourceRepo;
+import com.goal98.flipdroid.model.SourceRepo;
 import com.goal98.flipdroid.model.rss.RssParser;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
@@ -29,7 +29,7 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
         setContentView(R.layout.source_expandable_list);
         sourceDB = new SourceDB(this);
         String type = getIntent().getExtras().getString("type");
-        groupedSource = new RSSSourceRepo(this).findGroupedSourceByType(type);
+        groupedSource = new SourceRepo(this).findGroupedSourceByType(type);
         //////System.out.println("on create");
         addExtraItem(groupedSource);
         group();
@@ -50,7 +50,7 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
         super.onStart();
         String[] from = new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_SOURCE_TYPE};
         int[] to = new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type, R.id.group_desc};
-        ExpandableListAdapter adapter = new SourceExpandableListAdapter(this, groupedSource.getGroups(), R.layout.group, new String[]{RSSSourceRepo.KEY_NAME_GROUP, RSSSourceRepo.KEY_NAME_SAMPLES}, new int[]{R.id.txt_group, R.id.group_desc}, groupedSource.getChildren(), R.layout.source_item, from, to);
+        ExpandableListAdapter adapter = new SourceExpandableListAdapter(this, groupedSource.getGroups(), R.layout.group, new String[]{SourceRepo.KEY_NAME_GROUP, SourceRepo.KEY_NAME_SAMPLES}, new int[]{R.id.txt_group, R.id.group_desc}, groupedSource.getChildren(), R.layout.source_item, from, to);
         setListAdapter(adapter);
     }
 
@@ -60,7 +60,7 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
                 Constants.ADD_CUSTOME_SOURCE,
                 "Add any RSS URL here.", null, this.getString(R.string.custom));
 
-        groupedSource.addGroup(RSSSourceRepo.KEY_NAME_GROUP,this.getString(R.string.custom));
+        groupedSource.addGroup(SourceRepo.KEY_NAME_GROUP,this.getString(R.string.custom));
         groupedSource.addChild(this.getString(R.string.custom), customeSection);
     }
 

@@ -11,7 +11,7 @@ import org.json.JSONObject;
 
 import java.util.*;
 
-public class RSSSourceRepo {
+public class SourceRepo {
 
     private Context context;
     private FromFileJSONReader fromFileSourceResolver;
@@ -19,7 +19,7 @@ public class RSSSourceRepo {
     public static final String KEY_NAME_GROUP = "group";
     private RecommendSourceDB recommendSourceDB;
 
-    public RSSSourceRepo(Context context) {
+    public SourceRepo(Context context) {
         this.context = context;
         fromFileSourceResolver = new FromFileJSONReader(context);
         recommendSourceDB = RecommendSourceDB.getInstance(context);
@@ -95,8 +95,7 @@ public class RSSSourceRepo {
 
     public List<Map<String, String>> findSourceByType(String type) {
         LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
-        String sourceName = type.toUpperCase() + "_" + Constants.RECOMMAND_SOURCE_SUFFIX;
-        JSONArray array = getSourceJSON(sourceName);
+        JSONArray array = getSourceJSON(type);
         if (array != null && Constants.TYPE_SINA_WEIBO.equals(type)) {
             int count = array.length();
             for (int i = 0; i < count; i++) {
@@ -137,14 +136,14 @@ public class RSSSourceRepo {
         return result;
     }
 
-    private JSONArray getSourceJSON(String sourceName) {
+    private JSONArray getSourceJSON(String type) {
         try {
             String sourceJsonStr = null;
-            RecommendSource recommendSource = recommendSourceDB.findSourceByType("RSS");
-
+            RecommendSource recommendSource = recommendSourceDB.findSourceByType(type);
+            String sourceName = type.toUpperCase() + "_" + Constants.RECOMMAND_SOURCE_SUFFIX;
             if (recommendSource == null) {//read local file as a failover process
                 sourceJsonStr = fromFileSourceResolver.resolve(sourceName);
-                recommendSourceDB.insert(sourceJsonStr, "RSS");
+                recommendSourceDB.insert(sourceJsonStr, sourceName);
             } else {
                 sourceJsonStr = recommendSource.getBody();
             }

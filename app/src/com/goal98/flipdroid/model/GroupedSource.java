@@ -35,7 +35,7 @@ public class GroupedSource {
 
     public void addGroup(String keyName, String groupName) {
         Map<String, String> group = new HashMap<String, String>();
-        group.put(RSSSourceRepo.KEY_NAME_GROUP, groupName);
+        group.put(SourceRepo.KEY_NAME_GROUP, groupName);
         groups.add(group);
     }
 

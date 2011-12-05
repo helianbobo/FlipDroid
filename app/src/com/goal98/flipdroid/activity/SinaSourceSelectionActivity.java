@@ -4,7 +4,7 @@ import android.content.Intent;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.GroupedSource;
-import com.goal98.flipdroid.model.RSSSourceRepo;
+import com.goal98.flipdroid.model.SourceRepo;
 import com.goal98.flipdroid.util.Constants;
 
 import java.util.Map;
@@ -16,7 +16,7 @@ public class SinaSourceSelectionActivity extends RSSSourceSelectionActivity {
                 Constants.ADD_CUSTOME_SOURCE,
                 getString(R.string.add_custom_source_desc), null, this.getString(R.string.custom));
 
-        groupedSource.addGroup(RSSSourceRepo.KEY_NAME_GROUP,this.getString(R.string.custom));
+        groupedSource.addGroup(SourceRepo.KEY_NAME_GROUP,this.getString(R.string.custom));
         groupedSource.addChild(this.getString(R.string.custom), customeSection);
     }
 
