@@ -37,7 +37,7 @@ public class WebImageView extends ViewSwitcher {
     private int defaultWidth;
     private int defaultHeight;
     private boolean roundImage;
-    private boolean loadFromInternetFlag;
+    private boolean loadFromInternetFlag = true;
 
     public boolean isRoundImage() {
         return roundImage;

@@ -150,10 +150,10 @@ public class ContentLoadedView extends ArticleView {
                 tv.setGravity(Gravity.LEFT | Gravity.TOP);
                 if (uiObject.getObjectBody().startsWith("<p><blockquote>")) {
                     style = "<p><blockquote>";
-                    tv.setPadding(2 + txtSize , 3, 2 + txtSize , 3);
+                    tv.setPadding(2 + txtSize*2 , 3, 2 + txtSize *2, 3);
                     tv.setBackgroundColor(Color.parseColor("#DDDDDD"));
                 } else {
-                    tv.setPadding(2 + txtSize/2, 3, 2 + txtSize/2, 3);
+                    tv.setPadding(2 + txtSize, 3, 2 + txtSize, 3);
                 }
                 StringBuilder sb = new StringBuilder("<br/>");
                 String objectBody = uiObject.getObjectBody();
