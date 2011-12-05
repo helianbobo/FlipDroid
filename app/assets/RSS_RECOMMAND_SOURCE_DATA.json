@@ -207,7 +207,7 @@
         "name": "精彩资讯-Mtime时光网",
         "id": "28",
         "desc": "时光网（Mtime.com）精彩资讯",
-        "image_url": "",
+        "image_url": "http://tp1.sinaimg.cn/1663735900/180/1283204354/1",
         "content_url":"http://feed.mtime.com/news.rss",
         "cat":"读书"
     }
