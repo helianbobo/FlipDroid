@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -94,10 +95,22 @@ public class PageIndexView extends LinearLayout {
             update.setText("Reload");
             update.setTextColor(Color.parseColor(Constants.COLOR_RED));
             update.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            update.setOnClickListener(new OnClickListener() {
-                public void onClick(View view) {
-                    activity.reload();
+
+            update.setOnTouchListener(new View.OnTouchListener() {
+
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                    switch (motionEvent.getAction()) {
+                        case MotionEvent.ACTION_UP:
+                            activity.reload();
+                            break;
+                        default:
+                            break;
+                    }
+
+                    return false;
                 }
+
             });
             this.addView(update, params);
         } else if (updating) {
@@ -128,11 +141,11 @@ public class PageIndexView extends LinearLayout {
         return updating;
     }
 
-    public void hide(){
+    public void hide() {
         this.setVisibility(GONE);
     }
 
-     public void show(){
+    public void show() {
         this.setVisibility(VISIBLE);
     }
 }
