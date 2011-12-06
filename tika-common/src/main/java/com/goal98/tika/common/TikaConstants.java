@@ -16,4 +16,5 @@ public class TikaConstants {
     public static final String TYPE_TWITTER = "TWITTER";
     public static final String TYPE_FAKE = "FAKE";
     public static final String TYPE_FEATURED = "FEATURED";
+    public static final String TYPE_DEFAULT = "DEFAULT";
 }

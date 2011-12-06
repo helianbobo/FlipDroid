@@ -130,11 +130,6 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         return super.onContextItemSelected(item);
     }
 
-    private boolean getAutoUpdateNonWIFIFromPreference() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        return PreferenceUtil.checkBooleanPreference(preferences,this,R.string.key_auto_check_update_nonwifi_preference);
-    }
-
     private void bindAdapter() {
         if (deviceInfo == null)
             deviceInfo = getDeviceInfoFromApplicationContext();
@@ -261,6 +256,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
 
 
                 adapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item, sourceDB, deviceInfo);
+                bindAdapter();
+                adapter.notifyDataSetChanged();
                 return true;
             case ACCOUNT_LIST_ID:
                 startActivity(new Intent(this, AccountListActivity.class));
@@ -297,6 +294,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 ManagedCursor mc = new ManagedCursor(c);
                 mc.each(new EachCursor() {
                     public void call(Cursor cursor, int index) {
+                        if(!(adapter.getItem(index) instanceof SourceItem))
+                            return;
                         SourceItem item = (SourceItem) adapter.getItem(index);
                         if (token.match(item)) {
                             View childAt = IndexActivity.this.getListView().getChildAt(index);
@@ -322,6 +321,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 ManagedCursor mc = new ManagedCursor(c);
                 mc.each(new EachCursor() {
                     public void call(Cursor cursor, int index) {
+                        if(!(adapter.getItem(index) instanceof SourceItem))
+                            return;
                         SourceItem item = (SourceItem) adapter.getItem(index);
                         if (token.match(item)) {
                             View childAt = IndexActivity.this.getListView().getChildAt(index);

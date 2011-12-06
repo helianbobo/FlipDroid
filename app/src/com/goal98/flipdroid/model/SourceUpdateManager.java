@@ -72,15 +72,20 @@ public class SourceUpdateManager {
 
         Thread t = new Thread(new Runnable() {
             public void run() {
-                String rssUpdatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(TikaConstants.TYPE_RSS);
-                recommendSourceDB.update(rssUpdatedSource, TikaConstants.TYPE_RSS);
-                System.out.println("recommend source updated");
+                for (String updateType : UPDATE_TYPE) {
+                    String rssUpdatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(updateType);
+                    recommendSourceDB.update(rssUpdatedSource, updateType);
+                    System.out.println("recommend source " + updateType + " updated");
+                }
 
-                String sinaWeiboUpdatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(TikaConstants.TYPE_SINA_WEIBO);
-                recommendSourceDB.update(sinaWeiboUpdatedSource, TikaConstants.TYPE_SINA_WEIBO);
-                System.out.println("recommend source updated");
+
+//                String sinaWeiboUpdatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(TikaConstants.TYPE_SINA_WEIBO);
+//                recommendSourceDB.update(sinaWeiboUpdatedSource, TikaConstants.TYPE_SINA_WEIBO);
+//                System.out.println("recommend source updated");
             }
         });
         t.start();
     }
+
+    public static final String[] UPDATE_TYPE = new String[]{TikaConstants.TYPE_RSS, TikaConstants.TYPE_SINA_WEIBO, TikaConstants.TYPE_DEFAULT};
 }
