@@ -729,9 +729,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         if (bottomBar.dispatchTouchEvent(event)) {
             return true;
         }
-//        if (pageIndexView.dispatchTouchEvent(event)) {
-//            return true;
-//        }
+        if (pageIndexView.dispatchTouchEvent(event)) {
+            return true;
+        }
 //        }
         if (enlargedMode) {
             current.onTouchEvent(event);

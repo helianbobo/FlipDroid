@@ -101,7 +101,7 @@ public class PageIndexView extends LinearLayout {
                 public boolean onTouch(View view, MotionEvent motionEvent) {
 
                     switch (motionEvent.getAction()) {
-                        case MotionEvent.ACTION_UP:
+                        case MotionEvent.ACTION_DOWN:
                             activity.reload();
                             break;
                         default:
