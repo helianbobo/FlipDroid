@@ -52,7 +52,7 @@ public class SourceDB extends AbstractDB {
         return insert(values);
     }
 
-    public long insert(String accountType, String sourceName, String sourceId, String sourceDesc, String contentURL, String cat) {
+    public long insert(String accountType, String sourceName, String sourceId, String sourceDesc, String contentURL, String cat, String imageURL) {
         ContentValues values = new ContentValues();
         values.put(Source.KEY_SOURCE_NAME, sourceName);
         values.put(Source.KEY_SOURCE_TYPE, accountType);
@@ -60,7 +60,7 @@ public class SourceDB extends AbstractDB {
         values.put(Source.KEY_SOURCE_DESC, sourceDesc);
         values.put(Source.KEY_CONTENT_URL, contentURL);
         values.put(Source.KEY_CAT, cat);
-//        values.put(Source.KEY_IMAGE_URL, imageURL);
+        values.put(Source.KEY_IMAGE_URL, imageURL);
         return insert(values);
     }
 

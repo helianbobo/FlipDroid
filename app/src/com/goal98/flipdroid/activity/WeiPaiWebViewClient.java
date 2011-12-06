@@ -47,7 +47,7 @@ public class WeiPaiWebViewClient extends WebViewClient {
                 UserInfo user = oauth.GetAccessToken(url);
                 if (user != null) {
 
-                    sourceDB.insert(TikaConstants.TYPE_MY_SINA_WEIBO, activity.getString(R.string.my_timeline), Constants.SOURCE_HOME, activity.getString(R.string.my_timeline_desc), null,"mysina");
+                    sourceDB.insert(TikaConstants.TYPE_MY_SINA_WEIBO, activity.getString(R.string.my_timeline), Constants.SOURCE_HOME, activity.getString(R.string.my_timeline_desc), null,"mysina", "http://www.sinaimg.cn/blog/developer/wiki/48x48.png");
                     accountDB.insertOrUpdateOAuth(user.getUserId(), user.getToken(), user.getTokenSecret(), TikaConstants.TYPE_MY_SINA_WEIBO);
                     preferences.edit().putString(SINA_ACCOUNT_PREF_KEY, user.getUserId()).commit();
 
