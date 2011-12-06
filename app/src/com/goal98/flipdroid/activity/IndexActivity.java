@@ -178,7 +178,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         bindAdapter();
 
         adapter.notifyDataSetChanged();
-        boolean shallUpdate = NetworkUtil.toLoadImage(this);
+        boolean shallUpdate = NetworkUtil.toUpdateSource(this);
         if (shallUpdate) {
             new Thread(new Runnable() {
 

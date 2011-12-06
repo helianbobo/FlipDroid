@@ -36,8 +36,8 @@
         "name": "精彩资讯-Mtime时光网",
         "id": "28",
         "desc": "时光网（Mtime.com）精彩资讯",
-        "image_url": "",
-        "content_url":"http://tp1.sinaimg.cn/1663735900/180/1283204354/1",
+        "image_url": "http://tp1.sinaimg.cn/1663735900/180/1283204354/1",
+        "content_url":"http://feed.mtime.com/news.rss",
         "cat":"读书",
         "type":"RSS"
     }
@@ -50,13 +50,5 @@
         "content_url":"http://cn.engadget.com/rss.xml",
         "cat":"科技",
         "type":"RSS"
-    },
-    {
-        "name": "刘程序员超",
-        "id": "1702755335",
-        "desc": "前HOI系列游戏MOD作者。grails-melody插件作者",
-        "image_url": "http://tp4.sinaimg.cn/1702755335/50/1294333832/1",
-        "cat":"个人",
-        "type":"SINA_WEIBO"
     }
 ]
