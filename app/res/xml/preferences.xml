@@ -37,8 +37,14 @@
             />
     <android.preference.CheckBoxPreference android:id="@+id/loadImage"
                                            android:key="@string/key_load_image_preference"
-                                           android:defaultValue="true"
+                                           android:defaultValue="false"
                                            android:title="@string/title_load_image_preference"
+            />
+
+    <android.preference.CheckBoxPreference android:id="@+id/autoUpdateCheckNonWifi"
+                                           android:key="@string/key_auto_check_update_nonwifi_preference"
+                                           android:defaultValue="false"
+                                           android:title="@string/title_auto_check_update_nonwifi_preference"
             />
 
     <EditTextPreference

@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.activity.PageActivity;
+import com.goal98.flipdroid.util.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -91,12 +93,24 @@ public class PageIndexView extends LinearLayout {
         if (hasUpdate) {
             TextView update = new TextView(this.getContext());
             update.setText("Reload");
-            update.setTextColor(Color.parseColor("#FF0000"));
+            update.setTextColor(Color.parseColor(Constants.COLOR_RED));
             update.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-            update.setOnClickListener(new OnClickListener() {
-                public void onClick(View view) {
-                    activity.reload();
+
+            update.setOnTouchListener(new View.OnTouchListener() {
+
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                    switch (motionEvent.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            activity.reload();
+                            break;
+                        default:
+                            break;
+                    }
+
+                    return false;
                 }
+
             });
             this.addView(update, params);
         } else if (updating) {
@@ -109,12 +123,12 @@ public class PageIndexView extends LinearLayout {
     public void setHasUpdate(boolean hasUpdate) {
         this.hasUpdate = hasUpdate;
         this.updating = false;
-        System.out.println("has update");
+        System.out.println("has update" + hasUpdate);
         updateView();
     }
 
-    public void setUpdating(boolean upading) {
-        this.updating = upading;
+    public void setUpdating(boolean updating) {
+        this.updating = updating;
         System.out.println("updating view");
         updateView();
     }
@@ -125,5 +139,13 @@ public class PageIndexView extends LinearLayout {
 
     public boolean isUpdating() {
         return updating;
+    }
+
+    public void hide() {
+        this.setVisibility(GONE);
+    }
+
+    public void show() {
+        this.setVisibility(VISIBLE);
     }
 }

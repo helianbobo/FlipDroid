@@ -7,12 +7,14 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
+import com.goal98.flipdroid.db.RecommendSourceDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.model.SourceUpdateManager;
@@ -21,6 +23,7 @@ import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
 import com.goal98.flipdroid.util.*;
+import com.goal98.tika.common.TikaConstants;
 
 import java.util.*;
 
@@ -113,7 +116,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
             } finally {
                 sourceCache.close();
             }
-            if (sourceType.equals(Constants.TYPE_MY_SINA_WEIBO)) {
+            if (sourceType.equals(TikaConstants.TYPE_MY_SINA_WEIBO)) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String sinaAccountId = preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null);
                 preferences.edit().putString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null).commit();
@@ -175,7 +178,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         bindAdapter();
 
         adapter.notifyDataSetChanged();
-        if (NetworkUtil.isNetworkAvailable()) {
+        boolean shallUpdate = NetworkUtil.toUpdateSource(this);
+        if (shallUpdate) {
             new Thread(new Runnable() {
 
                 public void run() {
@@ -185,7 +189,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                         } catch (InterruptedException e) {
 
                         }
-                        SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this);
+                        SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
                         updateManager.updateAll();
                         updated = true;
                     }
@@ -252,6 +256,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
 
 
                 adapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item, sourceDB, deviceInfo);
+                bindAdapter();
+                adapter.notifyDataSetChanged();
                 return true;
             case ACCOUNT_LIST_ID:
                 startActivity(new Intent(this, AccountListActivity.class));
@@ -288,6 +294,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 ManagedCursor mc = new ManagedCursor(c);
                 mc.each(new EachCursor() {
                     public void call(Cursor cursor, int index) {
+                        if(!(adapter.getItem(index) instanceof SourceItem))
+                            return;
                         SourceItem item = (SourceItem) adapter.getItem(index);
                         if (token.match(item)) {
                             View childAt = IndexActivity.this.getListView().getChildAt(index);
@@ -313,6 +321,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 ManagedCursor mc = new ManagedCursor(c);
                 mc.each(new EachCursor() {
                     public void call(Cursor cursor, int index) {
+                        if(!(adapter.getItem(index) instanceof SourceItem))
+                            return;
                         SourceItem item = (SourceItem) adapter.getItem(index);
                         if (token.match(item)) {
                             View childAt = IndexActivity.this.getListView().getChildAt(index);

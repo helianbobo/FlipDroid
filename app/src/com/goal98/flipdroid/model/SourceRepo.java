@@ -5,13 +5,14 @@ import android.util.Log;
 import com.goal98.flipdroid.db.RecommendSourceDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.tika.common.TikaConstants;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.*;
 
-public class RSSSourceRepo {
+public class SourceRepo {
 
     private Context context;
     private FromFileJSONReader fromFileSourceResolver;
@@ -19,10 +20,10 @@ public class RSSSourceRepo {
     public static final String KEY_NAME_GROUP = "group";
     private RecommendSourceDB recommendSourceDB;
 
-    public RSSSourceRepo(Context context) {
+    public SourceRepo(Context context) {
         this.context = context;
         fromFileSourceResolver = new FromFileJSONReader(context);
-        recommendSourceDB = new RecommendSourceDB(context);
+        recommendSourceDB = RecommendSourceDB.getInstance(context);
     }
 
     public static GroupedSource group(List<Map<String, String>> sourceList) {
@@ -95,9 +96,8 @@ public class RSSSourceRepo {
 
     public List<Map<String, String>> findSourceByType(String type) {
         LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
-        String sourceName = type.toUpperCase() + "_" + Constants.RECOMMAND_SOURCE_SUFFIX;
-        JSONArray array = getSourceJSON(sourceName);
-        if (array != null && Constants.TYPE_SINA_WEIBO.equals(type)) {
+        JSONArray array = getSourceJSON(type);
+        if (array != null && TikaConstants.TYPE_SINA_WEIBO.equals(type)) {
             int count = array.length();
             for (int i = 0; i < count; i++) {
                 JSONObject jsonObject = null;
@@ -115,7 +115,7 @@ public class RSSSourceRepo {
                 }
             }
         }
-        if (array != null && Constants.TYPE_RSS.equals(type)) {
+        if (array != null && TikaConstants.TYPE_RSS.equals(type)) {
             int count = array.length();
             for (int i = 0; i < count; i++) {
                 JSONObject jsonObject = null;
@@ -137,14 +137,14 @@ public class RSSSourceRepo {
         return result;
     }
 
-    private JSONArray getSourceJSON(String sourceName) {
+    private JSONArray getSourceJSON(String type) {
         try {
             String sourceJsonStr = null;
-            RecommendSource recommendSource = recommendSourceDB.findSourceByType("RSS");
-
+            RecommendSource recommendSource = recommendSourceDB.findSourceByType(type);
+            String sourceName = type.toUpperCase() + "_" + Constants.RECOMMAND_SOURCE_SUFFIX;
             if (recommendSource == null) {//read local file as a failover process
                 sourceJsonStr = fromFileSourceResolver.resolve(sourceName);
-                recommendSourceDB.insert(sourceJsonStr, "RSS");
+                recommendSourceDB.insert(sourceJsonStr, sourceName);
             } else {
                 sourceJsonStr = recommendSource.getBody();
             }

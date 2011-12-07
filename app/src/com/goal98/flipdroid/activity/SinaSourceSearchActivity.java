@@ -9,6 +9,7 @@ import com.goal98.flipdroid.model.SearchSource;
 import com.goal98.flipdroid.model.sina.SearchSourceTask;
 import com.goal98.flipdroid.model.sina.SinaSearchSource;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.tika.common.TikaConstants;
 
 public class SinaSourceSearchActivity extends SourceSearchActivity {
     public SearchSource getSearchSource() {
@@ -21,7 +22,7 @@ public class SinaSourceSearchActivity extends SourceSearchActivity {
         String userId = preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null);
         Cursor cursor = null;
         try {
-            cursor = accountDB.findByTypeAndUsername(Constants.TYPE_MY_SINA_WEIBO, userId);
+            cursor = accountDB.findByTypeAndUsername(TikaConstants.TYPE_MY_SINA_WEIBO, userId);
             cursor.moveToFirst();
             token = cursor.getString(cursor.getColumnIndex(Account.KEY_PASSWORD));
             tokenSecret = cursor.getString(cursor.getColumnIndex(Account.KEY_PASSWORD_SECRET));

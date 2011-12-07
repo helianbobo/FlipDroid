@@ -13,6 +13,7 @@ import com.goal98.flipdroid.client.UserInfo;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.tika.common.TikaConstants;
 
 /**
  * Created by IntelliJ IDEA.
@@ -45,11 +46,12 @@ public class WeiPaiWebViewClient extends WebViewClient {
             if (oauth != null) {
                 UserInfo user = oauth.GetAccessToken(url);
                 if (user != null) {
-                    sourceDB.insert(Constants.TYPE_MY_SINA_WEIBO, activity.getString(R.string.my_timeline), Constants.SOURCE_HOME, activity.getString(R.string.my_timeline_desc), null,"mysina");
-                    accountDB.insertOrUpdateOAuth(user.getUserId(), user.getToken(), user.getTokenSecret(), Constants.TYPE_MY_SINA_WEIBO);
+
+                    sourceDB.insert(TikaConstants.TYPE_MY_SINA_WEIBO, activity.getString(R.string.my_timeline), Constants.SOURCE_HOME, activity.getString(R.string.my_timeline_desc), null,"mysina", "http://www.sinaimg.cn/blog/developer/wiki/48x48.png");
+                    accountDB.insertOrUpdateOAuth(user.getUserId(), user.getToken(), user.getTokenSecret(), TikaConstants.TYPE_MY_SINA_WEIBO);
                     preferences.edit().putString(SINA_ACCOUNT_PREF_KEY, user.getUserId()).commit();
 
-                    activity.startActivity(new Intent(activity, IndexActivity.class));
+//                    activity.startActivity(new Intent(activity, IndexActivity.class));
 
                     activity.finish();
                 }

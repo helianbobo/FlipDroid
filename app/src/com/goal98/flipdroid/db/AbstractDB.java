@@ -13,6 +13,7 @@ import com.goal98.flipdroid.model.Account;
 import com.goal98.flipdroid.model.RecommendSource;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.tika.common.TikaConstants;
 
 import java.util.Date;
 
@@ -59,7 +60,6 @@ public abstract class AbstractDB {
     }
 
     public int deleteAll() {
-
         SQLiteDatabase db = helper.getWritableDatabase();
         return db.delete(getTableName(), null, null);
     }
@@ -122,7 +122,7 @@ public abstract class AbstractDB {
 
         private static final String SOURCE_INIT_DATA = "INSERT INTO " + Source.TABLE_NAME +
                 " (" + Source.KEY_SOURCE_NAME + "," + Source.KEY_SOURCE_ID + "," + Source.KEY_SOURCE_TYPE + ")" +
-                " values ('FAKE', 'FAKE', '" + Constants.TYPE_FAKE + "');";
+                " values ('FAKE', 'FAKE', '" + TikaConstants.TYPE_FAKE + "');";
 
         public DBOpenHelper(Context context) {
             super(context, Constants.DATABASE_NAME, null, Constants.DATABASE_VERSION);

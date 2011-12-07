@@ -11,11 +11,12 @@ import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.GroupedSource;
 import com.goal98.flipdroid.model.SearchSource;
 import com.goal98.flipdroid.model.Source;
-import com.goal98.flipdroid.model.RSSSourceRepo;
+import com.goal98.flipdroid.model.SourceRepo;
 import com.goal98.flipdroid.model.sina.SearchSourceTask;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.SinaAccountUtil;
 import com.goal98.flipdroid.view.SourceExpandableListAdapter;
+import com.goal98.tika.common.TikaConstants;
 
 import java.util.Map;
 
@@ -51,7 +52,7 @@ abstract public class SourceSearchActivity extends ExpandableListActivity {
 
         String[] from = new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_SOURCE_TYPE};
         int[] to = new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type, R.id.group_desc};
-        adapter = new SourceExpandableListAdapter(this, groupedSource.getGroups(), R.layout.group, new String[]{RSSSourceRepo.KEY_NAME_GROUP, RSSSourceRepo.KEY_NAME_SAMPLES}, new int[]{R.id.txt_group, R.id.group_desc}, groupedSource.getChildren(), R.layout.source_item, from, to);
+        adapter = new SourceExpandableListAdapter(this, groupedSource.getGroups(), R.layout.group, new String[]{SourceRepo.KEY_NAME_GROUP, SourceRepo.KEY_NAME_SAMPLES}, new int[]{R.id.txt_group, R.id.group_desc}, groupedSource.getChildren(), R.layout.source_item, from, to);
         setListAdapter(adapter);
 
         Button searchButton = (Button) findViewById(R.id.source_search_button);
@@ -78,7 +79,7 @@ abstract public class SourceSearchActivity extends ExpandableListActivity {
         super.onChildClick(parent, v, groupPosition, childPosition, id);
         Map<String, String> source = (Map<String, String>) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
 
-        if (source.get(Source.KEY_SOURCE_TYPE).equals(Constants.TYPE_SINA_WEIBO)) {
+        if (source.get(Source.KEY_SOURCE_TYPE).equals(TikaConstants.TYPE_SINA_WEIBO)) {
             if (!SinaAccountUtil.alreadyBinded(this)) {
                 final Intent intent = new Intent(this, SinaAccountActivity.class);
                 intent.putExtra("PROMPTTEXT", this.getString(R.string.addsinamusthavesina));

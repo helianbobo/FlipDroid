@@ -11,6 +11,7 @@ import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.EncodingDetector;
 import com.goal98.flipdroid.util.NetworkUtil;
 import com.goal98.flipdroid.util.StopWatch;
+import com.goal98.tika.common.TikaConstants;
 import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayInputStream;
@@ -108,7 +109,7 @@ public class RSSArticleSource extends BaseCacheableArticleSource {
                 }
             }
             article.setCreatedDate(date);
-            article.setSourceType(Constants.TYPE_RSS);
+            article.setSourceType(TikaConstants.TYPE_RSS);
             list.add(article);
         }
         sw.stopPrintReset();
@@ -119,9 +120,7 @@ public class RSSArticleSource extends BaseCacheableArticleSource {
 
     public byte[] getLatestSource() {
 
-        if(!NetworkUtil.isNetworkAvailable()) {
-            return null;
-        }
+
 
         InputStream is = null;
         try {
@@ -168,7 +167,7 @@ public class RSSArticleSource extends BaseCacheableArticleSource {
 
     public CacheToken getCacheToken() {
         CacheToken token = new CacheToken();
-        token.setType(Constants.TYPE_RSS);
+        token.setType(TikaConstants.TYPE_RSS);
         token.setToken(this.contentUrl);
         return token;
     }

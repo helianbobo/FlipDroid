@@ -28,6 +28,7 @@ import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.PrettyTimeUtil;
 import com.goal98.tika.common.ImageInfo;
 import com.goal98.tika.common.Paragraphs;
+import com.goal98.tika.common.TikaConstants;
 import com.goal98.tika.common.TikaUIObject;
 
 import java.util.ArrayList;
@@ -63,48 +64,7 @@ public class ContentLoadedView extends ArticleView {
     static final int ZOOM = 2;
     int mode = NONE;
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        int pointerCount = event.getPointerCount();
-        if (pointerCount <= 1)
-            return true;
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_POINTER_DOWN:
-                oldDist = spacing(event);
-                //Log.d("MTZ", "oldDist=" + oldDist);
 
-                if (oldDist > 10f) {
-                    mode = ZOOM;
-                    //Log.d("MTZ", "mode=ZOOM");
-                }
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-                if (mode == ZOOM) {
-                    float newDist = spacing(event);
-                    //Log.d("MTZ", "newDist=" + newDist);
-                    if (newDist > oldDist) {
-                        //Log.d("MTZ", "zoomout" + newDist);
-                    } else if (newDist < oldDist) {
-                        //Log.d("MTZ", "zoomin" + newDist);
-                    }
-                }
-                break;
-        }
-        return true;
-    }
-
-    private float spacing(MotionEvent event) {
-        float x = event.getX(0) - event.getX(1);
-        float y = event.getY(0) - event.getY(1);
-        return FloatMath.sqrt(x * x + y * y);
-    }
-
-    private void midPoint(PointF point, MotionEvent event) {
-        float x = event.getX(0) + event.getX(1);
-        float y = event.getY(0) + event.getY(1);
-        point.set(x / 2, y / 2);
-    }
 
     public void buildView() {
         LayoutInflater inflator = LayoutInflater.from(this.getContext());
@@ -113,7 +73,7 @@ public class ContentLoadedView extends ArticleView {
         titleView.setText(article.getTitle());
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_TITLE);
 
-        if (article.getSourceType().equals(Constants.TYPE_SINA_WEIBO) || article.getSourceType().equals(Constants.TYPE_MY_SINA_WEIBO)) {
+        if (article.getSourceType().equals(TikaConstants.TYPE_SINA_WEIBO) || article.getSourceType().equals(TikaConstants.TYPE_MY_SINA_WEIBO)) {
             LinearLayout reference = (LinearLayout) layout.findViewById(R.id.reference);
             LinearLayout referenceContent = (LinearLayout) layout.findViewById(R.id.referenceContent);
             LinearLayout shareByll = (LinearLayout) layout.findViewById(R.id.shareByll);
@@ -121,7 +81,7 @@ public class ContentLoadedView extends ArticleView {
             reference.setVisibility(VISIBLE);
             referenceContent.setVisibility(VISIBLE);
             if (article.getPortraitImageUrl() != null) {
-                icon = new WebImageView(this.getContext(), article.getPortraitImageUrl().toExternalForm(), false);
+                icon = new WebImageView(this.getContext(), article.getPortraitImageUrl().toExternalForm(), false,toLoadImage);
                 icon.setRoundImage(true);
                 icon.setDefaultHeight(25);
                 icon.setDefaultWidth(25);
@@ -191,7 +151,7 @@ public class ContentLoadedView extends ArticleView {
                 tv.setGravity(Gravity.LEFT | Gravity.TOP);
                 if (uiObject.getObjectBody().startsWith("<p><blockquote>")) {
                     style = "<p><blockquote>";
-                    tv.setPadding(2 + txtSize * 2, 3, 2 + txtSize * 2, 3);
+                    tv.setPadding(2 + txtSize*2 , 3, 2 + txtSize *2, 3);
                     tv.setBackgroundColor(Color.parseColor("#DDDDDD"));
                 } else {
                     tv.setPadding(2 + txtSize, 3, 2 + txtSize, 3);
@@ -226,7 +186,7 @@ public class ContentLoadedView extends ArticleView {
                     continue;
                 ImageInfo imageInfo = ((ImageInfo) uiObject);
                 String url = imageInfo.getUrl();
-                WebImageView imageView = new WebImageView(this.getContext(), url, false);
+                WebImageView imageView = new WebImageView(this.getContext(), url, false,toLoadImage);
                 imageView.setRoundImage(false);
                 imageView.setBackgroundResource(R.drawable.border);
 //                imageView.imageView.setTag(url);

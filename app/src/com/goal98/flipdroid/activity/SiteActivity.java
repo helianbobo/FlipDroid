@@ -16,6 +16,7 @@ import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.SinaAccountUtil;
+import com.goal98.tika.common.TikaConstants;
 
 
 public class SiteActivity extends Activity {
@@ -45,9 +46,9 @@ public class SiteActivity extends Activity {
 
         private Context mContext;
 
-        private String[] site_type_array = {Constants.TYPE_SINA_WEIBO,
-                Constants.TYPE_RSS,
-                Constants.TYPE_GOOGLE_READER
+        private String[] site_type_array = {TikaConstants.TYPE_SINA_WEIBO,
+                TikaConstants.TYPE_RSS,
+                TikaConstants.TYPE_GOOGLE_READER
 //                ,
 //                Constants.TYPE_FLIPDROID
 //                ,Constants.TYPE_BAIDUSEARCH
@@ -97,7 +98,7 @@ public class SiteActivity extends Activity {
 
                     String type = (String) getItem(i);
 
-                    if (Constants.TYPE_SINA_WEIBO.equals(type)) {
+                    if (TikaConstants.TYPE_SINA_WEIBO.equals(type)) {
                         if (SinaAccountUtil.alreadyBinded(SiteActivity.this)) {
                             Intent intent = new Intent(SiteActivity.this, SinaSourceSelectionActivity.class);
                             intent.putExtra("type", type);
@@ -110,13 +111,14 @@ public class SiteActivity extends Activity {
                             startActivity(intent);
                             overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
                         }
+                        finish();
                     }
-                    if (Constants.TYPE_GOOGLE_READER.equals(type)) {
+                    if (TikaConstants.TYPE_GOOGLE_READER.equals(type)) {
                         startActivity(new Intent(SiteActivity.this, GoogleAccountActivity.class));
                         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
                         finish();
                     }
-                    if (Constants.TYPE_RSS.equals(type)) {
+                    if (TikaConstants.TYPE_RSS.equals(type)) {
                         Intent intent = new Intent(SiteActivity.this, RSSSourceSelectionActivity.class);
                         intent.putExtra("type", type);
                         startActivity(intent);

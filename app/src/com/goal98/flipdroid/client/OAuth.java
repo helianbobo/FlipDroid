@@ -53,6 +53,7 @@ public class OAuth {
             intent.putExtra(BindSinaActivity.URL, authUrl);
 
             activity.startActivity(intent);
+
             ret = true;
         } catch (Exception e) {
             e.printStackTrace();

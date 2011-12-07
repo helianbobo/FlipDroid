@@ -66,7 +66,7 @@ public abstract class ArticleView extends LinearLayout {
 
     public ArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
         super(context);
-        toLoadImage = ((PageActivity)context).toLoadImage();
+        toLoadImage = ((PageActivity)context).isToLoadImage();
         this.deviceInfo = getDeviceInfoFromApplicationContext();
         this.setOrientation(VERTICAL);
         this.placedAtBottom = placedAtBottom;

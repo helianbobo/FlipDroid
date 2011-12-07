@@ -67,6 +67,15 @@
                   android:paddingLeft="5dip"
                   android:gravity="center"></TextView>
     </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:padding="5dip"
+                  android:layout_height="wrap_content">
+        <TextView android:id="@+id/wordCount" android:layout_width="wrap_content"
+                  android:layout_height="fill_parent"
+                  android:textAppearance="?android:attr/textAppearanceSmall"
+                  android:textColor="#232323"
+                  android:paddingLeft="5dip"
+                  android:gravity="center"></TextView>
+    </LinearLayout>
     <com.goal98.flipdroid.view.LinedEditText
             android:id="@+id/comment"
             android:layout_width="match_parent"

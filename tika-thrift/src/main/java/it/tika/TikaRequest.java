@@ -25,14 +25,17 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
 
   private static final org.apache.thrift.protocol.TField URL_FIELD_DESC = new org.apache.thrift.protocol.TField("url", org.apache.thrift.protocol.TType.STRING, (short)1);
   private static final org.apache.thrift.protocol.TField REFERENCED_FROM_FIELD_DESC = new org.apache.thrift.protocol.TField("referencedFrom", org.apache.thrift.protocol.TType.STRING, (short)2);
+  private static final org.apache.thrift.protocol.TField USE_CACHE_FIELD_DESC = new org.apache.thrift.protocol.TField("useCache", org.apache.thrift.protocol.TType.BOOL, (short)3);
 
   public String url;
   public String referencedFrom;
+  public boolean useCache;
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
     URL((short)1, "url"),
-    REFERENCED_FROM((short)2, "referencedFrom");
+    REFERENCED_FROM((short)2, "referencedFrom"),
+    USE_CACHE((short)3, "useCache");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -51,6 +54,8 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
           return URL;
         case 2: // REFERENCED_FROM
           return REFERENCED_FROM;
+        case 3: // USE_CACHE
+          return USE_CACHE;
         default:
           return null;
       }
@@ -91,6 +96,8 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
   }
 
   // isset id assignments
+  private static final int __USECACHE_ISSET_ID = 0;
+  private BitSet __isset_bit_vector = new BitSet(1);
 
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
@@ -99,6 +106,8 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
     tmpMap.put(_Fields.REFERENCED_FROM, new org.apache.thrift.meta_data.FieldMetaData("referencedFrom", org.apache.thrift.TFieldRequirementType.DEFAULT, 
         new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
+    tmpMap.put(_Fields.USE_CACHE, new org.apache.thrift.meta_data.FieldMetaData("useCache", org.apache.thrift.TFieldRequirementType.DEFAULT, 
+        new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.BOOL)));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
     org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(TikaRequest.class, metaDataMap);
   }
@@ -108,23 +117,29 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
 
   public TikaRequest(
     String url,
-    String referencedFrom)
+    String referencedFrom,
+    boolean useCache)
   {
     this();
     this.url = url;
     this.referencedFrom = referencedFrom;
+    this.useCache = useCache;
+    setUseCacheIsSet(true);
   }
 
   /**
    * Performs a deep copy on <i>other</i>.
    */
   public TikaRequest(TikaRequest other) {
+    __isset_bit_vector.clear();
+    __isset_bit_vector.or(other.__isset_bit_vector);
     if (other.isSetUrl()) {
       this.url = other.url;
     }
     if (other.isSetReferencedFrom()) {
       this.referencedFrom = other.referencedFrom;
     }
+    this.useCache = other.useCache;
   }
 
   public TikaRequest deepCopy() {
@@ -135,6 +150,8 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
   public void clear() {
     this.url = null;
     this.referencedFrom = null;
+    setUseCacheIsSet(false);
+    this.useCache = false;
   }
 
   public String getUrl() {
@@ -185,6 +202,29 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
     }
   }
 
+  public boolean isUseCache() {
+    return this.useCache;
+  }
+
+  public TikaRequest setUseCache(boolean useCache) {
+    this.useCache = useCache;
+    setUseCacheIsSet(true);
+    return this;
+  }
+
+  public void unsetUseCache() {
+    __isset_bit_vector.clear(__USECACHE_ISSET_ID);
+  }
+
+  /** Returns true if field useCache is set (has been assigned a value) and false otherwise */
+  public boolean isSetUseCache() {
+    return __isset_bit_vector.get(__USECACHE_ISSET_ID);
+  }
+
+  public void setUseCacheIsSet(boolean value) {
+    __isset_bit_vector.set(__USECACHE_ISSET_ID, value);
+  }
+
   public void setFieldValue(_Fields field, Object value) {
     switch (field) {
     case URL:
@@ -203,6 +243,14 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
       }
       break;
 
+    case USE_CACHE:
+      if (value == null) {
+        unsetUseCache();
+      } else {
+        setUseCache((Boolean)value);
+      }
+      break;
+
     }
   }
 
@@ -213,6 +261,9 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
 
     case REFERENCED_FROM:
       return getReferencedFrom();
+
+    case USE_CACHE:
+      return new Boolean(isUseCache());
 
     }
     throw new IllegalStateException();
@@ -229,6 +280,8 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
       return isSetUrl();
     case REFERENCED_FROM:
       return isSetReferencedFrom();
+    case USE_CACHE:
+      return isSetUseCache();
     }
     throw new IllegalStateException();
   }
@@ -261,6 +314,15 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
       if (!(this_present_referencedFrom && that_present_referencedFrom))
         return false;
       if (!this.referencedFrom.equals(that.referencedFrom))
+        return false;
+    }
+
+    boolean this_present_useCache = true;
+    boolean that_present_useCache = true;
+    if (this_present_useCache || that_present_useCache) {
+      if (!(this_present_useCache && that_present_useCache))
+        return false;
+      if (this.useCache != that.useCache)
         return false;
     }
 
@@ -300,6 +362,16 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
         return lastComparison;
       }
     }
+    lastComparison = Boolean.valueOf(isSetUseCache()).compareTo(typedOther.isSetUseCache());
+    if (lastComparison != 0) {
+      return lastComparison;
+    }
+    if (isSetUseCache()) {
+      lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.useCache, typedOther.useCache);
+      if (lastComparison != 0) {
+        return lastComparison;
+      }
+    }
     return 0;
   }
 
@@ -331,6 +403,14 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
             org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
           }
           break;
+        case 3: // USE_CACHE
+          if (field.type == org.apache.thrift.protocol.TType.BOOL) {
+            this.useCache = iprot.readBool();
+            setUseCacheIsSet(true);
+          } else { 
+            org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
+          }
+          break;
         default:
           org.apache.thrift.protocol.TProtocolUtil.skip(iprot, field.type);
       }
@@ -356,6 +436,9 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
       oprot.writeString(this.referencedFrom);
       oprot.writeFieldEnd();
     }
+    oprot.writeFieldBegin(USE_CACHE_FIELD_DESC);
+    oprot.writeBool(this.useCache);
+    oprot.writeFieldEnd();
     oprot.writeFieldStop();
     oprot.writeStructEnd();
   }
@@ -380,6 +463,10 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
       sb.append(this.referencedFrom);
     }
     first = false;
+    if (!first) sb.append(", ");
+    sb.append("useCache:");
+    sb.append(this.useCache);
+    first = false;
     sb.append(")");
     return sb.toString();
   }
@@ -398,6 +485,8 @@ public class TikaRequest implements org.apache.thrift.TBase<TikaRequest, TikaReq
 
   private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, ClassNotFoundException {
     try {
+      // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
+      __isset_bit_vector = new BitSet(1);
       read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
     } catch (org.apache.thrift.TException te) {
       throw new java.io.IOException(te);

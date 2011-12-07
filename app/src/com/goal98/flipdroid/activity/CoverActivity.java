@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -19,10 +20,21 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
+import com.goal98.flipdroid.db.RecommendSourceDB;
+import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.model.FromFileJSONReader;
+import com.goal98.flipdroid.model.RecommendSource;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.GestureUtil;
 import com.goal98.flipdroid.util.NetworkUtil;
+import com.goal98.tika.common.TikaConstants;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import javax.xml.transform.URIResolver;
+import java.io.IOException;
+import java.util.Map;
 
 
 public class CoverActivity extends Activity {
@@ -31,6 +43,7 @@ public class CoverActivity extends Activity {
 
     private String deviceId;
     public static final int WIRELESS_SETTING = 1;
+    private RecommendSourceDB recommendSourceDB;
 
     protected Dialog onCreateDialog(int id) {
         Dialog dialog;
@@ -58,10 +71,11 @@ public class CoverActivity extends Activity {
         return dialog;
     }
 
+    private String TAG = this.getClass().getName();
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        NetworkUtil.context = getApplicationContext();
 
         setContentView(R.layout.cover);
 
@@ -75,7 +89,8 @@ public class CoverActivity extends Activity {
                 DeviceInfo.getInstance(CoverActivity.this);
             }
         });
-        new AccountDB(getApplicationContext());
+        recommendSourceDB = RecommendSourceDB.getInstance(this);
+        initDefaultSource();
 
         TelephonyManager tManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         deviceId = tManager.getDeviceId();
@@ -83,10 +98,55 @@ public class CoverActivity extends Activity {
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
-                    public void run() {
-                        goToNextActivity();
-                    }
-                }, 2000);
+            public void run() {
+                goToNextActivity();
+            }
+        }, 2000);
+    }
+
+    private void initDefaultSource() {
+        SourceDB sourceDB = new SourceDB(getApplicationContext());
+
+        final Cursor cursor = sourceDB.findAll();
+        startManagingCursor(cursor);
+        if (cursor.getCount() == 0) {
+
+            try {
+                RecommendSource recommendSource = recommendSourceDB.findSourceByType(TikaConstants.TYPE_DEFAULT);
+                String sourceName = TikaConstants.TYPE_DEFAULT + "_" + Constants.RECOMMAND_SOURCE_SUFFIX;
+                String sourceJsonStr = null;
+                if (recommendSource == null) {//read local file as a failover process
+                    FromFileJSONReader fromFileSourceResolver = new FromFileJSONReader(this);
+                    sourceJsonStr = fromFileSourceResolver.resolve(sourceName);
+                    recommendSourceDB.insert(sourceJsonStr, sourceName);
+                } else {
+                    sourceJsonStr = recommendSource.getBody();
+                }
+                JSONArray defaultSourceList = new JSONArray(sourceJsonStr);
+                for (int i = 0; i < defaultSourceList.length(); i++) {
+                    JSONObject defaultSource = (JSONObject) defaultSourceList.get(i);
+                    String contentURL = "";
+                    if (defaultSource.has("content_url"))
+                        contentURL = defaultSource.getString("content_url");
+
+                    final Map<String, String> source = SourceDB.buildSource(defaultSource.getString("type"),
+                            defaultSource.getString("name"),
+                            defaultSource.getString("id"),
+                            defaultSource.getString("desc"),
+                            defaultSource.getString("image_url"),
+                            contentURL,
+                            "");
+                    sourceDB.insert(source);
+                }
+
+            } catch (Exception e) {
+                Log.w(TAG, e.getMessage(), e);
+            } finally {
+                sourceDB.close();
+            }
+        }
+
+
     }
 
     @Override
@@ -133,4 +193,6 @@ public class CoverActivity extends Activity {
         animation.setDuration(1700);
         view.startAnimation(animation);
     }
+
+
 }

@@ -6,7 +6,7 @@ import com.goal98.flipdroid.client.TikaSourceResponse;
 import com.goal98.flipdroid.model.GroupedSource;
 import com.goal98.flipdroid.model.SearchSource;
 import com.goal98.flipdroid.model.Source;
-import com.goal98.flipdroid.model.RSSSourceRepo;
+import com.goal98.flipdroid.model.SourceRepo;
 import com.goal98.flipdroid.util.Constants;
 
 import java.io.UnsupportedEncodingException;
@@ -84,6 +84,6 @@ public class FlipdroidSearchSource implements SearchSource {
 
             sourceList.add(result);
         System.out.println("wawawa");
-        return RSSSourceRepo.group(sourceList);
+        return SourceRepo.group(sourceList);
     }
 }

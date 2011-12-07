@@ -25,7 +25,7 @@
 
     <string name="title_animation_mode_preference">翻页动画</string>
     <string name="dialog_title_animation_mode_preference">翻页动画</string>
-    <string name="title_load_image_preference">加载图片</string>
+    <string name="title_load_image_preference">非WIFI下加载图片</string>
     <string name="button_add_new_account">添加新账户</string>
     <string name="button_add_new_source">添加新内容</string>
     <string name="button_login">登入</string>
@@ -70,4 +70,7 @@
 
     <string name="original_url_is_not_available">源链接不存在。</string>
     <string name="share_success">已分享到您的微博</string>
+    <string name="inprogress">请稍候</string>
+    <string name="toolong">不能超过140字</string>
+    <string name="title_auto_check_update_nonwifi_preference">非Wifi下自动更新</string>
 </resources>

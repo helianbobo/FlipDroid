@@ -10,9 +10,17 @@ import com.goal98.flipdroid.model.Source;
 import java.util.*;
 
 public class RecommendSourceDB extends AbstractDB {
+    private static RecommendSourceDB recommendSourceDB;
 
-    public RecommendSourceDB(Context context) {
+    private RecommendSourceDB(Context context) {
         super(context);
+    }
+
+    public static synchronized RecommendSourceDB getInstance(Context context) {
+        if (recommendSourceDB == null) {
+            recommendSourceDB = new RecommendSourceDB(context);
+        }
+        return recommendSourceDB;
     }
 
     @Override
@@ -44,8 +52,8 @@ public class RecommendSourceDB extends AbstractDB {
         db.delete(RecommendSource.TABLE_NAME, RecommendSource.KEY_TYPE + " = ? ", new String[]{type});
     }
 
-    public RecommendSource findSourceByType(String type){
-        String[] projection = new String[] {
+    public RecommendSource findSourceByType(String type) {
+        String[] projection = new String[]{
                 RecommendSource.KEY_BODY,
                 RecommendSource.KEY_UPDATE_TIME
         };

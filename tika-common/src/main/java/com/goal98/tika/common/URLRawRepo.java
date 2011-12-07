@@ -1,4 +1,4 @@
-package flipdroid.grepper.extractor.raw;
+package com.goal98.tika.common;
 
 
 import com.goal98.tika.common.URLConnectionUtil;
@@ -25,13 +25,14 @@ public class URLRawRepo {
 
     public byte[] fetch(final URLConnection conn) throws URLRepoException, IOException {
         ByteArrayOutputStream bos = null;
+        InputStream in = null;
         int retryCount = 0;
         try {
             if (retryCount >= 3)
                 return null;
 
             retryCount++;
-            InputStream in = conn.getInputStream();
+            in = conn.getInputStream();
 
             final String encoding = conn.getContentEncoding();
             if (encoding != null) {
@@ -54,6 +55,9 @@ public class URLRawRepo {
             }
         } catch (IOException e) {
             retryCount++;
+        } finally {
+            if (in != null)
+                in.close();
         }
         return bos.toByteArray();
     }

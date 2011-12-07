@@ -12,6 +12,7 @@ public class ConfigActivity extends PreferenceActivity implements SharedPreferen
     SharedPreferences settings;
     private ListPreference browseModePreference;
     private CheckBoxPreference loadImagePreference;
+    private CheckBoxPreference autoUpdateNonWIFIPreference;
 //    private ListPreference animationModePreference;
     private String browseModeKey;
     private String animationModeKey;
@@ -25,6 +26,7 @@ public class ConfigActivity extends PreferenceActivity implements SharedPreferen
         animationModeKey = getString(R.string.key_animation_mode_preference);
         browseModePreference = (ListPreference) this.findPreference(getString(R.string.key_browse_mode_preference));
         loadImagePreference = (CheckBoxPreference) this.findPreference(getString(R.string.key_load_image_preference));
+        autoUpdateNonWIFIPreference = (CheckBoxPreference) this.findPreference(getString(R.string.key_auto_check_update_nonwifi_preference));
 
 //        animationModePreference = (ListPreference) this.findPreference(getString(R.string.key_animation_mode_preference));
         int browseModeIndex = findEntryIndex(settings, browseModeKey, browseModePreference);

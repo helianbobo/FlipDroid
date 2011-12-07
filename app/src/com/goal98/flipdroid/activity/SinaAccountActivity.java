@@ -22,6 +22,7 @@ import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.sina.OAuthHolder;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.tika.common.TikaConstants;
 import weibo4j.WeiboException;
 
 
@@ -64,6 +65,9 @@ public class SinaAccountActivity extends Activity {
                                 boolean result = oauth.RequestAccessToken(SinaAccountActivity.this, "flipdroid://SinaAccountSaver");
                                 if (!result)
                                     AlarmSender.sendInstantMessage(R.string.networkerror, SinaAccountActivity.this);
+                                else{
+                                    SinaAccountActivity.this.finish();
+                                }
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -93,7 +97,7 @@ public class SinaAccountActivity extends Activity {
         } else {
             intent = new Intent(this, AccountListActivity.class);
         }
-        intent.putExtra("type", Constants.TYPE_SINA_WEIBO);
+        intent.putExtra("type", TikaConstants.TYPE_SINA_WEIBO);
 
         startActivity(intent);
         finish();

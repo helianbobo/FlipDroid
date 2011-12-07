@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.view.View;
 import android.widget.BaseAdapter;
 import com.goal98.flipdroid.activity.IndexActivity;
+import com.goal98.flipdroid.client.TikaClient;
+import com.goal98.flipdroid.db.RecommendSourceDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.cachesystem.CacheableArticleSource;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
@@ -15,6 +17,7 @@ import com.goal98.flipdroid.model.rss.RSSArticleSource;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.EachCursor;
 import com.goal98.flipdroid.util.ManagedCursor;
+import com.goal98.tika.common.TikaConstants;
 
 import java.util.*;
 
@@ -29,11 +32,13 @@ public class SourceUpdateManager {
     private SourceDB sourceDB;
     private SourceCache sourceCache;
     private SourceUpdateable updateable;
+    private RecommendSourceDB recommendSourceDB;
 
-    public SourceUpdateManager(SourceDB sourceDB, SourceCache sourceCache, SourceUpdateable updateable) {
+    public SourceUpdateManager(SourceDB sourceDB, SourceCache sourceCache, SourceUpdateable updateable, RecommendSourceDB recommendSourceDB) {
         this.sourceDB = sourceDB;
         this.sourceCache = sourceCache;
         this.updateable = updateable;
+        this.recommendSourceDB = recommendSourceDB;
     }
 
     public void updateAll() {
@@ -48,7 +53,7 @@ public class SourceUpdateManager {
                 String sourceImage = c.getString(c.getColumnIndex(Source.KEY_IMAGE_URL));
 
                 CachedArticleSource cachedArticleSource = null;
-                if (sourceType.equals(Constants.TYPE_RSS)) {
+                if (sourceType.equals(TikaConstants.TYPE_RSS)) {
                     FeaturedArticleSource featuredArticleSource = new FeaturedArticleSource(sourceContentUrl, sourceName, sourceImage);
                     cachedArticleSource = new CachedArticleSource(featuredArticleSource, updateable, sourceCache);
                 }
@@ -65,5 +70,22 @@ public class SourceUpdateManager {
             cachedArticleSource.checkUpdate();
         }
 
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                for (String updateType : UPDATE_TYPE) {
+                    String rssUpdatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(updateType);
+                    recommendSourceDB.update(rssUpdatedSource, updateType);
+                    System.out.println("recommend source " + updateType + " updated");
+                }
+
+
+//                String sinaWeiboUpdatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(TikaConstants.TYPE_SINA_WEIBO);
+//                recommendSourceDB.update(sinaWeiboUpdatedSource, TikaConstants.TYPE_SINA_WEIBO);
+//                System.out.println("recommend source updated");
+            }
+        });
+        t.start();
     }
+
+    public static final String[] UPDATE_TYPE = new String[]{TikaConstants.TYPE_RSS, TikaConstants.TYPE_SINA_WEIBO, TikaConstants.TYPE_DEFAULT};
 }

@@ -70,8 +70,7 @@ public abstract class ExpandableArticleView extends ArticleView {
             this.executor = executor;
             preload();
         } else {
-            if (toLoadImage)
-                article.loadPrimaryImage(deviceInfo);
+                article.loadPrimaryImage(deviceInfo,toLoadImage);
         }
         fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
@@ -137,12 +136,12 @@ public abstract class ExpandableArticleView extends ArticleView {
         }
 
         //System.out.println("article.getImageUrl()" + article.getImageUrl());
-        if (article.getImageUrl() == null || !toLoadImage) {
+        if (article.getImageUrl() == null) {
             LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
             layoutParams.weight = 100;
             contentViewWrapper.addView(contentView, layoutParams);
         } else {
-            imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), false);
+            imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), false, toLoadImage);
             imageView.setRoundImage(true);
             imageView.imageView.setTag(article.getImageUrl().toExternalForm());
             imageView.setBackgroundResource(R.drawable.border);
@@ -166,7 +165,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                 article.addNotifier(new Notifier());
                 if (!article.isLoading()) {
                     System.out.println("reloading..." + article.getImageUrl().toExternalForm());
-                    article.loadPrimaryImage(deviceInfo);
+                    article.loadPrimaryImage(deviceInfo,toLoadImage);
                 }
                 imageHandled = false;
             }
@@ -272,7 +271,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                                 try {
                                     URL url = new URL(imageURL);
                                     article.setImageUrl(url);
-                                    article.loadPrimaryImage(imageURL, deviceInfo);
+                                    article.loadPrimaryImage(imageURL, deviceInfo,toLoadImage);
                                 } catch (Exception e) {
                                     continue;
                                 }

@@ -32,8 +32,9 @@
     <string name="title_animation_mode_preference">Flip Animation</string>
     <string name="dialog_title_animation_mode_preference">Flip Animation</string>
 
-    <string name="title_load_image_preference">load imageBlacklisted</string>
+    <string name="title_load_image_preference">load image in non-WIFI</string>
     <string name="key_load_image_preference">load_image</string>
+    <string name="key_auto_check_update_nonwifi_preference">auto_update_nonwifi</string>
 
     <string name="button_add_new_account">Add New Account</string>
     <string name="button_add_new_source">Add New Source</string>
@@ -81,5 +82,5 @@
     <string name="view_source">View Source</string>
 
     <string name="original_url_is_not_available">Original URL is not available.</string>
-     <string name="share_success">Shared to your Weibo</string>
+    <string name="title_auto_check_update_nonwifi_preference">Auto update if non-WIFI</string>
 </resources>

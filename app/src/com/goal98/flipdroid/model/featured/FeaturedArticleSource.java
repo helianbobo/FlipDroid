@@ -10,6 +10,7 @@ import com.goal98.flipdroid.model.cachesystem.BaseCacheableArticleSource;
 import com.goal98.flipdroid.model.cachesystem.CacheToken;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
+import com.goal98.tika.common.TikaConstants;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class FeaturedArticleSource extends BaseCacheableArticleSource {
 
     public CacheToken getCacheToken() {
         CacheToken token = new CacheToken();
-        token.setType(Constants.TYPE_FEATURED);
+        token.setType(TikaConstants.TYPE_FEATURED);
         token.setToken(this.feedURL);
         return token;
     }
@@ -79,7 +80,7 @@ public class FeaturedArticleSource extends BaseCacheableArticleSource {
 
                     }
                 }
-                article.setSourceType(Constants.TYPE_FEATURED);
+                article.setSourceType(TikaConstants.TYPE_FEATURED);
                 article.setAlreadyLoaded(true);
                 article.setExpandable(true);
                 article.setContent(tikaExtractResponse.getContent());

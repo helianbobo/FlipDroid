@@ -2,10 +2,11 @@
 
 <LinearLayout android:layout_width="fill_parent"
                android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical">
-    <ImageView android:id="@+id/logo" android:adjustViewBounds="true" android:scaleType="centerInside"
-               android:src="@drawable/google"
+    <ImageView android:id="@+id/logo" android:adjustViewBounds="true" android:scaleType="fitXY"
+               android:src="@drawable/google_reader_login"
                android:layout_width="wrap_content"
-               android:layout_height="wrap_content" android:padding="30dip"/>
+               android:layout_height="wrap_content" android:padding="30dip"
+            android:background="@color/white"/>
     <TableLayout
             style="@style/SinaAccount"  android:gravity="top"
             android:orientation="vertical"
@@ -16,7 +17,7 @@
 
             <TextView android:text="@string/username" android:paddingLeft="20dp"/>
 
-            <EditText android:id="@+id/sina_username"
+            <EditText android:id="@+id/sina_username" android:layout_marginLeft="10dp"
                       android:layout_width="200dp" android:singleLine="true"
                       android:layout_height="wrap_content"/>
         </TableRow>
@@ -25,7 +26,7 @@
 
             <TextView android:text="@string/password" android:paddingLeft="20dp"/>
 
-            <EditText android:id="@+id/sina_password"
+            <EditText android:id="@+id/sina_password" android:layout_marginLeft="10dp"
                       android:password="true" android:singleLine="true"
                       android:layout_width="200dp"
                       android:layout_height="wrap_content"/>
@@ -33,9 +34,13 @@
 
 
         <Button android:id="@+id/sina_login"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                style="@style/Button"
                 android:text="@string/button_login"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"/>
+                android:layout_width="150dp"
+                android:layout_height="50dp"/>
 
     </TableLayout>
 </LinearLayout>
