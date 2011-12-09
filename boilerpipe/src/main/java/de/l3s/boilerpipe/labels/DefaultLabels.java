@@ -27,6 +27,7 @@ import de.l3s.boilerpipe.document.TextBlock;
  */
 public final class DefaultLabels {
     public static final String TITLE = "de.l3s.boilerpipe/TITLE";
-    public static final String INDICATES_END_OF_TEXT = "de.l3s.boilerpipe/INDICATES_END_OF_TEXT";
+    public static final String INDICATES_SKIP_OF_TEXT = "de.l3s.boilerpipe/INDICATES_SKIP_OF_TEXT";
     public static final String MIGHT_BE_CONTENT = "de.l3s.boilerpipe/MIGHT_BE_CONTENT";
+    public static final String INDICATES_END_OF_TEXT = "de.l3s.boilerpipe/INDICATES_END_OF_TEXT";
 }

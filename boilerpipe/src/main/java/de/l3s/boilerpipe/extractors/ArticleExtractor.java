@@ -56,7 +56,7 @@ public final class ArticleExtractor extends ExtractorBase {
         boolean a5 = BlockProximityFusion.MAX_DISTANCE_1.process(doc);
         boolean a6 = BoilerplateBlockFilter.INSTANCE.process(doc);
         boolean a7 = BlockProximityFusion.MAX_DISTANCE_1_CONTENT_ONLY.process(doc);
-         boolean a8 = KeepLargestFulltextBlockFilter.INSTANCE.process(doc);
+        boolean a8 = KeepLargestFulltextBlockFilter.INSTANCE.process(doc);
         boolean a9 =  ExpandTitleToContentFilter.INSTANCE.process(doc);
         return a1|a2|a3|a4|a5|a6|a7|a8|a9;
     }
