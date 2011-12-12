@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 
 /**
  * Finds blocks which are potentially indicating the end of an article text and marks
- * them with {@link DefaultLabels#INDICATES_END_OF_TEXT}. This can be used in conjunction
+ * them with {@link DefaultLabels#INDICATES_SKIP_OF_TEXT}. This can be used in conjunction
  * with a downstream {@link IgnoreBlocksAfterContentFilter}.
  *
  * @author Christian Kohlschütter
@@ -90,6 +90,8 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
                         || text.contains("分享")
                         || text.contains("扩展阅读")
                         || text.contains("赞")
+                        || text.contains("名稱（英文）")
+
                         || text.contains("更多")
                         || text.contains("分享到")
                         || text.contains("热线")
@@ -119,8 +121,11 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
                         || text.toUpperCase().contains("SHARE IT ON")
                         || text.toUpperCase().contains("SHARE THIS ON")
                         ) {
-                    tb.addLabel(DefaultLabels.INDICATES_END_OF_TEXT);
+                    tb.addLabel(DefaultLabels.INDICATES_SKIP_OF_TEXT);
                     changes = true;
+                }
+                if(text.contains("对此文章发表回复")){
+                    tb.addLabel(DefaultLabels.INDICATES_END_OF_TEXT);
                 }
             }
         }

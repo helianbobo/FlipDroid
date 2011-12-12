@@ -143,6 +143,10 @@ public class ContentLoadedView extends ArticleView {
         for (int i = 0; i < paragraphsList.size(); i++) {
             TikaUIObject uiObject = paragraphsList.get(i);
             if (uiObject.getType().equals(TikaUIObject.TYPE_TEXT)) {
+                String temp =  uiObject.getObjectBody().replaceAll("<[/]?.+?>","");
+                if(temp.trim().length()==0){
+                    continue;
+                }
                 String style = "<p>";
                 TextView tv = new TextView(this.getContext());
 
@@ -242,7 +246,7 @@ public class ContentLoadedView extends ArticleView {
     }
 
     private String format(String paragraph) {
-        return paragraph.replaceAll("<p>", "<span>").replaceAll("</p>", "</span>").replaceAll("(<blockquote>)|(</blockquote>)", "");
+        return paragraph.replaceAll("<p>", "<span>").replaceAll("</p>", "</span>").replaceAll("<span><.*?></span>", "").replaceAll("(<blockquote>)|(</blockquote>)", "");
     }
 
     public void renderBeforeLayout() {

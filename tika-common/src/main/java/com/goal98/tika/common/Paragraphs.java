@@ -48,11 +48,13 @@ public class Paragraphs {
                 brAt = articleContent.indexOf("<br/>", brAt + 1);
             }
             if (startAt > 0) {
-                paragraphs.add(new Text(articleContent.substring(0, startAt)));
+                String text = articleContent.substring(0, startAt);
+                if (!text.replaceAll("<p>","").replaceAll("</p>","").equals("<br/>"))
+                    paragraphs.add(new Text(text));
             }
 
-            endAt = articleContent.indexOf(">", cutAt);
-            String paragraph = articleContent.substring(startAt, endAt + 1);
+            endAt = cutAt;
+            String paragraph = articleContent.substring(startAt, endAt);
             if (paragraph.indexOf(ImageInfo.IMG_START) != -1) {
                 paragraph = parseImg(paragraph);
 
@@ -82,20 +84,19 @@ public class Paragraphs {
                     }
                     toParagraph(paragraph);
                 }
-            } else
-                paragraphs.add(new Text(paragraph));
+            } else{
 
-            articleContent = articleContent.substring(endAt + 1);
+                if(!paragraph.matches(PAT_TAG_NO_TEXT2.pattern()) && !paragraph.matches(PAT_TAG_NO_TEXT.pattern()))
+                    paragraphs.add(new Text(paragraph));
+            }
+
+            articleContent = articleContent.substring(endAt);
         }
 
     }
-
     static Pattern startTag = Pattern.compile("(<[^>]+>)|</[^>]+>");
 
     private int findNextClosingTag(String articleContent) {
-//        articleContent = "<img src=http://www.ifanr.com/wp-content/uploads/avatar/1347.JPG >hack</img>";
-        if (articleContent.trim().startsWith("</"))
-            return 0;
         if (articleContent.trim().length() == 0)
             return -1;
         if (articleContent.replaceAll("<br/>", "").replaceAll("<p>", "").replaceAll("</p>", "").trim().length() == 0)
@@ -107,17 +108,23 @@ public class Paragraphs {
 //            System.out.println(startMatcher.group());
 
             final String group = startMatcher.group();
+//            System.out.println(group);
             if (group.indexOf("<br/>") != -1) {
                 continue;
             }
-            if (group.indexOf("</") == -1) {
-                level++;
-            } else {
+            if (group.startsWith("<a ") || group.startsWith("</a"))
+                continue;
+            if (group.startsWith("</")) {
                 level--;
+                if (level < 0) {
+                    level = 0;
+                }
+            } else {
+                level++;
             }
             if (level == 0) {
 //                System.out.println(startMatcher.start());
-                return startMatcher.start();
+                return startMatcher.start() + group.length();
             }
 
         }
@@ -187,7 +194,7 @@ public class Paragraphs {
     }
 
     public static void main(String[] args) {
-        String a = "<h1><a href=http://sports.sina.com.cn/><img src=http://i3.sinaimg.cn/ty/main/logo/logo_home_sports_nonike.gif >hack</img></a></h1><p>　　新浪体育讯　虽然临时协议达成，但对洛杉矶湖人<a href=http://weibo.com/lakersnews?zw=sports>(微博)</a>来说，他们的麻烦才刚刚开始。在洛杉矶当地媒体《洛杉矶时报》看来，湖人从阵容到教练组，都可以说是麻烦一堆。</p><p>　　33岁的科比-布莱恩特、31岁的保罗-加索尔、32岁的拉玛尔-奥多姆和24岁的安德鲁-拜纳姆<a href=http://weibo.com/andrewbynum?zw=sports>(微博)</a>，这四位是湖人最核心的家伙，但这四位的合同都将在两年内执行完毕。特别是奥多姆和拜纳姆，一个是万金油，一个是先发内线，合同都会在新赛季后就结束。对湖人来说，如果说这是个困扰，那好歹还有一年的潜伏期。</p><p><strong>相对来说，湖人现在的后场麻烦更大。德里克-费舍尔37岁了，还能指望他干嘛？史蒂夫-布雷克上赛季表现并不好，他有理由被换掉。湖人现在最希望的，大概就是骑士赶紧裁掉拜伦-戴维斯<a href=http://weibo.com/stevesnooker?zw=sports>(微博)</a>吧。此外，最好奇才还能裁掉拉沙德-刘易斯。这两人，虽然顶着高薪低能的恶名，但若能加盟湖人，都能起到立竿见影的效果。不过一位专家也暗示，这两人的年薪都已经超过千万，湖人想得到他们并不容易。</strong></p><p>　　湖人现在的薪金总额高达9000万美金，远超工资帽。在自由球员市场上，他们可用的就是中产特例了，一个大幅度缩水的签约工具。此外，湖人还有一个办法，那就是用升级版特赦令。不过，裁掉卢克-沃顿还是慈世平？这是个问题！</p><p>　　31岁的沃顿，合同上还剩2年1150万美金，32岁的慈世平还剩3年2150万美金。沃顿上赛季54场场均1.7分，慈世平数据稍好但场均8.5分也是生涯最低了。可以说，这两位都有被裁员的理由。但是，对杰里-巴斯来说，无论他裁掉哪位，该付的钱还是免不掉的。</p><p>　　在阵容之外，湖人另一大头疼的问题就是教练组。新上任的迈克-布朗铁定会抛弃在洛杉矶实行了十来年的三角进攻战术了，布朗的战术喜好从来都是以中锋唱主角的。不幸的是，尽管赛季缩水，但拜纳姆的五场停赛是逃不过的。上赛季季后赛，在和小牛的比赛中，拜纳姆因为不冷静而吃到联盟罚单。也就是说，新赛季前五场，对布朗是个残酷的考验。即便拜纳姆回归，他的不定时发作的伤病，对布朗的应变能力也是挑战，这还没算上其他球员能不能适应布朗的新战术呢。</p><p>　　所以，无论怎么看，湖人的新赛季都不会是一片坦途。对紫金军来说，想要洗刷上赛季的耻辱。从主帅到球员，再加上总经理，没有任何一个人可以掉以轻心。</p><p>　　(XWT185)</p><a href=http://sports.sina.com.cn/nba_in_wap.html><img src=http://i1.sinaimg.cn/ty/3g/nbaphone.GIF >hack</img></a><br/>";
+        String a = "<img src=http://www.blogcdn.com/www.engadget.com/media/2011/11/blackberry-london-verge-1321303731.jpg width=445 height=450 >hack</img><br/>如果以上的图片是真的话，这便是 RIM 第一部使用 QNX 系统的 BlackBerry 智能型手机，也就传说中的 BBX。这部看似来有点像 <a href=http://cn.engadget.com/2011/10/27/slug:%20porsche-design-p9981-blackberry-provides-a-long-awaited-design/>P'9981</a> 的手机，代号是 London，拥有相似的棱角设计，号称较 iPhone 4 更薄、更长一点。从图片看来，其拥有全触控屏幕，配合有点特色的界面，实在较现时的 BlackBerry OS 好看多了！<br/>回归现实，这也许只是一张概念图片、原型机图片或 PS 出来的图片，一切仍未被确认。根据 The Verge 的说法，这只是一台样版机，但真实的手机将配备 1.5GHz 双核心 TI OMAP 处理器、1GB RAM、16GB 内存，并最少拥有 800万像素镜头，200万像素前置镜头，预计将于 2012年推出。随着 BlackBerry 装置近月的失利，我们希望 London 快点出来，将 RIM 从困境中拯救出来呢！<br/><p><br/></p><p><br/></p><p><br/></p><p><br/><h4><a href=http://cn.engadget.com/2011/11/26/china-nokia-n9-hands-on/><br/></a></h4></p><p><br/><h4><a href=http://cn.engadget.com/2011/11/06/bbk-vivo-v1-hands-on/><br/></a></h4></p><p><br/></p><p><br/><h4><a href=http://cn.engadget.com/2011/10/16/smartq-ten2-ips-10-inch-android-tablet/><br/></a></h4></p>";
         Paragraphs p = new Paragraphs();
         p.toParagraph(a);
         System.out.println(p.getParagraphs());
@@ -238,5 +245,6 @@ public class Paragraphs {
     private static final Pattern PAT_TAG_A_NO_TEXT = Pattern.compile("<a [^>]*?></a>");
     private static final Pattern PAT_TAG_STRONG_NO_TEXT = Pattern.compile("<strong></strong>");
     private static final Pattern PAT_TAG_HEADER_NO_TEXT = Pattern.compile("<h[1-6]+></h[1-6]+>");
-    public static final Pattern PAT_TAG_NO_TEXT = Pattern.compile("<[^/][^>]*></[^>]*>");
+    public static final Pattern PAT_TAG_NO_TEXT = Pattern.compile("<[^/][^>]*>(<br/>)?</[^>]*>");
+    public static final Pattern PAT_TAG_NO_TEXT2 = Pattern.compile("</[^>]*>(<br/>)?<[^/][^>]*>");
 }

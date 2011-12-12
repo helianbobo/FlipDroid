@@ -4,6 +4,7 @@ import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.document.TextBlock;
 import de.l3s.boilerpipe.document.TextDocument;
 import de.l3s.boilerpipe.filters.english.DensityRulesClassifier;
+import de.l3s.boilerpipe.filters.english.IgnoreBlocksAfterContentFilter;
 import de.l3s.boilerpipe.filters.english.KeepLargestFulltextBlockFilter;
 import de.l3s.boilerpipe.filters.english.TerminatingBlocksFinder;
 import de.l3s.boilerpipe.filters.heuristics.BlockProximityFusion;
@@ -37,13 +38,13 @@ public class ChineseArticleExtractor extends ExtractorBase {
 
         //int titleBlock = findTitleBlock(doc);
         boolean a3 = DensityRulesClassifier.INSTANCE.process(doc);
-        // boolean a4 = IgnoreBlocksAfterContentFilter.DEFAULT_INSTANCE.process(doc);
+        boolean a4 = IgnoreBlocksAfterContentFilter.DEFAULT_INSTANCE.process(doc);
         boolean a5 = BlockProximityFusion.MAX_DISTANCE_1_CONTENT_ONLY.process(doc);
         boolean a6 = BoilerplateBlockFilter.INSTANCE.process(doc);
         boolean a7 = BlockProximityFusion.MAX_DISTANCE_1_CONTENT_ONLY.process(doc);
         boolean a8 = KeepLargestFulltextBlockFilter.INSTANCE.process(doc);
         boolean a9 = ExpandTitleToContentFilter.INSTANCE.process(doc);
-        return a1 | a2 | a3 | a5 | a6 | a7 | a8 | a9;
+        return a1 | a2 | a3 |a4| a5 | a6 | a7 | a8 | a9;
     }
 
 //    private int findTitleBlock(TextDocument doc) {
