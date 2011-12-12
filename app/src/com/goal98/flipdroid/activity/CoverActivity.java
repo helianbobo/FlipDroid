@@ -170,8 +170,8 @@ public class CoverActivity extends Activity {
     }
 
     private void goToNextActivity() {
-        startActivity(new Intent(this, IndexActivity.class));
-        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+        startActivity(new Intent(this, TipsActivity.class));
+//        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
         goingToSleep = true;
         finish();
     }

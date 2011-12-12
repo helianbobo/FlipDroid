@@ -32,6 +32,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     static final private int CONFIG_ID = Menu.FIRST;
     static final private int CLEAR_ID = Menu.FIRST + 1;
     static final private int ACCOUNT_LIST_ID = Menu.FIRST + 2;
+    static final private int TIPS_ID = Menu.FIRST + 3;
 
     private AccountDB accountDB;
     private SourceDB sourceDB;
@@ -227,6 +228,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         menu.add(0, CONFIG_ID, 0, R.string.config);
         menu.add(0, CLEAR_ID, 0, R.string.clear_all_account);
         menu.add(0, ACCOUNT_LIST_ID, 0, R.string.accounts);
+        menu.add(0, TIPS_ID, 0, R.string.tips);
 
         return true;
     }
@@ -261,6 +263,9 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 return true;
             case ACCOUNT_LIST_ID:
                 startActivity(new Intent(this, AccountListActivity.class));
+                return true;
+            case TIPS_ID:
+                startActivity(new Intent(this, TipsActivity.class));
                 return true;
         }
 
