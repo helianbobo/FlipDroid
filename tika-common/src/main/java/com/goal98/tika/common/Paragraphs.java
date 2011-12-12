@@ -48,11 +48,13 @@ public class Paragraphs {
                 brAt = articleContent.indexOf("<br/>", brAt + 1);
             }
             if (startAt > 0) {
-                paragraphs.add(new Text(articleContent.substring(0, startAt)));
+                String text = articleContent.substring(0, startAt);
+                if (!text.replaceAll("<p>","").replaceAll("</p>","").equals("<br/>"))
+                    paragraphs.add(new Text(text));
             }
 
-            endAt = articleContent.indexOf(">", cutAt);
-            String paragraph = articleContent.substring(startAt, endAt + 1);
+            endAt = cutAt;
+            String paragraph = articleContent.substring(startAt, endAt);
             if (paragraph.indexOf(ImageInfo.IMG_START) != -1) {
                 paragraph = parseImg(paragraph);
 
@@ -82,20 +84,19 @@ public class Paragraphs {
                     }
                     toParagraph(paragraph);
                 }
-            } else
-                paragraphs.add(new Text(paragraph));
+            } else{
 
-            articleContent = articleContent.substring(endAt + 1);
+                if(!paragraph.matches(PAT_TAG_NO_TEXT2.pattern()) && !paragraph.matches(PAT_TAG_NO_TEXT.pattern()))
+                    paragraphs.add(new Text(paragraph));
+            }
+
+            articleContent = articleContent.substring(endAt);
         }
 
     }
-
     static Pattern startTag = Pattern.compile("(<[^>]+>)|</[^>]+>");
 
     private int findNextClosingTag(String articleContent) {
-//        articleContent = "<img src=http://www.ifanr.com/wp-content/uploads/avatar/1347.JPG >hack</img>";
-        if (articleContent.trim().startsWith("</"))
-            return 0;
         if (articleContent.trim().length() == 0)
             return -1;
         if (articleContent.replaceAll("<br/>", "").replaceAll("<p>", "").replaceAll("</p>", "").trim().length() == 0)
@@ -107,17 +108,23 @@ public class Paragraphs {
 //            System.out.println(startMatcher.group());
 
             final String group = startMatcher.group();
+//            System.out.println(group);
             if (group.indexOf("<br/>") != -1) {
                 continue;
             }
-            if (group.indexOf("</") == -1) {
-                level++;
-            } else {
+            if (group.startsWith("<a ") || group.startsWith("</a"))
+                continue;
+            if (group.startsWith("</")) {
                 level--;
+                if (level < 0) {
+                    level = 0;
+                }
+            } else {
+                level++;
             }
             if (level == 0) {
 //                System.out.println(startMatcher.start());
-                return startMatcher.start();
+                return startMatcher.start() + group.length();
             }
 
         }
@@ -187,7 +194,7 @@ public class Paragraphs {
     }
 
     public static void main(String[] args) {
-        String a = "<img src=http://www.blogcdn.com/www.engadget.com/media/2011/12/lg2.jpg width=480 height=319 >hack</img><br/>LG <a href=http://cn.engadget.com/tag/OptimusPad/>Optimus Pad</a><p> ，或者也可以说是</p><a href=http://cn.engadget.com/tag/GSlate/> G Slate</a><p> 的后续平板电脑机型，已经出现在韩国的网站了，根据报道，这款新的平板设备将支持 </p><a href=http://cn.engadget.com/tag/LTE/>LTE</a><p> 的 4G 网络。用的是 8.9 英寸 WXGA 分辨率屏幕，高通的双核 1.5GHz 处理器，摒弃了前代双 500 万摄像头的 3D 拍摄设计，直接用一个后置 800 万像素的摄像头取代，当然还有一个视频摄像头。根据上图中左边的设备来看，这款机子采用的是 </p><a href=http://cn.engadget.com/tag/Honeycomb/>Honeycomb</a><p> 3.1 固件，做了一些定制改动，应该会有 </p><a href=http://cn.engadget.com/tag/IceCreamSandwich/>Ice Cream Sandwich</a><p> 冰激凌三明治升级。至于价格和发布时间目前还是处于保密状态，点击跳转还有一张图片可以看。<br/></p><img src=http://www.blogcdn.com/www.engadget.com/media/2011/12/ltelg.jpg width=480 height=319 >hack</img><p><br/></p><br/><p><br/><h4><a href=http://cn.engadget.com/2011/11/26/china-nokia-n9-hands-on/><br/></a></h4></p><p><br/><h4><a href=http://cn.engadget.com/2011/11/06/bbk-vivo-v1-hands-on/><br/></a></h4></p><p><br/></p><p><br/><h4><a href=http://cn.engadget.com/2011/10/16/smartq-ten2-ips-10-inch-android-tablet/><br/></a></h4></p>";
+        String a = "<img src=http://www.blogcdn.com/www.engadget.com/media/2011/11/blackberry-london-verge-1321303731.jpg width=445 height=450 >hack</img><br/>如果以上的图片是真的话，这便是 RIM 第一部使用 QNX 系统的 BlackBerry 智能型手机，也就传说中的 BBX。这部看似来有点像 <a href=http://cn.engadget.com/2011/10/27/slug:%20porsche-design-p9981-blackberry-provides-a-long-awaited-design/>P'9981</a> 的手机，代号是 London，拥有相似的棱角设计，号称较 iPhone 4 更薄、更长一点。从图片看来，其拥有全触控屏幕，配合有点特色的界面，实在较现时的 BlackBerry OS 好看多了！<br/>回归现实，这也许只是一张概念图片、原型机图片或 PS 出来的图片，一切仍未被确认。根据 The Verge 的说法，这只是一台样版机，但真实的手机将配备 1.5GHz 双核心 TI OMAP 处理器、1GB RAM、16GB 内存，并最少拥有 800万像素镜头，200万像素前置镜头，预计将于 2012年推出。随着 BlackBerry 装置近月的失利，我们希望 London 快点出来，将 RIM 从困境中拯救出来呢！<br/><p><br/></p><p><br/></p><p><br/></p><p><br/><h4><a href=http://cn.engadget.com/2011/11/26/china-nokia-n9-hands-on/><br/></a></h4></p><p><br/><h4><a href=http://cn.engadget.com/2011/11/06/bbk-vivo-v1-hands-on/><br/></a></h4></p><p><br/></p><p><br/><h4><a href=http://cn.engadget.com/2011/10/16/smartq-ten2-ips-10-inch-android-tablet/><br/></a></h4></p>";
         Paragraphs p = new Paragraphs();
         p.toParagraph(a);
         System.out.println(p.getParagraphs());
@@ -238,5 +245,6 @@ public class Paragraphs {
     private static final Pattern PAT_TAG_A_NO_TEXT = Pattern.compile("<a [^>]*?></a>");
     private static final Pattern PAT_TAG_STRONG_NO_TEXT = Pattern.compile("<strong></strong>");
     private static final Pattern PAT_TAG_HEADER_NO_TEXT = Pattern.compile("<h[1-6]+></h[1-6]+>");
-    public static final Pattern PAT_TAG_NO_TEXT = Pattern.compile("<[^/][^>]*></[^>]*>");
+    public static final Pattern PAT_TAG_NO_TEXT = Pattern.compile("<[^/][^>]*>(<br/>)?</[^>]*>");
+    public static final Pattern PAT_TAG_NO_TEXT2 = Pattern.compile("</[^>]*>(<br/>)?<[^/][^>]*>");
 }

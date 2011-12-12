@@ -42,7 +42,7 @@ public class TikaServiceImpl implements TikaService.Iface {
     public static void main(String[] args) throws TException, TikaException {
         TikaServiceImpl tikaService = new TikaServiceImpl();
         TikaRequest request = new TikaRequest();
-        request.setUrl("http://cn.engadget.com/2011/12/08/lg-optimus-pad-sequel-photos-leaked-gives-4g-gossips-something/");
+        request.setUrl("http://cn.engadget.com/2011/09/11/sharp-aquos-sh8298u-3d-smartphone-goes-under-the-knife-comes-ou/");
         TikaResponse response = tikaService.fire(request);
         System.out.println(response.getContent());
     }

@@ -19,7 +19,7 @@ import de.l3s.boilerpipe.sax.HTMLHighlighter;
 public class HTMLHighlightDemo {
     public static void main(String[] args) throws Exception {
 
-        URL url = new URL("http://cn.engadget.com/2011/12/08/lg-optimus-pad-sequel-photos-leaked-gives-4g-gossips-something/");
+        URL url = new URL("http://cn.engadget.com/2011/11/15/qnx-based-blackberry-london-purportedly-shown-off-dummy-unit-st/");
 
         final BoilerpipeExtractor extractor = CommonExtractors.CHINESE_ARTICLE_EXTRACTOR;
         final HTMLHighlighter hh = HTMLHighlighter.newExtractingInstanceForChinese();
