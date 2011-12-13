@@ -32,4 +32,7 @@ public class Constants {
     public static final int TEXT_SIZE_AUTHOR = 16;
     public static final int TEXT_SIZE_REFERENCE = 16;
     public static final int TEXT_SIZE_CONTENT = 16;
+    
+    public static final String PREFERENCE_TIPS_READ = "TIPS_READ";
+    public static final String PREFERENCE_TUTORIAL_READ = "TUTORIAL_READ";
 }

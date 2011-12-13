@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.MotionEvent;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.util.Constants;
 
 import java.util.ArrayList;
 
@@ -108,7 +110,9 @@ public class TipsActivity extends Activity {
                         final boolean handled = viewPager.arrowScroll(View.FOCUS_FORWARD);
                         progressBar.incrementProgressBy(1);
                         if (!handled) {
+                            PreferenceManager.getDefaultSharedPreferences(TipsActivity.this).edit().putBoolean(Constants.PREFERENCE_TIPS_READ, true).commit();
                             startActivity(new Intent(TipsActivity.this, IndexActivity.class));
+                            finish();
                         }
                         break;
                     default:

@@ -72,14 +72,14 @@ public class CoverActivity extends Activity {
     }
 
     private String TAG = this.getClass().getName();
+    private SharedPreferences preferences;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.cover);
 
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Constants.TIKA_HOST = preferences.getString(getString(R.string.key_tika_host), Constants.TIKA_HOST);
 
         final View view = this.findViewById(R.id.flipbar);
@@ -170,8 +170,12 @@ public class CoverActivity extends Activity {
     }
 
     private void goToNextActivity() {
-        startActivity(new Intent(this, TipsActivity.class));
-//        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+
+        boolean tips_read = preferences.getBoolean(Constants.PREFERENCE_TIPS_READ, false);
+        if (tips_read) {
+            startActivity(new Intent(this, IndexActivity.class));
+        } else
+            startActivity(new Intent(this, TipsActivity.class));
         goingToSleep = true;
         finish();
     }

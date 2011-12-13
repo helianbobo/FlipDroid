@@ -274,7 +274,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         tutorial.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 tutorial.setVisibility(View.GONE);
-                preferences.edit().putBoolean("TUTORIAL_READ", true).commit();
+                preferences.edit().putBoolean(Constants.PREFERENCE_TUTORIAL_READ, true).commit();
             }
         });
     }
@@ -422,7 +422,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private void displayTutorial() {
-        final boolean tutorial_read = preferences.getBoolean("TUTORIAL_READ", false);
+        final boolean tutorial_read = preferences.getBoolean(Constants.PREFERENCE_TUTORIAL_READ, false);
         if (!tutorial_read)
             tutorial.setVisibility(View.VISIBLE);
     }
