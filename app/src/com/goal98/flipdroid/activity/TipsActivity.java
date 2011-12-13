@@ -48,11 +48,12 @@ public class TipsActivity extends Activity {
 
             @Override
             public Object instantiateItem(View collection, int position) {
-                ImageView tv = new ImageView(TipsActivity.this);
-                tv.setImageResource(tipsResourceIdList.get(position));
-                ((ViewPager) collection).addView(tv, 0);
+                ImageView imageView = new ImageView(TipsActivity.this);
+                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                imageView.setImageResource(tipsResourceIdList.get(position));
+                ((ViewPager) collection).addView(imageView, 0);
 
-                return tv;
+                return imageView;
             }
 
             @Override
