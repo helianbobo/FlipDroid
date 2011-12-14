@@ -5,15 +5,16 @@
     <Button android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:drawableLeft="@drawable/ic_action_add_source"
-            android:paddingLeft="70dp"
-            android:paddingRight="70dp"
+            android:paddingLeft="90dp"
+            android:paddingRight="80dp"
             android:text="@string/button_add_new_source"
             style="@style/Button"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:id="@+id/btn_add_source"/>
 
     <ListView android:layout_height="fill_parent" android:layout_width="fill_parent"
-              android:layout_marginLeft="5dp" android:layout_marginRight="5dp"
-              android:id="@android:id/list"/>
+              android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+              android:id="@android:id/list"
+              android:layoutAnimation="@anim/layout_fade"/>
 
 </LinearLayout>
