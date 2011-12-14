@@ -85,7 +85,7 @@ public class ImageInfo implements TikaUIObject {
     }
 
     public static void main(String[] args) {
-        String str = "<aa><b>aaa</b></a>";
-        System.out.println(str.replaceAll("\\<[/]?.+?\\>",""));;
+        String str = "<aa><b></b></a>";
+        System.out.println(str.replaceAll("<[/]?.+?>",""));;
     }
 }

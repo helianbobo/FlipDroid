@@ -47,13 +47,13 @@
                                            android:title="@string/title_auto_check_update_nonwifi_preference"
             />
 
-    <EditTextPreference
+    <!--<EditTextPreference
             android:key="@string/key_tika_host"
             android:defaultValue="www.tika.it"
             android:inputType="text"
             android:title="Host"
-            android:summary="www.tika.com | 10.10.2.2:8182 | 192.168.1.100:8182"
-            android:dialogTitle="Host"/>
+            android:summary="www.tika.it | 10.10.2.2:8182 | 192.168.1.100:8182"
+            android:dialogTitle="Host"/>-->
 
     <!--<ListPreference android:id="@+id/animation"-->
     <!--android:key="@string/key_animation_mode_preference"-->

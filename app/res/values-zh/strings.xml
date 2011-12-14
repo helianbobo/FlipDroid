@@ -7,6 +7,8 @@
     <string name="username">用户名</string>
     <string name="clear_all_account">清除账户</string>
     <string name="accounts">用户管理</string>
+    <string name="tips">教程</string>
+    <string name="next">下一条</string>
     <string name="search">搜索</string>
     <string name="flip">划动 >></string>
 

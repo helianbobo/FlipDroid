@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          android:versionCode="2"
-          android:versionName="1.1"
+          android:versionCode="3"
+          android:versionName="1.1.1"
           package="com.goal98.flipdroid">
 
 
@@ -52,6 +52,8 @@
                   android:theme="@android:style/Theme.Light.NoTitleBar"/>
         <activity android:name=".activity.BaiduSearchSourceActivity" android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Light.NoTitleBar"/>
+        <activity android:name=".activity.TipsActivity" android:screenOrientation="portrait"
+                          android:theme="@android:style/Theme.Light.NoTitleBar"/>
     </application>
     <uses-sdk android:minSdkVersion="4"/>
     <uses-permission android:name="android.permission.INTERNET"/>
