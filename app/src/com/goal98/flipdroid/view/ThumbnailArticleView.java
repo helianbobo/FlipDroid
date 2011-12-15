@@ -15,10 +15,8 @@ import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
-import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.PrettyTimeUtil;
 
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 

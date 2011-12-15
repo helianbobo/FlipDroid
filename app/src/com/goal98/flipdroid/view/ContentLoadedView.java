@@ -107,7 +107,6 @@ public class ContentLoadedView extends ArticleView {
             referenceContent.addView(referenceText, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         } else {
             this.authorView = (TextView) layout.findViewById(R.id.author);
-            TextView sharedBy = (TextView) layout.findViewById(R.id.sharedBy);
             authorView.setText(article.getAuthor());
 
             createDateView = (TextView) layout.findViewById(R.id.createdDate);
@@ -125,9 +124,10 @@ public class ContentLoadedView extends ArticleView {
             if (deviceInfo.isLargeScreen()) {
                 authorView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_AUTHOR);
                 createDateView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_AUTHOR);
-                sharedBy.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_AUTHOR);
-
+                portraitView.setDefaultHeight(32);
+                portraitView.setDefaultWidth(32);
             }
+            this.portraitView.loadImage();
         }
         ScrollView wrapper = (ScrollView) layout.findViewById(R.id.wrapper);
         wrapper.setVerticalScrollBarEnabled(true);

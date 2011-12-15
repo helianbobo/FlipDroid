@@ -118,10 +118,9 @@ public class FeaturedArticleSource extends BaseCacheableArticleSource {
                     }
                 list.add(article);
             }
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (TikaClientException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
         return true;  //To change body of implemented methods use File | Settings | File Templates.
     }

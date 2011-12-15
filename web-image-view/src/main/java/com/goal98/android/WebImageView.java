@@ -83,8 +83,9 @@ public class WebImageView extends ViewSwitcher {
      *                         false, use {@link #loadImage()} to manually trigger the it.tika.mongodb.image read.
      */
     public WebImageView(Context context, String imageUrl, Drawable progressDrawable,
-                        Drawable errorDrawable, boolean autoLoad) {
+                        Drawable errorDrawable, boolean autoLoad,boolean loadFromInternetFlag) {
         super(context);
+        this.loadFromInternetFlag = loadFromInternetFlag;
         initialize(context, imageUrl, progressDrawable, errorDrawable, autoLoad);
     }
 

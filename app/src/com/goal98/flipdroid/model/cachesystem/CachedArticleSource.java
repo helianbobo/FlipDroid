@@ -8,6 +8,7 @@ import com.goal98.flipdroid.util.EncodingDetector;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class CachedArticleSource implements ArticleSource {
     public void loadSourceFromCache() {
         final SourceCacheObject cacheObject = dbCache.find(articleSource.getCacheToken().getType(), articleSource.getCacheToken().getToken());
 
-        if (cacheObject != null) {
+        if (cacheObject != null && cacheObject.getContent().trim().length() != 0) {
             this.articleSource.fromCache(cacheObject);
         }
 
@@ -82,6 +83,8 @@ public class CachedArticleSource implements ArticleSource {
                     sourceUpdateable.notifyUpdating(CachedArticleSource.this);
 
                     byte[] updatedBytes = articleSource.loadLatestSource();
+//                    InputStream content = new ByteArrayInputStream(updatedBytes);
+//                    articleSource.
                     updated = true;
                     System.out.println("has update:" + updatedBytes != null);
                     if (updatedBytes != null) {

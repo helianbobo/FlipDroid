@@ -82,7 +82,7 @@ public abstract class BaseCacheableArticleSource implements CacheableArticleSour
         return null;
     }
 
-    protected byte[] loadFromSource(){
+    protected byte[] loadFromSource() {
         loadedBytes = getLatestSource();
         return loadedBytes;
     }
@@ -94,7 +94,7 @@ public abstract class BaseCacheableArticleSource implements CacheableArticleSour
         this.content = new ByteArrayInputStream(cachedBytes);
     }
 
-    public boolean loadMore(){
+    public boolean loadMore() {
         if (content == null) {
             if (loadFromSource() == null)
                 return false;
@@ -107,8 +107,9 @@ public abstract class BaseCacheableArticleSource implements CacheableArticleSour
                 }
             }
         }
-        if(load()){
+        if (load()) {
             loaded = true;
+
             return true;
         }
         return false;
