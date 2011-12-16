@@ -44,6 +44,8 @@ public class CoverActivity extends Activity {
     private String deviceId;
     public static final int WIRELESS_SETTING = 1;
     private RecommendSourceDB recommendSourceDB;
+    private final int delayMillis = 1200;
+    private final int durationMillis = delayMillis - 300;
 
     protected Dialog onCreateDialog(int id) {
         Dialog dialog;
@@ -101,7 +103,7 @@ public class CoverActivity extends Activity {
             public void run() {
                 goToNextActivity();
             }
-        }, 2000);
+        }, delayMillis);
     }
 
     private void initDefaultSource() {
@@ -194,7 +196,7 @@ public class CoverActivity extends Activity {
         final View view = findViewById(R.id.flipbar);
         view.setVisibility(View.VISIBLE);
         final Animation animation = AnimationUtils.loadAnimation(this, R.anim.fadein);
-        animation.setDuration(1700);
+        animation.setDuration(durationMillis);
         view.startAnimation(animation);
     }
 
