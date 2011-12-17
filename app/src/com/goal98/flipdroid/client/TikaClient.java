@@ -34,7 +34,9 @@ public class TikaClient {
         String requestURL = null;
         requestURL = "http://" + host + "/v1/recommend?type=" + type;
         try {
-            return read(requestURL);
+            final String read = read(requestURL);
+
+            return read;
         } catch (TikaClientException e) {
             return null;
         }
@@ -53,6 +55,8 @@ public class TikaClient {
         if ("{}".equals(tikaResponse)) {
             return sourceResponses;
         }
+        if(tikaResponse ==null)
+            return sourceResponses;
         try {
             JSONArray sourceArray = new JSONArray(tikaResponse);
             for (int i = 0; i < sourceArray.length(); i++) {
@@ -196,7 +200,10 @@ public class TikaClient {
             final int responseCode = u.getResponseCode();
             if (responseCode >= 200 && responseCode <= 299) {
                 byte[] response = URLRawRepo.getInstance().fetch(u);
-                return new String(response, "utf-8");
+                final String s = new String(response, "utf-8");
+                if (s != null && s.startsWith("{"))// json
+                    return s;
+                return null;
             } else {
                 throw new TikaClientException();
             }

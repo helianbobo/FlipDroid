@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
@@ -24,6 +25,7 @@ public class HeaderView extends LinearLayout {
     private PageActivity pageActivity;
     private LayoutInflater inflater;
     private ViewSwitcher bottomBar;
+    private Button updateButton;
 
 
     public HeaderView(Context context) {
@@ -38,12 +40,17 @@ public class HeaderView extends LinearLayout {
         buildHeaderText();
     }
 
-    public DeviceInfo getDeviceInfoFromApplicationContext(){
+    public DeviceInfo getDeviceInfoFromApplicationContext() {
         return DeviceInfo.getInstance(pageActivity);
     }
 
+    public void showUpdate() {
+        updateButton.setVisibility(VISIBLE);
+    }
 
-
+    public void hideUpdate() {
+        updateButton.setVisibility(INVISIBLE);
+    }
 
 
     private void buildHeaderText() {
@@ -55,6 +62,21 @@ public class HeaderView extends LinearLayout {
         bottomBar.setInAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.fadeinfast));
         bottomBar.setOutAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.fadefast));
         TextView headerText = (TextView) bottomBar.findViewById(R.id.headerText);
+        updateButton = (Button) bottomBar.findViewById(R.id.update);
+        updateButton.setOnTouchListener(new View.OnTouchListener() {
+
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        pageActivity.reload();
+                        break;
+                    default:
+                        break;
+                }
+
+                return false;
+            }
+        });
         DeviceInfo deviceInfo = getDeviceInfoFromApplicationContext();
         headerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_TITLE);
         headerText.setOnClickListener(new OnClickListener() {
@@ -88,4 +110,6 @@ public class HeaderView extends LinearLayout {
     public void show() {
         bottomBar.setVisibility(VISIBLE);
     }
+
+
 }

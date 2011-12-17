@@ -186,11 +186,10 @@ public class ContentLoadedView extends ArticleView {
 
 
             if (uiObject.getType().equals(TikaUIObject.TYPE_IMAGE)) {
-                if (!toLoadImage)
-                    continue;
                 ImageInfo imageInfo = ((ImageInfo) uiObject);
                 String url = imageInfo.getUrl();
-                WebImageView imageView = new WebImageView(this.getContext(), url, false,toLoadImage);
+
+                WebImageView imageView = new WebImageView(this.getContext(), url, this.getResources().getDrawable(Constants.DEFAULT_PIC),this.getResources().getDrawable(Constants.DEFAULT_PIC),false,toLoadImage);
                 imageView.setRoundImage(false);
                 imageView.setBackgroundResource(R.drawable.border);
 //                imageView.imageView.setTag(url);
