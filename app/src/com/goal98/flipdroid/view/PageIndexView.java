@@ -31,7 +31,7 @@ public class PageIndexView extends LinearLayout {
     private Date latestUpdateDate = new Date();
     private int total;
     private int current;
-    private boolean hasUpdate;
+//    private boolean hasUpdate;
     private boolean updating;
     private PageActivity activity;
 
@@ -90,30 +90,7 @@ public class PageIndexView extends LinearLayout {
         latestUpdate.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
         this.addView(latestUpdate, params);
 
-        if (hasUpdate) {
-            TextView update = new TextView(this.getContext());
-            update.setText("Reload");
-            update.setTextColor(Color.parseColor(Constants.COLOR_RED));
-            update.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
-
-            update.setOnTouchListener(new View.OnTouchListener() {
-
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                    switch (motionEvent.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            activity.reload();
-                            break;
-                        default:
-                            break;
-                    }
-
-                    return false;
-                }
-
-            });
-            this.addView(update, params);
-        } else if (updating) {
+        if (updating) {
             LinearLayout progressBar = (LinearLayout) LayoutInflater.from(this.getContext()).inflate(R.layout.progressbar, null);
             progressBar.findViewById(R.id.loading).setVisibility(GONE);
             this.addView(progressBar, params);
@@ -121,7 +98,6 @@ public class PageIndexView extends LinearLayout {
     }
 
     public void setHasUpdate(boolean hasUpdate) {
-        this.hasUpdate = hasUpdate;
         this.updating = false;
         System.out.println("has update" + hasUpdate);
         updateView();
@@ -133,9 +109,6 @@ public class PageIndexView extends LinearLayout {
         updateView();
     }
 
-    public boolean isHasUpdate() {
-        return hasUpdate;
-    }
 
     public boolean isUpdating() {
         return updating;

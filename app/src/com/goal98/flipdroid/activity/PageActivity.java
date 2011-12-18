@@ -531,7 +531,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         handler.post(new Runnable() {
             public void run() {
                 setProgressBarIndeterminateVisibility(false);
-                pageIndexView.setHasUpdate(true);
+                bottomBar.showUpdate();
+                pageIndexView.setUpdating(false);
             }
         });
     }
@@ -541,6 +542,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             public void run() {
                 setProgressBarIndeterminateVisibility(false);
                 pageIndexView.setHasUpdate(false);
+                bottomBar.hideUpdate();
             }
         });
     }
@@ -878,12 +880,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             }
             slideToNextPageAsynchronized();
         } else {
-            if (pageIndexView.isHasUpdate()) {
-                this.reload();
-                return;
-            } else {
-                finishActivity();
-            }
+            finishActivity();
         }
         Log.v(TAG, "debug flip done");
     }
@@ -1375,7 +1372,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         }
         return;
     }
-
 
 
     private void addShortcut() {

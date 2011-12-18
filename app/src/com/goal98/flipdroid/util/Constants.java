@@ -1,5 +1,7 @@
 package com.goal98.flipdroid.util;
 
+import com.goal98.flipdroid.R;
+
 public class Constants {
     public static final String CONSUMER_KEY = "3540458031";
     public static final String CONSUMER_SECRET = "78ab7bd940a4cad913cd0f5e2eb38c87";
@@ -35,4 +37,5 @@ public class Constants {
     
     public static final String PREFERENCE_TIPS_READ = "TIPS_READ";
     public static final String PREFERENCE_TUTORIAL_READ = "TUTORIAL_READ";
+    public static final int DEFAULT_PIC = R.drawable.btn_sina;
 }

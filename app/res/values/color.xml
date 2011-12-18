@@ -9,5 +9,7 @@
     <color name="verylightblue">#ff66ccff</color>
     <color name="darkred">#ffcc0000</color>
     <color name="red">#ffff3333</color>
+    <color name="green">#ff33ff33</color>
+    <color name="darkgreen">#ff33ff33</color>
     <color name="lightred">#ffff6666</color>
 </resources>

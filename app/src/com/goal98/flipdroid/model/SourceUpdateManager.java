@@ -74,7 +74,8 @@ public class SourceUpdateManager {
             public void run() {
                 for (String updateType : UPDATE_TYPE) {
                     String rssUpdatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(updateType);
-                    recommendSourceDB.update(rssUpdatedSource, updateType);
+                    if(rssUpdatedSource!=null && rssUpdatedSource.length()!=0)
+                        recommendSourceDB.update(rssUpdatedSource, updateType);
                     System.out.println("recommend source " + updateType + " updated");
                 }
 

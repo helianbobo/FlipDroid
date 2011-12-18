@@ -43,6 +43,7 @@
     <string name="button_login">Login</string>
     <string name="button_close">Close</string>
     <string name="button_send">Send</string>
+    <string name="button_update">Reload</string>
 
     <string name="my_timeline">My Timeline</string>
     <string name="my_timeline_desc">The tweets I am follwing.</string>
