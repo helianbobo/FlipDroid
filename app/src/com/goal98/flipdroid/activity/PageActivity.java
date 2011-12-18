@@ -149,6 +149,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     private View tutorial;
 
+    public boolean isFlipStarted() {
+        return flipStarted;
+    }
 
     public String getSourceImageURL() {
         return sourceImageURL;
@@ -228,7 +231,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         });*/
         toLoadImage = NetworkUtil.toLoadImage(PageActivity.this);
         pageIndexView = (PageIndexView) findViewById(R.id.pageIndex);
-        ViewSwitcher headerSwitcher = (ViewSwitcher) findViewById(R.id.flipper);
         bottomBar = (HeaderView) findViewById(R.id.header);
         contentImageButton = (ImageButton) findViewById(R.id.content);
         contentImageButton.setOnTouchListener(new View.OnTouchListener() {
@@ -740,19 +742,21 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             case MotionEvent.ACTION_DOWN: {
                 mLastMotionX = mInitialMotionX = event.getX();
                 mLastMotionY = mInitialMotionY = event.getY();
+
                 break;
             }
-            case MotionEvent.ACTION_UP:
+            /*case MotionEvent.ACTION_UP:
                 Log.v(TAG, "** dispatchTouchEvent() event.getAction()=" + MotionEvent.ACTION_UP);
-                return current.dispatchTouchEvent(event);
-            case MotionEvent.ACTION_MOVE: {
+                return current.dispatchTouchEvent(event);*/
+            case MotionEvent.ACTION_UP: {
 
                 mLastMotionX = event.getX();
                 mLastMotionY = event.getY();
 
                 if (!enlargedMode) {
                     Log.v(TAG, "** dispatchTouchEvent() event.getAction()=" + MotionEvent.ACTION_MOVE + " enlargedMode=" + enlargedMode + " --> onTouchEvent(event)");
-                    onTouchEvent(event);
+                    if (!onTouchEvent(event))
+                        current.onTouchEvent(event);
                 } else {
                     Log.v(TAG, "** dispatchTouchEvent() event.getAction()=" + MotionEvent.ACTION_MOVE + " enlargedMode=" + enlargedMode + " --> current.onTouchEvent(event);");
                     current.onTouchEvent(event);
@@ -793,7 +797,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 break;
             }
 
-            case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_UP:
 
                 mLastMotionX = event.getX();
                 mLastMotionY = event.getY();
@@ -824,7 +828,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                             flipPage(false);
                             break;
                         case NONE:
-                            break;
+                            return false;
 
                     }
 
@@ -850,8 +854,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     private void flipPage(final boolean forward) {
 
-        if (!current.isFirstPage())
+        if (!current.isFirstPage()){
+
             flipStarted = true;
+        }
 
         this.previousDirection = this.forward;
         this.forward = forward;

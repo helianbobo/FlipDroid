@@ -186,6 +186,10 @@ public class WeiboPageView extends FrameLayout {
     private ArticleView articleView;
 
     public void enlarge(final ArticleView articleView, final ExpandableArticleView weiboArticleView) {
+
+        if(pageActivity.isFlipStarted())
+            return;;
+
         this.articleView = articleView;
         this.clickedArticleView = weiboArticleView;
         inflater = LayoutInflater.from(WeiboPageView.this.getContext());
