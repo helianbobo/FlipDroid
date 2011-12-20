@@ -30,14 +30,13 @@ public class TikaClient {
         this.host = host;
     }
 
-    public String updateRecommendSource(String type) {
+    public LastModifiedStampedResult updateRecommendSource(String type, long lastModified) {
         String requestURL = null;
         requestURL = "http://" + host + "/v1/recommend?type=" + type;
         try {
-            final String read = read(requestURL);
-
-            return read;
+            return readWithIMS(requestURL, lastModified);
         } catch (TikaClientException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -189,20 +188,27 @@ public class TikaClient {
     }
 
     public String read(String url) throws TikaClientException {
+        return (String) readWithIMS(url, -1).getResult();
+    }
+
+    public LastModifiedStampedResult readWithIMS(String url, long lastModified) throws TikaClientException {
         HttpURLConnection u = null;
         try {
             u = (HttpURLConnection) new URL(url).openConnection();
         } catch (IOException e) {
-            return "";
+            return new LastModifiedStampedResult(-1,null);
         }
-
+        if (lastModified != -1)
+            u.setIfModifiedSince(lastModified);
         try {
             final int responseCode = u.getResponseCode();
             if (responseCode >= 200 && responseCode <= 299) {
                 byte[] response = URLRawRepo.getInstance().fetch(u);
                 final String s = new String(response, "utf-8");
                 if (s != null && s.startsWith("{"))// json
-                    return s;
+                    return new LastModifiedStampedResult(u.getLastModified(), s);
+                return null;
+            } else if (responseCode == 304) {
                 return null;
             } else {
                 throw new TikaClientException();
@@ -212,4 +218,6 @@ public class TikaClient {
             throw new TikaClientException(url, e);  //To change body of catch statement use File | Settings | File Templates.
         }
     }
+
+
 }

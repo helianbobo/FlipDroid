@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.view.View;
 import android.widget.BaseAdapter;
 import com.goal98.flipdroid.activity.IndexActivity;
+import com.goal98.flipdroid.client.LastModifiedStampedResult;
 import com.goal98.flipdroid.client.TikaClient;
 import com.goal98.flipdroid.db.RecommendSourceDB;
 import com.goal98.flipdroid.db.SourceDB;
@@ -73,9 +74,10 @@ public class SourceUpdateManager {
         Thread t = new Thread(new Runnable() {
             public void run() {
                 for (String updateType : UPDATE_TYPE) {
-                    String rssUpdatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(updateType);
-                    if(rssUpdatedSource!=null && rssUpdatedSource.length()!=0)
-                        recommendSourceDB.update(rssUpdatedSource, updateType);
+                    long lastModified = recommendSourceDB.getLastModified(updateType);
+                    LastModifiedStampedResult rssUpdatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(updateType, lastModified);
+                    if (rssUpdatedSource!=null && rssUpdatedSource.getResult() != null && ((String) rssUpdatedSource.getResult()).length() != 0)
+                        recommendSourceDB.update((String) rssUpdatedSource.getResult(), updateType, rssUpdatedSource.getLastModified());
                     System.out.println("recommend source " + updateType + " updated");
                 }
 

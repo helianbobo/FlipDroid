@@ -144,7 +144,7 @@ public class SourceRepo {
             String sourceName = type.toUpperCase() + "_" + Constants.RECOMMAND_SOURCE_SUFFIX;
             if (recommendSource == null) {//read local file as a failover process
                 sourceJsonStr = fromFileSourceResolver.resolve(sourceName);
-                recommendSourceDB.insert(sourceJsonStr, sourceName);
+                recommendSourceDB.insert(sourceJsonStr, sourceName,-1);
             } else {
                 sourceJsonStr = recommendSource.getBody();
             }

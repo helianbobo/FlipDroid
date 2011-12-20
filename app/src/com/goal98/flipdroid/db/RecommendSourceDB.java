@@ -33,18 +33,26 @@ public class RecommendSourceDB extends AbstractDB {
         return db.insert(getTableName(), Source.KEY_SOURCE_TYPE, values);
     }
 
-    public long insert(String body, String type) {
+    public long insert(String body, String type, long lastModified) {
         ContentValues values = new ContentValues();
-        values.put(RecommendSource.KEY_UPDATE_TIME, new Date().getTime());
+        values.put(RecommendSource.KEY_UPDATE_TIME, lastModified);
         values.put(RecommendSource.KEY_BODY, body);
         values.put(RecommendSource.KEY_TYPE, type);
         return insert(values);
     }
 
 
-    public void update(String body, String type) {
+    public void update(String body, String type, long lastModified) {
         deleteByType(type);
-        insert(body, type);
+        insert(body, type,lastModified);
+    }
+
+    public long getLastModified(String type){
+        RecommendSource sourceByType = findSourceByType(type);
+        if(sourceByType==null)
+            return -1;
+
+        return sourceByType.getUpdateTime() .getTime();
     }
 
     public void deleteByType(String type) {

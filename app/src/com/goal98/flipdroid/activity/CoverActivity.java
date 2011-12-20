@@ -120,7 +120,7 @@ public class CoverActivity extends Activity {
                 if (recommendSource == null) {//read local file as a failover process
                     FromFileJSONReader fromFileSourceResolver = new FromFileJSONReader(this);
                     sourceJsonStr = fromFileSourceResolver.resolve(sourceName);
-                    recommendSourceDB.insert(sourceJsonStr, sourceName);
+                    recommendSourceDB.insert(sourceJsonStr, sourceName,-1);
                 } else {
                     sourceJsonStr = recommendSource.getBody();
                 }
