@@ -205,7 +205,7 @@ public class TikaClient {
             if (responseCode >= 200 && responseCode <= 299) {
                 byte[] response = URLRawRepo.getInstance().fetch(u);
                 final String s = new String(response, "utf-8");
-                if (s != null && s.startsWith("{"))// json
+                if (s != null &&(s.startsWith("{") || s.startsWith("[")) )// json
                     return new LastModifiedStampedResult(u.getLastModified(), s);
                 return null;
             } else if (responseCode == 304) {
