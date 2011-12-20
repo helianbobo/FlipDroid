@@ -2,7 +2,7 @@
 {% block title %}Source{% endblock %}  
 {% block content %}  
  <a href="/urls/">goto url_abstract</a>
- <a href="/recommendsource/">goto RecommendSource!!!!</a>
+
 <ul>
 {% for item in items.object_list %}
     <li>
@@ -12,12 +12,19 @@
      	 
      	<input name={{k}} type="text" value= {{v}} readonly="readonly" style="background-color: #999999">
      {% else %}
-     {% ifequal k 'url' %}
-     <input name={{k}} type="text" value= {{v}}  style= "WIDTH: 300px">
-     
+     {% ifequal k 'body' %}
+     <textarea rows="4" cols="50" name={{k}} type="text" value= {{v}} >{{v}}</textarea>
       {% else %}
+       {% ifequal k 'type' %}
+      <select name="type">
+	<option value="SINA_WEIBO"  {%ifequal  v  'SINA_WEIBO' %}selected="selected"{%endifequal%}>SINA_WEIBO</option>
+	<option value="RSS" {%ifequal  v  'RSS' %}selected="selected"{%endifequal%} >RSS</option>
+	<option value="DEFAULT" {%ifequal  v  'DEFAULT' %}selected="selected"{%endifequal%} >DEFAULT</option>
+	</select>
      
-     <input name={{k}} type="text" value= "{{v}}" >
+       {% else %}
+     <input name={{k}} type="text" value="{{v}}" >
+     {% endifequal %}
      {% endifequal %}
      {% endifequal %}
 	{% endfor %}
@@ -28,10 +35,12 @@
 {% endfor %}
  <li>
      <form action="updatesource" method="get"  >   
-     <input name="url" type="text" value="url" >
+      
+      <textarea rows="4" cols="50" name="body" type="text" value= {{v}} >body</textarea>
      <select name="type">
-	<option value="rss" selected="selected">rss</option>
-	<option value="weibo">weibo</option>
+	<option value="SINA_WEIBO"   selected="selected" >SINA_WEIBO</option>
+	<option value="RSS"   >RSS</option>
+	<option value="DEFAULT"   >DEFAULT</option>
 	</select>
     <input name="update" type="submit" value="add">
     </form>

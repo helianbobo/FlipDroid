@@ -22,7 +22,7 @@ con = Connection()
 #class Source(Tika):
 #    name="source"
 #    db = Connection().tika
-    
+import datetime   
 @con.register
 class Source(Document):
     __collection__ = 'source'
@@ -31,7 +31,7 @@ class Source(Document):
                  'url':unicode,
                  'type':unicode,
                  'md5':unicode,
-                 'time':unicode,
+                 'time':datetime.datetime,
                   
                  }
     required_fields = ['url' ]
@@ -47,6 +47,21 @@ class Url_abstract(Document):
                  } 
     required_fields = ['url' ]
     indexes = [{'fields':[('time',INDEX_DESCENDING)] },]
+    
+    
+@con.register
+class Recommend_Source(Document):
+    __collection__ = 'RecommendSource'
+    __database__ = 'tika'
+    structure = {
+                 'body':unicode,
+                  'lastModified':datetime.datetime,
+                 'type':unicode,
+                 } 
+    # = ['body' ]
+    #indexes = [{'fields':[('lastModified',INDEX_DESCENDING)] },]
+    
+     
      
 
   
