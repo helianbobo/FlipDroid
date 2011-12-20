@@ -111,11 +111,16 @@ public final class HTMLHighlighter {
         String html = implementation.html.toString();
         if (outputHighlightOnly) {
 
-             Matcher m;
+            Matcher m;
 			boolean repeat = true;
 			while(repeat) {
 				repeat = false;
-				m = PAT_TAG_P_NO_TEXT.matcher(html);
+				m = PAT_TAG_A_NO_TEXT.matcher(html);
+				if(m.find()) {
+					repeat = true;
+					html = m.replaceAll("");
+				}
+                m = PAT_TAG_P_NO_TEXT.matcher(html);
 				if(m.find()) {
 					repeat = true;
 					html = m.replaceAll("");
@@ -142,6 +147,7 @@ public final class HTMLHighlighter {
 
     private static final Pattern PAT_TAG_NO_TEXT = Pattern.compile("<[^/][^>]*></[^>]*>");
     private static final Pattern PAT_TAG_P_NO_TEXT = Pattern.compile("<p></p>");
+    private static final Pattern PAT_TAG_A_NO_TEXT = Pattern.compile("<a [^>]*?></a>");
     private static final Pattern PAT_TAG_STRONG_NO_TEXT = Pattern.compile("<strong></strong>");
     private static final Pattern PAT_TAG_HEADER_NO_TEXT = Pattern.compile("<h[1-6]+></h[1-6]+>");
     private static final Pattern PAT_SUPER_TAG = Pattern.compile("^<[^>]*>(<.*?>)</[^>]*>$");
@@ -493,38 +499,23 @@ public final class HTMLHighlighter {
                         inBlockQuote = true;
                     }
 
+                    if (qName.equalsIgnoreCase("a")) {
+                        String href = findAttr(atts,"href");
+                        html.append("<a href="+href+">");
+                    }
+
                     if (qName.equalsIgnoreCase("img") || qName.equalsIgnoreCase("image")) {
 
-                        int length = atts.getLength();
-                        String image = null;
-                        // Process each attribute
-                        for (int i = 0; i < length; i++) {
-                            // Get names and values for each attribute
-                            String name = atts.getQName(i);
-                            if (name.equalsIgnoreCase("src")) {
-                                image = atts.getValue(i);
-                                break;
-                            }
-                        }
+                        String image = findAttr(atts,"src");
                         if (image != null && image.trim().length() != 0)
                             for (int i = 0; i < HTMLHighlighter.this.images.size(); i++) {
                                 String s = HTMLHighlighter.this.images.get(i);
                                 if (s.indexOf(image) != -1) {
-//                                    if (html.toString().length() != 0 && !html.toString().endsWith("</p>") && !html.toString().endsWith("/>")) {
-//                                    if (inBlockQuote) {
-//                                        html.append("</blockquote></p>");
-//                                    } else
-//                                        html.append("</p>");
-//                                    }
                                     String img = "<img src=" + image + " >hack</img>";
                                     if (blockLevel == 0)
                                         html.append(img);//there must be a blank after image for parsing purpose
                                     else
                                         deferredImages.add(img);
-//                                    if (inBlockQuote)
-//                                        html.append("<blockquote><p>");
-//                                    else
-//                                        html.append("<p>");
                                     break;
                                 }
                             }
@@ -536,6 +527,21 @@ public final class HTMLHighlighter {
                 }
 
             }
+        }
+
+        private String findAttr(Attributes atts, String attrName) {
+            int length = atts.getLength();
+            String image = null;
+            // Process each attribute
+            for (int i = 0; i < length; i++) {
+                // Get names and values for each attribute
+                String name = atts.getQName(i);
+                if (name.equalsIgnoreCase(attrName)) {
+                    image = atts.getValue(i);
+                    break;
+                }
+            }
+            return image;
         }
 
         public void endElement(String uri, String localName, String qName)
@@ -569,6 +575,10 @@ public final class HTMLHighlighter {
                     }
                     if (qName.equalsIgnoreCase("div")) {
                         blockLevel--;
+                    }
+
+                    if (qName.equalsIgnoreCase("a")) {
+                        html.append("</a>");
                     }
                     if (qName.equalsIgnoreCase("p") ||
                             qName.equalsIgnoreCase("li")) {

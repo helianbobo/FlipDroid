@@ -1,7 +1,5 @@
 package com.goal98.flipdroid.model;
 
-import com.goal98.flipdroid.R;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

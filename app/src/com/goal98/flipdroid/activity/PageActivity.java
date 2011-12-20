@@ -3,18 +3,19 @@ package com.goal98.flipdroid.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent.ShortcutIconResource;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.v4.view.ViewConfigurationCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.*;
@@ -39,17 +40,15 @@ import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
 import com.goal98.flipdroid.model.featured.FeaturedArticleSource;
 import com.goal98.flipdroid.model.google.GoogleReaderArticleSource;
-import com.goal98.flipdroid.model.rss.RSSArticleSource;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.model.sina.SinaToken;
 import com.goal98.flipdroid.model.taobao.TaobaoArticleSource;
 import com.goal98.flipdroid.util.*;
 import com.goal98.flipdroid.view.*;
+import com.goal98.tika.common.TikaConstants;
 import weibo4j.Weibo;
 import weibo4j.WeiboException;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.*;
 
 public class PageActivity extends Activity implements com.goal98.flipdroid.model.Window.OnLoadListener, SourceUpdateable {
@@ -60,6 +59,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private ImageButton contentImageButton;
     public SinaToken sinaToken;
     private CachedArticleSource cachedArticleSource;
+    public static final int PROMPT_INPROGRESS = 3;
+    private boolean toLoadImage;
 
     public ExecutorService getExecutor() {
         return executor;
@@ -70,6 +71,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private boolean forward = false;
 
     private ViewGroup container;
+
+    public ViewGroup getContainer() {
+        return container;
+    }
+
     private WeiboPageView current;
     private WeiboPageView next;
     private WeiboPageView previous;
@@ -105,7 +111,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private boolean previousDirection;
     private boolean prepareFail;
     private FrameLayout.LayoutParams pageViewLayoutParamsBack;
-    private HeaderView header;
+    private HeaderView bottomBar;
     private TextView headerText;
     private WebImageView headerImageView;
     private int lastFlipDirection = ACTION_HORIZONTAL;
@@ -139,6 +145,13 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     public Dialog dialog;
     private Animation.AnimationListener fadeOutAnimationListener;
 
+    private int mTouchSlop;
+
+    private View tutorial;
+
+    public boolean isFlipStarted() {
+        return flipStarted;
+    }
 
     public String getSourceImageURL() {
         return sourceImageURL;
@@ -149,8 +162,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
 
-    public HeaderView getHeader() {
-        return header;
+    public HeaderView getBottomBar() {
+        return bottomBar;
     }
 
 
@@ -164,13 +177,16 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final ViewConfiguration configuration = ViewConfiguration.get(this);
+        mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
+        GestureUtil.minDelta = mTouchSlop;
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         this.deviceInfo = getDeviceInfoFromApplicationContext();
-        
-        
-  
-        
+
+
         StopWatch sw = new StopWatch();
         sw.start("create activity");
 
@@ -181,18 +197,13 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
 
         setProgressBarIndeterminateVisibility(false);
-        System.out.println("debug on create");
+        Log.v(TAG, "debug on create");
 
         executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
                 10L, TimeUnit.SECONDS,
                 new SynchronousQueue<Runnable>());
         sourceDB = new SourceDB(this);
         alarmSender = new AlarmSender(this);
-
-//        sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-//        acceleromererSensor = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-//        createShakeListener();
-
 
         Cursor sourceCursor = sourceDB.findAll();
 
@@ -209,20 +220,37 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         sourceName = (String) getIntent().getExtras().get("sourceName");
         contentUrl = (String) getIntent().getExtras().get("contentUrl");
 
-        ////System.out.println("sourceImageURL:" + sourceImageURL);
+        ////Log.v(TAG, "sourceImageURL:" + sourceImageURL);
         setContentView(R.layout.main);
         container = (ViewGroup) findViewById(R.id.pageContainer);
-        pageIndexView = (PageIndexView) findViewById(R.id.pageIndex);
-        ViewSwitcher headerSwitcher = (ViewSwitcher) findViewById(R.id.flipper);
-        header = (HeaderView) findViewById(R.id.header);
-        contentImageButton = (ImageButton) findViewById(R.id.content);
-        contentImageButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                PageActivity.this.finish();
+
+        /*container.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
             }
+        });*/
+        toLoadImage = NetworkUtil.toLoadImage(PageActivity.this);
+        pageIndexView = (PageIndexView) findViewById(R.id.pageIndex);
+        bottomBar = (HeaderView) findViewById(R.id.header);
+        contentImageButton = (ImageButton) findViewById(R.id.content);
+        contentImageButton.setOnTouchListener(new View.OnTouchListener() {
+
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        finishActivity();
+                        break;
+                    default:
+                        break;
+                }
+
+                return false;
+            }
+
         });
-//        pageInfo = (TextView)header.findViewById(R.id.pageInfo);
+
+//        pageInfo = (TextView)bottomBar.findViewById(R.id.pageInfo);
         headerText = (TextView) findViewById(R.id.headerText);
         headerImageView = (WebImageView) findViewById(R.id.headerImage);
 
@@ -234,9 +262,25 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 //        this.animationMode = getAnimationMode();
         refreshingSemaphore = new Semaphore(1, true);
         Log.v("accountType", accountType);
+
+        initTutorialView();
+
         reload();
 
+
     }
+
+    private void initTutorialView() {
+        tutorial = findViewById(R.id.tutorial);
+        tutorial.setVisibility(View.GONE);
+        tutorial.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                tutorial.setVisibility(View.GONE);
+                preferences.edit().putBoolean(Constants.PREFERENCE_TUTORIAL_READ, true).commit();
+            }
+        });
+    }
+
 
     private void createAnimation() {
         fadeOutAnimationListener = new Animation.AnimationListener() {
@@ -273,12 +317,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                     }
                 }).start();
                 pageIndexView.setDot(repo.getTotal(), currentPageIndex);
-                header.setPageView(current);
-                ////System.out.println("last page" + current.isLastPage());
-                if (current.isLastPage()) {
-                    overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                    PageActivity.this.finish();
-                }
+//                bottomBar.setPageView(current);
+
             }
 
             public void onAnimationRepeat(Animation animation) {
@@ -305,17 +345,16 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                     }
                 }).start();
 
-                if (cachedArticleSource != null && !updated) {
-                    System.out.println("animation update");
+
+                if (cachedArticleSource != null && !updated && NetworkUtil.isNetworkAvailable(PageActivity.this)) {
+                    Log.v(TAG, "check update");
                     cachedArticleSource.checkUpdate();
                 }
 
                 pageIndexView.setDot(repo.getTotal(), currentPageIndex);
-                header.setPageView(current);
-                ////System.out.println("last page" + current.isLastPage());
-                if (current.isLastPage()) {
-                    overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                    PageActivity.this.finish();
+//                bottomBar.setPageView(current);
+                if (current != null && current.isLastPage()) {
+                    finishActivity();
                 }
 //                current.startAnimation(fadeOutPageView);
             }
@@ -344,7 +383,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 flipStarted = false;
                 pageIndexView.setDot(repo.getTotal(), currentPageIndex);
                 switchViews(PageActivity.this.forward);
-                header.setPageView(current);
+//                bottomBar.setPageView(current);
                 new Thread(new Runnable() {
                     public void run() {
                         prepareNextPage();
@@ -359,7 +398,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         verticalAnimationListenerStep1 = new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
 
-                shadowParams.setMargins(0, (int) (0 - currentBottom.getHeight()), 0, 0);
+                shadowParams.setMargins(0, 0 - currentBottom.getHeight(), 0, 0);
                 //Log.d("ANI", "adding shadows " + currentBottom.getHeight() + "," + currentBottom.getChildCount());
 //                currentBottom.removeAllViews();
 
@@ -384,48 +423,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         };
     }
 
-//    private void createShakeListener() {
-//        acceleromererListener = new SensorEventListener() {
-//
-//            public void onAccuracyChanged(Sensor sensor, int accuracy) {
-//            }
-//
-//            public synchronized void onSensorChanged(SensorEvent event) {
-//                long curTime = System.currentTimeMillis();
-//                // only allow one update every 100ms.
-//                if ((curTime - lastUpdate) > 80) {
-//                    long diffTime = (curTime - lastUpdate);
-//                    lastUpdate = curTime;
-//
-//                    x = event.values[SensorManager.DATA_X];
-//                    y = event.values[SensorManager.DATA_Y];
-//                    z = event.values[SensorManager.DATA_Z];
-//
-//                    float speed = Math.abs(x + y + z - last_x - last_y - last_z)
-//                            / diffTime * 10000;
-//
-//                    if (speed > SHAKE_THRESHOLD) {
-//                        ////System.out.println("sensored" + dialog);
-//                        if (dialog == null)
-//                            PageActivity.this.showDialog(NAVIGATION);
-//                        else {
-//                            dialog.dismiss();
-//                        }
-//                    }
-//                    last_x = x;
-//                    last_y = y;
-//                    last_z = z;
-//                }
-//
-//            }
-//
-//        };
-//    }
-//
-//
-//    private void registerShakeListener() {
-//        sm.registerListener(acceleromererListener, acceleromererSensor, SensorManager.SENSOR_DELAY_UI);
-//    }
+    private void displayTutorial() {
+        final boolean tutorial_read = preferences.getBoolean(Constants.PREFERENCE_TUTORIAL_READ, false);
+        if (!tutorial_read)
+            tutorial.setVisibility(View.VISIBLE);
+    }
 
     private int getAnimationMode() {
         String key = getString(R.string.key_animation_mode_preference);
@@ -471,7 +473,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             next = window.get();
         else
             previous = window.get();
-        //Log.d("SLIDING", "on windows loaded");
         handler.post(new Runnable() {
             public void run() {
                 showAnimation();
@@ -489,7 +490,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     }
 
-    public void comment(String comment, long statusId) throws WeiboException, NoSinaAccountBindedException {
+    public void comment(String comment, Article article) throws WeiboException, NoSinaAccountBindedException {
         String userId = preferences.getString("sina_account", null);
         if (userId == null)
             throw new NoSinaAccountBindedException();
@@ -497,10 +498,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         if (weibo == null) {
             initSinaWeibo();
         }
-        weibo.updateStatus(comment, statusId);
+        weibo.updateStatus(comment, article.getStatusId());
     }
 
-    public void forward(String comment, String url) throws WeiboException, NoSinaAccountBindedException {
+    public void forward(String comment, Article article) throws WeiboException, NoSinaAccountBindedException {
         String userId = preferences.getString("sina_account", null);
         if (userId == null)
             throw new NoSinaAccountBindedException();
@@ -508,11 +509,17 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         if (weibo == null) {
             initSinaWeibo();
         }
-        weibo.updateStatus(comment + " " + url);
+
+
+        weibo.updateStatus(comment);
     }
 
     private void initSinaWeibo() {
+        System.setProperty("weibo4j.oauth.consumerKey", com.goal98.flipdroid.util.Constants.CONSUMER_KEY);
+        System.setProperty("weibo4j.oauth.consumerSecret", com.goal98.flipdroid.util.Constants.CONSUMER_SECRET);
+
         weibo = new WeiboExt();
+
         weibo.setHttpConnectionTimeout(5000);
         if (sinaToken == null)
             sinaToken = SinaAccountUtil.getToken(PageActivity.this);
@@ -524,7 +531,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         handler.post(new Runnable() {
             public void run() {
                 setProgressBarIndeterminateVisibility(false);
-                pageIndexView.setHasUpdate(true);
+                bottomBar.showUpdate();
+                pageIndexView.setUpdating(false);
             }
         });
     }
@@ -534,6 +542,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             public void run() {
                 setProgressBarIndeterminateVisibility(false);
                 pageIndexView.setHasUpdate(false);
+                bottomBar.hideUpdate();
             }
         });
     }
@@ -552,10 +561,15 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     public void reload() {
+        current = null;
+        next = null;
+        previous = null;
+        preparingWindow = null;
+
         currentPageIndex = -1;
         PagingStrategy pagingStrategy = null;
-        if (accountType.equals(Constants.TYPE_SINA_WEIBO) || accountType.equals(Constants.TYPE_MY_SINA_WEIBO)) {
-            ////System.out.println("accountType" + accountType);
+        if (accountType.equals(TikaConstants.TYPE_SINA_WEIBO) || accountType.equals(TikaConstants.TYPE_MY_SINA_WEIBO)) {
+            ////Log.v(TAG, "accountType" + accountType);
             if (isWeiboMode())
                 pagingStrategy = new WeiboPagingStrategy(this);
             else
@@ -579,7 +593,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
             source = new SinaArticleSource(true, sinaToken.getToken(), sinaToken.getTokenSecret(), sourceId, filter);
 
-        } else if (accountType.equals(Constants.TYPE_RSS) || accountType.equals(Constants.TYPE_BAIDUSEARCH)) {
+        } else if (accountType.equals(TikaConstants.TYPE_RSS) || accountType.equals(Constants.TYPE_BAIDUSEARCH)) {
             pagingStrategy = new FixedPagingStrategy(this, 2);
             pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
                 public void onNoMoreArticle() throws NoMoreStatusException {
@@ -588,11 +602,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             });
 
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            cachedArticleSource = new CachedArticleSource(new FeaturedArticleSource(this, contentUrl, sourceName, sourceImageURL), this, this, SourceCache.getInstance(this));
+            cachedArticleSource = new CachedArticleSource(new FeaturedArticleSource(contentUrl, sourceName, sourceImageURL), this, SourceCache.getInstance(this));
             cachedArticleSource.loadSourceFromCache();
             source = cachedArticleSource;
-        } else if (accountType.equals(Constants.TYPE_GOOGLE_READER)) {
-
+        } else if (accountType.equals(TikaConstants.TYPE_GOOGLE_READER)) {
             String sid = preferences.getString(GoogleAccountActivity.GOOGLE_ACCOUNT_SID, "");
             String auth = preferences.getString(GoogleAccountActivity.GOOGLE_ACCOUNT_AUTH, "");
 
@@ -623,6 +636,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         if (sourceImageURL != null && sourceImageURL.length() != 0) {
             headerImageView.setImageUrl(sourceImageURL);
             headerImageView.loadImage();
+            headerImageView.setRoundImage(true);
+            headerImageView.setBackgroundResource(R.drawable.border);
         } else {
             int maxTitle = 7;
 
@@ -645,6 +660,22 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         pageViewLayoutParamsFront = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT, FrameLayout.LayoutParams.FILL_PARENT);
         pageViewLayoutParamsBack = pageViewLayoutParamsFront;
         flipPage(true);
+    }
+
+    public void hideIndexView() {
+        this.pageIndexView.hide();
+        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 440);
+        container.setLayoutParams(params1);
+    }
+
+    public void showIndexView() {
+        this.pageIndexView.show();
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 415);
+        container.setLayoutParams(params);
+    }
+
+    public boolean isToLoadImage() {
+        return toLoadImage;
     }
 
 
@@ -680,84 +711,143 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     public void setEnlargedMode(boolean enlargedMode) {
         this.enlargedMode = enlargedMode;
         if (enlargedMode) {
-            header.showToolBar();
+            bottomBar.showToolBar();
         } else {
-            header.showTitleBar();
+            bottomBar.showTitleBar();
         }
     }
 
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        ////System.out.println("flipStarted" + flipStarted);
-        if (flipStarted)
-            return true;
-//        if (header.isSourceSelectMode()) {
-        if (header.dispatchTouchEvent(event)) {
+        ////Log.v(TAG, "flipStarted" + flipStarted);
+
+        if (tutorial.getVisibility() == View.VISIBLE) {
+            tutorial.dispatchTouchEvent(event);
             return true;
         }
-//        if (pageIndexView.dispatchTouchEvent(event)) {
-//            return true;
-//        }
+
+        if (flipStarted)
+            return true;
+//        if (bottomBar.isSourceSelectMode()) {
+        if (bottomBar.dispatchTouchEvent(event)) {
+            return true;
+        }
+        if (pageIndexView.dispatchTouchEvent(event)) {
+            return true;
+        }
 //        }
         if (enlargedMode) {
             current.onTouchEvent(event);
         }
         switch (event.getAction()) {
-            case MotionEvent.ACTION_UP:
-                return current.dispatchTouchEvent(event);
-            case MotionEvent.ACTION_MOVE: {
-                if (!enlargedMode)
-                    onTouchEvent(event);
-                else
+            case MotionEvent.ACTION_DOWN: {
+                mLastMotionX = mInitialMotionX = event.getX();
+                mLastMotionY = mInitialMotionY = event.getY();
+
+                break;
+            }
+            /*case MotionEvent.ACTION_UP:
+                Log.v(TAG, "** dispatchTouchEvent() event.getAction()=" + MotionEvent.ACTION_UP);
+                return current.dispatchTouchEvent(event);*/
+            case MotionEvent.ACTION_UP: {
+
+                mLastMotionX = event.getX();
+                mLastMotionY = event.getY();
+
+                if (!enlargedMode) {
+                    Log.v(TAG, "** dispatchTouchEvent() event.getAction()=" + MotionEvent.ACTION_MOVE + " enlargedMode=" + enlargedMode + " --> onTouchEvent(event)");
+                    if (!onTouchEvent(event))
+                        current.onTouchEvent(event);
+                } else {
+                    Log.v(TAG, "** dispatchTouchEvent() event.getAction()=" + MotionEvent.ACTION_MOVE + " enlargedMode=" + enlargedMode + " --> current.onTouchEvent(event);");
                     current.onTouchEvent(event);
+                }
 
             }
         }
+
+        Log.v("PageActivity", "** dispatchTouchEvent() event.getAction()=" + event.getAction() + " enlargedMode=" + enlargedMode + " --> super.dispatchTouchEvent(event);");
         return super.dispatchTouchEvent(event);
     }
 
+    private final String TAG = "PageActivity";
+    private float mLastMotionX, mLastMotionY, mInitialMotionX, mInitialMotionY;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        ////System.out.println("flipStarted" + flipStarted);
+        ////Log.v(TAG, "flipStarted" + flipStarted);
+
         if (flipStarted) {
+            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> return false;");
             return false;
         }
-//        if (header.isSourceSelectMode()) {
-//            header.onTouchEvent(event);
+//        if (bottomBar.isSourceSelectMode()) {
+//            bottomBar.onTouchEvent(event);
 //        }
         if (enlargedMode) {
+            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " enlargedMode=" + enlargedMode + " -->  current.onTouchEvent(event);");
             current.onTouchEvent(event);
         }
 
 
         switch (event.getAction()) {
-            case MotionEvent.ACTION_MOVE:
 
-                if (event.getHistorySize() > 0 && !flipStarted) {
-                    if (GestureUtil.flipRight(event)) {
-                        lastFlipDirection = ACTION_HORIZONTAL;
-                        flipPage(false);
-                    } else if (GestureUtil.flipUp(event)) {
-                        lastFlipDirection = ACTION_VERTICAL;
-                        flipPage(false);
-                    } else if (GestureUtil.flipLeft(event)) {
-                        lastFlipDirection = ACTION_HORIZONTAL;
-                        flipPage(true);
-                    } else if (GestureUtil.flipDown(event)) {
-                        lastFlipDirection = ACTION_VERTICAL;
-                        flipPage(true);
+            case MotionEvent.ACTION_DOWN: {
+                mLastMotionX = mInitialMotionX = event.getX();
+                mLastMotionY = mInitialMotionY = event.getY();
+                break;
+            }
+
+            case MotionEvent.ACTION_UP:
+
+                mLastMotionX = event.getX();
+                mLastMotionY = event.getY();
+
+                if (!flipStarted) {
+
+                    final GestureUtil.FlipDirection flipDirection = GestureUtil.checkFlipDirection(mInitialMotionX, mInitialMotionY, mLastMotionX, mLastMotionY);
+
+                    switch (flipDirection) {
+                        case RIGHT:
+                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> RIGHT;");
+                            lastFlipDirection = ACTION_HORIZONTAL;
+                            flipPage(false);
+                            break;
+                        case UP:
+                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> UP;");
+                            lastFlipDirection = ACTION_VERTICAL;
+                            flipPage(true);
+                            break;
+                        case LEFT:
+                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> LEFT;");
+                            lastFlipDirection = ACTION_HORIZONTAL;
+                            flipPage(true);
+                            break;
+                        case DOWN:
+                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> DOWN;");
+                            lastFlipDirection = ACTION_VERTICAL;
+                            flipPage(false);
+                            break;
+                        case NONE:
+                            return false;
+
                     }
 
+                    Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> No Gesture matched");
+
                 } else {
-//                    if (header.isSourceSelectMode())
-                    header.onTouchEvent(event);
+                    Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " event.getHistorySize()" + event.getHistorySize() + " --> bottomBar.onTouchEvent(event);");
+//                    if (bottomBar.isSourceSelectMode())
+                    bottomBar.onTouchEvent(event);
 //                    pageIndexView.onTouchEvent(event);
                 }
                 break;
             default:
+                Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> default;");
                 break;
         }
+        Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> return true;");
 
         return true;
     }
@@ -765,8 +855,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     Handler handler = new Handler();
 
     private void flipPage(final boolean forward) {
-        if (!current.isFirstPage())
+
+        if (!current.isFirstPage()){
+
             flipStarted = true;
+        }
 
         this.previousDirection = this.forward;
         this.forward = forward;
@@ -775,7 +868,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             decreasePageNo();
 
         int nextPageIndex = forward ? currentPageIndex + 1 : currentPageIndex;
-        System.out.println("debug flip");
+        Log.v(TAG, "debug flip");
         if (currentPageIndex == -1 && forward) {//we are first timer
             currentPageIndex++;
             container.addView(current, pageViewLayoutParamsFront);
@@ -787,18 +880,13 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             }
             slideToNextPageAsynchronized();
         } else {
-            if (pageIndexView.isHasUpdate()) {
-                this.reload();
-                return;
-            } else {
-                finishActivity();
-            }
+            finishActivity();
         }
-        System.out.println("debug flip done");
+        Log.v(TAG, "debug flip done");
     }
 
     private void finishActivity() {
-        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+        overridePendingTransition(R.anim.left_in, R.anim.fade);
         finish();
     }
 
@@ -811,7 +899,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private void slideToNextPage() {
-        System.out.println("debug slide to next");
+        Log.v(TAG, "debug slide to next");
         try {
             if (preparingWindow == null && !prepareFail)
                 preparingWindow = forward ? slidingWindows.getNextWindow() : slidingWindows.getPreviousWindow();
@@ -829,7 +917,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                         preparingWindow = slidingWindows.getNextWindow();
                     }
                 }
-                if (next.isLastPage()) {
+                if (next.isLastPage() && forward) {
                     handler.post(new Runnable() {
                         public void run() {
                             showAnimation();
@@ -867,7 +955,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 return;
             } else {
                 if (next.isLastPage()) {
-                    ////System.out.println("lastpage");
+                    ////Log.v(TAG, "lastpage");
                 } else {
                     if (forward)
                         next = nextWindow.get();
@@ -902,7 +990,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private void prepareNextPage() {
         try {
             preparingWindow = forward ? slidingWindows.getNextWindow() : slidingWindows.getPreviousWindow();
-            ////System.out.println("preparingWindow" + preparingWindow);
+            ////Log.v(TAG, "preparingWindow" + preparingWindow);
             if (preparingWindow.isLoading()) {
                 //Log.d("SLIDING", "register on load listener...");
 
@@ -943,6 +1031,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                             next.removeLoadingIfNecessary();
                         else
                             previous.removeLoadingIfNecessary();
+
+                        displayTutorial();
                     }
                 });
                 prepareFail = false;
@@ -963,6 +1053,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         } else {
             renderingPageView = previous;
         }
+        renderingPageView.setVisibility(View.VISIBLE);
         if (renderingPageView.isRendered())
             return;
 
@@ -970,7 +1061,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             v.renderBeforeLayout();
         }
         renderingPageView.renderBeforeLayout();
-        renderingPageView.setVisibility(View.VISIBLE);
     }
 
     private void decreasePageNo() {
@@ -982,16 +1072,17 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         final float centerX = 0;
         long duration = getFlipDurationFromPreference();
 
-        Animation rotation = AnimationFactory.buildHorizontalFlipAnimation(forward, duration, centerX, centerY);
+        int animation = forward ? R.anim.left_out : R.anim.left_in;
+        Animation result = AnimationUtils.loadAnimation(this, animation);//AnimationFactory.buildHorizontalFlipAnimation(forward, duration, centerX, centerY);
 
-
-        rotation.setAnimationListener(flipAnimationListener);
-        return rotation;
+        result.setDuration(duration);
+        result.setAnimationListener(flipAnimationListener);
+        return result;
     }
 
     private long getFlipDurationFromPreference() {
         String key = getString(R.string.key_anim_flip_duration_preference);
-        return Long.parseLong(preferences.getString(key, "500"));
+        return Long.parseLong(preferences.getString(key, "400"));
     }
 
     private int getBrowseMode() {
@@ -1055,12 +1146,16 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         //Log.d("ANI", "start animation");
         container.removeAllViews();
         if (current.isFirstPage()) {
+
             next.setVisibility(View.VISIBLE);
             currentPageIndex++;
             container.addView(current, pageViewLayoutParamsBack);
             container.addView(next, pageViewLayoutParamsFront);
+
+
+            current.setAnimationCacheEnabled(true);
             current.startAnimation(fadeInPageView);
-        } else if (isWeiboMode() || next.isLastPage() || next.getWrapperViews().size() < 2 || lastFlipDirection == ACTION_HORIZONTAL) {
+        } else if (isWeiboMode() || (current.isLastPage() && !forward) || (next.isLastPage() && forward) || (next.getWrapperViews().size() < 2 && forward) || lastFlipDirection == ACTION_HORIZONTAL) {
 
             Animation rotation = buildFlipHorizonalAnimation(forward);
             if (forward)
@@ -1072,14 +1167,19 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
                 container.addView(current, pageViewLayoutParamsBack);
                 container.addView(next, pageViewLayoutParamsFront);
+
+                current.setAnimationCacheEnabled(true);
                 current.startAnimation(rotation);
             } else {
 
                 container.addView(current, pageViewLayoutParamsFront);
                 container.addView(previous, pageViewLayoutParamsBack);
+
+                previous.setAnimationCacheEnabled(true);
                 previous.startAnimation(rotation);
             }
         } else {
+
             if (forward) {
                 currentPageIndex++;
                 container.addView(next, pageViewLayoutParamsFront);
@@ -1120,8 +1220,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private Animation buildFlipAnimation(final LinearLayout currentUpper, final LinearLayout currentBottom, final LinearLayout nextUpper, final LinearLayout nextBottom, final boolean forward) {
-        final float centerY = 240;
+        final float centerY = getWindowManager().getDefaultDisplay().getHeight() / 2;
         final float centerX = 160;
+
+        getWindowManager().getDefaultDisplay().getHeight();
 
         long duration = getFlipDurationFromPreference();
 
@@ -1141,19 +1243,35 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     public boolean sinaAlreadyBinded() {
         AccountDB accountDB = new AccountDB(this);
         try {
-            return accountDB.hasAccount(Constants.TYPE_MY_SINA_WEIBO) && preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null) != null;
+            return accountDB.hasAccount(TikaConstants.TYPE_MY_SINA_WEIBO) && preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null) != null;
         } finally {
             accountDB.close();
         }
+    }
+
+    public void hideBottomBar() {
+        bottomBar.hide();
+    }
+
+    public void showBottomBar() {
+        bottomBar.show();
     }
 
     public static final int PROMPT_OAUTH = 1;
     public static final int NAVIGATION = 2;
 
     protected Dialog onCreateDialog(int id) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = null;
         switch (id) {
+            case PROMPT_INPROGRESS:
+                ProgressDialog dialogProgress = new ProgressDialog(PageActivity.this);
+                dialogProgress.setIcon(R.drawable.icon);
+                dialogProgress.setMessage(this.getString(R.string.inprogress));
+                dialogProgress.setCancelable(false);
+                this.dialog = dialogProgress;
+                break;
             case PROMPT_OAUTH:
+                builder = new AlertDialog.Builder(this);
                 builder.setMessage(R.string.commentneedsinaoauth)
                         .setCancelable(false)
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -1161,7 +1279,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                                 FlipdroidApplications application = (FlipdroidApplications) getApplication();
                                 OAuth oauth = new OAuth();
                                 application.setOauth(oauth);
-                                ////System.out.println("OAuthHolder.oauth" + application + oauth);
+                                ////Log.v(TAG, "OAuthHolder.oauth" + application + oauth);
                                 oauth.RequestAccessToken(PageActivity.this, "flipdroid://SinaAccountSaver");
                             }
                         })
@@ -1170,17 +1288,16 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                             }
                         });
                 this.dialog = builder.create();
+
                 break;
             case NAVIGATION:
-        	LayoutInflater li = LayoutInflater.from(this);
-                View v = li.inflate(R.layout.dialog_nav_title_view,null);
-                 
-               // builder.setView(v);
+                builder = new AlertDialog.Builder(this);
+                LayoutInflater li = LayoutInflater.from(this);
+                View v = li.inflate(R.layout.dialog_nav_title_view, null);
+
                 builder.setCustomTitle(v);
-                 
-                
-                
-                 
+
+
                 builder.setAdapter(sourceAdapter, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -1200,18 +1317,16 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
 
                 this.dialog = builder.create();
-                Button btn_addshortcut =(Button) v.findViewById(R.id.btnaddshortcut);
+                Button btn_addshortcut = (Button) v.findViewById(R.id.btnaddshortcut);
                 btn_addshortcut.setText("add shortcut");
-                
-                btn_addshortcut.setOnClickListener(new Button.OnClickListener()
-                {
-                    public void onClick(View v)
-                    {
-                       addShortcut();
-                       dialog.cancel();  
+
+                btn_addshortcut.setOnClickListener(new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        addShortcut();
+                        dialog.cancel();
                     }
                 });
-                
+
                 dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
                     public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
                         if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_MENU) {
@@ -1253,36 +1368,32 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         if (enlargedMode)
             current.closeEnlargedView();
         else {
-            overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-            PageActivity.this.finish();
+            finishActivity();
         }
         return;
     }
 
-    public boolean toLoadImage() {
-        return PreferenceManager.getDefaultSharedPreferences(this).getBoolean(this.getString(R.string.key_load_image_preference), true);
-    }
-    
-    private void addShortcut( ){
-    	Intent shortcut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
-    	shortcut.putExtra("duplicate", false);
-    	ComponentName comp = new ComponentName(this.getPackageName(), "."+this.getLocalClassName());
-    	Intent intent=new Intent(Intent.ACTION_MAIN).setComponent(comp);
-    	//Bundle bundle = new Bundle();
-    	//bundle.putString("info", "infohahaha"+time);
-    	//bundle.putString("info", "infohahaha");
-    	//intent.putExtras(bundle);
-    	intent.putExtra("type", accountType );
-        intent.putExtra("sourceId", sourceId );
-        intent.putExtra("sourceImage", sourceImageURL);
-        intent.putExtra("sourceName", sourceName );
-        intent.putExtra("contentUrl", contentUrl );//for rss
 
-    	shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
-    	shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME,sourceName);
-    	
-    	ShortcutIconResource iconRes = Intent.ShortcutIconResource.fromContext(this, R.drawable.icon);
-    	shortcut.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconRes);	
-    	sendBroadcast(shortcut);
+    private void addShortcut() {
+        Intent shortcut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+        shortcut.putExtra("duplicate", false);
+        ComponentName comp = new ComponentName(this.getPackageName(), "." + this.getLocalClassName());
+        Intent intent = new Intent(Intent.ACTION_MAIN).setComponent(comp);
+        //Bundle bundle = new Bundle();
+        //bundle.putString("info", "infohahaha"+time);
+        //bundle.putString("info", "infohahaha");
+        //intent.putExtras(bundle);
+        intent.putExtra("type", accountType);
+        intent.putExtra("sourceId", sourceId);
+        intent.putExtra("sourceImage", sourceImageURL);
+        intent.putExtra("sourceName", sourceName);
+        intent.putExtra("contentUrl", contentUrl);//for rss
+
+        shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
+        shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME, sourceName);
+
+        ShortcutIconResource iconRes = Intent.ShortcutIconResource.fromContext(this, R.drawable.icon);
+        shortcut.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconRes);
+        sendBroadcast(shortcut);
     }
 }

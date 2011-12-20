@@ -3,7 +3,7 @@
     <style name="Base">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
-        <item name="android:background">#FFFFFF</item>
+        <item name="android:background">@color/white</item>
     </style>
 
     <style name="Cover" parent="Base">
@@ -46,9 +46,53 @@
 
     <style name="Article" parent="Base">
         <item name="android:textColor">#000</item>
-        <item name="android:textSize">14px</item>
+        <item name="android:textSize">16dp</item>
     </style>
 
+    <style name="Title">
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="EnlargedTitle" parent="Title">
+    </style>
+
+    <style name="ShareBy">
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+
+
     <style name="Menu" parent="Base">
+    </style>
+
+    <style name="Button">
+        <item name="android:background">@drawable/add_button</item>
+
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+
+        <item name="android:shadowColor">@color/lightblue</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">4</item>
+
+    </style>
+
+    <style name="CloseButton" parent="Button">
+        <item name="android:background">@drawable/close_button</item>
+
+        <item name="android:shadowColor">@color/red</item>
+
+    </style>
+    <style name="UpdateButton" parent="Button">
+        <item name="android:background">@drawable/update_button</item>
+
+        <item name="android:shadowColor">@color/green</item>
+
     </style>
 </resources>

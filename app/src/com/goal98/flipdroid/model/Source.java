@@ -13,6 +13,7 @@ public class Source {
     public static final String KEY_SOURCE_TYPE = "source_type";
     public static final String KEY_CAT = "cat";
     public static final String KEY_UPDATE_TIME = "update_on";
+    public static final String KEY_STATUS = "status";
 
     private String name;
     private String id;
@@ -21,6 +22,16 @@ public class Source {
     private String imageUrl;
     private String contentUrl;
     private Date updateTime;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    private String status;
 
     public Date getUpdateTime() {
         return updateTime;

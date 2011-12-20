@@ -141,7 +141,7 @@ public class DensityRulesClassifier implements
                 isContent = false;
         }
 
-        return curr.setIsContent(isContent && !curr.hasLabel(DefaultLabels.INDICATES_END_OF_TEXT));
+        return curr.setIsContent(isContent && !curr.hasLabel(DefaultLabels.INDICATES_SKIP_OF_TEXT));
     }
 
 }

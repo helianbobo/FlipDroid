@@ -1,55 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          android:versionCode="1"
-          android:versionName="1.0"
+          android:versionCode="3"
+          android:versionName="1.1.1"
           package="com.goal98.flipdroid">
 
 
     <application android:name=".activity.FlipdroidApplications" android:icon="@drawable/icon"
                  android:label="@string/app_name" android:debuggable="true">
-        <activity android:name=".activity.CoverActivity"
+        <activity android:name=".activity.CoverActivity" android:screenOrientation="portrait"
                   android:alwaysRetainTaskState="true"
-                  android:theme="@android:style/Theme.Light">
+                  android:theme="@android:style/Theme.Light.NoTitleBar">
             <intent-filter>
 
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ConfigActivity" android:theme="@android:style/Theme.Light"/>
-        <activity android:name=".activity.PageActivity" android:theme="@android:style/Theme.Light">
-         <intent-filter>
-
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        
-        </activity>
-        <activity android:name=".activity.IndexActivity" android:launchMode="singleTask"
-                  android:theme="@android:style/Theme.Light"/>
-        <activity android:name=".activity.SiteActivity" android:theme="@android:style/Theme.Light"/>
-        <activity android:name=".activity.SinaSourceSelectionActivity"
-                  android:theme="@android:style/Theme.Light"/>
-        <activity android:name=".activity.RSSSourceSelectionActivity" android:theme="@android:style/Theme.Light"/>
-
-        <activity android:name=".activity.SinaAccountActivity" android:theme="@android:style/Theme.Light">
+        <activity android:name=".activity.ConfigActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+        <activity android:name=".activity.PageActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar" android:windowSoftInputMode="stateUnspecified|adjustPan">
 
         </activity>
-        <activity android:name=".activity.AccountListActivity" android:theme="@android:style/Theme.Light"/>
-        <activity android:name=".activity.BindSinaActivity" android:theme="@android:style/Theme.Light"/>
-        <activity android:name=".activity.SinaSourceSearchActivity" android:theme="@android:style/Theme.Light"/>
-        <activity android:name=".activity.FlipdroidSourceActivity" android:theme="@android:style/Theme.Light"/>
-        <activity android:name=".activity.GoogleAccountActivity" android:theme="@android:style/Theme.Light"/>
-        <activity android:name=".activity.BaiduSearchSourceActivity" android:theme="@android:style/Theme.Light"/>
+        <activity android:name=".activity.IndexActivity" android:screenOrientation="portrait"
+                  android:launchMode="singleTask"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+        <activity android:name=".activity.SiteActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+        <activity android:name=".activity.SinaSourceSelectionActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+        <activity android:name=".activity.RSSSourceSelectionActivity" android:theme="@android:style/Theme.Light.NoTitleBar"/>
 
-        <activity android:name=".activity.SiteActivity" android:theme="@android:style/Theme.Light"/>
-        <activity android:name=".activity.BaiduSearchSourceActivity" android:theme="@android:style/Theme.Light"/>
+        <activity android:name=".activity.SinaAccountActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar">
+
+        </activity>
+        <activity android:name=".activity.AccountListActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+        <activity android:name=".activity.BindSinaActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+        <activity android:name=".activity.SinaSourceSearchActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+        <activity android:name=".activity.FlipdroidSourceActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+        <activity android:name=".activity.GoogleAccountActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+        <activity android:name=".activity.BaiduSearchSourceActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+
+        <activity android:name=".activity.SiteActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+        <activity android:name=".activity.BaiduSearchSourceActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+        <activity android:name=".activity.TipsActivity" android:screenOrientation="portrait"
+                          android:theme="@android:style/Theme.Light.NoTitleBar"/>
     </application>
     <uses-sdk android:minSdkVersion="4"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-<uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"/>
 </manifest>

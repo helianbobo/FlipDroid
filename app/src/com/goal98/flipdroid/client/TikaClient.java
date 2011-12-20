@@ -1,18 +1,16 @@
 package com.goal98.flipdroid.client;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import android.util.Log;
+import com.goal98.tika.common.URLRawRepo;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.net.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,10 +21,25 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class TikaClient {
+
+    private String TAG = this.getClass().getName();
+
     private String host;
 
     public TikaClient(String host) {
         this.host = host;
+    }
+
+    public String updateRecommendSource(String type) {
+        String requestURL = null;
+        requestURL = "http://" + host + "/v1/recommend?type=" + type;
+        try {
+            final String read = read(requestURL);
+
+            return read;
+        } catch (TikaClientException e) {
+            return null;
+        }
     }
 
     public List<TikaSourceResponse> searchSource(String keyword) throws TikaClientException {
@@ -42,6 +55,8 @@ public class TikaClient {
         if ("{}".equals(tikaResponse)) {
             return sourceResponses;
         }
+        if(tikaResponse ==null)
+            return sourceResponses;
         try {
             JSONArray sourceArray = new JSONArray(tikaResponse);
             for (int i = 0; i < sourceArray.length(); i++) {
@@ -124,6 +139,20 @@ public class TikaClient {
         } catch (JSONException e) {
 
         }
+        Date date = new Date();
+        try {
+            long time = s.getLong("createDate");
+            if (time != 0)
+                date = new Date(time);
+        } catch (JSONException e) {
+
+        }
+        String sourceURL = null;
+        try {
+            sourceURL = (String) s.get("sourceURL");
+        } catch (JSONException e) {
+
+        }
         List<String> images = new ArrayList<String>();
         try {
             JSONArray imagesArr = (JSONArray) s.get("images");
@@ -138,6 +167,8 @@ public class TikaClient {
         tikaExtractResponse.setContent(content);
         tikaExtractResponse.setTitle(title);
         tikaExtractResponse.setImages(images);
+        tikaExtractResponse.setSourceURL(sourceURL);
+        tikaExtractResponse.setCreateDate(date);
         return tikaExtractResponse;
     }
 
@@ -158,34 +189,26 @@ public class TikaClient {
     }
 
     public String read(String url) throws TikaClientException {
-        HttpClient client = HttpClientFactory.getHttpClient();
-        HttpGet request = new HttpGet(url);
+        HttpURLConnection u = null;
+        try {
+            u = (HttpURLConnection) new URL(url).openConnection();
+        } catch (IOException e) {
+            return "";
+        }
 
         try {
-            HttpResponse response = client.execute(request);
-            if (response.getStatusLine().getStatusCode() >= 200 && response.getStatusLine().getStatusCode() <= 299) {
-                InputStream is = response.getEntity().getContent();
-
-                try {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    int i;
-                    byte[] bytes = new byte[1024];
-                    while ((i = is.read(bytes)) != -1) {
-                        baos.write(bytes, 0, i);
-                        bytes = new byte[1024];
-                    }
-
-                    String s = new String(baos.toByteArray(), "utf-8");
-                    ////System.out.println(s);
+            final int responseCode = u.getResponseCode();
+            if (responseCode >= 200 && responseCode <= 299) {
+                byte[] response = URLRawRepo.getInstance().fetch(u);
+                final String s = new String(response, "utf-8");
+                if (s != null && s.startsWith("{"))// json
                     return s;
-                } finally {
-                    is.close();
-                }
+                return null;
             } else {
                 throw new TikaClientException();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, e.getMessage(), e);
             throw new TikaClientException(url, e);  //To change body of catch statement use File | Settings | File Templates.
         }
     }

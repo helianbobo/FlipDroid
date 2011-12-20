@@ -13,13 +13,8 @@ import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.PrettyTimeUtil;
 
-import java.net.URL;
-import java.util.Random;
 import java.util.concurrent.*;
 
-//import com.goal98.flipdroid.client.TikaClient;
-//import com.goal98.flipdroid.client.TikaClientException;
-//import com.goal98.flipdroid.client.TikaExtractResponse;
 
 /**
  * Created by IntelliJ IDEA.

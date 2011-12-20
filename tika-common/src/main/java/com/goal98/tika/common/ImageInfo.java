@@ -85,11 +85,7 @@ public class ImageInfo implements TikaUIObject {
     }
 
     public static void main(String[] args) {
-        String regEx = "[\u4e00-\u9fa5]";
-        Pattern pat = Pattern.compile(regEx);
-
-        String dot = "，";
-        Matcher m = pat.matcher(dot);
-        System.out.println(m.matches());
+        String str = "<aa><b></b></a>";
+        System.out.println(str.replaceAll("<[/]?.+?>",""));;
     }
 }

@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.Html;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 import com.goal98.flipdroid.model.Article;
@@ -30,7 +31,7 @@ public class ArticleTextViewRender {
             tv.setText(Html.fromHtml(article.getContent().replaceAll("(<br/>)|(</h[1-6]+>)|(<h[1-6]+>)|(<img.*?>)|(<blockquote>)|(</blockquote>)|(hack</img>)","")));
         } else {
             tv.setVisibility(View.GONE);
-            tv.setTextSize(25);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
         }
     }
 }

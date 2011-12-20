@@ -6,13 +6,13 @@ import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.GroupedSource;
 import com.goal98.flipdroid.model.SourceRepo;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.tika.common.TikaConstants;
 
-import java.util.List;
 import java.util.Map;
 
 public class SinaSourceSelectionActivity extends RSSSourceSelectionActivity {
     protected void addExtraItem(GroupedSource groupedSource) {
-        Map<String, String> customeSection = SourceDB.buildSource(Constants.TYPE_SINA_WEIBO,
+        Map<String, String> customeSection = SourceDB.buildSource(TikaConstants.TYPE_SINA_WEIBO,
                 getString(R.string.add_custom_source),
                 Constants.ADD_CUSTOME_SOURCE,
                 getString(R.string.add_custom_source_desc), null, this.getString(R.string.custom));

@@ -10,6 +10,7 @@ import com.goal98.flipdroid.model.cachesystem.BaseCacheableArticleSource;
 import com.goal98.flipdroid.model.cachesystem.CacheToken;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
+import com.goal98.tika.common.TikaConstants;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -31,20 +32,17 @@ public class FeaturedArticleSource extends BaseCacheableArticleSource {
     private String sourceName;
     private String sourceImage;
     TikaClient tikaClient;
-    private List<TikaExtractResponse> responses = new ArrayList<TikaExtractResponse>();
-    private Activity activity;
 
-    public FeaturedArticleSource(Activity activity, String feedURL, String sourceName, String sourceImage) {
+    public FeaturedArticleSource(String feedURL, String sourceName, String sourceImage) {
         this.feedURL = feedURL;
         this.sourceName = sourceName;
         this.sourceImage = sourceImage;
-        this.activity = activity;
         tikaClient = new TikaClient(Constants.TIKA_HOST);
     }
 
     public CacheToken getCacheToken() {
         CacheToken token = new CacheToken();
-        token.setType(Constants.TYPE_FEATURED);
+        token.setType(TikaConstants.TYPE_FEATURED);
         token.setToken(this.feedURL);
         return token;
     }
@@ -82,11 +80,13 @@ public class FeaturedArticleSource extends BaseCacheableArticleSource {
 
                     }
                 }
-                article.setSourceType(Constants.TYPE_FEATURED);
+                article.setSourceType(TikaConstants.TYPE_FEATURED);
                 article.setAlreadyLoaded(true);
                 article.setExpandable(true);
                 article.setContent(tikaExtractResponse.getContent());
                 article.setTitle(tikaExtractResponse.getTitle());
+                article.setSourceURL(tikaExtractResponse.getSourceURL());
+                article.setCreatedDate(tikaExtractResponse.getCreateDate());
                 if (tikaExtractResponse.getImages().size() != 0) {
                     article.setImageUrl(new URL(tikaExtractResponse.getImages().get(0)));
                 }
@@ -118,10 +118,9 @@ public class FeaturedArticleSource extends BaseCacheableArticleSource {
                     }
                 list.add(article);
             }
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (TikaClientException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
         return true;  //To change body of implemented methods use File | Settings | File Templates.
     }

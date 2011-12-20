@@ -15,6 +15,7 @@
         <module>tika-common</module>
         <module>tika-mongodb</module>
         <module>tika-thrift</module>
+		<module>tika-utils</module>
     </modules>
 
     <build>

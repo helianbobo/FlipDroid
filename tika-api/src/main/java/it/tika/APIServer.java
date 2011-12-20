@@ -13,7 +13,7 @@ public class APIServer {
     public static final String OFFICE = "D:\\myprojects\\android";
     public static final String HOME = "G:\\androidprj";
     public static final String HOME_2 = "D:\\Tools\\android-prj";
-    public static final String ROOT_URI = "file:///" + HOME_2 + "\\FlipDroid\\tika-ui";
+    public static final String ROOT_URI = "file:///" + HOME + "\\FlipDroid\\tika-ui";
     public static final String CURRENT_VERSION = "v1";
 
     public static void main(String[] args) throws Exception {
@@ -27,6 +27,7 @@ public class APIServer {
         c.getDefaultHost().attach("/"+CURRENT_VERSION+"/url/abstract/rating", URLAbstractRatingResource.class);
         c.getDefaultHost().attach("/"+CURRENT_VERSION+"/sources/search", SourcesResource.class);
         c.getDefaultHost().attach("/"+CURRENT_VERSION+"/feed", FeedResource.class);
+        c.getDefaultHost().attach("/"+CURRENT_VERSION+"/recommend", RecommendResource.class);
 
 
         // Create a component

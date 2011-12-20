@@ -7,10 +7,14 @@
     <string name="username">Username</string>
     <string name="clear_all_account">Clear Accounts</string>
     <string name="accounts">Accounts</string>
+    <string name="tips">Tips</string>
+    <string name="next">Next</string>
     <string name="search">Search</string>
     <string name="flip">FLIP >></string>
 
     <string name="sina_weibo">Sina Weibo</string>
+
+    <string name="key_tika_host">key_host</string>
 
     <string name="key_anim_flip_duration_preference">anim_flip_duration</string>
     <string name="title_anim_flip_duration_preference">Flip Duration</string>
@@ -30,17 +34,21 @@
     <string name="title_animation_mode_preference">Flip Animation</string>
     <string name="dialog_title_animation_mode_preference">Flip Animation</string>
 
-    <string name="title_load_image_preference">load imageBlacklisted</string>
+    <string name="title_load_image_preference">load image in non-WIFI</string>
     <string name="key_load_image_preference">load_image</string>
+    <string name="key_auto_check_update_nonwifi_preference">auto_update_nonwifi</string>
 
     <string name="button_add_new_account">Add New Account</string>
     <string name="button_add_new_source">Add New Source</string>
     <string name="button_login">Login</string>
+    <string name="button_close">Close</string>
+    <string name="button_send">Send</string>
+    <string name="button_update">Reload</string>
 
     <string name="my_timeline">My Timeline</string>
     <string name="my_timeline_desc">The tweets I am follwing.</string>
 
-    <string name="msg_no_more_page">No more smartPage to load.</string>
+    <string name="msg_no_more_page">No more article to load.Flip left to go back.Flip right to return.</string>
 
     <string name="sinaweiboheader">Sina</string>
     <string name="loading">loading...</string>
@@ -74,5 +82,8 @@
 
     <string name="add_custom_source">Add Custom Source</string>
     <string name="add_custom_source_desc">Add any weibo account to follow</string>
+    <string name="view_source">View Source</string>
 
+    <string name="original_url_is_not_available">Original URL is not available.</string>
+    <string name="title_auto_check_update_nonwifi_preference">Auto update if non-WIFI</string>
 </resources>

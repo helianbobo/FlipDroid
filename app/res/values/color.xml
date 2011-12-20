@@ -2,4 +2,14 @@
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
     <color name="gray">#ffaaaaaa</color>
+    <color name="lightgray">#fff7f7f7</color>
+    <color name="darkblue">#ff000099</color>
+    <color name="blue">#ff0066cc</color>
+    <color name="lightblue">#ff2491ff</color>
+    <color name="verylightblue">#ff66ccff</color>
+    <color name="darkred">#ffcc0000</color>
+    <color name="red">#ffff3333</color>
+    <color name="green">#ff33ff33</color>
+    <color name="darkgreen">#ff33ff33</color>
+    <color name="lightred">#ffff6666</color>
 </resources>

@@ -66,28 +66,6 @@ public class FeedResource extends ServerResource {
         return listeners;
     }
 
-    protected JSONObject convertURLAbstractToJSON(URLAbstract urlAbstract) {
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            jsonObject.accumulate("title", urlAbstract.getTitle());
-            jsonObject.accumulate("content", urlAbstract.getContent());
-            JSONArray jsonArray = new JSONArray();
-            List<String> images = urlAbstract.getImages();
-            if (images != null) {
-                for (int i = 0; i < images.size(); i++) {
-                    jsonArray.add(images.get(i));
-                }
-            }
-            jsonObject.accumulate("images", jsonArray);
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        return jsonObject;
-    }
-
     protected JSONObject convertURLAbstractCollectionToJSON(List<URLAbstract> urlAbstractList) {
         JSONObject urlAbstracts = new JSONObject();
         for (int i = 0; i < urlAbstractList.size(); i++) {
@@ -96,6 +74,7 @@ public class FeedResource extends ServerResource {
             try {
                 jsonObject.accumulate("title", urlAbstract.getTitle());
                 jsonObject.accumulate("content", urlAbstract.getContent());
+                jsonObject.accumulate("sourceURL", urlAbstract.getUrl());
                 JSONArray jsonArray = new JSONArray();
                 List<String> images = urlAbstract.getImages();
                 if (images != null) {
@@ -104,6 +83,7 @@ public class FeedResource extends ServerResource {
                     }
                 }
                 jsonObject.accumulate("images", jsonArray);
+                jsonObject.accumulate("createDate", urlAbstract.getCreateDate().getTime());
                 urlAbstracts.accumulate("abstracts", jsonObject);
             } catch (JSONException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.

@@ -8,6 +8,7 @@ import com.goal98.flipdroid.activity.WeiPaiWebViewClient;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.model.Account;
 import com.goal98.flipdroid.model.sina.SinaToken;
+import com.goal98.tika.common.TikaConstants;
 
 /**
  * Created by IntelliJ IDEA.
@@ -42,7 +43,7 @@ public class SinaAccountUtil {
         if (userId == null)
             userId = preferences.getString(WeiPaiWebViewClient.PREVIOUS_SINA_ACCOUNT_PREF_KEY, null);
 
-        Cursor cursor = accountDB.findByTypeAndUsername(Constants.TYPE_MY_SINA_WEIBO, userId);
+        Cursor cursor = accountDB.findByTypeAndUsername(TikaConstants.TYPE_MY_SINA_WEIBO, userId);
         try {
             cursor.moveToFirst();
             token = cursor.getString(cursor.getColumnIndex(Account.KEY_PASSWORD));

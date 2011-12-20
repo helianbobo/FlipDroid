@@ -136,7 +136,7 @@ public class WebGalleryAdapter extends BaseAdapter {
         if (convertView == null) {
             // create the it.tika.mongodb.image view
             webImageView = new WebImageView(context, null, progressDrawable,
-                    errorDrawable, false);
+                    errorDrawable, false,true);
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
                     LayoutParams.WRAP_CONTENT);
             lp.gravity = Gravity.CENTER;

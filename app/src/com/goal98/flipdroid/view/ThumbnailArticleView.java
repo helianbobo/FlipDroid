@@ -2,6 +2,7 @@ package com.goal98.flipdroid.view;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +15,8 @@ import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
-import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.PrettyTimeUtil;
 
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 
@@ -70,10 +69,10 @@ public class ThumbnailArticleView extends ExpandableArticleView {
 
                     int titleSize = 18;
                     int maxTitleLength = 0;
-                    if (!smallScreen) {
-                        maxTitleLength = 50;
-                    } else {
+                    if (smallScreen) {
                         maxTitleLength = 20;
+                    } else {
+                        maxTitleLength = 35;
                     }
                     if (article.getTitle() != null && article.getTitleLength() >= maxTitleLength) {
                         titleSize = 15;
@@ -85,12 +84,12 @@ public class ThumbnailArticleView extends ExpandableArticleView {
                         }
                     } else {
                         if (largeScreen) {
-                            titleSize = 21;
+                            titleSize = 18;
                         } else if (smallScreen) {
                             titleSize = 17;
                         }
                     }
-                    titleView.setTextSize(titleSize);
+                    titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
                     titleView.setText(article.getTitle());
                     titleView.setWidth(deviceInfo.getWidth());
 

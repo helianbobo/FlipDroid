@@ -1,0 +1,3 @@
+http://tika.it/v1/feed?source=http://rss.sina.com.cn/roll/sports/hot_roll.xml
+
+./refetchContainsImage.sh http://simg.sinajs.cn/blog7style/images/common/sg_trans.gif

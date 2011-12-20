@@ -4,6 +4,7 @@ import android.util.Log;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.ArticleSource;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.tika.common.TikaConstants;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,7 +55,7 @@ public class GoogleReaderArticleSource implements ArticleSource {
                     article.setTitle(item.getTitle());
                     article.setStatus(item.getLink());
                     article.setAuthor(item.getAuthor());
-                    article.setSourceType(Constants.TYPE_GOOGLE_READER);
+                    article.setSourceType(TikaConstants.TYPE_GOOGLE_READER);
                     articles.add(article);
                 }
                 result = true;

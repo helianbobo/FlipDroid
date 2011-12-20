@@ -4,7 +4,7 @@
 <LinearLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
               xmlns:android="http://schemas.android.com/apk/res/android" style="@style/AccountItem"
               android:orientation="horizontal" android:layout_marginTop="5dip" android:padding="2dip">
-    <com.goal98.android.WebImageView android:id="@+id/source_image" webimage:autoLoad="false"
+    <com.goal98.android.WebImageView android:id="@+id/source_image" webimage:autoLoad="false" webimage:roundImage="true"
                                      android:src="@drawable/portrait" webimage:errorDrawable="@drawable/portrait"
                                      android:layout_height="40dip" webimage:defaultWidth="40"
                                      webimage:defaultHeight="40" webimage:progressDrawable="@drawable/portrait"

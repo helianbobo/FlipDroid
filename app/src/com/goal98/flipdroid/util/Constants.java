@@ -1,5 +1,7 @@
 package com.goal98.flipdroid.util;
 
+import com.goal98.flipdroid.R;
+
 public class Constants {
     public static final String CONSUMER_KEY = "3540458031";
     public static final String CONSUMER_SECRET = "78ab7bd940a4cad913cd0f5e2eb38c87";
@@ -8,14 +10,7 @@ public class Constants {
 
     public static final String DATABASE_NAME = "VELOUR_DB";
 
-    public static final String TYPE_SINA_WEIBO = "SINA_WEIBO";
-    public static final String TYPE_MY_SINA_WEIBO = "MY_SINA_WEIBO";
-    public static final String TYPE_RSS = "RSS";
-    public static final String TYPE_GOOGLE_READER = "GOOGLE_READER";
-    public static final String TYPE_TENCENT_WEIBO = "TENCENT_WEIBO";
-    public static final String TYPE_TWITTER = "TWITTER";
-    public static final String TYPE_FAKE = "FAKE";
-    public static final String TYPE_FEATURED = "FEATURED";
+
 
     public static final String ADD_CUSTOME_SOURCE = "ADD_CUSTOME_SOURCE";
 
@@ -29,7 +24,18 @@ public class Constants {
     public static final String TYPE_FLIPDROID = "FLIPDROID";
     public static final String TYPE_BAIDUSEARCH="BAIDUSEARCH";
     public static final String TYPE_TAOBAO="TAOBAO";
-    public static final String TIKA_HOST="www.tika.it";
+    public static String TIKA_HOST="www.tika.it";
     public static final int LINE_COLOR=0xffDDDDDD;
     public static final int LOADED_TEXT_COLOR=0xff232323;
+    public static final String SHADOW_LAYER_COLOR="#77000000";
+    public static final String COLOR_RED="#FF0000";
+
+    public static final int TEXT_SIZE_TITLE = 18;
+    public static final int TEXT_SIZE_AUTHOR = 16;
+    public static final int TEXT_SIZE_REFERENCE = 16;
+    public static final int TEXT_SIZE_CONTENT = 16;
+    
+    public static final String PREFERENCE_TIPS_READ = "TIPS_READ";
+    public static final String PREFERENCE_TUTORIAL_READ = "TUTORIAL_READ";
+    public static final int DEFAULT_PIC = R.drawable.btn_sina;
 }

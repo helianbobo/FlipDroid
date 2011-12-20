@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.goal98.flipdroid.view.FlipPage
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/page" android:weightSum="480" android:orientation="vertical"
-        style="@style/Page" android:background="#DDDDDD">
 
-    <com.goal98.flipdroid.view.HeaderView android:background="#FFFFFF" android:id="@+id/header"
-                                          android:layout_width="match_parent"
-                                          android:layout_weight="40"
-                                          android:layout_height="0dip" android:gravity="center">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" style="@style/Page" >
 
-    </com.goal98.flipdroid.view.HeaderView>
+    <com.goal98.flipdroid.view.FlipPage
+            style="@style/Page"
+            android:id="@+id/page" android:weightSum="480" android:orientation="vertical"
+            android:background="#DDDDDD">
 
-    <FrameLayout android:background="#f0f0f0" android:id="@+id/pageContainer" android:layout_width="match_parent"
-                 android:layout_weight="415"
-                 android:layout_height="0dip" android:gravity="top" android:orientation="horizontal">
+        <com.goal98.flipdroid.view.PageIndexView android:background="@color/white" android:id="@+id/pageIndex"
+                                                 android:layout_width="fill_parent"
+                                                 android:layout_weight="25"
+                                                 android:layout_height="0dip" android:gravity="center">
 
-    </FrameLayout>
-    <com.goal98.flipdroid.view.PageIndexView android:background="#f0f0f0" android:id="@+id/pageIndex"
-                                             android:layout_width="fill_parent"
-                                             android:layout_weight="25"
-                                             android:layout_height="0dip" android:gravity="center">
+        </com.goal98.flipdroid.view.PageIndexView>
 
-    </com.goal98.flipdroid.view.PageIndexView>
-</com.goal98.flipdroid.view.FlipPage>
+        <FrameLayout android:background="#f0f0f0" android:id="@+id/pageContainer" android:layout_width="match_parent"
+                     android:layout_weight="415"
+                     android:layout_height="0dip" android:gravity="center" android:orientation="horizontal">
+
+        </FrameLayout>
+
+        <com.goal98.flipdroid.view.HeaderView android:background="#FFFFFF" android:id="@+id/header"
+                                              android:layout_width="match_parent"
+                                              android:layout_weight="40"
+                                              android:layout_height="0dip" android:gravity="center">
+
+        </com.goal98.flipdroid.view.HeaderView>
+    </com.goal98.flipdroid.view.FlipPage>
+
+    <include layout="@layout/tutorial" android:id="@+id/tutorial"/>
+
+</RelativeLayout>

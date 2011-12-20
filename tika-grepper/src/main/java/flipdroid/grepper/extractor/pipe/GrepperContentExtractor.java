@@ -13,12 +13,12 @@ public class GrepperContentExtractor implements Extractor {
 
     public void extract(URLAbstract urlAbstract) {
         try {
-            String content = extractor.fireAbstract(urlAbstract.getRawContent(), urlAbstract.getCharset());
-            urlAbstract.setContent(content);
-            urlAbstract.setImages(extractor.getImages());
+            flipdroid.grepper.extractor.GrepperContentExtractor.ExtractResult result = extractor.fireAbstract(urlAbstract.getRawContent(), urlAbstract.getCharset());
+            urlAbstract.setContent(result.abstractText);
+            urlAbstract.setImages(result.images);
 
             if (urlAbstract.getTitle() == null || urlAbstract.getTitle().length() == 0)//in case title fetcher failed
-                urlAbstract.setTitle(extractor.getTitle());
+                urlAbstract.setTitle(result.title);
         } catch (GrepperException e) {
             throw new ExtractorException(e);
         } catch (Exception e) {

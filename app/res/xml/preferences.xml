@@ -21,7 +21,7 @@
 
     <EditTextPreference
             android:key="@string/key_anim_flip_duration_preference"
-            android:defaultValue="700"
+            android:defaultValue="400"
             android:inputType="number"
             android:title="@string/title_anim_flip_duration_preference"
             android:summary="@string/summary_anim_flip_duration_preference"
@@ -37,9 +37,24 @@
             />
     <android.preference.CheckBoxPreference android:id="@+id/loadImage"
                                            android:key="@string/key_load_image_preference"
-                                           android:defaultValue="true"
+                                           android:defaultValue="false"
                                            android:title="@string/title_load_image_preference"
-            ></android.preference.CheckBoxPreference>
+            />
+
+    <android.preference.CheckBoxPreference android:id="@+id/autoUpdateCheckNonWifi"
+                                           android:key="@string/key_auto_check_update_nonwifi_preference"
+                                           android:defaultValue="false"
+                                           android:title="@string/title_auto_check_update_nonwifi_preference"
+            />
+
+    <!--<EditTextPreference
+            android:key="@string/key_tika_host"
+            android:defaultValue="www.tika.it"
+            android:inputType="text"
+            android:title="Host"
+            android:summary="www.tika.it | 10.10.2.2:8182 | 192.168.1.100:8182"
+            android:dialogTitle="Host"/>-->
+
     <!--<ListPreference android:id="@+id/animation"-->
     <!--android:key="@string/key_animation_mode_preference"-->
     <!--android:defaultValue="0"-->

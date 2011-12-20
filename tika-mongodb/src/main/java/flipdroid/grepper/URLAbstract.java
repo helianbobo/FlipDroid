@@ -3,6 +3,7 @@ package flipdroid.grepper;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class URLAbstract {
@@ -13,6 +14,12 @@ public class URLAbstract {
     private String base;
     private List<String> images = new ArrayList<String>();
     private String referencedFrom;
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    private Date createDate;
 
     public String getReferencedFrom() {
         return referencedFrom;
@@ -48,6 +55,16 @@ public class URLAbstract {
 
     public URLAbstract() {
     }
+
+    public List getIndexURL() {
+        return indexURL;
+    }
+
+    public void setIndexURL(List indexURL) {
+        this.indexURL = indexURL;
+    }
+
+    private List indexURL = new ArrayList();
 
     public URLAbstract(byte[] rawContent, Charset charset) {
         this.rawContent = rawContent;
@@ -90,5 +107,9 @@ public class URLAbstract {
 
     public Charset getCharset() {
         return charset;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }

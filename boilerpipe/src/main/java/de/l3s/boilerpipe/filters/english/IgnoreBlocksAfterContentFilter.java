@@ -27,7 +27,7 @@ import de.l3s.boilerpipe.labels.DefaultLabels;
 
 /**
  * Marks all blocks as "non-content" that occur after blocks that have been
- * marked {@link DefaultLabels#INDICATES_END_OF_TEXT}. These marks are ignored
+ * marked {@link DefaultLabels#INDICATES_SKIP_OF_TEXT}. These marks are ignored
  * unless a minimum number of words in content blocks occur before this mark (default: 60).
  * This can be used in conjunction with an upstream {@link TerminatingBlocksFinder}.
  * 
@@ -64,11 +64,13 @@ public final class IgnoreBlocksAfterContentFilter extends HeuristicFilterBase im
             if (block.isContent()) {
                 numWords += getNumFullTextWords(block);
             }
-            if (endOfText && numWords >= minNumWords) {
-                foundEndOfText = true;
+
+            if(endOfText){
+               foundEndOfText = true;
             }
-            if (foundEndOfText) {
-                changes = true;
+
+            if(foundEndOfText){
+               changes = true;
                 block.setIsContent(false);
             }
         }

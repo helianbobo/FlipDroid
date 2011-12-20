@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.Html;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -35,6 +37,9 @@ import java.util.concurrent.*;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class ExpandableArticleView extends ArticleView {
+
+    private String TAG = this.getClass().getName();
+
     protected ViewSwitcher switcher;
     protected ArticleView loadedArticleView;
     //    protected LinearLayout enlargedView;
@@ -65,8 +70,7 @@ public abstract class ExpandableArticleView extends ArticleView {
             this.executor = executor;
             preload();
         } else {
-            if (toLoadImage)
-                article.loadPrimaryImage(deviceInfo);
+                article.loadPrimaryImage(deviceInfo,toLoadImage);
         }
         fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
@@ -111,11 +115,11 @@ public abstract class ExpandableArticleView extends ArticleView {
         contentView = new TextView(this.getContext());
         contentView.getPaint().setAntiAlias(true);
         int scaleTextSize = scaled ? textSize - 3 : textSize;
-        contentView.setTextSize(scaleTextSize);
+        contentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_CONTENT);
         if (!smallScreen)
-            contentView.setPadding(2, 8, 2, 8);
+            contentView.setPadding(5, 8, 5, 8);
         else
-            contentView.setPadding(2, 4, 2, 4);
+            contentView.setPadding(5, 4, 5, 4);
 
         contentView.setTextColor(0xff232323);
         int maxLine = scaled ? maxLines + (smallScreen ? 0 : 1) : maxLines;
@@ -132,13 +136,15 @@ public abstract class ExpandableArticleView extends ArticleView {
         }
 
         //System.out.println("article.getImageUrl()" + article.getImageUrl());
-        if (article.getImageUrl() == null || !toLoadImage) {
+        if (article.getImageUrl() == null) {
             LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
             layoutParams.weight = 100;
             contentViewWrapper.addView(contentView, layoutParams);
         } else {
-            imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), false);
+            imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(),this.getResources().getDrawable(Constants.DEFAULT_PIC),this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage);
+            imageView.setRoundImage(true);
             imageView.imageView.setTag(article.getImageUrl().toExternalForm());
+            imageView.setBackgroundResource(R.drawable.border);
 
             if (article.getHeight() == 0) {
                 imageView.setDefaultWidth(deviceInfo.getWidth() / 2 - 8);
@@ -159,7 +165,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                 article.addNotifier(new Notifier());
                 if (!article.isLoading()) {
                     System.out.println("reloading..." + article.getImageUrl().toExternalForm());
-                    article.loadPrimaryImage(deviceInfo);
+                    article.loadPrimaryImage(deviceInfo,toLoadImage);
                 }
                 imageHandled = false;
             }
@@ -213,7 +219,9 @@ public abstract class ExpandableArticleView extends ArticleView {
                             try {
                                 extractResponse = tc.extract(url);
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                Log.e(TAG, e.getMessage(), e);
+                                article.setTitle(getContext().getString(R.string.tikaservererror) + " \n" + url);
+                                article.setContent(article.getStatus());
                                 return article;
                             }
                             //Log.d("Weibo view", "preloading " + url + " done");
@@ -239,7 +247,9 @@ public abstract class ExpandableArticleView extends ArticleView {
             article.setContent(extractResponse.getContent());
         else
             article.setContent("");
+
         article.setTitle(extractResponse.getTitle());
+        article.setSourceURL(extractResponse.getSourceURL());
 
         if (toLoadImage) {
             try {
@@ -261,7 +271,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                                 try {
                                     URL url = new URL(imageURL);
                                     article.setImageUrl(url);
-                                    article.loadPrimaryImage(imageURL, deviceInfo);
+                                    article.loadPrimaryImage(imageURL, deviceInfo,toLoadImage);
                                 } catch (Exception e) {
                                     continue;
                                 }

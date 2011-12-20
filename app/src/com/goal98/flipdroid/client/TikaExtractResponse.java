@@ -1,5 +1,6 @@
 package com.goal98.flipdroid.client;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,6 +11,18 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class TikaExtractResponse {
+    private Date createDate;
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getSourceURL() {
+        return sourceURL;
+    }
+
+    private String sourceURL;
+
     public String getContent() {
         return content;
     }
@@ -47,5 +60,13 @@ public class TikaExtractResponse {
 
     public void setImages(List<String> images) {
         this.images = images;
+    }
+
+    public void setSourceURL(String sourceURL) {
+        this.sourceURL = sourceURL;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
     }
 }

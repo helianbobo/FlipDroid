@@ -7,12 +7,14 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
+import com.goal98.flipdroid.db.RecommendSourceDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.model.SourceUpdateManager;
@@ -20,10 +22,8 @@ import com.goal98.flipdroid.model.cachesystem.CacheToken;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
-import com.goal98.flipdroid.util.Constants;
-import com.goal98.flipdroid.util.DeviceInfo;
-import com.goal98.flipdroid.util.EachCursor;
-import com.goal98.flipdroid.util.ManagedCursor;
+import com.goal98.flipdroid.util.*;
+import com.goal98.tika.common.TikaConstants;
 
 import java.util.*;
 
@@ -32,6 +32,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     static final private int CONFIG_ID = Menu.FIRST;
     static final private int CLEAR_ID = Menu.FIRST + 1;
     static final private int ACCOUNT_LIST_ID = Menu.FIRST + 2;
+    static final private int TIPS_ID = Menu.FIRST + 3;
 
     private AccountDB accountDB;
     private SourceDB sourceDB;
@@ -61,13 +62,25 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         setContentView(R.layout.index);
 
         Button addSourceButton = (Button) findViewById(R.id.btn_add_source);
-        addSourceButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent intent = new Intent(IndexActivity.this, SiteActivity.class);
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+        addSourceButton.setOnTouchListener(new View.OnTouchListener() {
+
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        Intent intent = new Intent(IndexActivity.this, SiteActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                        break;
+                    default:
+                        break;
+                }
+
+                return false;
             }
+
         });
+
         this.getListView().setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             public void onCreateContextMenu(ContextMenu menu, View v,
                                             ContextMenu.ContextMenuInfo menuInfo) {
@@ -104,7 +117,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
             } finally {
                 sourceCache.close();
             }
-            if (sourceType.equals(Constants.TYPE_MY_SINA_WEIBO)) {
+            if (sourceType.equals(TikaConstants.TYPE_MY_SINA_WEIBO)) {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String sinaAccountId = preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null);
                 preferences.edit().putString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null).commit();
@@ -133,10 +146,6 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                     new String[]{"text"},
                     new int[]{R.id.text});
         } else {
-//            adapter = new SimpleCursorAdapter(this, R.layout.source_item, sourceCursor,
-//                    new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_SOURCE_TYPE, Source.KEY_CONTENT_URL},
-//                    new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type, R.id.source_url});
-//            ((SimpleCursorAdapter) adapter).setViewBinder(new SourceItemViewBinder(deviceInfo));
             adapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item, sourceDB, deviceInfo);
         }
 
@@ -170,22 +179,24 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         bindAdapter();
 
         adapter.notifyDataSetChanged();
-        new Thread(new Runnable() {
+        boolean shallUpdate = NetworkUtil.toUpdateSource(this);
+        if (shallUpdate) {
+            new Thread(new Runnable() {
 
-            public void run() {
-                if (!updated) {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
+                public void run() {
+                    if (!updated) {
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
 
+                        }
+                        SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
+                        updateManager.updateAll();
+                        updated = true;
                     }
-                    SourceUpdateManager updateManager = new SourceUpdateManager(IndexActivity.this, adapter);
-                    updateManager.updateAll();
-                    updated = true;
                 }
-            }
-        }).start();
-
+            }).start();
+        }
     }
 
     @Override
@@ -217,6 +228,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         menu.add(0, CONFIG_ID, 0, R.string.config);
         menu.add(0, CLEAR_ID, 0, R.string.clear_all_account);
         menu.add(0, ACCOUNT_LIST_ID, 0, R.string.accounts);
+        menu.add(0, TIPS_ID, 0, R.string.tips);
 
         return true;
     }
@@ -246,9 +258,14 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
 
 
                 adapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item, sourceDB, deviceInfo);
+                bindAdapter();
+                adapter.notifyDataSetChanged();
                 return true;
             case ACCOUNT_LIST_ID:
                 startActivity(new Intent(this, AccountListActivity.class));
+                return true;
+            case TIPS_ID:
+                startActivity(new Intent(this, TipsActivity.class));
                 return true;
         }
 
@@ -262,7 +279,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 for (int i = 0; i < adapter.getCount(); i++) {
                     SourceItem item = (SourceItem) adapter.getItem(i);
                     if (token.match(item)) {
-                        if(item.getSourceItemView()!=null)
+                        if (item.getSourceItemView() != null)
                             item.getSourceItemView().findViewById(R.id.loadingbar).setVisibility(View.VISIBLE);
                     }
                 }
@@ -282,10 +299,12 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 ManagedCursor mc = new ManagedCursor(c);
                 mc.each(new EachCursor() {
                     public void call(Cursor cursor, int index) {
+                        if(!(adapter.getItem(index) instanceof SourceItem))
+                            return;
                         SourceItem item = (SourceItem) adapter.getItem(index);
                         if (token.match(item)) {
                             View childAt = IndexActivity.this.getListView().getChildAt(index);
-                            if(childAt!=null)
+                            if (childAt != null)
                                 childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
                         }
                     }
@@ -307,11 +326,13 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 ManagedCursor mc = new ManagedCursor(c);
                 mc.each(new EachCursor() {
                     public void call(Cursor cursor, int index) {
+                        if(!(adapter.getItem(index) instanceof SourceItem))
+                            return;
                         SourceItem item = (SourceItem) adapter.getItem(index);
                         if (token.match(item)) {
                             View childAt = IndexActivity.this.getListView().getChildAt(index);
-                            if(childAt !=null)
-                            childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
+                            if (childAt != null)
+                                childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
                         }
                     }
                 });

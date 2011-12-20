@@ -7,6 +7,7 @@ import com.goal98.flipdroid.model.AbstractArticleSource;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.ArticleFilter;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.tika.common.TikaConstants;
 import weibo4j.Paging;
 import weibo4j.Status;
 import weibo4j.Weibo;
@@ -79,7 +80,7 @@ public class SinaArticleSource extends AbstractArticleSource {
             for (int i = 0; i < statuses.size(); i++) {
                 Status status = statuses.get(i);
                 Article article = new Article();
-                article.setSourceType(Constants.TYPE_SINA_WEIBO);
+                article.setSourceType(TikaConstants.TYPE_SINA_WEIBO);
                 try {
                     String original_pic = status.getOriginal_pic();
                     if (original_pic != null && original_pic.length() != 0)
@@ -92,8 +93,11 @@ public class SinaArticleSource extends AbstractArticleSource {
                 article.setCreatedDate(status.getCreatedAt());
                 article.setPortraitImageUrl(status.getUser().getProfileImageURL());
                 article.setStatusId(status.getId());
-                if (filter.doFilter(article))
+
+                if (filter.doFilter(article)){
                     articleList.add(article);
+                    article.setSourceURL(article.extractURL());
+                }
             }
 
             pageLoaded++;

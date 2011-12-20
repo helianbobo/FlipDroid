@@ -7,6 +7,8 @@
     <string name="username">用户名</string>
     <string name="clear_all_account">清除账户</string>
     <string name="accounts">用户管理</string>
+    <string name="tips">教程</string>
+    <string name="next">下一条</string>
     <string name="search">搜索</string>
     <string name="flip">划动 >></string>
 
@@ -25,18 +27,21 @@
 
     <string name="title_animation_mode_preference">翻页动画</string>
     <string name="dialog_title_animation_mode_preference">翻页动画</string>
-    <string name="title_load_image_preference">加载图片</string>
+    <string name="title_load_image_preference">非WIFI下加载图片</string>
     <string name="button_add_new_account">添加新账户</string>
     <string name="button_add_new_source">添加新内容</string>
     <string name="button_login">登入</string>
+    <string name="button_close">关闭</string>
+    <string name="button_update">刷新</string>
+    <string name="button_send">发送</string>
 
     <string name="my_timeline">我的微博</string>
     <string name="my_timeline_desc">我关注的微博</string>
 
-    <string name="msg_no_more_page">读不到内容了。</string>
+    <string name="msg_no_more_page">读不到内容了。向左划显示最后一页，向右划返回主选单</string>
     <string name="loading">加载中...</string>
     <string name="sharedBy">分享自</string>
-    <string name="tikaservererror">获取内容错误</string>
+    <string name="tikaservererror">获取内容不成功，等一下再试吧。</string>
     <string name="tikatimeout">获取内容超时</string>
     <string name="unknownerror">获取内容错误</string>
     <string name="networkerror">找不到网络</string>
@@ -64,4 +69,11 @@
 
     <string name="add_custom_source">手工添加关注源</string>
     <string name="add_custom_source_desc">搜索并添加微博用户到关注源</string>
+    <string name="view_source">查看源链接</string>
+
+    <string name="original_url_is_not_available">源链接不存在。</string>
+    <string name="share_success">已分享到您的微博</string>
+    <string name="inprogress">请稍候</string>
+    <string name="toolong">不能超过140字</string>
+    <string name="title_auto_check_update_nonwifi_preference">非Wifi下自动更新</string>
 </resources>

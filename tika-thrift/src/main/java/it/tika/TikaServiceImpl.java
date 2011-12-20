@@ -25,7 +25,7 @@ public class TikaServiceImpl implements TikaService.Iface {
             return null;
         }
 
-        URLAbstract result = tika.extract(urlDecoded, false,request.getReferencedFrom());
+        URLAbstract result = tika.extract(urlDecoded, !request.isUseCache(),request.getReferencedFrom());
         if (result == null)
             throw new TikaException();
 
@@ -42,7 +42,7 @@ public class TikaServiceImpl implements TikaService.Iface {
     public static void main(String[] args) throws TException, TikaException {
         TikaServiceImpl tikaService = new TikaServiceImpl();
         TikaRequest request = new TikaRequest();
-        request.setUrl("http://www.ifanr.com/48929");
+        request.setUrl("http://cn.engadget.com/2011/09/11/sharp-aquos-sh8298u-3d-smartphone-goes-under-the-knife-comes-ou/");
         TikaResponse response = tikaService.fire(request);
         System.out.println(response.getContent());
     }

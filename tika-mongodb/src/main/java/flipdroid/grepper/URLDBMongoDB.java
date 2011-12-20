@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public class URLDBMongoDB implements URLDBInterface {
 
@@ -40,7 +41,7 @@ public class URLDBMongoDB implements URLDBInterface {
     public URLAbstract find(String url) {
         BasicDBObject query = new BasicDBObject();
 
-        query.put("url", url);
+        query.put("indexURL", url);
 
         URLAbstract urlAbstract = null;
         try {
@@ -51,6 +52,12 @@ public class URLDBMongoDB implements URLDBInterface {
         } catch (MongoException e) {
             logger.log(Level.INFO, e.getMessage(), e);
         }
+        return urlAbstract;
+    }
+
+    private URLAbstract fromDBObjectToURLAbstractURLOnly(DBObject urlFromDB) {
+        URLAbstract urlAbstract = new URLAbstract();
+        urlAbstract.setUrl((String) urlFromDB.get("url"));
         return urlAbstract;
     }
 
@@ -66,6 +73,7 @@ public class URLDBMongoDB implements URLDBInterface {
                 (String) urlFromDB.get("title"),
                 (String) urlFromDB.get("content"),
                 imageList);
+        urlAbstract.setCreateDate((Date) urlFromDB.get("time"));
         urlAbstract.setReferencedFrom((String) urlFromDB.get("reference"));
         return urlAbstract;
     }
@@ -94,6 +102,27 @@ public class URLDBMongoDB implements URLDBInterface {
         return urlAbstracts;
     }
 
+    public List<URLAbstract> findByContainsImage(String image) {
+        BasicDBObject query = new BasicDBObject();
+
+        Pattern p = Pattern.compile(image);
+
+        query.put("content", p);      //contains image
+
+        List<URLAbstract> urlAbstracts = new ArrayList<URLAbstract>();
+        try {
+            DBCursor urlFromDB = db.getCollection(urlCollectionName).find(query);
+            while (urlFromDB != null && urlFromDB.hasNext()) {
+                DBObject url = urlFromDB.next();
+                URLAbstract urlAbstract = fromDBObjectToURLAbstractURLOnly(url);
+                urlAbstracts.add(urlAbstract);
+            }
+        } catch (MongoException e) {
+            logger.log(Level.INFO, e.getMessage(), e);
+        }
+        return urlAbstracts;
+    }
+
     public void insert(URLAbstract urlAbstract) {
         BasicDBObject urlAbstractObj = new BasicDBObject();
         urlAbstractObj.put("url", urlAbstract.getUrl());
@@ -104,7 +133,7 @@ public class URLDBMongoDB implements URLDBInterface {
         urlAbstractObj.put("time", new Date());
         urlAbstractObj.put("state", "success");
         urlAbstractObj.put("reference", urlAbstract.getReferencedFrom());
-
+        urlAbstractObj.put("indexURL", urlAbstract.getIndexURL());
         try {
             db.getCollection(urlCollectionName).insert(urlAbstractObj);
         } catch (MongoException e) {
@@ -115,7 +144,17 @@ public class URLDBMongoDB implements URLDBInterface {
     public void insertOrUpdate(URLAbstract urlAbstract) {
         BasicDBObject query = new BasicDBObject();
 
-        query.put("url", urlAbstract.getUrl());
+        BasicDBObject or1 = new BasicDBObject();
+        or1.put("indexURL", urlAbstract.getUrl());
+
+        BasicDBObject or2 = new BasicDBObject();
+        or2.put("url", urlAbstract.getUrl());
+
+        ArrayList<DBObject> list = new ArrayList<DBObject>();
+        list.add(or1);
+        list.add(or2);
+        query.put("$or", list);
+
         try {
             DBObject urlFromDB = db.getCollection(urlCollectionName).findOne(query);
             if (urlFromDB == null) {
