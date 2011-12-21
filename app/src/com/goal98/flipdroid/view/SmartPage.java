@@ -28,13 +28,19 @@ public class SmartPage extends Page {
 
         DimensionMeasureTool dmt = new DimensionMeasureTool(deviceInfo);
         dmt.setText(Constants.WITHURLPREFIX + article.getStatus());
-        dmt.setTextSize(17);
-        dmt.setMaxLines(18);
-        height = dmt.onMeasure()[1] + 29;
+        if (!deviceInfo.isLargeScreen()) {
+            dmt.setTextSize(Constants.WEIBO_CONENT_TEXT_SIZE);
+            dmt.setMaxLines(18);
+            height = dmt.onMeasure()[1] + 29;
+        } else {
+            dmt.setTextSize(Constants.WEIBO_CONENT_TEXT_SIZE);
+            dmt.setMaxLines(18);
+            height = dmt.onMeasure()[1] + 130;
+        }
 
         if (article.getImageUrl() != null) {
             article.setTextHeight(height);
-            height = deviceInfo.getDisplayHeight()-1;
+            height = deviceInfo.getDisplayHeight() - 1;
         }
         System.out.println("view height" + height);
         DryRunResult result = overflowIfPut(height);

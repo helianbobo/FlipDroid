@@ -106,10 +106,10 @@ public abstract class ExpandableArticleView extends ArticleView {
         int textSize = 16;
         if (largeScreen) {
             maxLines = 6;
-            textSize = 18;
+            textSize = Constants.WEIBO_CONENT_TEXT_SIZE;
         } else if (smallScreen) {
             maxLines = 4;
-            textSize = 18;
+            textSize = Constants.WEIBO_CONENT_TEXT_SIZE;
         }
 
         contentView = new TextView(this.getContext());
