@@ -198,6 +198,7 @@ public class TikaClient {
         } catch (IOException e) {
             return new LastModifiedStampedResult(-1,null);
         }
+
         if (lastModified != -1)
             u.setIfModifiedSince(lastModified);
         try {
@@ -205,8 +206,14 @@ public class TikaClient {
             if (responseCode >= 200 && responseCode <= 299) {
                 byte[] response = URLRawRepo.getInstance().fetch(u);
                 final String s = new String(response, "utf-8");
-                if (s != null &&(s.startsWith("{") || s.startsWith("[")) )// json
-                    return new LastModifiedStampedResult(u.getLastModified(), s);
+                if (s != null &&(s.startsWith("{") || s.startsWith("[")) ){// json
+                    String lastModifiedFromServer = u.getHeaderField("Last-Modified-Tika");
+                    long lastModifiedFromServerLong = 0;
+                    if(lastModifiedFromServer!=null && lastModifiedFromServer.length()!=0){
+                       lastModifiedFromServerLong = Long.valueOf(lastModifiedFromServer);
+                    }
+                    return new LastModifiedStampedResult(lastModifiedFromServerLong, s);
+                }
                 return null;
             } else if (responseCode == 304) {
                 return null;
