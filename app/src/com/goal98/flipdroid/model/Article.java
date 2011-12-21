@@ -141,8 +141,9 @@ public class Article {
     public String extractURL() {
         if (status != null) {
             Matcher mat = urlPattern.matcher(status);
-            mat.find();
-            return mat.group();
+            if(mat.find())
+                return mat.group();
+            return null;
         }else{
             return null;
         }
