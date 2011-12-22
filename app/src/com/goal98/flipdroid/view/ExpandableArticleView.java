@@ -103,7 +103,7 @@ public abstract class ExpandableArticleView extends ArticleView {
 
 
         int maxLines = 5;
-        int textSize = 16;
+        int textSize = 0;
         if (largeScreen) {
             maxLines = 6;
             textSize = Constants.WEIBO_CONENT_TEXT_SIZE;
@@ -115,7 +115,7 @@ public abstract class ExpandableArticleView extends ArticleView {
         contentView = new TextView(this.getContext());
         contentView.getPaint().setAntiAlias(true);
         int scaleTextSize = scaled ? textSize - 3 : textSize;
-        contentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_CONTENT);
+        contentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, scaleTextSize);
         if (!smallScreen)
             contentView.setPadding(5, 8, 5, 8);
         else

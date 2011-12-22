@@ -35,7 +35,7 @@ public class SmartPage extends Page {
         } else {
             dmt.setTextSize(Constants.WEIBO_CONENT_TEXT_SIZE);
             dmt.setMaxLines(18);
-            height = dmt.onMeasure()[1] + 130;
+            height = dmt.onMeasure()[1] + 40;
         }
 
         if (article.getImageUrl() != null) {

@@ -32,7 +32,7 @@ public class Constants {
     public static final String SHADOW_LAYER_COLOR="#77000000";
     public static final String COLOR_RED="#FF0000";
 
-    public static final int WEIBO_CONENT_TEXT_SIZE = 18;
+    public static final int WEIBO_CONENT_TEXT_SIZE = 16;
     public static final int TEXT_SIZE_TITLE = 18;
     public static final int TEXT_SIZE_AUTHOR = 16;
     public static final int TEXT_SIZE_REFERENCE = 16;
