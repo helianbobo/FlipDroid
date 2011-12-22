@@ -10,6 +10,7 @@ import android.widget.SimpleCursorAdapter;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.model.Account;
+import com.mobclick.android.MobclickAgent;
 
 public class AccountListActivity extends ListActivity {
 
@@ -68,5 +69,15 @@ public class AccountListActivity extends ListActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

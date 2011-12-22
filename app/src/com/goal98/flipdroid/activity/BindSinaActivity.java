@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
 import com.goal98.flipdroid.R;
+import com.mobclick.android.MobclickAgent;
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,5 +33,15 @@ public class BindSinaActivity extends Activity {
 
         webview.loadUrl(url);
         //webview.get
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

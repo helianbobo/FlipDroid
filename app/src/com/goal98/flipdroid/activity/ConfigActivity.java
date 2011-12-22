@@ -7,15 +7,27 @@ import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import com.goal98.flipdroid.R;
+import com.mobclick.android.MobclickAgent;
 
 public class ConfigActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     SharedPreferences settings;
     private ListPreference browseModePreference;
     private CheckBoxPreference loadImagePreference;
     private CheckBoxPreference autoUpdateNonWIFIPreference;
-//    private ListPreference animationModePreference;
+    //    private ListPreference animationModePreference;
     private String browseModeKey;
     private String animationModeKey;
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

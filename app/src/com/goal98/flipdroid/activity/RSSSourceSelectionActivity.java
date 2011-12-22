@@ -17,6 +17,7 @@ import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.view.SourceExpandableListAdapter;
 import com.goal98.tika.common.TikaConstants;
+import com.mobclick.android.MobclickAgent;
 
 import java.util.*;
 
@@ -131,5 +132,15 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
                                 dialog.dismiss();
                             }
                         }).show();
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

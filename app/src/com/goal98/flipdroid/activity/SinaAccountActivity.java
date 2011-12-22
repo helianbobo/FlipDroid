@@ -23,6 +23,7 @@ import com.goal98.flipdroid.model.sina.OAuthHolder;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.tika.common.TikaConstants;
+import com.mobclick.android.MobclickAgent;
 import weibo4j.WeiboException;
 
 
@@ -112,5 +113,15 @@ public class SinaAccountActivity extends Activity {
     protected void onStart() {
         super.onStart();
         preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

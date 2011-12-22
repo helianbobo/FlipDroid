@@ -17,6 +17,7 @@ import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.SinaAccountUtil;
 import com.goal98.flipdroid.view.SourceExpandableListAdapter;
 import com.goal98.tika.common.TikaConstants;
+import com.mobclick.android.MobclickAgent;
 
 import java.util.Map;
 
@@ -72,6 +73,16 @@ abstract public class SourceSearchActivity extends ExpandableListActivity {
 
     public void doSearch(String query) {
         new SearchSourceTask(this, adapter, groupedSource, getSearchSource()).execute(query);
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override

@@ -29,6 +29,7 @@ import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.GestureUtil;
 import com.goal98.flipdroid.util.NetworkUtil;
 import com.goal98.tika.common.TikaConstants;
+import com.mobclick.android.MobclickAgent;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -78,6 +79,8 @@ public class CoverActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MobclickAgent.onError(this);
+        MobclickAgent.update(this);
 
         setContentView(R.layout.cover);
 
@@ -200,5 +203,14 @@ public class CoverActivity extends Activity {
         view.startAnimation(animation);
     }
 
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
 }

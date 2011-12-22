@@ -46,6 +46,7 @@ import com.goal98.flipdroid.model.taobao.TaobaoArticleSource;
 import com.goal98.flipdroid.util.*;
 import com.goal98.flipdroid.view.*;
 import com.goal98.tika.common.TikaConstants;
+import com.mobclick.android.MobclickAgent;
 import weibo4j.Weibo;
 import weibo4j.WeiboException;
 
@@ -169,6 +170,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     public DeviceInfo getDeviceInfoFromApplicationContext() {
         return DeviceInfo.getInstance(this);
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
     }
 
     /**
@@ -445,6 +451,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     @Override
     protected void onPause() {
+        MobclickAgent.onPause(this);
         super.onDestroy();
         CacheSystem.getTikaCache(this).shutdown();
     }
@@ -811,21 +818,25 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                     switch (flipDirection) {
                         case RIGHT:
                             Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> RIGHT;");
+                            MobclickAgent.onEvent(this, "FlipPage", "Right");
                             lastFlipDirection = ACTION_HORIZONTAL;
                             flipPage(false);
                             break;
                         case UP:
                             Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> UP;");
+                            MobclickAgent.onEvent(this, "FlipPage", "Up");
                             lastFlipDirection = ACTION_VERTICAL;
                             flipPage(true);
                             break;
                         case LEFT:
                             Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> LEFT;");
+                            MobclickAgent.onEvent(this, "FlipPage", "Left");
                             lastFlipDirection = ACTION_HORIZONTAL;
                             flipPage(true);
                             break;
                         case DOWN:
                             Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> DOWN;");
+                            MobclickAgent.onEvent(this, "FlipPage", "Down");
                             lastFlipDirection = ACTION_VERTICAL;
                             flipPage(false);
                             break;
@@ -856,7 +867,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     private void flipPage(final boolean forward) {
 
-        if (!current.isFirstPage()){
+        if (!current.isFirstPage()) {
 
             flipStarted = true;
         }

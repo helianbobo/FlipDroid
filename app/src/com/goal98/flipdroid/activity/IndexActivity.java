@@ -24,6 +24,7 @@ import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
 import com.goal98.flipdroid.util.*;
 import com.goal98.tika.common.TikaConstants;
+import com.mobclick.android.MobclickAgent;
 
 import java.util.*;
 
@@ -41,6 +42,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     //    private SourceCache sourceCache;
     private BaseAdapter adapter;
     private boolean updated;
+
 
 
     @Override
@@ -175,6 +177,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         openDatabase();
         bindAdapter();
 
@@ -202,6 +205,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPause(this);
         closeDB();
     }
 
@@ -299,7 +303,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 ManagedCursor mc = new ManagedCursor(c);
                 mc.each(new EachCursor() {
                     public void call(Cursor cursor, int index) {
-                        if(!(adapter.getItem(index) instanceof SourceItem))
+                        if (!(adapter.getItem(index) instanceof SourceItem))
                             return;
                         SourceItem item = (SourceItem) adapter.getItem(index);
                         if (token.match(item)) {
@@ -326,7 +330,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 ManagedCursor mc = new ManagedCursor(c);
                 mc.each(new EachCursor() {
                     public void call(Cursor cursor, int index) {
-                        if(!(adapter.getItem(index) instanceof SourceItem))
+                        if (!(adapter.getItem(index) instanceof SourceItem))
                             return;
                         SourceItem item = (SourceItem) adapter.getItem(index);
                         if (token.match(item)) {

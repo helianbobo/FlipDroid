@@ -17,6 +17,7 @@ import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.SinaAccountUtil;
 import com.goal98.tika.common.TikaConstants;
+import com.mobclick.android.MobclickAgent;
 
 
 public class SiteActivity extends Activity {
@@ -40,6 +41,16 @@ public class SiteActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     public class SiteAdapter extends BaseAdapter {

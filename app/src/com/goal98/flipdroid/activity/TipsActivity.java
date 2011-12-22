@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.util.Constants;
+import com.mobclick.android.MobclickAgent;
 
 import java.util.ArrayList;
 
@@ -132,5 +133,15 @@ public class TipsActivity extends Activity {
         tipsResourceIdList.add(R.drawable.tips_2);
         tipsResourceIdList.add(R.drawable.tips_3);
         tipsResourceIdList.add(R.drawable.tips_4);
+    }
+
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }
