@@ -171,7 +171,7 @@ public class ContentLoadedView extends ArticleView {
 
                 while (i + 1 < paragraphsList.size()) {
                     final String nextParagraph = paragraphsList.get(i + 1).getObjectBody();
-                    if (nextParagraph.startsWith(style)) {
+                    if (nextParagraph.startsWith(style) && !nextParagraph.startsWith("<p><blockquote>")) {
                         sb.append("<br/><br/>");
                         formatted = format(nextParagraph);
                         sb.append(formatted);
@@ -249,7 +249,7 @@ public class ContentLoadedView extends ArticleView {
     }
 
     private String format(String paragraph) {
-        return paragraph.replaceAll("<p>", "<span>").replaceAll("</p>", "</span>").replaceAll("<span><.*?></span>", "").replaceAll("(<blockquote>)|(</blockquote>)", "");
+        return paragraph.replaceAll("<p>", "<span>").replaceAll("</p>", "</span>").replaceAll("(<blockquote>)|(</blockquote>)", "").replaceAll("<span><.*?></span>", "");
     }
 
     public void renderBeforeLayout() {

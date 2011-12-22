@@ -30,15 +30,6 @@ import de.l3s.boilerpipe.extractors.ArticleExtractor;
  */
 public class Oneliner {
     public static void main(final String[] args) throws Exception {
-        final URL url = new URL(
-                "http://www.l3s.de/web/page11g.do?sp=page11g&link=ln104g&stu1g.LanguageISOCtxParam=en"
-        		);
-
-        // This can also be done in one line:
-         //System.out.println(ArticleExtractor.INSTANCE.getText(url));
-
-        // Also try other extractors!
-//        ////System.out.println(DefaultExtractor.INSTANCE.getText(url));
-//       //System.out.println(CommonExtractors.CANOLA_EXTRACTOR.getText(url));
+        System.out.println("<p><blockquote><strong>雷军：</strong>小米手机三个月的销量很巨大，具体的数据是 21.5 万 + 10 万= 31.5 万。媒体评价很高，我很满意，业界很惊诧。</blockquote></p>".replaceAll("<p>", "<span>").replaceAll("(<blockquote>)|(</blockquote>)".replaceAll("</p>", "</span>").replaceAll("<span><.*?></span>", ""), ""));
     }
 }
