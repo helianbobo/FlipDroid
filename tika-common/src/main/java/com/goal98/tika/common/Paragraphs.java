@@ -43,11 +43,12 @@ public class Paragraphs {
 
             int startAt = articleContent.indexOf("<");
             int brAt = articleContent.indexOf("<br/>");
+            int linkAt = articleContent.indexOf("<a ");
             while (brAt == startAt) {
                 startAt = articleContent.indexOf("<", brAt + 1);
                 brAt = articleContent.indexOf("<br/>", brAt + 1);
             }
-            if (startAt > 0) {
+            if (startAt > 0 && startAt!=linkAt) {
                 String text = articleContent.substring(0, startAt);
                 if (!text.replaceAll("<p>","").replaceAll("</p>","").equals("<br/>"))
                     paragraphs.add(new Text(text));
