@@ -1,5 +1,6 @@
 package com.goal98.flipdroid.util;
 
+import android.graphics.Color;
 import com.goal98.flipdroid.R;
 
 public class Constants {
@@ -40,4 +41,6 @@ public class Constants {
     public static final String PREFERENCE_TIPS_READ = "TIPS_READ";
     public static final String PREFERENCE_TUTORIAL_READ = "TUTORIAL_READ";
     public static final int DEFAULT_PIC = R.drawable.btn_sina;
+
+    public static final int COLOR_LINK_TEXT = Color.rgb(36, 145, 255);
 }

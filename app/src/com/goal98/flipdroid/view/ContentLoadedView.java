@@ -9,6 +9,7 @@ import android.graphics.PointF;
 import android.net.Uri;
 import android.text.Html;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ParagraphStyle;
 import android.text.util.Linkify;
 import android.util.FloatMath;
@@ -179,8 +180,11 @@ public class ContentLoadedView extends ArticleView {
                         break;
                     }
                 }
+                tv.setMovementMethod(LinkMovementMethod.getInstance());
+
                 tv.setText(Html.fromHtml(sb.toString()));
                 tv.setAutoLinkMask(Linkify.WEB_URLS);
+                tv.setLinkTextColor(Constants.COLOR_LINK_TEXT);
                 contentHolderView.addView(tv, textLayoutParams);
             }
 
