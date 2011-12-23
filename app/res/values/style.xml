@@ -92,7 +92,7 @@
     <style name="UpdateButton" parent="Button">
         <item name="android:background">@drawable/update_button</item>
 
-        <item name="android:shadowColor">@color/green</item>
+        <item name="android:shadowColor">@color/darkgreen</item>
 
     </style>
 </resources>

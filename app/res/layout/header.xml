@@ -41,7 +41,7 @@
                     style="@style/UpdateButton"
                     android:layout_margin="3dp"
                     android:id="@+id/update"
-                    android:visibility="invisible"
+                    android:visibility="visible"
                     android:layout_gravity="left"/>
         </LinearLayout>
     </LinearLayout>
