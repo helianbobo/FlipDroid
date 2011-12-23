@@ -52,7 +52,7 @@
                                                      webimage:defaultHeight="32" android:layout_gravity="left"
                                                      android:layout_width="32dip"
                                                      webimage:progressDrawable="@drawable/portrait"
-                                                     android:layout_marginBottom="2dip"></com.goal98.android.WebImageView>
+                                                     android:paddingBottom="2dip"></com.goal98.android.WebImageView>
                     <TextView android:id="@+id/author" android:layout_width="wrap_content"
                               style="@style/ShareBy" android:gravity="center" android:layout_gravity="left"
                               android:layout_height="wrap_content" android:paddingLeft="2dip"

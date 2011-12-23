@@ -66,9 +66,7 @@ public class SinaAccountActivity extends Activity {
                                 boolean result = oauth.RequestAccessToken(SinaAccountActivity.this, "flipdroid://SinaAccountSaver");
                                 if (!result)
                                     AlarmSender.sendInstantMessage(R.string.networkerror, SinaAccountActivity.this);
-                                else{
-                                    SinaAccountActivity.this.finish();
-                                }
+                                SinaAccountActivity.this.finish();
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

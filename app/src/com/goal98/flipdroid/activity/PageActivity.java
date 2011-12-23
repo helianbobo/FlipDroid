@@ -1291,7 +1291,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                                 OAuth oauth = new OAuth();
                                 application.setOauth(oauth);
                                 ////Log.v(TAG, "OAuthHolder.oauth" + application + oauth);
-                                oauth.RequestAccessToken(PageActivity.this, "flipdroid://SinaAccountSaver");
+                                boolean result = oauth.RequestAccessToken(PageActivity.this, "flipdroid://SinaAccountSaver");
+                                if(!result){
+                                    AlarmSender.sendInstantMessage(R.string.networkerror, PageActivity.this);
+                                }
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
