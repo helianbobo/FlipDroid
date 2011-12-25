@@ -109,14 +109,14 @@ public class TikaClient {
         return sourceResponses;
     }
 
-    public String getFeedJSON(String sourceURL) throws TikaClientException {
+    public LastModifiedStampedResult getFeedJSON(String sourceURL, long lastModified) throws TikaClientException {
         String requestURL = null;
         try {
             requestURL = "http://" + host + "/v1/feed?source=" + URLEncoder.encode(sourceURL, "utf-8");
         } catch (UnsupportedEncodingException e) {
 
         }
-        return read(requestURL);
+        return readWithIMS(requestURL,lastModified);
     }
 
     public TikaExtractResponse extract(String url) throws TikaClientException {

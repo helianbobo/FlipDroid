@@ -32,19 +32,20 @@ public class RecommendResource extends ServerResource {
         Form request = (Form) getRequest().getAttributes().get("org.restlet.http.headers");
         String ifModifiedSince = request.getValues("If-Modified-Since");
         long modifiedSince = -1;
-        try {
-            modifiedSince = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z").parse(ifModifiedSince).getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        if (ifModifiedSince != null)
+            try {
+                modifiedSince = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z").parse(ifModifiedSince).getTime();
+            } catch (ParseException e) {
+                //e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
 
         String type = this.getQuery().getFirst("type").getValue();
         Recommend recommend = RecommendMongoDB.getInstance().find(type);
         if (recommend != null) {
             long lastModified = recommend.getLastModified().getTime();
-            System.out.println("lm:"+lastModified);
-            System.out.println("ms:"+modifiedSince);
-            if (lastModified > modifiedSince+1000) {
+            System.out.println("lm:" + lastModified);
+            System.out.println("ms:" + modifiedSince);
+            if (lastModified > modifiedSince + 1000) {
                 Form responseHeaders = (Form) getResponse().getAttributes().get("org.restlet.http.headers");
                 if (responseHeaders == null) {
                     responseHeaders = new Form();

@@ -1,5 +1,6 @@
 package com.goal98.flipdroid.model.cachesystem;
 
+import com.goal98.flipdroid.client.LastModifiedStampedResult;
 import com.goal98.flipdroid.model.ArticleSource;
 import com.goal98.flipdroid.model.OnSourceLoadedListener;
 
@@ -17,5 +18,5 @@ public interface CacheableArticleSource extends ArticleSource {
 
     void registerOnLoadListener(OnSourceLoadedListener listener);
 
-    byte[] loadLatestSource();
+    LastModifiedStampedResult loadLatestSource();
 }

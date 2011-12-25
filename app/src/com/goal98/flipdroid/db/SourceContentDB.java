@@ -22,6 +22,7 @@ public class SourceContentDB extends AbstractDB {
     public static final String URL = "url";
     public static final String TYPE = "type";
     public static final String CONTENT = "CONTENT";
+    public static final String LAST_MODIFIED = "last_modified";
 
     public static final String TABLE_NAME = "sourceContent";
 
@@ -45,6 +46,7 @@ public class SourceContentDB extends AbstractDB {
             values.put(SourceContentDB.URL, sourceCacheObject.getUrl());
             values.put(SourceContentDB.CONTENT, sourceCacheObject.getContent());
             values.put(SourceContentDB.TYPE, sourceCacheObject.getType());
+            values.put(SourceContentDB.LAST_MODIFIED, sourceCacheObject.getLastModified());
             return insert(values);
         }
     }
@@ -54,6 +56,7 @@ public class SourceContentDB extends AbstractDB {
         values.put(SourceContentDB.URL, sourceCacheObject.getUrl());
         values.put(SourceContentDB.CONTENT, sourceCacheObject.getContent());
         values.put(SourceContentDB.TYPE, sourceCacheObject.getType());
+        values.put(SourceContentDB.LAST_MODIFIED, sourceCacheObject.getLastModified());
 
         String selection = SourceContentDB.URL + " = ? and " + SourceContentDB.TYPE + "= ?";
         String[] selectionArgs = {sourceCacheObject.getUrl(), sourceCacheObject.getType()};
@@ -77,6 +80,7 @@ public class SourceContentDB extends AbstractDB {
             }
             cursor.moveToFirst();
             sourceCacheObject.setContent(cursor.getString(3));
+            sourceCacheObject.setLastModified(cursor.getLong(4));
         } finally {
             cursor.close();
         }

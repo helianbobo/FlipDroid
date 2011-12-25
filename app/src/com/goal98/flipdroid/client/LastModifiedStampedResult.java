@@ -4,7 +4,7 @@ public class LastModifiedStampedResult{
         Object result;
         long lastModified;
 
-        LastModifiedStampedResult(long lastModified, Object result) {
+        public LastModifiedStampedResult(long lastModified, Object result) {
             this.lastModified = lastModified;
             this.result = result;
         }

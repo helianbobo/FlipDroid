@@ -2,6 +2,7 @@ package com.goal98.flipdroid.model.featured;
 
 import android.app.Activity;
 import android.content.Context;
+import com.goal98.flipdroid.client.LastModifiedStampedResult;
 import com.goal98.flipdroid.client.TikaClient;
 import com.goal98.flipdroid.client.TikaClientException;
 import com.goal98.flipdroid.client.TikaExtractResponse;
@@ -47,11 +48,14 @@ public class FeaturedArticleSource extends BaseCacheableArticleSource {
         return token;
     }
 
-    protected byte[] getLatestSource() {
+    protected LastModifiedStampedResult getLatestSource() {
         try {
-            return tikaClient.getFeedJSON(feedURL).getBytes();
+            LastModifiedStampedResult feedJSON = tikaClient.getFeedJSON(feedURL, lastModified);
+            if(feedJSON == null)
+                return null;
+            return feedJSON;
         } catch (TikaClientException e) {
-            return new byte[0];
+            return null;
         }
     }
 

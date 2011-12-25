@@ -1,5 +1,6 @@
 package com.goal98.flipdroid.model.cachesystem;
 
+import com.goal98.flipdroid.client.LastModifiedStampedResult;
 import com.goal98.flipdroid.exception.NoNetworkException;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.OnSourceLoadedListener;
@@ -26,8 +27,9 @@ public abstract class BaseCacheableArticleSource implements CacheableArticleSour
 
     protected byte[] cachedBytes;
     protected byte[] loadedBytes;
-
+    protected long lastModified;
     protected InputStream content;
+    private LastModifiedStampedResult lastModifiedStampedResult;
 
     public void registerOnLoadListener(OnSourceLoadedListener listener) {
         this.listener = listener;
@@ -53,44 +55,47 @@ public abstract class BaseCacheableArticleSource implements CacheableArticleSour
         return list;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public byte[] loadLatestSource() throws NoNetworkException {
-        byte[] loadedBytes = loadFromSource();
+    public LastModifiedStampedResult loadLatestSource() throws NoNetworkException {
+        LastModifiedStampedResult loadedBytes = loadFromSource();
         if (loadedBytes == null)
             return null;
 
-        byte[] latestSource = this.loadedBytes;
-        boolean needUpdate = false;
-        if (cachedBytes != null) {
-            for (int i = 0; i < latestSource.length; i++) {
-                if (i >= cachedBytes.length) {
-                    needUpdate = true;
-                    break;
-                }
-                if (latestSource[i] != cachedBytes[i]) {
-                    needUpdate = true;
-                    break;
-                }
-            }
-        } else {
-            needUpdate = true;
-        }
+//        byte[] latestSource = this.loadedBytes;
+//        boolean needUpdate = false;
+//        if (cachedBytes != null) {
+//            for (int i = 0; i < latestSource.length; i++) {
+//                if (i >= cachedBytes.length) {
+//                    needUpdate = true;
+//                    break;
+//                }
+//                if (latestSource[i] != cachedBytes[i]) {
+//                    needUpdate = true;
+//                    break;
+//                }
+//            }
+//        } else {
+//            needUpdate = true;
+//        }
 
-        if (needUpdate) {
-            this.cachedBytes = loadedBytes;
-            return loadedBytes;
-        }
-        return null;
-    }
-
-    protected byte[] loadFromSource() {
-        loadedBytes = getLatestSource();
+//        if (needUpdate) {
+        this.cachedBytes = loadedBytes.getResult().toString().getBytes();
         return loadedBytes;
+//        }
+//        return null;
     }
 
-    protected abstract byte[] getLatestSource();
+    protected LastModifiedStampedResult loadFromSource() {
+        lastModifiedStampedResult = getLatestSource();
+        if (lastModifiedStampedResult != null)
+            loadedBytes = lastModifiedStampedResult.getResult().toString().getBytes();
+        return lastModifiedStampedResult;
+    }
+
+    protected abstract LastModifiedStampedResult getLatestSource();
 
     public void fromCache(SourceCacheObject cachedObject) {
         cachedBytes = cachedObject.getContent().getBytes();
+        lastModified = cachedObject.getLastModified();
         this.content = new ByteArrayInputStream(cachedBytes);
     }
 
@@ -101,7 +106,7 @@ public abstract class BaseCacheableArticleSource implements CacheableArticleSour
             else {
                 content = new ByteArrayInputStream(loadedBytes);
                 try {
-                    listener.onLoaded(loadedBytes);
+                    listener.onLoaded(lastModifiedStampedResult);
                 } catch (IOException e) {
                     //ignore
                 }

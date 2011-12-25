@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.model.cachesystem;
 
 import android.content.Context;
+import com.goal98.flipdroid.client.LastModifiedStampedResult;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.ArticleSource;
 import com.goal98.flipdroid.model.OnSourceLoadedListener;
@@ -30,10 +31,11 @@ public class CachedArticleSource implements ArticleSource {
         this.sourceUpdateable = sourceUpdateable;
         this.articleSource = articleSource;
         this.listener = new OnSourceLoadedListener() {
-            public String onLoaded(byte[] updatedBytes) throws IOException {
-                String encoding = EncodingDetector.detect(new ByteArrayInputStream(updatedBytes));
-                String content = new String(updatedBytes, encoding);
-                CachedArticleSource.this.dbCache.put(articleSource.getCacheToken().getType(), articleSource.getCacheToken().getToken(), content);
+            public String onLoaded(LastModifiedStampedResult updatedBytes) throws IOException {
+                byte[] bytes = updatedBytes.getResult().toString().getBytes();
+                String encoding = EncodingDetector.detect(new ByteArrayInputStream(bytes));
+                String content = new String(bytes, encoding);
+                CachedArticleSource.this.dbCache.put(articleSource.getCacheToken().getType(), articleSource.getCacheToken().getToken(), content,updatedBytes.getLastModified());
                 return content;
             }
         };
@@ -82,9 +84,7 @@ public class CachedArticleSource implements ArticleSource {
                     System.out.println("checking update");
                     sourceUpdateable.notifyUpdating(CachedArticleSource.this);
 
-                    byte[] updatedBytes = articleSource.loadLatestSource();
-//                    InputStream content = new ByteArrayInputStream(updatedBytes);
-//                    articleSource.
+                    LastModifiedStampedResult updatedBytes = articleSource.loadLatestSource();
                     updated = true;
                     System.out.println("has update:" + updatedBytes != null);
                     if (updatedBytes != null) {

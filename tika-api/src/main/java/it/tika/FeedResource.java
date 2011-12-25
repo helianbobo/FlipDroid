@@ -15,18 +15,28 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.logging.Level;
 
 public class FeedResource extends ServerResource {
 
     private Tika tikaService = Tika.getInstance();
+    private Map<String, CachedContent> feedContentMap = new HashMap<String, CachedContent>();
 
     @Get("JSON")
     public String getFeed() {
         Form form = this.getQuery();
+
+        Form request = (Form) getRequest().getAttributes().get("org.restlet.http.headers");
+        String ifModifiedSince = request.getValues("If-Modified-Since");
+        long modifiedSince = -1;
+        try {
+            modifiedSince = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z").parse(ifModifiedSince).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
         String url = null;
         if (form.getFirst("source") != null) {
@@ -42,10 +52,37 @@ public class FeedResource extends ServerResource {
         source = SourceDBMongoDB.getInstance().findByURL(source);
         List<URLAbstract> urlAbstracts = new ArrayList<URLAbstract>();
         if (source != null) {
-            urlAbstracts = URLDBMongoDB.getInstance().findBySource(source.getId(),20);
+            urlAbstracts = URLDBMongoDB.getInstance().findBySource(source.getId(), 20);
         }
+        long returnedTime = 0;
+        String returnBody = "";
+        Date current = new Date();
+        synchronized (feedContentMap) {
+            if (!feedContentMap.containsKey(url)) {//first timer
+                feedContentMap.put(url, new CachedContent(urlAbstracts, current));
+                returnedTime = current.getTime();
+                returnBody = Util.writeJSON(convertURLAbstractCollectionToJSON(urlAbstracts));
+            } else {
+                CachedContent cache = feedContentMap.get(url);
+                if (cache.getLastModified().getTime() > modifiedSince) {//new
+                    returnBody = Util.writeJSON(convertURLAbstractCollectionToJSON(urlAbstracts));
+                    returnedTime = cache.getLastModified().getTime();
+                    feedContentMap.put(url, new CachedContent(urlAbstracts, current));
+                } else {      //old
+                    returnedTime = modifiedSince;//doesn't matter
+                    returnBody = "";
+                    getResponse().setStatus(new Status(304));
+                }
 
-        return Util.writeJSON(convertURLAbstractCollectionToJSON(urlAbstracts));
+            }
+            Form responseHeaders = (Form) getResponse().getAttributes().get("org.restlet.http.headers");
+            if (responseHeaders == null) {
+                responseHeaders = new Form();
+                getResponse().getAttributes().put("org.restlet.http.headers", responseHeaders);
+            }
+            responseHeaders.add("Last-Modified-Tika", returnedTime + "");
+            return returnBody;
+        }
     }
 
     private void onRequestResource() {

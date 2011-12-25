@@ -116,7 +116,7 @@ public abstract class AbstractDB {
                         SourceContentDB.URL + " TEXT, " +
                         SourceContentDB.TYPE + " TEXT, " +
                         SourceContentDB.CONTENT + " TEXT, " +
-
+                        SourceContentDB.LAST_MODIFIED + " LONG, "+
                         "PRIMARY KEY (" + SourceContentDB.URL + ")" +
                         ");";
 

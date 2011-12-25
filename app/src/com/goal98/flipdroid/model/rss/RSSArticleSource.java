@@ -1,5 +1,6 @@
 package com.goal98.flipdroid.model.rss;
 
+import com.goal98.flipdroid.client.LastModifiedStampedResult;
 import com.goal98.flipdroid.exception.NoNetworkException;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.OnSourceLoadedListener;
@@ -118,7 +119,7 @@ public class RSSArticleSource extends BaseCacheableArticleSource {
         return true;
     }
 
-    public byte[] getLatestSource() {
+    public LastModifiedStampedResult getLatestSource() {
 
 
 
@@ -128,7 +129,7 @@ public class RSSArticleSource extends BaseCacheableArticleSource {
             is = url.openConnection().getInputStream();
 
             loadedBytes = IOUtils.toByteArray(is);
-            return loadedBytes;
+            return new LastModifiedStampedResult(new Date().getDate(), new String(loadedBytes));
         } catch (IOException e) {
             e.printStackTrace();
             return null;

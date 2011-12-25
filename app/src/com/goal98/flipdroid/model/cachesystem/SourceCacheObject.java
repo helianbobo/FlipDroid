@@ -13,9 +13,15 @@ public class SourceCacheObject {
     String url;
     String type;
     String content;
+    long lastModified;
 
+    public long getLastModified() {
+        return lastModified;
+    }
 
-
+    public void setLastModified(long lastModified) {
+        this.lastModified = lastModified;
+    }
 
     public String getUrl() {
         return url;
