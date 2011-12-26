@@ -7,13 +7,13 @@ package com.goal98.flipdroid.model;
  * Time: 5:39 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ContainsLinkFilter extends FilterChain{
+public class ContainsLinkOrImageFilter extends FilterChain{
 
-    public ContainsLinkFilter(ArticleFilter filter) {
+    public ContainsLinkOrImageFilter(ArticleFilter filter) {
         super(filter);
     }
 
     public boolean doFilter(Article article) {
-        return article.hasLink() && nextFilter.doFilter(article);
+        return (article.hasLink() || article.getImageUrl() != null) && nextFilter.doFilter(article);
     }
 }

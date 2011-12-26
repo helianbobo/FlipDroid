@@ -48,7 +48,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
     public void displayLoadedThumbnail() {
         try {
             //System.out.println("taking content");
-            if (!article.isAlreadyLoaded()) {
+            if (!article.isAlreadyLoaded() && article.hasLink()) {
                 article = future.get();
 //                executor.shutdown();
             }

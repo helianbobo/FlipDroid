@@ -66,12 +66,12 @@ public abstract class ExpandableArticleView extends ArticleView {
     public ExpandableArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom, ExecutorService executor) {
         super(context, article, pageView, placedAtBottom);
 
-        if (!article.isAlreadyLoaded()) {
+        article.loadPrimaryImage(deviceInfo,toLoadImage);
+        if (!article.isAlreadyLoaded() && article.hasLink()) {
             this.executor = executor;
             preload();
-        } else {
-                article.loadPrimaryImage(deviceInfo,toLoadImage);
         }
+
         fadeOutAni.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
             }
@@ -292,7 +292,7 @@ public abstract class ExpandableArticleView extends ArticleView {
     protected void enlargeLoadedView() {
 
         try {
-            if (!article.isAlreadyLoaded())
+            if (!article.isAlreadyLoaded() && future != null)
                 future.get();
 
             loadedArticleView = new ContentLoadedView(this.getContext(), article, pageView);
@@ -338,14 +338,14 @@ public abstract class ExpandableArticleView extends ArticleView {
             public void onClick(View view) {
                 if (handler == null)
                     handler = new Handler();
-                if (!isLoading && !ExpandableArticleView.this.getPageView().loadingNext && (article.hasLink() || article.isExpandable())) {
+                if (!isLoading && !ExpandableArticleView.this.getPageView().loadingNext) {
 
                     if (enlargedView != null && enlargedView.get() != null) {//以前打开过的，直接显示
                         ExpandableArticleView.this.getPageView().enlarge(loadedArticleView, ExpandableArticleView.this);
                         return;
                     }
 
-                    if (article.isAlreadyLoaded() || future.isDone()) { //如果加载好了，直接显示
+                    if (article.isAlreadyLoaded() || (future != null && future.isDone())) { //如果加载好了，直接显示
                         enlargeLoadedView();
                         return;
                     }

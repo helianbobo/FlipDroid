@@ -596,7 +596,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             if (isWeiboMode())
                 filter = new NullArticleFilter();
             else
-                filter = new ContainsLinkFilter(new NullArticleFilter());
+                filter = new ContainsLinkOrImageFilter(new NullArticleFilter());
 
             source = new SinaArticleSource(true, sinaToken.getToken(), sinaToken.getTokenSecret(), sourceId, filter);
 
