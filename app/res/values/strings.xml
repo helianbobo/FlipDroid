@@ -86,4 +86,11 @@
 
     <string name="original_url_is_not_available">Original URL is not available.</string>
     <string name="title_auto_check_update_nonwifi_preference">Auto update if non-WIFI</string>
+
+    <string-array name="tips">
+        <item>Tips 01</item>
+        <item>Tips 02</item>
+        <item>Tips 03</item>
+        <item>Tips 04</item>
+    </string-array>
 </resources>
