@@ -8,12 +8,11 @@ import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.util.Constants;
 import com.mobclick.android.MobclickAgent;
@@ -28,6 +27,7 @@ public class TipsActivity extends Activity {
     private ViewPager viewPager;
     private ProgressBar progressBar;
     private Button nextButton;
+    private String[] tipsTextArray;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,23 +49,38 @@ public class TipsActivity extends Activity {
 
             @Override
             public Object instantiateItem(View collection, int position) {
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                LinearLayout linearLayout = new LinearLayout(TipsActivity.this);
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+                linearLayout.setVerticalGravity(Gravity.BOTTOM);
+                
                 ImageView imageView = new ImageView(TipsActivity.this);
                 imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 imageView.setImageResource(tipsResourceIdList.get(position));
-                ((ViewPager) collection).addView(imageView, 0);
 
-                return imageView;
+                
+                TextView tipsText = new TextView(TipsActivity.this);
+                tipsText.setText(tipsTextArray[position]);
+                tipsText.setPadding(5, 5, 5, 5);
+                tipsText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
+                
+                linearLayout.addView(imageView, params);
+                linearLayout.addView(tipsText, params);
+
+                ((ViewPager) collection).addView(linearLayout, 0);
+                return linearLayout;
             }
 
             @Override
             public void destroyItem(View collection, int position, Object view) {
-                ((ViewPager) collection).removeView((ImageView) view);
+                ((ViewPager) collection).removeView((LinearLayout) view);
             }
 
 
             @Override
             public boolean isViewFromObject(View view, Object object) {
-                return view == ((ImageView) object);
+                return view == object;
             }
 
             @Override
@@ -131,8 +146,10 @@ public class TipsActivity extends Activity {
     private void initTipsList() {
         tipsResourceIdList.add(R.drawable.tips_1);
         tipsResourceIdList.add(R.drawable.tips_2);
-        tipsResourceIdList.add(R.drawable.tips_3);
         tipsResourceIdList.add(R.drawable.tips_4);
+        tipsResourceIdList.add(R.drawable.tips_7);
+
+        tipsTextArray = getResources().getStringArray(R.array.tips);
     }
 
     public void onResume() {

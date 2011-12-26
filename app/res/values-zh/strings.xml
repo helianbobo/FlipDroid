@@ -76,4 +76,11 @@
     <string name="inprogress">请稍候</string>
     <string name="toolong">不能超过140字</string>
     <string name="title_auto_check_update_nonwifi_preference">非Wifi下自动更新</string>
+
+    <string-array name="tips">
+        <item>左右划上下划都可以翻页。</item>
+        <item>绑定新浪微博帐号后,可以在浏览的时候将你喜欢的文章分享到新浪微博</item>
+        <item>想要删除一个源，请长按该源，弹出菜单后，点击删除</item>
+        <item>目前支持3种源，新浪微博、RSS和谷歌订阅</item>
+    </string-array>
 </resources>
