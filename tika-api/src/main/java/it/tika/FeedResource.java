@@ -33,7 +33,8 @@ public class FeedResource extends ServerResource {
         String ifModifiedSince = request.getValues("If-Modified-Since");
         long modifiedSince = -1;
         try {
-            modifiedSince = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z").parse(ifModifiedSince).getTime();
+            if(ifModifiedSince != null)
+                modifiedSince = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z").parse(ifModifiedSince).getTime();
         } catch (ParseException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
