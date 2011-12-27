@@ -19,6 +19,7 @@ import java.util.logging.Level;
 public class URLAbstractResource extends ServerResource {
 
     private Tika tikaService = Tika.getInstance();
+    org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(URLAbstractResource.class); 
 
     @Get("JSON")
     public String toJson() {
@@ -28,6 +29,7 @@ public class URLAbstractResource extends ServerResource {
         if (form.getFirst("url") != null) {
             url = form.getFirst("url").getValue();
         } else {
+            LOG.warn("parameter 'url' is null.");
             getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
             return null;
         }
@@ -45,7 +47,7 @@ public class URLAbstractResource extends ServerResource {
         } catch (UnsupportedEncodingException e) {
             return null;
         }
-        System.out.println(urlDecoded);
+        LOG.info("urlDecoded:" + urlDecoded);
         urlAbstract = tikaService.extract(urlDecoded, nocache);
 
         if (urlAbstract == null) {
@@ -62,14 +64,14 @@ public class URLAbstractResource extends ServerResource {
                 OnRequestListener onRequestListener = listeners.get(i);
                 onRequestListener.onRequest(this);
             } catch (Exception e) {
-                getLogger().log(Level.SEVERE, listeners.get(i).toString(), e);
+                LOG.error(e.getMessage(), e);
             }
         }
     }
 
     private List<OnRequestListener> getListeners() {
         List<OnRequestListener> listeners = new LinkedList<OnRequestListener>();
-        listeners.add(new Logger());
+        listeners.add(new RequestLogger());
         return listeners;
     }
 

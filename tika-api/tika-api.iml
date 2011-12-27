@@ -52,11 +52,11 @@
     <orderEntry type="library" name="Maven: org.codehaus.gpars:gpars:0.11" level="project" />
     <orderEntry type="library" name="Maven: org.coconut.forkjoin:jsr166y:070108" level="project" />
     <orderEntry type="module" module-name="boilerpipe" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.6.1" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.16" level="project" />
     <orderEntry type="module" module-name="tika-mongodb" />
     <orderEntry type="library" name="Maven: org.apache.thrift:libthrift:0.6.1" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.5.8" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.5.8" level="project" />
-    <orderEntry type="library" name="Maven: log4j:log4j:1.2.14" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
     <orderEntry type="module" module-name="tika-common" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:1.4" level="project" />

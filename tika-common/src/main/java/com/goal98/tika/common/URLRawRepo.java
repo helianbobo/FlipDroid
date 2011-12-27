@@ -13,7 +13,7 @@ import java.util.zip.GZIPInputStream;
 public class URLRawRepo {
 
     private static URLRawRepo instance = new URLRawRepo();
-
+    org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(this.getClass().getName());
 
     private URLRawRepo() {
 
@@ -39,7 +39,7 @@ public class URLRawRepo {
                 if ("gzip".equalsIgnoreCase(encoding)) {
                     in = new GZIPInputStream(in);
                 } else {
-                    System.err.println("WARN: unsupported Content-Encoding: " + encoding);
+                    LOG.warn("WARN: unsupported Content-Encoding: " + encoding);
                 }
             }
 

@@ -27,6 +27,8 @@ import java.util.Date;
  */
 public class RecommendResource extends ServerResource {
 
+    org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(this.getClass().getName());
+
     @Get("JSON")
     public String getRecommend() throws IOException, JSONException {
         Form request = (Form) getRequest().getAttributes().get("org.restlet.http.headers");
@@ -43,8 +45,8 @@ public class RecommendResource extends ServerResource {
         Recommend recommend = RecommendMongoDB.getInstance().find(type);
         if (recommend != null) {
             long lastModified = recommend.getLastModified().getTime();
-            System.out.println("lm:" + lastModified);
-            System.out.println("ms:" + modifiedSince);
+            LOG.info("lm:" + lastModified);
+            LOG.info("ms:" + modifiedSince);
             if (lastModified > modifiedSince + 1000) {
                 Form responseHeaders = (Form) getResponse().getAttributes().get("org.restlet.http.headers");
                 if (responseHeaders == null) {

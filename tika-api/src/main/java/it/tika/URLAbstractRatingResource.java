@@ -16,6 +16,8 @@ import java.util.logging.Level;
 
 public class URLAbstractRatingResource extends ServerResource {
 
+    org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(this.getClass().getName()); 
+    
     @Get("JSON")
     public String toJson() {
         Form form = this.getQuery();
@@ -33,7 +35,7 @@ public class URLAbstractRatingResource extends ServerResource {
         try {
             CaseRepositoryDBMongoDB.getInstance().addCase(sample);
         } catch (DBNotAvailableException e) {
-            getLogger().log(Level.INFO, e.getMessage(), e);
+            LOG.error(e.getMessage(), e);
         }
 
         JSONObject jsonObject = new JSONObject();

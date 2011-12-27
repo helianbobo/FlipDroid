@@ -14,7 +14,6 @@ import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
-import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -24,6 +23,8 @@ public class FeedResource extends ServerResource {
 
     private Tika tikaService = Tika.getInstance();
     private FeedCache feedCache = FeedCache.getInstance();
+
+    org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(this.getClass().getName());
 
     @Get("JSON")
     public String getFeed() {
@@ -60,7 +61,7 @@ public class FeedResource extends ServerResource {
         Date current = new Date();
         synchronized (feedCache) {
             if (!feedCache.containsKey(url)) {//first timer
-                System.out.println("url:" + url + ", first timer");
+                LOG.info("url:" + url + ", first timer");
                 feedCache.put(url, new CachedContent(urlAbstracts, current));
                 returnedTime = current.getTime();
                 returnBody = Util.writeJSON(convertURLAbstractCollectionToJSON(urlAbstracts));
@@ -69,20 +70,20 @@ public class FeedResource extends ServerResource {
                 System.out.println(urlAbstracts.size());
                 System.out.println(((List<URLAbstract>) cache.getContent()).size());
                 if (urlAbstracts.equals(cache.getContent())) {
-                    System.out.println("url:" + url + ", found in cache , check if server has newer..");
+                    LOG.info("url:" + url + ", found in cache , check if server has newer..");
                     if (cache.getLastModified().getTime() > modifiedSince+1000) {//new
-                        System.out.println("url:" + url + ", has update");
+                        LOG.info("url:" + url + ", has update");
                         returnBody = Util.writeJSON(convertURLAbstractCollectionToJSON((List<URLAbstract>) cache.getContent()));
                         returnedTime = cache.getLastModified().getTime();
 //                    feedContentMap.put(url, new CachedContent(urlAbstracts, current));
                     } else {      //old
-                        System.out.println("url:" + url + ", cache hit");
+                        LOG.info("url:" + url + ", cache hit");
                         returnedTime = modifiedSince;//doesn't matter
                         returnBody = "";
                         getResponse().setStatus(new Status(304));
                     }
                 } else {
-                    System.out.println("url:" + url + ", server needs update");
+                    LOG.info("url:" + url + ", server needs update");
                     feedCache.put(url, new CachedContent(urlAbstracts, current));
                     returnBody = Util.writeJSON(convertURLAbstractCollectionToJSON(urlAbstracts));
                     returnedTime = current.getTime();
@@ -108,14 +109,14 @@ public class FeedResource extends ServerResource {
                 OnRequestListener onRequestListener = listeners.get(i);
                 onRequestListener.onRequest(this);
             } catch (Exception e) {
-                getLogger().log(Level.SEVERE, listeners.get(i).toString(), e);
+                LOG.error(e.getMessage(), e);
             }
         }
     }
 
     private List<OnRequestListener> getListeners() {
         List<OnRequestListener> listeners = new LinkedList<OnRequestListener>();
-        listeners.add(new Logger());
+        listeners.add(new RequestLogger());
         return listeners;
     }
 

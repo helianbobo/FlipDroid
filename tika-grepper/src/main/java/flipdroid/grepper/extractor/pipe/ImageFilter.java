@@ -27,7 +27,7 @@ import java.util.*;
  */
 public class ImageFilter implements Extractor {
     private ImageService tikaImageService;
-
+    org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(this.getClass().getName());
 
     public void extract(URLAbstract urlAbstract) {
         filterImage(urlAbstract);
@@ -99,7 +99,7 @@ public class ImageFilter implements Extractor {
             int first = queryURL.indexOf("http");
             queryURL = queryURL.substring(first);
             if (tikaImageService != null && tikaImageService.isBlacklisted(queryURL)){
-                System.out.println("in black list:"+queryURL);
+                LOG.info("in black list:"+queryURL);
                 continue;
             }
 
@@ -116,7 +116,7 @@ public class ImageFilter implements Extractor {
                 ii.setHeight(tikaImage.getHeight());
                 ii.setWidth(tikaImage.getWidth());
                 fromCache = true;
-                System.out.println("From Image DB Cache....");
+                LOG.info("From Image DB Cache....");
             } else {
                 String dimensionInfo = imageURL.substring(hashIndex, imageURL.length());
                 if ("#,".equals(dimensionInfo)) {

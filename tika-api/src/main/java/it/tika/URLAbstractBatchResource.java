@@ -22,6 +22,8 @@ public class URLAbstractBatchResource extends URLAbstractResource {
      */
     private Tika tikaService = Tika.getInstance();
 
+    org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(this.getClass().getName());
+
     @Post("JSON")
     @Get("JSON")
     public String toJson() {
@@ -65,7 +67,7 @@ public class URLAbstractBatchResource extends URLAbstractResource {
 
 
                     } catch (JSONException e) {
-                        getLogger().log(Level.INFO, e.getMessage(), e);
+                        LOG.error(e.getMessage(), e);
                     }
 
                     return null;

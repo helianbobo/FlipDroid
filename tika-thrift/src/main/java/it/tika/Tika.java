@@ -29,6 +29,7 @@ import java.nio.charset.UnsupportedCharsetException;
 public class Tika {
 
     public WebpageExtractor webpageExtractor;
+    org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(Tika.class);
 
     private Tika() {
         webpageExtractor = new WebpageExtractor(new TikaImageService());
@@ -50,7 +51,7 @@ public class Tika {
 
     public URLAbstract extract(final String urlString, boolean nocache, String referencedFrom) {
         URLAbstract result = null;
-        System.out.println("fetching " + urlString);
+        LOG.info("fetching " + urlString);
         try {
             boolean bypassCache = nocache;
 
@@ -64,9 +65,9 @@ public class Tika {
 
             if (result == null || (result != null && result.getContent() == null)) {
                 if (nocache) {
-                    System.out.println(Thread.currentThread().getName() + " no cache flag");
+                    LOG.info(Thread.currentThread().getName() + " no cache flag");
                 } else {
-                    System.out.println(Thread.currentThread().getName() + " db cache miss...");
+                    LOG.info(Thread.currentThread().getName() + " db cache miss...");
                 }
 
                 HttpURLConnection conn = null;
@@ -74,12 +75,12 @@ public class Tika {
                 int responseCode = 0;
                 while (count < 3) {
                     try {
-                        System.out.println("trying "+urlString);
+                        LOG.info("trying "+urlString);
                         URL url = new URL(urlString);
                         conn = URLConnectionUtil.decorateURLConnection(url);
 
                         responseCode = conn.getResponseCode();
-                        System.out.println("responseCode " + responseCode);
+                        LOG.info("responseCode " + responseCode);
                         if (responseCode >= 200 && responseCode <= 299) {
                             break;
                         }else{
@@ -98,7 +99,7 @@ public class Tika {
                 byte[] rawBytes = URLRawRepo.getInstance().fetch(conn);
                 if (rawBytes == null)
                     return null;
-                System.out.println("rawBytes length:" + rawBytes.length);
+                LOG.info("rawBytes length:" + rawBytes.length);
                 String charset = EncodingDetector.detect(new BufferedInputStream(new ByteArrayInputStream(rawBytes)));
 //                String charset = EncodingDetector.detect(urlDecoded);
                 Charset cs = null;
@@ -114,7 +115,7 @@ public class Tika {
 
                 if (rawBytes == null) {
                     getLogger().info("Can't fetch document");
-                    System.out.println("can't fetch document");
+                    LOG.info("can't fetch document");
                 } else {
                     result = new URLAbstract(rawBytes, cs);
                     result.setUrl(originalURLString);
@@ -123,7 +124,7 @@ public class Tika {
                     if (!urlString.equals(originalURLString))
                         result.getIndexURL().add(originalURLString);
 
-                    System.out.println("unextracted result:" + result.getRawContent());
+                    LOG.info("unextracted result:" + result.getRawContent());
 
                     result = webpageExtractor.extract(result);
                     if (result != null && result.getContent() != null && result.getContent().length() != 0) {
@@ -135,8 +136,8 @@ public class Tika {
                     }
                 }
             } else {
-                System.out.println("db cache hit...");
-                System.out.println("db cache:" + result.getContent());
+                LOG.info("db cache hit...");
+                LOG.info("db cache:" + result.getContent());
             }
         } catch (UnsupportedEncodingException e) {
             getLogger().error(e.getMessage(), e);
