@@ -28,6 +28,7 @@ import com.goal98.tika.common.TikaConstants;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.mobclick.android.MobclickAgent;
+import com.mobclick.android.UmengUpdateListener;
 
 import java.util.*;
 
@@ -47,6 +48,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     private boolean updated;
     private PullToRefreshListView mPullRefreshListView;
 
+    private String TAG = this.getClass().getName();
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -60,6 +62,30 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MobclickAgent.update(this);
+        MobclickAgent.updateAutoPopup = false;
+        MobclickAgent.setUpdateListener(new UmengUpdateListener() {
+            public void onUpdateReturned(int status) {
+                switch (status) {
+                    case 0: //has update
+                        MobclickAgent.showUpdateDialog(IndexActivity.this);
+                        Log.i(TAG, "show dialog");
+                        break;
+                    case 1: //has no update
+                        Toast.makeText(getParent(), "has no update", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 2: //none wifi
+                        Toast.makeText(getParent(), "has no update", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 3: //time out
+                        Toast.makeText(getParent(), "time out", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+
+
         deviceInfo = getDeviceInfoFromApplicationContext();
 
         sourceDB = new SourceDB(getApplicationContext());

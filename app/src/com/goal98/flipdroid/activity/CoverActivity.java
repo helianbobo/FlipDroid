@@ -30,6 +30,7 @@ import com.goal98.flipdroid.util.GestureUtil;
 import com.goal98.flipdroid.util.NetworkUtil;
 import com.goal98.tika.common.TikaConstants;
 import com.mobclick.android.MobclickAgent;
+import com.mobclick.android.UmengUpdateListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -80,7 +81,7 @@ public class CoverActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         MobclickAgent.onError(this);
-        MobclickAgent.update(this);
+        MobclickAgent.setUpdateOnlyWifi(false);
 
         setContentView(R.layout.cover);
 
