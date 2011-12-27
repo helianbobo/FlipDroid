@@ -12,9 +12,10 @@
             android:layout_margin="10dp"
             android:id="@+id/btn_add_source"/>
 
-    <ListView android:layout_height="fill_parent" android:layout_width="fill_parent"
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView android:layout_height="fill_parent" android:layout_width="fill_parent"
               android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
-              android:id="@android:id/list"
+              android:id="@+id/pull_refresh_list"
               android:layoutAnimation="@anim/layout_left_slide_in"/>
 
 </LinearLayout>

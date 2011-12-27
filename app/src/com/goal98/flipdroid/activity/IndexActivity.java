@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.Preference;
@@ -24,6 +25,8 @@ import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
 import com.goal98.flipdroid.util.*;
 import com.goal98.tika.common.TikaConstants;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.mobclick.android.MobclickAgent;
 
 import java.util.*;
@@ -42,7 +45,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     //    private SourceCache sourceCache;
     private BaseAdapter adapter;
     private boolean updated;
-
+    private PullToRefreshListView mPullRefreshListView;
 
 
     @Override
@@ -64,6 +67,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         setContentView(R.layout.index);
 
         Button addSourceButton = (Button) findViewById(R.id.btn_add_source);
+//        addSourceButton.setVisibility(View.GONE);
         addSourceButton.setOnTouchListener(new View.OnTouchListener() {
 
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -82,7 +86,15 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
             }
 
         });
+        mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
 
+        // Set a listener to be invoked when the list should be refreshed.
+        mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
+            public void onRefresh() {
+                // Do work to refresh the list here.
+                new GetDataTask().execute();
+            }
+        });
         this.getListView().setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             public void onCreateContextMenu(ContextMenu menu, View v,
                                             ContextMenu.ContextMenuInfo menuInfo) {
@@ -97,6 +109,25 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         });
 
 
+    }
+
+    private class GetDataTask extends AsyncTask<Void, Void, String[]> {
+
+        @Override
+        protected String[] doInBackground(Void... params) {
+            // Simulates a background job.
+            SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
+            updateManager.updateAll();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String[] result) {
+            // Call onRefreshComplete when the list has been refreshed.
+            mPullRefreshListView.onRefreshComplete();
+
+            super.onPostExecute(result);
+        }
     }
 
     @Override
@@ -182,24 +213,23 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         bindAdapter();
 
         adapter.notifyDataSetChanged();
-        boolean shallUpdate = NetworkUtil.toUpdateSource(this);
-        if (shallUpdate) {
-            new Thread(new Runnable() {
-
-                public void run() {
-                    if (!updated) {
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-
-                        }
-                        SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
-                        updateManager.updateAll();
-                        updated = true;
-                    }
-                }
-            }).start();
-        }
+//        boolean shallUpdate = NetworkUtil.toUpdateSource(this);
+//        if (shallUpdate) {
+//            new Thread(new Runnable() {
+//
+//                public void run() {
+//                    if (!updated) {
+//                        try {
+//                            Thread.sleep(2000);
+//                        } catch (InterruptedException e) {
+//
+//                        }
+//
+//                        updated = true;
+//                    }
+//                }
+//            }).start();
+//        }
     }
 
     @Override
