@@ -63,28 +63,29 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MobclickAgent.update(this);
-        MobclickAgent.updateAutoPopup = false;
-        MobclickAgent.setUpdateListener(new UmengUpdateListener() {
-            public void onUpdateReturned(int status) {
-                switch (status) {
-                    case 0: //has update
-                        MobclickAgent.showUpdateDialog(IndexActivity.this);
-                        Log.i(TAG, "show dialog");
-                        break;
-                    case 1: //has no update
-                        Toast.makeText(getParent(), "has no update", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 2: //none wifi
-                        Toast.makeText(getParent(), "has no update", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 3: //time out
-                        Toast.makeText(getParent(), "time out", Toast.LENGTH_SHORT).show();
-                        break;
+        if (NetworkUtil.isNetworkAvailable(this)) {
+            MobclickAgent.update(this);
+            MobclickAgent.updateAutoPopup = false;
+            MobclickAgent.setUpdateListener(new UmengUpdateListener() {
+                public void onUpdateReturned(int status) {
+                    switch (status) {
+                        case 0: //has update
+                            MobclickAgent.showUpdateDialog(IndexActivity.this);
+                            Log.i(TAG, "show dialog");
+                            break;
+                        case 1: //has no update
+                            Toast.makeText(getParent(), "has no update", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 2: //none wifi
+                            Toast.makeText(getParent(), "has no update", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 3: //time out
+                            Toast.makeText(getParent(), "time out", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
                 }
-            }
-        });
-
+            });
+        }
 
         deviceInfo = getDeviceInfoFromApplicationContext();
 
