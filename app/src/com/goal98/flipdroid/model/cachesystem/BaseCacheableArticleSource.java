@@ -8,6 +8,7 @@ import com.goal98.flipdroid.model.OnSourceLoadedListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -78,6 +79,7 @@ public abstract class BaseCacheableArticleSource implements CacheableArticleSour
 //        }
 
 //        if (needUpdate) {
+
         this.cachedBytes = loadedBytes.getResult().toString().getBytes();
         return loadedBytes;
 //        }
@@ -86,8 +88,12 @@ public abstract class BaseCacheableArticleSource implements CacheableArticleSour
 
     protected LastModifiedStampedResult loadFromSource() {
         lastModifiedStampedResult = getLatestSource();
-        if (lastModifiedStampedResult != null)
+        if (lastModifiedStampedResult != null) {
             loadedBytes = lastModifiedStampedResult.getResult().toString().getBytes();
+            if (lastModified == 0) {//not from cache
+                lastModified = new Date().getTime() - 2000;
+            }
+        }
         return lastModifiedStampedResult;
     }
 

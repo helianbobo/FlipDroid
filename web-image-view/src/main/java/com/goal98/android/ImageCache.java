@@ -74,7 +74,7 @@ public class ImageCache extends com.goal98.android.AbstractCache<String, byte[]>
     }
 
     @Override
-    protected void writeValueToDisk(File file, byte[] imageData) throws IOException {
+    protected  void writeValueToDisk(File file, byte[] imageData) throws IOException {
         BufferedOutputStream ostream = new BufferedOutputStream(new FileOutputStream(file));
 
         ostream.write(imageData);

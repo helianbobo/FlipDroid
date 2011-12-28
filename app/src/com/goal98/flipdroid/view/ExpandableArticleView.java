@@ -2,8 +2,6 @@ package com.goal98.flipdroid.view;
 
 import android.content.Context;
 import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.text.Html;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -20,10 +18,12 @@ import com.goal98.flipdroid.client.TikaExtractResponse;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.cachesystem.CacheSystem;
 import com.goal98.flipdroid.model.cachesystem.TikaCache;
+import com.goal98.flipdroid.multiscreen.MultiScreenSupport;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 
 import java.lang.ref.WeakReference;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Random;
@@ -66,7 +66,7 @@ public abstract class ExpandableArticleView extends ArticleView {
     public ExpandableArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom, ExecutorService executor) {
         super(context, article, pageView, placedAtBottom);
 
-        article.loadPrimaryImage(deviceInfo,toLoadImage);
+        article.loadPrimaryImage(deviceInfo, toLoadImage);
         if (!article.isAlreadyLoaded() && article.hasLink()) {
             this.executor = executor;
             preload();
@@ -92,71 +92,28 @@ public abstract class ExpandableArticleView extends ArticleView {
     }
 
     protected void buildImageAndContent() {
-        boolean scaled = false;
-        boolean largeScreen = false;
-        boolean smallScreen = false;
-        if (deviceInfo.isLargeScreen()) {
-            largeScreen = true;
-        } else if (deviceInfo.isSmallScreen()) {
-            smallScreen = true;
-        }
-
-
-        int maxLines = 5;
-        int textSize = 0;
-        if (largeScreen) {
-            maxLines = 6;
-            textSize = Constants.WEIBO_CONENT_TEXT_SIZE;
-        } else if (smallScreen) {
-            maxLines = 4;
-            textSize = Constants.WEIBO_CONENT_TEXT_SIZE;
-        }
-
         contentView = new TextView(this.getContext());
-        contentView.getPaint().setAntiAlias(true);
-        int scaleTextSize = scaled ? textSize - 3 : textSize;
-        contentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, scaleTextSize);
-        if (!smallScreen)
-            contentView.setPadding(5, 8, 5, 8);
-        else
-            contentView.setPadding(5, 4, 5, 4);
-
-        contentView.setTextColor(0xff232323);
-        int maxLine = scaled ? maxLines + (smallScreen ? 0 : 1) : maxLines;
-
-        contentView.setGravity(Gravity.CENTER_VERTICAL);
+        setThumbnailContentText(contentView);
         setText();
-
-        if (article.getHeight() == 0) {
-            contentView.setMaxLines(maxLine);
-        } else {
-            maxLine = (article.getHeight() / scaleTextSize) - 5;
-            maxLine = Math.max(maxLine, 5);
-            contentView.setMaxLines(maxLine);
-        }
-
-        //System.out.println("article.getImageUrl()" + article.getImageUrl());
+        MultiScreenSupport mss = MultiScreenSupport.getInstance(deviceInfo);
         if (article.getImageUrl() == null) {
             LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
             layoutParams.weight = 100;
             contentViewWrapper.addView(contentView, layoutParams);
         } else {
-            imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(),this.getResources().getDrawable(Constants.DEFAULT_PIC),this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage);
+            imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), this.getResources().getDrawable(Constants.DEFAULT_PIC), this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage);
             imageView.setRoundImage(true);
             imageView.imageView.setTag(article.getImageUrl().toExternalForm());
             imageView.setBackgroundResource(R.drawable.border);
 
             if (article.getHeight() == 0) {
                 imageView.setDefaultWidth(deviceInfo.getWidth() / 2 - 8);
-                System.out.println("gaga set height1" + ((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine));
-                imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine);
+                imageView.setDefaultHeight(mss.getImageHeightThumbnailView());  //(largeScreen ? 15 : smallScreen ? 0 : 5)
             } else {
                 imageView.setDefaultWidth(deviceInfo.getWidth());
-                System.out.println("gaga set height2" + (deviceInfo.getHeight() - article.getTextHeight() - 30));
                 imageView.setDefaultHeight(deviceInfo.getHeight() - article.getTextHeight() - 30);
             }
 
-//            imageView.setDefaultHeight((scaleTextSize + (largeScreen ? 15 : smallScreen ? 0 : 5)) * maxLine);
             boolean imageHandled = false;
             if (article.getImage() != null) {
                 imageView.handleImageLoaded(article.getImage(), null);
@@ -165,7 +122,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                 article.addNotifier(new Notifier());
                 if (!article.isLoading()) {
                     System.out.println("reloading..." + article.getImageUrl().toExternalForm());
-                    article.loadPrimaryImage(deviceInfo,toLoadImage);
+                    article.loadPrimaryImage(deviceInfo, toLoadImage);
                 }
                 imageHandled = false;
             }
@@ -197,6 +154,32 @@ public abstract class ExpandableArticleView extends ArticleView {
         }
     }
 
+    protected void setThumbnailContentText(TextView contentView) {
+        MultiScreenSupport mss = MultiScreenSupport.getInstance(deviceInfo);
+
+        int maxLines = mss.getMaxLineInThumbnailView();
+        int[] paddings = mss.getTextViewPaddingInThumbnailView();
+
+        int textSize = 0;
+        textSize = mss.getTextViewTextSize();
+
+
+        contentView.getPaint().setAntiAlias(true);
+        contentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
+        contentView.setPadding(paddings[0], paddings[1], paddings[2], paddings[3]);
+        contentView.setTextColor(Constants.LOADED_TEXT_COLOR);
+        contentView.setGravity(Gravity.CENTER_VERTICAL);
+
+
+        if (article.getHeight() == 0) {
+            contentView.setMaxLines(maxLines);
+        } else {
+            maxLines = (article.getHeight() / textSize) - 5;
+            maxLines = Math.max(maxLines, 5);
+            contentView.setMaxLines(maxLines);
+        }
+    }
+
     public abstract void setText();
 
     public void preload() {
@@ -206,30 +189,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                 public Object call() throws Exception {
                     try {
                         String url = article.extractURL();
-                        //Log.d("Weibo view", "preloading " + url);
-
-                        tikaCache = CacheSystem.getTikaCache(ExpandableArticleView.this.getContext());
-                        TikaExtractResponse loadedTikeExtractResponse = tikaCache.load(new URL(url));
-                        if (loadedTikeExtractResponse != null) {
-                            responseToArticle(loadedTikeExtractResponse);
-                            return article;
-                        } else {
-                            TikaClient tc = new TikaClient(Constants.TIKA_HOST);
-                            TikaExtractResponse extractResponse = null;
-                            try {
-                                extractResponse = tc.extract(url);
-                            } catch (Exception e) {
-                                Log.e(TAG, e.getMessage(), e);
-                                article.setTitle(getContext().getString(R.string.tikaservererror) + " \n" + url);
-                                article.setContent(article.getStatus());
-                                return article;
-                            }
-                            //Log.d("Weibo view", "preloading " + url + " done");
-                            responseToArticle(extractResponse);
-                            if (extractResponse.getContent() != null && extractResponse.getContent().trim().length() != 0)
-                                tikaCache.put(url, extractResponse);
-                            return article;
-                        }
+                        return getArticleFromURL(url);
                     } catch (Exception e) {
                         e.printStackTrace();
                         return article;
@@ -239,6 +199,30 @@ public abstract class ExpandableArticleView extends ArticleView {
                     }
                 }
             });
+        }
+    }
+
+    private Object getArticleFromURL(String url) throws MalformedURLException {
+        tikaCache = CacheSystem.getTikaCache(this.getContext());
+        TikaExtractResponse loadedTikeExtractResponse = tikaCache.load(new URL(url));
+        if (loadedTikeExtractResponse != null) {
+            responseToArticle(loadedTikeExtractResponse);
+            return article;
+        } else {
+            TikaClient tc = new TikaClient(Constants.TIKA_HOST);
+            TikaExtractResponse extractResponse = null;
+            try {
+                extractResponse = tc.extract(url);
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage(), e);
+                article.setTitle(getContext().getString(R.string.tikaservererror) + " \n" + url);
+                article.setContent(article.getStatus());
+                return article;
+            }
+            responseToArticle(extractResponse);
+            if (extractResponse.getContent() != null && extractResponse.getContent().trim().length() != 0)
+                tikaCache.put(url, extractResponse);
+            return article;
         }
     }
 
@@ -271,7 +255,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                                 try {
                                     URL url = new URL(imageURL);
                                     article.setImageUrl(url);
-                                    article.loadPrimaryImage(imageURL, deviceInfo,toLoadImage);
+                                    article.loadPrimaryImage(imageURL, deviceInfo, toLoadImage);
                                 } catch (Exception e) {
                                     continue;
                                 }
