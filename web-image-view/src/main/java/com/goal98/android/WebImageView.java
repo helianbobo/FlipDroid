@@ -306,15 +306,15 @@ public class WebImageView extends ViewSwitcher {
             int widthDip = 160 * bmpWidth / DisplayMetrics.DENSITY_DEFAULT;
 
             boolean debug = false;
-            if (width == 320) {
-                debug = true;
-            }
-            if (debug) {
-                System.out.println("gaga bmpWidth" + bmpWidth);
-                System.out.println("gaga bmpHeight" + bmpHeight);
-                System.out.println("gaga width" + width);
-                System.out.println("gaga height" + height);
-            }
+//            if (width == 320) {
+//                debug = true;
+//            }
+//            if (debug) {
+//                System.out.println("gaga bmpWidth" + bmpWidth);
+//                System.out.println("gaga bmpHeight" + bmpHeight);
+//                System.out.println("gaga width" + width);
+//                System.out.println("gaga height" + height);
+//            }
 
             float scale = 0.0f;
             if (bmpWidth > bmpHeight * 1.25) {
@@ -335,11 +335,11 @@ public class WebImageView extends ViewSwitcher {
             } else {
                 width = (int) (widthDip * scale);
             }
-            if (debug) {
-                System.out.println("gaga final width in dip" + width);
-                System.out.println("gaga final height in dip" + height);
-                System.out.println("gaga scale" + scale);
-            }
+//            if (debug) {
+//                System.out.println("gaga final width in dip" + width);
+//                System.out.println("gaga final height in dip" + height);
+//                System.out.println("gaga scale" + scale);
+//            }
             Bitmap resizeBitmap = null;
             if (scale != 1.0) {
                 Matrix matrix = new Matrix();

@@ -134,7 +134,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 menu.add(0, 1, 0, R.string.no);
             }
         });
-
+        SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
+        updateManager.updateSourceList();
 
     }
 

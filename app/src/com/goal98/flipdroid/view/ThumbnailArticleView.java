@@ -3,7 +3,6 @@ package com.goal98.flipdroid.view;
 import android.content.Context;
 import android.os.Handler;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -13,6 +12,7 @@ import android.widget.ViewSwitcher;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.model.Article;
+import com.goal98.flipdroid.multiscreen.MultiScreenSupport;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.PrettyTimeUtil;
@@ -32,6 +32,9 @@ public class ThumbnailArticleView extends ExpandableArticleView {
     private View loadedThumbnail;
 
     volatile boolean isLoading = false;
+    private LinearLayout weiboContentWrapper;
+    private View weiboContent;
+    private WebImageView portraitViewWeiboContent;
 
     public ThumbnailArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom, ExecutorService executor) {
         super(context, article, pageView, placedAtBottom, executor);
@@ -56,43 +59,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
             isLoading = true;
             handler.post(new Runnable() {
                 public void run() {
-
-                    boolean scaled = false;
-                    boolean largeScreen = false;
-                    boolean smallScreen = false;
-
-                    if (deviceInfo.isLargeScreen()) {
-                        largeScreen = true;
-                    }else if (deviceInfo.isSmallScreen()) {
-                        smallScreen = true;
-                    }
-
-                    int titleSize = 18;
-                    int maxTitleLength = 0;
-                    if (smallScreen) {
-                        maxTitleLength = 20;
-                    } else {
-                        maxTitleLength = 35;
-                    }
-                    if (article.getTitle() != null && article.getTitleLength() >= maxTitleLength) {
-                        titleSize = 15;
-                        scaled = true;
-                        if (largeScreen) {
-                            titleSize = 16;
-                        } else if (smallScreen) {
-                            titleSize = 15;
-                        }
-                    } else {
-                        if (largeScreen) {
-                            titleSize = 18;
-                        } else if (smallScreen) {
-                            titleSize = 17;
-                        }
-                    }
-                    titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
-                    titleView.setText(article.getTitle());
-                    titleView.setWidth(deviceInfo.getWidth());
-
+                    setTitleText();
                     buildImageAndContent();
                     reloadOriginalView();
                 }
@@ -128,6 +95,21 @@ public class ThumbnailArticleView extends ExpandableArticleView {
         }
     }
 
+    private void setTitleText() {
+        MultiScreenSupport mss = MultiScreenSupport.getInstance(deviceInfo);
+
+        int maxTitleLength = mss.getThumbnailMaxTitleLength();
+        int titleSize = 0;
+        if (article.getTitle() != null && article.getTitleLength() >= maxTitleLength) {
+            titleSize = mss.getThumbnailMaxLongTitleTextSize();
+        } else {
+            titleSize = mss.getThumbnailMaxTitleTextSize();
+        }
+        titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
+        titleView.setText(article.getTitle());
+        titleView.setWidth(deviceInfo.getWidth());
+    }
+
 
     protected void reloadOriginalView() {
         switcher.setDisplayedChild(0);
@@ -155,24 +137,52 @@ public class ThumbnailArticleView extends ExpandableArticleView {
         this.addView(switcher, layoutParams);
         switcher.setDisplayedChild(1);
         this.thumbnailViewWrapper = (LinearLayout) switcher.findViewById(R.id.loadedView);
+        this.weiboContentWrapper = (LinearLayout) switcher.findViewById(R.id.weiboContent);
+
         thumbnailViewWrapper.setVisibility(INVISIBLE);
         loadedThumbnail = inflater.inflate(R.layout.loadedthumbnail, null);
         thumbnailViewWrapper.addView(loadedThumbnail, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
+        weiboContent = inflater.inflate(R.layout.loadedthumbnail, null);
+        weiboContentWrapper.addView(weiboContent, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+
+
         this.titleView = (TextView) loadedThumbnail.findViewById(R.id.title);
+//        TextView titleViewWeiboContent = (TextView) weiboContent.findViewById(R.id.title);
+
         this.authorView = (TextView) loadedThumbnail.findViewById(R.id.author);
+        TextView authorViewWeiboContent = (TextView) weiboContent.findViewById(R.id.author);
+
         this.createDateView = (TextView) loadedThumbnail.findViewById(R.id.createDate);
+        TextView createDateViewWeiboContent = (TextView) weiboContent.findViewById(R.id.createDate);
+
         this.contentViewWrapper = (LinearLayout) loadedThumbnail.findViewById(R.id.contentll);
+        LinearLayout contentViewWrapperWeiboContent = (LinearLayout) weiboContent.findViewById(R.id.contentll);
+
+        TextView contentView = new TextView(this.getContext());
+        setThumbnailContentText(contentView);
+        contentView.setText(article.getStatus());
+
+        contentViewWrapperWeiboContent.addView(contentView);
+
 
         this.portraitView = (WebImageView) loadedThumbnail.findViewById(R.id.portrait2);
+        portraitViewWeiboContent = (WebImageView) weiboContent.findViewById(R.id.portrait2);
+
         authorView.setText(article.getAuthor());
+        authorViewWeiboContent.setText(article.getAuthor());
 
         String time = PrettyTimeUtil.getPrettyTime(this.getContext(), article.getCreatedDate());
         createDateView.setText(time);
-        if (article.getPortraitImageUrl() != null)
+        createDateViewWeiboContent.setText(time);
+
+        if (article.getPortraitImageUrl() != null) {
             portraitView.setImageUrl(article.getPortraitImageUrl().toString());
-        else
+            portraitViewWeiboContent.setImageUrl(article.getPortraitImageUrl().toString());
+        } else {
             portraitView.setVisibility(GONE);
+            portraitViewWeiboContent.setVisibility(GONE);
+        }
 
         addOnClickListener();
     }
@@ -187,5 +197,6 @@ public class ThumbnailArticleView extends ExpandableArticleView {
             }
         }).start();
         portraitView.loadImage();
+        portraitViewWeiboContent.loadImage();
     }
 }

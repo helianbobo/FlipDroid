@@ -71,6 +71,10 @@ public class SourceUpdateManager {
             cachedArticleSource.checkUpdate();
         }
 
+        updateSourceList();
+    }
+
+    public void updateSourceList() {
         Thread t = new Thread(new Runnable() {
             public void run() {
                 for (String updateType : UPDATE_TYPE) {
@@ -78,13 +82,7 @@ public class SourceUpdateManager {
                     LastModifiedStampedResult rssUpdatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(updateType, lastModified);
                     if (rssUpdatedSource!=null && rssUpdatedSource.getResult() != null && ((String) rssUpdatedSource.getResult()).length() != 0)
                         recommendSourceDB.update((String) rssUpdatedSource.getResult(), updateType, rssUpdatedSource.getLastModified());
-                    System.out.println("recommend source " + updateType + " updated");
                 }
-
-
-//                String sinaWeiboUpdatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(TikaConstants.TYPE_SINA_WEIBO);
-//                recommendSourceDB.update(sinaWeiboUpdatedSource, TikaConstants.TYPE_SINA_WEIBO);
-//                System.out.println("recommend source updated");
             }
         });
         t.start();

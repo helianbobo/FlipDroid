@@ -20,16 +20,13 @@ import de.l3s.boilerpipe.sax.HTMLHighlighter;
 public class HTMLHighlightDemo {
     public static void main(String[] args) throws Exception {
 
-//        URL url = new URL("http://cn.engadget.com/2011/11/15/qnx-based-blackberry-london-purportedly-shown-off-dummy-unit-st/");
-//
-//        final BoilerpipeExtractor extractor = CommonExtractors.CHINESE_ARTICLE_EXTRACTOR;
-//        final HTMLHighlighter hh = HTMLHighlighter.newExtractingInstanceForChinese();
-//
-//        String process = hh.process(url, extractor);
-//        System.out.println(process);
-        long a = 1324784623701l;
+        URL url = new URL("http://www.36kr.com/p/72373.html");
 
-        System.out.println(new Date(a));
+        final BoilerpipeExtractor extractor = CommonExtractors.CHINESE_ARTICLE_EXTRACTOR;
+        final HTMLHighlighter hh = HTMLHighlighter.newExtractingInstanceForChinese();
+
+        String process = hh.process(url, extractor);
+        System.out.println(process);
 
     }
 

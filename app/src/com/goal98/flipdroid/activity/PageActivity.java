@@ -572,7 +572,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         next = null;
         previous = null;
         preparingWindow = null;
-
+        bottomBar.hideUpdate();
         currentPageIndex = -1;
         PagingStrategy pagingStrategy = null;
         if (accountType.equals(TikaConstants.TYPE_SINA_WEIBO) || accountType.equals(TikaConstants.TYPE_MY_SINA_WEIBO)) {
