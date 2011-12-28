@@ -1,11 +1,14 @@
 package com.goal98.flipdroid.model.cachesystem;
 
 import android.content.Context;
+import android.util.Log;
 import com.goal98.flipdroid.client.LastModifiedStampedResult;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.ArticleSource;
 import com.goal98.flipdroid.model.OnSourceLoadedListener;
 import com.goal98.flipdroid.util.EncodingDetector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -25,6 +28,7 @@ public class CachedArticleSource implements ArticleSource {
     private SourceCache dbCache;
     private SourceUpdateable sourceUpdateable;
     private OnSourceLoadedListener listener;
+    private String TAG = this.getClass().getName();
 
     public CachedArticleSource(final CacheableArticleSource articleSource, SourceUpdateable sourceUpdateable, SourceCache dbCache) {
         this.dbCache = dbCache;
@@ -81,12 +85,12 @@ public class CachedArticleSource implements ArticleSource {
 
                 updating = true;
                 try {
-                    System.out.println("checking update");
+                    Log.d(TAG, "checking update");
                     sourceUpdateable.notifyUpdating(CachedArticleSource.this);
 
                     LastModifiedStampedResult updatedBytes = articleSource.loadLatestSource();
                     updated = true;
-                    System.out.println("has update:" + updatedBytes != null);
+                    Log.d(TAG, "has update:" + (updatedBytes != null));
                     if (updatedBytes != null) {
                         listener.onLoaded(updatedBytes);
                         sourceUpdateable.notifyHasNew(CachedArticleSource.this);

@@ -43,7 +43,7 @@ public class FeaturedArticleSource extends BaseCacheableArticleSource {
 
     public CacheToken getCacheToken() {
         CacheToken token = new CacheToken();
-        token.setType(TikaConstants.TYPE_FEATURED);
+        token.setType(TikaConstants.TYPE_RSS);
         token.setToken(this.feedURL);
         return token;
     }

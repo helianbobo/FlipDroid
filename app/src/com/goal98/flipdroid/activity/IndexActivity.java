@@ -48,6 +48,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     private boolean updated;
     private PullToRefreshListView mPullRefreshListView;
 
+    final private Map indicatorMap = new HashMap();
+
     private String TAG = this.getClass().getName();
 
     @Override
@@ -240,6 +242,29 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         bindAdapter();
 
         adapter.notifyDataSetChanged();
+
+        final Cursor c = sourceDB.findAll();
+        hander.post(new Runnable() {
+            public void run() {
+                ManagedCursor mc = new ManagedCursor(c);
+                mc.each(new EachCursor() {
+                    public void call(Cursor cursor, int index) {
+                        if (!(adapter.getItem(index) instanceof SourceItem))
+                            return;
+                        SourceItem item = (SourceItem) adapter.getItem(index);
+                        if (indicatorMap.get(item.getSourceType() + "_" + item.getSourceURL()) != null) {
+                            View childAt = IndexActivity.this.getListView().getChildAt(index);
+                            if (childAt != null) {
+                                childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
+                                TextView indicator = (TextView) childAt.findViewById(R.id.indicator);
+                                indicator.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
 //        boolean shallUpdate = NetworkUtil.toUpdateSource(this);
 //        if (shallUpdate) {
 //            new Thread(new Runnable() {
@@ -262,6 +287,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     @Override
     protected void onPause() {
         super.onPause();
+
         MobclickAgent.onPause(this);
         closeDB();
     }
@@ -272,7 +298,11 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         if (l.getItemAtPosition(position) instanceof Map) {
             return;
         }
+
         SourceItem item = (SourceItem) l.getItemAtPosition(position);
+
+        indicatorMap.remove(item.getSourceType() + "_" + item.getSourceURL());
+
         intent.putExtra("type", item.getSourceType());
         intent.putExtra("sourceId", item.getSourceId());
         intent.putExtra("sourceImage", item.getSourceImage());
@@ -340,8 +370,10 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 for (int i = 0; i < adapter.getCount(); i++) {
                     SourceItem item = (SourceItem) adapter.getItem(i);
                     if (token.match(item)) {
-                        if (item.getSourceItemView() != null)
+                        if (item.getSourceItemView() != null) {
                             item.getSourceItemView().findViewById(R.id.loadingbar).setVisibility(View.VISIBLE);
+                            item.getSourceItemView().findViewById(R.id.indicator).setVisibility(View.GONE);
+                        }
                     }
                 }
             }
@@ -350,7 +382,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     }
 
     public void notifyHasNew
-            (CachedArticleSource
+            (final CachedArticleSource
                      cachedArticleSource) {
         final CacheToken token = cachedArticleSource.getToken();
 
@@ -365,8 +397,12 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                         SourceItem item = (SourceItem) adapter.getItem(index);
                         if (token.match(item)) {
                             View childAt = IndexActivity.this.getListView().getChildAt(index);
-                            if (childAt != null)
+                            if (childAt != null) {
                                 childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
+                                TextView indicator = (TextView) childAt.findViewById(R.id.indicator);
+                                indicator.setVisibility(View.VISIBLE);
+                                indicatorMap.put(token.getType() + "_" + token.getToken(), new Object());
+                            }
                         }
                     }
                 });
@@ -377,7 +413,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     Handler hander = new Handler();
 
     public void notifyNoNew
-            (CachedArticleSource
+            (final CachedArticleSource
                      cachedArticleSource) {
         final CacheToken token = cachedArticleSource.getToken();
 
@@ -392,8 +428,14 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                         SourceItem item = (SourceItem) adapter.getItem(index);
                         if (token.match(item)) {
                             View childAt = IndexActivity.this.getListView().getChildAt(index);
-                            if (childAt != null)
+                            if (childAt != null) {
                                 childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
+                                if (indicatorMap.get(item.getSourceType() + "_" + item.getSourceURL()) != null) {
+                                    TextView indicator = (TextView) childAt.findViewById(R.id.indicator);
+                                    indicator.setVisibility(View.VISIBLE);
+                                }
+
+                            }
                         }
                     }
                 });
