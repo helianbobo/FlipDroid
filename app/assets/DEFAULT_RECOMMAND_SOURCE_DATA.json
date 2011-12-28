@@ -1,54 +1,44 @@
 [
+
     {
-        "name": "爱范儿",
-        "id": "1",
-        "desc": "发现创新价值的科技媒体。 全景关注移动互联网，集中报道创业团队、最潮的智能手持及最酷的互联网应用，致力于“独立，前瞻，深入”的分析评论",
-        "image_url": "http://tp1.sinaimg.cn/1642720480/180/1279882934/1",
-        "content_url":"http://www.ifanr.com/feed",
+        "name":"互联网",
+        "id":"1",
+        "desc":"",
+        "image_url":"http://tika.it/appimages/source-internet.png",
+        "content_url":"http://news.baidu.com/n?cmd=1&class=internet&tn=rss",
         "type":"RSS"
     },
     {
-        "name": "新浪体育",
-        "id": "3",
-        "desc": "新浪体育新闻",
-        "image_url": "http://i3.sinaimg.cn/ty/deco/2010/0601/logo_home_sports_nonike2.gif",
-        "content_url":"http://rss.sina.com.cn/roll/sports/hot_roll.xml",
+        "name":"体育",
+        "id":"2",
+        "desc":"",
+        "image_url":"http://tika.it/appimages/source-sports.png",
+        "content_url":"http://news.baidu.com/n?cmd=1&class=sportnews&tn=rss",
         "type":"RSS"
     },
     {
-        "name": "36氪",
-        "id": "4",
-        "desc": "关注互联网创业",
-        "image_url": "http://www.36kr.com/static/image/logo.png",
-        "content_url":"http://www.36kr.com/feed/",
+        "name":"游戏",
+        "id":"3",
+        "desc":"",
+        "image_url":"http://tika.it/appimages/source-game.png",
+        "content_url":"http://news.baidu.com/n?cmd=1&class=gamenews&tn=rss",
         "type":"RSS"
     },
     {
-        "name": "Leica中文摄影杂志",
-        "id": "18",
-        "desc": "...让你的摄影与众不同...",
-        "image_url": "http://www.leica.org.cn/template/leica/images/logo.gif",
-        "content_url":"http://feed.feedsky.com/leica",
-        "cat":"摄影",
+        "name":"科技",
+        "id":"4",
+        "desc":"",
+        "image_url":"http://tika.it/appimages/source-tech.png",
+        "content_url":"http://news.baidu.com/n?cmd=1&class=technnews&tn=rss",
         "type":"RSS"
     },
     {
-        "name": "精彩资讯-Mtime时光网",
-        "id": "28",
-        "desc": "时光网（Mtime.com）精彩资讯",
-        "image_url": "http://tp1.sinaimg.cn/1663735900/180/1283204354/1",
-        "content_url":"http://feed.mtime.com/news.rss",
-        "cat":"读书",
+        "name":"女性话题",
+        "id":"5",
+        "desc":"",
+        "image_url":"http://tika.it/appimages/source-women.png",
+        "content_url":"http://news.baidu.com/n?cmd=1&class=healthnews&tn=rss",
         "type":"RSS"
     }
-    ,
-    {
-        "name": "Engadget 中国版",
-        "id": "43",
-        "desc": "Engadget 中国版",
-        "image_url": "http://cn.engadget.com/media/feedlogo.gif",
-        "content_url":"http://cn.engadget.com/rss.xml",
-        "cat":"科技",
-        "type":"RSS"
-    }
+
 ]
