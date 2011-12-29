@@ -3,6 +3,7 @@ package com.goal98.android;
 import android.R;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
@@ -31,6 +32,8 @@ public class WebImageView extends ViewSwitcher {
 
     private Drawable progressDrawable, errorDrawable;
 
+    private String TAG = this.getClass().getName();
+
     private static final String ANDROID_XMLNS = "http://schemas.android.com/apk/res/android";
     private int width;
     private int height;
@@ -53,7 +56,7 @@ public class WebImageView extends ViewSwitcher {
      * @param autoLoad Whether the read should start immediately after creating the view. If set to
      *                 false, use {@link #loadImage()} to manually trigger the it.tika.mongodb.image read.
      */
-    public WebImageView(Context context, String imageUrl, boolean autoLoad,boolean loadFromInternetFlag) {
+    public WebImageView(Context context, String imageUrl, boolean autoLoad, boolean loadFromInternetFlag) {
         super(context);
         this.loadFromInternetFlag = loadFromInternetFlag;
         initialize(context, imageUrl, null, null, autoLoad);
@@ -83,7 +86,7 @@ public class WebImageView extends ViewSwitcher {
      *                         false, use {@link #loadImage()} to manually trigger the it.tika.mongodb.image read.
      */
     public WebImageView(Context context, String imageUrl, Drawable progressDrawable,
-                        Drawable errorDrawable, boolean autoLoad,boolean loadFromInternetFlag) {
+                        Drawable errorDrawable, boolean autoLoad, boolean loadFromInternetFlag) {
         super(context);
         this.loadFromInternetFlag = loadFromInternetFlag;
         initialize(context, imageUrl, progressDrawable, errorDrawable, autoLoad);
@@ -115,7 +118,7 @@ public class WebImageView extends ViewSwitcher {
         defaultHeight = attributes.getAttributeIntValue(XMLNS, "defaultHeight",
                 0);
 
-        roundImage = attributes.getAttributeBooleanValue(XMLNS, "roundImage",false);
+        roundImage = attributes.getAttributeBooleanValue(XMLNS, "roundImage", false);
 
         Drawable progressDrawable = null;
         if (progressDrawableId > 0) {
@@ -129,7 +132,7 @@ public class WebImageView extends ViewSwitcher {
                 attributes.getAttributeValue(XMLNS, "imageUrl"),
                 progressDrawable,
                 errorDrawable,
-                attributes.getAttributeBooleanValue(XMLNS, "autoLoad",true));
+                attributes.getAttributeBooleanValue(XMLNS, "autoLoad", true));
         // styles.recycle();
     }
 
@@ -211,7 +214,7 @@ public class WebImageView extends ViewSwitcher {
         if (imageUrl.length() == 0)
             return;
         handler = new DefaultImageLoaderHandler();
-        ImageLoader.start(imageUrl, handler,loadFromInternetFlag);
+        ImageLoader.start(imageUrl, handler, loadFromInternetFlag);
     }
 
     public DefaultImageLoaderHandler handler;
@@ -285,7 +288,7 @@ public class WebImageView extends ViewSwitcher {
                 return false;
 
             try {
-                if(false) //comment it out till black issue solved
+                if (false) //comment it out till black issue solved
                     bitmap = ImageHelper.getRoundedCornerBitmap(bitmap, 3);
             } catch (Throwable e) {
                 Log.w(this.getClass().getName(), "Failed to round image.", e);
@@ -295,7 +298,7 @@ public class WebImageView extends ViewSwitcher {
 
             int bmpHeight = bitmap.getHeight();
 
-            System.out.println("imageSize" + bmpWidth + "," + bmpHeight);
+            Log.v(TAG, "imageSize" + bmpWidth + "," + bmpHeight);
             //缩放图片的尺寸
 
             int width = WebImageView.this.getWidth() == 0 ? WebImageView.this.defaultWidth : WebImageView.this.getWidth();
@@ -342,25 +345,7 @@ public class WebImageView extends ViewSwitcher {
 //            }
             Bitmap resizeBitmap = null;
             if (scale != 1.0) {
-                Matrix matrix = new Matrix();
-
-                matrix.postScale(scale, scale);
-
-
-                //产生缩放后的Bitmap对象
-
-
-                try {
-                    resizeBitmap = Bitmap.createBitmap(
-                            bitmap, 0, 0, bmpWidth, bmpHeight, matrix, false);
-
-                    if (preloadImageLoaderHandler != null)
-                        preloadImageLoaderHandler.onImageResized(resizeBitmap, imageUrl);
-                    bitmap.recycle();
-                } catch (Throwable error) {
-                    error.printStackTrace();
-                    System.out.println("out of memory...skipped");
-                }
+                resizeBitmap = resizeBitmap(bitmap, scale);
             } else {
                 resizeBitmap = bitmap;
             }
@@ -389,6 +374,58 @@ public class WebImageView extends ViewSwitcher {
             }
 
             return result;
+        }
+
+        private Bitmap resizeBitmap(Bitmap bitmap, float scale) {
+            Matrix matrix = new Matrix();
+
+            matrix.postScale(scale, scale);
+
+
+            //产生缩放后的Bitmap对象
+            Bitmap resizeBitmap = null;
+
+            try {
+                resizeBitmap = Bitmap.createBitmap(
+                        bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
+
+                if (preloadImageLoaderHandler != null)
+                    preloadImageLoaderHandler.onImageResized(resizeBitmap, imageUrl);
+                bitmap.recycle();
+            } catch (Throwable error) {
+                error.printStackTrace();
+                Log.e(TAG, "out of memory...skipped");
+            }
+            return resizeBitmap;
+        }
+
+        private Bitmap resizeBitmapOptimised(Bitmap sampledSrcBitmap, float desiredScale) {
+            // Get the source image's dimensions
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+
+            int inSampleSize = 1;
+            int srcWidth = sampledSrcBitmap.getWidth();
+            int desiredWidth = (int)(srcWidth / desiredScale);
+            while(srcWidth / 2 > desiredWidth){
+                srcWidth /= 2;
+                inSampleSize *= 2;
+            }
+
+            // Decode with inSampleSize
+            options.inJustDecodeBounds = false;
+            options.inDither = false;
+            options.inSampleSize = inSampleSize;
+            options.inScaled = false;
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+            // Resize
+            Matrix matrix = new Matrix();
+            matrix.postScale(desiredScale, desiredScale);
+            Bitmap scaledBitmap = Bitmap.createBitmap(sampledSrcBitmap, 0, 0, srcWidth, sampledSrcBitmap.getHeight(), matrix, true);
+            sampledSrcBitmap.recycle();
+
+            return scaledBitmap;
         }
     }
 
