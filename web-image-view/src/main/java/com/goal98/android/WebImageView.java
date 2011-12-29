@@ -345,7 +345,7 @@ public class WebImageView extends ViewSwitcher {
 //            }
             Bitmap resizeBitmap = null;
             if (scale != 1.0) {
-                resizeBitmap = resizeBitmap(bitmap, scale);
+                resizeBitmap = resizeBitmapOptimised(bitmap, scale);
             } else {
                 resizeBitmap = bitmap;
             }
