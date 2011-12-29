@@ -7,8 +7,6 @@ import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.ArticleSource;
 import com.goal98.flipdroid.model.OnSourceLoadedListener;
 import com.goal98.flipdroid.util.EncodingDetector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

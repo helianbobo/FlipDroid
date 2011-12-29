@@ -13,4 +13,13 @@
               android:layout_height="wrap_content" android:textSize="16dip" android:gravity="center"></TextView>
     <TextView android:layout_marginLeft="4dip" android:id="@+id/createDate" android:layout_width="wrap_content"
               android:layout_height="wrap_content" android:textSize="12dip" android:gravity="center"></TextView>
+    <ProgressBar android:id="@+id/progressbar"
+                 android:visibility="invisible"
+                 android:layout_gravity="center"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:indeterminate="true"
+                 android:indeterminateOnly="true"
+                 style="?android:attr/progressBarStyleSmall">
+    </ProgressBar>
 </LinearLayout>

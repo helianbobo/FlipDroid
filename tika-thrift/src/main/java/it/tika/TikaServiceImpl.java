@@ -42,7 +42,7 @@ public class TikaServiceImpl implements TikaService.Iface {
     public static void main(String[] args) throws TException, TikaException {
         TikaServiceImpl tikaService = new TikaServiceImpl();
         TikaRequest request = new TikaRequest();
-        request.setUrl("http://cn.engadget.com/2011/09/11/sharp-aquos-sh8298u-3d-smartphone-goes-under-the-knife-comes-ou/");
+        request.setUrl("http://www.36kr.com/p/72373.html");
         TikaResponse response = tikaService.fire(request);
         System.out.println(response.getContent());
     }

@@ -320,6 +320,9 @@ public abstract class ExpandableArticleView extends ArticleView {
     protected void addOnClickListener() {
         contentViewWrapper.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
+                if(switcher.getDisplayedChild() == 1)
+                    return;
+
                 if (handler == null)
                     handler = new Handler();
                 if (!isLoading && !ExpandableArticleView.this.getPageView().loadingNext) {
@@ -329,7 +332,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                         return;
                     }
 
-                    if (article.isAlreadyLoaded() || (future != null && future.isDone())) { //如果加载好了，直接显示
+                    if (!article.hasLink() || article.isAlreadyLoaded() || (future != null && future.isDone())) { //如果加载好了，直接显示
                         enlargeLoadedView();
                         return;
                     }

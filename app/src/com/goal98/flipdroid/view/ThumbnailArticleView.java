@@ -159,12 +159,16 @@ public class ThumbnailArticleView extends ExpandableArticleView {
         this.contentViewWrapper = (LinearLayout) loadedThumbnail.findViewById(R.id.contentll);
         LinearLayout contentViewWrapperWeiboContent = (LinearLayout) weiboContent.findViewById(R.id.contentll);
 
+
         TextView contentView = new TextView(this.getContext());
         setThumbnailContentText(contentView);
         contentView.setText(article.getStatus());
 
         contentViewWrapperWeiboContent.addView(contentView);
-
+        if(article.hasLink()){
+            View progressBar = weiboContent.findViewById(R.id.progressbar);
+            progressBar.setVisibility(VISIBLE);
+        }
 
         this.portraitView = (WebImageView) loadedThumbnail.findViewById(R.id.portrait2);
         portraitViewWeiboContent = (WebImageView) weiboContent.findViewById(R.id.portrait2);

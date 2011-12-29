@@ -424,7 +424,8 @@ public class WebImageView extends ViewSwitcher {
             matrix.postScale(desiredScale, desiredScale);
             Bitmap scaledBitmap = Bitmap.createBitmap(sampledSrcBitmap, 0, 0, srcWidth, sampledSrcBitmap.getHeight(), matrix, true);
             sampledSrcBitmap.recycle();
-
+            if (preloadImageLoaderHandler != null)
+                    preloadImageLoaderHandler.onImageResized(scaledBitmap, imageUrl);
             return scaledBitmap;
         }
     }

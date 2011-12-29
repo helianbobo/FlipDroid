@@ -173,7 +173,7 @@ public class Article {
     }
 
     public String getContent() {
-        return content;
+                return content;
     }
 
     public void setContent(String content) {
