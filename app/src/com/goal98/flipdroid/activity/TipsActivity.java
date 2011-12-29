@@ -62,9 +62,10 @@ public class TipsActivity extends Activity {
                 
                 TextView tipsText = new TextView(TipsActivity.this);
                 tipsText.setText(tipsTextArray[position]);
-                tipsText.setPadding(5, 5, 5, 5);
+                tipsText.setPadding(15, 5, 15, 5);
                 tipsText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-                
+                tipsText.setTextColor(Constants.COLOR_LINK_TEXT);
+
                 linearLayout.addView(imageView, params);
                 linearLayout.addView(tipsText, params);
 
@@ -104,6 +105,11 @@ public class TipsActivity extends Activity {
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 progressBar.setProgress(position + 1);
+                if(progressBar.getProgress() == progressBar.getMax()){
+                    nextButton.setText(R.string.button_finish);
+                }else {
+                    nextButton.setText(R.string.next);
+                }
             }
 
             public void onPageSelected(int position) {
