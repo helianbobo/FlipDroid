@@ -189,7 +189,7 @@ public class WeiboPageView extends FrameLayout {
     public void enlarge(final ArticleView articleView, final ExpandableArticleView weiboArticleView) {
 
         if(pageActivity.isFlipStarted())
-            return;;
+            return;
 
         this.articleView = articleView;
         this.clickedArticleView = weiboArticleView;

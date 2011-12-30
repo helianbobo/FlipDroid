@@ -19,7 +19,6 @@ public class Paragraphs {
 
     List<TikaUIObject> paragraphs = new ArrayList<TikaUIObject>();
 
-    org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(this.getClass().getName());
 
     public List<TikaUIObject> getParagraphs() {
         return paragraphs;
@@ -132,7 +131,6 @@ public class Paragraphs {
             }
 
         }
-        LOG.debug(articleContent);
         return -2;
     }
 

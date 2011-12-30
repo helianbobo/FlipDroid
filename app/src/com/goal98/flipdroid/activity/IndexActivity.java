@@ -141,15 +141,20 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
 
     }
 
+    private void updateSource() {
+        SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
+        updateManager.updateAll();
+    }
+
     private class GetDataTask extends AsyncTask<Void, Void, String[]> {
 
         @Override
         protected String[] doInBackground(Void... params) {
             // Simulates a background job.
-            SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
-            updateManager.updateAll();
+            updateSource();
             return null;
         }
+
 
         @Override
         protected void onPostExecute(String[] result) {
@@ -266,23 +271,23 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
             }
         });
 
-//        boolean shallUpdate = NetworkUtil.toUpdateSource(this);
-//        if (shallUpdate) {
-//            new Thread(new Runnable() {
-//
-//                public void run() {
-//                    if (!updated) {
-//                        try {
-//                            Thread.sleep(2000);
-//                        } catch (InterruptedException e) {
-//
-//                        }
-//
-//                        updated = true;
-//                    }
-//                }
-//            }).start();
-//        }
+        boolean shallUpdate = NetworkUtil.toUpdateSource(this);
+        if (shallUpdate) {
+            new Thread(new Runnable() {
+
+                public void run() {
+                    if (!updated) {
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+
+                        }
+                        updateSource();
+                        updated = true;
+                    }
+                }
+            }).start();
+        }
     }
 
     @Override
