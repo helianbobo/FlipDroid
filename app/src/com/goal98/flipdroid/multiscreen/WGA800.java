@@ -28,7 +28,6 @@ public class WGA800 extends MultiScreenSupport {
 
     public int getMaxLineInThumbnailView() {
         return 6;
-
     }
 
     public int[] getTextViewPaddingInThumbnailView() {
@@ -41,7 +40,7 @@ public class WGA800 extends MultiScreenSupport {
     }
 
     public int getImageHeightThumbnailView() {
-        return (getTextViewTextSize() * 2) * getMaxLineInThumbnailView();  //(largeScreen ? 15 : smallScreen ? 0 : 5)
+        return (getTextViewTextSize() + 15) * getMaxLineInThumbnailView();  //(largeScreen ? 15 : smallScreen ? 0 : 5)
     }
 
     public int getThumbnailMaxTitleLength() {

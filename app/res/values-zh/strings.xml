@@ -34,7 +34,7 @@
     <string name="button_close">关闭</string>
     <string name="button_update">刷新</string>
     <string name="button_send">发送</string>
-    <string name="button_finish">结束</string>
+    <string name="button_finish">完成</string>
 
     <string name="my_timeline">我的微博</string>
     <string name="my_timeline_desc">我关注的微博</string>

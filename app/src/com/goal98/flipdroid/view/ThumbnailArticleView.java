@@ -31,7 +31,6 @@ public class ThumbnailArticleView extends ExpandableArticleView {
     private LinearLayout thumbnailViewWrapper;
     private View loadedThumbnail;
 
-    volatile boolean isLoading = false;
     private LinearLayout weiboContentWrapper;
     private View weiboContent;
     private WebImageView portraitViewWeiboContent;
@@ -50,10 +49,8 @@ public class ThumbnailArticleView extends ExpandableArticleView {
 
     public void displayLoadedThumbnail() {
         try {
-            //System.out.println("taking content");
             if (!article.isAlreadyLoaded() && article.hasLink()) {
                 article = future.get();
-//                executor.shutdown();
             }
 
             isLoading = true;

@@ -70,6 +70,9 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
             MobclickAgent.updateAutoPopup = false;
             MobclickAgent.setUpdateListener(new UmengUpdateListener() {
                 public void onUpdateReturned(int status) {
+                    if(getParent()==null)
+                        return;;
+
                     switch (status) {
                         case 0: //has update
                             MobclickAgent.showUpdateDialog(IndexActivity.this);

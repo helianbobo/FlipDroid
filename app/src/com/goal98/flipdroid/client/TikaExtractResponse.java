@@ -69,4 +69,9 @@ public class TikaExtractResponse {
     public Date getCreateDate() {
         return createDate;
     }
+
+    public boolean hasContent(){
+        String content = getContent();
+        return content != null && content.trim().length() != 0;
+    }
 }

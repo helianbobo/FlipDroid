@@ -48,7 +48,7 @@ public abstract class ExpandableArticleView extends ArticleView {
     protected final Animation fadeInAni = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
     protected Handler handler;
     protected Future<Article> future;
-    public volatile boolean isLoading = false;
+    protected volatile boolean isLoading = false;
     protected ExecutorService executor;
     private TikaCache tikaCache;
     protected WebImageView imageView;
@@ -67,6 +67,7 @@ public abstract class ExpandableArticleView extends ArticleView {
         super(context, article, pageView, placedAtBottom);
 
         article.loadPrimaryImage(deviceInfo, toLoadImage);
+        System.out.println("--------------------------------check if need preload,"+article.getTitle()+"--------------------------------");
         if (!article.isAlreadyLoaded() && article.hasLink()) {
             this.executor = executor;
             preload();
@@ -78,7 +79,7 @@ public abstract class ExpandableArticleView extends ArticleView {
 
             public void onAnimationEnd(Animation animation) {
                 fadeOutAni.setAnimationListener(null);
-                switcher.setDisplayedChild(1);
+                switcher.setDisplayedChild(0);
                 new Thread(new Runnable() {
                     public void run() {
                         enlargeLoadedView();
@@ -127,7 +128,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                 imageHandled = false;
             }
             if (article.getHeight() == 0) {
-                LayoutParams layoutParamsText = new LayoutParams(0, LayoutParams.FILL_PARENT);
+                LayoutParams layoutParamsText = new LayoutParams(0, mss.getImageHeightThumbnailView());
                 LayoutParams layoutParamsImage = new LayoutParams(0, LayoutParams.FILL_PARENT);
                 layoutParamsText.weight = 50;
                 layoutParamsImage.weight = 50;
@@ -184,6 +185,7 @@ public abstract class ExpandableArticleView extends ArticleView {
 
     public void preload() {
         if (article.hasLink()) {
+            System.out.println("--------------------------------preloading "+article.extractURL()+"--------------------------------");
             isLoading = true;
             future = executor.submit(new Callable() {
                 public Object call() throws Exception {
@@ -215,12 +217,12 @@ public abstract class ExpandableArticleView extends ArticleView {
                 extractResponse = tc.extract(url);
             } catch (Exception e) {
                 Log.e(TAG, e.getMessage(), e);
-                article.setTitle(getContext().getString(R.string.tikaservererror) + " \n" + url);
+                article.setTitle("");
                 article.setContent(article.getStatus());
                 return article;
             }
             responseToArticle(extractResponse);
-            if (extractResponse.getContent() != null && extractResponse.getContent().trim().length() != 0)
+            if (extractResponse.hasContent())
                 tikaCache.put(url, extractResponse);
             return article;
         }
@@ -274,14 +276,11 @@ public abstract class ExpandableArticleView extends ArticleView {
 
 
     protected void enlargeLoadedView() {
-
         try {
             if (!article.isAlreadyLoaded() && future != null)
                 future.get();
 
             loadedArticleView = new ContentLoadedView(this.getContext(), article, pageView);
-
-
             handler.post(new Runnable() {
                 public void run() {
                     switcher.setDisplayedChild(0);
@@ -320,12 +319,14 @@ public abstract class ExpandableArticleView extends ArticleView {
     protected void addOnClickListener() {
         contentViewWrapper.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
-                if(switcher.getDisplayedChild() == 1)
+                if(isLoading){
                     return;
+                }
+                System.out.println("leoshao:"+article.getTitle());
 
                 if (handler == null)
                     handler = new Handler();
-                if (!isLoading && !ExpandableArticleView.this.getPageView().loadingNext) {
+                if (!ExpandableArticleView.this.getPageView().loadingNext) {
 
                     if (enlargedView != null && enlargedView.get() != null) {//以前打开过的，直接显示
                         ExpandableArticleView.this.getPageView().enlarge(loadedArticleView, ExpandableArticleView.this);
@@ -336,8 +337,6 @@ public abstract class ExpandableArticleView extends ArticleView {
                         enlargeLoadedView();
                         return;
                     }
-
-                    isLoading = true;
 
                     ExpandableArticleView.this.contentViewWrapper.startAnimation(fadeOutAni);
                     return;
