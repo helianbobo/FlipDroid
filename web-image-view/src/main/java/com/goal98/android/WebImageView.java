@@ -345,7 +345,7 @@ public class WebImageView extends ViewSwitcher {
 //            }
             Bitmap resizeBitmap = null;
             if (scale != 1.0) {
-                resizeBitmap = resizeBitmapOptimised(bitmap, scale);
+                resizeBitmap = resizeBitmap(bitmap, scale);
             } else {
                 resizeBitmap = bitmap;
             }
@@ -393,41 +393,12 @@ public class WebImageView extends ViewSwitcher {
                     preloadImageLoaderHandler.onImageResized(resizeBitmap, imageUrl);
                 bitmap.recycle();
             } catch (Throwable error) {
-                error.printStackTrace();
-                Log.e(TAG, "out of memory...skipped");
+                Log.e(TAG, "out of memory...skipped", error);
             }
             return resizeBitmap;
         }
 
-        private Bitmap resizeBitmapOptimised(Bitmap sampledSrcBitmap, float desiredScale) {
-            // Get the source image's dimensions
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
 
-            int inSampleSize = 1;
-            int srcWidth = sampledSrcBitmap.getWidth();
-            int desiredWidth = (int)(srcWidth / desiredScale);
-            while(srcWidth / 2 > desiredWidth){
-                srcWidth /= 2;
-                inSampleSize *= 2;
-            }
-
-            // Decode with inSampleSize
-            options.inJustDecodeBounds = false;
-            options.inDither = false;
-            options.inSampleSize = inSampleSize;
-            options.inScaled = false;
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-
-            // Resize
-            Matrix matrix = new Matrix();
-            matrix.postScale(desiredScale, desiredScale);
-            Bitmap scaledBitmap = Bitmap.createBitmap(sampledSrcBitmap, 0, 0, srcWidth, sampledSrcBitmap.getHeight(), matrix, true);
-            sampledSrcBitmap.recycle();
-            if (preloadImageLoaderHandler != null)
-                    preloadImageLoaderHandler.onImageResized(scaledBitmap, imageUrl);
-            return scaledBitmap;
-        }
     }
 
     /**
