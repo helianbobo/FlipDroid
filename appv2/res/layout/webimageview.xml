@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent">
+
+    <com.goal98.android.WebImageView android:id="@+id/webimageview"
+                                     webimage:autoLoad="false"
+                                     android:layout_marginBottom="3dp" android:layout_marginTop="3dp"
+                                     android:src="@drawable/twitter" webimage:errorDrawable="@drawable/twitter"
+                                     android:layout_height="50dip" webimage:defaultWidth="50"
+                                     webimage:defaultHeight="50" webimage:progressDrawable="@drawable/twitter"
+                                     webimage:roundImage="true"
+                                     android:layout_width="50dip"/>
+
+
+</LinearLayout>

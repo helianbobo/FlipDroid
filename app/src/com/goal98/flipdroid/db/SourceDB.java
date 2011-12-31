@@ -2,8 +2,10 @@ package com.goal98.flipdroid.db;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.goal98.flipdroid.model.Source;
+import com.goal98.tika.common.TikaConstants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +21,7 @@ public class SourceDB extends AbstractDB {
         return Source.TABLE_NAME;
     }
 
-    public static Map<String, String> buildSource(String accountType, String name, String id, String desc, String imageUrl, String contentURL,String cat) {
+    public static Map<String, String> buildSource(String accountType, String name, String id, String desc, String imageUrl, String contentURL, String cat) {
         Map<String, String> result = new HashMap<String, String>();
         result.put(Source.KEY_SOURCE_NAME, name);
         result.put(Source.KEY_SOURCE_ID, id);
@@ -32,7 +34,7 @@ public class SourceDB extends AbstractDB {
     }
 
     public static Map<String, String> buildSource(String accountType, String name, String id, String desc, String imageUrl, String cat) {
-        return buildSource(accountType, name, id, desc, imageUrl, null,cat);
+        return buildSource(accountType, name, id, desc, imageUrl, null, cat);
     }
 
     public long insert(ContentValues values) {
@@ -62,6 +64,18 @@ public class SourceDB extends AbstractDB {
         values.put(Source.KEY_CAT, cat);
         values.put(Source.KEY_IMAGE_URL, imageURL);
         return insert(values);
+    }
+
+    public boolean isMySinaWeiboAccountExist() {
+        String[] projection = {Source.KEY_SOURCE_TYPE};
+        String selection = Source.KEY_SOURCE_TYPE + " = ? ";
+        String[] selectionArgs = {TikaConstants.TYPE_MY_SINA_WEIBO};
+
+        Cursor cursor = query(projection, selection, selectionArgs, null);
+        boolean result = cursor != null && cursor.getCount() > 0;
+        if (cursor != null)
+            cursor.close();
+        return result;
     }
 
     public int update(ContentValues values, String where, String[] whereArgs) {

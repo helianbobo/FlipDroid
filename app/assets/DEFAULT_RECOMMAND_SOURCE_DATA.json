@@ -1,6 +1,14 @@
 [
 
     {
+        "name":"我的微博",
+        "id":"6",
+        "desc":"我关注的微博",
+        "image_url":"http://www.sinaimg.cn/blog/developer/wiki/48x48.png",
+        "content_url":"",
+        "type":"MY_SINA_WEIBO"
+    },
+    {
         "name":"互联网",
         "id":"1",
         "desc":"",

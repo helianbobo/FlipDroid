@@ -2,6 +2,7 @@ package com.goal98.flipdroid.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.WebView;
 import com.goal98.flipdroid.R;
 import com.mobclick.android.MobclickAgent;
@@ -15,6 +16,7 @@ import com.mobclick.android.MobclickAgent;
  */
 public class BindSinaActivity extends Activity {
     public static String URL = "url";
+    private String TAG = this.getClass().getName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class BindSinaActivity extends Activity {
 
 
         String url = this.getIntent().getStringExtra(BindSinaActivity.URL);
+        Log.v(TAG, "Sina Oauth url: " + url);
 
         WeiPaiWebViewClient weiPaiWebViewClient = new WeiPaiWebViewClient(BindSinaActivity.this);
 

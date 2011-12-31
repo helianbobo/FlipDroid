@@ -70,8 +70,9 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
             MobclickAgent.updateAutoPopup = false;
             MobclickAgent.setUpdateListener(new UmengUpdateListener() {
                 public void onUpdateReturned(int status) {
-                    if(getParent()==null)
-                        return;;
+                    if (getParent() == null)
+                        return;
+                    ;
 
                     switch (status) {
                         case 0: //has update
@@ -303,20 +304,32 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        Intent intent = new Intent(this, PageActivity.class);
+        Intent intent;
         if (l.getItemAtPosition(position) instanceof Map) {
             return;
         }
 
         SourceItem item = (SourceItem) l.getItemAtPosition(position);
 
-        indicatorMap.remove(item.getSourceType() + "_" + item.getSourceURL());
+        if (TikaConstants.TYPE_MY_SINA_WEIBO.endsWith(item.getSourceType()) && !SinaAccountUtil.alreadyBinded(this)) {
 
-        intent.putExtra("type", item.getSourceType());
-        intent.putExtra("sourceId", item.getSourceId());
-        intent.putExtra("sourceImage", item.getSourceImage());
-        intent.putExtra("sourceName", item.getSourceName());
-        intent.putExtra("contentUrl", item.getSourceURL());//for rss
+            intent = new Intent(this, SinaAccountActivity.class);
+            intent.putExtra("PROMPTTEXT", this.getString(R.string.gotosinaoauth));
+
+        } else {
+
+            intent = new Intent(this, PageActivity.class);
+            indicatorMap.remove(item.getSourceType() + "_" + item.getSourceURL());
+
+            intent.putExtra("type", item.getSourceType());
+            intent.putExtra("sourceId", item.getSourceId());
+            intent.putExtra("sourceImage", item.getSourceImage());
+            intent.putExtra("sourceName", item.getSourceName());
+            intent.putExtra("contentUrl", item.getSourceURL());//for rss
+
+        }
+
+
         startActivity(intent);
         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
     }
