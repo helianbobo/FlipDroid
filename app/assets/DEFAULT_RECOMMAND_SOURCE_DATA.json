@@ -2,7 +2,7 @@
 
     {
         "name":"我的微博",
-        "id":"6",
+        "id":"SOURCE_HOME",
         "desc":"我关注的微博",
         "image_url":"http://www.sinaimg.cn/blog/developer/wiki/48x48.png",
         "content_url":"",
