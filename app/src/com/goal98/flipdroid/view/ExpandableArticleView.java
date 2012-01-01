@@ -322,7 +322,6 @@ public abstract class ExpandableArticleView extends ArticleView {
                 if(isLoading){
                     return;
                 }
-                System.out.println("leoshao:"+article.getTitle());
 
                 if (handler == null)
                     handler = new Handler();

@@ -19,6 +19,7 @@
         <option name="LIBRARY_PROJECT" value="false" />
         <option name="RUN_PROCESS_RESOURCES_MAVEN_TASK" value="true" />
         <option name="GENERATE_UNSIGNED_APK" value="false" />
+        <option name="CUSTOM_DEBUG_KEYSTORE_PATH" value="" />
       </configuration>
     </facet>
   </component>
@@ -137,7 +138,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://G:/android-sdk_r15-windows/android-sdk-windows/extras/android/support/v4/android-support-v4.jar!/" />
+          <root url="jar://$MODULE_DIR$/../lib/slf4j-android-1.6.1-RC1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -146,7 +147,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../lib/slf4j-android-1.6.1-RC1.jar!/" />
+          <root url="jar://$MODULE_DIR$/../lib/android-support-v4.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

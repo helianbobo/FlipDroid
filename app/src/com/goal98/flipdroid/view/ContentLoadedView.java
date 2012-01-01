@@ -66,7 +66,6 @@ public class ContentLoadedView extends ArticleView {
     int mode = NONE;
 
 
-
     public void buildView() {
         LayoutInflater inflator = LayoutInflater.from(this.getContext());
         LinearLayout layout = (LinearLayout) inflator.inflate(R.layout.enlarged_content, this);
@@ -82,7 +81,7 @@ public class ContentLoadedView extends ArticleView {
             reference.setVisibility(VISIBLE);
             referenceContent.setVisibility(VISIBLE);
             if (article.getPortraitImageUrl() != null) {
-                icon = new WebImageView(this.getContext(), article.getPortraitImageUrl().toExternalForm(), false,toLoadImage);
+                icon = new WebImageView(this.getContext(), article.getPortraitImageUrl().toExternalForm(), false, toLoadImage);
                 icon.setRoundImage(true);
                 icon.setDefaultHeight(25);
                 icon.setDefaultWidth(25);
@@ -144,8 +143,8 @@ public class ContentLoadedView extends ArticleView {
         for (int i = 0; i < paragraphsList.size(); i++) {
             TikaUIObject uiObject = paragraphsList.get(i);
             if (uiObject.getType().equals(TikaUIObject.TYPE_TEXT)) {
-                String temp =  uiObject.getObjectBody().replaceAll("<[/]?.+?>","");
-                if(temp.trim().length()==0){
+                String temp = uiObject.getObjectBody().replaceAll("<[/]?.+?>", "");
+                if (temp.trim().length() == 0) {
                     continue;
                 }
                 String style = "<p>";
@@ -154,14 +153,18 @@ public class ContentLoadedView extends ArticleView {
                 tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, txtSize);
                 tv.setTextColor(Constants.LOADED_TEXT_COLOR);
                 tv.setGravity(Gravity.LEFT | Gravity.TOP);
+                StringBuilder sb = null;
                 if (uiObject.getObjectBody().startsWith("<p><blockquote>")) {
                     style = "<p><blockquote>";
-                    tv.setPadding(2 + txtSize*2 , 3, 2 + txtSize *2, 3);
+                    tv.setPadding(2 + txtSize * 2, 3, 2 + txtSize * 2, 3);
                     tv.setBackgroundColor(Color.parseColor("#DDDDDD"));
+                    sb = new StringBuilder();
+                    textLayoutParams.setMargins(0, (int) tv.getTextSize(), 0, 0);
                 } else {
                     tv.setPadding(2 + txtSize, 3, 2 + txtSize, 3);
+                    sb = new StringBuilder("<br/>");
                 }
-                StringBuilder sb = new StringBuilder("<br/>");
+
                 String objectBody = uiObject.getObjectBody();
                 String formatted = format(objectBody);
                 if (formatted.trim().length() == 0)
@@ -171,12 +174,22 @@ public class ContentLoadedView extends ArticleView {
 
                 while (i + 1 < paragraphsList.size()) {
                     final String nextParagraph = paragraphsList.get(i + 1).getObjectBody();
-                    if (nextParagraph.startsWith(style) && !nextParagraph.startsWith("<p><blockquote>")) {
+                    if (nextParagraph.startsWith("<p><blockquote>") && !style.equals("<p><blockquote>")) {
+                        break;
+                    }
+                    if (nextParagraph.startsWith(style) && !style.equals("<p><blockquote>")) {
                         sb.append("<br/><br/>");
                         formatted = format(nextParagraph);
                         sb.append(formatted);
                         i++;
-                    } else {
+                    }
+                    else if (nextParagraph.startsWith(style) && style.equals("<p><blockquote>")) {
+                        sb.append("<br/><br/>");
+                        formatted = format(nextParagraph);
+                        sb.append(formatted);
+                        i++;
+                    }
+                    else {
                         break;
                     }
                 }
@@ -193,7 +206,7 @@ public class ContentLoadedView extends ArticleView {
                 ImageInfo imageInfo = ((ImageInfo) uiObject);
                 String url = imageInfo.getUrl();
 
-                WebImageView imageView = new WebImageView(this.getContext(), url, this.getResources().getDrawable(Constants.DEFAULT_PIC),this.getResources().getDrawable(Constants.DEFAULT_PIC),false,toLoadImage);
+                WebImageView imageView = new WebImageView(this.getContext(), url, this.getResources().getDrawable(Constants.DEFAULT_PIC), this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage);
                 imageView.setRoundImage(false);
                 imageView.setBackgroundResource(R.drawable.border);
 //                imageView.imageView.setTag(url);
@@ -241,7 +254,7 @@ public class ContentLoadedView extends ArticleView {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     intent.setData(Uri.parse(url));
                     ContentLoadedView.this.getContext().startActivity(intent);
-                }else{
+                } else {
                     AlarmSender.sendInstantMessage(R.string.original_url_is_not_available, getContext());
                 }
             }
@@ -251,6 +264,7 @@ public class ContentLoadedView extends ArticleView {
     private String format(String paragraph) {
         return paragraph.replaceAll("<p>", "<span>").replaceAll("</p>", "</span>").replaceAll("(<blockquote>)|(</blockquote>)", "").replaceAll("<span><.*?></span>", "");
     }
+
 
     public void renderBeforeLayout() {
         icon.loadImage();

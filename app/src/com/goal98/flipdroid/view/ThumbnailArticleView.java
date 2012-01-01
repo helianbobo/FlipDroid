@@ -156,7 +156,6 @@ public class ThumbnailArticleView extends ExpandableArticleView {
         this.contentViewWrapper = (LinearLayout) loadedThumbnail.findViewById(R.id.contentll);
         LinearLayout contentViewWrapperWeiboContent = (LinearLayout) weiboContent.findViewById(R.id.contentll);
 
-
         TextView contentView = new TextView(this.getContext());
         setThumbnailContentText(contentView);
         contentView.setText(article.getStatus());

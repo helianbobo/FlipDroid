@@ -341,6 +341,7 @@ public class WeiboPageView extends FrameLayout {
                                                         WeiboPageView.this.removeView(commentShadowLayer);
                                                         pageActivity.dismissDialog(PageActivity.PROMPT_INPROGRESS);
                                                         pageActivity.showBottomBar();
+                                                        WeiboPageView.this.invalidate();
                                                     }
                                                 });
                                             }
@@ -369,10 +370,13 @@ public class WeiboPageView extends FrameLayout {
                         if (paragraph1.length() > 40) {
                             paragraph1 = paragraph1.substring(0, 40);
                         }
-//                        commentEditText.setFocusable(true);
-//                        commentEditText.requestFocus(1000);
-//                        commentEditText.setFocusableInTouchMode(true);
-                        final String templateText = "| [" + article.getTitle() + "] " + paragraph1 + " " + article.getSourceURL();
+                        String prefixPart = "";
+                        String templateText = "";
+                        if(article.getTitle()!=null && article.getTitle().length()!=0){
+                            prefixPart = "[" + article.getTitle() + "]";
+                            templateText = "| "+prefixPart+" " + paragraph1 + " " + (article.getSourceURL()==null?"":article.getSourceURL());
+                        }
+
                         commentEditText.setText(templateText);
                         commentEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
                             public void onFocusChange(View view, boolean b) {
@@ -477,8 +481,9 @@ public class WeiboPageView extends FrameLayout {
     }
 
     public void releaseResource() {
-        for (int i = 0; i < page.getArticleList().size(); i++) {
-            Article article = page.getArticleList().get(i);
+        final List<Article> articleList = page.getArticleList();
+        for (int i = 0; i < articleList.size(); i++) {
+            Article article = articleList.get(i);
             System.out.println("release image...");
             article.setImageBitmap(null);
         }
