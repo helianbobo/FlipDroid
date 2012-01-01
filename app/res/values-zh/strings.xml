@@ -84,8 +84,8 @@
         <item>想要删除一个源，请长按该源，弹出菜单后，点击删除</item>
         <item>目前支持3种源，新浪微博、RSS和谷歌订阅</item>
     </string-array>
-    <string name="pull_to_refresh_pull_label">下拉可以刷新</string>
-    <string name="pull_to_refresh_release_label">松开可以刷新</string>
+    <string name="pull_to_refresh_pull_label">下拉检查更新</string>
+    <string name="pull_to_refresh_release_label">松开可以更新</string>
     <string name="pull_to_refresh_refreshing_label">检查更新中</string>
     <string name="pull_to_refresh_tap_label">轻按可以更新</string>
 </resources>

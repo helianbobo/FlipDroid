@@ -19,7 +19,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SinaArticleSource extends AbstractArticleSource {
+public class
+        SinaArticleSource extends AbstractArticleSource {
 
     private WeiboExt weibo;
 
@@ -95,9 +96,11 @@ public class SinaArticleSource extends AbstractArticleSource {
                 article.setPortraitImageUrl(status.getUser().getProfileImageURL());
                 article.setStatusId(status.getId());
 
-                if (filter.doFilter(article)){
+                if (filter.doFilter(article)) {
                     articleList.add(article);
-                    article.setSourceURL(article.extractURL());
+                    if (article.hasLink()){
+                        article.setSourceURL(article.extractURL());
+                    }
                 }
             }
 

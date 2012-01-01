@@ -4,8 +4,10 @@
 
     <Button android:layout_width="fill_parent"
             android:layout_height="50dp"
-            android:drawableTop="@drawable/ic_action_add_source"
-            android:paddingTop="12dp"
+            android:drawableLeft="@drawable/ic_action_add_source"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:text="@string/button_add_new_source"
             style="@style/Button"
             android:layout_margin="10dp"
             android:id="@+id/btn_add_source"/>

@@ -236,7 +236,7 @@ public abstract class ExpandableArticleView extends ArticleView {
 
         article.setTitle(extractResponse.getTitle());
         article.setSourceURL(extractResponse.getSourceURL());
-
+        article.setExpandable(true);
         if (toLoadImage) {
             try {
                 if (!extractResponse.getImages().isEmpty()) {

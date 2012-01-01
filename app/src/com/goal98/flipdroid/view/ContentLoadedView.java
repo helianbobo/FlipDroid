@@ -69,9 +69,14 @@ public class ContentLoadedView extends ArticleView {
     public void buildView() {
         LayoutInflater inflator = LayoutInflater.from(this.getContext());
         LinearLayout layout = (LinearLayout) inflator.inflate(R.layout.enlarged_content, this);
-        this.titleView = (TextView) layout.findViewById(R.id.title);
-        titleView.setText(article.getTitle());
-        titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_TITLE);
+        if (article.isExpandable()) {
+            this.titleView = (TextView) layout.findViewById(R.id.title);
+            titleView.setText(article.getTitle());
+            titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_TITLE);
+        } else {
+            LinearLayout titleViewWrapper = (LinearLayout) layout.findViewById(R.id.titleWrapper);
+            titleViewWrapper.setVisibility(GONE);
+        }
 
         if (article.getSourceType().equals(TikaConstants.TYPE_SINA_WEIBO) || article.getSourceType().equals(TikaConstants.TYPE_MY_SINA_WEIBO)) {
             LinearLayout reference = (LinearLayout) layout.findViewById(R.id.reference);
@@ -95,16 +100,19 @@ public class ContentLoadedView extends ArticleView {
             author.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_AUTHOR);
 
             author.setTextColor(Color.parseColor("#AAAAAA"));
-
-            TextView referenceText = new TextView(this.getContext());
-            referenceText.setText(article.getStatus());
-            referenceText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_REFERENCE);
-
-            referenceText.setTextColor(Color.parseColor("#AAAAAA"));
             final LayoutParams authorLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
             authorLayoutParams.gravity = Gravity.CENTER;
             reference.addView(author, authorLayoutParams);
-            referenceContent.addView(referenceText, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            if (article.isExpandable()) {
+                TextView referenceText = new TextView(this.getContext());
+                referenceText.setText(article.getStatus());
+                referenceText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_REFERENCE);
+
+                referenceText.setTextColor(Color.parseColor("#AAAAAA"));
+
+
+                referenceContent.addView(referenceText, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            }
         } else {
             this.authorView = (TextView) layout.findViewById(R.id.author);
             authorView.setText(article.getAuthor());
@@ -135,7 +143,7 @@ public class ContentLoadedView extends ArticleView {
         this.contentHolderView = (LinearLayout) layout.findViewById(R.id.contentHolder);
         int txtSize = Constants.TEXT_SIZE_CONTENT;
         Paragraphs paragraphs = new Paragraphs();
-        paragraphs.toParagraph(article.getContent());
+        paragraphs.toParagraph(article.getToParagraph(deviceInfo));
         LayoutParams textLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 
         int imageIndex = 0;
@@ -182,14 +190,12 @@ public class ContentLoadedView extends ArticleView {
                         formatted = format(nextParagraph);
                         sb.append(formatted);
                         i++;
-                    }
-                    else if (nextParagraph.startsWith(style) && style.equals("<p><blockquote>")) {
+                    } else if (nextParagraph.startsWith(style) && style.equals("<p><blockquote>")) {
                         sb.append("<br/><br/>");
                         formatted = format(nextParagraph);
                         sb.append(formatted);
                         i++;
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
@@ -237,28 +243,25 @@ public class ContentLoadedView extends ArticleView {
 
             }
         }
-//        TextView tv = new TextView(this.getContext());
-//        if (deviceInfo.isLargeScreen()) {
-//            tv.setPadding(0, 15, 0, 0);
-//        } else {
-//            tv.setPadding(0, 10, 0, 0);
-//        }
-//        tv.setText(Html.fromHtml("<br>"));
-//        contentHolderView.addView(tv, textLayoutParams);
+
         Button viewSource = (Button) layout.findViewById(R.id.viewSource);
-        viewSource.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, deviceInfo.getHeight() / 12));
-        viewSource.setOnClickListener(new OnClickListener() {
-            public void onClick(View view) {
-                String url = article.getSourceURL();
-                if (url != null) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(url));
-                    ContentLoadedView.this.getContext().startActivity(intent);
-                } else {
-                    AlarmSender.sendInstantMessage(R.string.original_url_is_not_available, getContext());
+        if (article.isExpandable()) {
+            viewSource.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, deviceInfo.getHeight() / 12));
+            viewSource.setOnClickListener(new OnClickListener() {
+                public void onClick(View view) {
+                    String url = article.getSourceURL();
+                    if (url != null) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(url));
+                        ContentLoadedView.this.getContext().startActivity(intent);
+                    } else {
+                        AlarmSender.sendInstantMessage(R.string.original_url_is_not_available, getContext());
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            viewSource.setVisibility(GONE);
+        }
     }
 
     private String format(String paragraph) {
