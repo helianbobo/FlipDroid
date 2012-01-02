@@ -90,7 +90,7 @@ public class ContentLoadedView extends ArticleView {
                 icon.setRoundImage(true);
                 icon.setDefaultHeight(25);
                 icon.setDefaultWidth(25);
-
+                icon.loadImage();
                 reference.addView(icon, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             }
 
@@ -265,7 +265,7 @@ public class ContentLoadedView extends ArticleView {
     }
 
     private String format(String paragraph) {
-        return paragraph.replaceAll("<p>", "<span>").replaceAll("</p>", "</span>").replaceAll("(<blockquote>)|(</blockquote>)", "").replaceAll("<span><.*?></span>", "");
+        return paragraph.replaceAll("<p>", "").replaceAll("</p>", "").replaceAll("(<blockquote>)|(</blockquote>)", "");
     }
 
 

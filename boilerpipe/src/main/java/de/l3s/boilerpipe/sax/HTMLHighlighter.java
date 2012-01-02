@@ -477,6 +477,7 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("h4") ||
                             qName.equalsIgnoreCase("h5") ||
                             qName.equalsIgnoreCase("h6") ||
+                            qName.equalsIgnoreCase("pre") ||
                             qName.equalsIgnoreCase("strong")) {
                         html.append("<" + qName.toLowerCase() + ">");
                     }
@@ -570,6 +571,7 @@ public final class HTMLHighlighter {
                             qName.equalsIgnoreCase("h4") ||
                             qName.equalsIgnoreCase("h5") ||
                             qName.equalsIgnoreCase("h6") ||
+                            qName.equalsIgnoreCase("pre") ||
                             qName.equalsIgnoreCase("strong")) {
                         html.append("</" + qName.toLowerCase() + ">");
                     }

@@ -20,7 +20,7 @@ import de.l3s.boilerpipe.sax.HTMLHighlighter;
 public class HTMLHighlightDemo {
     public static void main(String[] args) throws Exception {
 
-        URL url = new URL("http://www.36kr.com/p/72373.html");
+        URL url = new URL("http://wyj04138.iteye.com/blog/1332217");
 
         final BoilerpipeExtractor extractor = CommonExtractors.CHINESE_ARTICLE_EXTRACTOR;
         final HTMLHighlighter hh = HTMLHighlighter.newExtractingInstanceForChinese();

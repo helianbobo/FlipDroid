@@ -85,7 +85,7 @@ public class ImageInfo implements TikaUIObject {
     }
 
     public static void main(String[] args) {
-        String a = "error\r\nexception";
-        System.out.println(a.replaceAll("(error)|(exception)",""));
+        String paragraph = "<p><br/>　　美白，是无数mm美肤的终极目标。可是，商场里的高档美白护肤品的价格相当昂贵，大多数的mm都无法承受。没关系，我们可以靠吃水果来美白。<br/><a href=/GB/16775996.html></p>";
+        System.out.println(paragraph.replaceAll("<br/>", "").replaceAll("<p>", "").replaceAll("</p>", "").replaceAll("(<blockquote>)|(</blockquote>)", ""));
     }
 }
