@@ -27,12 +27,6 @@
         <LinearLayout android:orientation="vertical" android:layout_width="fill_parent"
                       android:layout_marginBottom="5dp"
                       android:layout_height="wrap_content">
-            <LinearLayout android:id="@+id/reference"
-                          android:visibility="gone" android:layout_width="fill_parent"
-                          android:layout_height="wrap_content" android:orientation="horizontal"
-                          android:gravity="left|center_vertical">
-
-            </LinearLayout>
             <LinearLayout android:gravity="top|center_horizontal" android:id="@+id/referenceContent"
                           android:paddingRight="15dip" android:paddingLeft="15dip" android:visibility="gone"
                           android:layout_width="fill_parent" android:layout_height="wrap_content"

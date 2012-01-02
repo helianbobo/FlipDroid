@@ -77,66 +77,43 @@ public class ContentLoadedView extends ArticleView {
             LinearLayout titleViewWrapper = (LinearLayout) layout.findViewById(R.id.titleWrapper);
             titleViewWrapper.setVisibility(GONE);
         }
-
         if (article.getSourceType().equals(TikaConstants.TYPE_SINA_WEIBO) || article.getSourceType().equals(TikaConstants.TYPE_MY_SINA_WEIBO)) {
-            LinearLayout reference = (LinearLayout) layout.findViewById(R.id.reference);
             LinearLayout referenceContent = (LinearLayout) layout.findViewById(R.id.referenceContent);
-            LinearLayout shareByll = (LinearLayout) layout.findViewById(R.id.shareByll);
-            shareByll.setVisibility(GONE);
-            reference.setVisibility(VISIBLE);
             referenceContent.setVisibility(VISIBLE);
-            if (article.getPortraitImageUrl() != null) {
-                icon = new WebImageView(this.getContext(), article.getPortraitImageUrl().toExternalForm(), false, toLoadImage);
-                icon.setRoundImage(true);
-                icon.setDefaultHeight(25);
-                icon.setDefaultWidth(25);
-                icon.loadImage();
-                reference.addView(icon, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-            }
-
-
-            TextView author = new TextView(this.getContext());
-            author.setText(article.getAuthor());
-            author.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_AUTHOR);
-
-            author.setTextColor(Color.parseColor("#AAAAAA"));
-            final LayoutParams authorLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-            authorLayoutParams.gravity = Gravity.CENTER;
-            reference.addView(author, authorLayoutParams);
             if (article.isExpandable()) {
                 TextView referenceText = new TextView(this.getContext());
                 referenceText.setText(article.getStatus());
                 referenceText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_REFERENCE);
 
                 referenceText.setTextColor(Color.parseColor("#AAAAAA"));
-
-
                 referenceContent.addView(referenceText, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             }
-        } else {
-            this.authorView = (TextView) layout.findViewById(R.id.author);
-            authorView.setText(article.getAuthor());
-
-            createDateView = (TextView) layout.findViewById(R.id.createdDate);
-
-            String time = PrettyTimeUtil.getPrettyTime(this.getContext(), article.getCreatedDate());
-            createDateView.setText(time);
-
-            this.portraitView = (WebImageView) layout.findViewById(R.id.portrait);
-            if (article.getPortraitImageUrl() != null) {
-                this.portraitView.setImageUrl(article.getPortraitImageUrl().toString());
-
-            } else {
-                this.portraitView.setVisibility(View.GONE);
-            }
-            if (deviceInfo.isLargeScreen()) {
-                authorView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_AUTHOR);
-                createDateView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_AUTHOR);
-                portraitView.setDefaultHeight(32);
-                portraitView.setDefaultWidth(32);
-            }
-            this.portraitView.loadImage();
         }
+
+        this.authorView = (TextView) layout.findViewById(R.id.author);
+
+        this.portraitView = (WebImageView) layout.findViewById(R.id.portrait);
+        if (article.getPortraitImageUrl() != null) {
+            this.portraitView.setImageUrl(article.getPortraitImageUrl().toString());
+        } else {
+            this.portraitView.setVisibility(View.GONE);
+        }
+        if (deviceInfo.isLargeScreen()) {
+            portraitView.setDefaultHeight(32);
+            portraitView.setDefaultWidth(32);
+        }
+        this.portraitView.loadImage();
+
+        authorView.setText(article.getAuthor());
+        authorView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_AUTHOR);
+        authorView.setTextColor(Color.parseColor("#AAAAAA"));
+
+        createDateView = (TextView) layout.findViewById(R.id.createdDate);
+
+        String time = PrettyTimeUtil.getPrettyTime(this.getContext(), article.getCreatedDate());
+        createDateView.setText(time);
+        createDateView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_AUTHOR);
+
         ScrollView wrapper = (ScrollView) layout.findViewById(R.id.wrapper);
         wrapper.setVerticalScrollBarEnabled(true);
 
@@ -265,13 +242,12 @@ public class ContentLoadedView extends ArticleView {
     }
 
     private String format(String paragraph) {
-        return paragraph.replaceAll("<p>", "").replaceAll("</p>", "").replaceAll("(<blockquote>)|(</blockquote>)", "");
+        return paragraph.replaceAll("<br/>", "<br/><br/>").replaceAll("<p>", "").replaceAll("</p>", "").replaceAll("(<blockquote>)|(</blockquote>)", "");
     }
 
 
     public void renderBeforeLayout() {
-        icon.loadImage();
-        this.portraitView.loadImage();
+
     }
 
 
