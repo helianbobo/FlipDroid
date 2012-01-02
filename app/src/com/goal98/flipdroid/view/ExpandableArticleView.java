@@ -67,7 +67,6 @@ public abstract class ExpandableArticleView extends ArticleView {
         super(context, article, pageView, placedAtBottom);
 
         article.loadPrimaryImage(deviceInfo, toLoadImage);
-        System.out.println("--------------------------------check if need preload,"+article.getTitle()+"--------------------------------");
         if (!article.isAlreadyLoaded() && article.hasLink()) {
             this.executor = executor;
             preload();

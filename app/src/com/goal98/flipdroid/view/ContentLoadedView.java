@@ -135,6 +135,7 @@ public class ContentLoadedView extends ArticleView {
                 String style = "<p>";
                 TextView tv = new TextView(this.getContext());
 
+                tv.setLineSpacing(1,1.3f);
                 tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, txtSize);
                 tv.setTextColor(Constants.LOADED_TEXT_COLOR);
                 tv.setGravity(Gravity.LEFT | Gravity.TOP);
