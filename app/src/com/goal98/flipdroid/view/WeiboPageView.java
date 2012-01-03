@@ -191,6 +191,7 @@ public class WeiboPageView extends FrameLayout {
         if(pageActivity.isFlipStarted())
             return;
 
+        onRead(articleView);
         this.articleView = articleView;
         this.clickedArticleView = weiboArticleView;
         inflater = LayoutInflater.from(WeiboPageView.this.getContext());
@@ -202,8 +203,10 @@ public class WeiboPageView extends FrameLayout {
             LinearLayout shadowLayer = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.shadowlayer);
             shadowLayer.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {
-                    if (!weiboArticleView.isLoading)
+                    if (!weiboArticleView.isLoading){
+
                         closeEnlargedView(weiboArticleView);
+                    }
                 }
             });
 
@@ -223,6 +226,15 @@ public class WeiboPageView extends FrameLayout {
         content = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.content);
         articleView.startAnimation(fadeinArticle);
 
+    }
+
+    private void onClose(ArticleView articleView) {
+       System.out.println("jleo closing..."+articleView.getArticle().getTitle());
+//      enlargedViewWrapperWr.clear();
+    }
+
+    private void onRead(ArticleView articleView) {
+        System.out.println("jleo opening..."+articleView.getArticle().getTitle());
     }
 
     private void setupToolBar(final ArticleView articleView, final ExpandableArticleView weiboArticleView, HeaderView header) {
@@ -418,12 +430,16 @@ public class WeiboPageView extends FrameLayout {
     }
 
 
-    private void closeEnlargedView(ExpandableArticleView weiboArticleView) {
+    private void closeEnlargedView(final ExpandableArticleView weiboArticleView) {
+
         if (commentShadowLayer != null)
             this.removeView(commentShadowLayer);
 
+        onClose(articleView);
+
         weiboArticleView.getContentView().setVisibility(VISIBLE);
         weiboArticleView.enlargedView = new WeakReference(enlargedViewWrapperWr.get());
+
         final Animation fadeout = AnimationUtils.loadAnimation(pageActivity, R.anim.fade);
         fadeout.setDuration(150);
         fadeout.setAnimationListener(new Animation.AnimationListener() {
@@ -431,8 +447,9 @@ public class WeiboPageView extends FrameLayout {
             }
 
             public void onAnimationEnd(Animation animation) {
-                enlargedViewWrapperWr.get().setVisibility(INVISIBLE);
                 WeiboPageView.this.removeView(enlargedViewWrapperWr.get());
+                enlargedViewWrapperWr.clear();
+                weiboArticleView.enlargedView.clear();
                 //TODO TEST
                 pageActivity.setEnlargedMode(false);
             }

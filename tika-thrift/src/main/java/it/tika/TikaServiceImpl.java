@@ -42,7 +42,7 @@ public class TikaServiceImpl implements TikaService.Iface {
     public static void main(String[] args) throws TException, TikaException {
         TikaServiceImpl tikaService = new TikaServiceImpl();
         TikaRequest request = new TikaRequest();
-        request.setUrl("http://wyj04138.iteye.com/blog/1332217");
+        request.setUrl("http://www.chuangyejia.com/index.php?m=content&c=index&a=show&catid=17&id=5764");
         TikaResponse response = tikaService.fire(request);
         System.out.println(response.getContent());
     }

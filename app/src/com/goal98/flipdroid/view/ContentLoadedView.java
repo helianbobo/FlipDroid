@@ -2,10 +2,7 @@ package com.goal98.flipdroid.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.PointF;
+import android.graphics.*;
 import android.net.Uri;
 import android.text.Html;
 import android.text.TextUtils;
@@ -243,5 +240,10 @@ public class ContentLoadedView extends ArticleView {
 
     }
 
+    private PaintFlagsDrawFilter pfd;
 
+    protected void dispatchDraw(android.graphics.Canvas canvas) {
+        canvas.setDrawFilter(pfd);
+        super.dispatchDraw(canvas);
+    }
 }

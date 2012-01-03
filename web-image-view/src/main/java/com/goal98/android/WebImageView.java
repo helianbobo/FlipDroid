@@ -1,23 +1,23 @@
 package com.goal98.android;
 
 import android.R;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.FaceDetector;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.animation.Animation;
 import android.widget.*;
 import android.widget.ImageView.ScaleType;
+import android.graphics.Paint;
+
+import java.awt.*;
 
 public class WebImageView extends ViewSwitcher {
 
@@ -42,7 +42,6 @@ public class WebImageView extends ViewSwitcher {
     private int defaultHeight;
     private boolean roundImage;
     private boolean loadFromInternetFlag = true;
-    private DisplayMetrics displayMetrics;
 
     public boolean isRoundImage() {
         return roundImage;
@@ -62,7 +61,6 @@ public class WebImageView extends ViewSwitcher {
         super(context);
         this.loadFromInternetFlag = loadFromInternetFlag;
         initialize(context, imageUrl, null, null, autoLoad);
-        displayMetrics = new DisplayMetrics();
     }
 
     /**
@@ -77,7 +75,6 @@ public class WebImageView extends ViewSwitcher {
                         boolean autoLoad) {
         super(context);
         initialize(context, imageUrl, progressDrawable, null, autoLoad);
-        displayMetrics = new DisplayMetrics();
     }
 
     /**
@@ -94,7 +91,6 @@ public class WebImageView extends ViewSwitcher {
         super(context);
         this.loadFromInternetFlag = loadFromInternetFlag;
         initialize(context, imageUrl, progressDrawable, errorDrawable, autoLoad);
-        displayMetrics = new DisplayMetrics();
     }
 
     public WebImageView(Context context, String imageUrl, Drawable progressDrawable,
@@ -104,7 +100,6 @@ public class WebImageView extends ViewSwitcher {
         this.loadFromInternetFlag = loadFromInternetFlag;
         initialize(context, imageUrl, progressDrawable, errorDrawable, autoLoad);
 
-        displayMetrics = new DisplayMetrics();
     }
 
     public WebImageView(Context context, AttributeSet attributes) {
@@ -140,7 +135,6 @@ public class WebImageView extends ViewSwitcher {
                 errorDrawable,
                 attributes.getAttributeBooleanValue(XMLNS, "autoLoad", true));
         // styles.recycle();
-        displayMetrics = new DisplayMetrics();
     }
 
     public void setDefaultHeight(int defaultHeight) {
@@ -154,6 +148,7 @@ public class WebImageView extends ViewSwitcher {
     private void initialize(Context context, String imageUrl, Drawable progressDrawable,
                             Drawable errorDrawable,
                             boolean autoLoad) {
+        pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
         this.imageUrl = imageUrl;
         this.progressDrawable = progressDrawable;
         this.errorDrawable = errorDrawable;
@@ -171,11 +166,6 @@ public class WebImageView extends ViewSwitcher {
 
         addLoadingSpinnerView(context);
         addImageView(context);
-
-        displayMetrics = new DisplayMetrics();
-        if(getContext() instanceof Activity)
-            ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
 
         if (autoLoad && imageUrl != null) {
             loadImage();
@@ -357,11 +347,11 @@ public class WebImageView extends ViewSwitcher {
 //                System.out.println("gaga scale" + scale);
 //            }
             Bitmap resizeBitmap = null;
-            if (scale != 1.0) {
-                resizeBitmap = resizeBitmap(bitmap, scale);
-            } else {
+//            if (scale != 1.0) {
+//                resizeBitmap = resizeBitmap(bitmap, scale);
+//            } else {
                 resizeBitmap = bitmap;
-            }
+//            }
 
             boolean result = false;
             String forUrl = (String) imageView.getTag();
@@ -370,10 +360,12 @@ public class WebImageView extends ViewSwitcher {
                         : ((BitmapDrawable) errorDrawable).getBitmap();
 
                 if (resizeBitmap != null) {
-                    BitmapDrawable bd = new BitmapDrawable(resizeBitmap);
-                    bd.setAntiAlias(true);
-                    bd.setTargetDensity(resizeBitmap.getDensity());
-                    imageView.setImageDrawable(bd);
+//                    BitmapDrawable bd= new BitmapDrawable(resizeBitmap);
+//                    bd.setAntiAlias(true);
+//                    imageView.setImageDrawable(bd);
+                    imageView.setImageBitmap(resizeBitmap);
+                    ((BitmapDrawable)imageView.getDrawable()).setAntiAlias(true);
+//                    imageView.
 //                    imageView.invalidate();
                 }
 
@@ -410,6 +402,8 @@ public class WebImageView extends ViewSwitcher {
                 if (preloadImageLoaderHandler != null)
                     preloadImageLoaderHandler.onImageResized(resizeBitmap, imageUrl);
                 bitmap.recycle();
+                bitmap = null;
+                System.gc();
             } catch (Throwable error) {
                 Log.e(TAG, "out of memory...skipped", error);
             }
@@ -427,6 +421,10 @@ public class WebImageView extends ViewSwitcher {
     public String getImageUrl() {
         return imageUrl;
     }
+    private PaintFlagsDrawFilter pfd;
 
-
+    protected void dispatchDraw(android.graphics.Canvas canvas) {
+        canvas.setDrawFilter(pfd);
+        super.dispatchDraw(canvas);
+    }
 }

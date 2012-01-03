@@ -1,5 +1,6 @@
 package com.goal98.flipdroid.activity;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -70,7 +71,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
             MobclickAgent.updateAutoPopup = false;
             MobclickAgent.setUpdateListener(new UmengUpdateListener() {
                 public void onUpdateReturned(int status) {
-                    if (getParent() == null)
+                    Activity parent = getParent();
+                    if (parent == null)
                         return;
                     ;
 
@@ -80,13 +82,13 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                             Log.i(TAG, "show dialog");
                             break;
                         case 1: //has no update
-                            Toast.makeText(getParent(), "has no update", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(parent, "has no update", Toast.LENGTH_SHORT).show();
                             break;
                         case 2: //none wifi
-                            Toast.makeText(getParent(), "has no update", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(parent, "has no update", Toast.LENGTH_SHORT).show();
                             break;
                         case 3: //time out
-                            Toast.makeText(getParent(), "time out", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(parent, "time out", Toast.LENGTH_SHORT).show();
                             break;
                     }
                 }
@@ -414,6 +416,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 ManagedCursor mc = new ManagedCursor(c);
                 mc.each(new EachCursor() {
                     public void call(Cursor cursor, int index) {
+                        if(adapter.getCount()<=index)
+                            return;
                         if (!(adapter.getItem(index) instanceof SourceItem))
                             return;
                         SourceItem item = (SourceItem) adapter.getItem(index);
@@ -445,6 +449,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 ManagedCursor mc = new ManagedCursor(c);
                 mc.each(new EachCursor() {
                     public void call(Cursor cursor, int index) {
+                        if(adapter.getCount()<=index)
+                            return;
                         if (!(adapter.getItem(index) instanceof SourceItem))
                             return;
                         SourceItem item = (SourceItem) adapter.getItem(index);

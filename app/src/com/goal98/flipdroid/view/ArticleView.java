@@ -67,6 +67,7 @@ public abstract class ArticleView extends LinearLayout {
 
     public ArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
         super(context);
+        pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
         toLoadImage = ((PageActivity)context).isToLoadImage();
         this.deviceInfo = getDeviceInfoFromApplicationContext();
         this.setOrientation(VERTICAL);
@@ -85,5 +86,10 @@ public abstract class ArticleView extends LinearLayout {
 
     public abstract void renderBeforeLayout();
 
+    private PaintFlagsDrawFilter pfd;
 
+    protected void dispatchDraw(android.graphics.Canvas canvas) {
+        canvas.setDrawFilter(pfd);
+        super.dispatchDraw(canvas);
+    }
 }
