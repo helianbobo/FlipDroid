@@ -56,7 +56,7 @@
                           android:theme="@android:style/Theme.Light.NoTitleBar"/>
 
         <meta-data android:value="4ecbd9185270152fdc000033" android:name="UMENG_APPKEY"/>
-        <meta-data android:value="AppChina" android:name="UMENG_CHANNEL"/>
+        <meta-data android:value="DEV" android:name="UMENG_CHANNEL"/>
     </application>
     <uses-sdk android:minSdkVersion="4"/>
     <uses-permission android:name="android.permission.INTERNET"/>
