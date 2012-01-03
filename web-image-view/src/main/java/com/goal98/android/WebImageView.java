@@ -150,6 +150,7 @@ public class WebImageView extends ViewSwitcher {
         this.imageUrl = imageUrl;
         this.progressDrawable = progressDrawable;
         this.errorDrawable = errorDrawable;
+
         this.setInAnimation(this.getContext(), R.anim.fade_in);
         ImageLoader.initialize(context);
 
@@ -349,6 +350,7 @@ public class WebImageView extends ViewSwitcher {
             } else {
                 resizeBitmap = bitmap;
             }
+
             boolean result = false;
             String forUrl = (String) imageView.getTag();
             if (imageUrl.equals(forUrl)) {
@@ -356,7 +358,10 @@ public class WebImageView extends ViewSwitcher {
                         : ((BitmapDrawable) errorDrawable).getBitmap();
 
                 if (resizeBitmap != null) {
-                    imageView.setImageBitmap(resizeBitmap);
+                    BitmapDrawable bd= new BitmapDrawable(resizeBitmap);
+                    bd.setAntiAlias(true);
+                    imageView.setImageDrawable(bd);
+//                    imageView.invalidate();
                 }
 
                 result = true;
@@ -409,4 +414,6 @@ public class WebImageView extends ViewSwitcher {
     public String getImageUrl() {
         return imageUrl;
     }
+
+
 }

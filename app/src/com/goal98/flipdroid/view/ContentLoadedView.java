@@ -135,7 +135,7 @@ public class ContentLoadedView extends ArticleView {
                 String style = "<p>";
                 TextView tv = new TextView(this.getContext());
 
-                tv.setLineSpacing(1,1.3f);
+                tv.setLineSpacing(1, getLineSpacing());
                 tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, txtSize);
                 tv.setTextColor(Constants.LOADED_TEXT_COLOR);
                 tv.setGravity(Gravity.LEFT | Gravity.TOP);
@@ -163,12 +163,7 @@ public class ContentLoadedView extends ArticleView {
                     if (nextParagraph.startsWith("<p><blockquote>") && !style.equals("<p><blockquote>")) {
                         break;
                     }
-                    if (nextParagraph.startsWith(style) && !style.equals("<p><blockquote>")) {
-                        sb.append("<br/><br/>");
-                        formatted = format(nextParagraph);
-                        sb.append(formatted);
-                        i++;
-                    } else if (nextParagraph.startsWith(style) && style.equals("<p><blockquote>")) {
+                    if (nextParagraph.startsWith(style) ) {
                         sb.append("<br/><br/>");
                         formatted = format(nextParagraph);
                         sb.append(formatted);
@@ -193,22 +188,15 @@ public class ContentLoadedView extends ArticleView {
                 WebImageView imageView = new WebImageView(this.getContext(), url, this.getResources().getDrawable(Constants.DEFAULT_PIC), this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage);
                 imageView.setRoundImage(false);
                 imageView.setBackgroundResource(R.drawable.border);
-//                imageView.imageView.setTag(url);
 
                 final DeviceInfo deviceInfo = getDeviceInfoFromApplicationContext();
-                final int picWidth = deviceInfo.getDipFromPixel(imageInfo.getWidth());
+                final int picWidth = imageInfo.getWidth();
 
-                int crop = 0;
-                if (deviceInfo.getDipFromPixel(imageInfo.getWidth()) > deviceInfo.getDisplayWidth())
-                    crop = 40;
-
-                final int defaultWidth = picWidth > deviceInfo.getDisplayWidth() - crop ? deviceInfo.getDisplayWidth() - crop : picWidth;
+                final int defaultWidth = (picWidth > deviceInfo.getDisplayWidth()-40)?deviceInfo.getDisplayWidth()-40:picWidth;
                 imageView.setDefaultWidth(defaultWidth);
                 final int defaultHeight = imageInfo.getHeight() * defaultWidth / imageInfo.getWidth();
                 imageView.setDefaultHeight(defaultHeight);
 
-                System.out.println("defaultWidth" + defaultWidth);
-                System.out.println("defaultHeight" + defaultHeight);
                 final LayoutParams imageLayoutParams = new LayoutParams(defaultWidth, defaultHeight);
                 imageLayoutParams.gravity = Gravity.CENTER;
 
@@ -240,6 +228,10 @@ public class ContentLoadedView extends ArticleView {
         } else {
             viewSource.setVisibility(GONE);
         }
+    }
+
+    private float getLineSpacing() {
+        return 1.2f;
     }
 
     private String format(String paragraph) {
