@@ -15,5 +15,5 @@
         <!--android:layout_width="27dip"></com.goal98.android.WebImageView>-->
 
     </LinearLayout>
-    <include layout="@layout/publisher"></include>
+    <include layout="@layout/publisher" android:layout_gravity="bottom"></include>
 </LinearLayout>

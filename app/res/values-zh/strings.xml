@@ -88,4 +88,5 @@
     <string name="pull_to_refresh_release_label">松开可以更新</string>
     <string name="pull_to_refresh_refreshing_label">检查更新中</string>
     <string name="pull_to_refresh_tap_label">轻按可以更新</string>
+    <string name="addShortcut">添加桌面快捷方式</string>
 </resources>

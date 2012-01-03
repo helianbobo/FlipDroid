@@ -27,7 +27,7 @@ public class WGA480 extends MultiScreenSupport {
     }
 
     public int getMaxLineInThumbnailView() {
-        return 4;
+        return 5;
     }
 
     public int[] getTextViewPaddingInThumbnailView() {
@@ -39,7 +39,7 @@ public class WGA480 extends MultiScreenSupport {
     }
 
     public int getImageHeightThumbnailView() {
-        return (getTextViewTextSize() * 2) * getMaxLineInThumbnailView();  //(largeScreen ? 15 : smallScreen ? 0 : 5)
+        return (getTextViewTextSize() +8) * getMaxLineInThumbnailView();  //(largeScreen ? 15 : smallScreen ? 0 : 5)
     }
 
     public int getThumbnailMaxTitleLength() {
@@ -53,5 +53,9 @@ public class WGA480 extends MultiScreenSupport {
     @Override
     public int getThumbnailMaxLongTitleTextSize() {
         return 15;
+    }
+
+    public int getMinTitleHeight() {
+        return 40;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
