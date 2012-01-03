@@ -53,6 +53,7 @@
 
     <string name="sinaweiboheader">Sina</string>
     <string name="loading">loading...</string>
+    <string name="url_loading">Url content loading...</string>
     <string name="sharedBy">Shared by</string>
     <string name="tikaservererror">Error retrieving content</string>
     <string name="tikatimeout">Retrieving content timeout</string>

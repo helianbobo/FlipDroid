@@ -22,4 +22,6 @@
                  android:indeterminateOnly="true"
                  style="?android:attr/progressBarStyleSmall">
     </ProgressBar>
+    <TextView android:layout_marginLeft="4dip" android:id="@+id/textUrlLoading" android:layout_width="wrap_content" android:text="@string/url_loading"
+                  android:layout_height="wrap_content" android:textSize="12dip" android:gravity="center" android:visibility="gone"/>
 </LinearLayout>

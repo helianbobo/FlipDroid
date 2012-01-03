@@ -41,6 +41,7 @@
 
     <string name="msg_no_more_page">读不到内容了。向左划显示最后一页，向右划返回主选单</string>
     <string name="loading">加载中...</string>
+    <string name="url_loading">链接内容读取中...</string>
     <string name="sharedBy">分享自</string>
     <string name="tikaservererror">获取内容不成功，等一下再试吧。</string>
     <string name="tikatimeout">获取内容超时</string>

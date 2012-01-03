@@ -163,7 +163,9 @@ public class ThumbnailArticleView extends ExpandableArticleView {
         contentViewWrapperWeiboContent.addView(contentView);
         if(article.hasLink()){
             View progressBar = weiboContent.findViewById(R.id.progressbar);
+            View textUrlLoading = weiboContent.findViewById(R.id.textUrlLoading);
             progressBar.setVisibility(VISIBLE);
+            textUrlLoading.setVisibility(VISIBLE);
         }
 
         this.portraitView = (WebImageView) loadedThumbnail.findViewById(R.id.portrait2);
