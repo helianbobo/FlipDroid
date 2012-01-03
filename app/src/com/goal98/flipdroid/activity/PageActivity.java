@@ -1292,7 +1292,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                                 application.setOauth(oauth);
                                 ////Log.v(TAG, "OAuthHolder.oauth" + application + oauth);
                                 boolean result = oauth.RequestAccessToken(PageActivity.this, "flipdroid://SinaAccountSaver");
-                                if(!result){
+                                if (!result) {
                                     AlarmSender.sendInstantMessage(R.string.networkerror, PageActivity.this);
                                 }
                             }
@@ -1332,12 +1332,13 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
                 this.dialog = builder.create();
                 Button btn_addshortcut = (Button) v.findViewById(R.id.btnaddshortcut);
-                btn_addshortcut.setText("add shortcut");
+                btn_addshortcut.setText(R.string.addShortcut);
 
                 btn_addshortcut.setOnClickListener(new Button.OnClickListener() {
                     public void onClick(View v) {
                         addShortcut();
-                        dialog.cancel();
+                        if (dialog != null)
+                            dialog.cancel();
                     }
                 });
 
@@ -1368,13 +1369,13 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_MENU) {//拦截meu键事件
             showDialog(NAVIGATION);
             return true;
         }
-        return super.onKeyDown(keyCode, event);
+        return super.onKeyUp(keyCode, event);
     }
 
     @Override
@@ -1393,10 +1394,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         shortcut.putExtra("duplicate", false);
         ComponentName comp = new ComponentName(this.getPackageName(), "." + this.getLocalClassName());
         Intent intent = new Intent(Intent.ACTION_MAIN).setComponent(comp);
-        //Bundle bundle = new Bundle();
-        //bundle.putString("info", "infohahaha"+time);
-        //bundle.putString("info", "infohahaha");
-        //intent.putExtras(bundle);
         intent.putExtra("type", accountType);
         intent.putExtra("sourceId", sourceId);
         intent.putExtra("sourceImage", sourceImageURL);

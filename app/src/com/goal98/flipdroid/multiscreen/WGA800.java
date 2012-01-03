@@ -55,4 +55,8 @@ public class WGA800 extends MultiScreenSupport {
     public int getThumbnailMaxLongTitleTextSize() {
         return 16;
     }
+
+    public int getMinTitleHeight() {
+        return 70;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

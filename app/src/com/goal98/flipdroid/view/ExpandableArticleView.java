@@ -120,10 +120,10 @@ public abstract class ExpandableArticleView extends ArticleView {
                 imageHandled = true;
             } else {
                 article.addNotifier(new Notifier());
-                if (!article.isLoading()) {
-                    System.out.println("reloading..." + article.getImageUrl().toExternalForm());
-                    article.loadPrimaryImage(deviceInfo, toLoadImage);
-                }
+//                if (!article.isLoading()) {
+//                    System.out.println("reloading..." + article.getImageUrl().toExternalForm());
+//                    article.loadPrimaryImage(deviceInfo, toLoadImage);
+//                }
                 imageHandled = false;
             }
             if (article.getHeight() == 0) {

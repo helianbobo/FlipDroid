@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
               xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/publisherWrapper"
-              android:layout_width="fill_parent" android:layout_marginTop="5dip" android:layout_marginBottom="0dip"
-              android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="bottom">
+              android:layout_width="fill_parent" android:layout_marginTop="3dip"
+              android:layout_height="fill_parent" android:orientation="horizontal" android:gravity="bottom">
 
     <com.goal98.android.WebImageView android:id="@+id/portrait2" webimage:autoLoad="false"
-                                     android:layout_height="25dip" webimage:defaultWidth="25"
+                                     android:layout_height="25dip" webimage:defaultWidth="25" android:layout_gravity="bottom"
                                      webimage:defaultHeight="25" webimage:progressDrawable="@drawable/portrait"
                                      android:layout_width="25dip"></com.goal98.android.WebImageView>
 
     <TextView android:layout_marginLeft="3dip" android:id="@+id/author" android:layout_width="wrap_content"
-              android:layout_height="wrap_content" android:textSize="16dip" android:gravity="center"></TextView>
+              android:layout_height="wrap_content" android:textSize="16dip" android:gravity="center" android:layout_gravity="bottom"></TextView>
     <TextView android:layout_marginLeft="4dip" android:id="@+id/createDate" android:layout_width="wrap_content"
-              android:layout_height="wrap_content" android:textSize="12dip" android:gravity="center"></TextView>
+              android:layout_height="wrap_content" android:textSize="12dip" android:gravity="center" android:layout_gravity="bottom"></TextView>
     <ProgressBar android:id="@+id/progressbar"
                  android:visibility="gone"
-                 android:layout_gravity="center"
+                 android:layout_gravity="bottom"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:indeterminate="true"
