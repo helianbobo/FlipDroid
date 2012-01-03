@@ -358,9 +358,9 @@ public class WebImageView extends ViewSwitcher {
                         : ((BitmapDrawable) errorDrawable).getBitmap();
 
                 if (resizeBitmap != null) {
-                    BitmapDrawable bd= new BitmapDrawable(resizeBitmap);
-                    bd.setAntiAlias(true);
-                    imageView.setImageDrawable(bd);
+//                    BitmapDrawable bd= new BitmapDrawable(resizeBitmap);
+//                    bd.setAntiAlias(true);
+                    imageView.setImageBitmap(resizeBitmap);
 //                    imageView.invalidate();
                 }
 
