@@ -1,6 +1,7 @@
 package com.goal98.android;
 
 import android.R;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,6 +42,7 @@ public class WebImageView extends ViewSwitcher {
     private int defaultHeight;
     private boolean roundImage;
     private boolean loadFromInternetFlag = true;
+    private DisplayMetrics displayMetrics;
 
     public boolean isRoundImage() {
         return roundImage;
@@ -60,6 +62,7 @@ public class WebImageView extends ViewSwitcher {
         super(context);
         this.loadFromInternetFlag = loadFromInternetFlag;
         initialize(context, imageUrl, null, null, autoLoad);
+        displayMetrics = new DisplayMetrics();
     }
 
     /**
@@ -74,6 +77,7 @@ public class WebImageView extends ViewSwitcher {
                         boolean autoLoad) {
         super(context);
         initialize(context, imageUrl, progressDrawable, null, autoLoad);
+        displayMetrics = new DisplayMetrics();
     }
 
     /**
@@ -90,6 +94,7 @@ public class WebImageView extends ViewSwitcher {
         super(context);
         this.loadFromInternetFlag = loadFromInternetFlag;
         initialize(context, imageUrl, progressDrawable, errorDrawable, autoLoad);
+        displayMetrics = new DisplayMetrics();
     }
 
     public WebImageView(Context context, String imageUrl, Drawable progressDrawable,
@@ -99,6 +104,7 @@ public class WebImageView extends ViewSwitcher {
         this.loadFromInternetFlag = loadFromInternetFlag;
         initialize(context, imageUrl, progressDrawable, errorDrawable, autoLoad);
 
+        displayMetrics = new DisplayMetrics();
     }
 
     public WebImageView(Context context, AttributeSet attributes) {
@@ -134,6 +140,7 @@ public class WebImageView extends ViewSwitcher {
                 errorDrawable,
                 attributes.getAttributeBooleanValue(XMLNS, "autoLoad", true));
         // styles.recycle();
+        displayMetrics = new DisplayMetrics();
     }
 
     public void setDefaultHeight(int defaultHeight) {
@@ -164,6 +171,11 @@ public class WebImageView extends ViewSwitcher {
 
         addLoadingSpinnerView(context);
         addImageView(context);
+
+        displayMetrics = new DisplayMetrics();
+        if(getContext() instanceof Activity)
+            ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
 
         if (autoLoad && imageUrl != null) {
             loadImage();
@@ -358,8 +370,9 @@ public class WebImageView extends ViewSwitcher {
                         : ((BitmapDrawable) errorDrawable).getBitmap();
 
                 if (resizeBitmap != null) {
-                    BitmapDrawable bd= new BitmapDrawable(resizeBitmap);
+                    BitmapDrawable bd = new BitmapDrawable(resizeBitmap);
                     bd.setAntiAlias(true);
+                    bd.setTargetDensity(resizeBitmap.getDensity());
                     imageView.setImageDrawable(bd);
 //                    imageView.invalidate();
                 }
