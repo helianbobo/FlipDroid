@@ -654,7 +654,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 headerImageView.setVisibility(View.INVISIBLE);
         }
 
-        slidingWindows = new PageViewSlidingWindows(10, repo, pageViewFactory, 3);
+        slidingWindows = new PageViewSlidingWindows(7, repo, pageViewFactory, 3);
         current = pageViewFactory.createFirstPage();
 
         shadow = new LinearLayout(PageActivity.this);
@@ -688,6 +688,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     public class WeiboPageViewFactory {
         public WeiboPageView createPageView() {
+            System.out.println("jleo creating page view");
             WeiboPageView pageView = null;
 
             if (isWeiboMode()) {
@@ -763,11 +764,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 mLastMotionY = event.getY();
 
                 if (!enlargedMode) {
-                    Log.v(TAG, "** dispatchTouchEvent() event.getAction()=" + MotionEvent.ACTION_MOVE + " enlargedMode=" + enlargedMode + " --> onTouchEvent(event)");
+//                    Log.v(TAG, "** dispatchTouchEvent() event.getAction()=" + MotionEvent.ACTION_MOVE + " enlargedMode=" + enlargedMode + " --> onTouchEvent(event)");
                     if (!onTouchEvent(event))
                         current.onTouchEvent(event);
                 } else {
-                    Log.v(TAG, "** dispatchTouchEvent() event.getAction()=" + MotionEvent.ACTION_MOVE + " enlargedMode=" + enlargedMode + " --> current.onTouchEvent(event);");
+//                    Log.v(TAG, "** dispatchTouchEvent() event.getAction()=" + MotionEvent.ACTION_MOVE + " enlargedMode=" + enlargedMode + " --> current.onTouchEvent(event);");
                     current.onTouchEvent(event);
                 }
 
@@ -786,14 +787,14 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         ////Log.v(TAG, "flipStarted" + flipStarted);
 
         if (flipStarted) {
-            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> return false;");
+//            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> return false;");
             return false;
         }
 //        if (bottomBar.isSourceSelectMode()) {
 //            bottomBar.onTouchEvent(event);
 //        }
         if (enlargedMode) {
-            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " enlargedMode=" + enlargedMode + " -->  current.onTouchEvent(event);");
+//            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " enlargedMode=" + enlargedMode + " -->  current.onTouchEvent(event);");
             current.onTouchEvent(event);
         }
 
@@ -817,25 +818,25 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
                     switch (flipDirection) {
                         case RIGHT:
-                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> RIGHT;");
+//                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> RIGHT;");
                             MobclickAgent.onEvent(this, "FlipPage", "Right");
                             lastFlipDirection = ACTION_HORIZONTAL;
                             flipPage(false);
                             break;
                         case UP:
-                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> UP;");
+//                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> UP;");
                             MobclickAgent.onEvent(this, "FlipPage", "Up");
                             lastFlipDirection = ACTION_VERTICAL;
                             flipPage(true);
                             break;
                         case LEFT:
-                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> LEFT;");
+//                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> LEFT;");
                             MobclickAgent.onEvent(this, "FlipPage", "Left");
                             lastFlipDirection = ACTION_HORIZONTAL;
                             flipPage(true);
                             break;
                         case DOWN:
-                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> DOWN;");
+//                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> DOWN;");
                             MobclickAgent.onEvent(this, "FlipPage", "Down");
                             lastFlipDirection = ACTION_VERTICAL;
                             flipPage(false);
@@ -845,20 +846,20 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
                     }
 
-                    Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> No Gesture matched");
+//                    Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> No Gesture matched");
 
                 } else {
-                    Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " event.getHistorySize()" + event.getHistorySize() + " --> bottomBar.onTouchEvent(event);");
+//                    Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " event.getHistorySize()" + event.getHistorySize() + " --> bottomBar.onTouchEvent(event);");
 //                    if (bottomBar.isSourceSelectMode())
                     bottomBar.onTouchEvent(event);
 //                    pageIndexView.onTouchEvent(event);
                 }
                 break;
             default:
-                Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> default;");
+//                Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> default;");
                 break;
         }
-        Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> return true;");
+//        Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> return true;");
 
         return true;
     }
@@ -879,7 +880,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             decreasePageNo();
 
         int nextPageIndex = forward ? currentPageIndex + 1 : currentPageIndex;
-        Log.v(TAG, "debug flip");
+//        Log.v(TAG, "debug flip");
         if (currentPageIndex == -1 && forward) {//we are first timer
             currentPageIndex++;
             container.addView(current, pageViewLayoutParamsFront);
@@ -893,7 +894,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         } else {
             finishActivity();
         }
-        Log.v(TAG, "debug flip done");
+//        Log.v(TAG, "debug flip done");
     }
 
     private void finishActivity() {
@@ -1103,15 +1104,15 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     private void switchViews(boolean forward) {
         if (forward) {
-            if (previous != null)
-                previous.releaseResource();
+//            if (previous != null)
+//                previous.releaseResource();
             WeiboPageView tmp = current;
             previous = current;
             current = next;
             next = tmp;
         } else {
-            if (next != null)
-                next.releaseResource();
+//            if (next != null)
+//                next.releaseResource();
             WeiboPageView tmp = current;
             next = current;
             current = previous;

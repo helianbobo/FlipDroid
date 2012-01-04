@@ -253,9 +253,9 @@ public class Article {
     }
 
     public void setImageBitmap(Bitmap image) {
-        if (image == null)
-            return;
-
+        if(this.image!=null){
+            this.image.recycle();
+        }
         this.image = image;
         //Log.d("imageLoading","loaded");
         if (notifier != null && image != null)

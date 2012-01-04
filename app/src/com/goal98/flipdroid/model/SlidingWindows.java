@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public abstract class SlidingWindows {
     protected int slotNumber;
 
-    private int cycle = 0;
+    protected int cycle = 0;
 
     protected Window[] windows;
 
@@ -94,8 +94,8 @@ public abstract class SlidingWindows {
             int bufferStep = getBufferStep();
             for (int i = 0; i < bufferStep; i++) {
                 if (current - i >= 0) {
-                    //Log.d("SLIDING", currentWindow + " is being loaded2: current:" + (current) + "cycle:" + cycle);
-                    createWindowIfNullOrOld(getNextIndex(-i), cycle * slotNumber + current - i);
+//                    Log.d("SLIDING", currentWindow + " is being loaded2: current:" + (current) + "cycle:" + cycle);
+                    createWindowIfNullOrOld(getNextIndex(-i-1), cycle * slotNumber + current - i-1);
                 }
             }
 
