@@ -347,11 +347,21 @@ public class WebImageView extends ViewSwitcher {
 //                System.out.println("gaga scale" + scale);
 //            }
             Bitmap resizeBitmap = null;
-//            if (scale != 1.0) {
-//                resizeBitmap = resizeBitmap(bitmap, scale);
-//            } else {
+            if(scale <= 1 && scale >0.5){
+                scale = 1.0f;
+            }
+            if(scale <= 0.5 && scale >0.25){
+                scale = 0.5f;
+            }
+            if(scale <= 0.25 && scale >0.125){
+                scale = 0.25f;
+            }
+            System.out.println("jleo scale:"+scale);
+            if (scale != 1.0) {
+                resizeBitmap = resizeBitmap(bitmap, scale);
+            } else {
                 resizeBitmap = bitmap;
-//            }
+            }
 
             boolean result = false;
             String forUrl = (String) imageView.getTag();

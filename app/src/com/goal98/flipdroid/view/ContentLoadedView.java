@@ -160,7 +160,12 @@ public class ContentLoadedView extends ArticleView {
                     if (nextParagraph.startsWith("<p><blockquote>") && !style.equals("<p><blockquote>")) {
                         break;
                     }
-                    if (nextParagraph.startsWith(style) ) {
+                    if (nextParagraph.startsWith(style) && !style.equals("<p><blockquote>")) {
+                        sb.append("<br/><br/>");
+                        formatted = format(nextParagraph);
+                        sb.append(formatted);
+                        i++;
+                    } else if (nextParagraph.startsWith(style) && style.equals("<p><blockquote>")) {
                         sb.append("<br/><br/>");
                         formatted = format(nextParagraph);
                         sb.append(formatted);
