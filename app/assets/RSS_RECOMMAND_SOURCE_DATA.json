@@ -363,4 +363,14 @@
         "image_url": "http://www.alibuybuy.com/wp-content/themes/WPortal-Blue-abb/images/logo.gif",
         "content_url":"http://feed.feedsky.com/alibuybuy",
         "cat":"互联网"
-    }]
+    },{
+         "name": "雷锋网",
+         "id": "50",
+         "desc": "专注在移动互联网领域的科技博客。",
+         "image_url": "http://leiphone.com/images/newlogo.png",
+         "content_url":"http://www.leiphone.com/feed",
+         "cat":"互联网"
+         }
+
+
+    ]

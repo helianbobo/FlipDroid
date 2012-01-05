@@ -4,6 +4,7 @@ import android.R;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,11 +14,10 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.widget.*;
+import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import android.graphics.Paint;
-
-import java.awt.*;
+import android.widget.ProgressBar;
+import android.widget.ViewSwitcher;
 
 public class WebImageView extends ViewSwitcher {
 
