@@ -14,6 +14,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
+import com.exchange.Public.ExchangeConstants;
+import com.exchange.View.ExchangeViewManager;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.RecommendSourceDB;
@@ -145,6 +147,14 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
         updateManager.updateSourceList();
 
+        initUmengAppNetwork();
+
+    }
+
+    private void initUmengAppNetwork() {
+        ViewGroup rootLayout = (ViewGroup) findViewById(R.id.indexView);
+        ExchangeViewManager exchangeViewManager = new ExchangeViewManager();
+        exchangeViewManager.addView(this, rootLayout, ExchangeConstants.type_grid_view_bottom);
     }
 
     private void updateSource() {

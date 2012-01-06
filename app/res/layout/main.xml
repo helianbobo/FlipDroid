@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" style="@style/Page" >
+<RelativeLayout android:id="@+id/pageView" xmlns:android="http://schemas.android.com/apk/res/android"
+                style="@style/Page">
 
     <com.goal98.flipdroid.view.FlipPage
             style="@style/Page"

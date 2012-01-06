@@ -55,8 +55,15 @@
         <activity android:name=".activity.TipsActivity" android:screenOrientation="portrait"
                           android:theme="@android:style/Theme.Light.NoTitleBar"/>
 
+        <service android:exported="true"
+            android:name="com.exchange.Public.DownloadingService"
+            android:process=":DownloadingService">
+        </service>
+
         <meta-data android:value="4ecbd9185270152fdc000033" android:name="UMENG_APPKEY"/>
         <meta-data android:value="DEV" android:name="UMENG_CHANNEL"/>
+
+
     </application>
     <uses-sdk android:minSdkVersion="4"/>
     <uses-permission android:name="android.permission.INTERNET"/>

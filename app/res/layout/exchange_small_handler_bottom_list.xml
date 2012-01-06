@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:id="@+id/exchange_panelHeight"
+	android:background="#ECECEC" android:layout_height="wrap_content">
+
+	<ListView android:id="@+id/exchange_list"
+		android:layout_width="fill_parent" android:background="#ECECEC"
+		android:dividerHeight="0dp" android:layout_marginBottom="10dp"
+		android:divider="#00000000" android:cacheColorHint="#00000000"
+		android:layout_height="wrap_content">
+	</ListView>
+
+	<include layout="@layout/exchange_component_back_bottom"
+		android:layout_below="@id/exchange_list" />
+
+</RelativeLayout>

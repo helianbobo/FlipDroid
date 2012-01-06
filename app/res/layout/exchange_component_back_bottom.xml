@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_alignParentBottom="true" android:layout_width="fill_parent"
+	android:layout_marginBottom="10dp" android:layout_marginTop="5dp"
+	android:layout_height="35dp" android:id="@+id/exchange_bottom"
+	android:layout_marginLeft="5dp" android:layout_marginRight="5dp"
+	android:orientation="horizontal">
+
+	<Button style="@style/exchange_grad_but" android:layout_weight="1"
+		android:gravity="center" android:id="@+id/exchange_back"
+		android:textSize="17dp" android:textColor="#666666" android:text="收起">
+	</Button>
+
+	<Button style="@style/exchange_grad_but" android:layout_weight="1"
+		android:id="@+id/exchange_more" android:gravity="center"
+		android:textSize="17dp" android:textColor="#666666" android:text="更多" />
+
+</LinearLayout>

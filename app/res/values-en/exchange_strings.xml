@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="exchange_size">Size</string>
+	<string name="exchange_action_open">open</string>
+	<string name="exchange_action_browse">browse</string>
+	<string name="exchange_action_download">install</string>
+	<string name="exchange_network_break_alert">Please make sure you are connected to internet, download failed</string>
+	<string name="exchange_back_to_top">Top</string>
+</resources>
