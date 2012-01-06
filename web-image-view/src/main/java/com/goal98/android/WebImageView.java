@@ -413,7 +413,7 @@ public class WebImageView extends ViewSwitcher {
                     preloadImageLoaderHandler.onImageResized(resizeBitmap, imageUrl);
                 bitmap.recycle();
                 bitmap = null;
-                System.gc();
+//                System.gc();
             } catch (Throwable error) {
                 Log.e(TAG, "out of memory...skipped", error);
             }

@@ -201,6 +201,6 @@ public class ThumbnailArticleView extends ExpandableArticleView {
         }).start();
         portraitView.loadImage();
         portraitViewWeiboContent.loadImage();
-        System.gc();
+//        System.gc();
     }
 }
