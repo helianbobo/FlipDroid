@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="55dp"
+	android:id="@+id/exchange_banner" android:gravity="center"
+	android:background="@drawable/exchange_highlight_banner_background_selector">
+	<TextView android:id="@+id/exchange_banner_more_txt"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:gravity="center" android:textStyle="bold" android:shadowColor="#ffeeeeee"
+		android:layout_centerVertical="true" android:shadowDx="1"
+		android:shadowDy="1" android:shadowRadius="2" android:textSize="20dp"
+		android:textColor="#4b4b4b" android:text="更多精彩推荐   " />
+	<ImageView android:id="@+id/exchange_pb"
+		android:layout_width="30dp" android:layout_height="30dp"
+		android:layout_margin="10dp" android:visibility="invisible"
+		android:layout_gravity="center_vertical"
+		android:layout_centerVertical="true" android:src="@drawable/exchange_loading"
+		android:layout_toRightOf="@id/exchange_banner_more_txt">
+	</ImageView>
+</RelativeLayout>

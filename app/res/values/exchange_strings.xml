@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="exchange_size">大小</string>
+	<string name="exchange_action_open">打开</string>
+	<string name="exchange_action_browse">浏览</string>
+	<string name="exchange_action_download">下载</string>
+	<string name="exchange_network_break_alert">请确定设备成功联接网络</string>
+	<string name="exchange_back_to_top">回到顶部</string>
+</resources>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- stat layout -->
+
+	<style name="exchange_grad_but">
+		<item name="android:orientation">vertical</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:textSize">15dp</item>
+		<item name="android:gravity">center_vertical</item>
+		<item name="android:background">@drawable/exchange_btn_gradient_grey</item>
+		<item name="android:layout_marginRight">5dp</item>
+		<item name="android:layout_marginLeft">5dp</item>
+	</style>
+
+	<style name="exchange_download_but">
+		<item name="android:orientation">vertical</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:textColor">#EEEEEE</item>
+		<item name="android:gravity">center_vertical</item>
+		<item name="android:background">@drawable/exchange_download_gradient_grey</item>
+		<item name="android:layout_marginRight">5dp</item>
+		<item name="android:layout_marginLeft">5dp</item>
+	</style>
+
+	<style name="exchange_more_but">
+		<item name="android:orientation">vertical</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:textSize">15dp</item>
+		<item name="android:gravity">center_vertical</item>
+		<item name="android:background">@drawable/exchange_btn_gradient_dark_grey</item>
+		<item name="android:layout_marginRight">5dp</item>
+		<item name="android:layout_marginLeft">5dp</item>
+	</style>
+
+	<style name="exchange_dialog_but">
+		<item name="android:orientation">vertical</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:textSize">15dp</item>
+		<item name="android:gravity">center_vertical</item>
+		<item name="android:background">@drawable/exchange_btn_gradient_grey</item>
+		<item name="android:layout_marginRight">10dp</item>
+		<item name="android:layout_marginLeft">10dp</item>
+		<item name="android:layout_marginBottom">10dp</item>
+	</style>
+
+	<style name="exchange_dialog_download">
+		<item name="android:orientation">vertical</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:textSize">15dp</item>
+		<item name="android:gravity">center_vertical</item>
+		<item name="android:background">@drawable/exchange_selector_download</item>
+		<item name="android:layout_marginRight">10dp</item>
+		<item name="android:layout_marginLeft">10dp</item>
+		<item name="android:layout_marginBottom">10dp</item>
+	</style>
+
+	<style name="exchange_dialog_cancel">
+		<item name="android:orientation">vertical</item>
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">fill_parent</item>
+		<item name="android:textSize">15dp</item>
+		<item name="android:gravity">center_vertical</item>
+		<item name="android:background">@drawable/exchange_selector_cancel</item>
+		<item name="android:layout_marginRight">10dp</item>
+		<item name="android:layout_marginLeft">10dp</item>
+		<item name="android:layout_marginBottom">10dp</item>
+	</style>
+
+</resources>

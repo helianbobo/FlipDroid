@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="55dp"
+	android:id="@+id/exchange_banner" android:gravity="center"
+	android:background="@drawable/exchange_normal_banner_background_selector">
+	<ImageView android:layout_width="35dp" android:layout_height="35dp"
+		android:src="@drawable/exchange_zhanwei"
+		android:layout_marginLeft="6dp" android:id="@+id/exchange_icon"
+		android:layout_centerVertical="true">
+	</ImageView>
+
+	<TextView android:id="@+id/exchange_name"
+		android:layout_width="130dp" android:layout_height="wrap_content"
+		android:textColor="#000000" android:layout_toRightOf="@+id/exchange_icon"
+		android:layout_marginLeft="5dp" android:textSize="14dp"
+		android:layout_marginTop="6dp" android:text="开心听" android:lines="1"
+		android:layout_marginRight="50dp">
+	</TextView>
+	<TextView android:id="@+id/exchange_des"
+		android:layout_alignParentBottom="true" android:layout_toRightOf="@+id/exchange_icon"
+		android:layout_marginBottom="5dp" android:layout_marginLeft="5dp"
+		android:layout_marginRight="50dp" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:textSize="12dp"
+		android:textColor="#777777" android:text="android上最好的音乐软件"
+		android:lines="1" android:ellipsize="marquee"
+		android:scrollHorizontally="true">
+	</TextView>
+
+	<ImageView android:layout_width="22dp" android:layout_height="25dp"
+		android:background="@drawable/exchange_detail365"
+		android:layout_marginRight="10dp" android:layout_centerVertical="true"
+		android:layout_alignParentRight="true" android:visibility="gone">
+	</ImageView>
+
+	<TextView android:layout_width="40dp" android:layout_height="wrap_content"
+		android:text="查看" android:id="@+id/exchange_open_type"
+		android:layout_marginRight="5dp" android:layout_marginTop="10dp"
+		android:textSize="12dp" android:textColor="#777777"
+		android:layout_alignParentRight="true" android:visibility="visible"
+		android:lines="1">
+	</TextView>
+
+	<ImageButton android:layout_width="40dp"
+		android:layout_height="35dp" android:id="@+id/exchange_download_btn"
+		android:src="@drawable/exchange_icon_download"
+		android:layout_marginRight="5dp" android:padding="10dp"
+		android:layout_alignParentRight="true" android:layout_centerVertical="true"
+		android:visibility="gone" android:background="@drawable/exchange_icon_background_selector">
+	</ImageButton>
+</RelativeLayout>
