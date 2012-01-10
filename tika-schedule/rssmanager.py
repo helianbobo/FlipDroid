@@ -20,9 +20,8 @@ from dbtools import ISOTIMEFORMAT
 USERAGENT = 'Mozilla/5.0 (Windows NT 6.0; WOW64) AppleWebKit/534.24 '\
             '(KHTML, like Gecko) Chrome/11.0.696.16 Safari/534.24'  
 
-TIMEOUT_JOIN = 60*2
-TIMEOUT_EVENT = 60*60
-
+TIMEOUT_JOIN=60*2
+TIMEOUT_EVENT=60*60
 class RssManager(object):
     """
     RssManager parse Rss

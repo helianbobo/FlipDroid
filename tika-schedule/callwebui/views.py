@@ -79,7 +79,7 @@ def updateSource(request):
         x["time"]=datetime.datetime.utcnow()
          
         x.save()
-        return HttpResponseRedirect("/source/")
+        return HttpResponseRedirect("/console/source/")
         
     type = request.GET['type'] 
     url = request.GET['url']
@@ -90,11 +90,11 @@ def updateSource(request):
                                   {'$set':{"url": url,
                                             "time": datetime.datetime.utcnow()                              
                                 }},False) 
-        return HttpResponseRedirect("/source/")
+        return HttpResponseRedirect("/console/source/")
 
     if request.GET['update']=='delete':
         model.con.tika.source.remove({'_id':pymongo.objectid.ObjectId(theid)})
-        return HttpResponseRedirect("/source/")
+        return HttpResponseRedirect("/console/source/")
     
  
 @islogin
@@ -108,7 +108,7 @@ def updateRecommendSourceSource(request):
         x["lastModified"]=datetime.datetime.utcnow()
          
         x.save()
-        return HttpResponseRedirect("/recommendsource/")
+        return HttpResponseRedirect("/console/recommendsource/")
         
     type = request.GET['type'] 
     body = request.GET['body']
@@ -121,11 +121,11 @@ def updateRecommendSourceSource(request):
                                             #"lastModified": time.strftime( ISOTIMEFORMAT, time.gmtime()),
                                             "type":type,                           
                                 }},False) 
-        return HttpResponseRedirect("/recommendsource/")
+        return HttpResponseRedirect("/console/recommendsource/")
 
     if request.GET['update']=='delete':
         model.con.tika.RecommendSource.remove({'_id':pymongo.objectid.ObjectId(theid)})
-        return HttpResponseRedirect("/recommendsource/")
+        return HttpResponseRedirect("/console/recommendsource/")
     
  
 @islogin
@@ -157,15 +157,20 @@ def searchUrls(request):
 def updateUrls(request):        
    
     theid = request.GET['_id']
+    print "#######:",theid
   
     if request.GET['update']=='show':
-        item = model.con.tika.url_abstract.find({'_id':pymongo.objectid.ObjectId(theid)})
-        html = item[0]['content']
+        
+        item = model.con.tika.url_abstract.find_one({'_id':pymongo.objectid.ObjectId(theid)})
+         
+         
+        html= item['content']
+         
         return HttpResponse(html)
     
     if request.GET['update']=='delete':
         model.con.tika.url_abstract.remove({'_id':pymongo.objectid.ObjectId(theid)})
-        return HttpResponseRedirect("/urls/")
+        return HttpResponseRedirect("/console/urls/")
     
     
 
@@ -182,7 +187,7 @@ def login(request):
         pwd = request.REQUEST['password']
         if pwd == PASSWD:
             request.session['userid'] = SESSIONID
-            return HttpResponseRedirect('/source/')
+            return HttpResponseRedirect('/console/source/')
         return HttpResponse("password error")
     except:
         return HttpResponse("password error")
