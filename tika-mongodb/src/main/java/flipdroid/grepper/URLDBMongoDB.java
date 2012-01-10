@@ -2,6 +2,7 @@ package flipdroid.grepper;
 
 import com.mongodb.*;
 import flipdroid.grepper.exception.DBNotAvailableException;
+import it.tika.mongodb.MongoDBFactory;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,8 +21,7 @@ public class URLDBMongoDB implements URLDBInterface {
 
     private URLDBMongoDB() throws Exception {
 
-        Mongo mongo = new Mongo();
-        db = mongo.getDB("tika");
+        db = MongoDBFactory.getDBInstance();
 
 
     }

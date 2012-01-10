@@ -3,6 +3,7 @@ package it.tika.mongodb.recommend;
 
 import com.mongodb.*;
 import flipdroid.grepper.exception.DBNotAvailableException;
+import it.tika.mongodb.MongoDBFactory;
 import it.tika.mongodb.image.ImageDBInterface;
 import it.tika.mongodb.image.TikaImage;
 
@@ -28,8 +29,7 @@ public class RecommendMongoDB implements RecommendInterface {
 
     private RecommendMongoDB() throws UnknownHostException {
         try {
-            Mongo mongo = new Mongo();
-            db = mongo.getDB("tika");
+            db = MongoDBFactory.getDBInstance();
         } catch (UnknownHostException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (MongoException e) {

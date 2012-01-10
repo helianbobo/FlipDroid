@@ -2,6 +2,7 @@ package it.tika.mongodb.source;
 
 import com.mongodb.*;
 import flipdroid.grepper.exception.DBNotAvailableException;
+import it.tika.mongodb.MongoDBFactory;
 import it.tika.mongodb.blacklist.BlacklistedTikaImage;
 import it.tika.mongodb.logger.Log;
 import org.bson.types.ObjectId;
@@ -26,8 +27,7 @@ public class SourceDBMongoDB implements SourceDBInterface {
     private Logger logger = Logger.getLogger(SourceDBMongoDB.class.getName());
 
     private SourceDBMongoDB() throws UnknownHostException {
-        Mongo mongo = new Mongo();
-        db = mongo.getDB("tika");
+        db = MongoDBFactory.getDBInstance();
     }
 
     public static SourceDBMongoDB getInstance() {
