@@ -2,6 +2,7 @@ package it.tika.mongodb.blacklist;
 
 import com.mongodb.*;
 import flipdroid.grepper.exception.DBNotAvailableException;
+import it.tika.mongodb.MongoDBFactory;
 
 import java.net.UnknownHostException;
 import java.util.logging.Level;
@@ -23,8 +24,7 @@ public class BlacklistedImageDBMongoDB implements BlacklistedImageDBInterface {
     private Logger logger = Logger.getLogger(BlacklistedImageDBMongoDB.class.getName());
 
     private BlacklistedImageDBMongoDB() throws UnknownHostException {
-        Mongo mongo = new Mongo();
-        db = mongo.getDB("tika");
+        db = MongoDBFactory.getDBInstance();
     }
 
     public static BlacklistedImageDBMongoDB getInstance() {

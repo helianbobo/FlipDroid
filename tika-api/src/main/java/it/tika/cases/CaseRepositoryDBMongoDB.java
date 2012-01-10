@@ -5,6 +5,7 @@ import com.mongodb.DB;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 import flipdroid.grepper.exception.DBNotAvailableException;
+import it.tika.mongodb.MongoDBFactory;
 
 import java.net.UnknownHostException;
 import java.util.logging.Level;
@@ -26,8 +27,7 @@ public class CaseRepositoryDBMongoDB implements CaseRepositoryDBInterface {
     private Logger logger = Logger.getLogger(CaseRepositoryDBMongoDB.class.getName());
 
     private CaseRepositoryDBMongoDB() throws UnknownHostException {
-        Mongo mongo = new Mongo();
-        db = mongo.getDB("tika");
+        db = MongoDBFactory.getDBInstance();
     }
 
     public static CaseRepositoryDBInterface getInstance() {

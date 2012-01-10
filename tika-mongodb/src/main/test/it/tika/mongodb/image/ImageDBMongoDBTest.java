@@ -4,6 +4,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
+import it.tika.mongodb.MongoDBFactory;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -12,8 +13,7 @@ public class ImageDBMongoDBTest {
     private DB db;
 
     public ImageDBMongoDBTest() throws Exception{
-        Mongo mongo = new Mongo();
-        db = mongo.getDB("tika");
+        db = MongoDBFactory.getDBInstance();
     }
 
     @Test
