@@ -55,7 +55,7 @@
                     <TextView android:id="@+id/createdDate" android:layout_width="fill_parent"
                               style="@style/ShareBy" android:gravity="right" android:layout_gravity="right"
                               android:layout_height="wrap_content" android:paddingLeft="2dip"
-                              android:paddingRight="2dip"
+                              android:paddingRight="12dip"
                               android:paddingTop="3dip" android:paddingBottom="2dip"></TextView>
                 </LinearLayout>
             </LinearLayout>

@@ -867,12 +867,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     Handler handler = new Handler();
 
     private void flipPage(final boolean forward) {
-
-        if (!current.isFirstPage()) {
-
-            flipStarted = true;
-        }
-
+        flipStarted = true;
         this.previousDirection = this.forward;
         this.forward = forward;
 

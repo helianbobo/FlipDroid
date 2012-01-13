@@ -95,7 +95,7 @@ public abstract class SlidingWindows {
             for (int i = 0; i < bufferStep; i++) {
                 if (current - i >= 0) {
 //                    Log.d("SLIDING", currentWindow + " is being loaded2: current:" + (current) + "cycle:" + cycle);
-                    createWindowIfNullOrOld(getNextIndex(-i-1), cycle * slotNumber + current - i-1);
+                    createWindowIfNullOrOld(getNextIndex(-i), cycle * slotNumber + current - i);
                 }
             }
 
