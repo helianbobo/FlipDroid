@@ -1,4 +1,4 @@
-package com.goal98.flipdroid.model.featured;
+package com.goal98.flipdroid.model.rss;
 
 import android.app.Activity;
 import android.content.Context;
