@@ -38,7 +38,7 @@ import com.goal98.flipdroid.model.cachesystem.CacheSystem;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
-import com.goal98.flipdroid.model.featured.FeaturedArticleSource;
+import com.goal98.flipdroid.model.featured.RemoteRSSArticleSource;
 import com.goal98.flipdroid.model.google.GoogleReaderArticleSource;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.model.sina.SinaToken;
@@ -609,7 +609,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             });
 
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            cachedArticleSource = new CachedArticleSource(new FeaturedArticleSource(contentUrl, sourceName, sourceImageURL), this, SourceCache.getInstance(this));
+            cachedArticleSource = new CachedArticleSource(new RemoteRSSArticleSource(contentUrl, sourceName, sourceImageURL), this, SourceCache.getInstance(this));
             cachedArticleSource.loadSourceFromCache();
             source = cachedArticleSource;
         } else if (accountType.equals(TikaConstants.TYPE_GOOGLE_READER)) {

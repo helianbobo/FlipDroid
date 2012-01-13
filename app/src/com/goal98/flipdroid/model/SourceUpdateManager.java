@@ -1,20 +1,14 @@
 package com.goal98.flipdroid.model;
 
-import android.content.Context;
 import android.database.Cursor;
-import android.view.View;
-import android.widget.BaseAdapter;
-import com.goal98.flipdroid.activity.IndexActivity;
 import com.goal98.flipdroid.client.LastModifiedStampedResult;
 import com.goal98.flipdroid.client.TikaClient;
 import com.goal98.flipdroid.db.RecommendSourceDB;
 import com.goal98.flipdroid.db.SourceDB;
-import com.goal98.flipdroid.model.cachesystem.CacheableArticleSource;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
-import com.goal98.flipdroid.model.featured.FeaturedArticleSource;
-import com.goal98.flipdroid.model.rss.RSSArticleSource;
+import com.goal98.flipdroid.model.featured.RemoteRSSArticleSource;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.EachCursor;
 import com.goal98.flipdroid.util.ManagedCursor;
@@ -55,8 +49,8 @@ public class SourceUpdateManager {
 
                 CachedArticleSource cachedArticleSource = null;
                 if (sourceType.equals(TikaConstants.TYPE_RSS)) {
-                    FeaturedArticleSource featuredArticleSource = new FeaturedArticleSource(sourceContentUrl, sourceName, sourceImage);
-                    cachedArticleSource = new CachedArticleSource(featuredArticleSource, updateable, sourceCache);
+                    RemoteRSSArticleSource remoteRSSArticleSource = new RemoteRSSArticleSource(sourceContentUrl, sourceName, sourceImage);
+                    cachedArticleSource = new CachedArticleSource(remoteRSSArticleSource, updateable, sourceCache);
                 }
 
                 if (cachedArticleSource != null) {
