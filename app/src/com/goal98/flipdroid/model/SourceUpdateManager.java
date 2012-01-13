@@ -8,7 +8,6 @@ import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
-import com.goal98.flipdroid.model.rss.RemoteArticleSource;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.EachCursor;
 import com.goal98.flipdroid.util.ManagedCursor;
