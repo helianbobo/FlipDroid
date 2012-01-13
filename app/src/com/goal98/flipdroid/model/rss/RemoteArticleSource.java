@@ -28,13 +28,13 @@ import java.util.List;
  * Time: 9:46 AM
  * To change this template use File | Settings | File Templates.
  */
-public class RemoteRSSArticleSource extends BaseCacheableArticleSource {
+public class RemoteArticleSource extends BaseCacheableArticleSource {
     private String feedURL;
     private String sourceName;
     private String sourceImage;
     TikaClient tikaClient;
 
-    public RemoteRSSArticleSource(String feedURL, String sourceName, String sourceImage) {
+    public RemoteArticleSource(String feedURL, String sourceName, String sourceImage) {
         this.feedURL = feedURL;
         this.sourceName = sourceName;
         this.sourceImage = sourceImage;
