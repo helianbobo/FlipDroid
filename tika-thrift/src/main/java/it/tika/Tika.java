@@ -73,6 +73,7 @@ public class Tika {
                 HttpURLConnection conn = null;
                 int count = 0;
                 int responseCode = 0;
+                boolean isText = false;
                 while (count < 3) {
                     try {
                         LOG.info("trying "+urlString);
@@ -80,6 +81,7 @@ public class Tika {
                         conn = URLConnectionUtil.decorateURLConnection(url);
 
                         responseCode = conn.getResponseCode();
+                        isText = conn.getContentType().toUpperCase().indexOf("text/html")!=-1;
                         LOG.info("responseCode " + responseCode);
                         if (responseCode >= 200 && responseCode <= 299) {
                             break;
@@ -91,7 +93,7 @@ public class Tika {
                         getLogger().error("tried " + count + " times, " + e.getMessage(), e);
                     }
                 }
-                if (responseCode < 200 || responseCode > 299) {
+                if (responseCode < 200 || responseCode > 299 || !isText) {
                     return null;
                 }
                 String originalURLString = conn.getURL().toString();
