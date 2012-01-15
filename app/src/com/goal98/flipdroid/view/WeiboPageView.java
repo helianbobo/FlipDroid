@@ -503,7 +503,7 @@ public class WeiboPageView extends FrameLayout {
             System.out.println("release image...");
             article.setImageBitmap(null);
         }
-        System.gc();
+//        System.gc();
     }
 
     public void closeEnlargedView() {
