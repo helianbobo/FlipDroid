@@ -88,7 +88,7 @@ public class PageViewWindow extends Window {
                     }
 
                     pageView = pageViewFactory.createPageView();
-                    //Log.d("SLIDING", "creating page view on " + PageViewWindow.this + ", page:" + page);
+                    Log.d("SLIDING", "creating page view on " + PageViewWindow.this + ", page:" + page);
                     if (page != null) {
                         pageView.setPage(page);
                     } else {

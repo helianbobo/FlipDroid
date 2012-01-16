@@ -29,7 +29,7 @@
     <string name="dialog_title_animation_mode_preference">翻页动画</string>
     <string name="title_load_image_preference">非WIFI下加载图片</string>
     <string name="button_add_new_account">添加新账户</string>
-    <string name="button_add_new_source">添加新内容</string>
+    <string name="button_add_new_source">添加新订阅</string>
     <string name="button_login">登入</string>
     <string name="button_close">关闭</string>
     <string name="button_update">刷新</string>

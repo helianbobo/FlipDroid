@@ -39,7 +39,7 @@
     <string name="key_auto_check_update_nonwifi_preference">auto_update_nonwifi</string>
 
     <string name="button_add_new_account">Add New Account</string>
-    <string name="button_add_new_source">Add New Source</string>
+    <string name="button_add_new_source">Add New Feeds</string>
     <string name="button_login">Login</string>
     <string name="button_close">Close</string>
     <string name="button_send">Send</string>

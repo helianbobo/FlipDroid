@@ -43,59 +43,63 @@ public abstract class SlidingWindows {
         return (slotNumber + 1) / 2;
     }
 
-    public Window getNextWindow() throws LastWindowException, WindowException {
+    public Window getNextWindow() throws  WindowException {
         lock.lock();
+        Window currentWindow = null;
         try {
             increaseWindowIndex();
             //Log.d("SLIDING", "begins returning Window: current:" + (current) + "cycle:" + cycle);
-            Window currentWindow = windows[current];
-
+            currentWindow = windows[current];
+            if (currentWindow == null || currentWindow.isLastWindow) {
+                currentWindow = getLastWindow();
+                return currentWindow;
+            }
             //Log.d("SLIDING", "current window is:" + currentWindow);
             int bufferStep = getBufferStep();
             for (int i = 0; i < bufferStep; i++) {
                 createWindowIfNullOrOld((current + i) % slotNumber, cycle * slotNumber + current + i);
             }
 
-            if (currentWindow.isLastWindow) {
-                //Log.d("SLIDING", "last Window:" + currentWindow + ", current:" + (current) + "cycle:" + cycle);
-                throw new LastWindowException();
-            }
+
             if (currentWindow.loading) {
                 //Log.d("SLIDING", currentWindow + " is being loaded: current:" + (current) + "cycle:" + cycle);
                 return currentWindow;
             } else if (currentWindow.isLoaded()) {
-                if (currentWindow.pageNumber / slotNumber <= cycle) {
-                    //Log.d("SLIDING", currentWindow + " loaded, return it: current:" + (current) + "cycle:" + cycle);
+//                if (currentWindow.pageNumber / slotNumber <= cycle) {
+//                    //Log.d("SLIDING", currentWindow + " loaded, return it: current:" + (current) + "cycle:" + cycle);
                     return currentWindow;
-                } else {
-                    //Log.d("SLIDING", "cycle met:" + ": current: " + currentWindow + ", " + (currentWindow.pageNumber / slotNumber) + "cycle:" + cycle);
-                    throw new LastWindowException();
-                }
+//                }
             } else {
                 return currentWindow;
             }
         } finally {
+            Log.d("SLIDING", currentWindow + " is being returned: current:" + (current) + "cycle:" + cycle);
             lock.unlock();
         }
     }
+
+    protected abstract Window getLastWindow();
 
     protected abstract void createWindowIfNullOrOld(int arratPosition, int pageNumber);
 
 
     public Window getPreviousWindow() throws WindowException {
         lock.lock();
+        Window currentWindow = null;
         try {
             decreaseWindowIndex();
-            if(cycle == -1){
-                return getFirstWindow();
+            if (cycle == -1) {
+                currentWindow = getFirstWindow();
+                return currentWindow;
             }
-            Window currentWindow = windows[current];
+            currentWindow = windows[current];
 
             int bufferStep = getBufferStep();
             for (int i = 0; i < bufferStep; i++) {
                 if (current - i >= 0) {
-//                    Log.d("SLIDING", currentWindow + " is being loaded2: current:" + (current) + "cycle:" + cycle);
-                    createWindowIfNullOrOld(getNextIndex(-i-1), cycle * slotNumber + current - i-1);
+                    int pageNumber = cycle * slotNumber + current - i - 1;
+                    if (pageNumber >= 0)
+                        createWindowIfNullOrOld(getNextIndex(-i - 1), cycle * slotNumber + current - i - 1);
                 }
             }
 
@@ -108,6 +112,7 @@ public abstract class SlidingWindows {
                 return currentWindow;
             }
         } finally {
+            Log.d("SLIDING", currentWindow + " is being returned: current:" + (current) + "cycle:" + cycle);
             lock.unlock();
         }
     }
