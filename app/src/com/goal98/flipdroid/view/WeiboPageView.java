@@ -160,12 +160,11 @@ public class WeiboPageView extends FrameLayout {
 
         fadeinArticle.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
-
+                WeiboPageView.this.pageActivity.setEnlargedMode(true);
             }
 
             public void onAnimationEnd(Animation animation) {
                 articleView.setVisibility(VISIBLE);
-                WeiboPageView.this.pageActivity.setEnlargedMode(true);
             }
 
             public void onAnimationRepeat(Animation animation) {
@@ -504,7 +503,7 @@ public class WeiboPageView extends FrameLayout {
             System.out.println("release image...");
             article.setImageBitmap(null);
         }
-        System.gc();
+//        System.gc();
     }
 
     public void closeEnlargedView() {

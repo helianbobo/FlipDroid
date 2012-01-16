@@ -1,7 +1,7 @@
 {% extends "base.html" %}  
 {% block title %}Url_abstract{% endblock %}  
 {% block content %}  
-<a href="/source/">goto source!!!!</a>
+<a href="/console/source/">goto source!!!!</a>
 
 <ul>
 {% for item in items.object_list %}
@@ -42,7 +42,7 @@
   
 {% endfor %}
    <li>
-     <form action="/urls/search" method="get"  >   
+     <form action="/console/urls/search" method="get"  >   
      <input name="url" type="text" value="url" >
     <input name="update" type="submit" value="search">
     </form>

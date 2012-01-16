@@ -24,19 +24,19 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class RSSArticleSource extends BaseCacheableArticleSource {
+public class LocalRSSArticleSource extends BaseCacheableArticleSource {
     private String contentUrl;
     private String sourceName;
 
     private String sourceImage;
 
-    public RSSArticleSource(String contentUrl, String sourceName, String sourceImage) {
+    public LocalRSSArticleSource(String contentUrl, String sourceName, String sourceImage) {
         this.contentUrl = contentUrl;
         this.sourceName = sourceName;
         this.sourceImage = sourceImage;
     }
 
-    public RSSArticleSource(InputStream content, String sourceName, String sourceImage) {
+    public LocalRSSArticleSource(InputStream content, String sourceName, String sourceImage) {
         this.content = content;
         this.sourceName = sourceName;
         this.sourceImage = sourceImage;

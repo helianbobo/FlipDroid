@@ -38,8 +38,9 @@ import com.goal98.flipdroid.model.cachesystem.CacheSystem;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
-import com.goal98.flipdroid.model.featured.FeaturedArticleSource;
+import com.goal98.flipdroid.model.RemoteArticleSource;
 import com.goal98.flipdroid.model.google.GoogleReaderArticleSource;
+import com.goal98.flipdroid.model.rss.RemoteRSSArticleSource;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.model.sina.SinaToken;
 import com.goal98.flipdroid.model.taobao.TaobaoArticleSource;
@@ -612,7 +613,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             });
 
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            cachedArticleSource = new CachedArticleSource(new FeaturedArticleSource(contentUrl, sourceName, sourceImageURL), this, SourceCache.getInstance(this));
+            cachedArticleSource = new CachedArticleSource(new RemoteRSSArticleSource(contentUrl, sourceName, sourceImageURL), this, SourceCache.getInstance(this));
             cachedArticleSource.loadSourceFromCache();
             source = cachedArticleSource;
         } else if (accountType.equals(TikaConstants.TYPE_GOOGLE_READER)) {
@@ -866,12 +867,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     Handler handler = new Handler();
 
     private void flipPage(final boolean forward) {
-
-        if (!current.isFirstPage()) {
-
-            flipStarted = true;
-        }
-
+        flipStarted = true;
         this.previousDirection = this.forward;
         this.forward = forward;
 

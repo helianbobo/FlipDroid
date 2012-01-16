@@ -9,21 +9,21 @@ def print_num(request,page):
     """ test  """
     return HttpResponse(page) 
 urlpatterns = patterns('',
-    ('^source/$', views.showSource),
-    (r'^source/(?P<page>\d+)', views.showSource),
-    ('^source/updatesource', views.updateSource),
+    ('^console/source/$', views.showSource),
+    (r'^console/source/(?P<page>\d+)', views.showSource),
+    ('^console/source/updatesource', views.updateSource),
     
-    ('^urls/$', views.showUrls),
-    (r'^urls/(?P<page>\d+)', views.showUrls),
-    ('^urls/updateurls', views.updateUrls),
-    ('^urls/search',views.searchUrls),
-    ('^recommendsource/$',views.showRecommendSource),
-    (r'^recommendsource/(?P<page>\d+)',views.showRecommendSource),
-    ('^recommendsource/updatesource', views.updateRecommendSourceSource),
-    ('^test/', views.test),
-    ('^login/$', views.login),
+    ('^console/urls/$', views.showUrls),
+    (r'^console/urls/(?P<page>\d+)', views.showUrls),
+    ('^console/urls/updateurls', views.updateUrls),
+    ('^console/urls/search',views.searchUrls),
+    ('^console/recommendsource/$',views.showRecommendSource),
+    (r'^console/recommendsource/(?P<page>\d+)',views.showRecommendSource),
+    ('^console/recommendsource/updatesource', views.updateRecommendSourceSource),
+    ('^console/test/', views.test),
+    ('^console/login/$', views.login),
      
-    ('$', views.loginPage),
+    ('^console/$', views.loginPage),
      
 
     

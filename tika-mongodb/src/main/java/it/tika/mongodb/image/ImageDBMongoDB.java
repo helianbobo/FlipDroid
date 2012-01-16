@@ -3,6 +3,7 @@ package it.tika.mongodb.image;
 
 import com.mongodb.*;
 import flipdroid.grepper.exception.DBNotAvailableException;
+import it.tika.mongodb.MongoDBFactory;
 
 import java.net.UnknownHostException;
 import java.util.logging.Level;
@@ -25,8 +26,7 @@ public class ImageDBMongoDB implements ImageDBInterface {
 
     private ImageDBMongoDB() throws UnknownHostException {
         try {
-            Mongo mongo = new Mongo();
-            db = mongo.getDB("tika");
+            db = MongoDBFactory.getDBInstance();
 
             BasicDBObject index = new BasicDBObject();
             index.put("url", 1);

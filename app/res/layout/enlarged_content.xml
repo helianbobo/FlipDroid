@@ -36,7 +36,7 @@
             <LinearLayout android:layout_width="fill_parent" android:paddingBottom="1dip"
                           android:layout_height="wrap_content" android:gravity="center"
                           android:orientation="horizontal" android:background="#DDDDDD">
-                <LinearLayout android:layout_width="fill_parent" android:paddingLeft="5dip"
+                <LinearLayout android:layout_width="fill_parent" android:paddingLeft="5dip" android:paddingRight="5dip"
                               android:layout_height="wrap_content" android:gravity="left"
                               android:orientation="horizontal" android:id="@+id/shareByll" android:background="@color/white">
 
@@ -49,12 +49,11 @@
                                                      android:paddingBottom="2dip"></com.goal98.android.WebImageView>
                     <TextView android:id="@+id/author" android:layout_width="wrap_content"
                               style="@style/ShareBy" android:gravity="center" android:layout_gravity="left"
-                              android:layout_height="wrap_content" android:paddingLeft="2dip"
-                              android:paddingRight="2dip"
+                              android:layout_height="wrap_content" android:layout_marginLeft="2dip"
                               android:paddingTop="2dip" android:paddingBottom="2dip"></TextView>
                     <TextView android:id="@+id/createdDate" android:layout_width="fill_parent"
                               style="@style/ShareBy" android:gravity="right" android:layout_gravity="right"
-                              android:layout_height="wrap_content" android:paddingLeft="2dip"
+                              android:layout_height="wrap_content" android:layout_marginLeft="2dip"
                               android:paddingRight="2dip"
                               android:paddingTop="3dip" android:paddingBottom="2dip"></TextView>
                 </LinearLayout>

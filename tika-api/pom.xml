@@ -127,6 +127,8 @@
                                       tofile="${project.build.directory}/dist/tika-api.jar"/>
                                 <copy file="${project.basedir}/src/main/script/run.sh"
                                       tofile="${project.build.directory}/dist/run.sh"/>
+                                <copy file="${project.basedir}/src/main/script/startTikaThriftService.sh"
+                                      tofile="${project.build.directory}/dist/startTikaThriftService.sh"/>
 
                                 <tar destfile="${project.build.directory}/tika-api-server.tar.gz" compression="gzip">
                                     <zipfileset dir="${project.build.directory}/dist" includes="**/*"/>

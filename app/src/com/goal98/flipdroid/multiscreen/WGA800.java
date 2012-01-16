@@ -31,7 +31,7 @@ public class WGA800 extends MultiScreenSupport {
     }
 
     public int[] getTextViewPaddingInThumbnailView() {
-        return new int[]{5, 8, 5, 8};
+        return new int[]{5, 6, 5, 6};
 
     }
 

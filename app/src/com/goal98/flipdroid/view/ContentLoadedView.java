@@ -101,14 +101,14 @@ public class ContentLoadedView extends ArticleView {
         }
         this.portraitView.loadImage();
 
-        authorView.setText(article.getAuthor());
+        authorView.setText(article.getAuthor()+" ");//nasty but works
         authorView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_AUTHOR);
         authorView.setTextColor(Color.parseColor("#AAAAAA"));
 
         createDateView = (TextView) layout.findViewById(R.id.createdDate);
 
         String time = PrettyTimeUtil.getPrettyTime(this.getContext(), article.getCreatedDate());
-        createDateView.setText(time);
+        createDateView.setText(time+" ");//nasty but works
         createDateView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_AUTHOR);
 
         ScrollView wrapper = (ScrollView) layout.findViewById(R.id.wrapper);

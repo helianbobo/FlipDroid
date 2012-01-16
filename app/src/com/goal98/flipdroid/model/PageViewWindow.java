@@ -1,6 +1,5 @@
 package com.goal98.flipdroid.model;
 
-import android.util.Log;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.exception.NoMorePageException;
 import com.goal98.flipdroid.exception.NoMoreStatusException;
@@ -10,7 +9,6 @@ import com.goal98.flipdroid.view.WeiboPageView;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.locks.Lock;
 
@@ -28,12 +26,14 @@ public class PageViewWindow extends Window {
     private ExecutorService executor;
     private PageActivity.WeiboPageViewFactory pageViewFactory;
     private WeiboPageView pageView;
+    private WeiboPageView previousPeiboPageView;
 
-    PageViewWindow(int index, int pageNumber, Lock preloadingLock, ContentRepo repo, PageActivity.WeiboPageViewFactory pageViewFactory, ExecutorService executor) {
+    PageViewWindow(int index, int pageNumber, Lock preloadingLock, ContentRepo repo, PageActivity.WeiboPageViewFactory pageViewFactory, ExecutorService executor, WeiboPageView previousPeiboPageView) {
         super(index, pageNumber, preloadingLock);
         this.executor = executor;
         this.repo = repo;
         this.pageViewFactory = pageViewFactory;
+        this.previousPeiboPageView = previousPeiboPageView;
         startTask();
     }
 
@@ -72,23 +72,23 @@ public class PageViewWindow extends Window {
                         page = onNoMorePage(page);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        skip = true;
+                        pageView= previousPeiboPageView;
+                        return pageView;
                     }
-                    if (skip) {
-                        //Log.d("SLIDING", "skipped " + this);
-                        new Thread(new Runnable() {
-                            public void run() {
-                                for (OnLoadListener listener : onLoadListeners) {
-                                    //Log.d("SLIDING", "onload...");
-                                    listener.onWindowSkipped(PageViewWindow.this);
-                                }
-                            }
-                        }).start();
-                        return null;
-                    }
+//                    if (skip) {
+//                        //Log.d("SLIDING", "skipped " + this);
+//                        new Thread(new Runnable() {
+//                            public void run() {
+//                                for (OnLoadListener listener : onLoadListeners) {
+//                                    //Log.d("SLIDING", "onload...");
+//                                    listener.onWindowSkipped(PageViewWindow.this);
+//                                }
+//                            }
+//                        }).start();
+//
+//                    }
 
                     pageView = pageViewFactory.createPageView();
-                    Log.d("SLIDING", "creating page view on " + PageViewWindow.this + ", page:" + page);
                     if (page != null) {
                         pageView.setPage(page);
                     } else {
@@ -106,7 +106,7 @@ public class PageViewWindow extends Window {
                     }).start();
 
                     loaded = true;
-                    //Log.d("SLIDING", "done. returning" + pageView.getClass().getSimpleName());
+                    previousPeiboPageView = null;
                     return pageView;
                 } finally {
                     loading = false;
