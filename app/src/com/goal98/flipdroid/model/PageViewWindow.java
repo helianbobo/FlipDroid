@@ -5,7 +5,7 @@ import com.goal98.flipdroid.exception.NoMorePageException;
 import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.exception.NoNetworkException;
 import com.goal98.flipdroid.view.Page;
-import com.goal98.flipdroid.view.WeiboPageView;
+import com.goal98.flipdroid.view.ThumbnailViewContainer;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -22,26 +22,26 @@ import java.util.concurrent.locks.Lock;
 public class PageViewWindow extends Window {
     private ContentRepo repo;
 
-    private Future<WeiboPageView> task;
+    private Future<ThumbnailViewContainer> task;
     private ExecutorService executor;
     private PageActivity.WeiboPageViewFactory pageViewFactory;
-    private WeiboPageView pageView;
-    private WeiboPageView previousPeiboPageView;
+    private ThumbnailViewContainer pageViewContainer;
+    private ThumbnailViewContainer previousPeiboPageViewContainer;
 
-    PageViewWindow(int index, int pageNumber, Lock preloadingLock, ContentRepo repo, PageActivity.WeiboPageViewFactory pageViewFactory, ExecutorService executor, WeiboPageView previousPeiboPageView) {
+    PageViewWindow(int index, int pageNumber, Lock preloadingLock, ContentRepo repo, PageActivity.WeiboPageViewFactory pageViewFactory, ExecutorService executor, ThumbnailViewContainer previousPeiboPageViewContainer) {
         super(index, pageNumber, preloadingLock);
         this.executor = executor;
         this.repo = repo;
         this.pageViewFactory = pageViewFactory;
-        this.previousPeiboPageView = previousPeiboPageView;
+        this.previousPeiboPageViewContainer = previousPeiboPageViewContainer;
         startTask();
     }
 
     @Override
-    public synchronized WeiboPageView get() {
+    public synchronized ThumbnailViewContainer get() {
         try {
             task.get();
-            return pageView;
+            return pageViewContainer;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,7 +49,7 @@ public class PageViewWindow extends Window {
     }
 
     public String toString() {
-        return "Window, page number: " + pageNumber + ", skip:" + skip + ", last:" + this.isLastWindow;
+        return "Window, pageContainer number: " + pageNumber + ", skip:" + skip + ", last:" + this.isLastWindow;
     }
 
     public synchronized void startTask() {
@@ -65,15 +65,15 @@ public class PageViewWindow extends Window {
                     Page page = null;
                     try {
                         page = repo.getPage(pageNumber);
-                        //Log.d("SLIDING", "page loaded: " + this);
+                        //Log.d("SLIDING", "pageContainer loaded: " + this);
                     } catch (NoSuchPageException e) {
                         page = onNoMorePage(page);
                     } catch (NoMorePageException e) {
                         page = onNoMorePage(page);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        pageView= previousPeiboPageView;
-                        return pageView;
+                        pageViewContainer = previousPeiboPageViewContainer;
+                        return pageViewContainer;
                     }
 //                    if (skip) {
 //                        //Log.d("SLIDING", "skipped " + this);
@@ -88,11 +88,11 @@ public class PageViewWindow extends Window {
 //
 //                    }
 
-                    pageView = pageViewFactory.createPageView();
+                    pageViewContainer = pageViewFactory.createPageView();
                     if (page != null) {
-                        pageView.setPage(page);
+                        pageViewContainer.setPage(page);
                     } else {
-                        pageView = pageViewFactory.createLastPage();
+                        pageViewContainer = pageViewFactory.createLastPage();
                     }
 
                     new Thread(new Runnable() {
@@ -106,8 +106,8 @@ public class PageViewWindow extends Window {
                     }).start();
 
                     loaded = true;
-                    previousPeiboPageView = null;
-                    return pageView;
+                    previousPeiboPageViewContainer = null;
+                    return pageViewContainer;
                 } finally {
                     loading = false;
                     reloadingLock.unlock();
@@ -115,7 +115,7 @@ public class PageViewWindow extends Window {
             }
 
             private Page onNoMorePage(Page page) {
-                //Log.d("SLIDING", "no more page, refreshing: " + this);
+                //Log.d("SLIDING", "no more pageContainer, refreshing: " + this);
                 int currentToken = repo.getRefreshingToken();
                 try {
                     repo.refreshAndPage(currentToken);

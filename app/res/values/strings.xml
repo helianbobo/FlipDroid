@@ -11,6 +11,8 @@
     <string name="next">Next</string>
     <string name="search">Search</string>
     <string name="flip">FLIP >></string>
+    <string name="nodatainscroll">No more data</string>
+    <string name="mystream">My Stream</string>
 
     <string name="sina_weibo">Sina Weibo</string>
 

@@ -35,8 +35,8 @@ public class ThumbnailArticleView extends ExpandableArticleView {
     private View weiboContent;
     private WebImageView portraitViewWeiboContent;
 
-    public ThumbnailArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom, ExecutorService executor) {
-        super(context, article, pageView, placedAtBottom, executor);
+    public ThumbnailArticleView(Context context, Article article, ThumbnailViewContainer pageViewContainer, boolean placedAtBottom, ExecutorService executor) {
+        super(context, article, pageViewContainer, placedAtBottom, executor);
     }
 
     public void setText() {
@@ -56,7 +56,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
             isLoading = true;
             handler.post(new Runnable() {
                 public void run() {
-                    setTitleText();
+                    ThumbnailContentRender.setTitleText(titleView, article, deviceInfo);
                     buildImageAndContent();
                     reloadOriginalView();
                 }
@@ -90,22 +90,6 @@ public class ThumbnailArticleView extends ExpandableArticleView {
         } finally {
             isLoading = false;
         }
-    }
-
-    private void setTitleText() {
-        MultiScreenSupport mss = MultiScreenSupport.getInstance(deviceInfo);
-
-        int maxTitleLength = mss.getThumbnailMaxTitleLength();
-        int titleSize = 0;
-        if (article.getTitle() != null && article.getTitleLength() >= maxTitleLength) {
-            titleSize = mss.getThumbnailMaxLongTitleTextSize();
-        } else {
-            titleSize = mss.getThumbnailMaxTitleTextSize();
-        }
-        titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, titleSize);
-        titleView.setText(article.getTitle());
-        titleView.setWidth(deviceInfo.getWidth());
-        titleView.setMinHeight(mss.getMinTitleHeight());
     }
 
 
@@ -146,7 +130,6 @@ public class ThumbnailArticleView extends ExpandableArticleView {
 
 
         this.titleView = (TextView) loadedThumbnail.findViewById(R.id.title);
-//        TextView titleViewWeiboContent = (TextView) weiboContent.findViewById(R.id.title);
 
         this.authorView = (TextView) loadedThumbnail.findViewById(R.id.author);
         TextView authorViewWeiboContent = (TextView) weiboContent.findViewById(R.id.author);
@@ -158,11 +141,11 @@ public class ThumbnailArticleView extends ExpandableArticleView {
         LinearLayout contentViewWrapperWeiboContent = (LinearLayout) weiboContent.findViewById(R.id.contentll);
 
         TextView contentView = new TextView(this.getContext());
-        setThumbnailContentText(contentView);
+        ThumbnailContentRender.setThumbnailContentText(contentView, article, deviceInfo);
         contentView.setText(article.getStatus());
 
         contentViewWrapperWeiboContent.addView(contentView);
-        if(article.hasLink()){
+        if (article.hasLink()) {
             View progressBar = weiboContent.findViewById(R.id.progressbar);
             View textUrlLoading = weiboContent.findViewById(R.id.textUrlLoading);
             progressBar.setVisibility(VISIBLE);

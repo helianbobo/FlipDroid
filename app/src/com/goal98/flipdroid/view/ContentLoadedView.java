@@ -5,12 +5,8 @@ import android.content.Intent;
 import android.graphics.*;
 import android.net.Uri;
 import android.text.Html;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ParagraphStyle;
 import android.text.util.Linkify;
-import android.util.FloatMath;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.*;
 import android.widget.Button;
@@ -29,7 +25,6 @@ import com.goal98.tika.common.Paragraphs;
 import com.goal98.tika.common.TikaConstants;
 import com.goal98.tika.common.TikaUIObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,8 +39,8 @@ public class ContentLoadedView extends ArticleView {
     private LinearLayout contentHolderView;
     public WebImageView icon;
 
-    public ContentLoadedView(Context context, Article article, WeiboPageView pageView) {
-        super(context, article, pageView, true);
+    public ContentLoadedView(Context context, Article article, ThumbnailViewContainer pageViewContainer) {
+        super(context, article, pageViewContainer, true);
     }
 
     protected String getPrefix() {

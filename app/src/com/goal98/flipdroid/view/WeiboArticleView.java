@@ -24,8 +24,8 @@ import java.util.concurrent.*;
  * To change this template use File | Settings | File Templates.
  */
 public class WeiboArticleView extends ExpandableArticleView {
-    public WeiboArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom, ExecutorService executor) {
-        super(context, article, pageView, placedAtBottom, executor);
+    public WeiboArticleView(Context context, Article article, ThumbnailViewContainer pageViewContainer, boolean placedAtBottom, ExecutorService executor) {
+        super(context, article, pageViewContainer, placedAtBottom, executor);
     }
 
     public void setText() {

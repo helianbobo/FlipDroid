@@ -5,10 +5,7 @@ import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.activity.PageActivity;
-import com.goal98.flipdroid.model.PageViewSlidingWindows;
 import com.goal98.flipdroid.model.SlidingWindows;
-
-import java.util.concurrent.ExecutorService;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,11 +14,11 @@ import java.util.concurrent.ExecutorService;
  * Time: 10:45 PM
  * To change this template use File | Settings | File Templates.
  */
-public class LastPageView extends WeiboPageView {
+public class LastPageViewContainer extends ThumbnailViewContainer {
     private LinearLayout frame;
     SlidingWindows windows;
 
-    public LastPageView(PageActivity context) {
+    public LastPageViewContainer(PageActivity context) {
         super(context);
 
     }

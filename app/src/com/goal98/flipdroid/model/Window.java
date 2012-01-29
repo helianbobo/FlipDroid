@@ -1,6 +1,6 @@
 package com.goal98.flipdroid.model;
 
-import com.goal98.flipdroid.view.WeiboPageView;
+import com.goal98.flipdroid.view.ThumbnailViewContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public abstract class Window {
         return loading;
     }
 
-    public abstract WeiboPageView get();
+    public abstract ThumbnailViewContainer get();
 
     public void registerOnLoadListener(OnLoadListener listener) {
         this.addListener(listener);

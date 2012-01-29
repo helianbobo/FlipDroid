@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent">
+    <TabHost android:layout_width="fill_parent" android:layout_gravity="bottom"
+             android:layout_height="fill_parent" android:id="@+id/tabHost">
+        <FrameLayout android:layout_width="fill_parent" android:id="@android:id/tabcontent"
+                     android:layout_height="fill_parent" android:paddingBottom="65dip">
+
+        </FrameLayout>
+        <RelativeLayout android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+            <TabWidget android:id="@android:id/tabs"
+                       android:visibility="gone"
+                       android:layout_width="fill_parent"
+                       android:layout_height="wrap_content"
+                       android:background="@color/white"
+                    />
+
+            <RadioGroup android:gravity="bottom"
+                        android:layout_gravity="bottom"
+                        android:orientation="horizontal"
+                         android:background="@drawable/bottom_bg"
+                        android:id="@+id/main_radio"
+                        android:layout_width="fill_parent"
+                        android:layout_alignParentBottom="true"
+                        android:layout_height="wrap_content"
+                    >
+                <RadioButton android:tag="radio_button0" android:background="@drawable/home_btn_bg"
+                             android:drawableTop="@drawable/like" style="@style/main_tab_bottom" android:text="My Stream"/>
+                <RadioButton android:tag="radio_button1"  android:background="@drawable/home_btn_bg"
+                             android:drawableTop="@drawable/like" style="@style/main_tab_bottom" android:text="Feeds"/>
+                <RadioButton android:tag="radio_button2" android:layout_marginTop="0.0dip" android:background="@drawable/home_btn_bg"
+                             android:drawableTop="@drawable/like" style="@style/main_tab_bottom"/>
+                <RadioButton android:drawableTop="@drawable/like" android:tag="radio_button3" style="@style/main_tab_bottom_empty" android:background="@drawable/home_btn_bg"/>
+                <RadioButton android:tag="radio_button4"
+                             android:background="@drawable/home_btn_bg" android:drawableTop="@drawable/like" style="@style/main_tab_bottom"/>
+            </RadioGroup>
+        </RelativeLayout>
+    </TabHost>
+</LinearLayout>

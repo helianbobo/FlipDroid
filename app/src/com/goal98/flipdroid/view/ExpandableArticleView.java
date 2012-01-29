@@ -63,8 +63,8 @@ public abstract class ExpandableArticleView extends ArticleView {
         }
     }
 
-    public ExpandableArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom, ExecutorService executor) {
-        super(context, article, pageView, placedAtBottom);
+    public ExpandableArticleView(Context context, Article article, ThumbnailViewContainer pageViewContainer, boolean placedAtBottom, ExecutorService executor) {
+        super(context, article, pageViewContainer, placedAtBottom);
 
         article.loadPrimaryImage(deviceInfo, toLoadImage);
         if (!article.isAlreadyLoaded() && article.hasLink()) {
@@ -279,11 +279,11 @@ public abstract class ExpandableArticleView extends ArticleView {
             if (!article.isAlreadyLoaded() && future != null)
                 future.get();
 
-            loadedArticleView = new ContentLoadedView(this.getContext(), article, pageView);
+            loadedArticleView = new ContentLoadedView(this.getContext(), article, this.getPageViewContainer());
             handler.post(new Runnable() {
                 public void run() {
                     switcher.setDisplayedChild(0);
-                    ExpandableArticleView.this.getPageView().enlarge(loadedArticleView, ExpandableArticleView.this);
+                    ExpandableArticleView.this.getPageViewContainer().enlarge(loadedArticleView, ExpandableArticleView.this);
                 }
             });
         } catch (InterruptedException e) {
@@ -324,10 +324,10 @@ public abstract class ExpandableArticleView extends ArticleView {
 
                 if (handler == null)
                     handler = new Handler();
-                if (!ExpandableArticleView.this.getPageView().loadingNext) {
+                if (!ExpandableArticleView.this.getPageViewContainer().loadingNext) {
 
                     if (enlargedView != null && enlargedView.get() != null) {//以前打开过的，直接显示
-                        ExpandableArticleView.this.getPageView().enlarge(loadedArticleView, ExpandableArticleView.this);
+                        ExpandableArticleView.this.getPageViewContainer().enlarge(loadedArticleView, ExpandableArticleView.this);
                         return;
                     }
 

@@ -62,7 +62,7 @@ public class ContentCache {
                 List<Page> newSmartPages = pagingStrategy.doPaging(unPagedArticles).getPages();
                 if (newSmartPages.size() == 0) {
                     //Log.d("cache system", "no more status.");
-                    throw new NoSuchPageException("page no" + pageNo);
+                    throw new NoSuchPageException("pageContainer no" + pageNo);
                 }
                 pagedList.addAll(newSmartPages);
                 pageCacheTo += newSmartPages.size();

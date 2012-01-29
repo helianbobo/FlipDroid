@@ -32,4 +32,8 @@ public abstract class MultiScreenSupport {
     public abstract int getThumbnailMaxTitleTextSize();
     public abstract int getThumbnailMaxLongTitleTextSize();
     public abstract int getMinTitleHeight();
+
+    public abstract int getTopbarHeight();
+
+    public abstract int getBottomRadioHeight();
 }

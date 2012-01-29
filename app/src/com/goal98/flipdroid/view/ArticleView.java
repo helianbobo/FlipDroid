@@ -2,27 +2,15 @@ package com.goal98.flipdroid.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
-import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ViewSwitcher;
 import com.goal98.android.WebImageView;
-import com.goal98.flipdroid.R;
-import com.goal98.flipdroid.activity.FlipdroidApplications;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.model.Article;
-import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.DeviceInfo;
-
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 public abstract class ArticleView extends LinearLayout {
 
@@ -37,14 +25,14 @@ public abstract class ArticleView extends LinearLayout {
     protected boolean toLoadImage;
 
 
-    protected WeiboPageView pageView;
+    protected ThumbnailViewContainer pageViewContainer;
 
     protected boolean placedAtBottom;
     protected DeviceInfo deviceInfo;
 
 
-    public WeiboPageView getPageView() {
-        return pageView;
+    public ThumbnailViewContainer getPageViewContainer() {
+        return pageViewContainer;
     }
 
     public View getContentView() {
@@ -65,7 +53,7 @@ public abstract class ArticleView extends LinearLayout {
         return DeviceInfo.getInstance((Activity) this.getContext());
     }
 
-    public ArticleView(Context context, Article article, WeiboPageView pageView, boolean placedAtBottom) {
+    public ArticleView(Context context, Article article, ThumbnailViewContainer pageViewContainer, boolean placedAtBottom) {
         super(context);
         pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
         toLoadImage = ((PageActivity)context).isToLoadImage();
@@ -74,7 +62,7 @@ public abstract class ArticleView extends LinearLayout {
         this.placedAtBottom = placedAtBottom;
 
 
-        this.pageView = pageView;
+        this.pageViewContainer = pageViewContainer;
         setArticle(article);
 
         buildView();

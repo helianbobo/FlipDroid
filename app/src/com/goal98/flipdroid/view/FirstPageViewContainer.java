@@ -1,7 +1,6 @@
 package com.goal98.flipdroid.view;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,11 +20,11 @@ import java.util.concurrent.ExecutorService;
  * Time: 10:45 PM
  * To change this template use File | Settings | File Templates.
  */
-public class FirstPageView extends WeiboPageView {
+public class FirstPageViewContainer extends ThumbnailViewContainer {
     private LinearLayout frame;
     private TipsRepo tipsRepo;
 
-    public FirstPageView(PageActivity context, PageViewSlidingWindows windows,ExecutorService executor) {
+    public FirstPageViewContainer(PageActivity context, PageViewSlidingWindows windows, ExecutorService executor) {
         super(context);
     }
 
@@ -58,7 +57,7 @@ public class FirstPageView extends WeiboPageView {
     }
 
     public void showLoading() {
-//        LayoutInflater inflater = LayoutInflater.from(WeiboPageView.this.getContext());
+//        LayoutInflater inflater = LayoutInflater.from(ThumbnailViewContainer.this.getContext());
 //        LinearLayout loadingView = (LinearLayout) inflater.inflate(R.layout.loading, null);
 //        this.addView(loadingView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
     }

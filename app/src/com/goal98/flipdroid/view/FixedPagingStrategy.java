@@ -1,5 +1,6 @@
 package com.goal98.flipdroid.view;
 
+import android.app.Activity;
 import android.util.Log;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.exception.NoMoreStatusException;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class FixedPagingStrategy implements PagingStrategy {
 
-    private PageActivity activity;
+    private Activity activity;
 
     public void setNoMoreArticleListener(NoMoreArticleListener noMoreArticleListener) {
         this.noMoreArticleListener = noMoreArticleListener;
@@ -20,7 +21,7 @@ public class FixedPagingStrategy implements PagingStrategy {
     private NoMoreArticleListener noMoreArticleListener = new DoNothingListener();
     private int articlePerPage;
 
-    public FixedPagingStrategy(PageActivity activity, int articlePerPage) {
+    public FixedPagingStrategy(Activity activity, int articlePerPage) {
         this.activity = activity;
         this.articlePerPage = articlePerPage;
     }

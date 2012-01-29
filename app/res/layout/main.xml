@@ -5,7 +5,7 @@
 
     <com.goal98.flipdroid.view.FlipPage
             style="@style/Page"
-            android:id="@+id/page" android:weightSum="480" android:orientation="vertical"
+            android:id="@+id/articlePerPage" android:weightSum="480" android:orientation="vertical"
             android:background="#DDDDDD">
 
         <com.goal98.flipdroid.view.PageIndexView android:background="@color/white" android:id="@+id/pageIndex"

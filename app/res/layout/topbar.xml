@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/titleBar"
+              android:background="@drawable/top_bg"
+              android:layout_width="fill_parent" android:orientation="horizontal"
+              android:layout_height="30dip" android:paddingTop="4.4dip"
+              android:paddingBottom="2.4dip" android:paddingLeft="3.5dip" android:paddingRight="3.5dip"
+        >
+    <LinearLayout android:layout_width="95dip" android:minWidth="95dip" android:layout_height="wrap_content" android:gravity="left">
+        <ImageButton android:id="@+id/leftButton" android:textSize="14px" android:background="@drawable/btn_return"
+                android:layout_width="wrap_content" android:maxHeight="30dip" android:adjustViewBounds="true"
+                android:layout_height="wrap_content" android:layout_gravity="left"/>
+    </LinearLayout>
+    <TextView android:id="@+id/topBarTitle" android:textColor="#232323"
+              android:textSize="19dip"
+              android:layout_width="123dip" android:layout_height="wrap_content"
+              android:gravity="center" android:layout_gravity="center"/>
+    <LinearLayout android:layout_width="95dip" android:minWidth="95dip" android:layout_height="wrap_content" android:gravity="right">
+        <ImageButton android:id="@+id/rightButton" android:background="@drawable/refresh"
+                android:textSize="14px" android:layout_width="wrap_content" android:maxHeight="30dip" android:adjustViewBounds="true"
+                android:layout_height="wrap_content" android:layout_gravity="right"/>
+    </LinearLayout>
+
+</LinearLayout>

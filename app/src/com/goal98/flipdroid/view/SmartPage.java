@@ -1,16 +1,12 @@
 package com.goal98.flipdroid.view;
 
-import android.util.Log;
-import com.goal98.flipdroid.activity.FlipdroidApplications;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.Constants;
-import com.goal98.flipdroid.util.DeviceInfo;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 public class SmartPage extends Page {
     private List<Integer> heights = new ArrayList();
@@ -71,11 +67,6 @@ public class SmartPage extends Page {
         return result;
     }
 
-    //must be called from UI thread
-    public WeiboPageView getWeiboPageView() {
-        weiboPageView.setPage(this);
-        return weiboPageView;
-    }
 
     class DryRunResult {
         boolean overflow;

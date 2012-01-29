@@ -30,7 +30,6 @@ import com.goal98.flipdroid.client.OAuth;
 import com.goal98.flipdroid.client.WeiboExt;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
-import com.goal98.flipdroid.exception.LastWindowException;
 import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.exception.NoSinaAccountBindedException;
 import com.goal98.flipdroid.model.*;
@@ -38,7 +37,6 @@ import com.goal98.flipdroid.model.cachesystem.CacheSystem;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
-import com.goal98.flipdroid.model.RemoteArticleSource;
 import com.goal98.flipdroid.model.google.GoogleReaderArticleSource;
 import com.goal98.flipdroid.model.rss.RemoteRSSArticleSource;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
@@ -80,9 +78,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         return container;
     }
 
-    private WeiboPageView current;
-    private WeiboPageView next;
-    private WeiboPageView previous;
+    private ThumbnailViewContainer current;
+    private ThumbnailViewContainer next;
+    private ThumbnailViewContainer previous;
 
     private ContentRepo repo;
     private SharedPreferences preferences;
@@ -691,29 +689,29 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
 
     public class WeiboPageViewFactory {
-        public WeiboPageView createPageView() {
+        public ThumbnailViewContainer createPageView() {
             System.out.println("jleo creating page view");
-            WeiboPageView pageView = null;
+            ThumbnailViewContainer pageViewContainer = null;
 
             if (isWeiboMode()) {
-                pageView = new WeiboPageView(PageActivity.this);
+                pageViewContainer = new ThumbnailViewContainer(PageActivity.this);
             } else {
-                pageView = new MagzinePageView(PageActivity.this);
+                pageViewContainer = new MagzinePageViewContainer(PageActivity.this);
             }
-            return pageView;
+            return pageViewContainer;
         }
 
-        public WeiboPageView createFirstPage() {
-            WeiboPageView pageView = null;
-            pageView = new FirstPageView(PageActivity.this, slidingWindows, executor);
-            return pageView;
+        public ThumbnailViewContainer createFirstPage() {
+            ThumbnailViewContainer pageViewContainer = null;
+            pageViewContainer = new FirstPageViewContainer(PageActivity.this, slidingWindows, executor);
+            return pageViewContainer;
         }
 
-        public WeiboPageView createLastPage() {
-            WeiboPageView pageView = null;
-            pageView = new LastPageView(PageActivity.this);
+        public ThumbnailViewContainer createLastPage() {
+            ThumbnailViewContainer pageViewContainer = null;
+            pageViewContainer = new LastPageViewContainer(PageActivity.this);
 
-            return pageView;
+            return pageViewContainer;
         }
 
     }
@@ -1025,7 +1023,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             prepareNextPage();
             return;
         } else {
-            WeiboPageView tmp = null;
+            ThumbnailViewContainer tmp = null;
             tmp = preparingWindow.get();
             if (tmp.isLastPage()) {
                 prepareFail = true;
@@ -1038,7 +1036,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             else
                 previous = tmp;
 
-            final WeiboPageView finalTmp = tmp;
+            final ThumbnailViewContainer finalTmp = tmp;
             handler.post(new Runnable() {
                 public void run() {
                     renderNextPageIfNotRendered();
@@ -1053,21 +1051,21 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private void renderNextPageIfNotRendered() {
-        WeiboPageView renderingPageView;
+        ThumbnailViewContainer renderingPageViewContainer;
 
         if (forward) {
-            renderingPageView = next;
+            renderingPageViewContainer = next;
         } else {
-            renderingPageView = previous;
+            renderingPageViewContainer = previous;
         }
-        renderingPageView.setVisibility(View.VISIBLE);
-        if (renderingPageView.isRendered())
+        renderingPageViewContainer.setVisibility(View.VISIBLE);
+        if (renderingPageViewContainer.isRendered())
             return;
 
-        for (ArticleView v : renderingPageView.getWeiboViews()) {
+        for (ArticleView v : renderingPageViewContainer.getWeiboViews()) {
             v.renderBeforeLayout();
         }
-        renderingPageView.renderBeforeLayout();
+        renderingPageViewContainer.renderBeforeLayout();
     }
 
     private void decreasePageNo() {
@@ -1099,14 +1097,14 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         if (forward) {
 //            if (previous != null)
 //                previous.releaseResource();
-            WeiboPageView tmp = current;
+            ThumbnailViewContainer tmp = current;
             previous = current;
             current = next;
             next = tmp;
         } else {
 //            if (next != null)
 //                next.releaseResource();
-            WeiboPageView tmp = current;
+            ThumbnailViewContainer tmp = current;
             next = current;
             current = previous;
             previous = tmp;

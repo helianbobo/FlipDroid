@@ -1,6 +1,7 @@
 <resources>
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
+    <color name="grepblack">#ff565656</color>
     <color name="gray">#ffaaaaaa</color>
     <color name="lightgray">#fff7f7f7</color>
     <color name="darkblue">#ff000099</color>
@@ -12,4 +13,5 @@
     <color name="green">#ff00f500</color>
     <color name="darkgreen">#ff00b500</color>
     <color name="lightred">#ffff6666</color>
+    <color name="transparent">#00000000</color>
 </resources>

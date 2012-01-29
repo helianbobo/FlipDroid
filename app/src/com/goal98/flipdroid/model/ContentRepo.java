@@ -86,11 +86,11 @@ public class ContentRepo {
     }
 
     private void preload(final int pageNo) {
-        //Log.d("cache system", "preloading page " + pageNo);
+        //Log.d("cache system", "preloading pageContainer " + pageNo);
         Future future = executor.submit(new Callable() {
             public Object call() throws Exception {
                 Page preloadedSmartPage = contentCache.getPagePreload(pageNo);
-                //Log.d("cache system", "preload page " + pageNo + " done");
+                //Log.d("cache system", "preload pageContainer " + pageNo + " done");
                 return preloadedSmartPage;
             }
         });

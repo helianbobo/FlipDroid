@@ -6,13 +6,10 @@ import android.widget.LinearLayout;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.Constants;
-import com.goal98.flipdroid.util.DeviceInfo;
 
-import java.util.concurrent.ExecutorService;
-
-public class MagzinePageView extends WeiboPageView {
+public class MagzinePageViewContainer extends ThumbnailViewContainer {
     public LinearLayout addArticleView(Article article, boolean last) {
-        final ThumbnailArticleView thumnnailView = new ThumbnailArticleView(MagzinePageView.this.getContext(), article, this,last,executor);
+        final ThumbnailArticleView thumnnailView = new ThumbnailArticleView(MagzinePageViewContainer.this.getContext(), article, this,last,executor);
         weiboViews.add(thumnnailView);
 
         if (!last) {
@@ -36,7 +33,7 @@ public class MagzinePageView extends WeiboPageView {
         return thumnnailView;
     }
 
-    public MagzinePageView(PageActivity pageActivity) {
+    public MagzinePageViewContainer(PageActivity pageActivity) {
         super(pageActivity);
     }
 }

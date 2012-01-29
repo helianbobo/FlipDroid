@@ -95,6 +95,7 @@ public abstract class PullToRefreshBase<T extends AbsListView> extends LinearLay
 
 	public static final int MODE_PULL_DOWN_TO_REFRESH = 0x1;
 	public static final int MODE_PULL_UP_TO_REFRESH = 0x2;
+	public static final int MODE_PULL_END_TO_REFRESH = 0x3;
 
 	// ===========================================================
 	// Fields

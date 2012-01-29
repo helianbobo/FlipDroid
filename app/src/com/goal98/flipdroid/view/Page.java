@@ -1,22 +1,20 @@
 package com.goal98.flipdroid.view;
 
 import android.app.Activity;
-import com.goal98.flipdroid.activity.FlipdroidApplications;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.DeviceInfo;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 public class Page {
     protected int heightSum;
 
-    protected WeiboPageView weiboPageView;
+//    protected ThumbnailViewContainer thumbnailViewContainer;
 
     protected List<Article> articleList;
-    protected PageActivity activity;
+    protected Activity activity;
     protected DeviceInfo deviceInfo;
 
 
@@ -24,11 +22,11 @@ public class Page {
         return DeviceInfo.getInstance(activity);
     }
 
-    public Page(PageActivity activity) {
+    public Page(Activity activity) {
         this.activity = activity;
         this.deviceInfo = getDeviceInfoFromApplicationContext();
         this.articleList = new LinkedList<Article>();
-        weiboPageView = new WeiboPageView(activity);
+//        thumbnailViewContainer = new ThumbnailViewContainer((PageActivity) activity);
     }
 
     public List<Article> getArticleList() {
@@ -38,11 +36,5 @@ public class Page {
     public boolean addArticle(final Article article) {
         articleList.add(article);
         return true;
-    }
-
-    //must be called from UI thread
-    public WeiboPageView getWeiboPageView() {
-        weiboPageView.setPage(this);
-        return weiboPageView;
     }
 }

@@ -59,4 +59,14 @@ public class WGA800 extends MultiScreenSupport {
     public int getMinTitleHeight() {
         return 70;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    public int getTopbarHeight() {
+        return 65;
+    }
+
+    @Override
+    public int getBottomRadioHeight() {
+        return 65;
+    }
 }

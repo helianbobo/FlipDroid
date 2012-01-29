@@ -53,7 +53,7 @@ public abstract class BaseCacheableArticleSource implements CacheableArticleSour
     }
 
     public List<Article> getArticleList() {
-        return list;  //To change body of implemented methods use File | Settings | File Templates.
+        return list;
     }
 
     public LastModifiedStampedResult loadLatestSource() throws NoNetworkException {
@@ -61,29 +61,9 @@ public abstract class BaseCacheableArticleSource implements CacheableArticleSour
         if (loadedBytes == null)
             return null;
 
-//        byte[] latestSource = this.loadedBytes;
-//        boolean needUpdate = false;
-//        if (cachedBytes != null) {
-//            for (int i = 0; i < latestSource.length; i++) {
-//                if (i >= cachedBytes.length) {
-//                    needUpdate = true;
-//                    break;
-//                }
-//                if (latestSource[i] != cachedBytes[i]) {
-//                    needUpdate = true;
-//                    break;
-//                }
-//            }
-//        } else {
-//            needUpdate = true;
-//        }
-
-//        if (needUpdate) {
 
         this.cachedBytes = loadedBytes.getResult().toString().getBytes();
         return loadedBytes;
-//        }
-//        return null;
     }
 
     protected LastModifiedStampedResult loadFromSource() {
