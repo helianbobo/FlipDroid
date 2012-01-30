@@ -120,6 +120,7 @@ public class WebImageView extends ViewSwitcher {
                 0);
 
         roundImage = attributes.getAttributeBooleanValue(XMLNS, "roundImage", false);
+        loadFromInternetFlag = attributes.getAttributeBooleanValue(XMLNS, "loadFromInternet", true);
 
         Drawable progressDrawable = null;
         if (progressDrawableId > 0) {

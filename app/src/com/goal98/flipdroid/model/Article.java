@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import com.goal98.android.ImageLoader;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.view.ExpandableArticleView;
+import com.goal98.flipdroid.view.Notifier;
 import com.goal98.flipdroid.view.ThumbnailArticleView;
 import com.goal98.tika.common.Paragraphs;
 import com.goal98.tika.common.TikaUIObject;
@@ -33,7 +34,7 @@ public class Article {
     private long statusId;
     private String sourceType;
     private Bitmap image;
-    private ThumbnailArticleView.Notifier notifier;
+    private Notifier notifier;
     private int height;
     private Map<String, Bitmap> imagesMap = new HashMap<String, Bitmap>();
     private List<String> images = new ArrayList<String>();
@@ -266,7 +267,7 @@ public class Article {
         return image;
     }
 
-    public void addNotifier(ExpandableArticleView.Notifier notifier) {
+    public void addNotifier(Notifier notifier) {
         this.notifier = notifier;
     }
 

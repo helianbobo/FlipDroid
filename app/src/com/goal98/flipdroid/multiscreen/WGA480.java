@@ -68,4 +68,8 @@ public class WGA480 extends MultiScreenSupport {
     public int getBottomRadioHeight() {
         return 50;
     }
+
+    public int getTopBarTextSize() {
+        return 17;
+    }
 }

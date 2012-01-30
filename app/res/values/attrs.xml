@@ -7,6 +7,11 @@
         <attr name="defaultHeight" format="integer"/>
         <attr name="errorDrawable" format="reference"/>
         <attr name="progressDrawable" format="reference"/>
+        <attr name="loadFromInternet" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="streamStyledArticleView">
+        <attr name="toLoadFromInternet" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="PullToRefresh">

@@ -5,5 +5,5 @@
           android:drawable="@drawable/home_btn_bg_n" />
     <item android:state_enabled="true" android:state_pressed="true" android:drawable="@drawable/home_btn_bg_n" />
     <item android:state_enabled="true" android:state_checked="true" android:drawable="@drawable/home_btn_bg_n" />
-    <item android:drawable="@color/transparent" />
+    <item android:drawable="@color/darkgreen" />
 </selector>

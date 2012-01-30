@@ -6,6 +6,9 @@ import android.graphics.drawable.Drawable;
 import com.goal98.android.MyHandler;
 import com.goal98.flipdroid.util.DeviceInfo;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Administrator
@@ -31,7 +34,10 @@ public class PreloadPrimaryImageLoaderHandler extends PreloadImageLoaderHandler 
             Bitmap scaledBitmap = scale(bitmap);
             article.getImagesMap().put(url, scaledBitmap);
             article.setImageBitmap(scaledBitmap);
+            article.setImageUrl(new URL(url));
             return scaledBitmap != null;
+        } catch (MalformedURLException e) {
+            return false;
         } finally {
             article.setLoading(false);
         }

@@ -53,7 +53,7 @@ public abstract class ExpandableArticleView extends ArticleView {
     private TikaCache tikaCache;
     protected WebImageView imageView;
 
-    public class Notifier {
+    public class ExpandableArticleViewNotifier implements Notifier{
         public void notifyImageLoaded() {
             handler.post(new Runnable() {
                 public void run() {
@@ -119,7 +119,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                 imageView.handleImageLoaded(article.getImage(), null);
                 imageHandled = true;
             } else {
-                article.addNotifier(new Notifier());
+                article.addNotifier(new ExpandableArticleViewNotifier());
 //                if (!article.isLoading()) {
 //                    System.out.println("reloading..." + article.getImageUrl().toExternalForm());
 //                    article.loadPrimaryImage(deviceInfo, toLoadImage);

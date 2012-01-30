@@ -54,27 +54,28 @@ public class TopBar extends LinearLayout {
         if(array.hasValue(R.styleable.topbar_title))
             title = array.getString(R.styleable.topbar_title);
 
-        ImageButton leftButton = (ImageButton)topbarLL.findViewById(R.id.leftButton);
+//        ImageButton leftButton = (ImageButton)topbarLL.findViewById(R.id.leftButton);
         ImageButton rightButton = (ImageButton)topbarLL.findViewById(R.id.rightButton);
         TextView titleView = (TextView)topbarLL.findViewById(R.id.topBarTitle);
 
-        if(leftButtonImage != null)
-            leftButton.setBackgroundDrawable(leftButtonImage);
-
-        if((leftButtonLabel == null || leftButtonLabel.length() == 0) && leftButtonImage==null)
-            leftButton.setVisibility(INVISIBLE);
+//        if(leftButtonImage != null)
+//            leftButton.setBackgroundDrawable(leftButtonImage);
+//
+//        if((leftButtonLabel == null || leftButtonLabel.length() == 0) && leftButtonImage==null)
+//            leftButton.setVisibility(GONE);
 
         if(rightButtonImage != null)
             rightButton.setBackgroundDrawable(rightButtonImage);
         if((rightButtonLabel == null || rightButtonLabel.length() == 0) && rightButtonImage==null)
-            rightButton.setVisibility(INVISIBLE);
-
+            rightButton.setVisibility(GONE);
 
         if(title!= null && title.length() != 0)
             titleView.setText(title);
         else
             titleView.setVisibility(INVISIBLE);
 
+        int textSize = MultiScreenSupport.getInstance(deviceInfo).getTopBarTextSize();
+        titleView.setTextSize(textSize);
         array.recycle();
     }
 

@@ -38,7 +38,7 @@ public class StreamStyledActivity extends ActivityGroup implements TabHost.TabCo
         tabHost.setup(this.getLocalActivityManager());
 
         tabHost.addTab(tabHost.newTabSpec("MyStream")
-                .setIndicator("MyStream", this.getResources().getDrawable(R.drawable.site))
+                .setIndicator("MyStream")
                 .setContent(this));
         tabHost.addTab(tabHost.newTabSpec("Feeds")
                 .setIndicator("Feeds")
@@ -96,7 +96,15 @@ public class StreamStyledActivity extends ActivityGroup implements TabHost.TabCo
             } else if (buttonView == mRadioButtons[1]) {
                 tabHost.setCurrentTabByTag("Feeds");
             }
+            for (int i = 0; i < mRadioButtons.length; i++) {
+            RadioButton mRadioButton = mRadioButtons[i];
+            if(buttonView== mRadioButton)
+                mRadioButton.setSelected(true);
+            else
+                mRadioButton.setSelected(false);
         }
+        }
+
     }
 
     private void initRadios() {

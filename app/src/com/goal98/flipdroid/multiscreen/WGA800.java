@@ -69,4 +69,8 @@ public class WGA800 extends MultiScreenSupport {
     public int getBottomRadioHeight() {
         return 65;
     }
+
+    public int getTopBarTextSize() {
+        return 18;
+    }
 }

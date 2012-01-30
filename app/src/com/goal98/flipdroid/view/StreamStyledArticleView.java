@@ -2,9 +2,11 @@ package com.goal98.flipdroid.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.goal98.android.WebImageView;
@@ -30,6 +32,7 @@ import java.util.concurrent.ExecutorService;
  */
 public class StreamStyledArticleView extends ItemView {
     private boolean toLoadImage;
+    Handler handler = new Handler();
 
     public void setToLoadImage(boolean toLoadImage) {
         this.toLoadImage = toLoadImage;
@@ -44,6 +47,9 @@ public class StreamStyledArticleView extends ItemView {
 
     public StreamStyledArticleView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        final String XMLNS = "http://schemas.android.com/apk/res/" + context.getPackageName();
+        toLoadImage = attrs.getAttributeBooleanValue(XMLNS,
+                "toLoadFromInternet", true);
     }
 
     public void render(DetailInfo di) {
@@ -87,8 +93,7 @@ public class StreamStyledArticleView extends ItemView {
         }
 
 
-
-         MultiScreenSupport mss = MultiScreenSupport.getInstance(deviceInfo);
+        MultiScreenSupport mss = MultiScreenSupport.getInstance(deviceInfo);
         if (article.getImageUrl() == null) {
             LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
             layoutParams.weight = 100;
@@ -112,11 +117,11 @@ public class StreamStyledArticleView extends ItemView {
                 imageView.handleImageLoaded(article.getImage(), null);
                 imageHandled = true;
             } else {
-//                article.addNotifier(new ExpandableArticleView.Notifier());
-//                if (!article.isLoading()) {
-//                    System.out.println("reloading..." + article.getImageUrl().toExternalForm());
-//                    article.loadPrimaryImage(deviceInfo, toLoadImage);
-//                }
+                article.addNotifier(new StreamStyledNotifier(article,imageView));
+                if (!article.isLoading()) {
+                    System.out.println("reloading..." + article.getImageUrl().toExternalForm());
+                    article.loadPrimaryImage(deviceInfo, toLoadImage);
+                }
                 imageHandled = false;
             }
             if (article.getHeight() == 0) {
@@ -145,11 +150,28 @@ public class StreamStyledArticleView extends ItemView {
                 contentViewWrapperWeiboContent.addView(imageView, layoutParamsImage);
             }
 
-        portraitViewWeiboContent.loadImage();
+            portraitViewWeiboContent.loadImage();
+        }
     }
-}
 
     public void setExecutor(ExecutorService executor) {
         this.executor = executor;
+    }
+
+    public class StreamStyledNotifier implements Notifier{
+        private Article article;
+        private WebImageView imageView;
+
+        public StreamStyledNotifier(Article article,final WebImageView imageView){
+            this.article = article;
+            this.imageView = imageView;
+        }
+        public void notifyImageLoaded() {
+            handler.post(new Runnable() {
+                public void run() {
+                    imageView.handleImageLoaded(article.getImage(), null);
+                }
+            });
+        }
     }
 }
