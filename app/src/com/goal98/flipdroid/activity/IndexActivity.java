@@ -27,6 +27,7 @@ import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
 import com.goal98.flipdroid.util.*;
+import com.goal98.flipdroid.view.TopBar;
 import com.goal98.tika.common.TikaConstants;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -102,27 +103,28 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         sourceDB = new SourceDB(getApplicationContext());
 
         setContentView(R.layout.index);
-
-        Button addSourceButton = (Button) findViewById(R.id.btn_add_source);
-//        addSourceButton.setVisibility(View.GONE);
-        addSourceButton.setOnTouchListener(new View.OnTouchListener() {
-
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_UP:
-                        Intent intent = new Intent(IndexActivity.this, SiteActivity.class);
-                        startActivity(intent);
-                        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                        break;
-                    default:
-                        break;
-                }
-
-                return false;
-            }
-
-        });
+        TopBar topbar = (TopBar)findViewById(R.id.topbar);
+        topbar.addButton(TopBar.IMAGE, R.drawable.like);
+//        Button addSourceButton = (Button) findViewById(R.id.btn_add_source);
+////        addSourceButton.setVisibility(View.GONE);
+//        addSourceButton.setOnTouchListener(new View.OnTouchListener() {
+//
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//
+//                switch (motionEvent.getAction()) {
+//                    case MotionEvent.ACTION_UP:
+//                        Intent intent = new Intent(IndexActivity.this, SiteActivity.class);
+//                        startActivity(intent);
+//                        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+//                        break;
+//                    default:
+//                        break;
+//                }
+//
+//                return false;
+//            }
+//
+//        });
         mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
 
         // Set a listener to be invoked when the list should be refreshed.
@@ -152,9 +154,9 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     }
 
     private void initUmengAppNetwork() {
-        ViewGroup rootLayout = (ViewGroup) findViewById(R.id.indexView);
-        ExchangeViewManager exchangeViewManager = new ExchangeViewManager();
-        exchangeViewManager.addView(this, rootLayout, ExchangeConstants.type_grid_view_bottom);
+//        ViewGroup rootLayout = (ViewGroup) findViewById(R.id.indexView);
+//        ExchangeViewManager exchangeViewManager = new ExchangeViewManager();
+//        exchangeViewManager.addView(this, rootLayout, ExchangeConstants.type_grid_view_bottom);
     }
 
     private void updateSource() {

@@ -122,26 +122,26 @@ public class SiteActivity extends Activity {
                             startActivity(intent);
                             overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
                         }
-                        finish();
+//                        finish();
                     }
                     if (TikaConstants.TYPE_GOOGLE_READER.equals(type)) {
                         startActivity(new Intent(SiteActivity.this, GoogleAccountActivity.class));
                         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                        finish();
+//                        finish();
                     }
                     if (TikaConstants.TYPE_RSS.equals(type)) {
                         Intent intent = new Intent(SiteActivity.this, RSSSourceSelectionActivity.class);
                         intent.putExtra("type", type);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                        finish();
+//                        finish();
                     }
                     if (Constants.TYPE_FLIPDROID.equals(type)) {
                         Intent intent = new Intent(SiteActivity.this, FlipdroidSourceActivity.class);
                         intent.putExtra("type", type);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                        finish();
+//                        finish();
                     }
                     
                     if (Constants.TYPE_BAIDUSEARCH.equals(type)) {
@@ -149,7 +149,7 @@ public class SiteActivity extends Activity {
                         intent.putExtra("type", type);
                         startActivity(intent);
                         overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                        finish();
+//                        finish();
                     }
 
 //                        if(Constants.TYPE_TENCENT_WEIBO.equals(type)){

@@ -7,10 +7,13 @@
     <TextView android:id="@+id/topBarTitle" android:textColor="@color/white"
               android:layout_width="wrap_content" android:layout_height="wrap_content"
               android:gravity="center" android:layout_gravity="center"/>
-    <LinearLayout android:layout_width="fill_parent" android:minWidth="95dip" android:layout_height="wrap_content" android:gravity="right">
-        <ImageButton android:id="@+id/rightButton" android:background="@drawable/refresh"
-                android:textSize="14px" android:layout_width="wrap_content" android:maxHeight="30dip" android:adjustViewBounds="true"
-                android:layout_height="wrap_content" android:layout_gravity="right"/>
+    <LinearLayout android:layout_width="fill_parent" android:minWidth="95dip" android:layout_height="wrap_content"
+                  >
+        <TableLayout android:layout_width="fill_parent" android:layout_height="fill_parent" >
+            <TableRow android:id="@+id/topbar_button" android:gravity="right">
+
+            </TableRow>
+        </TableLayout>
     </LinearLayout>
 
 </LinearLayout>

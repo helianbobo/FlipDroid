@@ -7,10 +7,8 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.multiscreen.MultiScreenSupport;
 import com.goal98.flipdroid.util.DeviceInfo;
@@ -25,6 +23,8 @@ import com.goal98.flipdroid.util.DeviceInfo;
 public class TopBar extends LinearLayout {
     private Context context;
     private LinearLayout topbarLL;
+    public static final int IMAGE = 0;
+    public static final int TEXT = 1;
 
     private void init(AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -55,7 +55,7 @@ public class TopBar extends LinearLayout {
             title = array.getString(R.styleable.topbar_title);
 
 //        ImageButton leftButton = (ImageButton)topbarLL.findViewById(R.id.leftButton);
-        ImageButton rightButton = (ImageButton)topbarLL.findViewById(R.id.rightButton);
+//        ImageButton rightButton = (ImageButton)topbarLL.findViewById(R.id.rightButton);
         TextView titleView = (TextView)topbarLL.findViewById(R.id.topBarTitle);
 
 //        if(leftButtonImage != null)
@@ -64,10 +64,10 @@ public class TopBar extends LinearLayout {
 //        if((leftButtonLabel == null || leftButtonLabel.length() == 0) && leftButtonImage==null)
 //            leftButton.setVisibility(GONE);
 
-        if(rightButtonImage != null)
-            rightButton.setBackgroundDrawable(rightButtonImage);
-        if((rightButtonLabel == null || rightButtonLabel.length() == 0) && rightButtonImage==null)
-            rightButton.setVisibility(GONE);
+//        if(rightButtonImage != null)
+//            rightButton.setBackgroundDrawable(rightButtonImage);
+//        if((rightButtonLabel == null || rightButtonLabel.length() == 0) && rightButtonImage==null)
+//            rightButton.setVisibility(GONE);
 
         if(title!= null && title.length() != 0)
             titleView.setText(title);
@@ -85,5 +85,20 @@ public class TopBar extends LinearLayout {
         init(attrs);
     }
 
-
+    public void addButton(int type, int resourceId){
+        View button = inflate(this.getContext(), R.layout.include_header_button,null);
+        if(type == IMAGE){
+            View viewById = button.findViewById(R.id.header_btn_img);
+            viewById.setBackgroundResource(resourceId);
+            viewById.setVisibility(VISIBLE);
+//            button.findViewById(R.id.header_btn_text).setVisibility(GONE);
+        }
+        if(type == TEXT){
+            TextView viewById = (TextView) button.findViewById(R.id.header_btn_text);
+            viewById.setText(resourceId);
+            viewById.setVisibility(VISIBLE);
+        }
+        TableRow row = (TableRow)this.findViewById(R.id.topbar_button);
+        row.addView(button);
+    }
 }

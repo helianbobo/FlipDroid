@@ -124,4 +124,13 @@
         <item name="android:singleLine">true</item>
         <item name="android:layout_weight">1.0</item>
     </style>
+
+    <style name="HeaderView_ButtonText">
+        <item name="android:textSize">13.0sp</item>
+        <item name="android:textColor">@color/header_btn_text_color</item>
+        <item name="android:shadowColor">#ff555555</item>
+        <item name="android:shadowDx">0.0</item>
+        <item name="android:shadowDy">0.0</item>
+        <item name="android:shadowRadius">2.5</item>
+    </style>
 </resources>

@@ -1,15 +1,24 @@
-<GridView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:id="@+id/siteGrid"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:wp="http://schemas.android.com/apk/res/com.goal98.flipdroid" android:orientation="vertical"
+              style="@style/Index">
 
-          style="@style/SiteGrid"
+    <com.goal98.flipdroid.view.TopBar wp:rightButtonImage="@drawable/like"
+                                      android:layout_height="wrap_content"
+                                      android:layout_width="fill_parent"
+                                      wp:title="@string/addfeeds"></com.goal98.flipdroid.view.TopBar>
+    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/siteGrid"
 
-          android:padding="10dp"
-          android:verticalSpacing="10dp"
+              style="@style/SiteGrid"
 
-          android:horizontalSpacing="10dp"
-          android:numColumns="auto_fit"
-          android:columnWidth="130dp"
-          android:stretchMode="columnWidth"
+              android:padding="10dp"
+              android:verticalSpacing="10dp"
 
-          android:gravity="center"
-        />
+              android:horizontalSpacing="10dp"
+              android:numColumns="auto_fit"
+              android:columnWidth="130dp"
+              android:stretchMode="columnWidth"
+
+              android:gravity="center"
+            />
+</LinearLayout>

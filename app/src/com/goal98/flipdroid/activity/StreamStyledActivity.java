@@ -37,14 +37,20 @@ public class StreamStyledActivity extends ActivityGroup implements TabHost.TabCo
         tabcontent.setPadding(0,0,0,bottomHeight);
         tabHost.setup(this.getLocalActivityManager());
 
-        tabHost.addTab(tabHost.newTabSpec("MyStream")
-                .setIndicator("MyStream")
+        String myStream = this.getString(R.string.mystream);
+        tabHost.addTab(tabHost.newTabSpec(myStream)
+                .setIndicator(myStream)
                 .setContent(this));
-        tabHost.addTab(tabHost.newTabSpec("Feeds")
-                .setIndicator("Feeds")
+        String myFeeds = this.getString(R.string.my_feed);
+        tabHost.addTab(tabHost.newTabSpec(myFeeds)
+                .setIndicator(myFeeds)
+                .setContent(new Intent(this, IndexActivity.class)));
+        String addFeeds = this.getString(R.string.addfeeds);
+        tabHost.addTab(tabHost.newTabSpec(addFeeds)
+                .setIndicator(addFeeds)
                 .setContent(new Intent(this, SiteActivity.class)));
-        tabHost.getTabWidget().getChildAt(0).getLayoutParams().height = 65;
-        tabHost.getTabWidget().setBackgroundResource(R.drawable.like);
+//        tabHost.getTabWidget().getChildAt(0).getLayoutParams().height = 65;
+//        tabHost.getTabWidget().setBackgroundResource(R.drawable.like);
         initRadios();
     }
 
@@ -92,9 +98,11 @@ public class StreamStyledActivity extends ActivityGroup implements TabHost.TabCo
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
             if (buttonView == mRadioButtons[0]) {
-                tabHost.setCurrentTabByTag("MyStream");
+                tabHost.setCurrentTabByTag(this.getString(R.string.mystream));
             } else if (buttonView == mRadioButtons[1]) {
-                tabHost.setCurrentTabByTag("Feeds");
+                tabHost.setCurrentTabByTag(this.getString(R.string.my_feed));
+            }else if (buttonView == mRadioButtons[2]) {
+                tabHost.setCurrentTabByTag(this.getString(R.string.addfeeds));
             }
             for (int i = 0; i < mRadioButtons.length; i++) {
             RadioButton mRadioButton = mRadioButtons[i];

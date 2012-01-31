@@ -1,27 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout android:id="@+id/indexView" xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:wp="http://schemas.android.com/apk/res/com.goal98.flipdroid" android:id="@+id/indexView" xmlns:android="http://schemas.android.com/apk/res/android"
                 style="@style/Index">
 
     <LinearLayout android:orientation="vertical" style="@style/Index">
 
-        <Button android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:drawableLeft="@drawable/ic_action_add_source"
-                android:paddingLeft="80dp"
-                android:paddingRight="65dp"
-                android:text="@string/button_add_new_source"
-                style="@style/Button"
-                android:layout_margin="10dp"
-                android:id="@+id/btn_add_source"/>
+        <com.goal98.flipdroid.view.TopBar android:id="@+id/topbar" wp:rightButtonImage="@drawable/like"
+                                          android:layout_height="wrap_content"
+                                          android:layout_width="fill_parent"
+                                          wp:title="@string/my_feed"></com.goal98.flipdroid.view.TopBar>
 
 
         <com.handmark.pulltorefresh.library.PullToRefreshListView android:layout_height="fill_parent"
                                                                   android:layout_width="fill_parent"
-                                                                  android:layout_marginLeft="10dp"
-                                                                  android:layout_marginRight="10dp"
-                                                                  android:id="@+id/pull_refresh_list"
-                                                                  android:layoutAnimation="@anim/layout_left_slide_in"/>
+
+                                                                  android:id="@+id/pull_refresh_list" />
 
     </LinearLayout>
 

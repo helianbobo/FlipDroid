@@ -1,6 +1,7 @@
 package com.handmark.pulltorefresh.library;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.widget.ListView;
 
@@ -17,8 +18,8 @@ public class PullToRefreshListView extends PullToRefreshBase<ListView> {
 	@Override
 	protected final ListView createAdapterView(Context context, AttributeSet attrs) {
 		ListView lv = new ListView(context, attrs);
-
 		// Set it to this so it can be used in ListActivity/ListFragment
+        lv.setVerticalFadingEdgeEnabled(true);
 		lv.setId(android.R.id.list);
 		return lv;
 	}

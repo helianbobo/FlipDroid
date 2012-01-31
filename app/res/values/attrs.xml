@@ -31,4 +31,5 @@
         <attr name="title" format="string"/>
         <attr name="rightButtonLabel" format="string"/>
     </declare-styleable>
+
 </resources>
