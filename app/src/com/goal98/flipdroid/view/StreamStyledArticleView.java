@@ -113,7 +113,7 @@ public class StreamStyledArticleView extends ItemView {
             }
 
             boolean imageHandled = false;
-            if (article.getImage() != null) {
+            if (article.getImage() != null && !article.getImage().isRecycled()) {
                 imageView.handleImageLoaded(article.getImage(), null);
                 imageHandled = true;
             } else {

@@ -2,6 +2,7 @@ package com.goal98.flipdroid.activity;
 
 import android.os.Handler;
 import android.widget.AbsListView;
+import android.widget.ListView;
 import com.goal98.flipdroid.model.NoSuchPageException;
 
 import java.util.List;
@@ -19,23 +20,40 @@ public class AutoLoadScrollListener implements AbsListView.OnScrollListener {
     private OnLoadListener onLoadListener;
     private AutoLoadArrayAdapter adapter;
     Handler handler = new Handler();
+    private ListView listView;
 
-    public AutoLoadScrollListener(OnLoadListener listener, AutoLoadArrayAdapter adapter) {
+    public AutoLoadScrollListener(OnLoadListener listener, AutoLoadArrayAdapter adapter, ListView listView) {
         this.onLoadListener = listener;
         this.adapter = adapter;
+        this.listView= listView;
+    }
+
+    private boolean isLastItemVisible() {
+        final int count = this.listView.getCount();
+        if (count == 0) {
+            return true;
+        } else if (listView.getLastVisiblePosition() == count - 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void onScroll(AbsListView view, int firstVisibleItem,
                          int visibleItemCount, int totalItemCount) {
-        if (firstVisibleItem + visibleItemCount >= totalItemCount
-                && totalItemCount != 0) {
+        if (visibleItemCount > 0 && visibleItemCount < totalItemCount
+                && (firstVisibleItem + visibleItemCount == totalItemCount)) {
             fireLoad = true;
         } else {
-            fireLoad = false;
+            if(isLastItemVisible())
+                fireLoad = true;
+            else
+                fireLoad = false;
         }
     }
 
     public void onScrollStateChanged(AbsListView view, int scrollState) {
+
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
             if (fireLoad && !adapter.isLoadingData())
                 load();

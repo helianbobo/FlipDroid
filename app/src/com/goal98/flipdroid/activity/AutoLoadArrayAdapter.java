@@ -41,7 +41,7 @@ public abstract class AutoLoadArrayAdapter extends ArrayAdapter implements Adapt
             public List load() throws NoSuchPageException {
                 return AutoLoadArrayAdapter.this.load();
             }
-        }, this);
+        }, this,listView);
         listView.setOnScrollListener(autoLoadScrollListener);
         listView.setAdapter(this);
     }
