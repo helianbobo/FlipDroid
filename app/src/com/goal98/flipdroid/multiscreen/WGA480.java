@@ -72,4 +72,8 @@ public class WGA480 extends MultiScreenSupport {
     public int getTopBarTextSize() {
         return 17;
     }
+
+    public int getBottomBarIconHeight() {
+        return 20;
+    }
 }

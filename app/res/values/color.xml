@@ -18,4 +18,5 @@
     <color name="header_btn_text_color_normal">#ffe6ecef</color>
     <color name="header_btn_backgroud_press_color">#ff054158</color>
     <color name="text_selected_color">#ffff9f08</color>
+    <color name="maintab_text_normal">#ffc1c1c1</color>
 </resources>

@@ -4,38 +4,37 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
     <TabHost android:layout_width="fill_parent" android:layout_gravity="bottom"
-             android:layout_height="fill_parent" android:id="@+id/tabHost">
+             android:layout_height="fill_parent" android:id="@android:id/tabhost">
         <FrameLayout android:layout_width="fill_parent" android:id="@android:id/tabcontent"
                      android:layout_height="fill_parent" android:paddingBottom="65dip">
 
         </FrameLayout>
         <RelativeLayout android:layout_width="fill_parent"
-                        android:layout_height="fill_parent">
+                        android:layout_height="wrap_content">
             <TabWidget android:id="@android:id/tabs"
-                       android:visibility="gone"
                        android:layout_width="fill_parent"
                        android:layout_height="wrap_content"
                        android:background="@color/white"
+                       android:layout_alignParentBottom="true"
                     />
 
-            <RadioGroup android:gravity="bottom"
-                        android:layout_gravity="bottom"
-                        android:orientation="horizontal"
-                        android:id="@+id/main_radio"
-                        android:layout_width="fill_parent"
-                        android:layout_alignParentBottom="true"
-                        android:layout_height="fill_parent" android:paddingTop="2dip"
-                    >
-                <RadioButton android:tag="radio_button0" android:background="@drawable/bg_tb_item_left" android:layout_height="wrap_content"
-                             android:drawableTop="@drawable/book1_29x" style="@style/main_tab_bottom" android:text="@string/mystream"/>
-                <RadioButton android:tag="radio_button1"  android:background="@drawable/bg_tb_item_center"
-                             android:drawableTop="@drawable/rss_29x" style="@style/main_tab_bottom" android:text="@string/my_feed"/>
-                <RadioButton android:tag="radio_button2" android:layout_marginTop="0.0dip" android:background="@drawable/bg_tb_item_center"
-                             android:drawableTop="@drawable/like" style="@style/main_tab_bottom" android:text="Feeds"/>
-                <RadioButton android:drawableTop="@drawable/like" android:tag="radio_button3" style="@style/main_tab_bottom" android:background="@drawable/bg_tb_item_center"/>
-                <RadioButton android:tag="radio_button4"
-                             android:background="@drawable/bg_tb_item_right" android:drawableTop="@drawable/like" style="@style/main_tab_bottom"/>
-            </RadioGroup>
+            <!--<TableLayout android:gravity="bottom"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:id="@+id/main_table"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_height="wrap_content" android:paddingTop="2dip"-->
+            <!-->-->
+            <!--<TableRow>-->
+            <!--<include android:layout_height="65dip" android:layout_width="fill_parent" layout="@layout/tab_stream"></include>-->
+            <!--<include android:layout_height="65dip" android:layout_width="fill_parent" layout="@layout/tab_feeds"></include>-->
+            <!--<include android:layout_height="65dip" android:layout_width="fill_parent" layout="@layout/tab_friend"></include>-->
+            <!--<include android:layout_height="65dip" android:layout_width="fill_parent" layout="@layout/tab_profile"></include>-->
+            <!--<include android:layout_height="65dip" android:layout_width="fill_parent" layout="@layout/tab_setting"></include>-->
+            <!--</TableRow>-->
+
+            <!--</TableLayout>-->
         </RelativeLayout>
     </TabHost>
 </LinearLayout>

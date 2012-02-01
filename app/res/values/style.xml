@@ -133,4 +133,28 @@
         <item name="android:shadowDy">0.0</item>
         <item name="android:shadowRadius">2.5</item>
     </style>
+    <style name="TabItem_Layout">
+        <item name="android:paddingLeft">0.0dip</item>
+        <item name="android:paddingRight">0.0dip</item>
+        <item name="android:paddingBottom">2.0dip</item>
+        <item name="android:layout_width">0.0dip</item>
+        <item name="android:layout_height">50.0dip</item>
+        <item name="android:layout_weight">1.0</item>
+    </style>
+    <style name="ShadowedText">
+        <item name="android:shadowDx">0.0</item>
+        <item name="android:shadowDy">-1.0</item>
+        <item name="android:shadowRadius">1.0</item>
+    </style>
+    <style name="Style.TabItem.Label" parent="@style/ShadowedText">
+        <item name="android:textSize">11.0sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/maintab_text_normal</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TabItem_Icon">
+        <item name="android:layout_marginTop">6.0dip</item>
+    </style>
 </resources>

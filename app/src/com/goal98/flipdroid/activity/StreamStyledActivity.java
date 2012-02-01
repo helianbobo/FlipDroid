@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.activity;
 
 import android.app.ActivityGroup;
+import android.app.TabActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,56 +21,66 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
  * Time: 下午4:21
  * To change this template use File | Settings | File Templates.
  */
-public class StreamStyledActivity extends ActivityGroup implements TabHost.TabContentFactory, CompoundButton.OnCheckedChangeListener {
+public class StreamStyledActivity extends TabActivity implements TabHost.TabContentFactory {
     private ArticleAdapter adapter;
-    private RadioButton[] mRadioButtons;
+    //    private RadioButton[] mRadioButtons;
     private TabHost tabHost;
     private DeviceInfo deviceInfo;
     private int bottomHeight;
+    private LayoutInflater inflator;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab);
+        inflator = (LayoutInflater) getSystemService("layout_inflater");
         deviceInfo = DeviceInfo.getInstance(this);
-        bottomHeight = MultiScreenSupport.getInstance(deviceInfo).getBottomRadioHeight();
-        tabHost = (TabHost) findViewById(R.id.tabHost);
-        FrameLayout tabcontent = (FrameLayout)findViewById(android.R.id.tabcontent);
-        tabcontent.setPadding(0,0,0,bottomHeight);
+        final MultiScreenSupport multiScreenSupport = MultiScreenSupport.getInstance(deviceInfo);
+        bottomHeight = multiScreenSupport.getBottomRadioHeight();
+        tabHost = getTabHost();
+        FrameLayout tabcontent = (FrameLayout) findViewById(android.R.id.tabcontent);
+        tabcontent.setPadding(0, 0, 0, bottomHeight);
         tabHost.setup(this.getLocalActivityManager());
+        final int bottomBarIconHeight = multiScreenSupport.getBottomBarIconHeight();
 
-        String myStream = this.getString(R.string.mystream);
-        tabHost.addTab(tabHost.newTabSpec(myStream)
-                .setIndicator(myStream)
-                .setContent(this));
-        String myFeeds = this.getString(R.string.my_feed);
-        tabHost.addTab(tabHost.newTabSpec(myFeeds)
-                .setIndicator(myFeeds)
-                .setContent(new Intent(this, IndexActivity.class)));
-        String addFeeds = this.getString(R.string.addfeeds);
-        tabHost.addTab(tabHost.newTabSpec(addFeeds)
-                .setIndicator(addFeeds)
-                .setContent(new Intent(this, SiteActivity.class)));
-//        tabHost.getTabWidget().getChildAt(0).getLayoutParams().height = 65;
-//        tabHost.getTabWidget().setBackgroundResource(R.drawable.like);
-        initRadios();
+        addTab(R.string.mystream, R.layout.tab_stream, bottomBarIconHeight,null);
+        addTab(R.string.my_feed, R.layout.tab_feeds, bottomBarIconHeight, new Intent(this, IndexActivity.class));
+
+
+        for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
+            tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = 65;
+        }
     }
 
+    private void addTab(int strId, int layout, int bottomBarIconHeight, Intent intent) {
+        String text = this.getString(strId);
+        final View view = inflator.inflate(layout, null);
+        view.findViewById(R.id.tab_item_iv_icon).getLayoutParams().height = bottomBarIconHeight;
+        final TabHost.TabSpec tabSpec = tabHost.newTabSpec(text)
+                .setIndicator(view);
+        if (intent != null) {
+            tabSpec.setContent(intent);
+        } else
+            tabSpec.setContent(this);
+        tabHost.addTab(tabSpec);
+    }
 
     public View createTabContent(String s) {
-        LayoutInflater li = LayoutInflater.from(this);
-        View wrapper = li.inflate(R.layout.stream, null);
-        final PullToRefreshListView mPullRefreshListView = (PullToRefreshListView) (wrapper.findViewById(R.id.pull_refresh_list));
-        // Set a listener to be invoked when the list should be refreshed.
-        mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
-            public void onRefresh() {
-                // Do work to refresh the list here.
-                new GetDataTask(mPullRefreshListView).execute();
-            }
-        });
-        adapter = new ArticleAdapter(this, mPullRefreshListView.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, new ArticleLoader(this, 8), R.layout.nodataview);
+        if (s.equals(this.getString(R.string.mystream))) {
+            View wrapper = inflator.inflate(R.layout.stream, null);
+            final PullToRefreshListView mPullRefreshListView = (PullToRefreshListView) (wrapper.findViewById(R.id.pull_refresh_list));
+            // Set a listener to be invoked when the list should be refreshed.
+            mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
+                public void onRefresh() {
+                    // Do work to refresh the list here.
+                    new GetDataTask(mPullRefreshListView).execute();
+                }
+            });
+            adapter = new ArticleAdapter(this, mPullRefreshListView.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, new ArticleLoader(this, 8), R.layout.nodataview);
 
-        adapter.forceLoad();
-        return wrapper;
+            adapter.forceLoad();
+            return wrapper;
+        }
+        return null;
     }
 
     private class GetDataTask extends AsyncTask<Void, Void, String[]> {
@@ -95,41 +106,26 @@ public class StreamStyledActivity extends ActivityGroup implements TabHost.TabCo
         }
     }
 
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked) {
-            if (buttonView == mRadioButtons[0]) {
-                tabHost.setCurrentTabByTag(this.getString(R.string.mystream));
-            } else if (buttonView == mRadioButtons[1]) {
-                tabHost.setCurrentTabByTag(this.getString(R.string.my_feed));
-            }else if (buttonView == mRadioButtons[2]) {
-                tabHost.setCurrentTabByTag(this.getString(R.string.addfeeds));
-            }
-            for (int i = 0; i < mRadioButtons.length; i++) {
-            RadioButton mRadioButton = mRadioButtons[i];
-            if(buttonView== mRadioButton)
-                mRadioButton.setSelected(true);
-            else
-                mRadioButton.setSelected(false);
-        }
-        }
+//    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//        if (isChecked) {
+//            if (buttonView == mRadioButtons[0]) {
+//                tabHost.setCurrentTabByTag(this.getString(R.string.mystream));
+//            } else if (buttonView == mRadioButtons[1]) {
+//                tabHost.setCurrentTabByTag(this.getString(R.string.my_feed));
+//            }else if (buttonView == mRadioButtons[2]) {
+//                tabHost.setCurrentTabByTag(this.getString(R.string.addfeeds));
+//            }
+//            for (int i = 0; i < mRadioButtons.length; i++) {
+//            RadioButton mRadioButton = mRadioButtons[i];
+//            if(buttonView== mRadioButton)
+//                mRadioButton.setSelected(true);
+//            else
+//                mRadioButton.setSelected(false);
+//        }
+//        }
 
-    }
+//    }
 
-    private void initRadios() {
-        RadioGroup localRadioGroup = (RadioGroup) findViewById(R.id.main_radio);
-        RadioButton[] arrayOfRadioButton1 = new RadioButton[5];
-        this.mRadioButtons = arrayOfRadioButton1;
-
-        localRadioGroup.getLayoutParams().height = bottomHeight;
-
-        for (int i = 0; i < arrayOfRadioButton1.length; i++) {
-            RadioButton radioButton = (RadioButton) localRadioGroup.findViewWithTag("radio_button" + i);
-            radioButton.setOnCheckedChangeListener(this);
-
-            mRadioButtons[i] = radioButton;
-        }
-
-    }
 }
 
 

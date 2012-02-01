@@ -38,4 +38,6 @@ public abstract class MultiScreenSupport {
     public abstract int getBottomRadioHeight();
 
     public abstract int getTopBarTextSize();
+
+    public abstract int getBottomBarIconHeight();
 }

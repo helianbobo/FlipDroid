@@ -30,6 +30,7 @@ public class TopBar extends LinearLayout {
         LayoutInflater inflater = LayoutInflater.from(context);
         topbarLL = (LinearLayout) inflater.inflate(R.layout.topbar, this);
         DeviceInfo deviceInfo = DeviceInfo.getInstance((Activity) context);
+
         LinearLayout titleBar = (LinearLayout)topbarLL.findViewById(R.id.titleBar);
         titleBar.getLayoutParams().height = MultiScreenSupport.getInstance(deviceInfo).getTopbarHeight();
         TypedArray array = getContext().obtainStyledAttributes(attrs, R.styleable.topbar);
