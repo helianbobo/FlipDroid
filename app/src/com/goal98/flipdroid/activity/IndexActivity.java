@@ -27,6 +27,7 @@ import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
 import com.goal98.flipdroid.util.*;
+import com.goal98.flipdroid.view.PopupWindowManager;
 import com.goal98.flipdroid.view.TopBar;
 import com.goal98.tika.common.TikaConstants;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -35,8 +36,9 @@ import com.mobclick.android.MobclickAgent;
 import com.mobclick.android.UmengUpdateListener;
 
 import java.util.*;
+import java.util.zip.Inflater;
 
-public class IndexActivity extends ListActivity implements SourceUpdateable {
+public class IndexActivity extends ListActivity implements SourceUpdateable, View.OnTouchListener {
 
     static final private int CONFIG_ID = Menu.FIRST;
     static final private int CLEAR_ID = Menu.FIRST + 1;
@@ -55,6 +57,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     final private Map indicatorMap = new HashMap();
 
     private String TAG = this.getClass().getName();
+    private LayoutInflater inflater;
+    private PopupWindow mPopupWindow;
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -65,6 +69,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     public DeviceInfo getDeviceInfoFromApplicationContext() {
         return DeviceInfo.getInstance(this);
     }
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,22 +82,21 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                     Activity parent = getParent();
                     if (parent == null)
                         return;
-                    ;
 
                     switch (status) {
                         case 0: //has update
                             MobclickAgent.showUpdateDialog(IndexActivity.this);
                             Log.i(TAG, "show dialog");
                             break;
-                        case 1: //has no update
-                            Toast.makeText(parent, "has no update", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 2: //none wifi
-                            Toast.makeText(parent, "has no update", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 3: //time out
-                            Toast.makeText(parent, "time out", Toast.LENGTH_SHORT).show();
-                            break;
+//                        case 1: //has no update
+//                            Toast.makeText(parent, "has no update", Toast.LENGTH_SHORT).show();
+//                            break;
+//                        case 2: //none wifi
+//                            Toast.makeText(parent, "has no update", Toast.LENGTH_SHORT).show();
+//                            break;
+//                        case 3: //time out
+//                            Toast.makeText(parent, "time out", Toast.LENGTH_SHORT).show();
+//                            break;
                     }
                 }
             });
@@ -103,8 +107,24 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         sourceDB = new SourceDB(getApplicationContext());
 
         setContentView(R.layout.index);
-        TopBar topbar = (TopBar)findViewById(R.id.topbar);
-        topbar.addButton(TopBar.IMAGE, R.drawable.like);
+        inflater = LayoutInflater.from(this);
+        final TopBar topbar = (TopBar) findViewById(R.id.topbar);
+        topbar.addButton(TopBar.IMAGE, R.drawable.ic_btn_add_source, new LinearLayout.OnClickListener() {
+            public synchronized void onClick(View view) {
+                if(mPopupWindow!=null && mPopupWindow.isShowing()){
+                    mPopupWindow.dismiss();
+                }
+
+                View addSourcePopUp = inflater.inflate(
+                        R.layout.add_source, null);
+                mPopupWindow = new PopupWindow(addSourcePopUp, ViewGroup.LayoutParams.FILL_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                mPopupWindow.setOutsideTouchable(false);
+                mPopupWindow.showAsDropDown(topbar.getTableRow());
+                PopupWindowManager.getInstance().setWindow(mPopupWindow);
+            }
+        });
+
 //        Button addSourceButton = (Button) findViewById(R.id.btn_add_source);
 ////        addSourceButton.setVisibility(View.GONE);
 //        addSourceButton.setOnTouchListener(new View.OnTouchListener() {
@@ -134,6 +154,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 new GetDataTask().execute();
             }
         });
+        mPullRefreshListView.setOnTouchListener(this);
         this.getListView().setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             public void onCreateContextMenu(ContextMenu menu, View v,
                                             ContextMenu.ContextMenuInfo menuInfo) {
@@ -163,6 +184,13 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
         updateManager.updateAll();
     }
+
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_UP)
+            PopupWindowManager.getInstance().dismissIfShowing();
+        return true;
+    }
+
 
     private class GetDataTask extends AsyncTask<Void, Void, String[]> {
 
@@ -428,7 +456,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 ManagedCursor mc = new ManagedCursor(c);
                 mc.each(new EachCursor() {
                     public void call(Cursor cursor, int index) {
-                        if(adapter.getCount()<=index)
+                        if (adapter.getCount() <= index)
                             return;
                         if (!(adapter.getItem(index) instanceof SourceItem))
                             return;
@@ -461,7 +489,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 ManagedCursor mc = new ManagedCursor(c);
                 mc.each(new EachCursor() {
                     public void call(Cursor cursor, int index) {
-                        if(adapter.getCount()<=index)
+                        if (adapter.getCount() <= index)
                             return;
                         if (!(adapter.getItem(index) instanceof SourceItem))
                             return;

@@ -67,7 +67,7 @@ public class WGA800 extends MultiScreenSupport {
 
     @Override
     public int getBottomRadioHeight() {
-        return 65;
+        return 75;
     }
 
     public int getTopBarTextSize() {

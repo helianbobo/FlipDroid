@@ -3,6 +3,8 @@ package com.handmark.pulltorefresh.library;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ListView;
 
 public class PullToRefreshListView extends PullToRefreshBase<ListView> {
@@ -14,6 +16,7 @@ public class PullToRefreshListView extends PullToRefreshBase<ListView> {
 	public PullToRefreshListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
+
 
 	@Override
 	protected final ListView createAdapterView(Context context, AttributeSet attrs) {

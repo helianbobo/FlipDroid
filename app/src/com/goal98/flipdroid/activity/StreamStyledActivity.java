@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.multiscreen.MultiScreenSupport;
 import com.goal98.flipdroid.util.DeviceInfo;
+import com.goal98.flipdroid.view.PopupWindowManager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -21,7 +23,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
  * Time: 下午4:21
  * To change this template use File | Settings | File Templates.
  */
-public class StreamStyledActivity extends TabActivity implements TabHost.TabContentFactory {
+public class StreamStyledActivity extends TabActivity implements TabHost.TabContentFactory, View.OnTouchListener {
     private ArticleAdapter adapter;
     //    private RadioButton[] mRadioButtons;
     private TabHost tabHost;
@@ -42,13 +44,18 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
         tabHost.setup(this.getLocalActivityManager());
         final int bottomBarIconHeight = multiScreenSupport.getBottomBarIconHeight();
 
-        addTab(R.string.mystream, R.layout.tab_stream, bottomBarIconHeight,null);
+        addTab(R.string.mystream, R.layout.tab_stream, bottomBarIconHeight, null);
         addTab(R.string.my_feed, R.layout.tab_feeds, bottomBarIconHeight, new Intent(this, IndexActivity.class));
 
-
         for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
-            tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = 65;
+            tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = bottomHeight;
         }
+        TabHost.OnTabChangeListener changeLis=new TabHost.OnTabChangeListener(){
+            public void onTabChanged(String tabId) {
+                PopupWindowManager.getInstance().dismissIfShowing();
+            }
+        };
+        tabHost.setOnTabChangedListener(changeLis);
     }
 
     private void addTab(int strId, int layout, int bottomBarIconHeight, Intent intent) {
@@ -63,6 +70,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
             tabSpec.setContent(this);
         tabHost.addTab(tabSpec);
     }
+
 
     public View createTabContent(String s) {
         if (s.equals(this.getString(R.string.mystream))) {
@@ -82,6 +90,14 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
         }
         return null;
     }
+
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        if (motionEvent.getAction() == MotionEvent.ACTION_UP)
+            PopupWindowManager.getInstance().dismissIfShowing();
+        return true;
+    }
+
+
 
     private class GetDataTask extends AsyncTask<Void, Void, String[]> {
         private PullToRefreshListView mPullRefreshListView;

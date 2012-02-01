@@ -25,6 +25,7 @@ public class TopBar extends LinearLayout {
     private LinearLayout topbarLL;
     public static final int IMAGE = 0;
     public static final int TEXT = 1;
+    private final TableRow tableRow;
 
     private void init(AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -84,22 +85,29 @@ public class TopBar extends LinearLayout {
         super(context, attrs);
         this.context = context;
         init(attrs);
+        tableRow = (TableRow)this.findViewById(R.id.topbar_button);
     }
 
-    public void addButton(int type, int resourceId){
+    public void addButton(int type, int resourceId, OnClickListener listener){
         View button = inflate(this.getContext(), R.layout.include_header_button,null);
+        button.setClickable(true);
         if(type == IMAGE){
             View viewById = button.findViewById(R.id.header_btn_img);
             viewById.setBackgroundResource(resourceId);
             viewById.setVisibility(VISIBLE);
-//            button.findViewById(R.id.header_btn_text).setVisibility(GONE);
+//            viewById.setOnClickListener(listener);
         }
         if(type == TEXT){
             TextView viewById = (TextView) button.findViewById(R.id.header_btn_text);
             viewById.setText(resourceId);
             viewById.setVisibility(VISIBLE);
+//            viewById.setOnClickListener(listener);
         }
-        TableRow row = (TableRow)this.findViewById(R.id.topbar_button);
-        row.addView(button);
+        button.findViewById(R.id.header_btn_container).setOnClickListener(listener);
+        tableRow.addView(button);
+    }
+
+    public TableRow getTableRow() {
+        return tableRow;
     }
 }
