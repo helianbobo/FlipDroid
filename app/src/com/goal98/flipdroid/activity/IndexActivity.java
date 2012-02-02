@@ -117,7 +117,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
 
                 View addSourcePopUp = inflater.inflate(
                         R.layout.add_source, null);
-                mPopupWindow = new PopupWindow(addSourcePopUp, ViewGroup.LayoutParams.FILL_PARENT,
+                mPopupWindow = new PopupWindow(addSourcePopUp, ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
                 mPopupWindow.setOutsideTouchable(false);
                 mPopupWindow.showAsDropDown(topbar.getTableRow());
@@ -188,7 +188,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_UP)
             PopupWindowManager.getInstance().dismissIfShowing();
-        return true;
+        return false;
     }
 
 

@@ -5,6 +5,21 @@
         <item name="android:layout_height">fill_parent</item>
         <item name="android:background">@color/white</item>
     </style>
+    <style name="menu_item">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/bg_menu_item</item>
+        <item name="android:paddingLeft">10.0dip</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">45.0dip</item>
+    </style>
+
+    <style name="menu_text">
+        <item name="android:textSize">14.0sp</item>
+        <item name="android:paddingTop">3dip</item>
+        <item name="android:textColor">@color/menu_text</item>
+    </style>
 
     <style name="Cover" parent="Base">
     </style>

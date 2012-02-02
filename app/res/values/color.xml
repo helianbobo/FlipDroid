@@ -19,4 +19,6 @@
     <color name="header_btn_backgroud_press_color">#ff054158</color>
     <color name="text_selected_color">#ffff9f08</color>
     <color name="maintab_text_normal">#ffc1c1c1</color>
+    <color name="menu_item_dark">#7f000000</color>
+    <color name="menu_text">#ffffffff</color>
 </resources>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="130dip"
+              android:layout_width="wrap_content"
               android:layout_height="wrap_content" android:background="@drawable/bg_dropmenu">
      <TableRow>
-         <include layout="@layout/include_list_simpleitem"/>
-         <include layout="@layout/include_list_simpleitem"/>
-         <include layout="@layout/include_list_simpleitem"/>
+         <include layout="@layout/include_list_simpleitem_sina"/>
+         <include layout="@layout/include_list_simpleitem_rss"/>
+         <include layout="@layout/include_list_simpleitem_gr"/>
      </TableRow>
 </TableLayout>
