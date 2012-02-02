@@ -4,8 +4,8 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content" android:background="@drawable/bg_dropmenu">
      <TableRow>
-         <include layout="@layout/include_list_simpleitem_sina"/>
-         <include layout="@layout/include_list_simpleitem_rss"/>
-         <include layout="@layout/include_list_simpleitem_gr"/>
+         <include android:id="@+id/sina" layout="@layout/include_list_simpleitem_sina"/>
+         <include android:id="@+id/rss" layout="@layout/include_list_simpleitem_rss"/>
+         <include android:id="@+id/gr" layout="@layout/include_list_simpleitem_gr"/>
      </TableRow>
 </TableLayout>

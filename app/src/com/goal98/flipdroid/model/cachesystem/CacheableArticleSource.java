@@ -19,4 +19,8 @@ public interface CacheableArticleSource extends ArticleSource {
     void registerOnLoadListener(OnSourceLoadedListener listener);
 
     LastModifiedStampedResult loadLatestSource();
+
+    String getImageUrl();
+
+    String getAuthor();
 }

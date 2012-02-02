@@ -117,6 +117,8 @@ public abstract class AbstractDB {
                         SourceContentDB.TYPE + " TEXT, " +
                         SourceContentDB.CONTENT + " TEXT, " +
                         SourceContentDB.LAST_MODIFIED + " LONG, "+
+                        SourceContentDB.IMAGEURL + " TEXT, "+
+                        SourceContentDB.AUTHOR + " TEXT, "+
                         "PRIMARY KEY (" + SourceContentDB.URL + ")" +
                         ");";
 
@@ -187,11 +189,7 @@ public abstract class AbstractDB {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             Log.w(this.getClass().getName(), "Upgrading database from version " + oldVersion + " to "
                     + newVersion + ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS " + Account.TABLE_NAME);
-            db.execSQL("DROP TABLE IF EXISTS " + Source.TABLE_NAME);
-            db.execSQL("DROP TABLE IF EXISTS " + URLDB.TABLE_NAME);
             db.execSQL("DROP TABLE IF EXISTS " + SourceContentDB.TABLE_NAME);
-            db.execSQL("DROP TABLE IF EXISTS " + RecommendSource.TABLE_NAME);
             onCreate(db);
 
         }

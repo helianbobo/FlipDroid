@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,6 +24,7 @@ public class TikaClient {
     private String TAG = this.getClass().getName();
 
     private String host;
+    private final FeedJSONParser feedJSONParser = new FeedJSONParser();
 
     public TikaClient(String host) {
         this.host = host;
@@ -90,23 +90,8 @@ public class TikaClient {
         return sourceResponses;
     }
 
-    public List<TikaExtractResponse> getFeedsFromFeedJSON(String feedJSON) throws TikaClientException {
-        List<TikaExtractResponse> sourceResponses = new ArrayList<TikaExtractResponse>();
-        if ("{}".equals(feedJSON)) {
-            return sourceResponses;
-        }
-        try {
-            JSONObject feedsJSON = new JSONObject(feedJSON);
-            JSONArray feeds = feedsJSON.getJSONArray("abstracts");
-            for (int i = 0; i < feeds.length(); i++) {
-                JSONObject object = (JSONObject) feeds.get(i);
-                TikaExtractResponse response = toTikaResponse(object);
-                sourceResponses.add(response);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return sourceResponses;
+    public List<TikaExtractResponse> getFeedsFromFeedJSON(String feedJSON) {
+        return feedJSONParser.getFeedsFromFeedJSON(feedJSON);
     }
 
     public LastModifiedStampedResult getFeedJSON(String sourceURL, long lastModified) throws TikaClientException {
@@ -121,54 +106,12 @@ public class TikaClient {
 
     public TikaExtractResponse extract(String url) throws TikaClientException {
         JSONObject s = toJSONObject(url);
-        TikaExtractResponse tikaExtractResponse = toTikaResponse(s);
+        TikaExtractResponse tikaExtractResponse = feedJSONParser.toTikaResponse(s);
         return tikaExtractResponse;
     }
 
     private TikaExtractResponse toTikaResponse(JSONObject s) {
-        String title = "";
-        try {
-            title = (String) s.get("title");
-        } catch (Exception e) {
-
-        }
-        String content = null;
-        try {
-            content = (String) s.get("content");
-        } catch (JSONException e) {
-
-        }
-        Date date = new Date();
-        try {
-            long time = s.getLong("createDate");
-            if (time != 0)
-                date = new Date(time);
-        } catch (JSONException e) {
-
-        }
-        String sourceURL = null;
-        try {
-            sourceURL = (String) s.get("sourceURL");
-        } catch (JSONException e) {
-
-        }
-        List<String> images = new ArrayList<String>();
-        try {
-            JSONArray imagesArr = (JSONArray) s.get("images");
-            for (int j = 0; j < imagesArr.length(); j++) {
-                String imageURL = (String) imagesArr.get(j);
-                images.add(imageURL);
-            }
-        } catch (JSONException e) {
-
-        }
-        TikaExtractResponse tikaExtractResponse = new TikaExtractResponse();
-        tikaExtractResponse.setContent(content);
-        tikaExtractResponse.setTitle(title);
-        tikaExtractResponse.setImages(images);
-        tikaExtractResponse.setSourceURL(sourceURL);
-        tikaExtractResponse.setCreateDate(date);
-        return tikaExtractResponse;
+        return feedJSONParser.toTikaResponse(s);
     }
 
     private JSONObject toJSONObject(String url) throws TikaClientException {

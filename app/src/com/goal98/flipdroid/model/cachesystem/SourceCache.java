@@ -25,13 +25,14 @@ public class SourceCache {
         contentDB = new SourceContentDB(context);
     }
 
-    public synchronized void put(String type, String url, String content, long lastModified) {
+    public synchronized void put(String type, String url, String content, long lastModified, String imageUrl, String author) {
         SourceCacheObject cacheObject = new SourceCacheObject();
         cacheObject.setType(type);
         cacheObject.setUrl(url);
         cacheObject.setContent(content);
         cacheObject.setLastModified(lastModified);
-
+        cacheObject.setImageUrl(imageUrl);
+        cacheObject.setAuthor(author);
         contentDB.persist(cacheObject);
     }
 

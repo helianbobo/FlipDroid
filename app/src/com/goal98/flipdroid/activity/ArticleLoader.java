@@ -1,12 +1,11 @@
 package com.goal98.flipdroid.activity;
 
 import android.app.Activity;
+import com.goal98.flipdroid.db.SourceContentDB;
 import com.goal98.flipdroid.exception.NoMorePageException;
 import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.exception.NoNetworkException;
-import com.goal98.flipdroid.model.Article;
-import com.goal98.flipdroid.model.ContentRepo;
-import com.goal98.flipdroid.model.NoSuchPageException;
+import com.goal98.flipdroid.model.*;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
@@ -44,14 +43,14 @@ public class ArticleLoader implements PaginationLoaderService, SourceUpdateable 
         });
         Semaphore refreshingSemaphore = new Semaphore(1, true);
         repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-        CachedArticleSource cachedArticleSource = new CachedArticleSource(new RemoteRSSArticleSource("http://www.ifanr.com/feed", "爱范儿", "http://tp1.sinaimg.cn/1642720480/180/1279882934/1"), this, SourceCache.getInstance(activity));
-        cachedArticleSource.loadSourceFromCache();
+        ArticleSource cachedArticleSource = new AllLocalArticleSource(new SourceContentDB(activity));
         repo.setArticleSource(cachedArticleSource);
         repo.setPagingStrategy(pagingStrategy);
     }
 
 
     public List<ArticleDetailInfo> load(int pageNumber, int count) throws NoSuchPageException {
+        pageNumber--;
         List<Article> articles = null;
         Page p;
         try {

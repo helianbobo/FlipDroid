@@ -46,6 +46,7 @@ public class LocalRSSArticleSource extends BaseCacheableArticleSource {
         return new Date();  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+
     public static long cachedTime = -1;
 
     public boolean load() {
@@ -171,5 +172,13 @@ public class LocalRSSArticleSource extends BaseCacheableArticleSource {
         token.setType(TikaConstants.TYPE_RSS);
         token.setToken(this.contentUrl);
         return token;
+    }
+
+    public String getImageUrl() {
+        return sourceImage;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public String getAuthor() {
+        return sourceName;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

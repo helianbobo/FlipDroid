@@ -24,6 +24,9 @@ public class RemoteRSSArticleSource extends RemoteArticleSource {
         return token;
     }
 
+
+
+
     protected void setSourceType(Article article) {
         article.setSourceType(TikaConstants.TYPE_RSS);
     }

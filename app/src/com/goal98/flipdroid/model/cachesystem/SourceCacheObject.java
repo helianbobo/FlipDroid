@@ -11,9 +11,11 @@ import java.util.Date;
  */
 public class SourceCacheObject {
     String url;
+    String imageUrl;
     String type;
     String content;
     long lastModified;
+    private String author;
 
     public long getLastModified() {
         return lastModified;
@@ -21,6 +23,14 @@ public class SourceCacheObject {
 
     public void setLastModified(long lastModified) {
         this.lastModified = lastModified;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getUrl() {
@@ -45,5 +55,13 @@ public class SourceCacheObject {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

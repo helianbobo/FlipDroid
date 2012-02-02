@@ -37,7 +37,7 @@ public class CachedArticleSource implements ArticleSource {
                 byte[] bytes = updatedBytes.getResult().toString().getBytes();
                 String encoding = EncodingDetector.detect(new ByteArrayInputStream(bytes));
                 String content = new String(bytes, encoding);
-                CachedArticleSource.this.dbCache.put(articleSource.getCacheToken().getType(), articleSource.getCacheToken().getToken(), content,updatedBytes.getLastModified());
+                CachedArticleSource.this.dbCache.put(articleSource.getCacheToken().getType(), articleSource.getCacheToken().getToken(), content,updatedBytes.getLastModified(),articleSource.getImageUrl(),articleSource.getAuthor());
                 return content;
             }
         };

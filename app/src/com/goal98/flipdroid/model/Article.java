@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Article {
+public class Article implements Comparable{
     public boolean isExpandable() {
         return expandable;
     }
@@ -369,5 +369,12 @@ public class Article {
             return content;
         }
 
+    }
+
+    public int compareTo(Object o) {
+        Article a = (Article)o;
+        if(a.getCreatedDate().before(createdDate))
+            return -1;
+        return 1;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

@@ -42,7 +42,7 @@ public class AutoLoadScrollListener implements AbsListView.OnScrollListener {
     public void onScroll(AbsListView view, int firstVisibleItem,
                          int visibleItemCount, int totalItemCount) {
         if (visibleItemCount > 0 && visibleItemCount < totalItemCount
-                && (firstVisibleItem + visibleItemCount == totalItemCount)) {
+                && (firstVisibleItem + visibleItemCount == totalItemCount-1)) {
             fireLoad = true;
         } else {
             if(isLastItemVisible())

@@ -108,6 +108,42 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
 
         setContentView(R.layout.index);
         inflater = LayoutInflater.from(this);
+
+        final View addSourcePopUp = inflater.inflate(
+                R.layout.add_source, null);
+        addSourcePopUp.findViewById(R.id.sina).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (SinaAccountUtil.alreadyBinded(IndexActivity.this)) {
+                    Intent intent = new Intent(IndexActivity.this, SinaSourceSelectionActivity.class);
+                    intent.putExtra("type", TikaConstants.TYPE_SINA_WEIBO);
+                    intent.putExtra("next", SinaSourceSelectionActivity.class.getName());
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                } else {
+                    final Intent intent = new Intent(IndexActivity.this, SinaAccountActivity.class);
+                    intent.putExtra("PROMPTTEXT",IndexActivity.this.getString(R.string.gotosinaoauth));
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                }
+            }
+        });
+
+        addSourcePopUp.findViewById(R.id.rss).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intent = new Intent(IndexActivity.this, RSSSourceSelectionActivity.class);
+                intent.putExtra("type", TikaConstants.TYPE_RSS);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+            }
+        });
+
+        addSourcePopUp.findViewById(R.id.gr).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                startActivity(new Intent(IndexActivity.this, GoogleAccountActivity.class));
+                overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+            }
+        });
+
         final TopBar topbar = (TopBar) findViewById(R.id.topbar);
         topbar.addButton(TopBar.IMAGE, R.drawable.ic_btn_add_source, new LinearLayout.OnClickListener() {
             public synchronized void onClick(View view) {
@@ -115,8 +151,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
                     mPopupWindow.dismiss();
                 }
 
-                View addSourcePopUp = inflater.inflate(
-                        R.layout.add_source, null);
+
                 mPopupWindow = new PopupWindow(addSourcePopUp, ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
                 mPopupWindow.setOutsideTouchable(false);

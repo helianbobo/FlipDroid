@@ -82,6 +82,7 @@ public abstract class BaseCacheableArticleSource implements CacheableArticleSour
     public void fromCache(SourceCacheObject cachedObject) {
         cachedBytes = cachedObject.getContent().getBytes();
         lastModified = cachedObject.getLastModified();
+
         this.content = new ByteArrayInputStream(cachedBytes);
     }
 

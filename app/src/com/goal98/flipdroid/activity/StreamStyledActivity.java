@@ -83,7 +83,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
                     new GetDataTask(mPullRefreshListView).execute();
                 }
             });
-            adapter = new ArticleAdapter(this, mPullRefreshListView.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, new ArticleLoader(this, 8), R.layout.nodataview);
+            adapter = new ArticleAdapter(this, mPullRefreshListView.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, new ArticleLoader(this, 5), R.layout.nodataview);
 
             adapter.forceLoad();
             return wrapper;

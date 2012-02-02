@@ -1,9 +1,6 @@
 package com.goal98.flipdroid.model;
 
-import com.goal98.flipdroid.client.LastModifiedStampedResult;
-import com.goal98.flipdroid.client.TikaClient;
-import com.goal98.flipdroid.client.TikaClientException;
-import com.goal98.flipdroid.client.TikaExtractResponse;
+import com.goal98.flipdroid.client.*;
 import com.goal98.flipdroid.model.cachesystem.BaseCacheableArticleSource;
 import com.goal98.flipdroid.model.cachesystem.CacheToken;
 import com.goal98.flipdroid.util.Constants;
@@ -28,6 +25,12 @@ public abstract class RemoteArticleSource extends BaseCacheableArticleSource {
     private String sourceImage;
     TikaClient tikaClient;
 
+    public String getImageUrl() {
+        return sourceImage;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+    public String getAuthor() {
+        return sourceName;  //To change body of implemented methods use File | Settings | File Templates.
+    }
     public RemoteArticleSource(String remoteSourceToken, String sourceName, String sourceImage) {
         this.remoteSourceToken = remoteSourceToken;
         this.sourceName = sourceName;
@@ -40,7 +43,7 @@ public abstract class RemoteArticleSource extends BaseCacheableArticleSource {
     protected LastModifiedStampedResult getLatestSource() {
         try {
             LastModifiedStampedResult feedJSON = tikaClient.getFeedJSON(remoteSourceToken, lastModified);
-            if(feedJSON == null)
+            if (feedJSON == null)
                 return null;
             return feedJSON;
         } catch (TikaClientException e) {
@@ -74,41 +77,7 @@ public abstract class RemoteArticleSource extends BaseCacheableArticleSource {
                     }
                 }
                 setSourceType(article);
-                article.setAlreadyLoaded(true);
-                article.setExpandable(true);
-                article.setContent(tikaExtractResponse.getContent());
-                article.setTitle(tikaExtractResponse.getTitle());
-                article.setSourceURL(tikaExtractResponse.getSourceURL());
-                article.setCreatedDate(tikaExtractResponse.getCreateDate());
-                if (tikaExtractResponse.getImages().size() != 0) {
-                    article.setImageUrl(new URL(tikaExtractResponse.getImages().get(0)));
-                }
-                List<String> responsedImages = tikaExtractResponse.getImages();
-                    for (int j = 0; j < responsedImages.size(); j++) {
-                        String imageURL = responsedImages.get(j);
-                        if (imageURL != null && imageURL.length() != 0) {
-                            int sizeInfoBeginAt = imageURL.lastIndexOf("#");
-                            String sizeInfoStr = imageURL.substring(sizeInfoBeginAt + 1);
-                            imageURL = imageURL.substring(0, sizeInfoBeginAt);
-
-                            if (j == 0) {//primary image
-                                String[] sizeInfo = sizeInfoStr.split(",");
-                                int width = Integer.valueOf(sizeInfo[0]);
-                                int height = Integer.valueOf(sizeInfo[1]);
-                                article.setImageWidth(width);
-                                article.setImageHeight(height);
-                                try {
-                                    URL url = new URL(imageURL);
-                                    article.setImageUrl(url);
-//                                    article.loadPrimaryImage(imageURL, DeviceInfo.getInstance(activity));
-                                } catch (Exception e) {
-                                    continue;
-                                }
-                            }
-                            article.getImagesMap().put(imageURL, null);
-                            article.getImages().add(imageURL);
-                        }
-                    }
+                feedJSONParser.toArticle(tikaExtractResponse, article);
                 list.add(article);
             }
         } catch (Exception e) {
@@ -118,5 +87,7 @@ public abstract class RemoteArticleSource extends BaseCacheableArticleSource {
         return true;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
+
+    private final FeedJSONParser feedJSONParser = new FeedJSONParser();
     protected abstract void setSourceType(Article article);
 }
