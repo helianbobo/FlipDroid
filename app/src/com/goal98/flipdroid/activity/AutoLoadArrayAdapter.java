@@ -23,27 +23,37 @@ public abstract class AutoLoadArrayAdapter extends ArrayAdapter implements Adapt
     private AutoLoadScrollListener autoLoadScrollListener;
     private int layoutId;
     private boolean noMoreToLoad;
+    private final LayoutInflater inflater;
+    ListView listView;
 
-    public AutoLoadArrayAdapter(Activity activity, ListView listView, int layoutId, int progressDrawableResourceId, List items, int nodataview) {
+    public AutoLoadArrayAdapter(Activity activity, ListView listView, int layoutId, int progressDrawableResourceId, List items, int nodataview, View.OnClickListener noitemListener) {
         super(activity, layoutId, items);
         this.items = items;
         this.layoutId = layoutId;
         isLoadingData = false;
-        this.progressView = activity.getLayoutInflater().inflate(progressDrawableResourceId,
+        this.listView = listView;
+        inflater = activity.getLayoutInflater();
+        this.progressView = inflater.inflate(progressDrawableResourceId,
                 listView, false);
-        this.nodataitem = activity.getLayoutInflater().inflate(nodataview,
-                listView, false);
+        setNoDataView(nodataview, noitemListener);
         //if (listView.getOnItemClickListener() == null)
-            listView.setOnItemClickListener(this);
+        listView.setOnItemClickListener(this);
 
 
         autoLoadScrollListener = new AutoLoadScrollListener(new OnLoadListener() {
             public List load() throws NoSuchPageException {
                 return AutoLoadArrayAdapter.this.load();
             }
-        }, this,listView);
+        }, this, listView);
         listView.setOnScrollListener(autoLoadScrollListener);
         listView.setAdapter(this);
+    }
+
+    public void setNoDataView(int nodataview, View.OnClickListener listener) {
+        this.nodataitem = inflater.inflate(nodataview,
+                listView, false);
+        if (listener != null)
+            nodataitem.setOnClickListener(listener);
     }
 
     public boolean isLoadingData() {

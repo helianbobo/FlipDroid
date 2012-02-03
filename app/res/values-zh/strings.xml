@@ -14,6 +14,7 @@
     <string name="nodatainscroll">没有更多了</string>
     <string name="mystream">我的阅读</string>
     <string name="addfeeds">添加订阅</string>
+    <string name="addmorefeeds">添加更多订阅</string>
     <string name="sina_weibo">新浪微博</string>
 
     <string name="title_anim_flip_duration_preference">翻页动画时间</string>

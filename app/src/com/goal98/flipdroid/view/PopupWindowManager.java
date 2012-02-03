@@ -22,7 +22,7 @@ public class PopupWindowManager {
     }
 
     public void dismissIfShowing() {
-        if (window != null && window.isShowing()) {
+        if (window != null && window.isShowing() && window.isTouchable()) {
             window.dismiss();
             window = null;
         }

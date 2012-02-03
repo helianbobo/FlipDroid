@@ -31,6 +31,7 @@ public class ArticleLoader implements PaginationLoaderService, SourceUpdateable 
     Activity activity;
     private ContentRepo repo;
     private int articlePerPage;
+    private final ArticleSource articleSource;
 
     public ArticleLoader(Activity activity, int articlePerPage) {
         this.activity = activity;
@@ -43,8 +44,8 @@ public class ArticleLoader implements PaginationLoaderService, SourceUpdateable 
         });
         Semaphore refreshingSemaphore = new Semaphore(1, true);
         repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-        ArticleSource cachedArticleSource = new AllLocalArticleSource(new SourceContentDB(activity));
-        repo.setArticleSource(cachedArticleSource);
+        articleSource = new AllLocalArticleSource(new SourceContentDB(activity));
+        repo.setArticleSource(articleSource);
         repo.setPagingStrategy(pagingStrategy);
     }
 
@@ -111,5 +112,9 @@ public class ArticleLoader implements PaginationLoaderService, SourceUpdateable 
 
     public void notifyUpdateDone(CachedArticleSource cachedArticleSource) {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void reset() {
+        articleSource.reset();
     }
 }

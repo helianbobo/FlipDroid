@@ -54,8 +54,6 @@ public class CachedArticleSource implements ArticleSource {
         if (cacheObject != null && cacheObject.getContent().trim().length() != 0) {
             this.articleSource.fromCache(cacheObject);
         }
-
-
     }
 
     public Date lastModified() {

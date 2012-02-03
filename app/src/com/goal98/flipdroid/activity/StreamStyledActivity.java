@@ -8,8 +8,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.db.RecommendSourceDB;
+import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.model.SourceUpdateManager;
+import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
+import com.goal98.flipdroid.model.cachesystem.SourceCache;
+import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
 import com.goal98.flipdroid.multiscreen.MultiScreenSupport;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.view.PopupWindowManager;
@@ -23,18 +30,22 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
  * Time: 下午4:21
  * To change this template use File | Settings | File Templates.
  */
-public class StreamStyledActivity extends TabActivity implements TabHost.TabContentFactory, View.OnTouchListener {
+public class StreamStyledActivity extends TabActivity implements TabHost.TabContentFactory, View.OnTouchListener, SourceUpdateable {
     private ArticleAdapter adapter;
     //    private RadioButton[] mRadioButtons;
     private TabHost tabHost;
     private DeviceInfo deviceInfo;
     private int bottomHeight;
     private LayoutInflater inflator;
-
+    private final ArticleLoader articleLoader = new ArticleLoader(this, 5);
+    private AddSourcePopupViewBuilder addSourcePopupViewBuilder;
+    private PopupWindow mPopupWindow;
+    
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab);
         inflator = (LayoutInflater) getSystemService("layout_inflater");
+        addSourcePopupViewBuilder = new AddSourcePopupViewBuilder(StreamStyledActivity.this);
         deviceInfo = DeviceInfo.getInstance(this);
         final MultiScreenSupport multiScreenSupport = MultiScreenSupport.getInstance(deviceInfo);
         bottomHeight = multiScreenSupport.getBottomRadioHeight();
@@ -50,7 +61,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
         for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
             tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = bottomHeight;
         }
-        TabHost.OnTabChangeListener changeLis=new TabHost.OnTabChangeListener(){
+        TabHost.OnTabChangeListener changeLis = new TabHost.OnTabChangeListener() {
             public void onTabChanged(String tabId) {
                 PopupWindowManager.getInstance().dismissIfShowing();
             }
@@ -58,6 +69,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
         tabHost.setOnTabChangedListener(changeLis);
     }
 
+    
     private void addTab(int strId, int layout, int bottomBarIconHeight, Intent intent) {
         String text = this.getString(strId);
         final View view = inflator.inflate(layout, null);
@@ -74,7 +86,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
 
     public View createTabContent(String s) {
         if (s.equals(this.getString(R.string.mystream))) {
-            View wrapper = inflator.inflate(R.layout.stream, null);
+            final View wrapper = inflator.inflate(R.layout.stream, null);
             final PullToRefreshListView mPullRefreshListView = (PullToRefreshListView) (wrapper.findViewById(R.id.pull_refresh_list));
             // Set a listener to be invoked when the list should be refreshed.
             mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
@@ -83,7 +95,20 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
                     new GetDataTask(mPullRefreshListView).execute();
                 }
             });
-            adapter = new ArticleAdapter(this, mPullRefreshListView.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, new ArticleLoader(this, 5), R.layout.nodataview);
+            adapter = new ArticleAdapter(this, mPullRefreshListView.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, articleLoader, R.layout.add_more_source_view, new View.OnClickListener(){
+                public void onClick(View view) {
+                    View addSourcePopup = addSourcePopupViewBuilder.buildAddSourcePopupView(StreamStyledActivity.this);
+                    if(mPopupWindow!=null && mPopupWindow.isShowing()){
+                        mPopupWindow.dismiss();
+                    }
+
+                    mPopupWindow = new PopupWindow(addSourcePopup, ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT);
+                    mPopupWindow.setOutsideTouchable(false);
+                    mPopupWindow.showAsDropDown(wrapper);
+                    PopupWindowManager.getInstance().setWindow(mPopupWindow);
+                }
+            });
 
             adapter.forceLoad();
             return wrapper;
@@ -97,6 +122,21 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
         return true;
     }
 
+    public void notifyUpdating(CachedArticleSource cachedArticleSource) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void notifyHasNew(CachedArticleSource cachedArticleSource) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void notifyNoNew(CachedArticleSource cachedArticleSource) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public void notifyUpdateDone(CachedArticleSource cachedArticleSource) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 
 
     private class GetDataTask extends AsyncTask<Void, Void, String[]> {
@@ -108,7 +148,9 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
 
         @Override
         protected String[] doInBackground(Void... params) {
-            // Simulates a background job.
+            SourceDB sourceDB = new SourceDB(getApplicationContext());
+            SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(StreamStyledActivity.this), StreamStyledActivity.this, RecommendSourceDB.getInstance(StreamStyledActivity.this));
+            updateManager.updateAll(true);
             return null;
         }
 
@@ -116,6 +158,9 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
         @Override
         protected void onPostExecute(String[] result) {
             // Call onRefreshComplete when the list has been refreshed.
+            adapter.reset();
+            articleLoader.reset();
+            adapter.forceLoad();
             mPullRefreshListView.onRefreshComplete();
 
             super.onPostExecute(result);

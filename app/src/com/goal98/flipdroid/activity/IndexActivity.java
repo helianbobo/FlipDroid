@@ -9,13 +9,10 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
-import com.exchange.Public.ExchangeConstants;
-import com.exchange.View.ExchangeViewManager;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.RecommendSourceDB;
@@ -36,7 +33,6 @@ import com.mobclick.android.MobclickAgent;
 import com.mobclick.android.UmengUpdateListener;
 
 import java.util.*;
-import java.util.zip.Inflater;
 
 public class IndexActivity extends ListActivity implements SourceUpdateable, View.OnTouchListener {
 
@@ -59,6 +55,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
     private String TAG = this.getClass().getName();
     private LayoutInflater inflater;
     private PopupWindow mPopupWindow;
+    private final AddSourcePopupViewBuilder addSourcePopupViewBuilder = new AddSourcePopupViewBuilder(this);
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -109,40 +106,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
         setContentView(R.layout.index);
         inflater = LayoutInflater.from(this);
 
-        final View addSourcePopUp = inflater.inflate(
-                R.layout.add_source, null);
-        addSourcePopUp.findViewById(R.id.sina).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (SinaAccountUtil.alreadyBinded(IndexActivity.this)) {
-                    Intent intent = new Intent(IndexActivity.this, SinaSourceSelectionActivity.class);
-                    intent.putExtra("type", TikaConstants.TYPE_SINA_WEIBO);
-                    intent.putExtra("next", SinaSourceSelectionActivity.class.getName());
-                    startActivity(intent);
-                    overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                } else {
-                    final Intent intent = new Intent(IndexActivity.this, SinaAccountActivity.class);
-                    intent.putExtra("PROMPTTEXT",IndexActivity.this.getString(R.string.gotosinaoauth));
-                    startActivity(intent);
-                    overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                }
-            }
-        });
-
-        addSourcePopUp.findViewById(R.id.rss).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent intent = new Intent(IndexActivity.this, RSSSourceSelectionActivity.class);
-                intent.putExtra("type", TikaConstants.TYPE_RSS);
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-            }
-        });
-
-        addSourcePopUp.findViewById(R.id.gr).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                startActivity(new Intent(IndexActivity.this, GoogleAccountActivity.class));
-                overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-            }
-        });
+        final View addSourcePopUp = addSourcePopupViewBuilder.buildAddSourcePopupView(this);
 
         final TopBar topbar = (TopBar) findViewById(R.id.topbar);
         topbar.addButton(TopBar.IMAGE, R.drawable.ic_btn_add_source, new LinearLayout.OnClickListener() {
@@ -202,11 +166,15 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
                 menu.add(0, 1, 0, R.string.no);
             }
         });
-        SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
-        updateManager.updateSourceList();
+//        SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
+//        updateManager.updateSourceList(false);
 
         initUmengAppNetwork();
 
+    }
+
+    public View buildAddSourcePopupView(final Activity activity) {
+        return addSourcePopupViewBuilder.buildAddSourcePopupView(activity);
     }
 
     private void initUmengAppNetwork() {
@@ -217,7 +185,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
 
     private void updateSource() {
         SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
-        updateManager.updateAll();
+        updateManager.updateAll(false);
     }
 
     public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -352,23 +320,23 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
             }
         });
 
-        boolean shallUpdate = NetworkUtil.toUpdateSource(this);
-        if (shallUpdate) {
-            new Thread(new Runnable() {
-
-                public void run() {
-                    if (!updated) {
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-
-                        }
-                        updateSource();
-                        updated = true;
-                    }
-                }
-            }).start();
-        }
+//        boolean shallUpdate = NetworkUtil.toUpdateSource(this);
+//        if (shallUpdate) {
+//            new Thread(new Runnable() {
+//
+//                public void run() {
+//                    if (!updated) {
+//                        try {
+//                            Thread.sleep(2000);
+//                        } catch (InterruptedException e) {
+//
+//                        }
+//                        updateSource();
+//                        updated = true;
+//                    }
+//                }
+//            }).start();
+//        }
     }
 
     @Override

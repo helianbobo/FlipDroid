@@ -38,6 +38,10 @@ public class AllLocalArticleSource implements ArticleSource {
 
     public boolean loadMore() {
         List<SourceCacheObject> sourceCacheObjects = contentDB.findAllByType(TikaConstants.TYPE_RSS);
+        if(sourceCacheObjects==null){
+            isNoMoreToLoad = true;
+            return false;
+        }
         int sourceCacheObjectSize = sourceCacheObjects.size();
         for (int i = 0; i < sourceCacheObjectSize; i++) {
             SourceCacheObject sourceCacheObject = sourceCacheObjects.get(i);
@@ -75,6 +79,6 @@ public class AllLocalArticleSource implements ArticleSource {
     }
 
     public boolean reset() {
-        return false;
+        return isNoMoreToLoad=false;
     }
 }

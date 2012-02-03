@@ -1,6 +1,7 @@
 package com.goal98.flipdroid.activity;
 
 import android.app.Activity;
+import android.view.View;
 import android.widget.ListView;
 import com.goal98.flipdroid.exception.NoMorePageException;
 import com.goal98.flipdroid.model.NoSuchPageException;
@@ -37,8 +38,8 @@ public abstract class PaginationLoaderAdapter extends AutoLoadArrayAdapter {
 
     PaginationLoaderService loader;
 
-    public PaginationLoaderAdapter(Activity activity, ListView listView, int layoutId, int progressDrawableResourceId, List items, int nodataview, PaginationLoaderService loader) {
-        super(activity, listView, layoutId, progressDrawableResourceId, items, nodataview);
+    public PaginationLoaderAdapter(Activity activity, ListView listView, int layoutId, int progressDrawableResourceId, List items, int nodataview, PaginationLoaderService loader, View.OnClickListener noitemListener) {
+        super(activity, listView, layoutId, progressDrawableResourceId, items, nodataview, noitemListener);
         this.loader = loader;
     }
 

@@ -36,7 +36,7 @@ public class SourceUpdateManager {
         this.recommendSourceDB = recommendSourceDB;
     }
 
-    public void updateAll() {
+    public void updateAll(boolean block) {
         Cursor c = sourceDB.findAll();
         ManagedCursor mc = new ManagedCursor(c);
         final List<CachedArticleSource> cachedArticleSources = new ArrayList<CachedArticleSource>();
@@ -65,21 +65,28 @@ public class SourceUpdateManager {
             cachedArticleSource.checkUpdate();
         }
 
-        updateSourceList();
+        updateSourceList(block);
     }
 
-    public void updateSourceList() {
+    public void updateSourceList(boolean block) {
         Thread t = new Thread(new Runnable() {
             public void run() {
                 for (String updateType : UPDATE_TYPE) {
                     long lastModified = recommendSourceDB.getLastModified(updateType);
                     LastModifiedStampedResult rssUpdatedSource = new TikaClient(Constants.TIKA_HOST).updateRecommendSource(updateType, lastModified);
-                    if (rssUpdatedSource!=null && rssUpdatedSource.getResult() != null && ((String) rssUpdatedSource.getResult()).length() != 0)
+                    if (rssUpdatedSource != null && rssUpdatedSource.getResult() != null && ((String) rssUpdatedSource.getResult()).length() != 0)
                         recommendSourceDB.update((String) rssUpdatedSource.getResult(), updateType, rssUpdatedSource.getLastModified());
                 }
             }
         });
         t.start();
+        if (block) {
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+
+            }
+        }
     }
 
     public static final String[] UPDATE_TYPE = new String[]{TikaConstants.TYPE_RSS, TikaConstants.TYPE_SINA_WEIBO, TikaConstants.TYPE_DEFAULT};
