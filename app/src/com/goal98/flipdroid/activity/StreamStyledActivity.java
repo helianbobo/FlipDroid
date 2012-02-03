@@ -105,7 +105,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
                     mPopupWindow = new PopupWindow(addSourcePopup, ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT);
                     mPopupWindow.setOutsideTouchable(false);
-                    mPopupWindow.showAsDropDown(wrapper);
+//                    mPopupWindow.showAsDropDown(mPullRefreshListView.getAdapterView(.get);
                     PopupWindowManager.getInstance().setWindow(mPopupWindow);
                 }
             });
