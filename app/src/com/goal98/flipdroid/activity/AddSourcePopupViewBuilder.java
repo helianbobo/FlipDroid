@@ -24,12 +24,10 @@ public class AddSourcePopupViewBuilder {
                     intent.putExtra("type", TikaConstants.TYPE_SINA_WEIBO);
                     intent.putExtra("next", SinaSourceSelectionActivity.class.getName());
                     AddSourcePopupViewBuilder.this.activity.startActivity(intent);
-                    AddSourcePopupViewBuilder.this.activity.overridePendingTransition(R.anim.slide_in_left, R.anim.fade);
                 } else {
                     final Intent intent = new Intent(activity, SinaAccountActivity.class);
                     intent.putExtra("PROMPTTEXT", activity.getString(R.string.gotosinaoauth));
                     AddSourcePopupViewBuilder.this.activity.startActivity(intent);
-                    AddSourcePopupViewBuilder.this.activity.overridePendingTransition(R.anim.slide_in_left, R.anim.fade);
                 }
             }
         });

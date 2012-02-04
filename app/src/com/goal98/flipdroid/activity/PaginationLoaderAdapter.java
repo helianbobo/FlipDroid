@@ -49,6 +49,7 @@ public abstract class PaginationLoaderAdapter extends AutoLoadArrayAdapter {
 
     public void reset() {
         items.clear();
+//        refreshingToken
         this.page = 0;
     }
 }

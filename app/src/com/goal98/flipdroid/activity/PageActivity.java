@@ -356,7 +356,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
                 if (cachedArticleSource != null && !updated && NetworkUtil.isNetworkAvailable(PageActivity.this)) {
                     Log.v(TAG, "check update");
-                    cachedArticleSource.checkUpdate();
+                    cachedArticleSource.checkUpdate(false);
                 }
 
                 pageIndexView.setDot(repo.getTotal(), currentPageIndex);

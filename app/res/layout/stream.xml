@@ -2,7 +2,7 @@
 <LinearLayout xmlns:wp="http://schemas.android.com/apk/res/com.goal98.flipdroid"
               xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent"
               android:layout_width="fill_parent" android:orientation="vertical">
-    <com.goal98.flipdroid.view.TopBar wp:rightButtonImage="@drawable/like"
+    <com.goal98.flipdroid.view.TopBar android:id="@+id/topbar" wp:rightButtonImage="@drawable/like"
                                       android:layout_height="wrap_content"
                                       android:layout_width="fill_parent"
                                       wp:title="@string/mystream"></com.goal98.flipdroid.view.TopBar>

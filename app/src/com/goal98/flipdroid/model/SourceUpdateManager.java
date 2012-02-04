@@ -62,7 +62,7 @@ public class SourceUpdateManager {
         for (int i = 0; i < cachedArticleSources.size(); i++) {
             CachedArticleSource cachedArticleSource = cachedArticleSources.get(i);
             cachedArticleSource.loadSourceFromCache();
-            cachedArticleSource.checkUpdate();
+            cachedArticleSource.checkUpdate(block);
         }
 
         updateSourceList(block);

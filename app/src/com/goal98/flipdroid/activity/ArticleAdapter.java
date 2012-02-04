@@ -5,7 +5,9 @@ import android.content.Context;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.model.Article;
+import com.goal98.flipdroid.view.PopupWindowManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,5 +32,11 @@ public class ArticleAdapter extends PaginationLoaderAdapter {
     }
 
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+         PopupWindowManager.getInstance().dismissIfShowing();
+    }
+
+    @Override
+    protected void setNoDataOnClickListener(View nodataitem, View.OnClickListener listener) {
+        nodataitem.findViewById(R.id.addmorefeeds).setOnClickListener(listener);
     }
 }

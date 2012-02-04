@@ -5,10 +5,7 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.RecommendSourceDB;
@@ -20,6 +17,7 @@ import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
 import com.goal98.flipdroid.multiscreen.MultiScreenSupport;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.view.PopupWindowManager;
+import com.goal98.flipdroid.view.TopBar;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
@@ -40,7 +38,8 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
     private final ArticleLoader articleLoader = new ArticleLoader(this, 5);
     private AddSourcePopupViewBuilder addSourcePopupViewBuilder;
     private PopupWindow mPopupWindow;
-    
+    private PullToRefreshListView mPullRefreshListView;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab);
@@ -66,10 +65,12 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
                 PopupWindowManager.getInstance().dismissIfShowing();
             }
         };
+
         tabHost.setOnTabChangedListener(changeLis);
+
     }
 
-    
+
     private void addTab(int strId, int layout, int bottomBarIconHeight, Intent intent) {
         String text = this.getString(strId);
         final View view = inflator.inflate(layout, null);
@@ -87,7 +88,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
     public View createTabContent(String s) {
         if (s.equals(this.getString(R.string.mystream))) {
             final View wrapper = inflator.inflate(R.layout.stream, null);
-            final PullToRefreshListView mPullRefreshListView = (PullToRefreshListView) (wrapper.findViewById(R.id.pull_refresh_list));
+            mPullRefreshListView = (PullToRefreshListView) (wrapper.findViewById(R.id.pull_refresh_list));
             // Set a listener to be invoked when the list should be refreshed.
             mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
                 public void onRefresh() {
@@ -95,17 +96,23 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
                     new GetDataTask(mPullRefreshListView).execute();
                 }
             });
-            adapter = new ArticleAdapter(this, mPullRefreshListView.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, articleLoader, R.layout.add_more_source_view, new View.OnClickListener(){
+            final TopBar topbar = (TopBar) wrapper.findViewById(R.id.topbar);
+            topbar.addButton(TopBar.IMAGE, R.drawable.refresh_black_48, new LinearLayout.OnClickListener() {
+                public synchronized void onClick(View view) {
+                    mPullRefreshListView.setRefreshing();
+                }
+            });
+            adapter = new ArticleAdapter(this, mPullRefreshListView.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, articleLoader, R.layout.add_more_source_view, new View.OnClickListener() {
                 public void onClick(View view) {
                     View addSourcePopup = addSourcePopupViewBuilder.buildAddSourcePopupView(StreamStyledActivity.this);
-                    if(mPopupWindow!=null && mPopupWindow.isShowing()){
+                    if (mPopupWindow != null && mPopupWindow.isShowing()) {
                         mPopupWindow.dismiss();
                     }
 
                     mPopupWindow = new PopupWindow(addSourcePopup, ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT);
                     mPopupWindow.setOutsideTouchable(false);
-//                    mPopupWindow.showAsDropDown(mPullRefreshListView.getAdapterView(.get);
+                    mPopupWindow.showAsDropDown(view, 0, 0);
                     PopupWindowManager.getInstance().setWindow(mPopupWindow);
                 }
             });
@@ -158,6 +165,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
         @Override
         protected void onPostExecute(String[] result) {
             // Call onRefreshComplete when the list has been refreshed.
+
             adapter.reset();
             articleLoader.reset();
             adapter.forceLoad();

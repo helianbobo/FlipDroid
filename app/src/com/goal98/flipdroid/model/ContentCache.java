@@ -34,6 +34,10 @@ public class ContentCache {
         return refreshingToken;
     }
 
+    public void resetToken() {
+        refreshingToken = 0;
+    }
+
     Lock lock = new ReentrantLock();
 
     public int getPageCacheTo() {

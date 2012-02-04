@@ -16,6 +16,7 @@ import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.RecommendSourceDB;
+import com.goal98.flipdroid.db.SourceContentDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.model.SourceUpdateManager;
@@ -111,7 +112,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
         final TopBar topbar = (TopBar) findViewById(R.id.topbar);
         topbar.addButton(TopBar.IMAGE, R.drawable.ic_btn_add_source, new LinearLayout.OnClickListener() {
             public synchronized void onClick(View view) {
-                if(mPopupWindow!=null && mPopupWindow.isShowing()){
+                if (mPopupWindow != null && mPopupWindow.isShowing()) {
                     mPopupWindow.dismiss();
                 }
 
@@ -171,10 +172,6 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
 
         initUmengAppNetwork();
 
-    }
-
-    public View buildAddSourcePopupView(final Activity activity) {
-        return addSourcePopupViewBuilder.buildAddSourcePopupView(activity);
     }
 
     private void initUmengAppNetwork() {
@@ -342,7 +339,6 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
     @Override
     protected void onPause() {
         super.onPause();
-
         MobclickAgent.onPause(this);
         closeDB();
     }
@@ -412,6 +408,11 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
                 Log.e(this.getClass().getName(), count + " accounts are deleted.");
 
                 count = sourceDB.deleteAll();
+
+                SourceContentDB sourceContentDB = new SourceContentDB(this);
+                sourceContentDB.deleteAll();
+                sourceContentDB.close();
+
                 Log.e(this.getClass().getName(), count + " sources are deleted.");
 
 

@@ -77,7 +77,6 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
             doWithAddCustomerSouce();
         } else {
             sourceDB.insert(source);
-            startActivity(new Intent(this, IndexActivity.class));
             finish();
         }
         return true;

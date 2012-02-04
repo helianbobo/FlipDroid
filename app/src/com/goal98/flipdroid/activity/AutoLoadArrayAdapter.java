@@ -52,9 +52,10 @@ public abstract class AutoLoadArrayAdapter extends ArrayAdapter implements Adapt
     public void setNoDataView(int nodataview, View.OnClickListener listener) {
         this.nodataitem = inflater.inflate(nodataview,
                 listView, false);
-        if (listener != null)
-            nodataitem.setOnClickListener(listener);
+       setNoDataOnClickListener(nodataitem, listener);
     }
+
+    protected abstract void setNoDataOnClickListener(View nodataitem, View.OnClickListener listener);
 
     public boolean isLoadingData() {
         return isLoadingData;
