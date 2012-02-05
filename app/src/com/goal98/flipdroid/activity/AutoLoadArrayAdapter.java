@@ -114,15 +114,7 @@ public abstract class AutoLoadArrayAdapter extends ArrayAdapter implements Adapt
         DetailInfo di = items.get(position);
 
         ItemView view = null;
-        if (convertView == null)
             view = (ItemView) inflater.inflate(layoutId, null);
-        else {
-            if (convertView instanceof ItemView){
-                System.out.println("from cached,hahaha");
-                view = (ItemView) convertView;
-            }else
-                view = (ItemView) inflater.inflate(layoutId, null);
-        }
         view.render(di);
         return view;
     }

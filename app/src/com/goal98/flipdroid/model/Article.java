@@ -1,6 +1,8 @@
 package com.goal98.flipdroid.model;
 
 import android.graphics.Bitmap;
+import android.text.Html;
+import android.text.Spanned;
 import com.goal98.android.ImageLoader;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.view.ExpandableArticleView;
@@ -179,6 +181,7 @@ public class Article implements Comparable{
 
     public void setContent(String content) {
         this.content = content;
+        thumbnailText = Html.fromHtml(getContent().replaceAll("(<br/>)|(</h[1-6]+>)|(<h[1-6]+>)|(<img.*?>)|(<blockquote>)|(</blockquote>)|(hack</img>)", ""));
     }
 
     public URL getPortraitImageUrl() {
@@ -377,4 +380,11 @@ public class Article implements Comparable{
             return -1;
         return 1;  //To change body of implemented methods use File | Settings | File Templates.
     }
+    private Spanned thumbnailText;
+
+    public Spanned getThumbnailText() {
+        return thumbnailText;
+    }
+
+
 }

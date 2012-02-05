@@ -28,7 +28,7 @@ public class ArticleTextViewRender {
 
     public void renderTextView(TextView tv, final Article article) {
         if (article != null && article.getContent() != null) {
-            tv.setText(Html.fromHtml(article.getContent().replaceAll("(<br/>)|(</h[1-6]+>)|(<h[1-6]+>)|(<img.*?>)|(<blockquote>)|(</blockquote>)|(hack</img>)","")));
+            tv.setText(article.getThumbnailText());
             tv.setLinkTextColor(Constants.COLOR_LINK_TEXT);
         } else {
             tv.setVisibility(View.GONE);

@@ -53,7 +53,7 @@ public class StreamStyledArticleView extends ItemView {
 
     public void render(DetailInfo di) {
         ArticleDetailInfo articleDetailInfo = (ArticleDetailInfo) di;
-        Article article = articleDetailInfo.getArticle();
+        final Article article = articleDetailInfo.getArticle();
 
         TextView titleView = (TextView) findViewById(R.id.title);
 
@@ -64,7 +64,7 @@ public class StreamStyledArticleView extends ItemView {
         LinearLayout contentViewWrapperWeiboContent = (LinearLayout) findViewById(R.id.contentll);
 //
         TextView contentView = new TextView(this.getContext());
-        DeviceInfo deviceInfo = DeviceInfo.getInstance((Activity) this.getContext());
+        final DeviceInfo deviceInfo = DeviceInfo.getInstance((Activity) this.getContext());
 //
         ThumbnailContentRender.setThumbnailContentText(contentView, article, deviceInfo);
         ThumbnailContentRender.setTitleText(titleView, article, deviceInfo);
@@ -78,7 +78,7 @@ public class StreamStyledArticleView extends ItemView {
 //            textUrlLoading.setVisibility(VISIBLE);
 //        }
 //
-        WebImageView portraitViewWeiboContent = (WebImageView) findViewById(R.id.portrait2);
+        final WebImageView portraitViewWeiboContent = (WebImageView) findViewById(R.id.portrait2);
 
         authorViewWeiboContent.setText(article.getAuthor());
 
@@ -91,14 +91,13 @@ public class StreamStyledArticleView extends ItemView {
             portraitViewWeiboContent.setVisibility(GONE);
         }
 
-
         MultiScreenSupport mss = MultiScreenSupport.getInstance(deviceInfo);
         if (article.getImageUrl() == null) {
             LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
             layoutParams.weight = 100;
             contentViewWrapperWeiboContent.addView(contentView, layoutParams);
         } else {
-            WebImageView imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), this.getResources().getDrawable(Constants.DEFAULT_PIC), this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage);
+            final WebImageView imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), this.getResources().getDrawable(Constants.DEFAULT_PIC), this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage);
             imageView.setRoundImage(true);
             imageView.imageView.setTag(article.getImageUrl().toExternalForm());
             imageView.setBackgroundResource(R.drawable.border);
@@ -111,18 +110,7 @@ public class StreamStyledArticleView extends ItemView {
                 imageView.setDefaultHeight(deviceInfo.getHeight() - article.getTextHeight() - 30);
             }
 
-            boolean imageHandled = false;
-            if (article.getImage() != null && !article.getImage().isRecycled()) {
-                imageView.handleImageLoaded(article.getImage(), null);
-                imageHandled = true;
-            } else {
-                article.addNotifier(new StreamStyledNotifier(article,imageView));
-                if (!article.isLoading()) {
-                    System.out.println("reloading..." + article.getImageUrl().toExternalForm());
-                    article.loadPrimaryImage(deviceInfo, toLoadImage);
-                }
-                imageHandled = false;
-            }
+
             if (article.getHeight() == 0) {
                 LayoutParams layoutParamsText = new LayoutParams(0, mss.getImageHeightThumbnailView());
                 LayoutParams layoutParamsImage = new LayoutParams(0, LayoutParams.FILL_PARENT);
@@ -149,7 +137,30 @@ public class StreamStyledArticleView extends ItemView {
                 contentViewWrapperWeiboContent.addView(imageView, layoutParamsImage);
             }
 
-            portraitViewWeiboContent.loadImage();
+            new Thread(new Runnable() {
+
+                public void run() {
+                    handler.post(new Runnable() {
+
+                        public void run() {
+                            boolean imageHandled = false;
+                            if (article.getImage() != null && !article.getImage().isRecycled()) {
+                                imageView.handleImageLoaded(article.getImage(), null);
+                                imageHandled = true;
+                            } else {
+                                article.addNotifier(new StreamStyledNotifier(article, imageView));
+                                if (!article.isLoading()) {
+                                    System.out.println("reloading..." + article.getImageUrl().toExternalForm());
+                                    article.loadPrimaryImage(deviceInfo, toLoadImage);
+                                }
+                                imageHandled = false;
+                            }
+                            portraitViewWeiboContent.loadImage();
+                        }
+                    });
+
+                }
+            }).start();
         }
     }
 
@@ -157,14 +168,15 @@ public class StreamStyledArticleView extends ItemView {
         this.executor = executor;
     }
 
-    public class StreamStyledNotifier implements Notifier{
+    public class StreamStyledNotifier implements Notifier {
         private Article article;
         private WebImageView imageView;
 
-        public StreamStyledNotifier(Article article,final WebImageView imageView){
+        public StreamStyledNotifier(Article article, final WebImageView imageView) {
             this.article = article;
             this.imageView = imageView;
         }
+
         public void notifyImageLoaded() {
             handler.post(new Runnable() {
                 public void run() {

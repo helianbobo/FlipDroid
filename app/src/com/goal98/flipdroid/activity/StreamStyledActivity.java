@@ -20,6 +20,7 @@ import com.goal98.flipdroid.view.PopupWindowManager;
 import com.goal98.flipdroid.view.TopBar;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.ocpsoft.pretty.time.units.Year;
 
 /**
  * Created by IntelliJ IDEA.
@@ -104,6 +105,9 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
             });
             adapter = new ArticleAdapter(this, mPullRefreshListView.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, articleLoader, R.layout.add_more_source_view, new View.OnClickListener() {
                 public void onClick(View view) {
+                    int[] location = new int[2];
+                    view.getLocationOnScreen(location);
+
                     View addSourcePopup = addSourcePopupViewBuilder.buildAddSourcePopupView(StreamStyledActivity.this);
                     if (mPopupWindow != null && mPopupWindow.isShowing()) {
                         mPopupWindow.dismiss();
@@ -111,8 +115,12 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
 
                     mPopupWindow = new PopupWindow(addSourcePopup, ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT);
-                    mPopupWindow.setOutsideTouchable(false);
-                    mPopupWindow.showAsDropDown(view, 0, 0);
+                    if(location[1]>deviceInfo.getHeight()/2){
+                       mPopupWindow.showAsDropDown(view, 0, -view.getHeight());
+                    }else{
+                        mPopupWindow.showAsDropDown(view, 0, 0);
+                    }
+
                     PopupWindowManager.getInstance().setWindow(mPopupWindow);
                 }
             });
