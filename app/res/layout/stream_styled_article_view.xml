@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.goal98.flipdroid.view.StreamStyledArticleView xmlns:streamStyledArticleView="http://schemas.android.com/apk/res/com.goal98.flipdroid" xmlns:android="http://schemas.android.com/apk/res/android"
+<com.goal98.flipdroid.view.StreamStyledArticleView xmlns:streamStyledArticleView="http://schemas.android.com/apk/res/com.goal98.flipdroid" xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/article_view"
                                                    android:paddingTop="5dip"
                                                    android:paddingBottom="5dip" android:paddingLeft="8dip"
                                                    android:paddingRight="8dip"

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.model.NoSuchPageException;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public abstract class AutoLoadArrayAdapter extends ArrayAdapter implements Adapt
     private AutoLoadScrollListener autoLoadScrollListener;
     private int layoutId;
     private boolean noMoreToLoad;
-    private final LayoutInflater inflater;
+    private static LayoutInflater inflater;
     ListView listView;
 
     public AutoLoadArrayAdapter(Activity activity, ListView listView, int layoutId, int progressDrawableResourceId, List items, int nodataview, View.OnClickListener noitemListener) {
@@ -32,7 +33,7 @@ public abstract class AutoLoadArrayAdapter extends ArrayAdapter implements Adapt
         this.layoutId = layoutId;
         isLoadingData = false;
         this.listView = listView;
-        inflater = activity.getLayoutInflater();
+        inflater = LayoutInflater.from(activity);
         this.progressView = inflater.inflate(progressDrawableResourceId,
                 listView, false);
         setNoDataView(nodataview, noitemListener);
@@ -52,7 +53,7 @@ public abstract class AutoLoadArrayAdapter extends ArrayAdapter implements Adapt
     public void setNoDataView(int nodataview, View.OnClickListener listener) {
         this.nodataitem = inflater.inflate(nodataview,
                 listView, false);
-       setNoDataOnClickListener(nodataitem, listener);
+        setNoDataOnClickListener(nodataitem, listener);
     }
 
     protected abstract void setNoDataOnClickListener(View nodataitem, View.OnClickListener listener);
@@ -112,8 +113,16 @@ public abstract class AutoLoadArrayAdapter extends ArrayAdapter implements Adapt
     public View buildViewFromItem(int position, View convertView, ViewGroup parent) {
         DetailInfo di = items.get(position);
 
-        LayoutInflater inflator = LayoutInflater.from(this.getContext());
-        ItemView view = (ItemView) inflator.inflate(layoutId, null);
+        ItemView view = null;
+        if (convertView == null)
+            view = (ItemView) inflater.inflate(layoutId, null);
+        else {
+            if (convertView instanceof ItemView){
+                System.out.println("from cached,hahaha");
+                view = (ItemView) convertView;
+            }else
+                view = (ItemView) inflater.inflate(layoutId, null);
+        }
         view.render(di);
         return view;
     }

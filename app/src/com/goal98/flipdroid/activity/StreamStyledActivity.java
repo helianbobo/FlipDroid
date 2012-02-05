@@ -35,7 +35,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
     private DeviceInfo deviceInfo;
     private int bottomHeight;
     private LayoutInflater inflator;
-    private final ArticleLoader articleLoader = new ArticleLoader(this, 5);
+    private final ArticleLoader articleLoader = new ArticleLoader(this, 20);
     private AddSourcePopupViewBuilder addSourcePopupViewBuilder;
     private PopupWindow mPopupWindow;
     private PullToRefreshListView mPullRefreshListView;
