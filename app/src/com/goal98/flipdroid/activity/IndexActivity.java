@@ -114,6 +114,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
             public synchronized void onClick(View view) {
                 if (mPopupWindow != null && mPopupWindow.isShowing()) {
                     mPopupWindow.dismiss();
+                    return;
                 }
 
 

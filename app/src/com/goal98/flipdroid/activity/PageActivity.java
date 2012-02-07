@@ -27,8 +27,6 @@ import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.anim.AnimationFactory;
 import com.goal98.flipdroid.client.OAuth;
-import com.goal98.flipdroid.client.WeiboExt;
-import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.exception.NoSinaAccountBindedException;
@@ -57,19 +55,19 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private Animation fadeInPageView;
     private Animation fadeOutPageView;
     private ImageButton contentImageButton;
-    public SinaToken sinaToken;
+
     private CachedArticleSource cachedArticleSource;
     public static final int PROMPT_INPROGRESS = 3;
     private boolean toLoadImage;
     private Animation rotationForward;
     private Animation rotationBackward;
+    private  SinaWeiboHelper sinaWeiboHelper;
 
     public ExecutorService getExecutor() {
         return executor;
     }
 
     private boolean flipStarted = false;
-    private boolean mToggleIndeterminate = false;
     private boolean forward = false;
 
     private ViewGroup container;
@@ -103,7 +101,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private PageViewSlidingWindows slidingWindows;
     private WeiboPageViewFactory pageViewFactory;
     private ArticleSource source;
-    private Weibo weibo;
+
     //    private int animationMode;
     private LinearLayout shadow;
     private LinearLayout shadow2;
@@ -273,6 +271,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         initTutorialView();
         rotationForward = buildFlipHorizonalAnimation(true);
         rotationBackward = buildFlipHorizonalAnimation(false);
+        sinaWeiboHelper = new SinaWeiboHelper(this);
         reload();
 
 
@@ -500,40 +499,19 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     public void comment(String comment, Article article) throws WeiboException, NoSinaAccountBindedException {
-        String userId = preferences.getString("sina_account", null);
-        if (userId == null)
-            throw new NoSinaAccountBindedException();
 
-        if (weibo == null) {
-            initSinaWeibo();
-        }
-        weibo.updateStatus(comment, article.getStatusId());
+        sinaWeiboHelper.comment(comment, article);
     }
 
     public void forward(String comment, Article article) throws WeiboException, NoSinaAccountBindedException {
-        String userId = preferences.getString("sina_account", null);
-        if (userId == null)
-            throw new NoSinaAccountBindedException();
-
-        if (weibo == null) {
-            initSinaWeibo();
-        }
 
 
-        weibo.updateStatus(comment);
+        sinaWeiboHelper.forward(comment, article);
     }
 
     private void initSinaWeibo() {
-        System.setProperty("weibo4j.oauth.consumerKey", com.goal98.flipdroid.util.Constants.CONSUMER_KEY);
-        System.setProperty("weibo4j.oauth.consumerSecret", com.goal98.flipdroid.util.Constants.CONSUMER_SECRET);
 
-        weibo = new WeiboExt();
-
-        weibo.setHttpConnectionTimeout(5000);
-        if (sinaToken == null)
-            sinaToken = SinaAccountUtil.getToken(PageActivity.this);
-
-        weibo.setToken(sinaToken.getToken(), sinaToken.getTokenSecret());
+        sinaWeiboHelper.initSinaWeibo();
     }
 
     public void notifyHasNew(CachedArticleSource cachedArticleSource) {
@@ -593,7 +571,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
 
-            sinaToken = SinaAccountUtil.getToken(PageActivity.this);
+            SinaToken sinaToken = SinaAccountUtil.getToken(PageActivity.this);
             ArticleFilter filter;
             if (isWeiboMode())
                 filter = new NullArticleFilter();
@@ -1242,14 +1220,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         return verticalAnimationStep1;
     }
 
-    public boolean sinaAlreadyBinded() {
-        AccountDB accountDB = new AccountDB(this);
-        try {
-            return accountDB.hasAccount(TikaConstants.TYPE_MY_SINA_WEIBO) && preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null) != null;
-        } finally {
-            accountDB.close();
-        }
-    }
+
 
     public void hideBottomBar() {
         bottomBar.hide();

@@ -18,6 +18,7 @@ import com.goal98.tika.common.TikaConstants;
  * To change this template use File | Settings | File Templates.
  */
 public class SinaAccountUtil {
+
     public static boolean alreadyBinded(Context context) {
         AccountDB accountDB = null;
         try {

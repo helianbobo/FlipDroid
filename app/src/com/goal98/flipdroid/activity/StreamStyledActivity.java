@@ -40,6 +40,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
     private AddSourcePopupViewBuilder addSourcePopupViewBuilder;
     private PopupWindow mPopupWindow;
     private PullToRefreshListView mPullRefreshListView;
+    private FrameLayout tabcontent;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +51,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
         final MultiScreenSupport multiScreenSupport = MultiScreenSupport.getInstance(deviceInfo);
         bottomHeight = multiScreenSupport.getBottomRadioHeight();
         tabHost = getTabHost();
-        FrameLayout tabcontent = (FrameLayout) findViewById(android.R.id.tabcontent);
+        tabcontent = (FrameLayout) findViewById(android.R.id.tabcontent);
         tabcontent.setPadding(0, 0, 0, bottomHeight);
         tabHost.setup(this.getLocalActivityManager());
         final int bottomBarIconHeight = multiScreenSupport.getBottomBarIconHeight();
@@ -124,6 +125,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
                     PopupWindowManager.getInstance().setWindow(mPopupWindow);
                 }
             });
+            adapter.setParentContainer(tabcontent);
 
             adapter.forceLoad();
             return wrapper;

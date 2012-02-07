@@ -47,7 +47,6 @@ public class AccountListActivity extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-
         menu.add(0, NEW_ACCOUNT_ID, 0, getString(R.string.button_add_new_account));
 
         return true;

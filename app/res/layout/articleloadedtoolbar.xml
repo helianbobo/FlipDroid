@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/toolbar" android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content" android:background="@color/white" android:weightSum="100">
+    <LinearLayout android:layout_width="0dip" android:layout_weight="25" android:paddingLeft="5dip"
+                  android:paddingTop="2dip" android:paddingBottom="2dip"
+                  android:layout_height="wrap_content" android:gravity="left|center_vertical" android:background="@color/white">
+
+        <Button android:layout_width="fill_parent"
+                android:layout_height="35dp"
+                android:text="@string/button_close"
+                style="@style/CloseButton"
+                android:id="@+id/close"
+                android:layout_gravity="left|bottom"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="0dip" android:layout_weight="75" android:orientation="horizontal"
+                  android:layout_height="wrap_content" android:gravity="right|center_vertical"
+                  android:layout_gravity="right|center_vertical" android:paddingTop="4dip">
+        <!--<ImageButton android:id="@+id/like" android:background="@drawable/like"
+       android:layout_width="wrap_content" android:maxHeight="30dip"
+       android:adjustViewBounds="true" android:scaleType="centerInside"
+       android:layout_height="fill_parent" android:layout_gravity="right|center_vertical"/>-->
+        <!--<ImageButton android:id="@+id/retweet" android:background="@drawable/ic_menu_share"
+             android:layout_width="35dp"
+             android:adjustViewBounds="true" android:scaleType="fitXY"
+             android:layout_height="35dp" android:layout_gravity="right|center_vertical"
+        android:visibility="visible"/>-->
+        <ImageButton android:layout_width="115dp"
+                     android:layout_height="26dp"
+                     android:adjustViewBounds="true"
+                     android:background="@color/white"
+                     android:scaleType="fitXY"
+                     android:src="@drawable/sina_publish_button"
+                     android:id="@+id/retweet"
+                     android:layout_margin="3dp"
+                     android:layout_gravity="right"/>
+        <!--<ImageButton android:id="@+id/share" android:background="@drawable/share"
+       android:layout_width="wrap_content" android:maxHeight="30dip"
+       android:adjustViewBounds="true" android:scaleType="centerInside"
+       android:layout_height="fill_parent" android:layout_gravity="right|center_vertical"/>-->
+    </LinearLayout>
+</LinearLayout>

@@ -32,6 +32,7 @@ import java.util.concurrent.ExecutorService;
 public class StreamStyledArticleView extends ItemView {
     private boolean toLoadImage;
     Handler handler = new Handler();
+    private Article article;
 
     public void setToLoadImage(boolean toLoadImage) {
         this.toLoadImage = toLoadImage;
@@ -53,7 +54,7 @@ public class StreamStyledArticleView extends ItemView {
 
     public void render(DetailInfo di) {
         ArticleDetailInfo articleDetailInfo = (ArticleDetailInfo) di;
-        final Article article = articleDetailInfo.getArticle();
+        article = articleDetailInfo.getArticle();
 
         TextView titleView = (TextView) findViewById(R.id.title);
 
@@ -150,7 +151,6 @@ public class StreamStyledArticleView extends ItemView {
                             } else {
                                 article.addNotifier(new StreamStyledNotifier(article, imageView));
                                 if (!article.isLoading()) {
-                                    System.out.println("reloading..." + article.getImageUrl().toExternalForm());
                                     article.loadPrimaryImage(deviceInfo, toLoadImage);
                                 }
                                 imageHandled = false;
@@ -166,6 +166,10 @@ public class StreamStyledArticleView extends ItemView {
 
     public void setExecutor(ExecutorService executor) {
         this.executor = executor;
+    }
+
+    public Article getArticle() {
+        return article;
     }
 
     public class StreamStyledNotifier implements Notifier {

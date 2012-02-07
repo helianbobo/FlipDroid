@@ -19,6 +19,7 @@ import com.goal98.flipdroid.exception.NoSinaAccountBindedException;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
+import com.goal98.flipdroid.util.SinaAccountUtil;
 import com.goal98.tika.common.TikaConstants;
 import com.mobclick.android.MobclickAgent;
 import weibo4j.WeiboException;
@@ -261,7 +262,7 @@ public class ThumbnailViewContainer extends FrameLayout {
 
                 switch (motionEvent.getAction()) {
                     case MotionEvent.ACTION_UP:
-                        if (!pageActivity.sinaAlreadyBinded()) {
+                        if (!SinaAccountUtil.alreadyBinded(pageActivity)) {
                             pageActivity.showDialog(PageActivity.PROMPT_OAUTH);
                             break;
                         }

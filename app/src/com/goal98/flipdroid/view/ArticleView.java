@@ -11,6 +11,7 @@ import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.DeviceInfo;
+import com.goal98.flipdroid.util.NetworkUtil;
 
 public abstract class ArticleView extends LinearLayout {
 
@@ -56,11 +57,10 @@ public abstract class ArticleView extends LinearLayout {
     public ArticleView(Context context, Article article, ThumbnailViewContainer pageViewContainer, boolean placedAtBottom) {
         super(context);
         pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
-        toLoadImage = ((PageActivity)context).isToLoadImage();
+        toLoadImage = NetworkUtil.toLoadImage(context);
         this.deviceInfo = getDeviceInfoFromApplicationContext();
         this.setOrientation(VERTICAL);
         this.placedAtBottom = placedAtBottom;
-
 
         this.pageViewContainer = pageViewContainer;
         setArticle(article);

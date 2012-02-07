@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:wp="http://schemas.android.com/apk/res/com.goal98.flipdroid" android:id="@+id/body" xmlns:android="http://schemas.android.com/apk/res/android"
+                style="@style/Index">
+
+
+        <com.goal98.flipdroid.view.TopBar android:id="@+id/topbar"
+                                          android:layout_height="wrap_content"
+                                          android:layout_width="fill_parent" android:layout_alignParentTop="true"
+                                          wp:title="@string/mystream"></com.goal98.flipdroid.view.TopBar>
+</RelativeLayout>
