@@ -181,7 +181,7 @@ public class Article implements Comparable{
 
     public void setContent(String content) {
         this.content = content;
-        thumbnailText = Html.fromHtml(getContent().replaceAll("(<br/>)|(</h[1-6]+>)|(<h[1-6]+>)|(<img.*?>)|(<blockquote>)|(</blockquote>)|(hack</img>)", ""));
+        thumbnailText = Html.fromHtml(content.replaceAll("(<br/>)|(</h[1-6]+>)|(<h[1-6]+>)|(<img.*?>)|(<blockquote>)|(</blockquote>)|(hack</img>)", ""));
     }
 
     public URL getPortraitImageUrl() {

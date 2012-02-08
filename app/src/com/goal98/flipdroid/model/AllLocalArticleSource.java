@@ -79,6 +79,7 @@ public class AllLocalArticleSource implements ArticleSource {
     }
 
     public boolean reset() {
+        articles.clear();
         return isNoMoreToLoad=false;
     }
 }
