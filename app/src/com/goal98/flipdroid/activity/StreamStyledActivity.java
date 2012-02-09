@@ -58,6 +58,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
 
         addTab(R.string.mystream, R.layout.tab_stream, bottomBarIconHeight, null);
         addTab(R.string.my_feed, R.layout.tab_feeds, bottomBarIconHeight, new Intent(this, IndexActivity.class));
+        addTab(R.string.config, R.layout.tab_setting, bottomBarIconHeight, new Intent(this, ConfigActivity.class));
 
         for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
             tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = bottomHeight;

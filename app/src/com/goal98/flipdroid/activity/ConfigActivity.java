@@ -2,10 +2,8 @@ package com.goal98.flipdroid.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.ListPreference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
+import android.preference.*;
+import android.widget.ListView;
 import com.goal98.flipdroid.R;
 import com.mobclick.android.MobclickAgent;
 
@@ -31,7 +29,14 @@ public class ConfigActivity extends PreferenceActivity implements SharedPreferen
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.config);
+
         addPreferencesFromResource(R.xml.preferences);
+        PreferenceScreen screen = getPreferenceScreen();
+        ListView listView = (ListView) findViewById(android.R.id.list);
+        screen.bind(listView);
+        listView.setAdapter(screen.getRootAdapter());
+
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         settings.registerOnSharedPreferenceChangeListener(this);
 //        browseModeKey = getString(R.string.key_browse_mode_preference);

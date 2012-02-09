@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">天鹅绒围脖</string>
-    <string name="config">配置参数</string>
+    <string name="config">设置</string>
     <string name="password">密码</string>
     <string name="username">用户名</string>
     <string name="clear_all_account">清除账户</string>
