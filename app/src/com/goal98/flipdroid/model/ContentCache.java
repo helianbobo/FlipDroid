@@ -34,8 +34,10 @@ public class ContentCache {
         return refreshingToken;
     }
 
-    public void resetToken() {
+    public void reset() {
         refreshingToken = 0;
+        pagedList.clear();
+        unPagedArticles.clear();
     }
 
     Lock lock = new ReentrantLock();

@@ -34,4 +34,8 @@ public class UnPagedArticles{
     public void setPagedTo(int pagedTo) {
         this.pagedTo = pagedTo;
     }
+
+    public void clear() {
+        articleList.clear();
+    }
 }

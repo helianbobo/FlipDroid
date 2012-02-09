@@ -7,9 +7,7 @@ import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.exception.NoNetworkException;
 import com.goal98.flipdroid.model.*;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
-import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
-import com.goal98.flipdroid.model.rss.RemoteRSSArticleSource;
 import com.goal98.flipdroid.view.FixedPagingStrategy;
 import com.goal98.flipdroid.view.NoMoreArticleListener;
 import com.goal98.flipdroid.view.Page;
@@ -17,7 +15,6 @@ import com.goal98.flipdroid.view.PagingStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -118,6 +115,6 @@ public class ArticleLoader implements PaginationLoaderService, SourceUpdateable 
 
     public void reset() {
         articleSource.reset();
-        repo.getContentCache().resetToken();
+        repo.getContentCache().reset();
     }
 }

@@ -42,4 +42,8 @@ public class PagedPageView {
     public List<Page> getPages() {
         return pages;
     }
+
+    public void clear() {
+        pages.clear();
+    }
 }

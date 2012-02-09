@@ -165,6 +165,8 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
 
         @Override
         protected String[] doInBackground(Void... params) {
+            adapter.reset();
+            articleLoader.reset();
             SourceDB sourceDB = new SourceDB(getApplicationContext());
             SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(StreamStyledActivity.this), StreamStyledActivity.this, RecommendSourceDB.getInstance(StreamStyledActivity.this));
             updateManager.updateAll(true);
@@ -176,8 +178,6 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
         protected void onPostExecute(String[] result) {
             // Call onRefreshComplete when the list has been refreshed.
 
-            adapter.reset();
-            articleLoader.reset();
             adapter.forceLoad();
             mPullRefreshListView.onRefreshComplete();
 
