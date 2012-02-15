@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import com.goal98.flipdroid.R;
-import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.RecommendSourceDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.FromFileJSONReader;
@@ -27,15 +26,11 @@ import com.goal98.flipdroid.model.RecommendSource;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.util.GestureUtil;
-import com.goal98.flipdroid.util.NetworkUtil;
 import com.goal98.tika.common.TikaConstants;
 import com.mobclick.android.MobclickAgent;
-import com.mobclick.android.UmengUpdateListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.xml.transform.URIResolver;
-import java.io.IOException;
 import java.util.Map;
 
 
@@ -76,7 +71,6 @@ public class CoverActivity extends Activity {
     }
 
     private String TAG = this.getClass().getName();
-    private SharedPreferences preferences;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,8 +79,9 @@ public class CoverActivity extends Activity {
 
         setContentView(R.layout.cover);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Constants.TIKA_HOST = preferences.getString(getString(R.string.key_tika_host), Constants.TIKA_HOST);
+        HostSetter hostSetter = new HostSetter(this);
+        hostSetter.setHost();
+        hostSetter = null;
 
         final View view = this.findViewById(R.id.flipbar);
         view.setVisibility(View.GONE);
@@ -110,6 +105,7 @@ public class CoverActivity extends Activity {
         }, delayMillis);
     }
 
+
     private void initDefaultSource() {
         SourceDB sourceDB = new SourceDB(getApplicationContext());
 
@@ -124,7 +120,7 @@ public class CoverActivity extends Activity {
                 if (recommendSource == null) {//read local file as a failover process
                     FromFileJSONReader fromFileSourceResolver = new FromFileJSONReader(this);
                     sourceJsonStr = fromFileSourceResolver.resolve(sourceName);
-                    recommendSourceDB.insert(sourceJsonStr, sourceName,-1);
+                    recommendSourceDB.insert(sourceJsonStr, sourceName, -1);
                 } else {
                     sourceJsonStr = recommendSource.getBody();
                 }
@@ -177,7 +173,7 @@ public class CoverActivity extends Activity {
 
     private void goToNextActivity() {
 
-        boolean tips_read = preferences.getBoolean(Constants.PREFERENCE_TIPS_READ, false);
+        boolean tips_read = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Constants.PREFERENCE_TIPS_READ, false);
         if (tips_read) {
             startActivity(new Intent(this, IndexActivity.class));
         } else

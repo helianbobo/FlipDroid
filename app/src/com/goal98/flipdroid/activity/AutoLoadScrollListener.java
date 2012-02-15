@@ -25,7 +25,8 @@ public class AutoLoadScrollListener implements AbsListView.OnScrollListener {
     public AutoLoadScrollListener(OnLoadListener listener, AutoLoadArrayAdapter adapter, ListView listView) {
         this.onLoadListener = listener;
         this.adapter = adapter;
-        this.listView= listView;
+        this.listView = listView;
+        listView.setFastScrollEnabled(true);
     }
 
     private boolean isLastItemVisible() {
@@ -42,10 +43,10 @@ public class AutoLoadScrollListener implements AbsListView.OnScrollListener {
     public void onScroll(AbsListView view, int firstVisibleItem,
                          int visibleItemCount, int totalItemCount) {
         if (visibleItemCount > 0 && visibleItemCount < totalItemCount
-                && (firstVisibleItem + visibleItemCount == totalItemCount-1)) {
+                && (firstVisibleItem + visibleItemCount == totalItemCount - 1)) {
             fireLoad = true;
         } else {
-            if(isLastItemVisible())
+            if (isLastItemVisible())
                 fireLoad = true;
             else
                 fireLoad = false;
@@ -53,9 +54,9 @@ public class AutoLoadScrollListener implements AbsListView.OnScrollListener {
     }
 
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-
+        System.out.println("cena2"+(view.getLastVisiblePosition() == adapter.getCount()-1) );
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-            if (fireLoad && !adapter.isLoadingData())
+            if ((fireLoad || view.getLastVisiblePosition() == adapter.getCount()-1 )&& !adapter.isLoadingData())
                 load();
             else {
                 fireLoad = false;

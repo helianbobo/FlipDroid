@@ -37,14 +37,12 @@ public class AddSourcePopupViewBuilder {
                 Intent intent = new Intent(activity, RSSSourceSelectionActivity.class);
                 intent.putExtra("type", TikaConstants.TYPE_RSS);
                 AddSourcePopupViewBuilder.this.activity.startActivity(intent);
-                AddSourcePopupViewBuilder.this.activity.overridePendingTransition(R.anim.slide_in_left, R.anim.fade);
             }
         });
 
         addSourcePopUp.findViewById(R.id.gr).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 AddSourcePopupViewBuilder.this.activity.startActivity(new Intent(activity, GoogleAccountActivity.class));
-                AddSourcePopupViewBuilder.this.activity.overridePendingTransition(R.anim.slide_in_left, R.anim.fade);
             }
         });
         return addSourcePopUp;

@@ -58,7 +58,7 @@
     <string name="deletesource">删除源</string>
     <string name="yes">删除</string>
     <string name="no">取消</string>
-    <string name="my_feed">我的订阅</string>
+    <string name="my_feed">编辑订阅</string>
     <string name="my_feed_desc">我的谷歌订阅</string>
     <string name="credentialInCorrect">认证失败</string>
     <string name="nonetwork">没有可用网络连接，现在就去设置网络？</string>

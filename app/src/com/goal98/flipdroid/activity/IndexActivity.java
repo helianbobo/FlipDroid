@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,7 +36,7 @@ import com.mobclick.android.UmengUpdateListener;
 
 import java.util.*;
 
-public class IndexActivity extends ListActivity implements SourceUpdateable, View.OnTouchListener {
+public class IndexActivity extends ListActivity implements SourceUpdateable {
 
     static final private int CONFIG_ID = Menu.FIRST;
     static final private int CLEAR_ID = Menu.FIRST + 1;
@@ -120,7 +121,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
 
                 mPopupWindow = new PopupWindow(addSourcePopUp, ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
-                mPopupWindow.setOutsideTouchable(false);
+                mPopupWindow.setOutsideTouchable(true);
+                mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
                 mPopupWindow.showAsDropDown(topbar.getTableRow());
                 PopupWindowManager.getInstance().setWindow(mPopupWindow);
             }
@@ -155,7 +157,6 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
                 new GetDataTask().execute();
             }
         });
-        mPullRefreshListView.setOnTouchListener(this);
         this.getListView().setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             public void onCreateContextMenu(ContextMenu menu, View v,
                                             ContextMenu.ContextMenuInfo menuInfo) {
@@ -186,11 +187,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable, Vie
         updateManager.updateAll(false);
     }
 
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (motionEvent.getAction() == MotionEvent.ACTION_UP)
-            PopupWindowManager.getInstance().dismissIfShowing();
-        return false;
-    }
+
 
 
     private class GetDataTask extends AsyncTask<Void, Void, String[]> {

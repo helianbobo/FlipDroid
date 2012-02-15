@@ -3,6 +3,7 @@ package com.goal98.flipdroid.activity;
 import android.app.ActivityGroup;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.*;
@@ -29,7 +30,7 @@ import com.ocpsoft.pretty.time.units.Year;
  * Time: 下午4:21
  * To change this template use File | Settings | File Templates.
  */
-public class StreamStyledActivity extends TabActivity implements TabHost.TabContentFactory, View.OnTouchListener, SourceUpdateable {
+public class StreamStyledActivity extends TabActivity implements TabHost.TabContentFactory, SourceUpdateable {
     private ArticleAdapter adapter;
     //    private RadioButton[] mRadioButtons;
     private TabHost tabHost;
@@ -45,6 +46,11 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab);
+
+        HostSetter hostSetter = new HostSetter(this);
+        hostSetter.setHost();
+        hostSetter = null;
+
         inflator = (LayoutInflater) getSystemService("layout_inflater");
         addSourcePopupViewBuilder = new AddSourcePopupViewBuilder(StreamStyledActivity.this);
         deviceInfo = DeviceInfo.getInstance(this);
@@ -63,13 +69,9 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
         for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
             tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = bottomHeight;
         }
-        TabHost.OnTabChangeListener changeLis = new TabHost.OnTabChangeListener() {
-            public void onTabChanged(String tabId) {
-                PopupWindowManager.getInstance().dismissIfShowing();
-            }
-        };
 
-        tabHost.setOnTabChangedListener(changeLis);
+
+//        tabHost.setOnTabChangedListener(changeLis);
 
     }
 
@@ -113,10 +115,13 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
                     View addSourcePopup = addSourcePopupViewBuilder.buildAddSourcePopupView(StreamStyledActivity.this);
                     if (mPopupWindow != null && mPopupWindow.isShowing()) {
                         mPopupWindow.dismiss();
+                        return;
                     }
 
                     mPopupWindow = new PopupWindow(addSourcePopup, ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT);
+                    mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+                    mPopupWindow.setOutsideTouchable(true);
                     if(location[1]>deviceInfo.getHeight()/2){
                        mPopupWindow.showAsDropDown(view, 0, -view.getHeight());
                     }else{
@@ -126,7 +131,6 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
                     PopupWindowManager.getInstance().setWindow(mPopupWindow);
                 }
             });
-            adapter.setParentContainer(tabcontent);
 
             adapter.forceLoad();
             return wrapper;
@@ -134,11 +138,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
         return null;
     }
 
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (motionEvent.getAction() == MotionEvent.ACTION_UP)
-            PopupWindowManager.getInstance().dismissIfShowing();
-        return true;
-    }
+
 
     public void notifyUpdating(CachedArticleSource cachedArticleSource) {
         //To change body of implemented methods use File | Settings | File Templates.

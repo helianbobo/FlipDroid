@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -41,7 +42,7 @@ public class ContentLoadedActivity extends Activity {
     private LayoutInflater inflater;
     private SinaWeiboHelper sinaWeiboHelper;
     private Article article;
-
+    private Handler hander = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +64,9 @@ public class ContentLoadedActivity extends Activity {
 
                     if (!SinaAccountUtil.alreadyBinded(ContentLoadedActivity.this)) {
                         showDialog(PageActivity.PROMPT_OAUTH);
+                        return;
                     }
-                    LinearLayout commentShadowLayer = new LinearLayout(ContentLoadedActivity.this);
+                    final LinearLayout commentShadowLayer = new LinearLayout(ContentLoadedActivity.this);
                     commentShadowLayer.setBackgroundColor(Color.parseColor(Constants.SHADOW_LAYER_COLOR));
                     commentShadowLayer.setPadding(14, 20, 14, 20);
                     LinearLayout commentPad = (LinearLayout) inflater.inflate(R.layout.comment_pad, null);
@@ -74,7 +76,22 @@ public class ContentLoadedActivity extends Activity {
                     ImageButton sendBtn = (ImageButton) commentPad.findViewById(R.id.send);
 
                     //closeBtn
+                    closeBtn.setOnTouchListener(new View.OnTouchListener() {
 
+                        public boolean onTouch(View view, MotionEvent motionEvent) {
+
+                            switch (motionEvent.getAction()) {
+                                case MotionEvent.ACTION_UP:
+                                    body.removeView(commentShadowLayer);
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            return false;
+                        }
+
+                    });
 
                     TextView status = (TextView) commentPad.findViewById(R.id.status);
                     final TextView wordCount = (TextView) commentPad.findViewById(R.id.wordCount);
@@ -177,8 +194,9 @@ public class ContentLoadedActivity extends Activity {
                     int count = templateText.length();
                     setWordCountIndicator(wordCount, count);
 
-                    commentShadowLayer.addView(commentPad, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
-                    body.addView(commentShadowLayer);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT);
+                    commentShadowLayer.addView(commentPad, params);
+                    body.addView(commentShadowLayer,params);
                 }
             }
         });
@@ -218,13 +236,25 @@ public class ContentLoadedActivity extends Activity {
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 FlipdroidApplications application = (FlipdroidApplications) getApplication();
-                                OAuth oauth = new OAuth();
+                                final OAuth oauth = new OAuth();
                                 application.setOauth(oauth);
-                                ////Log.v(TAG, "OAuthHolder.oauth" + application + oauth);
-                                boolean result = oauth.RequestAccessToken(ContentLoadedActivity.this, "flipdroid://SinaAccountSaver");
-                                if (!result) {
-                                    AlarmSender.sendInstantMessage(R.string.networkerror, ContentLoadedActivity.this);
-                                }
+
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        hander.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                boolean result = oauth.RequestAccessToken(ContentLoadedActivity.this, "flipdroid://SinaAccountSaver");
+                                                if (!result) {
+                                                    AlarmSender.sendInstantMessage(R.string.networkerror, ContentLoadedActivity.this);
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                }).start();
+                                showDialog(PROMPT_INPROGRESS);
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

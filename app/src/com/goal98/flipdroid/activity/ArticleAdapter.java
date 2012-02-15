@@ -27,7 +27,6 @@ import java.util.List;
  */
 public class ArticleAdapter extends PaginationLoaderAdapter {
     protected Context context;
-    private ViewGroup parentView;
 
     public ArticleAdapter(Activity activity, ListView listView, int progressDrawableResourceId, int layoutId, PaginationLoaderService loaderService, List<Article> videoDetailInfos, int nodataview, View.OnClickListener noitemListener) {
         super(activity, listView, layoutId, progressDrawableResourceId, videoDetailInfos, nodataview, loaderService, noitemListener);
@@ -38,12 +37,9 @@ public class ArticleAdapter extends PaginationLoaderAdapter {
         this(activity, listView, progressDrawableResourceId, layoutId, loaderService, new ArrayList(), nodataview, noitemListener);
     }
 
-    public void setParentContainer(ViewGroup v) {
-        this.parentView = v;
-    }
+
 
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        PopupWindowManager.getInstance().dismissIfShowing();
         StreamStyledArticleView articleView = (StreamStyledArticleView) view;
         Article article = articleView.getArticle();
 

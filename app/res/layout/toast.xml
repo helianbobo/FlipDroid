@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="120dip" android:background="@drawable/toast" android:paddingTop="15px" android:paddingBottom="15px" android:paddingLeft="90dip" android:paddingRight="90dip">
+      <TextView android:id="@+id/text" android:layout_height="fill_parent" android:layout_width="fill_parent" android:textSize="15sp"></TextView>
+</LinearLayout>
