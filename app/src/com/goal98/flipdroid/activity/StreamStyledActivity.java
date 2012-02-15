@@ -1,6 +1,5 @@
 package com.goal98.flipdroid.activity;
 
-import android.app.ActivityGroup;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -9,6 +8,7 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.db.RSSURLDB;
 import com.goal98.flipdroid.db.RecommendSourceDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.SourceUpdateManager;
@@ -21,7 +21,6 @@ import com.goal98.flipdroid.view.PopupWindowManager;
 import com.goal98.flipdroid.view.TopBar;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.ocpsoft.pretty.time.units.Year;
 
 /**
  * Created by IntelliJ IDEA.
@@ -169,7 +168,8 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
             adapter.reset();
             articleLoader.reset();
             SourceDB sourceDB = new SourceDB(getApplicationContext());
-            SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(StreamStyledActivity.this), StreamStyledActivity.this, RecommendSourceDB.getInstance(StreamStyledActivity.this));
+            RSSURLDB rssurlDB = new RSSURLDB(getApplicationContext());
+            SourceUpdateManager updateManager = new SourceUpdateManager(rssurlDB, sourceDB, SourceCache.getInstance(StreamStyledActivity.this), StreamStyledActivity.this, RecommendSourceDB.getInstance(StreamStyledActivity.this));
             updateManager.updateAll(true);
             return null;
         }

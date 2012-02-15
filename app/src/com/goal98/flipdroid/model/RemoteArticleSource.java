@@ -9,6 +9,7 @@ import org.apache.commons.io.IOUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -58,33 +59,39 @@ public abstract class RemoteArticleSource extends BaseCacheableArticleSource {
     public boolean load() {
         try {
             byte[] contentsBytes = IOUtils.toByteArray(content);
-            List<TikaExtractResponse> tikaResponses = tikaClient.getFeedsFromFeedJSON(new String(contentsBytes));
-            for (int i = 0; i < tikaResponses.size(); i++) {
-                TikaExtractResponse tikaExtractResponse = tikaResponses.get(i);
-                Article article = new Article();
-                if (tikaExtractResponse.getAuthor() == null || tikaExtractResponse.getAuthor().trim().length() == 0)
-                    article.setAuthor(sourceName);
-                else {
-                    String[] authors = tikaExtractResponse.getAuthor().split(" ");
-                    article.setAuthor(authors[0]);
-                }
-
-                if (sourceImage != null) {
-                    try {
-                        article.setPortraitImageUrl(new URL(sourceImage));
-                    } catch (MalformedURLException e) {
-
-                    }
-                }
-                setSourceType(article);
-                feedJSONParser.toArticle(tikaExtractResponse, article);
-                list.add(article);
-            }
+            list.addAll(contentToArticles(new String(contentsBytes)));
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
         return true;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public List<Article> contentToArticles(String content)  {
+        List<Article> articles = new ArrayList<Article>();
+        List<TikaExtractResponse> tikaResponses = tikaClient.getFeedsFromFeedJSON(content);
+        for (int i = 0; i < tikaResponses.size(); i++) {
+            TikaExtractResponse tikaExtractResponse = tikaResponses.get(i);
+            Article article = new Article();
+            if (tikaExtractResponse.getAuthor() == null || tikaExtractResponse.getAuthor().trim().length() == 0)
+                article.setAuthor(sourceName);
+            else {
+                String[] authors = tikaExtractResponse.getAuthor().split(" ");
+                article.setAuthor(authors[0]);
+            }
+
+            if (sourceImage != null) {
+                try {
+                    article.setPortraitImageUrl(new URL(sourceImage));
+                } catch (MalformedURLException e) {
+
+                }
+            }
+            setSourceType(article);
+            feedJSONParser.toArticle(tikaExtractResponse, article);
+            articles.add(article);
+        }
+        return articles;
     }
 
 

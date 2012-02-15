@@ -1,7 +1,7 @@
 package com.goal98.flipdroid.activity;
 
 import android.app.Activity;
-import com.goal98.flipdroid.db.SourceContentDB;
+import com.goal98.flipdroid.db.RSSURLDB;
 import com.goal98.flipdroid.exception.NoMorePageException;
 import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.exception.NoNetworkException;
@@ -29,7 +29,7 @@ public class ArticleLoader implements PaginationLoaderService, SourceUpdateable 
     private ContentRepo repo;
     private int articlePerPage;
     private final ArticleSource articleSource;
-    private SourceContentDB contentDB;
+    private RSSURLDB rssurlDB;
 
     public ArticleLoader(Activity activity, int articlePerPage) {
         this.activity = activity;
@@ -42,8 +42,8 @@ public class ArticleLoader implements PaginationLoaderService, SourceUpdateable 
         });
         Semaphore refreshingSemaphore = new Semaphore(1, true);
         repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-        contentDB = new SourceContentDB(activity);
-        articleSource = new AllLocalArticleSource(contentDB);
+        rssurlDB = new RSSURLDB(activity);
+        articleSource = new AllLocalArticleSource(rssurlDB);
         repo.setArticleSource(articleSource);
         repo.setPagingStrategy(pagingStrategy);
     }

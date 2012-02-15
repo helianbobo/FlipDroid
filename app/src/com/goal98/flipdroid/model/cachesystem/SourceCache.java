@@ -34,6 +34,8 @@ public class SourceCache {
         cacheObject.setImageUrl(imageUrl);
         cacheObject.setAuthor(author);
         contentDB.persist(cacheObject);
+
+
     }
 
     public synchronized SourceCacheObject find(String type, String url) {

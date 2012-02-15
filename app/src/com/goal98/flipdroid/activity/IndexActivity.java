@@ -15,10 +15,7 @@ import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import com.goal98.flipdroid.R;
-import com.goal98.flipdroid.db.AccountDB;
-import com.goal98.flipdroid.db.RecommendSourceDB;
-import com.goal98.flipdroid.db.SourceContentDB;
-import com.goal98.flipdroid.db.SourceDB;
+import com.goal98.flipdroid.db.*;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.model.SourceUpdateManager;
 import com.goal98.flipdroid.model.cachesystem.CacheToken;
@@ -45,6 +42,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
 
     private AccountDB accountDB;
     private SourceDB sourceDB;
+    private RSSURLDB rssurlDB;
     private Cursor sourceCursor;
     private DeviceInfo deviceInfo;
     //    private SourceCache sourceCache;
@@ -103,8 +101,8 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
 
         deviceInfo = getDeviceInfoFromApplicationContext();
 
-        sourceDB = new SourceDB(getApplicationContext());
-
+        sourceDB = new SourceDB(this);
+        rssurlDB = new RSSURLDB(this);
         setContentView(R.layout.index);
         inflater = LayoutInflater.from(this);
 
@@ -183,7 +181,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     }
 
     private void updateSource() {
-        SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
+        SourceUpdateManager updateManager = new SourceUpdateManager(rssurlDB, sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
         updateManager.updateAll(false);
     }
 
@@ -223,6 +221,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         String sourceType = sourceTypeTextView.getText().toString();
         if (item.getItemId() == 0) {//delete
             sourceDB.removeSourceByName(sourceName);
+            rssurlDB.deleteFromFrom(sourceUrl);
             SourceCache sourceCache = SourceCache.getInstance(this);
             try {
                 sourceCache.clear(sourceType, sourceUrl);

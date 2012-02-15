@@ -3,6 +3,7 @@ package com.goal98.flipdroid.model;
 import com.goal98.flipdroid.client.FeedJSONParser;
 import com.goal98.flipdroid.client.TikaClientException;
 import com.goal98.flipdroid.client.TikaExtractResponse;
+import com.goal98.flipdroid.db.RSSURLDB;
 import com.goal98.flipdroid.db.SourceContentDB;
 import com.goal98.flipdroid.model.cachesystem.SourceCacheObject;
 import com.goal98.tika.common.TikaConstants;
@@ -20,11 +21,11 @@ import java.util.*;
  */
 public class AllLocalArticleSource implements ArticleSource {
     private List<Article> articles = new ArrayList<Article>();
-    SourceContentDB contentDB;
+    RSSURLDB contentDB;
     FeedJSONParser jsonParser = new FeedJSONParser();
     private boolean isNoMoreToLoad;
 
-    public AllLocalArticleSource(SourceContentDB contentDB) {
+    public AllLocalArticleSource(RSSURLDB contentDB) {
         this.contentDB = contentDB;
     }
 
@@ -37,33 +38,12 @@ public class AllLocalArticleSource implements ArticleSource {
     }
 
     public boolean loadMore() {
-        List<SourceCacheObject> sourceCacheObjects = contentDB.findAllByType(TikaConstants.TYPE_RSS);
-        if(sourceCacheObjects==null){
+        List<Article> loadedArticles = contentDB.findAllByStatus(RSSURLDB.STATUS_NEW);
+        if(loadedArticles==null){
             isNoMoreToLoad = true;
             return false;
         }
-        int sourceCacheObjectSize = sourceCacheObjects.size();
-        for (int i = 0; i < sourceCacheObjectSize; i++) {
-            SourceCacheObject sourceCacheObject = sourceCacheObjects.get(i);
-            List<TikaExtractResponse> tikaExtractResponses = jsonParser.getFeedsFromFeedJSON(sourceCacheObject.getContent());
-            int tikaExtractResponsesSize = tikaExtractResponses.size();
-            for (int j = 0; j < tikaExtractResponsesSize; j++) {
-                Article article = new Article();
-                article.setSourceType(TikaConstants.TYPE_RSS);
-                TikaExtractResponse tikaExtractResponse = tikaExtractResponses.get(j);
-
-                article.setAuthor(sourceCacheObject.getAuthor());
-
-                try {
-                    article.setPortraitImageUrl(new URL(sourceCacheObject.getImageUrl()));
-                    jsonParser.toArticle(tikaExtractResponse, article);
-                } catch (MalformedURLException e) {
-
-                }
-                articles.add(article);
-            }
-
-        }
+        this.articles.addAll(loadedArticles);
         Collections.sort(articles);
         isNoMoreToLoad = true;
         return true;  //To change body of implemented methods use File | Settings | File Templates.

@@ -61,7 +61,8 @@ public class ContentLoadedView extends ArticleView {
     public void buildView() {
         LayoutInflater inflator = LayoutInflater.from(this.getContext());
         LinearLayout layout = (LinearLayout) inflator.inflate(R.layout.enlarged_content, this);
-        if (article.isExpandable()) {
+        boolean expandable = article.isExpandable();
+        if (expandable) {
             this.titleView = (TextView) layout.findViewById(R.id.title);
             titleView.setText(article.getTitle());
             titleView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_TITLE);
@@ -72,7 +73,7 @@ public class ContentLoadedView extends ArticleView {
         if (article.getSourceType().equals(TikaConstants.TYPE_SINA_WEIBO) || article.getSourceType().equals(TikaConstants.TYPE_MY_SINA_WEIBO)) {
             LinearLayout referenceContent = (LinearLayout) layout.findViewById(R.id.referenceContent);
             referenceContent.setVisibility(VISIBLE);
-            if (article.isExpandable()) {
+            if (expandable) {
                 TextView referenceText = new TextView(this.getContext());
                 referenceText.setText(article.getStatus());
                 referenceText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_REFERENCE);
@@ -210,7 +211,7 @@ public class ContentLoadedView extends ArticleView {
         }
 
         Button viewSource = (Button) layout.findViewById(R.id.viewSource);
-        if (article.isExpandable()) {
+        if (expandable) {
             viewSource.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, deviceInfo.getHeight() / 12));
             viewSource.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {

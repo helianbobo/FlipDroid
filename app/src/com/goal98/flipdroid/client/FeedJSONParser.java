@@ -77,7 +77,7 @@ public class FeedJSONParser {
         return tikaExtractResponse;
     }
 
-    public void toArticle(TikaExtractResponse tikaExtractResponse, Article article) throws MalformedURLException {
+    public void toArticle(TikaExtractResponse tikaExtractResponse, Article article)  {
 
         article.setAlreadyLoaded(true);
         article.setExpandable(true);
@@ -86,7 +86,11 @@ public class FeedJSONParser {
         article.setSourceURL(tikaExtractResponse.getSourceURL());
         article.setCreatedDate(tikaExtractResponse.getCreateDate());
         if (tikaExtractResponse.getImages().size() != 0) {
-            article.setImageUrl(new URL(tikaExtractResponse.getImages().get(0)));
+            try {
+                article.setImageUrl(new URL(tikaExtractResponse.getImages().get(0)));
+            } catch (MalformedURLException e) {
+
+            }
         }
         List<String> responsedImages = tikaExtractResponse.getImages();
         for (int j = 0; j < responsedImages.size(); j++) {

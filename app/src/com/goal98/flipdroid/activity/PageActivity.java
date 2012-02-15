@@ -27,6 +27,7 @@ import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.anim.AnimationFactory;
 import com.goal98.flipdroid.client.OAuth;
+import com.goal98.flipdroid.db.RSSURLDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.exception.NoSinaAccountBindedException;
@@ -62,6 +63,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private Animation rotationForward;
     private Animation rotationBackward;
     private  SinaWeiboHelper sinaWeiboHelper;
+    private RSSURLDB rssurlDB;
 
     public ExecutorService getExecutor() {
         return executor;
@@ -208,6 +210,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 10L, TimeUnit.SECONDS,
                 new SynchronousQueue<Runnable>());
         sourceDB = new SourceDB(this);
+        rssurlDB = new RSSURLDB(this);
         alarmSender = new AlarmSender(this);
 
         Cursor sourceCursor = sourceDB.findAll();
@@ -589,7 +592,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             });
 
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            cachedArticleSource = new CachedArticleSource(new RemoteRSSArticleSource(contentUrl, sourceName, sourceImageURL), this, SourceCache.getInstance(this));
+            cachedArticleSource = new CachedArticleSource(new RemoteRSSArticleSource(contentUrl, sourceName, sourceImageURL), this, SourceCache.getInstance(this),rssurlDB);
             cachedArticleSource.loadSourceFromCache();
             source = cachedArticleSource;
         } else if (accountType.equals(TikaConstants.TYPE_GOOGLE_READER)) {

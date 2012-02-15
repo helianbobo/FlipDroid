@@ -1,8 +1,11 @@
 package com.goal98.flipdroid.model.cachesystem;
 
 import com.goal98.flipdroid.client.LastModifiedStampedResult;
+import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.ArticleSource;
 import com.goal98.flipdroid.model.OnSourceLoadedListener;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -23,4 +26,6 @@ public interface CacheableArticleSource extends ArticleSource {
     String getImageUrl();
 
     String getAuthor();
+
+    List<Article> contentToArticles(String content);
 }

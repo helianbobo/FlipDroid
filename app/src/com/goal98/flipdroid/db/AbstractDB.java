@@ -101,6 +101,22 @@ public abstract class AbstractDB {
                         "PRIMARY KEY (" + URLDB.URL + ")" +
                         ");";
 
+        private static final String RSS_URL_TABLE_CREATE =
+                "CREATE TABLE " + RSSURLDB.TABLE_NAME + " (" +
+                        BaseColumns._ID + " INTEGER," +
+                        RSSURLDB.URL + " TEXT, " +
+                        RSSURLDB.CONTENT + " TEXT, " +
+                        RSSURLDB.TITLE + " TEXT, " +
+                        RSSURLDB.IMAGES + " TEXT, " +
+                        RSSURLDB.AUTHOR + " TEXT, "+
+                        RSSURLDB.AUTHOR_IMAGE + " TEXT, "+
+                        RSSURLDB.DATE + " LONG, "+
+                        RSSURLDB.SOURCE + " TEXT, "+
+                        RSSURLDB.STATUS + " INT, "+
+                        RSSURLDB.TYPE + " TEXT, "+
+                        "PRIMARY KEY (" + RSSURLDB.URL + ")" +
+                        ");";
+
         private static final String RECOMMAND_SOURCE_TABLE_CREATE =
                 "CREATE TABLE " + RecommendSource.TABLE_NAME + " (" +
                         BaseColumns._ID + " INTEGER," +
@@ -137,6 +153,7 @@ public abstract class AbstractDB {
             createURLTable(sqLiteDatabase);
             createSourceContentTable(sqLiteDatabase);
             createRecommandTable(sqLiteDatabase);
+            createRSSURLTable(sqLiteDatabase);
         }
 
         private void createRecommandTable(SQLiteDatabase sqLiteDatabase) {
@@ -153,6 +170,15 @@ public abstract class AbstractDB {
             Log.w(this.getClass().getName(), "Creating table " + URLDB.TABLE_NAME);
             try {
                 sqLiteDatabase.execSQL(URL_TABLE_CREATE);
+            } catch (SQLException e) {
+                Log.e(this.getClass().getName(), e.getMessage(), e);
+            }
+        }
+
+        private void createRSSURLTable(SQLiteDatabase sqLiteDatabase) {
+            Log.w(this.getClass().getName(), "Creating table " + RSSURLDB.TABLE_NAME);
+            try {
+                sqLiteDatabase.execSQL(RSS_URL_TABLE_CREATE);
             } catch (SQLException e) {
                 Log.e(this.getClass().getName(), e.getMessage(), e);
             }

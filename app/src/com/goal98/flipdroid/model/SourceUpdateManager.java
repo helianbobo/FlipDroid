@@ -3,6 +3,7 @@ package com.goal98.flipdroid.model;
 import android.database.Cursor;
 import com.goal98.flipdroid.client.LastModifiedStampedResult;
 import com.goal98.flipdroid.client.TikaClient;
+import com.goal98.flipdroid.db.RSSURLDB;
 import com.goal98.flipdroid.db.RecommendSourceDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
@@ -28,12 +29,14 @@ public class SourceUpdateManager {
     private SourceCache sourceCache;
     private SourceUpdateable updateable;
     private RecommendSourceDB recommendSourceDB;
+    private RSSURLDB rssurlDB;
 
-    public SourceUpdateManager(SourceDB sourceDB, SourceCache sourceCache, SourceUpdateable updateable, RecommendSourceDB recommendSourceDB) {
+    public SourceUpdateManager(RSSURLDB rssurlDB, SourceDB sourceDB, SourceCache sourceCache, SourceUpdateable updateable, RecommendSourceDB recommendSourceDB) {
         this.sourceDB = sourceDB;
         this.sourceCache = sourceCache;
         this.updateable = updateable;
         this.recommendSourceDB = recommendSourceDB;
+        this.rssurlDB = rssurlDB;
     }
 
     public void updateAll(boolean block) {
@@ -50,7 +53,7 @@ public class SourceUpdateManager {
                 CachedArticleSource cachedArticleSource = null;
                 if (sourceType.equals(TikaConstants.TYPE_RSS)) {
                     RemoteArticleSource remoteRSSArticleSource = new RemoteRSSArticleSource(sourceContentUrl, sourceName, sourceImage);
-                    cachedArticleSource = new CachedArticleSource(remoteRSSArticleSource, updateable, sourceCache);
+                    cachedArticleSource = new CachedArticleSource(remoteRSSArticleSource, updateable, sourceCache,rssurlDB);
                 }
 
                 if (cachedArticleSource != null) {

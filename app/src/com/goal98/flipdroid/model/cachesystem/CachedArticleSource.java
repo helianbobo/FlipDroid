@@ -3,6 +3,7 @@ package com.goal98.flipdroid.model.cachesystem;
 import android.content.Context;
 import android.util.Log;
 import com.goal98.flipdroid.client.LastModifiedStampedResult;
+import com.goal98.flipdroid.db.RSSURLDB;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.ArticleSource;
 import com.goal98.flipdroid.model.OnSourceLoadedListener;
@@ -28,7 +29,7 @@ public class CachedArticleSource implements ArticleSource {
     private OnSourceLoadedListener listener;
     private String TAG = this.getClass().getName();
 
-    public CachedArticleSource(final CacheableArticleSource articleSource, SourceUpdateable sourceUpdateable, SourceCache dbCache) {
+    public CachedArticleSource(final CacheableArticleSource articleSource, SourceUpdateable sourceUpdateable, SourceCache dbCache, final RSSURLDB rssurlDB) {
         this.dbCache = dbCache;
         this.sourceUpdateable = sourceUpdateable;
         this.articleSource = articleSource;
@@ -38,6 +39,12 @@ public class CachedArticleSource implements ArticleSource {
                 String encoding = EncodingDetector.detect(new ByteArrayInputStream(bytes));
                 String content = new String(bytes, encoding);
                 CachedArticleSource.this.dbCache.put(articleSource.getCacheToken().getType(), articleSource.getCacheToken().getToken(), content, updatedBytes.getLastModified(), articleSource.getImageUrl(), articleSource.getAuthor());
+
+                List<Article> articles = articleSource.contentToArticles(content);
+                for (int i = 0; i < articles.size(); i++) {
+                    Article article =  articles.get(i);
+                    rssurlDB.insert(article, articleSource.getCacheToken().getToken());
+                }
                 return content;
             }
         };

@@ -213,6 +213,7 @@ public class Article implements Comparable{
 
     public void setTitle(String title) {
         this.title = title;
+        expandable = true;
     }
 
     public String getAuthor() {
