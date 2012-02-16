@@ -4,7 +4,9 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.model.*;
@@ -21,38 +23,40 @@ import java.util.concurrent.ExecutorService;
  * To change this template use File | Settings | File Templates.
  */
 public class FirstPageViewContainer extends ThumbnailViewContainer {
-    private LinearLayout frame;
-    private TipsRepo tipsRepo;
-
-    public FirstPageViewContainer(PageActivity context, PageViewSlidingWindows windows, ExecutorService executor) {
+    private RelativeLayout frame;
+//    private TipsRepo tipsRepo;
+    public FirstPageViewContainer(PageActivity context) {
         super(context);
     }
 
     protected void setDynamicLayout(Context context) {
-        tipsRepo = new TipsRepo(context);
+//        tipsRepo = new TipsRepo(context);
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
-        this.frame = (LinearLayout) inflater.inflate(R.layout.first_page_view, null);
-        TextView textView = (TextView) this.frame.findViewById(R.id.tips);
-
-
-        List<Tip> tips = tipsRepo.getTips();
-        int size = tips.size();
-        if (size > 0) {
-            Random random = new Random();
-            int tipId = random.nextInt(size);
-            Tip tip = tips.get(tipId);
-            textView.setText("小贴士:" + tip.getText());
-
-            ImageView imageView = (ImageView) this.frame.findViewById(R.id.tipImage);
-            imageView.setAlpha(130);
-            try {
-                Class clazz = Class.forName("com.goal98.flipdroid.R$drawable");
-                int tipImage=clazz.getField("tips_" +tip.getId()).getInt(clazz);
-                imageView.setImageResource(tipImage);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        this.frame = (RelativeLayout) inflater.inflate(R.layout.first_page_view_no_tip, null);
+        TextView textView = (TextView) this.frame.findViewById(R.id.sourceName);
+        textView.setText(sourceName);
+        
+        WebImageView imageView = (WebImageView)this.frame.findViewById(R.id.portrait);
+        imageView.setImageUrl(sourceImageURL);
+        imageView.loadImage();
+//        List<Tip> tips = tipsRepo.getTips();
+//        int size = tips.size();
+//        if (size > 0) {
+//            Random random = new Random();
+//            int tipId = random.nextInt(size);
+//            Tip tip = tips.get(tipId);
+//            textView.setText("小贴士:" + tip.getText());
+//
+//            ImageView imageView = (ImageView) this.frame.findViewById(R.id.tipImage);
+//            imageView.setAlpha(130);
+//            try {
+//                Class clazz = Class.forName("com.goal98.flipdroid.R$drawable");
+//                int tipImage=clazz.getField("tips_" +tip.getId()).getInt(clazz);
+//                imageView.setImageResource(tipImage);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
         this.addView(frame, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
     }
 

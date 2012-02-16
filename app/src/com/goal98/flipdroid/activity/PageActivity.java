@@ -126,7 +126,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private LayoutInflater inflater;
     public SourceItemArrayAdapter sourceAdapter;
     private boolean updated;
-    private long lastUpdate = -1;
     private float x, y, z;
     private float last_x, last_y, last_z;
     private static final int SHAKE_THRESHOLD = 900;
@@ -684,7 +683,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
         public ThumbnailViewContainer createFirstPage() {
             ThumbnailViewContainer pageViewContainer = null;
-            pageViewContainer = new FirstPageViewContainer(PageActivity.this, slidingWindows, executor);
+            pageViewContainer = new FirstPageViewContainer(PageActivity.this);
             return pageViewContainer;
         }
 
