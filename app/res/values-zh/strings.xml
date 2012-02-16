@@ -17,6 +17,8 @@
     <string name="addmorefeeds">添加更多订阅</string>
     <string name="sina_weibo">新浪微博</string>
     <string name="updated">您有%条新更新</string>
+    <string name="rssfeeds">RSS订阅</string>
+    <string name="sinafeeds">新浪微博</string>
 
     <string name="title_anim_flip_duration_preference">翻页动画时间</string>
     <string name="summary_anim_flip_duration_preference">翻页动画时间(毫秒)</string>

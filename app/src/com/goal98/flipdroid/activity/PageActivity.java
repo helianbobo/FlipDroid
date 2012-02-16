@@ -846,7 +846,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     Handler handler = new Handler();
 
     private void flipPage(final boolean forward) {
-        flipStarted = true;
+
         this.previousDirection = this.forward;
         this.forward = forward;
 
@@ -860,6 +860,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             container.addView(current, pageViewLayoutParamsFront);
             slideToNextPageAsynchronized();
         } else if (nextPageIndex > 0) {
+            if(this.forward && next.isLastPage())
+                return;
 
             if (current.isLastPage() && forward) {
                 finishActivity();
@@ -877,6 +879,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private void slideToNextPageAsynchronized() {
+        flipStarted = true;
         new Thread(new Runnable() {
             public void run() {
                 slideToNextPage();

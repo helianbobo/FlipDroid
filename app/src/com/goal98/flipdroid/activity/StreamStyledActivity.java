@@ -185,7 +185,6 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
                 rssurlDB.close();
             }
             
-            
             adapter.forceLoad(false);
             return null;
         }

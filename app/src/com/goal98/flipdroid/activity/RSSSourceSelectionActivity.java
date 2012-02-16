@@ -5,6 +5,7 @@ import android.app.ExpandableListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import com.goal98.flipdroid.R;
@@ -16,6 +17,7 @@ import com.goal98.flipdroid.model.rss.RssParser;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.view.SourceExpandableListAdapter;
+import com.goal98.flipdroid.view.TopBar;
 import com.goal98.tika.common.TikaConstants;
 import com.mobclick.android.MobclickAgent;
 
@@ -25,17 +27,23 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
 
     protected SourceDB sourceDB;
     private GroupedSource groupedSource;
+    protected TopBar topbar;
 
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.source_expandable_list);
+        topbar = (TopBar) findViewById(R.id.topbar);//(TopBar) inflator.inflate(R.layout.add_rss_topbar,null);
+        setTitle();
         sourceDB = new SourceDB(this);
         String type = getIntent().getExtras().getString("type");
         groupedSource = new SourceRepo(this).findGroupedSourceByType(type);
-        //////System.out.println("on create");
         addExtraItem(groupedSource);
         group();
+    }
+
+    public void setTitle() {
+        topbar.setTitle(getString(R.string.rssfeeds));
     }
 
     private void group() {
@@ -55,6 +63,7 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
         int[] to = new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type, R.id.group_desc};
         ExpandableListAdapter adapter = new SourceExpandableListAdapter(this, groupedSource.getGroups(), R.layout.group, new String[]{SourceRepo.KEY_NAME_GROUP, SourceRepo.KEY_NAME_SAMPLES}, new int[]{R.id.txt_group, R.id.group_desc}, groupedSource.getChildren(), R.layout.source_item, from, to);
         setListAdapter(adapter);
+
     }
 
     protected void addExtraItem(GroupedSource groupedSource) {

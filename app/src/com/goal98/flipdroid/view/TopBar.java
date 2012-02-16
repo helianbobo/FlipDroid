@@ -26,39 +26,40 @@ public class TopBar extends LinearLayout {
     public static final int IMAGE = 0;
     public static final int TEXT = 1;
     private final TableRow tableRow;
+    private TextView titleView;
 
     private void init(AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(context);
         topbarLL = (LinearLayout) inflater.inflate(R.layout.topbar, this);
         DeviceInfo deviceInfo = DeviceInfo.getInstance((Activity) context);
 
-        LinearLayout titleBar = (LinearLayout)topbarLL.findViewById(R.id.titleBar);
+        LinearLayout titleBar = (LinearLayout) topbarLL.findViewById(R.id.titleBar);
         titleBar.getLayoutParams().height = MultiScreenSupport.getInstance(deviceInfo).getTopbarHeight();
         TypedArray array = getContext().obtainStyledAttributes(attrs, R.styleable.topbar);
         String leftButtonLabel = null;
-        if(array.hasValue(R.styleable.topbar_leftButtonLabel))
+        if (array.hasValue(R.styleable.topbar_leftButtonLabel))
             leftButtonLabel = array.getString(R.styleable.topbar_leftButtonLabel);
 
         Drawable leftButtonImage = null;
-        if(array.hasValue(R.styleable.topbar_leftButtonImage))
+        if (array.hasValue(R.styleable.topbar_leftButtonImage))
             leftButtonImage = array.getDrawable(R.styleable.topbar_leftButtonImage);
 
 
         String rightButtonLabel = null;
-        if(array.hasValue(R.styleable.topbar_rightButtonLabel))
+        if (array.hasValue(R.styleable.topbar_rightButtonLabel))
             rightButtonLabel = array.getString(R.styleable.topbar_rightButtonLabel);
 
-         Drawable rightButtonImage = null;
-        if(array.hasValue(R.styleable.topbar_rightButtonImage))
+        Drawable rightButtonImage = null;
+        if (array.hasValue(R.styleable.topbar_rightButtonImage))
             rightButtonImage = array.getDrawable(R.styleable.topbar_rightButtonImage);
 
         String title = null;
-        if(array.hasValue(R.styleable.topbar_title))
+        if (array.hasValue(R.styleable.topbar_title))
             title = array.getString(R.styleable.topbar_title);
 
 //        ImageButton leftButton = (ImageButton)topbarLL.findViewById(R.id.leftButton);
 //        ImageButton rightButton = (ImageButton)topbarLL.findViewById(R.id.rightButton);
-        TextView titleView = (TextView)topbarLL.findViewById(R.id.topBarTitle);
+        titleView = (TextView) topbarLL.findViewById(R.id.topBarTitle);
 
 //        if(leftButtonImage != null)
 //            leftButton.setBackgroundDrawable(leftButtonImage);
@@ -71,7 +72,7 @@ public class TopBar extends LinearLayout {
 //        if((rightButtonLabel == null || rightButtonLabel.length() == 0) && rightButtonImage==null)
 //            rightButton.setVisibility(GONE);
 
-        if(title!= null && title.length() != 0)
+        if (title != null && title.length() != 0)
             titleView.setText(title);
         else
             titleView.setVisibility(INVISIBLE);
@@ -81,23 +82,28 @@ public class TopBar extends LinearLayout {
         array.recycle();
     }
 
+    public void setTitle(String title) {
+        titleView.setVisibility(VISIBLE);
+        titleView.setText(title);
+    }
+
     public TopBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         init(attrs);
-        tableRow = (TableRow)this.findViewById(R.id.topbar_button);
+        tableRow = (TableRow) this.findViewById(R.id.topbar_button);
     }
 
-    public void addButton(int type, int resourceId, OnClickListener listener){
-        View button = inflate(this.getContext(), R.layout.include_header_button,null);
+    public void addButton(int type, int resourceId, OnClickListener listener) {
+        View button = inflate(this.getContext(), R.layout.include_header_button, null);
         button.setClickable(true);
-        if(type == IMAGE){
+        if (type == IMAGE) {
             View viewById = button.findViewById(R.id.header_btn_img);
             viewById.setBackgroundResource(resourceId);
             viewById.setVisibility(VISIBLE);
 //            viewById.setOnClickListener(listener);
         }
-        if(type == TEXT){
+        if (type == TEXT) {
             TextView viewById = (TextView) button.findViewById(R.id.header_btn_text);
             viewById.setText(resourceId);
             viewById.setVisibility(VISIBLE);

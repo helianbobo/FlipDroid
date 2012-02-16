@@ -40,6 +40,11 @@ public class SourceExpandableListAdapter extends SimpleExpandableListAdapter {
     }
 
     @Override
+    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        return super.getGroupView(groupPosition, isExpanded, convertView, parent);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
         View v;

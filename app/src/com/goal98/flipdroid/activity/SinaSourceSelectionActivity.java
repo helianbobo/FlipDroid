@@ -6,6 +6,7 @@ import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.GroupedSource;
 import com.goal98.flipdroid.model.SourceRepo;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.flipdroid.view.TopBar;
 import com.goal98.tika.common.TikaConstants;
 
 import java.util.Map;
@@ -24,5 +25,10 @@ public class SinaSourceSelectionActivity extends RSSSourceSelectionActivity {
     public void doWithAddCustomerSouce() {
         startActivity(new Intent(this, SinaSourceSearchActivity.class));
         finish();
+    }
+
+
+    public void setTitle() {
+        topbar.setTitle(getString(R.string.sinafeeds));
     }
 }
