@@ -71,8 +71,11 @@ public abstract class AutoLoadArrayAdapter extends ArrayAdapter implements Adapt
             this.items.addAll(detailInfos);
     }
 
+    public void forceLoad(boolean showLoading) {
+        autoLoadScrollListener.load(showLoading);
+    }
     public void forceLoad() {
-        autoLoadScrollListener.load();
+        forceLoad(true);
     }
 
     public int getCount() {

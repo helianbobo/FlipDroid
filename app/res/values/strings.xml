@@ -14,6 +14,7 @@
     <string name="addmorefeeds">add more</string>
     <string name="nodatainscroll">No more data</string>
     <string name="mystream">My Stream</string>
+    <string name="updated">You have % new entries</string>
 
     <string name="sina_weibo">Sina Weibo</string>
 

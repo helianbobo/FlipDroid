@@ -27,22 +27,24 @@ public class AlarmSender {
     }
 
     public static void sendInstantMessage(int msgId, Context context){
+        String msg = context.getString(msgId);
+        sendInstantMessage(msg,context);
+    }
+
+    public static void sendInstantMessage(String msg, Context context){
         LayoutInflater inflater = LayoutInflater.from(context);
         View layout = inflater.inflate(R.layout.toast,
                 null);
         layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
         TextView title = (TextView) layout.findViewById(R.id.text);
-        title.setText(msgId);
+
+        title.setText(msg);
         Toast toast = new Toast(context);
         toast.setGravity(Gravity.CENTER,0,200);
         toast.setDuration(2000);
         toast.setView(layout);
 
         toast.show();
-    }
-
-    public static void sendInstantMessage(String msg, Context context){
-        Toast.makeText(context, msg, 3000).show();
     }
 
     public void sendAlarm(String msg) {

@@ -40,6 +40,11 @@ public class SourceUpdateManager {
     }
 
     public void updateAll(boolean block) {
+        updateContent(block);
+        updateSourceList(block);
+    }
+
+    public void updateContent(boolean block) {
         Cursor c = sourceDB.findAll();
         ManagedCursor mc = new ManagedCursor(c);
         final List<CachedArticleSource> cachedArticleSources = new ArrayList<CachedArticleSource>();
@@ -53,7 +58,7 @@ public class SourceUpdateManager {
                 CachedArticleSource cachedArticleSource = null;
                 if (sourceType.equals(TikaConstants.TYPE_RSS)) {
                     RemoteArticleSource remoteRSSArticleSource = new RemoteRSSArticleSource(sourceContentUrl, sourceName, sourceImage);
-                    cachedArticleSource = new CachedArticleSource(remoteRSSArticleSource, updateable, sourceCache,rssurlDB);
+                    cachedArticleSource = new CachedArticleSource(remoteRSSArticleSource, updateable, sourceCache, rssurlDB);
                 }
 
                 if (cachedArticleSource != null) {
@@ -62,13 +67,23 @@ public class SourceUpdateManager {
             }
         });
         this.sourceDB.close();
+        Thread[] threads = new Thread[cachedArticleSources.size()];
         for (int i = 0; i < cachedArticleSources.size(); i++) {
             CachedArticleSource cachedArticleSource = cachedArticleSources.get(i);
             cachedArticleSource.loadSourceFromCache();
-            cachedArticleSource.checkUpdate(block);
+            Thread t = cachedArticleSource.checkUpdate(false);
+            threads[i] = t;
         }
+        if (block) {
+            for (int i = 0; i < threads.length; i++) {
+                Thread thread = threads[i];
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
 
-        updateSourceList(block);
+                }
+            }
+        }
     }
 
     public void updateSourceList(boolean block) {

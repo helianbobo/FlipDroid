@@ -47,6 +47,16 @@ public class RSSURLDB extends AbstractDB {
     protected String getTableName() {
         return TABLE_NAME;
     }
+    
+    public int getCount(){
+        Cursor cursor = this.findAll();
+
+        try {
+            return cursor.getCount();
+        } finally {
+            cursor.close();
+        }
+    }
 
     public void deleteFromFrom(String from) {
         SQLiteDatabase db = helper.getWritableDatabase();
@@ -129,6 +139,7 @@ public class RSSURLDB extends AbstractDB {
                 article.setCreatedDate(new Date(cursor.getLong(cursor.getColumnIndex(RSSURLDB.DATE))));
                 article.setAuthor(cursor.getString(cursor.getColumnIndex(RSSURLDB.AUTHOR)));
                 article.setSourceType(cursor.getString(cursor.getColumnIndex(RSSURLDB.TYPE)));
+                article.setSourceURL(cursor.getString(cursor.getColumnIndex(RSSURLDB.URL)));
                 String imageString = cursor.getString(cursor.getColumnIndex(RSSURLDB.IMAGES));
                 String[] imageArr = imageString.split(";");
                 List<String> images = new ArrayList<String>();

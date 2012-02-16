@@ -54,25 +54,27 @@ public class AutoLoadScrollListener implements AbsListView.OnScrollListener {
     }
 
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        System.out.println("cena2"+(view.getLastVisiblePosition() == adapter.getCount()-1) );
+        System.out.println("cena2" + (view.getLastVisiblePosition() == adapter.getCount() - 1));
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-            if ((fireLoad || view.getLastVisiblePosition() == adapter.getCount()-1 )&& !adapter.isLoadingData())
-                load();
+            if ((fireLoad || view.getLastVisiblePosition() == adapter.getCount() - 1) && !adapter.isLoadingData())
+                load(true);
             else {
                 fireLoad = false;
             }
         }
     }
 
-    public void load() {
-        new Thread(new Runnable() {
+    public void load(final boolean showLoading) {
+        Thread thread = new Thread(new Runnable() {
             public void run() {
-                adapter.setLoading(true);
-                handler.post(new Runnable() {
-                    public void run() {
-                        adapter.notifyDataSetChanged();
-                    }
-                });
+                if (showLoading) {
+                    adapter.setLoading(true);
+                    handler.post(new Runnable() {
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
                 final List loadedItems;
                 try {
                     loadedItems = onLoadListener.load();
@@ -88,7 +90,15 @@ public class AutoLoadScrollListener implements AbsListView.OnScrollListener {
                     }
                 });
             }
-        }).start();
+        });
+        thread.start();
+        if(!showLoading){
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+
+            }
+        }
     }
 }
 

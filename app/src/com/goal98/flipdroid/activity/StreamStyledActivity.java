@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.*;
 import android.widget.*;
 import com.goal98.flipdroid.R;
@@ -16,6 +17,7 @@ import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
 import com.goal98.flipdroid.multiscreen.MultiScreenSupport;
+import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.view.PopupWindowManager;
 import com.goal98.flipdroid.view.TopBar;
@@ -41,6 +43,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
     private PopupWindow mPopupWindow;
     private PullToRefreshListView mPullRefreshListView;
     private FrameLayout tabcontent;
+    private Handler handler = new Handler();
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,7 +134,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
                 }
             });
 
-            adapter.forceLoad();
+            adapter.forceLoad(true);
             return wrapper;
         }
         return null;
@@ -158,19 +161,32 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
 
     private class GetDataTask extends AsyncTask<Void, Void, String[]> {
         private PullToRefreshListView mPullRefreshListView;
+        private RSSURLDB rssurlDB;
 
         public GetDataTask(PullToRefreshListView mPullRefreshListView) {
             this.mPullRefreshListView = mPullRefreshListView;
+
         }
+        
+        int countBeforeUpdate = 0;
 
         @Override
         protected String[] doInBackground(Void... params) {
             adapter.reset();
             articleLoader.reset();
             SourceDB sourceDB = new SourceDB(getApplicationContext());
-            RSSURLDB rssurlDB = new RSSURLDB(getApplicationContext());
-            SourceUpdateManager updateManager = new SourceUpdateManager(rssurlDB, sourceDB, SourceCache.getInstance(StreamStyledActivity.this), StreamStyledActivity.this, RecommendSourceDB.getInstance(StreamStyledActivity.this));
-            updateManager.updateAll(true);
+            rssurlDB = new RSSURLDB(getApplicationContext());
+            countBeforeUpdate = rssurlDB.getCount();
+            try{
+                SourceUpdateManager updateManager = new SourceUpdateManager(rssurlDB, sourceDB, SourceCache.getInstance(StreamStyledActivity.this), StreamStyledActivity.this, RecommendSourceDB.getInstance(StreamStyledActivity.this));
+                updateManager.updateContent(true);
+            }finally {
+                sourceDB.close();
+                rssurlDB.close();
+            }
+            
+            
+            adapter.forceLoad(false);
             return null;
         }
 
@@ -178,11 +194,20 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
         @Override
         protected void onPostExecute(String[] result) {
             // Call onRefreshComplete when the list has been refreshed.
+            int countAfterUpdate = rssurlDB.getCount();
+            final int updatedCount = countAfterUpdate-countBeforeUpdate;
 
-            adapter.forceLoad();
             mPullRefreshListView.onRefreshComplete();
 
             super.onPostExecute(result);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    String updated = StreamStyledActivity.this.getString(R.string.updated);
+                    updated = updated.replaceAll("%", "" + updatedCount);
+                    AlarmSender.sendInstantMessage(updated,StreamStyledActivity.this);
+                }
+            });
         }
     }
 

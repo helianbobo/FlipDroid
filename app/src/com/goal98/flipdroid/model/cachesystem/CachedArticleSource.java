@@ -82,7 +82,7 @@ public class CachedArticleSource implements ArticleSource {
         return articleSource.isNoMoreToLoad();
     }
 
-    public void checkUpdate(boolean block) {
+    public Thread checkUpdate(boolean block) {
         Thread t = new Thread(new Runnable() {
             public void run() {
 
@@ -115,6 +115,7 @@ public class CachedArticleSource implements ArticleSource {
 
             }
         }
+        return t;
     }
 
     public void setUpdating(boolean updating) {
