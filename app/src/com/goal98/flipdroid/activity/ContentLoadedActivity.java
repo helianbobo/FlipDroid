@@ -55,6 +55,7 @@ public class ContentLoadedActivity extends Activity {
         article = ArticleHolder.getInstance().get();
         ContentLoadedView loadedArticleView = new ContentLoadedView(this, article, null);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,RelativeLayout.LayoutParams.FILL_PARENT);
+        loadedArticleView.setPadding(0,10,0,0);
         layoutParams.addRule(RelativeLayout.BELOW, R.id.topbar);
         body.addView(loadedArticleView,layoutParams);
         topBar.addButton(TopBar.IMAGE, R.drawable.share_white, new View.OnClickListener() {
