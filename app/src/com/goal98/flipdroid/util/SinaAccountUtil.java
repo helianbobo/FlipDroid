@@ -20,17 +20,8 @@ import com.goal98.tika.common.TikaConstants;
 public class SinaAccountUtil {
 
     public static boolean alreadyBinded(Context context) {
-        AccountDB accountDB = null;
-        try {
-            accountDB = new AccountDB(context);
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-            boolean binded = preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null) != null;
-
-            return binded;
-        } finally {
-            if (accountDB != null)
-                accountDB.close();
-        }
+        return (preferences.getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null) != null);
     }
 
     public static SinaToken getToken(Context context) {

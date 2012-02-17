@@ -2,6 +2,7 @@ package com.goal98.flipdroid.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.preference.PreferenceManager;
 import com.goal98.flipdroid.client.WeiboExt;
 import com.goal98.flipdroid.exception.NoSinaAccountBindedException;
 import com.goal98.flipdroid.model.Article;
@@ -21,7 +22,7 @@ public class SinaWeiboHelper {
     }
 
     public void comment(String comment, Article article) throws WeiboException, NoSinaAccountBindedException {
-        String userId = activity.getPreferences(Context.MODE_WORLD_READABLE).getString("sina_account", null);
+        String userId =  PreferenceManager.getDefaultSharedPreferences(activity).getString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null);
         if (userId == null)
             throw new NoSinaAccountBindedException();
 
@@ -32,7 +33,7 @@ public class SinaWeiboHelper {
     }
 
     public void forward(String comment, Article article) throws WeiboException, NoSinaAccountBindedException {
-        String userId = activity.getPreferences(Context.MODE_WORLD_READABLE).getString("sina_account", null);
+        String userId = PreferenceManager.getDefaultSharedPreferences(activity).getString("sina_account", null);
         if (userId == null)
             throw new NoSinaAccountBindedException();
 

@@ -63,7 +63,7 @@ public class RSSURLDB extends AbstractDB {
         db.delete(RSSURLDB.TABLE_NAME, RSSURLDB.SOURCE + " = ? ", new String[]{from});
     }
 
-    public long insert(Article article, String from) {
+    public synchronized long insert(Article article, String from) {
         boolean exist = exist(article.getSourceURL());
         if (exist) {
             return 0;
