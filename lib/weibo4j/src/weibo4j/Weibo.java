@@ -2462,9 +2462,9 @@ public class Weibo extends WeiboSupport implements java.io.Serializable {
     }
 
     /**
-     * Returns the remaining number of API requests available to the requesting user before the API limit is reached for the current hour. Calls to rate_limit_status do not count against the rate limit.  If authentication credentials are provided, the rate limit status for the authenticating user is returned.  Otherwise, the rate limit status for the requester's IP address is returned.<br>
+     * Returns the remaining number of API requests available to the requesting user before the API recordPerPage is reached for the current hour. Calls to rate_limit_status do not count against the rate recordPerPage.  If authentication credentials are provided, the rate recordPerPage status for the authenticating user is returned.  Otherwise, the rate recordPerPage status for the requester's IP address is returned.<br>
      *
-     * @return the rate limit status
+     * @return the rate recordPerPage status
      * @throws WeiboException when Weibo service or network is unavailable
      * @since Weibo4J 1.1.4
      * @see <a href="http://open.t.sina.com.cn/wiki/index.php/Account/rate_limit_status">account/rate_limit_status </a>

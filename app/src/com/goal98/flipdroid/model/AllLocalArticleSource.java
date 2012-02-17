@@ -24,9 +24,12 @@ public class AllLocalArticleSource implements ArticleSource {
     RSSURLDB contentDB;
     FeedJSONParser jsonParser = new FeedJSONParser();
     private boolean isNoMoreToLoad;
+    private int offset = 0;
+    private int totalNumber = 0;
 
     public AllLocalArticleSource(RSSURLDB contentDB) {
         this.contentDB = contentDB;
+        ;
     }
 
     public Date lastModified() {
@@ -38,14 +41,21 @@ public class AllLocalArticleSource implements ArticleSource {
     }
 
     public boolean loadMore() {
-        List<Article> loadedArticles = contentDB.findAllByStatus(RSSURLDB.STATUS_NEW);
+        if(totalNumber == 0){
+            totalNumber = contentDB.countByStatus(RSSURLDB.STATUS_NEW);
+        }
+        List<Article> loadedArticles = contentDB.findAllByStatus(RSSURLDB.STATUS_NEW, offset);
         if(loadedArticles==null){
             isNoMoreToLoad = true;
             return false;
         }
+
+        offset += RSSURLDB.recordPerPage;
+        if(offset > totalNumber){
+            isNoMoreToLoad = true;
+        }
         this.articles.addAll(loadedArticles);
         Collections.sort(articles);
-        isNoMoreToLoad = true;
         return true;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -60,6 +70,7 @@ public class AllLocalArticleSource implements ArticleSource {
 
     public boolean reset() {
         articles.clear();
+        offset = 0;
         return isNoMoreToLoad=false;
     }
 }

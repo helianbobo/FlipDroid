@@ -501,9 +501,9 @@ public class WeiboStream extends WeiboSupport {
                             }
                         }
                     }else{
-                        // exceeded retry limit, wait to a moment not to overload Weibo API
+                        // exceeded retry recordPerPage, wait to a moment not to overload Weibo API
                         long timeToSleep = 60000 - (System.currentTimeMillis() - retryHistory.get(retryHistory.size() - 1));
-                        setStatus("[retry limit reached. sleeping for " + (timeToSleep / 1000) + " secs]");
+                        setStatus("[retry recordPerPage reached. sleeping for " + (timeToSleep / 1000) + " secs]");
                         try {
                             Thread.sleep(timeToSleep);
                         } catch (InterruptedException ignore) {

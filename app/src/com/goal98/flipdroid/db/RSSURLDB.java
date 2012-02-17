@@ -38,6 +38,7 @@ public class RSSURLDB extends AbstractDB {
     public static final String TABLE_NAME = "rssurl";
     public static final int STATUS_NEW = 1;
     public static final int STATUS_READ = 2;
+    public static final int recordPerPage = 20;
 
     public RSSURLDB(Context context) {
         super(context);
@@ -47,8 +48,8 @@ public class RSSURLDB extends AbstractDB {
     protected String getTableName() {
         return TABLE_NAME;
     }
-    
-    public int getCount(){
+
+    public int getCount() {
         Cursor cursor = this.findAll();
 
         try {
@@ -112,13 +113,24 @@ public class RSSURLDB extends AbstractDB {
         return db.insert(getTableName(), RSSURLDB.URL, values);
     }
 
-    public List<Article> findAllByStatus(int status) {
+    public int countByStatus(int status) {
         String[] projection = null;
         String selection = RSSURLDB.STATUS + " = ?";
         String[] selectionArgs = {status + ""};
 
+        Cursor cursor = null;
+        try {
+            cursor = query(projection, selection, selectionArgs, null);
+            return cursor.getCount();
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+    }
+
+    public List<Article> findAllByStatus(int status, int offset) {
         List<Article> articles = new ArrayList<Article>();
-        Cursor cursor = query(projection, selection, selectionArgs, null);
+        Cursor cursor = rawQuery("select * from " + getTableName() + " where " + RSSURLDB.STATUS + " = ? limit "+recordPerPage+" offset " + offset, new String[]{status + ""});
         try {
             if (cursor.getCount() == 0) {
                 return null;

@@ -35,11 +35,15 @@ public abstract class AbstractDB {
     public Cursor query(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(getTableName());
-
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 
         return cursor;
+    }
+    
+    public Cursor rawQuery(String sql, String[] args){
+        SQLiteDatabase db = helper.getReadableDatabase();
+        return db.rawQuery(sql,args);
     }
 
     protected abstract String getTableName();

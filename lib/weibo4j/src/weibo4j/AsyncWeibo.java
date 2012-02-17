@@ -2261,7 +2261,7 @@ public class AsyncWeibo extends Weibo {
     }
 
     /**
-     * Gets the remaining number of API requests available to the requesting user before the API limit is reached for the current hour. Calls to rate_limit_status do not count against the rate limit.  If authentication credentials are provided, the rate limit status for the authenticating user is returned.  Otherwise, the rate limit status for the requester's IP address is returned.
+     * Gets the remaining number of API requests available to the requesting user before the API recordPerPage is reached for the current hour. Calls to rate_limit_status do not count against the rate recordPerPage.  If authentication credentials are provided, the rate recordPerPage status for the authenticating user is returned.  Otherwise, the rate recordPerPage status for the requester's IP address is returned.
      * <br>This method calls http://api.t.sina.com.cn/account/rate_limit_status
      *
      * @since Weibo4J 1.1.4

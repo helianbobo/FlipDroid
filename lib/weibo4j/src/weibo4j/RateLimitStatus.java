@@ -35,7 +35,7 @@ import weibo4j.org.json.JSONException;
 import weibo4j.org.json.JSONObject;
 
 /**
- * A data class representing Weibo rate limit status
+ * A data class representing Weibo rate recordPerPage status
  * @author Yusuke Yamamoto - yusuke at mac.com
  */
 public class RateLimitStatus extends WeiboResponse {
@@ -49,7 +49,7 @@ public class RateLimitStatus extends WeiboResponse {
         super(res);
         Element elem = res.asDocument().getDocumentElement();
         remainingHits = getChildInt("remaining-hits", elem);
-        hourlyLimit = getChildInt("hourly-limit", elem);
+        hourlyLimit = getChildInt("hourly-recordPerPage", elem);
         resetTimeInSeconds = getChildInt("reset-time-in-seconds", elem);
         resetTime = getChildDate("reset-time", elem, "EEE MMM d HH:mm:ss z yyyy");
     }
