@@ -5,7 +5,7 @@ import android.view.MotionEvent;
 
 public class GestureUtil {
 
-    public static int minDelta = 3;
+    public static int minDelta = 1;
 
     public enum FlipDirection{
         RIGHT,LEFT,UP,DOWN,NONE
@@ -15,7 +15,9 @@ public class GestureUtil {
         final float dx = endX - startX;
         final float dy = endY - startY;
         final boolean isHorizontal = Math.abs(dx) > Math.abs(dy);
-
+        System.out.println("cena2:"+dx+","+dy);
+        System.out.println("cena2 end x: "+endX+", start x: "+startX);
+        System.out.println("cena2 end y: "+endY+", start y: "+startY);
         if(isHorizontal && Math.abs(dx) > minDelta){
             if(dx > 0)
                 return FlipDirection.RIGHT;

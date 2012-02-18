@@ -24,9 +24,12 @@ import java.util.concurrent.ExecutorService;
  */
 public class FirstPageViewContainer extends ThumbnailViewContainer {
     private RelativeLayout frame;
-//    private TipsRepo tipsRepo;
+    private WebImageView imageView;
+
+    //    private TipsRepo tipsRepo;
     public FirstPageViewContainer(PageActivity context) {
         super(context);
+
     }
 
     protected void setDynamicLayout(Context context) {
@@ -35,10 +38,9 @@ public class FirstPageViewContainer extends ThumbnailViewContainer {
         this.frame = (RelativeLayout) inflater.inflate(R.layout.first_page_view_no_tip, null);
         TextView textView = (TextView) this.frame.findViewById(R.id.sourceName);
         textView.setText(sourceName);
-        
-        WebImageView imageView = (WebImageView)this.frame.findViewById(R.id.portrait);
+        imageView = (WebImageView)this.frame.findViewById(R.id.portrait);
         imageView.setImageUrl(sourceImageURL);
-        imageView.loadImage();
+
 //        List<Tip> tips = tipsRepo.getTips();
 //        int size = tips.size();
 //        if (size > 0) {
@@ -72,5 +74,11 @@ public class FirstPageViewContainer extends ThumbnailViewContainer {
 
     public void releaseResource() {
 
+    }
+
+    @Override
+    public void renderBeforeLayout() {
+        super.renderBeforeLayout();
+        imageView.loadImage();
     }
 }

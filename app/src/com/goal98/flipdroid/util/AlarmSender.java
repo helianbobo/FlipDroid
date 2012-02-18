@@ -18,20 +18,19 @@ import java.util.Calendar;
 
 public class AlarmSender {
 
-    private Toast mToast;
-
     private Activity activity;
+    private static Toast toast;
 
     public AlarmSender(Activity activity) {
         this.activity = activity;
     }
 
-    public static void sendInstantMessage(int msgId, Context context){
+    public static void sendInstantMessage(int msgId, Context context) {
         String msg = context.getString(msgId);
-        sendInstantMessage(msg,context);
+        sendInstantMessage(msg, context);
     }
 
-    public static void sendInstantMessage(String msg, Context context){
+    public static void sendInstantMessage(String msg, Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View layout = inflater.inflate(R.layout.toast,
                 null);
@@ -39,8 +38,9 @@ public class AlarmSender {
         TextView title = (TextView) layout.findViewById(R.id.text);
 
         title.setText(msg);
-        Toast toast = new Toast(context);
-        toast.setGravity(Gravity.CENTER,0,200);
+        if (toast == null)
+            toast = new Toast(context);
+        toast.setGravity(Gravity.CENTER, 0, 200);
         toast.setDuration(2000);
         toast.setView(layout);
 
@@ -63,11 +63,11 @@ public class AlarmSender {
         am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender);
 
         // Tell the user about what we did.
-        if (mToast != null) {
-            mToast.cancel();
-        }
-        mToast = Toast.makeText(activity, msg,
-                Toast.LENGTH_LONG);
-        mToast.show();
+        if (toast == null)
+            toast = Toast.makeText(activity, msg,
+                    Toast.LENGTH_LONG);
+        else
+            toast.setText(msg);
+        toast.show();
     }
 }

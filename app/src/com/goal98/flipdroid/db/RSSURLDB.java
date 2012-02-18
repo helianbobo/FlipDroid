@@ -130,7 +130,7 @@ public class RSSURLDB extends AbstractDB {
 
     public List<Article> findAllByStatus(int status, int offset) {
         List<Article> articles = new ArrayList<Article>();
-        Cursor cursor = rawQuery("select * from " + getTableName() + " where " + RSSURLDB.STATUS + " = ? limit "+recordPerPage+" offset " + offset, new String[]{status + ""});
+        Cursor cursor = rawQuery("select * from " + getTableName() + " where " + RSSURLDB.STATUS + " = ? order by "+RSSURLDB.DATE+" desc limit "+recordPerPage+" offset " + offset, new String[]{status + ""});
         try {
             if (cursor.getCount() == 0) {
                 return null;

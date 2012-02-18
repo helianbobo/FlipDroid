@@ -22,7 +22,6 @@ import java.util.*;
 public class AllLocalArticleSource implements ArticleSource {
     private List<Article> articles = new ArrayList<Article>();
     RSSURLDB contentDB;
-    FeedJSONParser jsonParser = new FeedJSONParser();
     private boolean isNoMoreToLoad;
     private int offset = 0;
     private int totalNumber = 0;

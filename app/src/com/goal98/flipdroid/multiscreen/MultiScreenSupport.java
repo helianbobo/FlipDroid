@@ -40,4 +40,6 @@ public abstract class MultiScreenSupport {
     public abstract int getTopBarTextSize();
 
     public abstract int getBottomBarIconHeight();
+
+    public abstract int getFirstPageTranslateY();
 }

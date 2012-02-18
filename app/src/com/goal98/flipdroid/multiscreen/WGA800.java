@@ -77,4 +77,8 @@ public class WGA800 extends MultiScreenSupport {
     public int getBottomBarIconHeight() {
         return 33;
     }
+
+    public int getFirstPageTranslateY() {
+        return 4500;
+    }
 }

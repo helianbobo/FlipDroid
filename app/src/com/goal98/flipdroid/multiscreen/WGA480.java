@@ -61,12 +61,12 @@ public class WGA480 extends MultiScreenSupport {
 
     @Override
     public int getTopbarHeight() {
-        return 30;
+        return 40;
     }
 
     @Override
     public int getBottomRadioHeight() {
-        return 50;
+        return 45;
     }
 
     public int getTopBarTextSize() {
@@ -75,5 +75,9 @@ public class WGA480 extends MultiScreenSupport {
 
     public int getBottomBarIconHeight() {
         return 20;
+    }
+
+    public int getFirstPageTranslateY() {
+        return 750;
     }
 }

@@ -6,7 +6,7 @@
     <com.goal98.flipdroid.view.FlipPage
             style="@style/Page"
             android:id="@+id/articlePerPage" android:weightSum="480" android:orientation="vertical"
-            android:background="#DDDDDD">
+            android:background="#FFFFFF">
 
         <com.goal98.flipdroid.view.PageIndexView android:background="@color/white" android:id="@+id/pageIndex"
                                                  android:layout_width="fill_parent"
@@ -23,7 +23,7 @@
 
         <com.goal98.flipdroid.view.HeaderView android:background="#FFFFFF" android:id="@+id/header"
                                               android:layout_width="match_parent"
-                                              android:layout_weight="40"
+                                              android:layout_weight="40" android:visibility="invisible"
                                               android:layout_height="0dip" android:gravity="center">
 
         </com.goal98.flipdroid.view.HeaderView>

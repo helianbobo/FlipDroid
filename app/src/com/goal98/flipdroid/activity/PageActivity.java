@@ -20,8 +20,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.*;
 import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.animation.*;
 import android.widget.*;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
@@ -41,11 +40,11 @@ import com.goal98.flipdroid.model.rss.RemoteRSSArticleSource;
 import com.goal98.flipdroid.model.sina.SinaArticleSource;
 import com.goal98.flipdroid.model.sina.SinaToken;
 import com.goal98.flipdroid.model.taobao.TaobaoArticleSource;
+import com.goal98.flipdroid.multiscreen.MultiScreenSupport;
 import com.goal98.flipdroid.util.*;
 import com.goal98.flipdroid.view.*;
 import com.goal98.tika.common.TikaConstants;
 import com.mobclick.android.MobclickAgent;
-import weibo4j.Weibo;
 import weibo4j.WeiboException;
 
 import java.util.concurrent.*;
@@ -53,6 +52,7 @@ import java.util.concurrent.*;
 public class PageActivity extends Activity implements com.goal98.flipdroid.model.Window.OnLoadListener, SourceUpdateable {
 
     private static final int CONFIG_ID = Menu.FIRST;
+    public static final int FADE_OUT_FIRST_PAGE_DURATION = 1000;
     private Animation fadeInPageView;
     private Animation fadeOutPageView;
     private ImageButton contentImageButton;
@@ -62,7 +62,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private boolean toLoadImage;
     private Animation rotationForward;
     private Animation rotationBackward;
-    private  SinaWeiboHelper sinaWeiboHelper;
+    private SinaWeiboHelper sinaWeiboHelper;
     private RSSURLDB rssurlDB;
 
     public ExecutorService getExecutor() {
@@ -176,7 +176,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         super.onResume();
         MobclickAgent.onResume(this);
     }
-
+    LayoutAnimationController fadeinController;
     /**
      * Called when the activity is first created.
      */
@@ -196,7 +196,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         StopWatch sw = new StopWatch();
         sw.start("create activity");
 
-
+        fadeinController = new LayoutAnimationController(AnimationUtils.loadAnimation(PageActivity.this, R.anim.fadein));
         createAnimation();
         buildFadeInPageViewAnimation();
         buildFadeOutPageViewAnimation();
@@ -239,6 +239,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         toLoadImage = NetworkUtil.toLoadImage(PageActivity.this);
         pageIndexView = (PageIndexView) findViewById(R.id.pageIndex);
         bottomBar = (HeaderView) findViewById(R.id.header);
+        bottomBar.setLayoutAnimation(fadeinController);
         contentImageButton = (ImageButton) findViewById(R.id.content);
         contentImageButton.setOnTouchListener(new View.OnTouchListener() {
 
@@ -340,13 +341,17 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 if (forward)
                     container.bringChildToFront(current);
                 next.setVisibility(View.VISIBLE);
+                bottomBar.setVisibility(View.VISIBLE);
+                    current.setVisibility(View.GONE);
+                
+                
             }
 
             public void onAnimationEnd(Animation animation) {
                 flipStarted = false;
 
                 container.bringChildToFront(forward ? next : previous);
-                current.setVisibility(View.INVISIBLE);
+
                 switchViews(forward);
                 new Thread(new Runnable() {
                     public void run() {
@@ -591,7 +596,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             });
 
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            cachedArticleSource = new CachedArticleSource(new RemoteRSSArticleSource(contentUrl, sourceName, sourceImageURL), this, SourceCache.getInstance(this),rssurlDB);
+            cachedArticleSource = new CachedArticleSource(new RemoteRSSArticleSource(contentUrl, sourceName, sourceImageURL), this, SourceCache.getInstance(this), rssurlDB);
             cachedArticleSource.loadSourceFromCache();
             source = cachedArticleSource;
         } else if (accountType.equals(TikaConstants.TYPE_GOOGLE_READER)) {
@@ -638,7 +643,12 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
         slidingWindows = new PageViewSlidingWindows(5, repo, pageViewFactory, 2);
         current = pageViewFactory.createFirstPage();
-
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                current.renderBeforeLayout();
+            }
+        });
         shadow = new LinearLayout(PageActivity.this);
         shadow.setBackgroundColor(Color.parseColor("#10999999"));
 
@@ -734,7 +744,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             case MotionEvent.ACTION_DOWN: {
                 mLastMotionX = mInitialMotionX = event.getX();
                 mLastMotionY = mInitialMotionY = event.getY();
-
                 break;
             }
             /*case MotionEvent.ACTION_UP:
@@ -789,11 +798,62 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 mLastMotionY = mInitialMotionY = event.getY();
                 break;
             }
+            case MotionEvent.ACTION_MOVE: {
+                mLastMotionX = event.getX();
+                mLastMotionY = event.getY();
+
+
+                if(mInitialMotionX == 0 && mInitialMotionY == 0){
+                    System.out.println("it works");
+                    mInitialMotionX = event.getX();
+                    mInitialMotionY = event.getY();
+                }
+                if (!flipStarted && !enlargedMode) {
+
+                    final GestureUtil.FlipDirection flipDirection = GestureUtil.checkFlipDirection(mInitialMotionX, mInitialMotionY, mLastMotionX, mLastMotionY);
+
+                    switch (flipDirection) {
+                        case RIGHT:
+//                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> RIGHT;");
+                            MobclickAgent.onEvent(this, "FlipPage", "Right");
+                            lastFlipDirection = ACTION_HORIZONTAL;
+                            flipPage(false);
+                            break;
+                        case UP:
+//                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> UP;");
+                            MobclickAgent.onEvent(this, "FlipPage", "Up");
+                            lastFlipDirection = ACTION_VERTICAL;
+                            flipPage(true);
+                            break;
+                        case LEFT:
+//                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> LEFT;");
+                            MobclickAgent.onEvent(this, "FlipPage", "Left");
+                            lastFlipDirection = ACTION_HORIZONTAL;
+                            flipPage(true);
+                            break;
+                        case DOWN:
+//                            Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> DOWN;");
+                            MobclickAgent.onEvent(this, "FlipPage", "Down");
+                            lastFlipDirection = ACTION_VERTICAL;
+                            flipPage(false);
+                            break;
+                        case NONE:
+                            return false;
+
+                    }
+
+//                    Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> No Gesture matched");
+
+                }
+                break;
+            }
 
             case MotionEvent.ACTION_UP:
 
                 mLastMotionX = event.getX();
                 mLastMotionY = event.getY();
+
+
 
                 if (!flipStarted && !enlargedMode) {
 
@@ -833,11 +893,12 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
                 }
                 break;
+
             default:
-//                Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> default;");
+
                 break;
         }
-//        Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> return true;");
+        Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> return true;");
 
         return true;
     }
@@ -859,8 +920,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             container.addView(current, pageViewLayoutParamsFront);
             slideToNextPageAsynchronized();
         } else if (nextPageIndex > 0) {
-            if(this.forward && next.isLastPage())
+            if (this.forward && next.isLastPage()) {
+                AlarmSender.sendInstantMessage(R.string.isLastPage, this);
                 return;
+            }
 
             if (current.isLastPage() && forward) {
                 finishActivity();
@@ -873,7 +936,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private void finishActivity() {
-        overridePendingTransition(R.anim.left_in, R.anim.fade);
         finish();
     }
 
@@ -888,6 +950,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     private void slideToNextPage() {
         Log.v(TAG, "debug slide to next");
+
         try {
             if (preparingWindow == null && !prepareFail)
                 preparingWindow = forward ? slidingWindows.getNextWindow() : slidingWindows.getPreviousWindow();
@@ -1132,15 +1195,29 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         //Log.d("ANI", "start animation");
         container.removeAllViews();
         if (current.isFirstPage()) {
-
+            WebImageView webImageView = (WebImageView) current.findViewById(R.id.portrait);
             next.setVisibility(View.VISIBLE);
             currentPageIndex++;
             container.addView(current, pageViewLayoutParamsBack);
             container.addView(next, pageViewLayoutParamsFront);
 
-
-            current.setAnimationCacheEnabled(true);
             current.startAnimation(fadeInPageView);
+            int translateY = MultiScreenSupport.getInstance(deviceInfo).getFirstPageTranslateY();
+            Animation translate = new TranslateAnimation(Animation.ABSOLUTE, 0.0f,  Animation.ABSOLUTE, -70, Animation.ABSOLUTE,   0f, Animation.ABSOLUTE, 400);
+            AnimationSet animationSet = new AnimationSet(true);
+            Animation scale = new ScaleAnimation(1,0.25f,1,0.25f,Animation.RELATIVE_TO_SELF, 0.5f,Animation.RELATIVE_TO_SELF, 0.5f);
+            animationSet.addAnimation(scale);
+            animationSet.addAnimation(translate);
+
+
+            translate.setDuration(FADE_OUT_FIRST_PAGE_DURATION);
+            scale.setDuration((long) (FADE_OUT_FIRST_PAGE_DURATION));
+//            animationSet.setInterpolator(new AccelerateInterpolator());
+            animationSet.setFillAfter(true);
+            webImageView.setAnimation(animationSet);
+            animationSet.startNow();
+//            webImageView.startAnimation(scale);
+
         } else if (isWeiboMode() || (current.isLastPage() && !forward) || (next.isLastPage() && forward) || (next.getWrapperViews().size() < 2 && forward) || lastFlipDirection == ACTION_HORIZONTAL) {
 
             if (forward)
@@ -1196,6 +1273,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
     private void buildFadeInPageViewAnimation() {
         fadeInPageView = AnimationUtils.loadAnimation(this, R.anim.fadeout);
+        fadeInPageView.setDuration(FADE_OUT_FIRST_PAGE_DURATION);
+//        fadeInPageView.setInterpolator();
         fadeInPageView.setAnimationListener(fadeInAnimationListener);
     }
 
@@ -1224,7 +1303,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         //Log.d("ANI", "currentBottom");
         return verticalAnimationStep1;
     }
-
 
 
     public void hideBottomBar() {

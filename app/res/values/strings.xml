@@ -17,6 +17,7 @@
     <string name="updated">You have % new entries</string>
     <string name="rssfeeds">RSS Feeds</string>
     <string name="sinafeeds">Sina Weibo</string>
+    <string name="isLastPage">This is the last page</string>
 
     <string name="sina_weibo">Sina Weibo</string>
 
@@ -74,7 +75,7 @@
     <string name="deletesource">Delete Source</string>
     <string name="yes">Delete</string>
     <string name="no">Cancel</string>
-    <string name="my_feed">My feeds</string>
+    <string name="my_feed">My Feeds</string>
     <string name="my_feed_desc">My Google Reader feeds</string>
     <string name="credentialInCorrect">Fail to authenticate</string>
 
