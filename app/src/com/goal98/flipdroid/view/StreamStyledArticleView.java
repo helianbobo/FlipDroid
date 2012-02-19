@@ -91,7 +91,7 @@ public class StreamStyledArticleView extends ItemView {
         } else {
             portraitViewWeiboContent.setVisibility(GONE);
         }
-
+        portraitViewWeiboContent.loadImage();
         MultiScreenSupport mss = MultiScreenSupport.getInstance(deviceInfo);
         if (article.getImageUrl() == null) {
             LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
@@ -155,7 +155,7 @@ public class StreamStyledArticleView extends ItemView {
                                 }
                                 imageHandled = false;
                             }
-                            portraitViewWeiboContent.loadImage();
+
                         }
                     });
 

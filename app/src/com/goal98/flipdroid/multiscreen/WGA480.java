@@ -78,6 +78,6 @@ public class WGA480 extends MultiScreenSupport {
     }
 
     public int getFirstPageTranslateY() {
-        return 750;
+        return 240;
     }
 }

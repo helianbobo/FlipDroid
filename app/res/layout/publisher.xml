@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
-              xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/publisherWrapper"
-              android:layout_width="fill_parent" android:layout_marginTop="3dip"
-              android:layout_height="fill_parent" android:orientation="horizontal" android:gravity="bottom">
+<RelativeLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
+                xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/publisherWrapper"
+                android:layout_width="fill_parent" android:layout_marginTop="3dip"
+                android:layout_height="fill_parent" android:orientation="horizontal" android:gravity="bottom">
 
     <com.goal98.android.WebImageView android:id="@+id/portrait2" webimage:autoLoad="false"
-                                     android:layout_height="25dip" webimage:defaultWidth="25" android:layout_gravity="bottom"
+                                     android:layout_height="25dip" webimage:defaultWidth="50" android:layout_alignParentLeft="true" android:layout_centerInParent="true"
                                      webimage:defaultHeight="25" webimage:progressDrawable="@drawable/portrait"
-                                     android:layout_width="25dip"></com.goal98.android.WebImageView>
+                                     android:layout_width="50dip"></com.goal98.android.WebImageView>
 
-    <TextView android:layout_marginLeft="3dip" android:id="@+id/author" android:layout_width="wrap_content"
-              android:layout_height="wrap_content" android:textSize="16dip" android:gravity="center" android:layout_gravity="bottom"></TextView>
+    <TextView  android:layout_marginLeft="3dip" android:id="@+id/author" android:layout_width="wrap_content"
+              android:layout_height="wrap_content" android:textSize="16dip" android:gravity="center" android:layout_centerInParent="true" android:layout_toRightOf="@id/portrait2"></TextView>
     <TextView android:layout_marginLeft="4dip" android:id="@+id/createDate" android:layout_width="wrap_content"
-              android:layout_height="wrap_content" android:textSize="12dip" android:gravity="center" android:layout_gravity="bottom"></TextView>
+              android:layout_height="wrap_content" android:textSize="12dip" android:gravity="center" android:layout_toRightOf="@id/author" android:layout_centerInParent="true"></TextView>
     <ProgressBar android:id="@+id/progressbar"
                  android:visibility="gone"
-                 android:layout_gravity="bottom"
+                 android:layout_toRightOf="@id/createDate"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:indeterminate="true"
@@ -23,5 +23,5 @@
                  style="?android:attr/progressBarStyleSmall">
     </ProgressBar>
     <TextView android:layout_marginLeft="4dip" android:id="@+id/textUrlLoading" android:layout_width="wrap_content" android:text="@string/url_loading"
-                  android:layout_height="wrap_content" android:textSize="12dip" android:gravity="center" android:visibility="gone"/>
-</LinearLayout>
+              android:layout_height="wrap_content" android:textSize="12dip" android:layout_toRightOf="@id/progressbar" android:visibility="gone"/>
+</RelativeLayout>

@@ -1203,7 +1203,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
             current.startAnimation(fadeInPageView);
             int translateY = MultiScreenSupport.getInstance(deviceInfo).getFirstPageTranslateY();
-            Animation translate = new TranslateAnimation(Animation.ABSOLUTE, 0.0f,  Animation.ABSOLUTE, -70, Animation.ABSOLUTE,   0f, Animation.ABSOLUTE, 400);
+            Animation translate = new TranslateAnimation(Animation.ABSOLUTE, 0.0f,  Animation.ABSOLUTE, -70, Animation.ABSOLUTE,   0f, Animation.ABSOLUTE, translateY);
             AnimationSet animationSet = new AnimationSet(true);
             Animation scale = new ScaleAnimation(1,0.25f,1,0.25f,Animation.RELATIVE_TO_SELF, 0.5f,Animation.RELATIVE_TO_SELF, 0.5f);
             animationSet.addAnimation(scale);

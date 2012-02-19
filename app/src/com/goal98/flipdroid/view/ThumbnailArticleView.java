@@ -16,6 +16,7 @@ import com.goal98.flipdroid.multiscreen.MultiScreenSupport;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.PrettyTimeUtil;
+import com.goal98.tika.common.TikaConstants;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -95,20 +96,21 @@ public class ThumbnailArticleView extends ExpandableArticleView {
 
     protected void reloadOriginalView() {
         switcher.setDisplayedChild(0);
-        fadeInAni.setAnimationListener(new Animation.AnimationListener() {
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            public void onAnimationEnd(Animation animation) {
-                thumbnailViewWrapper.setVisibility(VISIBLE);
-            }
-
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        ThumbnailArticleView.this.thumbnailViewWrapper.startAnimation(fadeInAni);
+        thumbnailViewWrapper.setVisibility(VISIBLE);
+//        fadeInAni.setAnimationListener(new Animation.AnimationListener() {
+//            public void onAnimationStart(Animation animation) {
+//
+//            }
+//
+//            public void onAnimationEnd(Animation animation) {
+//                thumbnailViewWrapper.setVisibility(VISIBLE);
+//            }
+//
+//            public void onAnimationRepeat(Animation animation) {
+//
+//            }
+//        });
+//        ThumbnailArticleView.this.thumbnailViewWrapper.startAnimation(fadeInAni);
     }
 
     public void buildView() {
@@ -125,49 +127,58 @@ public class ThumbnailArticleView extends ExpandableArticleView {
         loadedThumbnail = inflater.inflate(R.layout.loadedthumbnail, null);
         thumbnailViewWrapper.addView(loadedThumbnail, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
-        weiboContent = inflater.inflate(R.layout.loadedthumbnail, null);
-        weiboContentWrapper.addView(weiboContent, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+        String time = PrettyTimeUtil.getPrettyTime(this.getContext(), article.getCreatedDate());
 
+        if (!article.getSourceType().equals(TikaConstants.TYPE_RSS)) {
+            weiboContent = inflater.inflate(R.layout.loadedthumbnail, null);
+            weiboContentWrapper.addView(weiboContent, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+            TextView authorViewWeiboContent = (TextView) weiboContent.findViewById(R.id.author);
+            TextView createDateViewWeiboContent = (TextView) weiboContent.findViewById(R.id.createDate);
+            LinearLayout contentViewWrapperWeiboContent = (LinearLayout) weiboContent.findViewById(R.id.contentll);
+
+            TextView contentView = new TextView(this.getContext());
+            contentViewWrapperWeiboContent.addView(contentView);
+            ThumbnailContentRender.setThumbnailContentText(contentView, article, deviceInfo);
+            contentView.setText(article.getStatus());
+
+            authorViewWeiboContent.setText(article.getAuthor());
+            createDateViewWeiboContent.setText(time);
+
+            if (article.hasLink()) {
+                View progressBar = weiboContent.findViewById(R.id.progressbar);
+                View textUrlLoading = weiboContent.findViewById(R.id.textUrlLoading);
+                progressBar.setVisibility(VISIBLE);
+                textUrlLoading.setVisibility(VISIBLE);
+            }
+            portraitViewWeiboContent = (WebImageView) weiboContent.findViewById(R.id.portrait2);
+            if (article.getPortraitImageUrl() != null) {
+                portraitViewWeiboContent.setImageUrl(article.getPortraitImageUrl().toString());
+            } else {
+                portraitViewWeiboContent.setVisibility(GONE);
+            }
+        }
 
         this.titleView = (TextView) loadedThumbnail.findViewById(R.id.title);
 
         this.authorView = (TextView) loadedThumbnail.findViewById(R.id.author);
-        TextView authorViewWeiboContent = (TextView) weiboContent.findViewById(R.id.author);
 
         this.createDateView = (TextView) loadedThumbnail.findViewById(R.id.createDate);
-        TextView createDateViewWeiboContent = (TextView) weiboContent.findViewById(R.id.createDate);
 
         this.contentViewWrapper = (LinearLayout) loadedThumbnail.findViewById(R.id.contentll);
-        LinearLayout contentViewWrapperWeiboContent = (LinearLayout) weiboContent.findViewById(R.id.contentll);
 
-        TextView contentView = new TextView(this.getContext());
-        ThumbnailContentRender.setThumbnailContentText(contentView, article, deviceInfo);
-        contentView.setText(article.getStatus());
-
-        contentViewWrapperWeiboContent.addView(contentView);
-        if (article.hasLink()) {
-            View progressBar = weiboContent.findViewById(R.id.progressbar);
-            View textUrlLoading = weiboContent.findViewById(R.id.textUrlLoading);
-            progressBar.setVisibility(VISIBLE);
-            textUrlLoading.setVisibility(VISIBLE);
-        }
 
         this.portraitView = (WebImageView) loadedThumbnail.findViewById(R.id.portrait2);
-        portraitViewWeiboContent = (WebImageView) weiboContent.findViewById(R.id.portrait2);
+
 
         authorView.setText(article.getAuthor());
-        authorViewWeiboContent.setText(article.getAuthor());
 
-        String time = PrettyTimeUtil.getPrettyTime(this.getContext(), article.getCreatedDate());
+
         createDateView.setText(time);
-        createDateViewWeiboContent.setText(time);
 
         if (article.getPortraitImageUrl() != null) {
             portraitView.setImageUrl(article.getPortraitImageUrl().toString());
-            portraitViewWeiboContent.setImageUrl(article.getPortraitImageUrl().toString());
         } else {
             portraitView.setVisibility(GONE);
-            portraitViewWeiboContent.setVisibility(GONE);
         }
 
         addOnClickListener();
@@ -183,7 +194,8 @@ public class ThumbnailArticleView extends ExpandableArticleView {
             }
         }).start();
         portraitView.loadImage();
-        portraitViewWeiboContent.loadImage();
+        if (!article.getSourceType().equals(TikaConstants.TYPE_RSS))
+            portraitViewWeiboContent.loadImage();
 //        System.gc();
     }
 }

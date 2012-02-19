@@ -79,6 +79,6 @@ public class WGA800 extends MultiScreenSupport {
     }
 
     public int getFirstPageTranslateY() {
-        return 4500;
+        return 450;
     }
 }
