@@ -26,7 +26,7 @@ public class AutoLoadScrollListener implements AbsListView.OnScrollListener {
         this.onLoadListener = listener;
         this.adapter = adapter;
         this.listView = listView;
-        listView.setFastScrollEnabled(true);
+//        listView.setFastScrollEnabled(true);
     }
 
     private boolean isLastItemVisible() {

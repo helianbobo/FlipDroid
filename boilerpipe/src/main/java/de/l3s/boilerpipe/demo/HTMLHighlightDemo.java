@@ -21,33 +21,33 @@ import de.l3s.boilerpipe.sax.HTMLHighlighter;
 public class HTMLHighlightDemo {
     public static void main(String[] args) throws Exception {
 
-//        URL url = new URL("http://www.chuangyejia.com/index.php?m=content&c=index&a=show&catid=17&id=5764");
+        URL url = new URL("http://www.cocoachina.com/gamedev/misc/2012/0203/3934.html");
+
+        final BoilerpipeExtractor extractor = CommonExtractors.CHINESE_ARTICLE_EXTRACTOR;
+        final HTMLHighlighter hh = HTMLHighlighter.newExtractingInstanceForChinese();
+
+        String process = hh.process(url, extractor);
+        System.out.println(process);
+
+//        URL url = new URL("http://img05.36krcnd.com/wp-content/uploads/2011/12/印象码logo.gif");
+//        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 //
-//        final BoilerpipeExtractor extractor = CommonExtractors.CHINESE_ARTICLE_EXTRACTOR;
-//        final HTMLHighlighter hh = HTMLHighlighter.newExtractingInstanceForChinese();
+//        int fileSize = connection.getContentLength();
 //
-//        String process = hh.process(url, extractor);
-//        System.out.println(process);
-
-        URL url = new URL("http://img05.36krcnd.com/wp-content/uploads/2011/12/印象码logo.gif");
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-        int fileSize = connection.getContentLength();
-
-        byte[] imageData = new byte[fileSize];
-
-        BufferedInputStream istream = new BufferedInputStream(connection.getInputStream(), 32768);
-        try {
-            int bytesRead = 0;
-            int offset = 0;
-            while (bytesRead != -1 && offset < fileSize) {
-                bytesRead = istream.read(imageData, offset, fileSize - offset);
-                offset += bytesRead;
-            }
-        } finally {
-            istream.close();
-            connection.disconnect();
-        }
+//        byte[] imageData = new byte[fileSize];
+//
+//        BufferedInputStream istream = new BufferedInputStream(connection.getInputStream(), 32768);
+//        try {
+//            int bytesRead = 0;
+//            int offset = 0;
+//            while (bytesRead != -1 && offset < fileSize) {
+//                bytesRead = istream.read(imageData, offset, fileSize - offset);
+//                offset += bytesRead;
+//            }
+//        } finally {
+//            istream.close();
+//            connection.disconnect();
+//        }
 
         // clean up
     }

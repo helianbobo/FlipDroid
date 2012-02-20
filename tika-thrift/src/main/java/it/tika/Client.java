@@ -9,7 +9,6 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 
-import javax.xml.ws.Response;
 
 /**
  * Created by IntelliJ IDEA.

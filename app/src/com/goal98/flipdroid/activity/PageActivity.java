@@ -176,7 +176,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         super.onResume();
         MobclickAgent.onResume(this);
     }
+
     LayoutAnimationController fadeinController;
+
     /**
      * Called when the activity is first created.
      */
@@ -321,11 +323,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                     current.setVisibility(View.INVISIBLE);
                 }
                 switchViews(forward);
-                new Thread(new Runnable() {
-                    public void run() {
-                        prepareNextPage();
-                    }
-                }).start();
+//                new Thread(new Runnable() {
+//                    public void run() {
+//                        prepareNextPage();
+//                    }
+//                }).start();
                 pageIndexView.setDot(repo.getTotal(), currentPageIndex);
 //                bottomBar.setPageView(current);
 
@@ -342,9 +344,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                     container.bringChildToFront(current);
                 next.setVisibility(View.VISIBLE);
                 bottomBar.setVisibility(View.VISIBLE);
-                    current.setVisibility(View.GONE);
-                
-                
+                current.setVisibility(View.GONE);
+
+
             }
 
             public void onAnimationEnd(Animation animation) {
@@ -353,11 +355,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 container.bringChildToFront(forward ? next : previous);
 
                 switchViews(forward);
-                new Thread(new Runnable() {
-                    public void run() {
-                        prepareNextPage();
-                    }
-                }).start();
+//                new Thread(new Runnable() {
+//                    public void run() {
+//                        prepareNextPage();
+//                    }
+//                }).start();
 
 
                 if (cachedArticleSource != null && !updated && NetworkUtil.isNetworkAvailable(PageActivity.this)) {
@@ -398,11 +400,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 pageIndexView.setDot(repo.getTotal(), currentPageIndex);
                 switchViews(PageActivity.this.forward);
 //                bottomBar.setPageView(current);
-                new Thread(new Runnable() {
-                    public void run() {
-                        prepareNextPage();
-                    }
-                }).start();
+//                new Thread(new Runnable() {
+//                    public void run() {
+//                        prepareNextPage();
+//                    }
+//                }).start();
             }
 
             public void onAnimationRepeat(Animation animation) {
@@ -803,7 +805,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                 mLastMotionY = event.getY();
 
 
-                if(mInitialMotionX == 0 && mInitialMotionY == 0){
+                if (mInitialMotionX == 0 && mInitialMotionY == 0) {
                     System.out.println("it works");
                     mInitialMotionX = event.getX();
                     mInitialMotionY = event.getY();
@@ -852,7 +854,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
                 mLastMotionX = event.getX();
                 mLastMotionY = event.getY();
-
 
 
                 if (!flipStarted && !enlargedMode) {
@@ -920,13 +921,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             container.addView(current, pageViewLayoutParamsFront);
             slideToNextPageAsynchronized();
         } else if (nextPageIndex > 0) {
-            if (this.forward && next.isLastPage()) {
-                AlarmSender.sendInstantMessage(R.string.isLastPage, this);
-                return;
-            }
 
             if (current.isLastPage() && forward) {
                 finishActivity();
+                return;
             }
             slideToNextPageAsynchronized();
         } else {
@@ -1189,7 +1187,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private void showAnimation() {
-
+        if (next != null && next.isLastPage() && forward) {
+            AlarmSender.sendInstantMessage(R.string.isLastPage, this);
+            flipStarted= false;
+            return;
+        }
         enlargedMode = false;
         renderNextPageIfNotRendered();
         //Log.d("ANI", "start animation");
@@ -1203,9 +1205,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
             current.startAnimation(fadeInPageView);
             int translateY = MultiScreenSupport.getInstance(deviceInfo).getFirstPageTranslateY();
-            Animation translate = new TranslateAnimation(Animation.ABSOLUTE, 0.0f,  Animation.ABSOLUTE, -70, Animation.ABSOLUTE,   0f, Animation.ABSOLUTE, translateY);
+            Animation translate = new TranslateAnimation(Animation.ABSOLUTE, 0.0f, Animation.ABSOLUTE, -70, Animation.ABSOLUTE, 0f, Animation.ABSOLUTE, translateY);
             AnimationSet animationSet = new AnimationSet(true);
-            Animation scale = new ScaleAnimation(1,0.25f,1,0.25f,Animation.RELATIVE_TO_SELF, 0.5f,Animation.RELATIVE_TO_SELF, 0.5f);
+            Animation scale = new ScaleAnimation(1, 0.25f, 1, 0.25f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
             animationSet.addAnimation(scale);
             animationSet.addAnimation(translate);
 
@@ -1235,6 +1237,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             } else {
 
                 container.addView(current, pageViewLayoutParamsFront);
+                if(previous.getParent()!=null)
+                    ((ViewGroup)previous.getParent()).removeView(previous);
                 container.addView(previous, pageViewLayoutParamsBack);
 
 //                previous.setAnimationCacheEnabled(true);

@@ -91,7 +91,7 @@ public class TerminatingBlocksFinder implements BoilerpipeFilter {
                         || text.contains("扩展阅读")
                         || text.contains("赞")
                         || text.contains("名稱（英文）")
-
+                        || text.contains("阅读数")
                         || text.contains("更多")
                         || text.contains("分享到")
                         || text.contains("热线")

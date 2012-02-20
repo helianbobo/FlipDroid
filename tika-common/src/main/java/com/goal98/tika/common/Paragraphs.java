@@ -58,6 +58,7 @@ public class Paragraphs {
 
             endAt = cutAt;
             String paragraph = articleContent.substring(startAt, endAt);
+            System.out.println(paragraph);
             if (paragraph.indexOf(ImageInfo.IMG_START) != -1) {
                 paragraph = parseImg(paragraph);
 
@@ -88,7 +89,6 @@ public class Paragraphs {
                     toParagraph(paragraph);
                 }
             } else{
-
                 if(!paragraph.matches(PAT_TAG_NO_TEXT2.pattern()) && !paragraph.matches(PAT_TAG_NO_TEXT.pattern()))
                     paragraphs.add(new Text(paragraph));
             }
@@ -117,6 +117,9 @@ public class Paragraphs {
             }
             if (group.startsWith("<a ") || group.startsWith("</a"))
                 continue;
+            if (group.startsWith("<strong ") || group.startsWith("</strong"))
+                continue;
+
             if (group.startsWith("</")) {
                 level--;
                 if (level < 0) {

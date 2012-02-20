@@ -81,7 +81,7 @@ public class Tika {
                         conn = URLConnectionUtil.decorateURLConnection(url);
 
                         responseCode = conn.getResponseCode();
-                        isText = conn.getContentType().toUpperCase().indexOf("text/html")!=-1;
+                        isText = conn.getContentType().toUpperCase().indexOf("TEXT/HTML")!=-1;
                         LOG.info("responseCode " + responseCode);
                         if (responseCode >= 200 && responseCode <= 299) {
                             break;
