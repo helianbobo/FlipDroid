@@ -768,7 +768,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             }
         }
 
-        Log.v("PageActivity", "** dispatchTouchEvent() event.getAction()=" + event.getAction() + " enlargedMode=" + enlargedMode + " --> super.dispatchTouchEvent(event);");
+//        Log.v("PageActivity", "** dispatchTouchEvent() event.getAction()=" + event.getAction() + " enlargedMode=" + enlargedMode + " --> super.dispatchTouchEvent(event);");
         return super.dispatchTouchEvent(event);
     }
 
@@ -899,7 +899,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
                 break;
         }
-        Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> return true;");
+//        Log.v(TAG, "** onTouchEvent() event.getAction()=" + event.getAction() + " flipStarted=" + flipStarted + " --> return true;");
 
         return true;
     }
@@ -921,7 +921,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             container.addView(current, pageViewLayoutParamsFront);
             slideToNextPageAsynchronized();
         } else if (nextPageIndex > 0) {
-
+            if (repo.getTotal() == currentPageIndex+1) {
+                AlarmSender.sendInstantMessage(R.string.isLastPage, this);
+                flipStarted = false;
+                return;
+            }
             if (current.isLastPage() && forward) {
                 finishActivity();
                 return;
@@ -966,14 +970,14 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                         preparingWindow = slidingWindows.getNextWindow();
                     }
                 }
-                if (next.isLastPage() && forward) {
-                    handler.post(new Runnable() {
-                        public void run() {
-                            showAnimation();
-                        }
-                    });
-                    return;
-                }
+//                if (next.isLastPage() && forward) {
+//                    handler.post(new Runnable() {
+//                        public void run() {
+//                            showAnimation();
+//                        }
+//                    });
+//                    return;
+//                }
                 boolean preparingWindowReady = preparingWindow.isLoaded();
                 if (!preparingWindowReady && !preparingWindow.isSkip()) {
                     preparingWindow.registerOnLoadListener(PageActivity.this);
@@ -1187,11 +1191,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
     private void showAnimation() {
-        if (next != null && next.isLastPage() && forward) {
-            AlarmSender.sendInstantMessage(R.string.isLastPage, this);
-            flipStarted= false;
-            return;
-        }
+//        if (next != null && next.isLastPage() && forward) {
+//            AlarmSender.sendInstantMessage(R.string.isLastPage, this);
+//            flipStarted= false;
+//            return;
+//        }
         enlargedMode = false;
         renderNextPageIfNotRendered();
         //Log.d("ANI", "start animation");
@@ -1205,9 +1209,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
             current.startAnimation(fadeInPageView);
             int translateY = MultiScreenSupport.getInstance(deviceInfo).getFirstPageTranslateY();
-            Animation translate = new TranslateAnimation(Animation.ABSOLUTE, 0.0f, Animation.ABSOLUTE, -70, Animation.ABSOLUTE, 0f, Animation.ABSOLUTE, translateY);
+            Animation translate = new TranslateAnimation(Animation.ABSOLUTE, 0.0f, Animation.ABSOLUTE, -80, Animation.ABSOLUTE, 0f, Animation.ABSOLUTE, translateY);
             AnimationSet animationSet = new AnimationSet(true);
             Animation scale = new ScaleAnimation(1, 0.25f, 1, 0.25f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            animationSet.setInterpolator(new AccelerateInterpolator());
             animationSet.addAnimation(scale);
             animationSet.addAnimation(translate);
 
@@ -1237,8 +1242,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             } else {
 
                 container.addView(current, pageViewLayoutParamsFront);
-                if(previous.getParent()!=null)
-                    ((ViewGroup)previous.getParent()).removeView(previous);
+                if (previous.getParent() != null)
+                    ((ViewGroup) previous.getParent()).removeView(previous);
                 container.addView(previous, pageViewLayoutParamsBack);
 
 //                previous.setAnimationCacheEnabled(true);
@@ -1252,6 +1257,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             } else {
                 container.addView(previous, pageViewLayoutParamsFront);
             }
+            if (current.getParent() != null)
+                ((ViewGroup) current.getParent()).removeView(current);
             container.addView(current, pageViewLayoutParamsBack);
 
 

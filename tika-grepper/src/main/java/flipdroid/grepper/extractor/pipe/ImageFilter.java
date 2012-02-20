@@ -269,10 +269,10 @@ public class ImageFilter implements Extractor {
 
                 int i;
                 int sum = 0;
-                byte[] bytes = new byte[1024];
+                byte[] bytes = new byte[10240];
                 while ((i = is.read(bytes)) != -1) {
                     sum += i;
-                    bytes = new byte[1024];
+                    bytes = new byte[10240];
                 }
                 return sum;
             }

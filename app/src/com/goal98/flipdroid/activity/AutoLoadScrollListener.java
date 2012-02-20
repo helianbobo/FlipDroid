@@ -54,7 +54,7 @@ public class AutoLoadScrollListener implements AbsListView.OnScrollListener {
     }
 
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        System.out.println("cena2" + (view.getLastVisiblePosition() == adapter.getCount() - 1));
+        System.out.println("cena3" + (view.getLastVisiblePosition() == adapter.getCount() - 1));
         if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
             if ((fireLoad || view.getLastVisiblePosition() == adapter.getCount() - 1) && !adapter.isLoadingData())
                 load(true);
