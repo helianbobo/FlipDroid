@@ -32,8 +32,7 @@ public class PreloadPrimaryImageLoaderHandler extends PreloadImageLoaderHandler 
     public boolean handleImageLoaded(Bitmap bitmap) {
         try {
             Bitmap scaledBitmap = scale(bitmap);
-            article.getImagesMap().put(url, scaledBitmap);
-            article.setImageBitmap(scaledBitmap);
+//            article.getImagesMap().put(url, scaledBitmap);
             article.setImageUrl(new URL(url));
             return scaledBitmap != null;
         } catch (MalformedURLException e) {

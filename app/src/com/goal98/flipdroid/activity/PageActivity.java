@@ -207,12 +207,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         setProgressBarIndeterminateVisibility(false);
         Log.v(TAG, "debug on create");
 
-        executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
-                10L, TimeUnit.SECONDS,
-                new SynchronousQueue<Runnable>());
+        executor = Executors.newFixedThreadPool(10);
         sourceDB = new SourceDB(this);
         rssurlDB = new RSSURLDB(this);
-        alarmSender = new AlarmSender(this);
+        alarmSender = new AlarmSender(this.getApplicationContext());
 
         Cursor sourceCursor = sourceDB.findAll();
 
@@ -455,6 +453,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        executor.shutdownNow();
         if (sourceDB != null)
             sourceDB.close();
     }
@@ -598,7 +597,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             });
 
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            cachedArticleSource = new CachedArticleSource(new RemoteRSSArticleSource(contentUrl, sourceName, sourceImageURL), this, SourceCache.getInstance(this), rssurlDB);
+            cachedArticleSource = new CachedArticleSource(new RemoteRSSArticleSource(contentUrl, sourceName, sourceImageURL), this, new SourceCache(this), rssurlDB);
             cachedArticleSource.loadSourceFromCache();
             source = cachedArticleSource;
         } else if (accountType.equals(TikaConstants.TYPE_GOOGLE_READER)) {
@@ -921,8 +920,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             container.addView(current, pageViewLayoutParamsFront);
             slideToNextPageAsynchronized();
         } else if (nextPageIndex > 0) {
-            if (repo.getTotal() == currentPageIndex+1) {
-                AlarmSender.sendInstantMessage(R.string.isLastPage, this);
+            if (repo.getTotal() == currentPageIndex) {
+                new AlarmSender(this.getApplicationContext()).sendInstantMessage(R.string.isLastPage);
                 flipStarted = false;
                 return;
             }
@@ -1185,10 +1184,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     }
 
 
-    private void executionFailed() {
-        alarmSender.sendInstantMessage(R.string.networkerror, this);
-        flipStarted = false;
-    }
+
 
     private void showAnimation() {
 //        if (next != null && next.isLastPage() && forward) {
@@ -1365,7 +1361,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
                                 ////Log.v(TAG, "OAuthHolder.oauth" + application + oauth);
                                 boolean result = oauth.RequestAccessToken(PageActivity.this, "flipdroid://SinaAccountSaver");
                                 if (!result) {
-                                    AlarmSender.sendInstantMessage(R.string.networkerror, PageActivity.this);
+                                    new AlarmSender(PageActivity.this.getApplicationContext()).sendInstantMessage(R.string.networkerror);
                                 }
                             }
                         })

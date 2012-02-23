@@ -65,7 +65,7 @@ public class GoogleAccountActivity extends SinaAccountActivity {
         try {
             gr.getSidAndAuth(username, password);
         } catch (Exception e) {
-            AlarmSender.sendInstantMessage(R.string.credentialInCorrect, GoogleAccountActivity.this);
+            new AlarmSender(GoogleAccountActivity.this.getApplicationContext()).sendInstantMessage(R.string.credentialInCorrect);
             return;
         }
         if (gr.isLogin()) {
@@ -75,7 +75,7 @@ public class GoogleAccountActivity extends SinaAccountActivity {
             preferences.edit().putString(GOOGLE_ACCOUNT_SID, gr.getSid()).commit();
             preferences.edit().putString(GOOGLE_ACCOUNT_AUTH, gr.getAuth()).commit();
         } else {
-            AlarmSender.sendInstantMessage(R.string.credentialInCorrect, GoogleAccountActivity.this);
+            new AlarmSender(GoogleAccountActivity.this.getApplicationContext()).sendInstantMessage(R.string.credentialInCorrect);
         }
     }
 

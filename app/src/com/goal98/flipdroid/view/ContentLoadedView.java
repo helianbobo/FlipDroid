@@ -216,7 +216,7 @@ public class ContentLoadedView extends ArticleView {
                         intent.setData(Uri.parse(url));
                         ContentLoadedView.this.getContext().startActivity(intent);
                     } else {
-                        AlarmSender.sendInstantMessage(R.string.original_url_is_not_available, getContext());
+                        new AlarmSender(getContext().getApplicationContext()).sendInstantMessage(R.string.original_url_is_not_available);
                     }
                 }
             });

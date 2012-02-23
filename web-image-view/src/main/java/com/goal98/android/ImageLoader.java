@@ -311,7 +311,7 @@ public class ImageLoader implements Runnable {
 
         // determine the it.tika.mongodb.image size and allocate a buffer
         int fileSize = connection.getContentLength();
-        if (fileSize <= 0) {
+        if (fileSize <= 0 || (connection.getResponseCode() < 200 || connection.getResponseCode() > 299)) {
             return null;
         }
         byte[] imageData = new byte[fileSize];

@@ -65,7 +65,7 @@ public class SinaAccountActivity extends Activity {
                                 ////System.out.println("OAuthHolder.oauth" + application + oauth);
                                 boolean result = oauth.RequestAccessToken(SinaAccountActivity.this, "flipdroid://SinaAccountSaver");
                                 if (!result)
-                                    AlarmSender.sendInstantMessage(R.string.networkerror, SinaAccountActivity.this);
+                                    new AlarmSender(SinaAccountActivity.this.getApplicationContext()).sendInstantMessage(R.string.networkerror);
                                 SinaAccountActivity.this.finish();
                             }
                         })

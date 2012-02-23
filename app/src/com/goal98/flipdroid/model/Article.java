@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Article implements Comparable{
+public class Article implements Comparable {
     public boolean isExpandable() {
         return expandable;
     }
@@ -35,7 +35,7 @@ public class Article implements Comparable{
     private URL imageUrl;
     private long statusId;
     private String sourceType;
-    private Bitmap image;
+    //    private Bitmap image;
     private Notifier notifier;
     private int height;
     private Map<String, Bitmap> imagesMap = new HashMap<String, Bitmap>();
@@ -257,19 +257,27 @@ public class Article implements Comparable{
         this.sourceType = sourceType;
     }
 
-    public void setImageBitmap(Bitmap image) {
-        if(this.image!=null){
-            this.image.recycle();
-        }
-        this.image = image;
-        //Log.d("imageLoading","loaded");
-        if (notifier != null && image != null)
-            notifier.notifyImageLoaded();
-    }
+//    public void setImageBitmap(Bitmap image) {
+//        if(this.image!=null){
+//            this.image.recycle();
+//        }
+//
+////        Iterator<String> itor = this.imagesMap.keySet().iterator();
+////        while(itor.hasNext()){
+////            String key = itor.next();
+////            if(imagesMap.get(key).equals(this.image)){
+////                im
+////            }
+////        }
+//        this.image = image;
+//        //Log.d("imageLoading","loaded");
+//        if (notifier != null && image != null)
+//            notifier.notifyImageLoaded();
+//    }
 
-    public Bitmap getImage() {
-        return image;
-    }
+//    public Bitmap getImage() {
+//        return image;
+//    }
 
     public void addNotifier(Notifier notifier) {
         this.notifier = notifier;
@@ -314,7 +322,7 @@ public class Article implements Comparable{
     }
 
     public void onSecondaryImageLoaded(Bitmap bitmap, String url) {
-        this.getImagesMap().put(url, bitmap);
+//        this.getImagesMap().put(url, bitmap);
     }
 
     public int getImageHeight() {
@@ -362,25 +370,22 @@ public class Article implements Comparable{
         if (expandable) {
             return content;
         } else {
-            if (getImageUrl() != null){
-                final Bitmap image = getImage();
-
-                if(image !=null)
-                    return "<p>" + content + "</p>" + "<img src=" + getImageUrl() + " width="+image.getWidth()+" height="+image.getHeight()+" >hack</img>";
-                else
-                    return "<p>" + content + "</p>" + "<p><img src=" + getImageUrl() + " width="+(deviceInfo.getWidth()-16)+" height="+(deviceInfo.getHeight())+" >hack</img></p>";
-            }
-            return content;
+            if (getImageUrl() != null) {
+                return "<p>" + content + "</p>" + "<img src=" + getImageUrl() + " width=" + getImageWidth() + " height=" + getImageHeight() + " >hack</img>";
+            } else
+                return "<p>" + content + "</p>" + "<p><img src=" + getImageUrl() + " width=" + (deviceInfo.getWidth() - 16) + " height=" + (deviceInfo.getHeight()) + " >hack</img></p>";
         }
+
 
     }
 
     public int compareTo(Object o) {
-        Article a = (Article)o;
-        if(a.getCreatedDate().before(createdDate))
+        Article a = (Article) o;
+        if (a.getCreatedDate().before(createdDate))
             return -1;
         return 1;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
     private Spanned thumbnailText;
 
     public Spanned getThumbnailText() {

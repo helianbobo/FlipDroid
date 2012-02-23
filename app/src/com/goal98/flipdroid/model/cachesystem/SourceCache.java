@@ -3,6 +3,9 @@ package com.goal98.flipdroid.model.cachesystem;
 import android.content.Context;
 import com.goal98.flipdroid.db.SourceContentDB;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Created by IntelliJ IDEA.
  * User: ITS
@@ -12,20 +15,15 @@ import com.goal98.flipdroid.db.SourceContentDB;
  */
 public class SourceCache {
     private SourceContentDB contentDB;
-    private static SourceCache sourceCache;
+    private static Lock lock = new ReentrantLock();
 
-    public synchronized static SourceCache getInstance(Context context) {
-        if (sourceCache == null) {
-            sourceCache = new SourceCache(context);
-        }
-        return sourceCache;
-    }
-
-    private SourceCache(Context context) {
+    public SourceCache(Context context) {
         contentDB = new SourceContentDB(context);
     }
 
-    public synchronized void put(String type, String url, String content, long lastModified, String imageUrl, String author) {
+    public void put(String type, String url, String content, long lastModified, String imageUrl, String author) {
+        lock.lock();
+        try{
         SourceCacheObject cacheObject = new SourceCacheObject();
         cacheObject.setType(type);
         cacheObject.setUrl(url);
@@ -34,11 +32,14 @@ public class SourceCache {
         cacheObject.setImageUrl(imageUrl);
         cacheObject.setAuthor(author);
         contentDB.persist(cacheObject);
-
-
+        }finally {
+            lock.unlock();
+        }
     }
 
     public synchronized SourceCacheObject find(String type, String url) {
+        lock.lock();
+        try{
         SourceCacheObject cacheObject = new SourceCacheObject();
         cacheObject.setType(type);
         cacheObject.setUrl(url);
@@ -47,14 +48,22 @@ public class SourceCache {
         if (cacheObject != null)
             return cacheObject;
         return null;
+        }finally {
+            lock.unlock();
+        }
     }
 
     public synchronized void clear(String type, String url) {
+        lock.lock();
+        try{
         SourceCacheObject cacheObject = new SourceCacheObject();
         cacheObject.setType(type);
         cacheObject.setUrl(url);
 
         contentDB.clear(cacheObject);
+        }finally {
+            lock.unlock();
+        }
     }
 
     public void close() {

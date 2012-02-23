@@ -117,4 +117,12 @@ public class ArticleLoader implements PaginationLoaderService, SourceUpdateable 
         articleSource.reset();
         repo.getContentCache().reset();
     }
+
+    public void closeDB() {
+        rssurlDB.close();
+    }
+
+    public void reopen() {
+        rssurlDB.open();
+    }
 }

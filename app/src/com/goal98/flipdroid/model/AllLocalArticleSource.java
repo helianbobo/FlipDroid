@@ -28,7 +28,6 @@ public class AllLocalArticleSource implements ArticleSource {
 
     public AllLocalArticleSource(RSSURLDB contentDB) {
         this.contentDB = contentDB;
-        ;
     }
 
     public Date lastModified() {
@@ -40,10 +39,12 @@ public class AllLocalArticleSource implements ArticleSource {
     }
 
     public boolean loadMore() {
+        contentDB.open();
         if(totalNumber == 0){
             totalNumber = contentDB.countByStatus(RSSURLDB.STATUS_NEW);
         }
         List<Article> loadedArticles = contentDB.findAllByStatus(RSSURLDB.STATUS_NEW, offset);
+        contentDB.close();
         if(loadedArticles==null){
             isNoMoreToLoad = true;
             return false;

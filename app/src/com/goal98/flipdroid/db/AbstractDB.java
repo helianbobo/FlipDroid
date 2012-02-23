@@ -32,6 +32,11 @@ public abstract class AbstractDB {
             helper.close();
     }
 
+    public void open() {
+        if(helper == null)
+            helper = new DBOpenHelper(context);
+    }
+
     public Cursor query(String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         qb.setTables(getTableName());

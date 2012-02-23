@@ -500,7 +500,6 @@ public class ThumbnailViewContainer extends FrameLayout {
         for (int i = 0; i < articleList.size(); i++) {
             Article article = articleList.get(i);
             System.out.println("release image...");
-            article.setImageBitmap(null);
         }
 //        System.gc();
     }

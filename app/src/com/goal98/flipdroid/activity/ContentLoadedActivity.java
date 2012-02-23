@@ -248,7 +248,7 @@ public class ContentLoadedActivity extends Activity {
                                             public void run() {
                                                 boolean result = oauth.RequestAccessToken(ContentLoadedActivity.this, "flipdroid://SinaAccountSaver");
                                                 if (!result) {
-                                                    AlarmSender.sendInstantMessage(R.string.networkerror, ContentLoadedActivity.this);
+                                                    new AlarmSender(ContentLoadedActivity.this.getApplicationContext()).sendInstantMessage(R.string.networkerror);
                                                 }
                                             }
                                         });

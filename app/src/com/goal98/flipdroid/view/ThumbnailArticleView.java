@@ -67,7 +67,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
         } catch (InterruptedException e) {
             handler.post(new Runnable() {
                 public void run() {
-                    AlarmSender.sendInstantMessage(R.string.tikatimeout, ThumbnailArticleView.this.getContext());
+                    new AlarmSender(ThumbnailArticleView.this.getContext().getApplicationContext()).sendInstantMessage(R.string.tikatimeout);
 //                    reloadOriginalView();
                 }
             });
@@ -75,7 +75,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
             //System.out.println("taking content error");
             handler.post(new Runnable() {
                 public void run() {
-                    AlarmSender.sendInstantMessage(R.string.tikaservererror, ThumbnailArticleView.this.getContext());
+                    new AlarmSender(ThumbnailArticleView.this.getContext().getApplicationContext()).sendInstantMessage(R.string.tikaservererror);
 //                    reloadOriginalView();
                 }
             });
@@ -84,7 +84,7 @@ public class ThumbnailArticleView extends ExpandableArticleView {
             //System.out.println("taking content error");
             handler.post(new Runnable() {
                 public void run() {
-                    AlarmSender.sendInstantMessage(R.string.unknownerror, ThumbnailArticleView.this.getContext());
+                    new AlarmSender(ThumbnailArticleView.this.getContext().getApplicationContext()).sendInstantMessage(R.string.unknownerror);
 //                    reloadOriginalView();
                 }
             });
@@ -188,11 +188,11 @@ public class ThumbnailArticleView extends ExpandableArticleView {
         if (handler == null)
             handler = new Handler();
 
-        new Thread(new Runnable() {
+        executor.execute(new Runnable() {
             public void run() {
                 displayLoadedThumbnail();
             }
-        }).start();
+        });
         portraitView.loadImage();
         if (!article.getSourceType().equals(TikaConstants.TYPE_RSS))
             portraitViewWeiboContent.loadImage();

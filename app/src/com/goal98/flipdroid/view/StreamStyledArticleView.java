@@ -100,7 +100,7 @@ public class StreamStyledArticleView extends ItemView {
         } else {
             final WebImageView imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), this.getResources().getDrawable(Constants.DEFAULT_PIC), this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage);
             imageView.setRoundImage(true);
-            imageView.imageView.setTag(article.getImageUrl().toExternalForm());
+//            imageView.imageView.setTag(article.getImageUrl().toExternalForm());
             imageView.setBackgroundResource(R.drawable.border);
 
             if (article.getHeight() == 0) {
@@ -136,29 +136,7 @@ public class StreamStyledArticleView extends ItemView {
                 contentViewWrapperWeiboContent.addView(imageView, layoutParamsImage);
             }
 
-            new Thread(new Runnable() {
-
-                public void run() {
-                    handler.post(new Runnable() {
-
-                        public void run() {
-                            boolean imageHandled = false;
-                            if (article.getImage() != null && !article.getImage().isRecycled()) {
-                                imageView.handleImageLoaded(article.getImage(), null);
-                                imageHandled = true;
-                            } else {
-                                article.addNotifier(new StreamStyledNotifier(article, imageView));
-                                if (!article.isLoading()) {
-                                    article.loadPrimaryImage(deviceInfo, toLoadImage);
-                                }
-                                imageHandled = false;
-                            }
-
-                        }
-                    });
-
-                }
-            }).start();
+            imageView.loadImage();
         }
     }
 
@@ -170,21 +148,5 @@ public class StreamStyledArticleView extends ItemView {
         return article;
     }
 
-    public class StreamStyledNotifier implements Notifier {
-        private Article article;
-        private WebImageView imageView;
 
-        public StreamStyledNotifier(Article article, final WebImageView imageView) {
-            this.article = article;
-            this.imageView = imageView;
-        }
-
-        public void notifyImageLoaded() {
-            handler.post(new Runnable() {
-                public void run() {
-                    imageView.handleImageLoaded(article.getImage(), null);
-                }
-            });
-        }
-    }
 }

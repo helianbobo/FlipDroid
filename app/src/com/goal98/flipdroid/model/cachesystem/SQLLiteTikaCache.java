@@ -25,16 +25,18 @@ public class SQLLiteTikaCache implements TikaCache {
 
     public synchronized TikaExtractResponse load(URL url) {
         TikaExtractResponse response = urldb.findByURL(url.toExternalForm());
-        return response;  //To change body of implemented methods use File | Settings | File Templates.
+        return response;
     }
 
     public synchronized void put(String url, TikaExtractResponse extractResponse) {
         urldb.insert(url, extractResponse);
     }
 
-    public void shutdown() {
-        urldb.close();
+    public synchronized void shutdown() {
+        cache = null;
         shutdown = true;
+        urldb.close();
+        urldb=null;
     }
 
     public static synchronized TikaCache getInstance(Context context) {

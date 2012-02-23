@@ -129,7 +129,7 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
                                     finish();
                                 } catch (Exception e) {
                                     e.printStackTrace();
-                                    AlarmSender.sendInstantMessage(R.string.rssinvalid, RSSSourceSelectionActivity.this);
+                                    new AlarmSender(RSSSourceSelectionActivity.this.getApplicationContext()).sendInstantMessage(R.string.rssinvalid);
                                 }
                             }
                         })

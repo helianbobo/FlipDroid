@@ -53,22 +53,14 @@ public abstract class ExpandableArticleView extends ArticleView {
     private TikaCache tikaCache;
     protected WebImageView imageView;
 
-    public class ExpandableArticleViewNotifier implements Notifier{
-        public void notifyImageLoaded() {
-            handler.post(new Runnable() {
-                public void run() {
-                    imageView.handleImageLoaded(article.getImage(), null);
-                }
-            });
-        }
-    }
+
 
     public ExpandableArticleView(Context context, Article article, ThumbnailViewContainer pageViewContainer, boolean placedAtBottom, ExecutorService executor) {
         super(context, article, pageViewContainer, placedAtBottom);
 
+            this.executor = executor;
         article.loadPrimaryImage(deviceInfo, toLoadImage);
         if (!article.isAlreadyLoaded() && article.hasLink()) {
-            this.executor = executor;
             preload();
         }
 
@@ -103,7 +95,7 @@ public abstract class ExpandableArticleView extends ArticleView {
         } else {
             imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), this.getResources().getDrawable(Constants.DEFAULT_PIC), this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage);
             imageView.setRoundImage(true);
-            imageView.imageView.setTag(article.getImageUrl().toExternalForm());
+//            imageView.imageView.setTag(article.getImageUrl().toExternalForm());
             imageView.setBackgroundResource(R.drawable.border);
 
             if (article.getHeight() == 0) {
@@ -114,18 +106,12 @@ public abstract class ExpandableArticleView extends ArticleView {
                 imageView.setDefaultHeight(deviceInfo.getHeight() - article.getTextHeight() - 30);
             }
 
-            boolean imageHandled = false;
-            if (article.getImage() != null && !article.getImage().isRecycled()) {
-                imageView.handleImageLoaded(article.getImage(), null);
-                imageHandled = true;
-            } else {
-                article.addNotifier(new ExpandableArticleViewNotifier());
-//                if (!article.isLoading()) {
-//                    System.out.println("reloading..." + article.getImageUrl().toExternalForm());
-//                    article.loadPrimaryImage(deviceInfo, toLoadImage);
-//                }
-                imageHandled = false;
-            }
+//            if (article.getImage() != null && !article.getImage().isRecycled()) {
+//                imageView.handleImageLoaded(article.getImage(), null);
+//            } else {
+//                article.addNotifier(new ExpandableArticleViewNotifier());
+//            }
+            imageView.loadImage();
             if (article.getHeight() == 0) {
                 LayoutParams layoutParamsText = new LayoutParams(0, mss.getImageHeightThumbnailView());
                 LayoutParams layoutParamsImage = new LayoutParams(0, LayoutParams.FILL_PARENT);
@@ -261,7 +247,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                                     continue;
                                 }
                             }
-                            article.getImagesMap().put(imageURL, null);
+//                            article.getImagesMap().put(imageURL, null);
                             article.getImages().add(imageURL);
                         }
                     }
@@ -289,7 +275,7 @@ public abstract class ExpandableArticleView extends ArticleView {
         } catch (InterruptedException e) {
             handler.post(new Runnable() {
                 public void run() {
-                    AlarmSender.sendInstantMessage(R.string.tikatimeout, ExpandableArticleView.this.getContext());
+                    new AlarmSender(ExpandableArticleView.this.getContext().getApplicationContext()).sendInstantMessage(R.string.tikatimeout);
                     reloadOriginalView();
                 }
             });
@@ -297,7 +283,7 @@ public abstract class ExpandableArticleView extends ArticleView {
             e.printStackTrace();
             handler.post(new Runnable() {
                 public void run() {
-                    AlarmSender.sendInstantMessage(R.string.tikaservererror, ExpandableArticleView.this.getContext());
+                    new AlarmSender(ExpandableArticleView.this.getContext().getApplicationContext()).sendInstantMessage(R.string.tikaservererror);
                     reloadOriginalView();
                 }
             });
@@ -305,7 +291,7 @@ public abstract class ExpandableArticleView extends ArticleView {
             e.printStackTrace();
             handler.post(new Runnable() {
                 public void run() {
-                    AlarmSender.sendInstantMessage(R.string.unknownerror, ExpandableArticleView.this.getContext());
+                    new AlarmSender(ExpandableArticleView.this.getContext().getApplicationContext()).sendInstantMessage(R.string.unknownerror);
                     reloadOriginalView();
                 }
             });

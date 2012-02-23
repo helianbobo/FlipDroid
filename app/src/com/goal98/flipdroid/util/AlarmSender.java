@@ -18,20 +18,20 @@ import java.util.Calendar;
 
 public class AlarmSender {
 
-    private Activity activity;
-    private static Toast toast;
+    private Context activity;
+    private Toast toast;
 
-    public AlarmSender(Activity activity) {
+    public AlarmSender(Context activity) {
         this.activity = activity;
     }
 
-    public static void sendInstantMessage(int msgId, Context context) {
-        String msg = context.getString(msgId);
-        sendInstantMessage(msg, context);
+    public void sendInstantMessage(int msgId) {
+        String msg = activity.getString(msgId);
+        sendInstantMessage(msg);
     }
 
-    public static void sendInstantMessage(String msg, Context context) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+    public void sendInstantMessage(String msg) {
+        LayoutInflater inflater = LayoutInflater.from(activity);
         View layout = inflater.inflate(R.layout.toast,
                 null);
         layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
@@ -39,7 +39,7 @@ public class AlarmSender {
 
         title.setText(msg);
         if (toast == null)
-            toast = new Toast(context);
+            toast = new Toast(activity);
         toast.setGravity(Gravity.CENTER, 0, 200);
         toast.setDuration(2000);
         toast.setView(layout);

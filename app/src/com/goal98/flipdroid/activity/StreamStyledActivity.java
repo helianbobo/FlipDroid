@@ -158,6 +158,17 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        articleLoader.closeDB();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        articleLoader.reopen();
+    }
 
     private class GetDataTask extends AsyncTask<Void, Void, String[]> {
         private PullToRefreshListView mPullRefreshListView;
@@ -178,13 +189,13 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
             rssurlDB = new RSSURLDB(getApplicationContext());
             countBeforeUpdate = rssurlDB.getCount();
             try{
-                SourceUpdateManager updateManager = new SourceUpdateManager(rssurlDB, sourceDB, SourceCache.getInstance(StreamStyledActivity.this), StreamStyledActivity.this, RecommendSourceDB.getInstance(StreamStyledActivity.this));
+                SourceUpdateManager updateManager = new SourceUpdateManager(rssurlDB, sourceDB, new SourceCache(StreamStyledActivity.this), StreamStyledActivity.this, RecommendSourceDB.getInstance(StreamStyledActivity.this));
                 updateManager.updateContent(true);
             }finally {
                 sourceDB.close();
                 rssurlDB.close();
             }
-            
+//            mPullRefreshListView.
             adapter.forceLoad(false);
             return null;
         }
@@ -204,7 +215,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
                 public void run() {
                     String updated = StreamStyledActivity.this.getString(R.string.updated);
                     updated = updated.replaceAll("%", "" + updatedCount);
-                    AlarmSender.sendInstantMessage(updated,StreamStyledActivity.this);
+                    new AlarmSender(StreamStyledActivity.this.getApplicationContext()).sendInstantMessage(updated);
                 }
             });
         }

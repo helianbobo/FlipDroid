@@ -28,7 +28,7 @@ public class SearchSourceTask extends AsyncTask<String, NoNetworkException, Inte
         this.sourceSearchActivity = sourceSearchActivity;
         this.adapter = adapter;
         this.groupedSource = groupedSource;
-        this.alarmSender = new AlarmSender(sourceSearchActivity);
+        this.alarmSender = new AlarmSender(sourceSearchActivity.getApplicationContext());
         this.source = searchSource;
     }
 
