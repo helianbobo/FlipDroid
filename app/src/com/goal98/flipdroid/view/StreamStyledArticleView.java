@@ -118,9 +118,7 @@ public class StreamStyledArticleView extends ItemView {
                 layoutParamsText.weight = 50;
                 layoutParamsImage.weight = 50;
 
-                Random random = new Random();
-                random.setSeed(System.currentTimeMillis());
-                if (random.nextBoolean()) {
+                if (false) {
                     contentViewWrapperWeiboContent.addView(contentView, layoutParamsText);
                     layoutParamsImage.gravity = Gravity.RIGHT;
                     contentViewWrapperWeiboContent.addView(imageView, layoutParamsImage);

@@ -1222,6 +1222,22 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 //            animationSet.setInterpolator(new AccelerateInterpolator());
             animationSet.setFillAfter(true);
             webImageView.setAnimation(animationSet);
+            animationSet.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    //To change body of implemented methods use File | Settings | File Templates.
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    bottomBar.findViewById(R.id.headerImage).setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                    //To change body of implemented methods use File | Settings | File Templates.
+                }
+            });
             animationSet.startNow();
 //            webImageView.startAnimation(scale);
 

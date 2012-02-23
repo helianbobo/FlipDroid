@@ -26,7 +26,7 @@
             <com.goal98.android.WebImageView android:id="@+id/headerImage" webimage:autoLoad="false"
                                              android:src="@drawable/portrait" webimage:roundImage="true"
                                              android:layout_height="wrap_content" webimage:defaultWidth="50"
-                                             webimage:defaultHeight="50"
+                                             webimage:defaultHeight="50" android:visibility="invisible"
                                              android:layout_width="50dip" android:gravity="center"
                                              android:layout_centerInParent="true"></com.goal98.android.WebImageView>
 

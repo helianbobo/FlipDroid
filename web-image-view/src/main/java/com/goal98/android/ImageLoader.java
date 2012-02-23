@@ -30,6 +30,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -268,7 +269,7 @@ public class ImageLoader implements Runnable {
 
             BitmapFactory.Options o2 = new BitmapFactory.Options();
             o2.inPurgeable = true;
-
+            o2.inInputShareable = true;
 
             try {
                 image = BitmapFactory.decodeStream(byteArrayInputStream, null, o2);
@@ -301,6 +302,10 @@ public class ImageLoader implements Runnable {
     }
 
     protected byte[] retrieveImageData() throws IOException {
+        String imageUrl = URLEncoder.encode(this.imageUrl);
+        imageUrl = imageUrl.replace("%2F","/");
+        imageUrl = imageUrl.replace("%3A",":");
+
         URL url = new URL(imageUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 

@@ -407,9 +407,9 @@ public class WebImageView extends ViewSwitcher {
             Bitmap resizeBitmap = null;
 
             try {
-                resizeBitmap = Bitmap.createBitmap(
-                        bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
-
+//                resizeBitmap = Bitmap.createBitmap(
+//                        bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
+                resizeBitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*scale),(int)(bitmap.getHeight()*scale),true);
                 if (preloadImageLoaderHandler != null)
                     preloadImageLoaderHandler.onImageResized(resizeBitmap, imageUrl);
                 bitmap.recycle();
@@ -436,6 +436,11 @@ public class WebImageView extends ViewSwitcher {
 
     protected void dispatchDraw(android.graphics.Canvas canvas) {
         canvas.setDrawFilter(pfd);
+        try{
         super.dispatchDraw(canvas);
+        }catch (Exception e){
+            int i=0;
+            i++;
+        }
     }
 }
