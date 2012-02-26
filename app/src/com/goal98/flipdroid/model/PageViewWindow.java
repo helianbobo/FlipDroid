@@ -1,5 +1,6 @@
 package com.goal98.flipdroid.model;
 
+import android.os.Looper;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.exception.NoMorePageException;
 import com.goal98.flipdroid.exception.NoMoreStatusException;
@@ -27,6 +28,7 @@ public class PageViewWindow extends Window {
     private PageActivity.WeiboPageViewFactory pageViewFactory;
     private ThumbnailViewContainer pageViewContainer;
     private ThumbnailViewContainer previousPeiboPageViewContainer;
+    private Looper mainLooper;
 
     PageViewWindow(int index, int pageNumber, Lock preloadingLock, ContentRepo repo, PageActivity.WeiboPageViewFactory pageViewFactory, ExecutorService executor, ThumbnailViewContainer previousPeiboPageViewContainer) {
         super(index, pageNumber, preloadingLock);
@@ -35,6 +37,7 @@ public class PageViewWindow extends Window {
         this.pageViewFactory = pageViewFactory;
         this.previousPeiboPageViewContainer = previousPeiboPageViewContainer;
         startTask();
+        mainLooper = null;
     }
 
     @Override
@@ -60,8 +63,10 @@ public class PageViewWindow extends Window {
         loading = true;
         task = executor.submit(new Callable() {
             public Object call() {
+
                 reloadingLock.lock();
                 try {
+
                     Page page = null;
                     try {
                         page = repo.getPage(pageNumber);
@@ -108,7 +113,11 @@ public class PageViewWindow extends Window {
                     loaded = true;
                     previousPeiboPageViewContainer = null;
                     return pageViewContainer;
-                } finally {
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return null;
+                }
+                finally {
                     loading = false;
                     reloadingLock.unlock();
                 }

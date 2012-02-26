@@ -35,8 +35,10 @@ public class SQLLiteTikaCache implements TikaCache {
     public synchronized void shutdown() {
         cache = null;
         shutdown = true;
+        if(urldb!=null){
         urldb.close();
         urldb=null;
+        }
     }
 
     public static synchronized TikaCache getInstance(Context context) {

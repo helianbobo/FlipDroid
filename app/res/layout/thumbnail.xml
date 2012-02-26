@@ -2,8 +2,9 @@
 <ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/flipper"
               android:layout_width="fill_parent" android:background="@color/white"
               android:layout_height="fill_parent"  android:gravity="center">
-    <LinearLayout android:id="@+id/loadedView" android:layout_width="fill_parent"
-                  android:layout_height="fill_parent" android:gravity="center"></LinearLayout>
+    <LinearLayout android:id="@+id/loadedView" android:layout_width="fill_parent" android:paddingTop="5dip"
+                  android:paddingBottom="5dip" android:paddingLeft="8dip" android:paddingRight="8dip"
+                  android:layout_height="fill_parent" android:gravity="center" android:orientation="vertical"></LinearLayout>
     <LinearLayout android:layout_width="fill_parent"  android:id="@+id/weiboContent"
                   android:layout_height="fill_parent"
                   android:gravity="center" android:orientation="horizontal">

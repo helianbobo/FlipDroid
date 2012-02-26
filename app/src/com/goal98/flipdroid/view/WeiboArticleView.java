@@ -1,6 +1,9 @@
 package com.goal98.flipdroid.view;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.animation.Animation;
@@ -26,6 +29,7 @@ import java.util.concurrent.*;
 public class WeiboArticleView extends ExpandableArticleView {
     public WeiboArticleView(Context context, Article article, ThumbnailViewContainer pageViewContainer, boolean placedAtBottom, ExecutorService executor) {
         super(context, article, pageViewContainer, placedAtBottom, executor);
+        setWillNotDraw(false);
     }
 
     public void setText() {
@@ -37,15 +41,15 @@ public class WeiboArticleView extends ExpandableArticleView {
     }
 
     protected void reloadOriginalView() {
-        switcher.setDisplayedChild(0);
-        switcher.getChildAt(0).setVisibility(INVISIBLE);
+        setDisplayedChild(0);
+        getChildAt(0).setVisibility(INVISIBLE);
         fadeInAni.setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
 
             }
 
             public void onAnimationEnd(Animation animation) {
-                switcher.getChildAt(0).setVisibility(VISIBLE);
+                getChildAt(0).setVisibility(VISIBLE);
             }
 
             public void onAnimationRepeat(Animation animation) {
@@ -63,17 +67,17 @@ public class WeiboArticleView extends ExpandableArticleView {
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
 
 
-        switcher = (ViewSwitcher) inflater.inflate(R.layout.weibo_article_view, null);
-        switcher.setDisplayedChild(0);
+        inflater.inflate(R.layout.weibo_article_view, this,true);
+        setDisplayedChild(0);
 
 
-        this.titleView = (TextView) switcher.findViewById(R.id.title);
-        this.authorView = (TextView) switcher.findViewById(R.id.author);
-        this.createDateView = (TextView) switcher.findViewById(R.id.createDate);
-        this.contentViewWrapper = (LinearLayout) switcher.findViewById(R.id.contentll);
+        this.titleView = (TextView) findViewById(R.id.title);
+        this.authorView = (TextView) findViewById(R.id.author);
+        this.createDateView = (TextView) findViewById(R.id.createDate);
+        this.contentViewWrapper = (LinearLayout) findViewById(R.id.contentll);
 
 //        buildImageAndContent();
-        this.portraitView = (WebImageView) switcher.findViewById(R.id.portrait2);
+        this.portraitView = (WebImageView) findViewById(R.id.portrait2);
 
         authorView.setText(article.getAuthor());
         createDateView.setText(PrettyTimeUtil.getPrettyTime(this.getContext(), article.getCreatedDate()));
@@ -81,10 +85,8 @@ public class WeiboArticleView extends ExpandableArticleView {
         if (article.getPortraitImageUrl() != null)
             portraitView.setImageUrl(article.getPortraitImageUrl().toString());
 
-        addOnClickListener();
+        addOnClickListener(contentViewWrapper);
 
-        LayoutParams switcherLayoutParam = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-        this.addView(switcher, switcherLayoutParam);
     }
 
     public void renderBeforeLayout() {
@@ -108,5 +110,24 @@ public class WeiboArticleView extends ExpandableArticleView {
 
             }
         }).start();
+    }
+
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+
+        Rect r = new Rect();
+        this.getDrawingRect(r);
+        canvas.drawColor(0xFF000000);
+        paint.setColor(0xFF434343);
+        canvas.drawLine(r.left, r.top + 1, r.right, r.top + 1, paint);
+        int color = 46;
+
+        for (int i = 0; i < (this.getHeight() / 2); i++) {
+            paint.setARGB(255, color, color, color);
+            canvas.drawRect(r.left, r.top + i + 1, r.right, r.top + i + 2, paint);
+            color--;
+        }
     }
 }

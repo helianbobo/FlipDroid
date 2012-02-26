@@ -40,10 +40,10 @@ public abstract class ExpandableArticleView extends ArticleView {
 
     private String TAG = this.getClass().getName();
 
-    protected ViewSwitcher switcher;
+//    protected ViewSwitcher switcher;
     protected ArticleView loadedArticleView;
     //    protected LinearLayout enlargedView;
-    protected WeakReference<LinearLayout> enlargedView;
+    protected LinearLayout enlargedView;
     protected final Animation fadeOutAni = AnimationUtils.loadAnimation(this.getContext(), R.anim.fade);
     protected final Animation fadeInAni = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
     protected Handler handler;
@@ -59,7 +59,7 @@ public abstract class ExpandableArticleView extends ArticleView {
         super(context, article, pageViewContainer, placedAtBottom);
 
             this.executor = executor;
-        article.loadPrimaryImage(deviceInfo, toLoadImage);
+//        article.loadPrimaryImage(deviceInfo, toLoadImage);
         if (!article.isAlreadyLoaded() && article.hasLink()) {
             preload();
         }
@@ -70,7 +70,7 @@ public abstract class ExpandableArticleView extends ArticleView {
 
             public void onAnimationEnd(Animation animation) {
                 fadeOutAni.setAnimationListener(null);
-                switcher.setDisplayedChild(0);
+                setDisplayedChild(0);
                 new Thread(new Runnable() {
                     public void run() {
                         enlargeLoadedView();
@@ -89,12 +89,12 @@ public abstract class ExpandableArticleView extends ArticleView {
         setText();
         MultiScreenSupport mss = MultiScreenSupport.getInstance(deviceInfo);
         if (article.getImageUrl() == null) {
-            LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT);
             layoutParams.weight = 100;
             contentViewWrapper.addView(contentView, layoutParams);
         } else {
             imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), this.getResources().getDrawable(Constants.DEFAULT_PIC), this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage);
-            imageView.setRoundImage(true);
+//            imageView.setRoundImage(true);
 //            imageView.imageView.setTag(article.getImageUrl().toExternalForm());
             imageView.setBackgroundResource(R.drawable.border);
 
@@ -111,10 +111,16 @@ public abstract class ExpandableArticleView extends ArticleView {
 //            } else {
 //                article.addNotifier(new ExpandableArticleViewNotifier());
 //            }
-            imageView.loadImage();
-            if (article.getHeight() == 0) {
-                LayoutParams layoutParamsText = new LayoutParams(0, mss.getImageHeightThumbnailView());
-                LayoutParams layoutParamsImage = new LayoutParams(0, LayoutParams.FILL_PARENT);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    imageView.loadImage();
+                }
+            });
+
+            if (article.getHeight() == 0 ) {
+                LinearLayout.LayoutParams layoutParamsText = new LinearLayout.LayoutParams(0, mss.getImageHeightThumbnailView());
+                LinearLayout.LayoutParams layoutParamsImage = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT);
                 layoutParamsText.weight = 50;
                 layoutParamsImage.weight = 50;
 
@@ -130,9 +136,9 @@ public abstract class ExpandableArticleView extends ArticleView {
                     contentViewWrapper.addView(contentView, layoutParamsText);
                 }
             } else {
-                LayoutParams layoutParamsText = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-                LayoutParams layoutParamsImage = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-                contentViewWrapper.setOrientation(VERTICAL);
+                LinearLayout.LayoutParams layoutParamsText = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams layoutParamsImage = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                contentViewWrapper.setOrientation(VERTICAL);
                 contentViewWrapper.addView(contentView, layoutParamsText);
                 layoutParamsImage.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
                 contentViewWrapper.addView(imageView, layoutParamsImage);
@@ -242,7 +248,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                                 try {
                                     URL url = new URL(imageURL);
                                     article.setImageUrl(url);
-                                    article.loadPrimaryImage(imageURL, deviceInfo, toLoadImage);
+//                                    article.loadPrimaryImage(imageURL, deviceInfo, toLoadImage);
                                 } catch (Exception e) {
                                     continue;
                                 }
@@ -268,7 +274,7 @@ public abstract class ExpandableArticleView extends ArticleView {
             loadedArticleView = new ContentLoadedView(this.getContext(), article, this.getPageViewContainer());
             handler.post(new Runnable() {
                 public void run() {
-                    switcher.setDisplayedChild(0);
+                    setDisplayedChild(0);
                     ExpandableArticleView.this.getPageViewContainer().enlarge(loadedArticleView, ExpandableArticleView.this);
                 }
             });
@@ -301,10 +307,10 @@ public abstract class ExpandableArticleView extends ArticleView {
     protected abstract void reloadOriginalView();
 
 
-    protected void addOnClickListener() {
+    protected void addOnClickListener(LinearLayout contentViewWrapper) {
         contentViewWrapper.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
-                if(isLoading){
+                if (isLoading) {
                     return;
                 }
 
@@ -312,7 +318,7 @@ public abstract class ExpandableArticleView extends ArticleView {
                     handler = new Handler();
                 if (!ExpandableArticleView.this.getPageViewContainer().loadingNext) {
 
-                    if (enlargedView != null && enlargedView.get() != null) {//以前打开过的，直接显示
+                    if (enlargedView != null) {//以前打开过的，直接显示
                         ExpandableArticleView.this.getPageViewContainer().enlarge(loadedArticleView, ExpandableArticleView.this);
                         return;
                     }

@@ -11,6 +11,7 @@ import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.RSSURLDB;
 import com.goal98.flipdroid.db.RecommendSourceDB;
+import com.goal98.flipdroid.db.SourceContentDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.SourceUpdateManager;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
@@ -189,7 +190,7 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
             rssurlDB = new RSSURLDB(getApplicationContext());
             countBeforeUpdate = rssurlDB.getCount();
             try{
-                SourceUpdateManager updateManager = new SourceUpdateManager(rssurlDB, sourceDB, new SourceCache(StreamStyledActivity.this), StreamStyledActivity.this, RecommendSourceDB.getInstance(StreamStyledActivity.this));
+                SourceUpdateManager updateManager = new SourceUpdateManager(rssurlDB, sourceDB, new SourceCache(new SourceContentDB(StreamStyledActivity.this)), StreamStyledActivity.this, RecommendSourceDB.getInstance(StreamStyledActivity.this));
                 updateManager.updateContent(true);
             }finally {
                 sourceDB.close();

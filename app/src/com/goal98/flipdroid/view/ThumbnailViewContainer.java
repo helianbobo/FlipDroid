@@ -29,25 +29,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-public class ThumbnailViewContainer extends FrameLayout {
+public class ThumbnailViewContainer extends LinearLayout{
     private Page page;
 
-    protected LinearLayout frame;
     protected ExecutorService executor;
-    private Animation fadeinArticle;
-    private Animation fadeinBoard;
-    private LinearLayout content;
+//    private Animation fadeinArticle;
+//    private Animation fadeinBoard;
     private LayoutInflater inflater;
     protected DeviceInfo deviceInfo;
     private ExpandableArticleView clickedArticleView;
+    private LinearLayout content;
 
-    public LinearLayout getContentLayout() {
-        return contentLayout;
-    }
 
-    protected LinearLayout contentLayout; //this layout is supposed to be dynamic, depending on the Articles on this smartPage
 
-    protected WeakReference<LinearLayout> enlargedViewWrapperWr;
+//    protected LinearLayout contentLayout; //this layout is supposed to be dynamic, depending on the Articles on this smartPage
+
+    protected LinearLayout enlargedViewWrapperWr;
     //    protected LinearLayout enlargedViewWrapper;
     //    protected ScrollView wrapper;
     protected String sourceName;
@@ -72,7 +69,7 @@ public class ThumbnailViewContainer extends FrameLayout {
     public void setPage(Page page) {
         this.page = page;
 
-        this.contentLayout.removeAllViews();
+        this.removeAllViews();
         List<Article> articleList = this.page.getArticleList();
         //System.out.println("articleList:" + articleList.size());
 
@@ -97,18 +94,18 @@ public class ThumbnailViewContainer extends FrameLayout {
         return weiboViews;
     }
 
-    public List<LinearLayout> getWrapperViews() {
+    public List<ViewGroup> getWrapperViews() {
         return wrapperViews;
     }
 
     protected List<ArticleView> weiboViews = new ArrayList<ArticleView>();
-    protected List<LinearLayout> wrapperViews = new ArrayList<LinearLayout>();
+    protected List<ViewGroup> wrapperViews = new ArrayList<ViewGroup>();
 
-    public LinearLayout addArticleView(Article article, boolean last) {
+    public View addArticleView(Article article, boolean last) {
         WeiboArticleView withoutURLArticleView = new WeiboArticleView(ThumbnailViewContainer.this.getContext(), article, this, last, executor);
         weiboViews.add(withoutURLArticleView);
 
-
+//        withoutURLArticleView.setWillNotDraw(false);
         LinearLayout articleWrapper = new LinearLayout(this.getContext());
         wrapperViews.add(articleWrapper);
         articleWrapper.setBackgroundColor(Constants.LINE_COLOR);//分割线颜色
@@ -124,7 +121,8 @@ public class ThumbnailViewContainer extends FrameLayout {
         else
             articleWrapper.setPadding(0, 0, 0, 1);
 
-        contentLayout.addView(articleWrapper, wrapperLayoutParam);
+        addView(articleWrapper, wrapperLayoutParam);
+        articleWrapper.setClickable(true);
         return articleWrapper;
     }
 
@@ -137,49 +135,46 @@ public class ThumbnailViewContainer extends FrameLayout {
         this.deviceInfo = this.getDeviceInfoFromApplicationContext();
         setDynamicLayout(pageActivity);
 
-        fadeinArticle = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
-        fadeinBoard = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
+//        fadeinArticle = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
+//        fadeinBoard = AnimationUtils.loadAnimation(this.getContext(), R.anim.fadein);
 
-        fadeinArticle.setDuration(400);
-        fadeinBoard.setDuration(450);
+//        fadeinArticle.setDuration(400);
+//        fadeinBoard.setDuration(450);
 
-        fadeinBoard.setAnimationListener(new Animation.AnimationListener() {
-            public void onAnimationStart(Animation animation) {
-            }
+//        fadeinBoard.setAnimationListener(new Animation.AnimationListener() {
+//            public void onAnimationStart(Animation animation) {
+//            }
+//
+//            public void onAnimationEnd(Animation animation) {
+//                content.setVisibility(VISIBLE);
+//                articleView.startAnimation(fadeinArticle);
+//            }
+//
+//            public void onAnimationRepeat(Animation animation) {
+//            }
+//        });
 
-            public void onAnimationEnd(Animation animation) {
-                content.setVisibility(VISIBLE);
-                articleView.startAnimation(fadeinArticle);
-            }
 
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-
-
-        fadeinArticle.setAnimationListener(new Animation.AnimationListener() {
-            public void onAnimationStart(Animation animation) {
-                ThumbnailViewContainer.this.pageActivity.setEnlargedMode(true);
-            }
-
-            public void onAnimationEnd(Animation animation) {
-                articleView.setVisibility(VISIBLE);
-            }
-
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
+//        fadeinArticle.setAnimationListener(new Animation.AnimationListener() {
+//            public void onAnimationStart(Animation animation) {
+//                ThumbnailViewContainer.this.pageActivity.setEnlargedMode(true);
+//
+//            }
+//
+//
+//            public void onAnimationEnd(Animation animation) {
+//                articleView.setVisibility(VISIBLE);
+//            }
+//
+//            public void onAnimationRepeat(Animation animation) {
+//            }
+//        });
     }
 
 
     protected void setDynamicLayout(Context context) {
         this.removeAllViews();
-
-        inflater = LayoutInflater.from(context);
-
-        this.frame = (LinearLayout) inflater.inflate(R.layout.pageview, null);
-        this.contentLayout = (LinearLayout) frame.findViewById(R.id.content);
-        this.addView(this.frame, new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+        this.setOrientation(VERTICAL);
     }
 
     private ArticleView articleView;
@@ -192,38 +187,29 @@ public class ThumbnailViewContainer extends FrameLayout {
         onRead(articleView);
         this.articleView = articleView;
         this.clickedArticleView = weiboArticleView;
-        inflater = LayoutInflater.from(ThumbnailViewContainer.this.getContext());
-        if (enlargedViewWrapperWr == null || enlargedViewWrapperWr.get() == null) {
-            enlargedViewWrapperWr = new WeakReference(inflater.inflate(R.layout.enlarged, null));
-
-            wrapperll = (LinearLayout) (enlargedViewWrapperWr.get().findViewById(R.id.wrapperll));
-
-            LinearLayout shadowLayer = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.shadowlayer);
-            shadowLayer.setOnClickListener(new OnClickListener() {
-                public void onClick(View view) {
-                    if (!weiboArticleView.isLoading){
-
-                        closeEnlargedView(weiboArticleView);
-                    }
-                }
-            });
-
+//        inflater = LayoutInflater.from(ThumbnailViewContainer.this.getContext());
+//        if (enlargedViewWrapperWr == null) {
+//            enlargedViewWrapperWr = (LinearLayout) inflater.inflate(R.layout.enlarged, null);
+//            wrapperll = (LinearLayout) (enlargedViewWrapperWr.findViewById(R.id.wrapperll));
+//        }
+        for(int i=0; i<wrapperViews.size(); i++){
+            wrapperViews.get(i).setVisibility(GONE);
         }
-        enlargedViewWrapperWr.get().setVisibility(VISIBLE);
-        wrapperll.removeAllViews();
-        wrapperll.addView(articleView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
-        articleView.setVisibility(INVISIBLE);
-        ThumbnailViewContainer.this.removeView(enlargedViewWrapperWr.get());
+//        enlargedViewWrapperWr.setVisibility(VISIBLE);
+        //wrapperll.removeAllViews();
+//        articleView.setPadding(0,10,0,10);
+        addView(articleView, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
+//        ThumbnailViewContainer.this.removeView(enlargedViewWrapperWr);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(deviceInfo.getWidth(), deviceInfo.getHeight());
-        ThumbnailViewContainer.this.addView(enlargedViewWrapperWr.get(), params);
+//        ThumbnailViewContainer.this.addView(enlargedViewWrapperWr, params);
         setupToolBar(articleView, weiboArticleView, pageActivity.getBottomBar());
         pageActivity.hideIndexView();
 //        pageActivity.getContainer().setLayoutParams();
 
 //        pageActivity.getBottomBar().setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        content = (LinearLayout) enlargedViewWrapperWr.get().findViewById(R.id.content);
-        articleView.startAnimation(fadeinArticle);
-
+//        content = (LinearLayout) enlargedViewWrapperWr.findViewById(R.id.content);
+//        articleView.startAnimation(fadeinArticle);
+        ThumbnailViewContainer.this.pageActivity.setEnlargedMode(true);
     }
 
     private void onClose(ArticleView articleView) {
@@ -433,30 +419,33 @@ public class ThumbnailViewContainer extends FrameLayout {
         if (commentShadowLayer != null)
             this.removeView(commentShadowLayer);
 
+
+
         onClose(articleView);
 
         weiboArticleView.getContentView().setVisibility(VISIBLE);
-        weiboArticleView.enlargedView = new WeakReference(enlargedViewWrapperWr.get());
+        weiboArticleView.enlargedView = enlargedViewWrapperWr;
 
-        final Animation fadeout = AnimationUtils.loadAnimation(pageActivity, R.anim.fade);
-        fadeout.setDuration(150);
-        fadeout.setAnimationListener(new Animation.AnimationListener() {
-            public void onAnimationStart(Animation animation) {
-            }
-
-            public void onAnimationEnd(Animation animation) {
-                ThumbnailViewContainer.this.removeView(enlargedViewWrapperWr.get());
-                enlargedViewWrapperWr.clear();
-                weiboArticleView.enlargedView.clear();
-                //TODO TEST
-                pageActivity.setEnlargedMode(false);
-            }
-
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        enlargedViewWrapperWr.get().startAnimation(fadeout);
+//        final Animation fadeout = AnimationUtils.loadAnimation(pageActivity, R.anim.fade);
+//        fadeout.setDuration(150);
+//        fadeout.setAnimationListener(new Animation.AnimationListener() {
+//            public void onAnimationStart(Animation animation) {
+//            }
+//
+//            public void onAnimationEnd(Animation animation) {
+//
+//            }
+//
+//            public void onAnimationRepeat(Animation animation) {
+//
+//            }
+//        });
+        ThumbnailViewContainer.this.removeView(articleView);
+        //TODO TEST
+        for(int i=0; i<wrapperViews.size(); i++){
+            wrapperViews.get(i).setVisibility(VISIBLE);
+        }
+        pageActivity.setEnlargedMode(false);
         pageActivity.showIndexView();
     }
 
@@ -496,11 +485,11 @@ public class ThumbnailViewContainer extends FrameLayout {
     }
 
     public void releaseResource() {
-        final List<Article> articleList = page.getArticleList();
-        for (int i = 0; i < articleList.size(); i++) {
-            Article article = articleList.get(i);
-            System.out.println("release image...");
-        }
+//        final List<Article> articleList = page.getArticleList();
+//        for (int i = 0; i < articleList.size(); i++) {
+//            Article article = articleList.get(i);
+//            System.out.println("release image...");
+//        }
 //        System.gc();
     }
 

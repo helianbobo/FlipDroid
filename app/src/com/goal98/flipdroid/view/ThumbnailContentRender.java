@@ -43,7 +43,6 @@ public class ThumbnailContentRender {
         textSize = mss.getTextViewTextSize();
 
 
-        contentView.getPaint().setAntiAlias(true);
         contentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
         contentView.setPadding(paddings[0], paddings[1], paddings[2], paddings[3]);
         contentView.setTextColor(Constants.LOADED_TEXT_COLOR);

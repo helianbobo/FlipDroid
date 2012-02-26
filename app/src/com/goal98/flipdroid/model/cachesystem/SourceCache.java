@@ -17,8 +17,8 @@ public class SourceCache {
     private SourceContentDB contentDB;
     private static Lock lock = new ReentrantLock();
 
-    public SourceCache(Context context) {
-        contentDB = new SourceContentDB(context);
+    public SourceCache(SourceContentDB sourceContentDB) {
+        this.contentDB = sourceContentDB;
     }
 
     public void put(String type, String url, String content, long lastModified, String imageUrl, String author) {

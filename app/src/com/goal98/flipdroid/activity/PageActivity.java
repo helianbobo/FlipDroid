@@ -27,6 +27,7 @@ import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.anim.AnimationFactory;
 import com.goal98.flipdroid.client.OAuth;
 import com.goal98.flipdroid.db.RSSURLDB;
+import com.goal98.flipdroid.db.SourceContentDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.exception.NoSinaAccountBindedException;
@@ -64,6 +65,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     private Animation rotationBackward;
     private SinaWeiboHelper sinaWeiboHelper;
     private RSSURLDB rssurlDB;
+    private SourceContentDB sourceContentDB;
 
     public ExecutorService getExecutor() {
         return executor;
@@ -138,10 +140,10 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
     public Animation.AnimationListener verticalAnimationListenerStep1;
     public Animation.AnimationListener verticalAnimationListenerStep2;
     public Animation verticalAnimationStep1;
-    public LinearLayout currentUpper;
-    public LinearLayout currentBottom;
-    public LinearLayout nextUpper;
-    public LinearLayout nextBottom;
+    public ViewGroup currentUpper;
+    public ViewGroup currentBottom;
+    public ViewGroup nextUpper;
+    public ViewGroup nextBottom;
     public Animation verticalAnimationStep2;
     public Dialog dialog;
     private Animation.AnimationListener fadeOutAnimationListener;
@@ -210,6 +212,8 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         executor = Executors.newFixedThreadPool(10);
         sourceDB = new SourceDB(this);
         rssurlDB = new RSSURLDB(this);
+        sourceContentDB = new SourceContentDB(this);
+
         alarmSender = new AlarmSender(this.getApplicationContext());
 
         Cursor sourceCursor = sourceDB.findAll();
@@ -456,6 +460,11 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         executor.shutdownNow();
         if (sourceDB != null)
             sourceDB.close();
+        if(sourceContentDB!=null){
+            sourceContentDB.close();
+        }
+        if(rssurlDB!=null)
+            rssurlDB.close();
     }
 
     @Override
@@ -597,7 +606,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
             });
 
             repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
-            cachedArticleSource = new CachedArticleSource(new RemoteRSSArticleSource(contentUrl, sourceName, sourceImageURL), this, new SourceCache(this), rssurlDB);
+            cachedArticleSource = new CachedArticleSource(new RemoteRSSArticleSource(contentUrl, sourceName, sourceImageURL), this, new SourceCache(sourceContentDB), rssurlDB);
             cachedArticleSource.loadSourceFromCache();
             source = cachedArticleSource;
         } else if (accountType.equals(TikaConstants.TYPE_GOOGLE_READER)) {
@@ -1039,63 +1048,6 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         }
     }
 
-    private void prepareNextPage() {
-        preparingWindow = forward ? slidingWindows.getNextWindow() : slidingWindows.getPreviousWindow();
-        ////Log.v(TAG, "preparingWindow" + preparingWindow);
-        if (preparingWindow.isLoading()) {
-            //Log.d("SLIDING", "register on load listener...");
-
-            handler.post(new Runnable() {
-                public void run() {
-                    preparingWindow.registerOnLoadListener(new com.goal98.flipdroid.model.Window.OnLoadListener() {
-
-                        public void onWindowLoaded(com.goal98.flipdroid.model.Window window) {
-                            if (forward)
-                                next = preparingWindow.get();
-                            else {
-                                previous = preparingWindow.get();
-                            }
-                            prepareFail = false;
-                        }
-
-                        public void onWindowSkipped(com.goal98.flipdroid.model.Window pageViewWindow) {
-                            prepareNextPage();
-                        }
-                    });
-                }
-            });
-            return;
-        } else if (preparingWindow.isSkip()) {
-            //Log.d("SLIDING", "slide to next page...");
-            prepareNextPage();
-            return;
-        } else {
-            ThumbnailViewContainer tmp = null;
-            tmp = preparingWindow.get();
-            if (tmp.isLastPage()) {
-                prepareFail = true;
-
-                next = pageViewFactory.createLastPage();
-                return;
-            }
-            if (forward)
-                next = tmp;
-            else
-                previous = tmp;
-
-            final ThumbnailViewContainer finalTmp = tmp;
-            handler.post(new Runnable() {
-                public void run() {
-                    renderNextPageIfNotRendered();
-                    finalTmp.removeLoadingIfNecessary();
-
-                    displayTutorial();
-                }
-            });
-            prepareFail = false;
-        }
-
-    }
 
     private void renderNextPageIfNotRendered() {
         ThumbnailViewContainer renderingPageViewContainer;
@@ -1306,7 +1258,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         fadeOutPageView.setAnimationListener(fadeOutAnimationListener);
     }
 
-    private Animation buildFlipAnimation(final LinearLayout currentUpper, final LinearLayout currentBottom, final LinearLayout nextUpper, final LinearLayout nextBottom, final boolean forward) {
+    private Animation buildFlipAnimation(final ViewGroup currentUpper, final ViewGroup currentBottom, final ViewGroup nextUpper, final ViewGroup nextBottom, final boolean forward) {
         final float centerY = getWindowManager().getDefaultDisplay().getHeight() / 2;
         final float centerX = 160;
 

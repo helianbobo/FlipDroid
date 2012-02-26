@@ -21,6 +21,6 @@
     <color name="maintab_text_normal">#ffc1c1c1</color>
     <color name="menu_item_dark">#7f000000</color>
     <color name="menu_text">#ffffffff</color>
-    <color name="verylightbluetransparent">#EE66ccff</color>
+    <color name="toast_color">#ff2c73ff</color>
     <color name="lightbluetransparent">#ee2491ff</color>
 </resources>

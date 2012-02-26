@@ -397,6 +397,7 @@ public final class HTMLHighlighter {
         private final BitSet contentBitSet = new BitSet();
         private final HTMLHighlighter hl = HTMLHighlighter.this;
         private boolean inBlockQuote;
+        private boolean inHref;
 
         Implementation() {
             super(new HTMLConfiguration());
@@ -502,7 +503,8 @@ public final class HTMLHighlighter {
 
                     if (qName.equalsIgnoreCase("a")) {
                         String href = findAttr(atts,"href");
-                        html.append("<a href="+href+">");
+                        html.append("<a href=\""+href+"\">");
+                        inHref = true;
                     }
 
                     if (qName.equalsIgnoreCase("img") || qName.equalsIgnoreCase("image")) {

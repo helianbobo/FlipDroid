@@ -2,13 +2,14 @@ package com.goal98.flipdroid.view;
 
 
 import android.view.Gravity;
+import android.view.View;
 import android.widget.LinearLayout;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.Constants;
 
 public class MagzinePageViewContainer extends ThumbnailViewContainer {
-    public LinearLayout addArticleView(Article article, boolean last) {
+    public View addArticleView(Article article, boolean last) {
         final ThumbnailArticleView thumnnailView = new ThumbnailArticleView(MagzinePageViewContainer.this.getContext(), article, this,last,executor);
         weiboViews.add(thumnnailView);
 
@@ -23,12 +24,12 @@ public class MagzinePageViewContainer extends ThumbnailViewContainer {
             wrapperViews.add(articleWrapper);
             LayoutParams wrapperLayoutParams = new LayoutParams(deviceInfo.getWidth(), deviceInfo.getDisplayHeight() / 2);
 
-            contentLayout.addView(articleWrapper, wrapperLayoutParams);
+            addView(articleWrapper, wrapperLayoutParams);
 
         } else {
             wrapperViews.add(thumnnailView);
             LayoutParams layoutParams = new LayoutParams(deviceInfo.getWidth(), LayoutParams.MATCH_PARENT);
-            contentLayout.addView(thumnnailView, layoutParams);
+            addView(thumnnailView, layoutParams);
         }
         return thumnnailView;
     }

@@ -2,6 +2,7 @@ package com.goal98.flipdroid.view;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,7 +58,8 @@ public class ThumbnailArticleView extends ExpandableArticleView {
             isLoading = true;
             handler.post(new Runnable() {
                 public void run() {
-                    ThumbnailContentRender.setTitleText(titleView, article, deviceInfo);
+                    if (titleView != null)
+                        ThumbnailContentRender.setTitleText(titleView, article, deviceInfo);
                     buildImageAndContent();
                     reloadOriginalView();
                 }
@@ -95,68 +97,51 @@ public class ThumbnailArticleView extends ExpandableArticleView {
 
 
     protected void reloadOriginalView() {
-        switcher.setDisplayedChild(0);
-        thumbnailViewWrapper.setVisibility(VISIBLE);
-//        fadeInAni.setAnimationListener(new Animation.AnimationListener() {
-//            public void onAnimationStart(Animation animation) {
-//
-//            }
-//
-//            public void onAnimationEnd(Animation animation) {
-//                thumbnailViewWrapper.setVisibility(VISIBLE);
-//            }
-//
-//            public void onAnimationRepeat(Animation animation) {
-//
-//            }
-//        });
-//        ThumbnailArticleView.this.thumbnailViewWrapper.startAnimation(fadeInAni);
+        setDisplayedChild(0);
+//        thumbnailViewWrapper.setVisibility(VISIBLE);
     }
 
     public void buildView() {
         LayoutInflater inflater = LayoutInflater.from(this.getContext());
-        switcher = (ViewSwitcher) inflater.inflate(R.layout.thumbnail, null);
-        LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+        inflater.inflate(R.layout.thumbnail, this, true);
 
-        this.addView(switcher, layoutParams);
-        switcher.setDisplayedChild(1);
-        this.thumbnailViewWrapper = (LinearLayout) switcher.findViewById(R.id.loadedView);
-        this.weiboContentWrapper = (LinearLayout) switcher.findViewById(R.id.weiboContent);
+        setDisplayedChild(1);
+        this.thumbnailViewWrapper = (LinearLayout) findViewById(R.id.loadedView);
+//        this.weiboContentWrapper = (LinearLayout) switcher.findViewById(R.id.weiboContent);
 
-        thumbnailViewWrapper.setVisibility(INVISIBLE);
-        loadedThumbnail = inflater.inflate(R.layout.loadedthumbnail, null);
-        thumbnailViewWrapper.addView(loadedThumbnail, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+//        thumbnailViewWrapper.setVisibility(INVISIBLE);
+        loadedThumbnail = inflater.inflate(R.layout.loadedthumbnail, thumbnailViewWrapper, true);
 
         String time = PrettyTimeUtil.getPrettyTime(this.getContext(), article.getCreatedDate());
 
-        if (!article.getSourceType().equals(TikaConstants.TYPE_RSS)) {
-            weiboContent = inflater.inflate(R.layout.loadedthumbnail, null);
-            weiboContentWrapper.addView(weiboContent, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-            TextView authorViewWeiboContent = (TextView) weiboContent.findViewById(R.id.author);
-            TextView createDateViewWeiboContent = (TextView) weiboContent.findViewById(R.id.createDate);
-            LinearLayout contentViewWrapperWeiboContent = (LinearLayout) weiboContent.findViewById(R.id.contentll);
-
-            TextView contentView = new TextView(this.getContext());
-            contentViewWrapperWeiboContent.addView(contentView);
-            ThumbnailContentRender.setThumbnailContentText(contentView, article, deviceInfo);
-            contentView.setText(article.getStatus());
-
-            authorViewWeiboContent.setText(article.getAuthor());
-            createDateViewWeiboContent.setText(time);
-
-            if (article.hasLink()) {
-                View progressBar = weiboContent.findViewById(R.id.progressbar);
-                View textUrlLoading = weiboContent.findViewById(R.id.textUrlLoading);
-                progressBar.setVisibility(VISIBLE);
-                textUrlLoading.setVisibility(VISIBLE);
-            }
-            portraitViewWeiboContent = (WebImageView) weiboContent.findViewById(R.id.portrait2);
-            if (article.getPortraitImageUrl() != null) {
-                portraitViewWeiboContent.setImageUrl(article.getPortraitImageUrl().toString());
-            } else {
-                portraitViewWeiboContent.setVisibility(GONE);
-            }
-        }
+//        if (!article.getSourceType().equals(TikaConstants.TYPE_RSS) && article.getSourceURL()!=null) {
+//            weiboContent = inflater.inflate(R.layout.loadedthumbnail, weiboContentWrapper, true);
+////            weiboContentWrapper.addView(weiboContent, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
+//            TextView authorViewWeiboContent = (TextView) weiboContent.findViewById(R.id.author);
+//            TextView createDateViewWeiboContent = (TextView) weiboContent.findViewById(R.id.createDate);
+//            LinearLayout contentViewWrapperWeiboContent = (LinearLayout) weiboContent.findViewById(R.id.contentll);
+//
+//            TextView contentView = new TextView(this.getContext());
+//            contentViewWrapperWeiboContent.addView(contentView);
+//            ThumbnailContentRender.setThumbnailContentText(contentView, article, deviceInfo);
+//            contentView.setText(article.getStatus());
+//
+//            authorViewWeiboContent.setText(article.getAuthor());
+//            createDateViewWeiboContent.setText(time);
+//
+//            if (article.hasLink()) {
+//                View progressBar = weiboContent.findViewById(R.id.progressbar);
+//                View textUrlLoading = weiboContent.findViewById(R.id.textUrlLoading);
+//                progressBar.setVisibility(VISIBLE);
+//                textUrlLoading.setVisibility(VISIBLE);
+//            }
+//            portraitViewWeiboContent = (WebImageView) weiboContent.findViewById(R.id.portrait2);
+//            if (article.getPortraitImageUrl() != null) {
+//                portraitViewWeiboContent.setImageUrl(article.getPortraitImageUrl().toString());
+//            } else {
+//                portraitViewWeiboContent.setVisibility(GONE);
+//            }
+//        }
 
         this.titleView = (TextView) loadedThumbnail.findViewById(R.id.title);
 
@@ -176,26 +161,34 @@ public class ThumbnailArticleView extends ExpandableArticleView {
         createDateView.setText(time);
 
         if (article.getPortraitImageUrl() != null) {
+            portraitView.setAutoSize(true);
             portraitView.setImageUrl(article.getPortraitImageUrl().toString());
         } else {
             portraitView.setVisibility(GONE);
         }
+        addOnClickListener(contentViewWrapper);
+        if (titleView != null)
+            ThumbnailContentRender.setTitleText(titleView, article, deviceInfo);
 
-        addOnClickListener();
+        if (handler == null) {
+            handler = new Handler(Looper.getMainLooper());
+        }
+
+        buildImageAndContent();
+        reloadOriginalView();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!article.getSourceType().equals(TikaConstants.TYPE_RSS) && portraitViewWeiboContent != null)
+                    portraitViewWeiboContent.loadImage();
+                else
+                    portraitView.loadImage();
+            }
+        });
     }
 
     public void renderBeforeLayout() {
-        if (handler == null)
-            handler = new Handler();
 
-        executor.execute(new Runnable() {
-            public void run() {
-                displayLoadedThumbnail();
-            }
-        });
-        portraitView.loadImage();
-        if (!article.getSourceType().equals(TikaConstants.TYPE_RSS))
-            portraitViewWeiboContent.loadImage();
 //        System.gc();
     }
 }

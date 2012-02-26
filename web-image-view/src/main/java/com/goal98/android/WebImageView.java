@@ -32,6 +32,12 @@ public class WebImageView extends ViewSwitcher {
 
     private String TAG = this.getClass().getName();
 
+    private boolean autoSize = false;
+
+    public void setAutoSize(boolean autoSize) {
+        this.autoSize = autoSize;
+    }
+
     private static final String ANDROID_XMLNS = "http://schemas.android.com/apk/res/android";
     private int width;
     private int height;
@@ -306,6 +312,10 @@ public class WebImageView extends ViewSwitcher {
             int height = WebImageView.this.getHeight() == 0 ? WebImageView.this.defaultHeight : WebImageView.this.getHeight();
 //            int height = width * bmpHeight / bmpWidth;
 
+            if(autoSize){
+                width = bmpWidth;
+                height = bmpHeight;
+            }
             int heightDip = 160 * bmpHeight / DisplayMetrics.DENSITY_DEFAULT;
             int widthDip = 160 * bmpWidth / DisplayMetrics.DENSITY_DEFAULT;
 
@@ -408,9 +418,6 @@ public class WebImageView extends ViewSwitcher {
 //                        bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
                 resizeBitmap = createScaledBitmap(bitmap, (int)(bitmap.getWidth()*scale),(int)(bitmap.getHeight()*scale), ScalingLogic.FIT);
                 //Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*scale),(int)(bitmap.getHeight()*scale),true);
-                if (preloadImageLoaderHandler != null)
-                    preloadImageLoaderHandler.onImageResized(resizeBitmap, imageUrl);
-                bitmap.recycle();
                 bitmap = null;
 //                System.gc();
             } catch (Throwable error) {
@@ -430,7 +437,7 @@ public class WebImageView extends ViewSwitcher {
             Canvas canvas = new Canvas(scaledBitmap);
 
             canvas.drawBitmap(unscaledBitmap, srcRect, dstRect, new Paint(Paint.FILTER_BITMAP_FLAG));
-
+            unscaledBitmap.recycle();
             return scaledBitmap;
 
         }

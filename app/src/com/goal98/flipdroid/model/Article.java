@@ -289,16 +289,16 @@ public class Article implements Comparable {
 
     private volatile boolean loading = false;
 
-    public synchronized void loadPrimaryImage(String image, DeviceInfo deviceInfo, boolean loadFromInternet) {
-        PreloadPrimaryImageLoaderHandler preloadPrimaryImageLoaderHandler = new PreloadPrimaryImageLoaderHandler(this, image, deviceInfo);
-        final ImageLoader loader = new ImageLoader(image, preloadPrimaryImageLoaderHandler, loadFromInternet);
-        new Thread(loader).start();
-    }
+//    public synchronized void loadPrimaryImage(String image, DeviceInfo deviceInfo, boolean loadFromInternet) {
+//        PreloadPrimaryImageLoaderHandler preloadPrimaryImageLoaderHandler = new PreloadPrimaryImageLoaderHandler(this, image, deviceInfo);
+//        final ImageLoader loader = new ImageLoader(image, preloadPrimaryImageLoaderHandler, loadFromInternet);
+//        new Thread(loader).start();
+//    }
 
-    public void loadPrimaryImage(DeviceInfo deviceInfo, boolean loadFromInternet) {
-        if (getImageUrl() != null)
-            loadPrimaryImage(getImageUrl().toExternalForm(), deviceInfo, loadFromInternet);
-    }
+//    public void loadPrimaryImage(DeviceInfo deviceInfo, boolean loadFromInternet) {
+//        if (getImageUrl() != null)
+//            loadPrimaryImage(getImageUrl().toExternalForm(), deviceInfo, loadFromInternet);
+//    }
 
     public void setLoading(boolean loading) {
         this.loading = loading;
@@ -370,10 +370,10 @@ public class Article implements Comparable {
         if (expandable) {
             return content;
         } else {
-            if (getImageUrl() != null) {
+            if (getImageUrl() != null && getImageWidth()!=0 && getImageHeight()!=0) {
                 return "<p>" + content + "</p>" + "<img src=" + getImageUrl() + " width=" + getImageWidth() + " height=" + getImageHeight() + " >hack</img>";
             } else
-                return "<p>" + content + "</p>" + "<p><img src=" + getImageUrl() + " width=" + (deviceInfo.getWidth() - 16) + " height=" + (deviceInfo.getHeight()) + " >hack</img></p>";
+                return "<p>" + content + "</p>";
         }
 
 

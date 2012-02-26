@@ -140,9 +140,6 @@ public class StreamStyledArticleView extends ItemView {
         }
     }
 
-    public void setExecutor(ExecutorService executor) {
-        this.executor = executor;
-    }
 
     public Article getArticle() {
         return article;

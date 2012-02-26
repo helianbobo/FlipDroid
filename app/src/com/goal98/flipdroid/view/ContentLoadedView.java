@@ -60,7 +60,7 @@ public class ContentLoadedView extends ArticleView {
 
     public void buildView() {
         LayoutInflater inflator = LayoutInflater.from(this.getContext());
-        LinearLayout layout = (LinearLayout) inflator.inflate(R.layout.enlarged_content, this);
+        View layout =  inflator.inflate(R.layout.enlarged_content, this);
         boolean expandable = article.isExpandable();
         if (expandable) {
             this.titleView = (TextView) layout.findViewById(R.id.title);
@@ -79,7 +79,7 @@ public class ContentLoadedView extends ArticleView {
                 referenceText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_REFERENCE);
 
                 referenceText.setTextColor(Color.parseColor("#AAAAAA"));
-                referenceContent.addView(referenceText, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+                referenceContent.addView(referenceText, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             }
         }
 
@@ -114,7 +114,7 @@ public class ContentLoadedView extends ArticleView {
         int txtSize = Constants.TEXT_SIZE_CONTENT;
         Paragraphs paragraphs = new Paragraphs();
         paragraphs.toParagraph(article.getToParagraph(deviceInfo));
-        LayoutParams textLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         int imageIndex = 0;
         final List<TikaUIObject> paragraphsList = paragraphs.getParagraphs();
@@ -180,34 +180,21 @@ public class ContentLoadedView extends ArticleView {
                     continue;
                 String url = imageInfo.getUrl();
 
-                WebImageView imageView = new WebImageView(this.getContext(), url, this.getResources().getDrawable(Constants.DEFAULT_PIC), this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage);
-                imageView.setRoundImage(false);
-                imageView.setBackgroundResource(R.drawable.border);
-
-                final DeviceInfo deviceInfo = getDeviceInfoFromApplicationContext();
-                final int picWidth = imageInfo.getWidth();
-
-                final int defaultWidth = (picWidth > deviceInfo.getDisplayWidth()-40)?deviceInfo.getDisplayWidth()-40:picWidth;
-                imageView.setDefaultWidth(defaultWidth);
-                final int defaultHeight = imageInfo.getHeight() * defaultWidth / imageInfo.getWidth();
-                imageView.setDefaultHeight(defaultHeight);
-
-                final LayoutParams imageLayoutParams = new LayoutParams(defaultWidth, defaultHeight);
-                imageLayoutParams.gravity = Gravity.CENTER;
-
-                imageLayoutParams.setMargins(0, 10, 0, 0);
-                contentHolderView.addView(imageView, imageLayoutParams);
-
-                imageView.loadImage();
+                addImageView(imageInfo, url);
 
                 imageIndex++;
 
             }
         }
-
+        if(!expandable){
+            ImageInfo imageInfo = new ImageInfo();
+            imageInfo.setHeight(deviceInfo.getHeight());
+            imageInfo.setWidth(deviceInfo.getWidth());
+            addImageView(imageInfo, article.getImageUrl().toExternalForm());
+        }
         Button viewSource = (Button) layout.findViewById(R.id.viewSource);
         if (expandable) {
-            viewSource.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, deviceInfo.getHeight() / 12));
+            viewSource.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, deviceInfo.getHeight() / 12));
             viewSource.setOnClickListener(new OnClickListener() {
                 public void onClick(View view) {
                     String url = article.getSourceURL();
@@ -225,6 +212,20 @@ public class ContentLoadedView extends ArticleView {
         }
     }
 
+    private void addImageView(ImageInfo imageInfo, String url) {
+        WebImageView imageView = new WebImageView(this.getContext(), url, this.getResources().getDrawable(Constants.DEFAULT_PIC), this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage);
+        imageView.setRoundImage(false);
+        imageView.setBackgroundResource(R.drawable.border);
+
+
+        final LayoutParams imageLayoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        imageLayoutParams.setMargins(0, 10, 0, 0);
+        contentHolderView.addView(imageView, imageLayoutParams);
+        imageView.setAutoSize(true);
+        imageView.loadImage();
+    }
+
     private float getLineSpacing() {
         return 1.2f;
     }
@@ -238,10 +239,6 @@ public class ContentLoadedView extends ArticleView {
 
     }
 
-    private PaintFlagsDrawFilter pfd;
 
-    protected void dispatchDraw(android.graphics.Canvas canvas) {
-        canvas.setDrawFilter(pfd);
-        super.dispatchDraw(canvas);
-    }
+
 }

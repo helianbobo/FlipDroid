@@ -21,10 +21,10 @@ import com.goal98.flipdroid.util.DeviceInfo;
  * Time: 下午3:38
  * To change this template use File | Settings | File Templates.
  */
-public class HeaderView extends LinearLayout {
+public class HeaderView extends ViewSwitcher {
     private PageActivity pageActivity;
     private LayoutInflater inflater;
-    private ViewSwitcher bottomBar;
+    private View bottomBar;
     private Button updateButton;
 
 
@@ -55,12 +55,12 @@ public class HeaderView extends LinearLayout {
 
     private void buildHeaderText() {
         inflater = LayoutInflater.from(pageActivity);
-        bottomBar = (ViewSwitcher) inflater.inflate(R.layout.header, null);
+        bottomBar =  inflater.inflate(R.layout.header, this,true);
 
         showTitleBar();
 
-        bottomBar.setInAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.fadeinfast));
-        bottomBar.setOutAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.fadefast));
+        this.setInAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.toolbar_slide_in_from_left));
+        this.setOutAnimation(AnimationUtils.loadAnimation(pageActivity, R.anim.toolbar_slide_out_to_right));
         TextView headerText = (TextView) bottomBar.findViewById(R.id.headerText);
         updateButton = (Button) bottomBar.findViewById(R.id.update);
         updateButton.setOnTouchListener(new View.OnTouchListener() {
@@ -77,30 +77,29 @@ public class HeaderView extends LinearLayout {
                 return false;
             }
         });
-        DeviceInfo deviceInfo = getDeviceInfoFromApplicationContext();
         headerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, Constants.TEXT_SIZE_TITLE);
         headerText.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 HeaderView.this.pageActivity.showDialog(PageActivity.NAVIGATION);
             }
         });
-        LinearLayout greyLayer = new LinearLayout(this.getContext());
-        greyLayer.setBackgroundColor(Color.parseColor(Constants.SHADOW_LAYER_COLOR));
-        greyLayer.setPadding(0, 0, 0, 1);
-
-        greyLayer.addView(bottomBar, new LayoutParams
-                (LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-
-        this.addView(greyLayer, new LayoutParams
-                (LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+//        LinearLayout greyLayer = new LinearLayout(this.getContext());
+//        greyLayer.setBackgroundColor(Color.parseColor(Constants.SHADOW_LAYER_COLOR));
+//        greyLayer.setPadding(0, 0, 0, 1);
+//
+//        greyLayer.addView(bottomBar, new LayoutParams
+//                (LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+//
+//        this.addView(greyLayer, new LayoutParams
+//                (LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
     }
 
     public void showToolBar() {
-        bottomBar.setDisplayedChild(1);
+        setDisplayedChild(1);
     }
 
     public void showTitleBar() {
-        bottomBar.setDisplayedChild(0);
+        setDisplayedChild(0);
     }
 
     public void hide() {

@@ -21,7 +21,7 @@ public class MongoDBFactory {
             try {
                 config = new PropertiesConfiguration("tika.properties");
             } catch (ConfigurationException e) {
-                LOG.warn(e.getMessage(), e);
+                //LOG.warn(e.getMessage(), e);
             }
             
             String host = "localhost";

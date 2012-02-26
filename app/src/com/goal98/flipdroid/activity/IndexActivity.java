@@ -181,7 +181,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     }
 
     private void updateSource() {
-        SourceUpdateManager updateManager = new SourceUpdateManager(rssurlDB, sourceDB,new SourceCache(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
+        SourceUpdateManager updateManager = new SourceUpdateManager(rssurlDB, sourceDB,new SourceCache(new SourceContentDB(IndexActivity.this)), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
         updateManager.updateAll(false);
     }
 
@@ -222,7 +222,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         if (item.getItemId() == 0) {//delete
             sourceDB.removeSourceByName(sourceName);
             rssurlDB.deleteFromFrom(sourceUrl);
-            SourceCache sourceCache = new SourceCache(this);
+            SourceCache sourceCache = new SourceCache(new SourceContentDB(this));
             try {
                 sourceCache.clear(sourceType, sourceUrl);
             } finally {
