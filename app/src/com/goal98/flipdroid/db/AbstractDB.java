@@ -123,6 +123,7 @@ public abstract class AbstractDB {
                         RSSURLDB.SOURCE + " TEXT, "+
                         RSSURLDB.STATUS + " INT, "+
                         RSSURLDB.TYPE + " TEXT, "+
+                        RSSURLDB.FAVORITE + " INT, "+
                         "PRIMARY KEY (" + RSSURLDB.URL + ")" +
                         ");";
 

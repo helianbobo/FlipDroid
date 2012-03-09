@@ -35,7 +35,8 @@
         <activity android:name=".activity.ConfigActivity" android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Light.NoTitleBar"/>
         <activity android:name=".activity.PageActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar" android:windowSoftInputMode="stateUnspecified|adjustPan">
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="stateUnspecified|adjustPan">
 
         </activity>
         <activity android:name=".activity.IndexActivity" android:screenOrientation="portrait"
@@ -45,10 +46,11 @@
                   android:launchMode="singleTask"
                   android:theme="@android:style/Theme.Light.NoTitleBar"/>
         <activity android:name=".activity.SiteActivity" android:screenOrientation="portrait"
-        android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
         <activity android:name=".activity.SinaSourceSelectionActivity" android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Light.NoTitleBar"/>
-        <activity android:name=".activity.RSSSourceSelectionActivity" android:theme="@android:style/Theme.Light.NoTitleBar"/>
+        <activity android:name=".activity.RSSSourceSelectionActivity"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
 
         <activity android:name=".activity.SinaAccountActivity" android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Light.NoTitleBar">
@@ -72,11 +74,25 @@
         <activity android:name=".activity.BaiduSearchSourceActivity" android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Light.NoTitleBar"/>
         <activity android:name=".activity.TipsActivity" android:screenOrientation="portrait"
-                          android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+        <activity android:name=".activity.ViewPagerActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.StreamActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
 
         <service android:exported="true"
-            android:name="com.exchange.Public.DownloadingService"
-            android:process=":DownloadingService">
+                 android:name="com.exchange.Public.DownloadingService"
+                 android:process=":DownloadingService">
         </service>
 
         <meta-data android:value="4ecbd9185270152fdc000033" android:name="UMENG_APPKEY"/>
@@ -92,6 +108,6 @@
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"/>
     <uses-permission android:name="android.permission.READ_LOGS"/>
-    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS"/>
 
 </manifest>

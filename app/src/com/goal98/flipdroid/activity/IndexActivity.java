@@ -126,26 +126,6 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
             }
         });
 
-//        Button addSourceButton = (Button) findViewById(R.id.btn_add_source);
-////        addSourceButton.setVisibility(View.GONE);
-//        addSourceButton.setOnTouchListener(new View.OnTouchListener() {
-//
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//
-//                switch (motionEvent.getAction()) {
-//                    case MotionEvent.ACTION_UP:
-//                        Intent intent = new Intent(IndexActivity.this, SiteActivity.class);
-//                        startActivity(intent);
-//                        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-//                        break;
-//                    default:
-//                        break;
-//                }
-//
-//                return false;
-//            }
-//
-//        });
         mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
 
         // Set a listener to be invoked when the list should be refreshed.
@@ -167,18 +147,35 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 menu.add(0, 1, 0, R.string.no);
             }
         });
-//        SourceUpdateManager updateManager = new SourceUpdateManager(sourceDB, SourceCache.getInstance(IndexActivity.this), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
-//        updateManager.updateSourceList(false);
 
-        initUmengAppNetwork();
+        openDatabase();
+        bindAdapter();
 
+        adapter.notifyDataSetChanged();
+
+        final Cursor c = sourceDB.findAll();
+        hander.post(new Runnable() {
+            public void run() {
+                ManagedCursor mc = new ManagedCursor(c);
+                mc.each(new EachCursor() {
+                    public void call(Cursor cursor, int index) {
+                        if (!(adapter.getItem(index) instanceof SourceItem))
+                            return;
+                        SourceItem item = (SourceItem) adapter.getItem(index);
+                        if (indicatorMap.get(item.getSourceType() + "_" + item.getSourceURL()) != null) {
+                            View childAt = IndexActivity.this.getListView().getChildAt(index);
+                            if (childAt != null) {
+                                childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
+                                TextView indicator = (TextView) childAt.findViewById(R.id.indicator);
+                                indicator.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                });
+            }
+        });
     }
 
-    private void initUmengAppNetwork() {
-//        ViewGroup rootLayout = (ViewGroup) findViewById(R.id.indexView);
-//        ExchangeViewManager exchangeViewManager = new ExchangeViewManager();
-//        exchangeViewManager.addView(this, rootLayout, ExchangeConstants.type_grid_view_bottom);
-    }
 
     private void updateSource() {
         SourceUpdateManager updateManager = new SourceUpdateManager(rssurlDB, sourceDB,new SourceCache(new SourceContentDB(IndexActivity.this)), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
@@ -287,32 +284,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
-        openDatabase();
-        bindAdapter();
 
-        adapter.notifyDataSetChanged();
-
-        final Cursor c = sourceDB.findAll();
-        hander.post(new Runnable() {
-            public void run() {
-                ManagedCursor mc = new ManagedCursor(c);
-                mc.each(new EachCursor() {
-                    public void call(Cursor cursor, int index) {
-                        if (!(adapter.getItem(index) instanceof SourceItem))
-                            return;
-                        SourceItem item = (SourceItem) adapter.getItem(index);
-                        if (indicatorMap.get(item.getSourceType() + "_" + item.getSourceURL()) != null) {
-                            View childAt = IndexActivity.this.getListView().getChildAt(index);
-                            if (childAt != null) {
-                                childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
-                                TextView indicator = (TextView) childAt.findViewById(R.id.indicator);
-                                indicator.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    }
-                });
-            }
-        });
 
 //        boolean shallUpdate = NetworkUtil.toUpdateSource(this);
 //        if (shallUpdate) {

@@ -33,6 +33,7 @@ public class RSSURLDB extends AbstractDB {
     public static final String SOURCE = "source";
     public static final String STATUS = "status";
     public static final String TYPE = "type";
+    public static final String FAVORITE = "favorite";
 
     public static final String SEPARATOR = ";";
     public static final String TABLE_NAME = "rssurl";
@@ -64,7 +65,7 @@ public class RSSURLDB extends AbstractDB {
         db.delete(RSSURLDB.TABLE_NAME, RSSURLDB.SOURCE + " = ? ", new String[]{from});
     }
 
-    public synchronized long insert(Article article, String from) {
+    public synchronized long insert(Article article) {
         boolean exist = exist(article.getSourceURL());
         if (exist) {
             return 0;
@@ -76,9 +77,10 @@ public class RSSURLDB extends AbstractDB {
         values.put(RSSURLDB.DATE, article.getCreatedDate().getTime());
         values.put(RSSURLDB.AUTHOR, article.getAuthor());
         values.put(RSSURLDB.AUTHOR_IMAGE, article.getPortraitImageUrl().toExternalForm());
-        values.put(RSSURLDB.SOURCE, from);
+        values.put(RSSURLDB.SOURCE, article.getFrom());
         values.put(RSSURLDB.STATUS, RSSURLDB.STATUS_NEW + "");
         values.put(RSSURLDB.TYPE, article.getSourceType());
+        values.put(RSSURLDB.FAVORITE, article.isFavorite());
 
         String images = "";
         for (int i = 0; i < article.getImages().size(); i++) {
@@ -153,6 +155,8 @@ public class RSSURLDB extends AbstractDB {
                 article.setSourceType(cursor.getString(cursor.getColumnIndex(RSSURLDB.TYPE)));
                 article.setSourceURL(cursor.getString(cursor.getColumnIndex(RSSURLDB.URL)));
                 String imageString = cursor.getString(cursor.getColumnIndex(RSSURLDB.IMAGES));
+                int favorite = cursor.getInt(cursor.getColumnIndex(RSSURLDB.FAVORITE));
+                article.setIsFavorite(favorite!=0);
                 String[] imageArr = imageString.split(";");
                 List<String> images = new ArrayList<String>();
                 for (int i = 0; i < imageArr.length; i++) {

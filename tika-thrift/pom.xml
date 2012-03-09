@@ -65,7 +65,7 @@
     </build>
     <dependencies>
 
-        
+
 
         <dependency>
             <groupId>org.apache.thrift</groupId>

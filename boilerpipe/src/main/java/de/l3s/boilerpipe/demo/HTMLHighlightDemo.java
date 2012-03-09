@@ -36,7 +36,7 @@ public class HTMLHighlightDemo {
 //
 //        byte[] imageData = new byte[fileSize];
 //
-//        BufferedInputStream istream = new BufferedInputStream(connection.getInputStream(), 32768);
+//        BufferedInputStream istream = new BufferedInput/Users/jleo/IdeaProjects/FlipDroid/Stream(connection.getInputStream(), 32768);
 //        try {
 //            int bytesRead = 0;
 //            int offset = 0;

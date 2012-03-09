@@ -72,10 +72,6 @@ public class StreamStyledActivity extends TabActivity implements TabHost.TabCont
         for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
             tabHost.getTabWidget().getChildAt(i).getLayoutParams().height = bottomHeight;
         }
-
-
-//        tabHost.setOnTabChangedListener(changeLis);
-
     }
 
 

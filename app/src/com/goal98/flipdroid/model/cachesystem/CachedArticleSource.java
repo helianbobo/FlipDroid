@@ -43,7 +43,8 @@ public class CachedArticleSource implements ArticleSource {
                 List<Article> articles = articleSource.contentToArticles(content);
                 for (int i = 0; i < articles.size(); i++) {
                     Article article =  articles.get(i);
-                    rssurlDB.insert(article, articleSource.getCacheToken().getToken());
+                    article.setFrom(articleSource.getCacheToken().getToken());
+                    rssurlDB.insert(article);
                 }
                 return content;
             }

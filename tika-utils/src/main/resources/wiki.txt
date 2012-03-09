@@ -1,3 +1,8 @@
-http://tika.it/v1/feed?source=http://rss.sina.com.cn/roll/sports/hot_roll.xml
-
-./refetchContainsImage.sh http://simg.sinajs.cn/blog7style/images/common/sg_trans.gif
+mv sqlqueries.properties.p1int_vgtest1-mw3_8736           sqlqueries.properties.p1int1_vgtest1-mw3_8736
+mv sqlqueries.properties.p1intstruts_vgtest1-mw3_8738     sqlqueries.properties.p1int1struts_vgtest1-mw3_8738
+mv sqlqueries.properties.p1intmf_vgtest1-mw3_8735         sqlqueries.properties.p1intmf1_vgtest1-mw3_8735
+mv sqlqueries.properties.p1intmfstruts_vgtest1-mw3_8734   sqlqueries.properties.p1intmf1struts_vgtest1-mw3_8734
+mv sqlqueries.properties.p1intmfadm_vgtest1-mw3_8731      sqlqueries.properties.p1intmf1adm_vgtest1-mw3_8731
+mv sqlqueries.properties.p1intadm_vgtest1-mw3_8737        sqlqueries.properties.p1int1adm_vgtest1-mw3_8737
+mv MaxitConfig.properties.p1intstruts_vgtest1-mw3_8738    MaxitConfig.properties.p1int1struts_vgtest1-mw3_8738
+mv MaxitConfig.properties.p1intmfstruts_vgtest1-mw3_8734  MaxitConfig.properties.p1intmf1struts_vgtest1-mw3_8734

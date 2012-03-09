@@ -17,6 +17,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Article implements Comparable {
+    private boolean favorite;
+
     public boolean isExpandable() {
         return expandable;
     }
@@ -46,6 +48,15 @@ public class Article implements Comparable {
     private float suggestScale;
     private int textHeight;
     private String sourceURL;
+    private String from;
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
 
     public String getSourceURL() {
         return sourceURL;
@@ -393,4 +404,11 @@ public class Article implements Comparable {
     }
 
 
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setIsFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
 }

@@ -6,7 +6,7 @@
                                                    android:paddingRight="8dip"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent" android:orientation="vertical"
-                                                   android:gravity="center" streamStyledArticleView:toLoadFromInternet="true">
+                                                   android:gravity="center" streamStyledArticleView:toLoadFromInternet="true" android:background="@drawable/listbg">
     <TextView android:id="@+id/title" android:layout_width="fill_parent" style="@style/Title"
               android:layout_height="wrap_content" android:gravity="center"></TextView>
     <LinearLayout android:id="@+id/contentll"

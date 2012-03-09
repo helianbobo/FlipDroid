@@ -151,7 +151,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../lib/android-support-v4.jar!/" />
+          <root url="jar://$MODULE_DIR$/../umeng/umeng_appnetwork_android_sdk.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -160,7 +160,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../umeng/umeng_appnetwork_android_sdk.jar!/" />
+          <root url="jar://$USER_HOME$/android-sdk-macosx/extras/android/support/v13/android-support-v13.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

@@ -19,6 +19,7 @@ import android.widget.*;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.client.OAuth;
+import com.goal98.flipdroid.db.RSSURLDB;
 import com.goal98.flipdroid.exception.NoSinaAccountBindedException;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.util.AlarmSender;
@@ -57,8 +58,16 @@ public class ContentLoadedActivity extends Activity {
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,RelativeLayout.LayoutParams.FILL_PARENT);
         loadedArticleView.setPadding(0,10,0,0);
         layoutParams.addRule(RelativeLayout.BELOW, R.id.topbar);
-        body.addView(loadedArticleView,layoutParams);
-        topBar.addButton(TopBar.IMAGE, R.drawable.share_white, new View.OnClickListener() {
+        body.addView(loadedArticleView, layoutParams);
+        topBar.addButton(TopBar.TEXT, R.string.addfavorite, new View.OnClickListener(){
+            public void onClick(View view) {
+                RSSURLDB rssUrlDB = new RSSURLDB(ContentLoadedActivity.this);
+                rssUrlDB.insert(article);
+                rssUrlDB.close();
+
+            }
+        });
+        topBar.addButton(TopBar.TEXT, R.string.share, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 {
