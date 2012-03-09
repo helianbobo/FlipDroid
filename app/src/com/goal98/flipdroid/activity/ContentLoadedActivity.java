@@ -11,11 +11,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
+import android.widget.LinearLayout.LayoutParams;
+
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.client.OAuth;
@@ -30,6 +35,8 @@ import com.goal98.flipdroid.view.ContentLoadedView;
 import com.goal98.flipdroid.view.TopBar;
 import com.goal98.tika.common.TikaConstants;
 import com.mobclick.android.MobclickAgent;
+ 
+
 import weibo4j.WeiboException;
 
 /**
@@ -58,9 +65,12 @@ public class ContentLoadedActivity extends Activity {
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,RelativeLayout.LayoutParams.FILL_PARENT);
         loadedArticleView.setPadding(0,10,0,0);
         layoutParams.addRule(RelativeLayout.BELOW, R.id.topbar);
-        body.addView(loadedArticleView, layoutParams);
+        body.addView(loadedArticleView, layoutParams); 
         topBar.addButton(TopBar.TEXT, R.string.addfavorite, new View.OnClickListener(){
             public void onClick(View view) {
+                addFavoriteTagAnim(view, body, topBar.getId());
+               
+                
                 RSSURLDB rssUrlDB = new RSSURLDB(ContentLoadedActivity.this);
                 rssUrlDB.insert(article);
                 rssUrlDB.close();
@@ -286,6 +296,24 @@ public class ContentLoadedActivity extends Activity {
             });
         }
         return this.dialog;
+    }
+    
+    
+    private void addFavoriteTagAnim(View view,RelativeLayout body, int belowViewId) {
+         
+        ImageView favoriteImageView = new ImageView(view.getContext());
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,  
+                LayoutParams.WRAP_CONTENT );  
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        //layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        layoutParams.addRule(RelativeLayout.BELOW, belowViewId);
+         
+        favoriteImageView.setLayoutParams(layoutParams);
+        favoriteImageView.setImageResource(R.drawable.tag_favorite);
+        body.addView(favoriteImageView);
+        Animation animation = AnimationUtils.loadAnimation( 
+                view.getContext(), R.anim.favoriteanim);
+        favoriteImageView.startAnimation(animation);
     }
 
 }

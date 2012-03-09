@@ -109,4 +109,5 @@
     <string name="pull_to_refresh_refreshing_label">Updating...</string>
     <string name="pull_to_refresh_tap_label">Tap to update...</string>
     <string name="addShortcut">Add shortcut to desktop</string>
+ 
 </resources>
