@@ -1,6 +1,7 @@
 package com.goal98.android;
 
 import android.R;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.*;
 import android.graphics.drawable.AnimationDrawable;
@@ -14,7 +15,13 @@ import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
+
+import java.io.*;
+import java.net.*;
+import java.util.List;
+import java.util.Map;
 
 public class WebImageView extends ViewSwitcher {
 
@@ -26,6 +33,7 @@ public class WebImageView extends ViewSwitcher {
 
     public ImageView imageView;
 
+
     private ScaleType scaleType = ScaleType.FIT_CENTER;
 
     private Drawable progressDrawable, errorDrawable;
@@ -33,9 +41,18 @@ public class WebImageView extends ViewSwitcher {
     private String TAG = this.getClass().getName();
 
     private boolean autoSize = false;
+    private OnImageLoadedListener onImageloadedListener;
 
     public void setAutoSize(boolean autoSize) {
         this.autoSize = autoSize;
+    }
+
+    public ImageView getImageView() {
+        return imageView;
+    }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
     }
 
     private static final String ANDROID_XMLNS = "http://schemas.android.com/apk/res/android";
@@ -90,17 +107,19 @@ public class WebImageView extends ViewSwitcher {
      *                         false, use {@link #loadImage()} to manually trigger the it.tika.mongodb.image read.
      */
     public WebImageView(Context context, String imageUrl, Drawable progressDrawable,
-                        Drawable errorDrawable, boolean autoLoad, boolean loadFromInternetFlag) {
+                        Drawable errorDrawable, boolean autoLoad, boolean loadFromInternetFlag, ScaleType scaleType) {
         super(context);
         this.loadFromInternetFlag = loadFromInternetFlag;
+        this.scaleType = scaleType;
         initialize(context, imageUrl, progressDrawable, errorDrawable, autoLoad);
     }
 
     public WebImageView(Context context, String imageUrl, Drawable progressDrawable,
-                        Drawable errorDrawable, boolean autoLoad, boolean roundImage, boolean loadFromInternetFlag) {
+                        Drawable errorDrawable, boolean autoLoad, boolean roundImage, boolean loadFromInternetFlag, ScaleType scaleType) {
         super(context);
         this.roundImage = roundImage;
         this.loadFromInternetFlag = loadFromInternetFlag;
+        this.scaleType = scaleType;
         initialize(context, imageUrl, progressDrawable, errorDrawable, autoLoad);
 
     }
@@ -123,6 +142,12 @@ public class WebImageView extends ViewSwitcher {
                 0);
 
         roundImage = attributes.getAttributeBooleanValue(XMLNS, "roundImage", false);
+
+        String scaleType = attributes.getAttributeValue(XMLNS, "scaleType");
+        System.out.println("scale type" + scaleType);
+        if (scaleType != null)
+            this.scaleType = ScaleType.valueOf(scaleType);
+
         loadFromInternetFlag = attributes.getAttributeBooleanValue(XMLNS, "loadFromInternet", true);
 
         Drawable progressDrawable = null;
@@ -152,11 +177,11 @@ public class WebImageView extends ViewSwitcher {
     private void initialize(Context context, String imageUrl, Drawable progressDrawable,
                             Drawable errorDrawable,
                             boolean autoLoad) {
-        pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
+        pfd = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
         this.imageUrl = imageUrl;
         this.progressDrawable = progressDrawable;
         this.errorDrawable = errorDrawable;
-
+        setBackgroundColor(Color.TRANSPARENT);
         this.setInAnimation(this.getContext(), R.anim.fade_in);
         ImageLoader.initialize(context);
 
@@ -167,7 +192,7 @@ public class WebImageView extends ViewSwitcher {
         // AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
         // anim.setDuration(500L);
         // setInAnimation(anim);
-
+//        setBackgroundColor(Color.parseColor("#FF343434"));
         addLoadingSpinnerView(context);
         addImageView(context);
 
@@ -188,6 +213,7 @@ public class WebImageView extends ViewSwitcher {
                     .getIntrinsicHeight() / 2);
         } else {
             loadingSpinner.setIndeterminateDrawable(progressDrawable);
+            loadingSpinner.setPadding(15, 15, 15, 15);
             if (progressDrawable instanceof AnimationDrawable) {
                 ((AnimationDrawable) progressDrawable).start();
             }
@@ -204,9 +230,9 @@ public class WebImageView extends ViewSwitcher {
     private void addImageView(Context context) {
         imageView = new ImageView(context);
         imageView.setScaleType(scaleType);
-        imageView.setAdjustViewBounds(true);
+        imageView.setAdjustViewBounds(false);
 
-        LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        LayoutParams lp = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
         lp.gravity = Gravity.CENTER;
         addView(imageView, 1, lp);
     }
@@ -220,9 +246,84 @@ public class WebImageView extends ViewSwitcher {
         }
         if (imageUrl.length() == 0)
             return;
-        handler = new DefaultImageLoaderHandler();
+        handler = new DefaultImageLoaderHandler(this);
+        handler.setOnImageLoadedListener(onImageloadedListener);
         ImageLoader.start(imageUrl, handler, loadFromInternetFlag);
+
+//        final String cacheDir = this.getContext().getCacheDir().getAbsolutePath();
+//        if (ResponseCache.getDefault() == null)
+//            ResponseCache.setDefault(new ResponseCache() {
+//                @Override
+//                public CacheResponse get(URI uri, String s, Map<String, List<String>> headers) throws IOException {
+//                    final File file = new File(cacheDir, escape(uri.getPath()));
+//                    if (file.exists()) {
+//                        return new CacheResponse() {
+//                            @Override
+//                            public Map<String, List<String>> getHeaders() throws IOException {
+//                                return null;
+//                            }
+//
+//                            @Override
+//                            public InputStream getBody() throws IOException {
+//                                return new FileInputStream(file);
+//                            }
+//                        };
+//                    } else {
+//                        return null;
+//                    }
+//                }
+//
+//                @Override
+//                public CacheRequest put(URI uri, URLConnection urlConnection) throws IOException {
+//                    final File file = new File(cacheDir, escape(urlConnection.getURL().getPath()));
+//                    return new CacheRequest() {
+//                        @Override
+//                        public OutputStream getBody() throws IOException {
+//                            return new FileOutputStream(file);
+//                        }
+//
+//                        @Override
+//                        public void abort() {
+//                            file.delete();
+//                        }
+//                    };
+//                }
+//
+//                private String escape(String url) {
+//                    return url.replace("/", "-").replace(".", "-");
+//                }
+//            });
+//
+//        Thread t = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                URL url = null;
+//                try {
+//                    url = new URL(imageUrl);
+//                    URLConnection connection = url.openConnection();
+//                    connection.setUseCaches(true);
+//                    final Drawable drawable = Drawable.createFromStream(connection.getInputStream(), "src");
+//
+//                    BitmapDrawable bd = (BitmapDrawable) drawable;
+//                    if (bd == null)
+//                        return;
+//
+//                    final Bitmap bm = bd.getBitmap();
+//
+//                    handler.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            imageView.setImageBitmap(bm);
+//                            setDisplayedChild(1);
+//                        }
+//                    });
+//                } catch (IOException e) {
+//                }
+//            }
+//        });
+//        t.start();
     }
+
 
     public DefaultImageLoaderHandler handler;
 
@@ -257,6 +358,8 @@ public class WebImageView extends ViewSwitcher {
             handler = new DefaultImageLoaderHandler();
 
         handler.handleImageLoaded(image, null);
+        if (onImageloadedListener != null)
+            onImageloadedListener.onLoaded(imageView);
     }
 
     int fatOrSlim = 0;
@@ -282,10 +385,21 @@ public class WebImageView extends ViewSwitcher {
         this.percentageInWidth = percentageInWidth;
     }
 
+    public void setOnImageloaded(OnImageLoadedListener onImageLoadedListener) {
+        this.onImageloadedListener = onImageLoadedListener;
+    }
+
     private class DefaultImageLoaderHandler extends ImageLoaderHandler {
+
+        private WebImageView webImageView;
 
         public DefaultImageLoaderHandler() {
             super(imageView, imageUrl, errorDrawable);
+        }
+
+        public DefaultImageLoaderHandler(WebImageView webImageView) {
+            this();
+            this.webImageView = webImageView;
         }
 
         @Override
@@ -308,63 +422,36 @@ public class WebImageView extends ViewSwitcher {
             Log.v(TAG, "imageSize" + bmpWidth + "," + bmpHeight);
             //缩放图片的尺寸
 
-            int width = WebImageView.this.getWidth() == 0 ? WebImageView.this.defaultWidth : WebImageView.this.getWidth();
-            int height = WebImageView.this.getHeight() == 0 ? WebImageView.this.defaultHeight : WebImageView.this.getHeight();
-//            int height = width * bmpHeight / bmpWidth;
+            int width = 0;
 
-            if(autoSize){
+            if (autoSize) {
                 width = bmpWidth;
-                height = bmpHeight;
-            }
-            int heightDip = 160 * bmpHeight / DisplayMetrics.DENSITY_DEFAULT;
-            int widthDip = 160 * bmpWidth / DisplayMetrics.DENSITY_DEFAULT;
-
-            boolean debug = false;
-//            if (width == 320) {
-//                debug = true;
-//            }
-//            if (debug) {
-//                System.out.println("gaga bmpWidth" + bmpWidth);
-//                System.out.println("gaga bmpHeight" + bmpHeight);
-//                System.out.println("gaga width" + width);
-//                System.out.println("gaga height" + height);
-//            }
-
-            float scale = 0.0f;
-            if (bmpWidth > bmpHeight * 1.25) {
-                scale = (float) width / widthDip;
-
-                fatOrSlim = FAT;
             } else {
-                scale = (float) height / heightDip;
-                fatOrSlim = SLIM;
-                percentageInWidth = 50 * (bmpWidth / bmpHeight);
+                width = WebImageView.this.getWidth() == 0 ? WebImageView.this.defaultWidth : WebImageView.this.getWidth();
             }
+
+            ((Activity) (WebImageView.this.getContext())).getWindowManager().getDefaultDisplay().getWidth();
+            float scale = 0.0f;
+            scale = (float) width / bmpWidth;
+
             if (scale > 1) {
                 scale = 1;
             }
 
-            if (fatOrSlim == FAT) {
-                height = (int) (heightDip * scale);
-            } else {
-                width = (int) (widthDip * scale);
-            }
-//            if (debug) {
-//                System.out.println("gaga final width in dip" + width);
-//                System.out.println("gaga final height in dip" + height);
-//                System.out.println("gaga scale" + scale);
-//            }
             Bitmap resizeBitmap = null;
-            if(scale <= 1 && scale >0.5){
-                scale = 1.0f;
-            }
-            if(scale <= 0.5 && scale >0.25){
-                scale = 0.5f;
-            }
-            if(scale <= 0.25 && scale >0.125){
-                scale = 0.25f;
-            }
-            System.out.println("jleo scale:"+scale);
+//            if (scale <= 1 && scale > 0.5) {
+//                scale = 1.0f;
+//            }
+//            if (scale <= 0.5 && scale > 0.25) {
+//                scale = 0.5f;
+//            }
+//            if (scale <= 0.25 && scale > 0.125) {
+//                scale = 0.25f;
+//            }
+//            if(scale == 0)
+//                scale = 1;
+
+            System.out.println("jleo scale:" + scale);
             if (scale != 1.0) {
                 resizeBitmap = resizeBitmap(bitmap, scale);
             } else {
@@ -382,7 +469,7 @@ public class WebImageView extends ViewSwitcher {
 //                    bd.setAntiAlias(true);
 //                    imageView.setImageDrawable(bd);
                     imageView.setImageBitmap(resizeBitmap);
-                    ((BitmapDrawable)imageView.getDrawable()).setAntiAlias(true);
+                    ((BitmapDrawable) imageView.getDrawable()).setAntiAlias(true);
 //                    imageView.
 //                    imageView.invalidate();
                 }
@@ -400,7 +487,9 @@ public class WebImageView extends ViewSwitcher {
 
                 setDisplayedChild(1);
             }
-
+            if (webImageView.onImageloadedListener != null)
+                webImageView.onImageloadedListener.onLoaded(webImageView.getImageView());
+            
             return result;
         }
 
@@ -416,7 +505,7 @@ public class WebImageView extends ViewSwitcher {
             try {
 //                resizeBitmap = Bitmap.createBitmap(
 //                        bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
-                resizeBitmap = createScaledBitmap(bitmap, (int)(bitmap.getWidth()*scale),(int)(bitmap.getHeight()*scale), ScalingLogic.FIT);
+                resizeBitmap = createScaledBitmap(bitmap, (int) (bitmap.getWidth() * scale), (int) (bitmap.getHeight() * scale), ScalingLogic.FIT);
                 //Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*scale),(int)(bitmap.getHeight()*scale),true);
                 bitmap = null;
 //                System.gc();
@@ -446,13 +535,13 @@ public class WebImageView extends ViewSwitcher {
 
             if (scalingLogic == ScalingLogic.CROP) {
 
-                final float srcAspect = (float)srcWidth / (float)srcHeight;
+                final float srcAspect = (float) srcWidth / (float) srcHeight;
 
-                final float dstAspect = (float)dstWidth / (float)dstHeight;
+                final float dstAspect = (float) dstWidth / (float) dstHeight;
 
                 if (srcAspect > dstAspect) {
 
-                    final int srcRectWidth = (int)(srcHeight * dstAspect);
+                    final int srcRectWidth = (int) (srcHeight * dstAspect);
 
                     final int srcRectLeft = (srcWidth - srcRectWidth) / 2;
 
@@ -460,9 +549,9 @@ public class WebImageView extends ViewSwitcher {
 
                 } else {
 
-                    final int srcRectHeight = (int)(srcWidth / dstAspect);
+                    final int srcRectHeight = (int) (srcWidth / dstAspect);
 
-                    final int scrRectTop = (int)(srcHeight - srcRectHeight) / 2;
+                    final int scrRectTop = (int) (srcHeight - srcRectHeight) / 2;
 
                     return new Rect(0, scrRectTop, srcWidth, scrRectTop + srcRectHeight);
 
@@ -480,17 +569,17 @@ public class WebImageView extends ViewSwitcher {
 
             if (scalingLogic == ScalingLogic.FIT) {
 
-                final float srcAspect = (float)srcWidth / (float)srcHeight;
+                final float srcAspect = (float) srcWidth / (float) srcHeight;
 
-                final float dstAspect = (float)dstWidth / (float)dstHeight;
+                final float dstAspect = (float) dstWidth / (float) dstHeight;
 
                 if (srcAspect > dstAspect) {
 
-                    return new Rect(0, 0, dstWidth, (int)(dstWidth / srcAspect));
+                    return new Rect(0, 0, dstWidth, (int) (dstWidth / srcAspect));
 
                 } else {
 
-                    return new Rect(0, 0, (int)(dstHeight * srcAspect), dstHeight);
+                    return new Rect(0, 0, (int) (dstHeight * srcAspect), dstHeight);
 
                 }
 
@@ -511,15 +600,20 @@ public class WebImageView extends ViewSwitcher {
     public String getImageUrl() {
         return imageUrl;
     }
+
     private PaintFlagsDrawFilter pfd;
 
     protected void dispatchDraw(android.graphics.Canvas canvas) {
         canvas.setDrawFilter(pfd);
-        try{
-        super.dispatchDraw(canvas);
-        }catch (Exception e){
-            int i=0;
+        try {
+            super.dispatchDraw(canvas);
+        } catch (Exception e) {
+            int i = 0;
             i++;
         }
+    }
+
+    public interface OnImageLoadedListener {
+        public void onLoaded(ImageView imageView1);
     }
 }

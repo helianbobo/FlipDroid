@@ -27,13 +27,18 @@ import java.util.concurrent.Semaphore;
 public class ArticleLoader implements PaginationLoaderService, SourceUpdateable {
     Activity activity;
     private ContentRepo repo;
-    private int articlePerPage;
     private final ArticleSource articleSource;
     private RSSURLDB rssurlDB;
+    private String name;
+    private boolean isFavorite;
 
-    public ArticleLoader(Activity activity, int articlePerPage) {
+    public ArticleLoader(Activity activity, int articlePerPage){
+        this(activity,articlePerPage,null,null,-1,-1);
+    }
+
+    public ArticleLoader(Activity activity, int articlePerPage, String from, String name, int inDaysFrom, int inDaysTo) {
         this.activity = activity;
-        this.articlePerPage = articlePerPage;
+        this.name = name;
         PagingStrategy pagingStrategy = new FixedPagingStrategy(activity, articlePerPage);
         pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
             public void onNoMoreArticle() throws NoMoreStatusException {
@@ -43,7 +48,24 @@ public class ArticleLoader implements PaginationLoaderService, SourceUpdateable 
         Semaphore refreshingSemaphore = new Semaphore(1, true);
         repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
         rssurlDB = new RSSURLDB(activity);
-        articleSource = new AllLocalArticleSource(rssurlDB);
+        articleSource = new AllLocalArticleSource(rssurlDB, from, inDaysFrom, inDaysTo);
+        repo.setArticleSource(articleSource);
+        repo.setPagingStrategy(pagingStrategy);
+    }
+
+    public ArticleLoader(Activity activity, int articlePerPage,String from, boolean isFavorite) {
+        this.activity = activity;
+        this.isFavorite = isFavorite;
+        PagingStrategy pagingStrategy = new FixedPagingStrategy(activity, articlePerPage);
+        pagingStrategy.setNoMoreArticleListener(new NoMoreArticleListener() {
+            public void onNoMoreArticle() throws NoMoreStatusException {
+                throw new NoMoreStatusException();
+            }
+        });
+        Semaphore refreshingSemaphore = new Semaphore(1, true);
+        repo = new ContentRepo(pagingStrategy, refreshingSemaphore);
+        rssurlDB = new RSSURLDB(activity);
+        articleSource = new AllLocalFavoriteArticleSource(rssurlDB, from);
         repo.setArticleSource(articleSource);
         repo.setPagingStrategy(pagingStrategy);
     }
@@ -124,5 +146,9 @@ public class ArticleLoader implements PaginationLoaderService, SourceUpdateable 
 
     public void reopen() {
         rssurlDB.open();
+    }
+
+    public String getName() {
+        return name;
     }
 }

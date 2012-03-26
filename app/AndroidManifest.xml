@@ -10,30 +10,24 @@
         <activity android:name=".activity.CoverActivity" android:screenOrientation="portrait"
                   android:alwaysRetainTaskState="true"
                   android:theme="@android:style/Theme.Light.NoTitleBar">
-            <intent-filter>
 
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
-        <activity android:name=".activity.StreamStyledActivity" android:screenOrientation="portrait"
+        <activity android:name=".activity.TabActivity" android:screenOrientation="portrait"
                   android:alwaysRetainTaskState="true"
                   android:theme="@android:style/Theme.Light.NoTitleBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
         <activity android:name=".activity.SendMessageActivity" android:screenOrientation="portrait"
                   android:alwaysRetainTaskState="true"
                   android:theme="@android:style/Theme.Light.NoTitleBar">
+
+        </activity>
+        <activity android:name=".activity.ConfigActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-        <activity android:name=".activity.ConfigActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                </activity>
         <activity android:name=".activity.PageActivity" android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Light.NoTitleBar"
                   android:windowSoftInputMode="stateUnspecified|adjustPan">
@@ -77,10 +71,11 @@
                   android:theme="@android:style/Theme.Light.NoTitleBar"/>
         <activity android:name=".activity.ViewPagerActivity" android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Light.NoTitleBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+
+        </activity>
+        <activity android:name=".activity.ContentPagedActivity" android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar">
+
         </activity>
         <activity android:name=".activity.StreamActivity" android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Light.NoTitleBar">

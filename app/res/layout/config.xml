@@ -3,14 +3,13 @@
 <RelativeLayout xmlns:wp="http://schemas.android.com/apk/res/com.goal98.flipdroid" android:id="@+id/indexView" xmlns:android="http://schemas.android.com/apk/res/android"
                 style="@style/Index">
 
+
     <LinearLayout android:orientation="vertical" style="@style/Index">
 
-        <com.goal98.flipdroid.view.TopBar android:id="@+id/topbar"
+        <com.goal98.flipdroid.view.TopBar android:id="@+id/topbar" wp:rightButtonImage="@drawable/like"
                                           android:layout_height="wrap_content"
                                           android:layout_width="fill_parent"
                                           wp:title="@string/config"></com.goal98.flipdroid.view.TopBar>
-
-
         <ListView android:layout_height="fill_parent"
                                                                   android:layout_width="fill_parent"
                                                                   android:id="@android:id/list" />

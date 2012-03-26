@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
               xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent" android:background="@color/white" android:paddingTop="10dip"
+              android:layout_width="fill_parent"  android:paddingTop="10dip"
               android:layout_height="fill_parent" android:orientation="vertical" android:gravity="top|center_horizontal">
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:orientation="vertical" android:id="@+id/titleWrapper">
@@ -19,7 +19,7 @@
                 android:scrollbars="vertical"
                 android:paddingLeft="16dip"
                 android:paddingRight="16dip"
-
+                android:background="@color/content_background"
                 android:paddingBottom="3dp"
                 android:paddingTop="5dp"
 
@@ -35,10 +35,10 @@
             </LinearLayout>
             <LinearLayout android:layout_width="fill_parent" android:paddingBottom="1dip"
                           android:layout_height="wrap_content" android:gravity="center"
-                          android:orientation="horizontal" android:background="#DDDDDD">
+                          android:orientation="horizontal">
                 <LinearLayout android:layout_width="fill_parent" android:paddingLeft="5dip" android:paddingRight="5dip"
                               android:layout_height="wrap_content" android:gravity="left"
-                              android:orientation="horizontal" android:id="@+id/shareByll" android:background="@color/white">
+                              android:orientation="horizontal" android:id="@+id/shareByll">
 
                     <com.goal98.android.WebImageView android:id="@+id/portrait" webimage:autoLoad="false"
                                                      webimage:roundImage="true"
@@ -65,14 +65,7 @@
                           android:layout_gravity="center"
                           android:layout_marginTop="5dp"
                           android:layout_marginBottom="10dp"
-
                           android:gravity="center">
-
-                <!--<TextView android:id="@+id/content" android:layout_width="fill_parent"-->
-                <!--android:textSize="18dip"-->
-                <!--android:textColor="#232323" android:gravity="left"-->
-                <!--android:layout_height="wrap_content" android:paddingLeft="2dip" android:paddingRight="2dip"-->
-                <!--android:paddingTop="10dip" android:paddingBottom="10dip"></TextView>-->
 
             </LinearLayout>
 
@@ -82,7 +75,7 @@
                     android:drawableLeft="@drawable/ic_action_open_original_url"
                     style="@style/Button"
                     android:background="@drawable/source_button"
-                    android:paddingLeft="70dp"
+                    android:paddingLeft="70dp" android:visibility="gone"
                     android:paddingRight="70dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="10dp"

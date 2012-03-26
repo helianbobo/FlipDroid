@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent" android:paddingTop="10dip"
+              android:layout_height="fill_parent" android:orientation="vertical"
+              android:gravity="top|center_horizontal">
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:orientation="vertical" android:id="@+id/titleWrapper" android:visibility="gone">
+        <TextView android:id="@+id/title" android:layout_width="fill_parent" style="@style/EnlargedTitle"
+                  android:gravity="center"
+                  android:layout_height="wrap_content" android:paddingLeft="15dip" android:paddingRight="15dip"
+                  android:paddingTop="2dip"></TextView>
+    </LinearLayout>
+    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent"
+                  android:layout_marginBottom="5dp"
+                  android:layout_height="wrap_content" android:paddingLeft="20dip" android:paddingRight="20dip">
+
+        <LinearLayout android:layout_width="fill_parent" android:paddingBottom="1dip"
+                      android:layout_height="wrap_content" android:gravity="center"
+                      android:orientation="horizontal">
+            <LinearLayout android:layout_width="fill_parent" android:paddingLeft="5dip" android:paddingRight="5dip"
+                          android:layout_height="wrap_content" android:gravity="left" android:id="@+id/infoWrapper"
+                          android:orientation="horizontal" android:visibility="gone">
+
+                <com.goal98.android.WebImageView android:id="@+id/portrait" webimage:autoLoad="false"
+                                                 webimage:roundImage="true"
+                                                 android:layout_height="32dip" webimage:defaultWidth="32"
+                                                 webimage:defaultHeight="32" android:layout_gravity="left"
+                                                 android:layout_width="32dip"
+                                                 webimage:progressDrawable="@drawable/portrait"
+                                                 android:paddingBottom="2dip"></com.goal98.android.WebImageView>
+                <TextView android:id="@+id/author" android:layout_width="wrap_content"
+                          style="@style/ShareBy" android:gravity="center" android:layout_gravity="left"
+                          android:layout_height="wrap_content" android:layout_marginLeft="2dip"
+                          android:paddingTop="2dip" android:paddingBottom="2dip"></TextView>
+                <TextView android:id="@+id/createdDate" android:layout_width="fill_parent"
+                          style="@style/ShareBy" android:gravity="right" android:layout_gravity="right"
+                          android:layout_height="wrap_content" android:layout_marginLeft="2dip"
+                          android:paddingRight="2dip"
+                          android:paddingTop="3dip" android:paddingBottom="2dip"></TextView>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:orientation="vertical"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/contentHolder"
+                      android:layout_gravity="center"
+                      android:layout_marginTop="5dp"
+                      android:layout_marginBottom="10dp"
+                      android:gravity="center">
+
+        </LinearLayout>
+
+        <!--<Button android:id="@+id/viewSource"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="50dip"-->
+        <!--android:drawableLeft="@drawable/ic_action_open_original_url"-->
+        <!--style="@style/Button"-->
+        <!--android:background="@drawable/source_button"-->
+        <!--android:paddingLeft="70dp" android:visibility="gone"-->
+        <!--android:paddingRight="70dp"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:text="@string/view_source"/>-->
+    </LinearLayout>
+
+</LinearLayout>

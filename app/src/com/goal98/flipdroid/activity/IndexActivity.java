@@ -39,6 +39,9 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     static final private int CLEAR_ID = Menu.FIRST + 1;
     static final private int ACCOUNT_LIST_ID = Menu.FIRST + 2;
     static final private int TIPS_ID = Menu.FIRST + 3;
+    private View addSourcePopup;
+    private PopupWindow mPopupWindow;
+    private AddSourcePopupViewBuilder addSourcePopupViewBuilder;
 
     private AccountDB accountDB;
     private SourceDB sourceDB;
@@ -53,9 +56,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     final private Map indicatorMap = new HashMap();
 
     private String TAG = this.getClass().getName();
-    private LayoutInflater inflater;
-    private PopupWindow mPopupWindow;
-    private final AddSourcePopupViewBuilder addSourcePopupViewBuilder = new AddSourcePopupViewBuilder(this);
+
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -104,11 +105,11 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         sourceDB = new SourceDB(this);
         rssurlDB = new RSSURLDB(this);
         setContentView(R.layout.index);
-        inflater = LayoutInflater.from(this);
 
-        final View addSourcePopUp = addSourcePopupViewBuilder.buildAddSourcePopupView(this);
-
+        addSourcePopupViewBuilder = new AddSourcePopupViewBuilder(IndexActivity.this);
+        addSourcePopup = addSourcePopupViewBuilder.buildAddSourcePopupView(IndexActivity.this);
         final TopBar topbar = (TopBar) findViewById(R.id.topbar);
+        topbar.setTitle(this.getString(R.string.app_name));
         topbar.addButton(TopBar.IMAGE, R.drawable.ic_btn_add_source, new LinearLayout.OnClickListener() {
             public synchronized void onClick(View view) {
                 if (mPopupWindow != null && mPopupWindow.isShowing()) {
@@ -116,8 +117,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                     return;
                 }
 
-
-                mPopupWindow = new PopupWindow(addSourcePopUp, ViewGroup.LayoutParams.WRAP_CONTENT,
+                mPopupWindow = new PopupWindow(addSourcePopup, ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
                 mPopupWindow.setOutsideTouchable(true);
                 mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
@@ -379,12 +379,20 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                 count = sourceDB.deleteAll();
 
                 SourceContentDB sourceContentDB = new SourceContentDB(this);
-                sourceContentDB.deleteAll();
-                sourceContentDB.close();
+                try {
+                    sourceContentDB.deleteAll();
+                } finally {
+                    sourceContentDB.close();
+                }
 
                 Log.e(this.getClass().getName(), count + " sources are deleted.");
 
-
+                RSSURLDB rssurldb = new RSSURLDB(this);
+                try{
+                rssurldb.deleteAll();
+                }finally {
+                    rssurldb.close();
+                }
                 adapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item, sourceDB, deviceInfo);
                 bindAdapter();
                 adapter.notifyDataSetChanged();

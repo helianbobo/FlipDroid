@@ -1,17 +1,17 @@
 /* Copyright (c) 2009 Matthias Kaeppler
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 
 package com.goal98.android;
 
@@ -27,6 +27,7 @@ import android.widget.ImageView;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -89,7 +90,7 @@ public class ImageLoader implements Runnable {
 
     /**
      * This method must be called before any other method is invoked on this class. Please note that
-     * when using ImageLoader as part of {@link WebImageView} or {@link WebGalleryAdapter}, then
+     * when using ImageLoader as part of {@link WebImageView} or {@link }, then
      * there is no need to call this method, since those classes will already do that for you. This
      * method is idempotent. You may call it multiple times without any side effects.
      *
@@ -213,7 +214,8 @@ public class ImageLoader implements Runnable {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
             handler.handleImageLoaded(bitmap, null);
-
+            if (handler.getOnImageLoadedListener() != null)
+                handler.getOnImageLoadedListener().onLoaded(imageView);
         } else {
             executor.execute(new ImageLoader(imageUrl, handler, loadFromInternetFlag));
         }
@@ -256,13 +258,14 @@ public class ImageLoader implements Runnable {
         if (loadImageFromInternet) {
             bitmapBytes = downloadImage();
             if (bitmapBytes != null) {
-                imageCache.put(imageUrl, bitmapBytes);
-                processImage(bitmapBytes);
+                Bitmap bitmap = processImage(bitmapBytes);
+                if(bitmap!=null)
+                    imageCache.put(imageUrl, bitmapBytes);
             }
         }
     }
 
-    private void processImage(byte[] bitmapBytes) {
+    private Bitmap processImage(byte[] bitmapBytes) {
         Bitmap image = null;
         if (bitmapBytes != null) {
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bitmapBytes);
@@ -273,12 +276,15 @@ public class ImageLoader implements Runnable {
 
             try {
                 image = BitmapFactory.decodeStream(byteArrayInputStream, null, o2);
+                if(image!=null)
+                    notifyImageLoaded(imageUrl, image);
+                return image;
             } catch (Throwable t) {
                 t.printStackTrace();
+
             }
         }
-        // TODO: gracefully handle this case.
-        notifyImageLoaded(imageUrl, image);
+            return image;
     }
 
     // TODO: we could probably improve performance by re-using connections instead of closing them
@@ -303,38 +309,41 @@ public class ImageLoader implements Runnable {
 
     protected byte[] retrieveImageData() throws IOException {
         String imageUrl = URLEncoder.encode(this.imageUrl);
-        imageUrl = imageUrl.replace("%2F","/");
-        imageUrl = imageUrl.replace("%3A",":");
+        imageUrl = imageUrl.replace("%2F", "/");
+        imageUrl = imageUrl.replace("%3A", ":");
 
         URL url = new URL(imageUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         // determine the it.tika.mongodb.image size and allocate a buffer
         int fileSize = connection.getContentLength();
-        if (fileSize <= 0 || (connection.getResponseCode() < 200 || connection.getResponseCode() > 299)) {
+        if ((connection.getResponseCode() < 200 || connection.getResponseCode() > 299)) {
             return null;
         }
-        byte[] imageData = new byte[fileSize];
+
 
         // read the file
         Log.d(LOG_TAG, "fetching image " + imageUrl + " (" + fileSize + ")");
         BufferedInputStream istream = new BufferedInputStream(connection.getInputStream(), 32768);
+        ByteArrayOutputStream bos = null;
         try {
-            int bytesRead = 0;
-            int offset = 0;
-            while (bytesRead != -1 && offset < fileSize) {
-                bytesRead = istream.read(imageData, offset, fileSize - offset);
-                offset += bytesRead;
+            bos = new ByteArrayOutputStream();
+            byte[] buf = new byte[4096];
+            int r;
+            try {
+                while ((r = istream.read(buf)) != -1) {
+                    bos.write(buf, 0, r);
+                }
+            } finally {
+                istream.close();
             }
+        } catch (IOException e) {
+            throw new RuntimeException();
         } finally {
-            istream.close();
-            connection.disconnect();
+            if (istream != null)
+                istream.close();
         }
-
-        // clean up
-
-
-        return imageData;
+        return bos.toByteArray();
     }
 
     public void notifyImageLoaded(String url, Bitmap bitmap) {
@@ -358,10 +367,9 @@ public class ImageLoader implements Runnable {
         if (handler != null) {
             handler.sendMessage(message);
             System.out.println("cena2 handler" + url);
-        }
-        else if (preloadImageLoaderHandler != null) {
+        } else if (preloadImageLoaderHandler != null) {
             preloadImageLoaderHandler.handleImageLoaded(image);
-            System.out.println("cena2 preloadImageLoaderHandler"+url);
+            System.out.println("cena2 preloadImageLoaderHandler" + url);
         }
     }
 }

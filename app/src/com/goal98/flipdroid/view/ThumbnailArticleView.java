@@ -112,7 +112,8 @@ public class ThumbnailArticleView extends ExpandableArticleView {
 //        thumbnailViewWrapper.setVisibility(INVISIBLE);
         loadedThumbnail = inflater.inflate(R.layout.loadedthumbnail, thumbnailViewWrapper, true);
 
-        String time = PrettyTimeUtil.getPrettyTime(this.getContext(), article.getCreatedDate());
+        String localeStr = this.getContext().getString(R.string.locale);
+        String time = PrettyTimeUtil.getPrettyTime(localeStr, article.getCreatedDate());
 
 //        if (!article.getSourceType().equals(TikaConstants.TYPE_RSS) && article.getSourceURL()!=null) {
 //            weiboContent = inflater.inflate(R.layout.loadedthumbnail, weiboContentWrapper, true);

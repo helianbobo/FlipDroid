@@ -5,14 +5,14 @@
                 android:layout_height="fill_parent" android:orientation="horizontal" android:gravity="bottom">
 
     <com.goal98.android.WebImageView android:id="@+id/portrait2" webimage:autoLoad="false"
-                                     android:layout_height="30dip"  android:layout_alignParentLeft="true" android:layout_alignParentBottom="true"
-                                     webimage:progressDrawable="@drawable/portrait"
-                                     android:layout_width="30dip"></com.goal98.android.WebImageView>
+                                     android:layout_height="35dip"  android:layout_alignParentLeft="true" android:layout_alignParentBottom="true"
+                                     webimage:progressDrawable="@drawable/portrait" webimage:scaleType="FIT_END"
+                                     android:layout_width="35dip" android:paddingBottom="4dip"></com.goal98.android.WebImageView>
 
-    <TextView android:layout_marginLeft="4dip" android:id="@+id/author" android:layout_width="wrap_content"
-              android:layout_height="wrap_content" android:textSize="16dip" android:gravity="center" android:layout_alignParentBottom="true" android:layout_toRightOf="@id/portrait2"></TextView>
-    <TextView android:layout_marginLeft="4dip" android:id="@+id/createDate" android:layout_width="wrap_content"
-              android:layout_height="wrap_content" android:textSize="12dip" android:gravity="center" android:layout_toRightOf="@id/author" android:layout_alignParentBottom="true"></TextView>
+    <TextView android:layout_marginLeft="4dip" android:textColor="@color/gray" android:id="@+id/author" android:layout_width="wrap_content" android:layout_toRightOf="@id/portrait2"
+              android:layout_height="wrap_content" android:textSize="14sp" android:gravity="bottom" android:layout_alignParentBottom="true" ></TextView>
+    <TextView android:layout_marginLeft="4dip" android:textColor="@color/gray" android:id="@+id/createDate" android:layout_width="wrap_content" android:layout_toRightOf="@id/author"  android:paddingTop="3dip"
+              android:layout_height="wrap_content" android:textSize="12sp" android:gravity="bottom"  android:layout_alignParentBottom="true"></TextView>
     <ProgressBar android:id="@+id/progressbar"
                  android:visibility="gone"
                  android:layout_toRightOf="@id/createDate"

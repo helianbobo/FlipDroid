@@ -2,9 +2,10 @@ package com.goal98.flipdroid.model;
 
 import android.graphics.Bitmap;
 import android.text.Html;
+import android.text.Spannable;
 import android.text.Spanned;
-import com.goal98.android.ImageLoader;
 import com.goal98.flipdroid.util.DeviceInfo;
+import com.goal98.flipdroid.util.TextPaintUtil;
 import com.goal98.flipdroid.view.ExpandableArticleView;
 import com.goal98.flipdroid.view.Notifier;
 import com.goal98.flipdroid.view.ThumbnailArticleView;
@@ -193,6 +194,11 @@ public class Article implements Comparable {
     public void setContent(String content) {
         this.content = content;
         thumbnailText = Html.fromHtml(content.replaceAll("(<br/>)|(</h[1-6]+>)|(<h[1-6]+>)|(<img.*?>)|(<blockquote>)|(</blockquote>)|(hack</img>)", ""));
+
+        Spannable spannable = Spannable.Factory.getInstance().newSpannable(thumbnailText);
+
+        TextPaintUtil.removeUnderlines(spannable);
+        thumbnailText = spannable;
     }
 
     public URL getPortraitImageUrl() {
@@ -325,16 +331,16 @@ public class Article implements Comparable {
 //        }
 //    }
 
-    public synchronized void loadSecondaryImage(String image, DeviceInfo deviceInfo, boolean loadFromInternet) {
-        PreloadSecondaryImageLoaderHandler preloadSecondaryImageLoaderHandler = new PreloadSecondaryImageLoaderHandler(this, image, deviceInfo);
+//    public synchronized void loadSecondaryImage(String image, DeviceInfo deviceInfo, boolean loadFromInternet) {
+//        PreloadSecondaryImageLoaderHandler preloadSecondaryImageLoaderHandler = new PreloadSecondaryImageLoaderHandler(this, image, deviceInfo);
+//
+//        final ImageLoader loader = new ImageLoader(image, preloadSecondaryImageLoaderHandler, loadFromInternet);
+//        new Thread(loader).start();
+//    }
 
-        final ImageLoader loader = new ImageLoader(image, preloadSecondaryImageLoaderHandler, loadFromInternet);
-        new Thread(loader).start();
-    }
-
-    public void onSecondaryImageLoaded(Bitmap bitmap, String url) {
+//    public void onSecondaryImageLoaded(Bitmap bitmap, String url) {
 //        this.getImagesMap().put(url, bitmap);
-    }
+//    }
 
     public int getImageHeight() {
         return imageHeight;
@@ -381,7 +387,7 @@ public class Article implements Comparable {
         if (expandable) {
             return content;
         } else {
-            if (getImageUrl() != null && getImageWidth()!=0 && getImageHeight()!=0) {
+            if (getImageUrl() != null && getImageWidth() != 0 && getImageHeight() != 0) {
                 return "<p>" + content + "</p>" + "<img src=" + getImageUrl() + " width=" + getImageWidth() + " height=" + getImageHeight() + " >hack</img>";
             } else
                 return "<p>" + content + "</p>";

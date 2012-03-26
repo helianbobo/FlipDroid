@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:wp="http://schemas.android.com/apk/res/com.goal98.flipdroid"
+              xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
     <TabHost android:layout_width="fill_parent" android:layout_gravity="bottom"
              android:layout_height="fill_parent" android:id="@android:id/tabhost">
-        <FrameLayout android:layout_width="fill_parent" android:id="@android:id/tabcontent"
-                     android:layout_height="fill_parent" android:paddingBottom="65dip">
-
-        </FrameLayout>
         <RelativeLayout android:layout_width="fill_parent"
                         android:layout_height="wrap_content">
+            <FrameLayout android:layout_width="fill_parent" android:id="@android:id/tabcontent" android:layout_alignParentTop="true"
+                         android:layout_height="fill_parent" android:paddingBottom="65dip">
+            </FrameLayout>
+
             <TabWidget android:id="@android:id/tabs"
                        android:layout_width="fill_parent"
                        android:layout_height="wrap_content"

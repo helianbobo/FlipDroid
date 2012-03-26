@@ -1,9 +1,12 @@
 package com.goal98.flipdroid.activity;
 
 import android.os.Handler;
+import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import com.goal98.flipdroid.model.NoSuchPageException;
+import com.goal98.flipdroid.view.HeavyUIOperater;
+import com.goal98.flipdroid.view.StreamStyledArticleView;
 
 import java.util.List;
 
@@ -33,7 +36,7 @@ public class AutoLoadScrollListener implements AbsListView.OnScrollListener {
         final int count = this.listView.getCount();
         if (count == 0) {
             return true;
-        } else if (listView.getLastVisiblePosition() == count - 1) {
+        } else if (listView.getLastVisiblePosition() >= count - 1) {
             return true;
         } else {
             return false;
@@ -42,27 +45,41 @@ public class AutoLoadScrollListener implements AbsListView.OnScrollListener {
 
     public void onScroll(AbsListView view, int firstVisibleItem,
                          int visibleItemCount, int totalItemCount) {
-        if (visibleItemCount > 0 && visibleItemCount < totalItemCount
-                && (firstVisibleItem + visibleItemCount == totalItemCount - 1)) {
+        if (firstVisibleItem + visibleItemCount >= totalItemCount
+                && totalItemCount != 0) {
             fireLoad = true;
         } else {
-            if (isLastItemVisible())
-                fireLoad = true;
-            else
-                fireLoad = false;
+            fireLoad = false;
         }
     }
 
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-        System.out.println("cena3" + (view.getLastVisiblePosition() == adapter.getCount() - 1));
-        if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-            if ((fireLoad || view.getLastVisiblePosition() == adapter.getCount() - 1) && !adapter.isLoadingData())
+        int first = view.getFirstVisiblePosition();
+        int count = view.getChildCount();
+        if (scrollState == SCROLL_STATE_IDLE || (first + count >= adapter.getCount())) {
+            if ((fireLoad || isLastItemVisible()) && !adapter.isLoadingData()) {
+                triggerHeavyUIOperation();
                 load(true);
-            else {
+            } else {
                 fireLoad = false;
+                triggerHeavyUIOperation();
+
             }
         }
     }
+
+    public void triggerHeavyUIOperation() {
+        int first = listView.getFirstVisiblePosition();
+        int count = listView.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View childAt = listView.getChildAt(i);
+            if (childAt instanceof HeavyUIOperater) {
+                HeavyUIOperater articleView = (HeavyUIOperater) childAt;
+                articleView.heavyUIOperation();
+            }
+        }
+    }
+
 
     public void load(final boolean showLoading) {
         Thread thread = new Thread(new Runnable() {
@@ -75,24 +92,31 @@ public class AutoLoadScrollListener implements AbsListView.OnScrollListener {
                         }
                     });
                 }
-                final List loadedItems;
+                List loadedItems = null;
                 try {
                     loadedItems = onLoadListener.load();
-                    adapter.addItems(loadedItems);
+
                 } catch (NoSuchPageException e) {
                     adapter.setNoMoreToLoad(true);
                 }
-
+                final List toAdd = loadedItems;
                 adapter.setLoading(false);
                 handler.post(new Runnable() {
                     public void run() {
+                        adapter.addItems(toAdd);
                         adapter.notifyDataSetChanged();
                     }
                 });
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        triggerHeavyUIOperation();
+                    }
+                },100);
             }
         });
         thread.start();
-        if(!showLoading){
+        if (!showLoading) {
             try {
                 thread.join();
             } catch (InterruptedException e) {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
+import android.os.Handler;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,7 +26,7 @@ public abstract class ArticleView extends ViewSwitcher {
     protected WebImageView portraitView;
     protected LinearLayout contentViewWrapper;
     protected boolean toLoadImage;
-
+    protected Handler handler = new Handler();
 
     protected ThumbnailViewContainer pageViewContainer;
 

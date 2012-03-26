@@ -166,6 +166,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="library" />
   </component>
 </module>
 

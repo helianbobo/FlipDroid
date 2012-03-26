@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:wp="http://schemas.android.com/apk/res/com.goal98.flipdroid" android:id="@+id/body" xmlns:android="http://schemas.android.com/apk/res/android"
-                style="@style/Index">
+                style="@style/Index" android:background="#fff4f4f2">
 
         <com.goal98.flipdroid.view.TopBar android:id="@+id/topbar"
                                           android:layout_height="wrap_content"

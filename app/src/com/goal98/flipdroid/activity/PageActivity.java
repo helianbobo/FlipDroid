@@ -271,7 +271,7 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
 
         preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         this.browseMode = getBrowseMode();
-//        this.animationMode = getAnimationMode();
+
         refreshingSemaphore = new Semaphore(1, true);
         Log.v("accountType", accountType);
 

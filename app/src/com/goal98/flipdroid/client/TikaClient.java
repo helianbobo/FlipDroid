@@ -141,7 +141,6 @@ public class TikaClient {
         } catch (IOException e) {
             return new LastModifiedStampedResult(-1,null);
         }
-
         if (lastModified != -1)
             u.setIfModifiedSince(lastModified);
         try {

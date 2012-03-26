@@ -27,6 +27,7 @@ import java.util.List;
  */
 public class ArticleAdapter extends PaginationLoaderAdapter {
     protected Context context;
+    private boolean loaded;
 
     public ArticleAdapter(Activity activity, ListView listView, int progressDrawableResourceId, int layoutId, PaginationLoaderService loaderService, List<Article> videoDetailInfos, int nodataview, View.OnClickListener noitemListener) {
         super(activity, listView, layoutId, progressDrawableResourceId, videoDetailInfos, nodataview, loaderService, noitemListener);
@@ -37,20 +38,33 @@ public class ArticleAdapter extends PaginationLoaderAdapter {
         this(activity, listView, progressDrawableResourceId, layoutId, loaderService, new ArrayList(), nodataview, noitemListener);
     }
 
-
-
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         StreamStyledArticleView articleView = (StreamStyledArticleView) view;
         Article article = articleView.getArticle();
 
         ArticleHolder.getInstance().setArticle(article);
-        Intent articleLoadedActivityIntent = new Intent(context, ContentLoadedActivity.class);
+        Intent articleLoadedActivityIntent = new Intent(context, ContentPagedActivity.class);
         context.startActivity(articleLoadedActivityIntent);
-
     }
 
     @Override
     protected void setNoDataOnClickListener(View nodataitem, View.OnClickListener listener) {
         nodataitem.findViewById(R.id.addmorefeeds).setOnClickListener(listener);
     }
+
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    public void setLoaded(boolean loaded) {
+        this.loaded = loaded;
+    }
+
+    @Override
+    public void forceLoad() {
+        super.forceLoad();
+        loaded = true;
+    }
+
+
 }

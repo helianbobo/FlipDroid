@@ -23,4 +23,17 @@
     <color name="menu_text">#ffffffff</color>
     <color name="toast_color">#ff2c73ff</color>
     <color name="lightbluetransparent">#ee2491ff</color>
+
+
+
+    <color name="title_bar_color">#f4f4f2</color>
+    <color name="title_bar_center_text">#1A1A1A</color>
+
+    <color name="pager_frame_color">#91A438</color>
+    <color name="pager_background_color">#5fa707</color>
+
+    <color name="article_title_color">#1872b7</color>
+    <color name="background_color">#f4f4f2</color>
+    <color name="content_background">#f4f4f2</color>
+
 </resources>

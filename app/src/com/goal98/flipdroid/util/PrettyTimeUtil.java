@@ -15,8 +15,8 @@ import java.util.Locale;
  * To change this template use File | Settings | File Templates.
  */
 public class PrettyTimeUtil {
-    public static String getPrettyTime(Context context, Date date) {
-        String localeStr = context.getString(R.string.locale);
+    public static String getPrettyTime(String localeStr, Date date) {
+
         Locale locale = null;
         PrettyTime p = null;
         if (localeStr != null && localeStr.length() > 0) {

@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.goal98.android.WebImageView;
@@ -17,6 +19,7 @@ import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.multiscreen.MultiScreenSupport;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
+import com.goal98.flipdroid.util.NetworkUtil;
 import com.goal98.flipdroid.util.PrettyTimeUtil;
 
 import java.util.Random;
@@ -29,10 +32,12 @@ import java.util.concurrent.ExecutorService;
  * Time: 下午8:40
  * To change this template use File | Settings | File Templates.
  */
-public class StreamStyledArticleView extends ItemView {
+public class StreamStyledArticleView extends ItemView implements HeavyUIOperater {
     private boolean toLoadImage;
     Handler handler = new Handler();
     private Article article;
+    private WebImageView imageView;
+    private WebImageView portraitViewWeiboContent;
 
     public void setToLoadImage(boolean toLoadImage) {
         this.toLoadImage = toLoadImage;
@@ -48,8 +53,9 @@ public class StreamStyledArticleView extends ItemView {
     public StreamStyledArticleView(Context context, AttributeSet attrs) {
         super(context, attrs);
         final String XMLNS = "http://schemas.android.com/apk/res/" + context.getPackageName();
-        toLoadImage = attrs.getAttributeBooleanValue(XMLNS,
-                "toLoadFromInternet", true);
+//        toLoadImage = attrs.getAttributeBooleanValue(XMLNS,
+//                "toLoadFromInternet",  NetworkUtil.toLoadImage(this.getContext()));
+        toLoadImage = NetworkUtil.toLoadImage(this.getContext());
     }
 
     public void render(DetailInfo di) {
@@ -61,29 +67,21 @@ public class StreamStyledArticleView extends ItemView {
         TextView authorViewWeiboContent = (TextView) findViewById(R.id.author);
 
         TextView createDateViewWeiboContent = (TextView) findViewById(R.id.createDate);
-//
+
         LinearLayout contentViewWrapperWeiboContent = (LinearLayout) findViewById(R.id.contentll);
-//
+
         TextView contentView = new TextView(this.getContext());
         final DeviceInfo deviceInfo = DeviceInfo.getInstance((Activity) this.getContext());
-//
+
         ThumbnailContentRender.setThumbnailContentText(contentView, article, deviceInfo);
         ThumbnailContentRender.setTitleText(titleView, article, deviceInfo);
         new ArticleTextViewRender(Constants.INDENT).renderTextView(contentView, article);
-//
-//        contentViewWrapperWeiboContent.addView(contentView);
-//        if (article.hasLink()) {
-//            View progressBar = findViewById(R.id.progressbar);
-//            View textUrlLoading = findViewById(R.id.textUrlLoading);
-//            progressBar.setVisibility(VISIBLE);
-//            textUrlLoading.setVisibility(VISIBLE);
-//        }
-//
-        final WebImageView portraitViewWeiboContent = (WebImageView) findViewById(R.id.portrait2);
 
+        portraitViewWeiboContent = (WebImageView) findViewById(R.id.portrait2);
+        portraitViewWeiboContent.setAutoSize(true);
         authorViewWeiboContent.setText(article.getAuthor());
-
-        String time = PrettyTimeUtil.getPrettyTime(this.getContext(), article.getCreatedDate());
+        String localeStr = this.getContext().getString(R.string.locale);
+        String time = PrettyTimeUtil.getPrettyTime(localeStr, article.getCreatedDate());
         createDateViewWeiboContent.setText(time);
 
         if (article.getPortraitImageUrl() != null) {
@@ -91,14 +89,14 @@ public class StreamStyledArticleView extends ItemView {
         } else {
             portraitViewWeiboContent.setVisibility(GONE);
         }
-        portraitViewWeiboContent.loadImage();
+
         MultiScreenSupport mss = MultiScreenSupport.getInstance(deviceInfo);
         if (article.getImageUrl() == null) {
             LayoutParams layoutParams = new LayoutParams(0, LayoutParams.FILL_PARENT);
             layoutParams.weight = 100;
             contentViewWrapperWeiboContent.addView(contentView, layoutParams);
         } else {
-            final WebImageView imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), this.getResources().getDrawable(Constants.DEFAULT_PIC), this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage);
+            imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), this.getResources().getDrawable(Constants.DEFAULT_PIC), this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage, ImageView.ScaleType.CENTER_CROP);
             imageView.setRoundImage(true);
 //            imageView.imageView.setTag(article.getImageUrl().toExternalForm());
             imageView.setBackgroundResource(R.drawable.border);
@@ -113,17 +111,17 @@ public class StreamStyledArticleView extends ItemView {
 
 
             if (article.getHeight() == 0) {
-                LayoutParams layoutParamsText = new LayoutParams(0, mss.getImageHeightThumbnailView());
-                LayoutParams layoutParamsImage = new LayoutParams(0, LayoutParams.FILL_PARENT);
+                LayoutParams layoutParamsText = new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT);
+                LayoutParams layoutParamsImage = new LayoutParams(0, mss.getImageHeightThumbnailView());
+
+                layoutParamsImage.gravity = Gravity.CENTER;
                 layoutParamsText.weight = 50;
                 layoutParamsImage.weight = 50;
 
                 if (false) {
                     contentViewWrapperWeiboContent.addView(contentView, layoutParamsText);
-                    layoutParamsImage.gravity = Gravity.RIGHT;
                     contentViewWrapperWeiboContent.addView(imageView, layoutParamsImage);
                 } else {
-                    layoutParamsImage.gravity = Gravity.LEFT;
                     contentViewWrapperWeiboContent.addView(imageView, layoutParamsImage);
                     contentViewWrapperWeiboContent.addView(contentView, layoutParamsText);
                 }
@@ -135,8 +133,6 @@ public class StreamStyledArticleView extends ItemView {
                 layoutParamsImage.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
                 contentViewWrapperWeiboContent.addView(imageView, layoutParamsImage);
             }
-
-            imageView.loadImage();
         }
     }
 
@@ -146,4 +142,9 @@ public class StreamStyledArticleView extends ItemView {
     }
 
 
+    public void heavyUIOperation() {
+        if (imageView != null)
+            imageView.loadImage();
+        portraitViewWeiboContent.loadImage();
+    }
 }

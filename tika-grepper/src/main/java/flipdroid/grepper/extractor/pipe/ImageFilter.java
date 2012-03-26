@@ -304,5 +304,7 @@ public class ImageFilter implements Extractor {
         public int getHeight() {
             return -1;
         }
+
+
     }
 }

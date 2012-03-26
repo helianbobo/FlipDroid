@@ -30,20 +30,17 @@ public class DeviceInfo {
             Rect rect = new Rect();
             Window window = activity.getWindow();
             window.getDecorView().getWindowVisibleDisplayFrame(rect);
-            int statusBarHeight = rect.top;
-            int contentViewTop =
-                    window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
-            int titleBarHeight = contentViewTop - statusBarHeight;
-            System.out.println("creating new device info");
+            DisplayMetrics dm = new DisplayMetrics();
+            activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+
             deviceInfo = new DeviceInfo();
-            deviceInfo.setDisplayHeight((int) ((activity.getWindowManager().getDefaultDisplay().getHeight())*5/6));
+            deviceInfo.setDisplayHeight((int) ((activity.getWindowManager().getDefaultDisplay().getHeight()) * 5 / 6));
             deviceInfo.setDisplayWidth((activity.getWindowManager().getDefaultDisplay().getWidth()) - 20);
             deviceInfo.setWidth(activity.getWindowManager().getDefaultDisplay().getWidth());
             deviceInfo.setHeight(activity.getWindowManager().getDefaultDisplay().getHeight());
-            deviceInfo.setDensityScale(activity.getResources().getDisplayMetrics().density);
+            deviceInfo.setDensityScale(dm.density);
             FlipdroidApplications application = (FlipdroidApplications) activity.getApplication();
             application.setDeviceInfo(deviceInfo);
-            System.out.println("creating new device info done" + deviceInfo);
         }
         return deviceInfo;
 
@@ -54,7 +51,7 @@ public class DeviceInfo {
     }
 
     public float getDensity() {
-        return DisplayMetrics.DENSITY_DEFAULT*density;
+        return density;
     }
 
     public int getDisplayHeight() {
@@ -98,12 +95,10 @@ public class DeviceInfo {
         return height == 320;
     }
 
-    public int getDipFromPixel(int px) {
-        return (int) (px*160/ this.getDensity());
-    }
+
 
     @Override
     public String toString() {
-        return "display:" + displayWidth + "," + displayHeight+", actual:"+width +"," + height+",scale:" + density;
+        return "display:" + displayWidth + "," + displayHeight + ", actual:" + width + "," + height + ",scale:" + density;
     }
 }

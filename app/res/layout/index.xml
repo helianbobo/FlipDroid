@@ -4,11 +4,11 @@
                 style="@style/Index">
 
     <LinearLayout android:orientation="vertical" style="@style/Index">
-
-        <com.goal98.flipdroid.view.TopBar android:id="@+id/topbar"
+        <com.goal98.flipdroid.view.TopBar android:id="@+id/topbar" wp:rightButtonImage="@drawable/like"
                                           android:layout_height="wrap_content"
                                           android:layout_width="fill_parent"
                                           wp:title="@string/my_feed"></com.goal98.flipdroid.view.TopBar>
+
 
 
         <com.handmark.pulltorefresh.library.PullToRefreshListView android:layout_height="fill_parent"

@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
@@ -93,24 +94,25 @@ public abstract class ExpandableArticleView extends ArticleView {
             layoutParams.weight = 100;
             contentViewWrapper.addView(contentView, layoutParams);
         } else {
-            imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), this.getResources().getDrawable(Constants.DEFAULT_PIC), this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage);
+            imageView = new WebImageView(this.getContext(), article.getImageUrl().toExternalForm(), this.getResources().getDrawable(Constants.DEFAULT_PIC), this.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage, ImageView.ScaleType.CENTER);
 //            imageView.setRoundImage(true);
 //            imageView.imageView.setTag(article.getImageUrl().toExternalForm());
-            imageView.setBackgroundResource(R.drawable.border);
+//            imageView.setBackgroundResource(R.drawable.border);
 
-            if (article.getHeight() == 0) {
-                imageView.setDefaultWidth(deviceInfo.getWidth() / 2 - 8);
-                imageView.setDefaultHeight(mss.getImageHeightThumbnailView());  //(largeScreen ? 15 : smallScreen ? 0 : 5)
-            } else {
-                imageView.setDefaultWidth(deviceInfo.getWidth());
-                imageView.setDefaultHeight(deviceInfo.getHeight() - article.getTextHeight() - 30);
-            }
+//            if (article.getHeight() == 0) {
+//                imageView.setDefaultWidth(deviceInfo.getWidth() / 2 - 8);
+//                imageView.setDefaultHeight(mss.getImageHeightThumbnailView());  //(largeScreen ? 15 : smallScreen ? 0 : 5)
+//            } else {
+//                imageView.setDefaultWidth(deviceInfo.getWidth());
+//                imageView.setDefaultHeight(deviceInfo.getHeight() - article.getTextHeight() - 30);
+//            }
 
 //            if (article.getImage() != null && !article.getImage().isRecycled()) {
 //                imageView.handleImageLoaded(article.getImage(), null);
 //            } else {
 //                article.addNotifier(new ExpandableArticleViewNotifier());
 //            }
+            
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -120,7 +122,7 @@ public abstract class ExpandableArticleView extends ArticleView {
 
             if (article.getHeight() == 0 ) {
                 LinearLayout.LayoutParams layoutParamsText = new LinearLayout.LayoutParams(0, mss.getImageHeightThumbnailView());
-                LinearLayout.LayoutParams layoutParamsImage = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.FILL_PARENT);
+                LinearLayout.LayoutParams layoutParamsImage = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
                 layoutParamsText.weight = 50;
                 layoutParamsImage.weight = 50;
 
@@ -152,9 +154,7 @@ public abstract class ExpandableArticleView extends ArticleView {
         int maxLines = mss.getMaxLineInThumbnailView();
         int[] paddings = mss.getTextViewPaddingInThumbnailView();
 
-        int textSize = 0;
-        textSize = mss.getTextViewTextSize();
-
+        int textSize = mss.getTextViewTextSize();
 
         contentView.getPaint().setAntiAlias(true);
         contentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);

@@ -37,6 +37,7 @@ public class RefetchSourceWithImage {
                     try {
                         TikaResponse response = client.fire(request);
                         System.out.println(response.getTitle());
+                        System.out.println(response.getContent());
                     } catch (TikaException e) {
                         e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                     } catch (TException e) {

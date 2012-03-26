@@ -37,9 +37,9 @@ public final class BlockProximityFusion implements BoilerpipeFilter {
     private final int maxBlocksDistance;
 
     public static final BlockProximityFusion MAX_DISTANCE_1 = new BlockProximityFusion(
-            1, false);
+            2, false);
     public static final BlockProximityFusion MAX_DISTANCE_1_CONTENT_ONLY = new BlockProximityFusion(
-            1, true);
+            2, true);
 
     private final boolean contentOnly;
 

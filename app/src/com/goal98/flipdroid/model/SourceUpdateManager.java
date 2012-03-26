@@ -44,8 +44,7 @@ public class SourceUpdateManager {
         updateSourceList(block);
     }
 
-    public void updateContent(boolean block) {
-        Cursor c = sourceDB.findAll();
+    public void updateContentGivenCursor(boolean block, Cursor c){
         ManagedCursor mc = new ManagedCursor(c);
         final List<CachedArticleSource> cachedArticleSources = new ArrayList<CachedArticleSource>();
         mc.each(new EachCursor() {
@@ -66,7 +65,6 @@ public class SourceUpdateManager {
                 }
             }
         });
-        this.sourceDB.close();
         Thread[] threads = new Thread[cachedArticleSources.size()];
         for (int i = 0; i < cachedArticleSources.size(); i++) {
             CachedArticleSource cachedArticleSource = cachedArticleSources.get(i);
@@ -84,6 +82,14 @@ public class SourceUpdateManager {
                 }
             }
         }
+    }
+    public void updateContentByName(boolean block, String name){
+        updateContentGivenCursor(block, sourceDB.findSourceByName(name));
+    }
+
+    public void updateContent(boolean block) {
+        Cursor c = sourceDB.findAll();
+        updateContentGivenCursor(block, c);
     }
 
     public void updateSourceList(boolean block) {

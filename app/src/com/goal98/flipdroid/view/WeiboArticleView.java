@@ -80,7 +80,8 @@ public class WeiboArticleView extends ExpandableArticleView {
         this.portraitView = (WebImageView) findViewById(R.id.portrait2);
 
         authorView.setText(article.getAuthor());
-        createDateView.setText(PrettyTimeUtil.getPrettyTime(this.getContext(), article.getCreatedDate()));
+        String localeStr = this.getContext().getString(R.string.locale);
+        createDateView.setText(PrettyTimeUtil.getPrettyTime(localeStr, article.getCreatedDate()));
 
         if (article.getPortraitImageUrl() != null)
             portraitView.setImageUrl(article.getPortraitImageUrl().toString());

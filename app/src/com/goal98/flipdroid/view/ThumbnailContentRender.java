@@ -44,6 +44,7 @@ public class ThumbnailContentRender {
 
 
         contentView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSize);
+         contentView.setLineSpacing(0,1.1f);
         contentView.setPadding(paddings[0], paddings[1], paddings[2], paddings[3]);
         contentView.setTextColor(Constants.LOADED_TEXT_COLOR);
         contentView.setGravity(Gravity.CENTER_VERTICAL);

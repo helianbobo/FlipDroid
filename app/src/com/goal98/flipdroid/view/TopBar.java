@@ -94,7 +94,7 @@ public class TopBar extends LinearLayout {
         tableRow = (TableRow) this.findViewById(R.id.topbar_button);
     }
 
-    public void addButton(int type, int resourceId, OnClickListener listener) {
+    public View addButton(int type, int resourceId, OnClickListener listener) {
         View button = inflate(this.getContext(), R.layout.include_header_button, null);
         button.setClickable(true);
         if (type == IMAGE) {
@@ -111,8 +111,16 @@ public class TopBar extends LinearLayout {
         }
         button.findViewById(R.id.header_btn_container).setOnClickListener(listener);
         tableRow.addView(button);
+        return button;
+    }
+    
+    public void removeButton(View button){
+        tableRow.removeView(button);
     }
 
+    public void reset(){
+        tableRow.removeAllViews();
+    }
     public TableRow getTableRow() {
         return tableRow;
     }

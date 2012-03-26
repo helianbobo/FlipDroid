@@ -1,5 +1,7 @@
 package com.goal98.flipdroid.multiscreen;
 
+import android.util.DisplayMetrics;
+import android.widget.TextView;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.util.DeviceInfo;
 
@@ -40,7 +42,7 @@ public class WGA800 extends MultiScreenSupport {
     }
 
     public int getImageHeightThumbnailView() {
-        return (getTextViewTextSize() + 15) * getMaxLineInThumbnailView();  //(largeScreen ? 15 : smallScreen ? 0 : 5)
+        return (int) (((getTextViewTextSize()+3)*deviceInfo.getDensity()) * getMaxLineInThumbnailView());  //(largeScreen ? 15 : smallScreen ? 0 : 5)
     }
 
     public int getThumbnailMaxTitleLength() {

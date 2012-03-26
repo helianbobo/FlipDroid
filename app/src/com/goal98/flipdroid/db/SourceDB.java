@@ -4,9 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import com.goal98.flipdroid.model.RecommendSource;
 import com.goal98.flipdroid.model.Source;
+import com.goal98.flipdroid.util.EachCursor;
+import com.goal98.flipdroid.util.ManagedCursor;
 import com.goal98.tika.common.TikaConstants;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,5 +91,13 @@ public class SourceDB extends AbstractDB {
     public void removeSourceByName(String sourceName) {
         SQLiteDatabase db = helper.getWritableDatabase();
         db.delete(Source.TABLE_NAME, Source.KEY_SOURCE_NAME + " = ? ", new String[]{sourceName});
+    }
+
+    public Cursor findSourceByName(final String name) {
+        String[] projection = null;
+        String selection = Source.KEY_SOURCE_NAME + " = ? ";
+        String[] selectionArgs = {name};
+
+        return query(projection, selection, selectionArgs, null);
     }
 }

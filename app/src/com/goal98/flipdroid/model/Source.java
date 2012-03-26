@@ -18,7 +18,7 @@ public class Source {
     private String name;
     private String id;
     private String desc;
-    private String accountType;
+    private String sourceType;
     private String imageUrl;
     private String contentUrl;
     private Date updateTime;
@@ -57,12 +57,12 @@ public class Source {
         this.imageUrl = imageUrl;
     }
 
-    public String getAccountType() {
-        return accountType;
+    public String getSourceType() {
+        return sourceType;
     }
 
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
+    public void setSourceType(String sourceType) {
+        this.sourceType = sourceType;
     }
 
     public String getDesc() {

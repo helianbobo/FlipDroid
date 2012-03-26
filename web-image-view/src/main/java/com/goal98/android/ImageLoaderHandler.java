@@ -100,4 +100,14 @@ public class ImageLoaderHandler extends Handler {
     public void setCustomImageLoaderHandler(MyHandler preloadImageLoaderHandler) {
         this.preloadImageLoaderHandler = preloadImageLoaderHandler;
     }
+
+    private WebImageView.OnImageLoadedListener onImageLoadedListener;
+
+    public WebImageView.OnImageLoadedListener getOnImageLoadedListener() {
+        return onImageLoadedListener;
+    }
+
+    public void setOnImageLoadedListener(WebImageView.OnImageLoadedListener onImageLoadedListener) {
+        this.onImageLoadedListener = onImageLoadedListener;
+    }
 }

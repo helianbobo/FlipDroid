@@ -1,15 +1,7 @@
 package com.goal98.flipdroid.model;
 
-import com.goal98.flipdroid.client.FeedJSONParser;
-import com.goal98.flipdroid.client.TikaClientException;
-import com.goal98.flipdroid.client.TikaExtractResponse;
 import com.goal98.flipdroid.db.RSSURLDB;
-import com.goal98.flipdroid.db.SourceContentDB;
-import com.goal98.flipdroid.model.cachesystem.SourceCacheObject;
-import com.goal98.tika.common.TikaConstants;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
 
 /**
@@ -25,9 +17,19 @@ public class AllLocalArticleSource implements ArticleSource {
     private boolean isNoMoreToLoad;
     private int offset = 0;
     private int totalNumber = 0;
+    private String from;
+    private int inDaysFrom;
+    private int inDaysTo;
 
     public AllLocalArticleSource(RSSURLDB contentDB) {
+        this(contentDB, null, -1, -1);
+    }
+
+    public AllLocalArticleSource(RSSURLDB contentDB, String from, int inDaysFrom, int inDaysTo) {
         this.contentDB = contentDB;
+        this.from = from;
+        this.inDaysFrom = inDaysFrom;
+        this.inDaysTo = inDaysTo;
     }
 
     public Date lastModified() {
@@ -40,18 +42,27 @@ public class AllLocalArticleSource implements ArticleSource {
 
     public boolean loadMore() {
         contentDB.open();
-        if(totalNumber == 0){
-            totalNumber = contentDB.countByStatus(RSSURLDB.STATUS_NEW);
+        List<Article> loadedArticles = null;
+        if (from == null) {
+            if (totalNumber == 0) {
+                totalNumber = contentDB.countByStatus(RSSURLDB.STATUS_NEW, inDaysFrom, inDaysTo);
+            }
+
+            loadedArticles = contentDB.findAllByStatus(RSSURLDB.STATUS_NEW, offset, inDaysFrom, inDaysTo);
+        } else {
+            if (totalNumber == 0) {
+                totalNumber = contentDB.countByStatus(RSSURLDB.STATUS_NEW, from, inDaysFrom, inDaysTo);
+            }
+            loadedArticles = contentDB.findAllByStatus(RSSURLDB.STATUS_NEW, from, offset, inDaysFrom, inDaysTo);
         }
-        List<Article> loadedArticles = contentDB.findAllByStatus(RSSURLDB.STATUS_NEW, offset);
         contentDB.close();
-        if(loadedArticles==null){
+        if (loadedArticles == null) {
             isNoMoreToLoad = true;
             return false;
         }
 
         offset += RSSURLDB.recordPerPage;
-        if(offset > totalNumber){
+        if (offset > totalNumber) {
             isNoMoreToLoad = true;
         }
         this.articles.addAll(loadedArticles);
@@ -71,6 +82,6 @@ public class AllLocalArticleSource implements ArticleSource {
     public boolean reset() {
         articles.clear();
         offset = 0;
-        return isNoMoreToLoad=false;
+        return isNoMoreToLoad = false;
     }
 }

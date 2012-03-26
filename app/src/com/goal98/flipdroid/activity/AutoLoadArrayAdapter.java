@@ -36,7 +36,8 @@ public abstract class AutoLoadArrayAdapter extends ArrayAdapter implements Adapt
         inflater = LayoutInflater.from(activity);
         this.progressView = inflater.inflate(progressDrawableResourceId,
                 listView, false);
-        setNoDataView(nodataview, noitemListener);
+        if(nodataview!=-1)
+            setNoDataView(nodataview, noitemListener);
         //if (listView.getOnItemClickListener() == null)
         listView.setOnItemClickListener(this);
 
@@ -74,6 +75,7 @@ public abstract class AutoLoadArrayAdapter extends ArrayAdapter implements Adapt
     public void forceLoad(boolean showLoading) {
         autoLoadScrollListener.load(showLoading);
     }
+
     public void forceLoad() {
         forceLoad(true);
     }
@@ -105,7 +107,7 @@ public abstract class AutoLoadArrayAdapter extends ArrayAdapter implements Adapt
         if (isLastItem(position)) {
             if (items.size() == 0 && isLoadingData)
                 return progressView;
-            if ((items.size() == 0 || noMoreToLoad) && !isLoadingData)
+            if (nodataitem !=null && (items.size() == 0 || noMoreToLoad) && !isLoadingData)
                 return nodataitem;
 
             return progressView;

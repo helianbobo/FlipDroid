@@ -54,6 +54,7 @@ public class DefaultTagActionMap extends TagActionMap {
         setTagAction("EM", CommonTagActions.TA_INLINE_NO_WHITESPACE);
         setTagAction("STRONG", CommonTagActions.TA_INLINE_NO_WHITESPACE);
         setTagAction("SPAN", CommonTagActions.TA_INLINE_NO_WHITESPACE);
+        setTagAction("LI", CommonTagActions.TA_INLINE_NO_WHITESPACE);
 
         // New in 1.1 (especially to improve extraction quality from Wikipedia etc.)
         setTagAction("SUP", CommonTagActions.TA_INLINE_NO_WHITESPACE);
