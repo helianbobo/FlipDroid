@@ -2,17 +2,14 @@ package com.goal98.flipdroid.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Paint;
-import android.graphics.PaintFlagsDrawFilter;
 import android.os.Handler;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 import com.goal98.android.WebImageView;
-import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.model.Article;
-import com.goal98.flipdroid.util.DeviceInfo;
+import com.srz.androidtools.util.DeviceInfo;
 import com.goal98.flipdroid.util.NetworkUtil;
 
 public abstract class ArticleView extends ViewSwitcher {

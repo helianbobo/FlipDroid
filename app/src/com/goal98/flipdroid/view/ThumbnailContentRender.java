@@ -6,7 +6,7 @@ import android.widget.TextView;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.multiscreen.MultiScreenSupport;
 import com.goal98.flipdroid.util.Constants;
-import com.goal98.flipdroid.util.DeviceInfo;
+import com.srz.androidtools.util.DeviceInfo;
 
 /**
  * Created by IntelliJ IDEA.

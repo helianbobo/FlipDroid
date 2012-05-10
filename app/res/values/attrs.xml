@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
     <declare-styleable name="webimage">
         <attr name="autoLoad" format="boolean"/>
         <attr name="roundImage" format="boolean"/>
@@ -15,62 +17,16 @@
         <attr name="toLoadFromInternet" format="boolean"/>
     </declare-styleable>
 
-    <declare-styleable name="PullToRefresh">
-        <attr name="adapterViewBackground" format="reference|color"/>
-        <attr name="headerBackground" format="reference|color"/>
-        <attr name="headerTextColor" format="color"/>
-        <attr name="mode">
-            <flag name="pullDownFromTop" value="0x1"/>
-            <flag name="pullUpFromBottom" value="0x2"/>
-        </attr>
-    </declare-styleable>
+
 
     <declare-styleable name="topbar">
         <attr name="leftButtonLabel" format="string"/>
         <attr name="leftButtonImage" format="reference"/>
         <attr name="rightButtonImage" format="reference"/>
-        <attr name="title" format="string"/>
+        <attr name="titleText" format="string"/>
         <attr name="rightButtonLabel" format="string"/>
     </declare-styleable>
 
-    <declare-styleable name="ViewPagerTabs">
 
-        <attr
-                name="backgroundColor"
-                format="color"/>
-        <attr
-                name="backgroundColorPressed"
-                format="color"/>
-        <attr
-                name="textColor2"
-                format="color"/>
-        <attr
-                name="textColorCenter"
-                format="color"/>
-        <attr
-                name="lineColorCenter"
-                format="color"/>
-        <attr
-                name="lineHeight"
-                format="dimension"/>
-        <attr
-                name="tabPaddingLeft"
-                format="dimension"/>
-        <attr
-                name="tabPaddingTop"
-                format="dimension"/>
-        <attr
-                name="tabPaddingRight"
-                format="dimension"/>
-        <attr
-                name="tabPaddingBottom"
-                format="dimension"/>
-        <attr
-                name="textSize2"
-                format="dimension"/>
-        <attr
-                name="outsideOffset"
-                format="dimension"/>
-    </declare-styleable>
 
 </resources>

@@ -3,10 +3,12 @@ package com.goal98.flipdroid.view;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
+import com.goal98.flipdroid.db.SourceDB;
 
 import java.util.List;
 import java.util.Map;
@@ -22,13 +24,14 @@ public class SourceExpandableListAdapter extends SimpleExpandableListAdapter {
     private List<? extends List<? extends Map<String, String>>> mChildData;
     private String[] mChildFrom;
     private int[] mChildTo;
+    private SourceDB sourceDB;
 
-
-    public SourceExpandableListAdapter(Context context, List<? extends Map<String, ?>> groupData, int groupLayout, String[] groupFrom, int[] groupTo, List<? extends List<? extends Map<String, ?>>> childData, int childLayout, String[] childFrom, int[] childTo) {
+    public SourceExpandableListAdapter(Context context, List<? extends Map<String, ?>> groupData, int groupLayout, String[] groupFrom, int[] groupTo, List<? extends List<? extends Map<String, ?>>> childData, int childLayout, String[] childFrom, int[] childTo, SourceDB sourceDB) {
         super(context, groupData, groupLayout, groupFrom, groupTo, childData, childLayout, childFrom, childTo);
         mChildData = (List<? extends List<? extends Map<String, String>>>) childData;
         mChildFrom = childFrom;
         mChildTo = childTo;
+        this.sourceDB = sourceDB;
     }
 
     public SourceExpandableListAdapter(Context context, List<? extends Map<String, ?>> groupData, int expandedGroupLayout, int collapsedGroupLayout, String[] groupFrom, int[] groupTo, List<? extends List<? extends Map<String, ?>>> childData, int childLayout, String[] childFrom, int[] childTo) {
@@ -46,29 +49,37 @@ public class SourceExpandableListAdapter extends SimpleExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-
         View v;
         if (convertView == null) {
             v = newChildView(isLastChild, parent);
         } else {
             v = convertView;
         }
-//        SourceItemViewBinder sourceItemViewBinder = new SourceItemViewBinder();
-//        sourceItemViewBinder.setViewValue();
+
         bindView(v, mChildData.get(groupPosition).get(childPosition), mChildFrom, mChildTo, groupPosition, childPosition);
         return v;
     }
 
     private void bindView(View v, Map<String, String> stringMap, String[] mChildFrom, int[] mChildTo, int groupPosition, int childPosition) {
+
         WebImageView image = (WebImageView) v.findViewById(R.id.source_image);
         TextView sourceName = (TextView) v.findViewById(R.id.source_name);
         TextView sourceDesc = (TextView) v.findViewById(R.id.source_desc);
         TextView sourceType = (TextView) v.findViewById(R.id.source_type);
+        ImageView ticker = (ImageView) v.findViewById(R.id.ticker);
+        String sn = stringMap.get(mChildFrom[0]);
 
+        if (sourceDB.findSourceByName(sn).getCount() > 0) {
+            ticker.setVisibility(View.VISIBLE);
+        } else {
+            ticker.setVisibility(View.INVISIBLE);
+        }
+        image.setInAnimation(null);
         image.setImageUrl(stringMap.get(mChildFrom[2]));
         image.loadImage();
-        sourceName.setText(stringMap.get(mChildFrom[0]));
+        sourceName.setText(sn);
         sourceDesc.setText(stringMap.get(mChildFrom[1]));
         sourceType.setText(stringMap.get(mChildFrom[3]));
+
     }
 }

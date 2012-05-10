@@ -13,14 +13,11 @@ import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.Source;
-import com.goal98.flipdroid.model.google.RssParser;
-import com.goal98.flipdroid.util.DeviceInfo;
-import com.goal98.flipdroid.util.EachCursor;
-import com.goal98.flipdroid.util.ManagedCursor;
+import com.srz.androidtools.database.EachCursor;
+import com.srz.androidtools.util.DeviceInfo;
+import com.srz.androidtools.util.ManagedCursor;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -34,7 +31,7 @@ public class SourceItemArrayAdapter<T> extends ArrayAdapter<SourceItem> {
     private LayoutInflater inflator;
     private DeviceInfo deviceInfo;
 
-    public SourceItemArrayAdapter(Context indexActivity, int sourceItemLayoutResource,SourceDB sourceDB, DeviceInfo deviceInfo) {
+    public SourceItemArrayAdapter(Context indexActivity, int sourceItemLayoutResource, SourceDB sourceDB, DeviceInfo deviceInfo) {
         super(indexActivity, sourceItemLayoutResource);
 
         Cursor sourceCursor = sourceDB.findAll();
@@ -113,9 +110,15 @@ public class SourceItemArrayAdapter<T> extends ArrayAdapter<SourceItem> {
         item.setSourceItemView(sourceItemView);
         sourceNameTV.setText(item.getSourceName());
         sourceTypeTV.setText(item.getSourceType());
-        sourceDescTV.setText(item.getSourceDesc());
+        if (sourceDescTV != null)
+            sourceDescTV.setText(item.getSourceDesc());
         sourceURLTV.setText(item.getSourceURL());
 
         return sourceItemView;
+    }
+
+    @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        return getView(position, convertView, parent);    //To change body of overridden methods use File | Settings | File Templates.
     }
 }

@@ -12,6 +12,8 @@ import com.goal98.flipdroid.view.FixedPagingStrategy;
 import com.goal98.flipdroid.view.NoMoreArticleListener;
 import com.goal98.flipdroid.view.Page;
 import com.goal98.flipdroid.view.PagingStrategy;
+import com.srz.androidtools.autoloadlistview.NoSuchPageException;
+import com.srz.androidtools.autoloadlistview.PaginationLoaderService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +73,7 @@ public class ArticleLoader implements PaginationLoaderService, SourceUpdateable 
     }
 
 
-    public List<ArticleDetailInfo> load(int pageNumber, int count) throws NoSuchPageException {
+    public List<ArticleDetailInfo> load(int pageNumber) throws NoSuchPageException {
         pageNumber--;
         List<Article> articles = null;
         Page p;
@@ -80,8 +82,6 @@ public class ArticleLoader implements PaginationLoaderService, SourceUpdateable 
             articles = repo.getPage(pageNumber).getArticleList();
         } catch (NoMorePageException e) {
             articles = onNoMorePage(pageNumber).getArticleList();
-        } catch (NoSuchPageException e1) {
-            throw e1;
         } catch (NoMoreStatusException e) {
             throw new NoSuchPageException("");
         } catch (Exception e) {
@@ -104,8 +104,6 @@ public class ArticleLoader implements PaginationLoaderService, SourceUpdateable 
             repo.refreshAndPage(currentToken);
             try {
                 page = repo.getPage(pageNumber);
-            } catch (NoSuchPageException e1) {
-                e1.printStackTrace();
             } catch (NoMorePageException e) {
                 page = onNoMorePage(pageNumber);
             } catch (Exception e2) {

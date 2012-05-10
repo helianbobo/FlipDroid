@@ -5,8 +5,8 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.srz.androidtools.viewpagertitle.ViewPagerTabProvider;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,7 +16,7 @@ import java.util.List;
  * Time: 下午9:34
  * To change this template use File | Settings | File Templates.
  */
-public class StreamPagerAdapter extends PagerAdapter implements ViewPagerTabProvider{
+public class StreamPagerAdapter extends PagerAdapter implements ViewPagerTabProvider {
     private List<PullToRefreshListView> ptrs;
     private List<String> titles;
     private List<String> icons;

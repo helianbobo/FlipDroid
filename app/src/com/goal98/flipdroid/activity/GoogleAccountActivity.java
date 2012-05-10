@@ -12,7 +12,7 @@ import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.google.GReader;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
-import com.goal98.flipdroid.util.DeviceInfo;
+import com.srz.androidtools.util.DeviceInfo;
 import com.goal98.tika.common.TikaConstants;
 
 

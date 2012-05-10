@@ -4,10 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint.Align;
 import android.text.TextPaint;
-import android.util.Log;
 import android.view.View;
-import com.goal98.flipdroid.activity.FlipdroidApplications;
-import com.goal98.flipdroid.util.DeviceInfo;
+import com.srz.androidtools.util.DeviceInfo;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -22,7 +22,8 @@ import com.goal98.flipdroid.model.cachesystem.CacheToken;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
-import com.goal98.flipdroid.util.*;
+import com.goal98.flipdroid.util.NetworkUtil;
+import com.goal98.flipdroid.util.SinaAccountUtil;
 import com.goal98.flipdroid.view.PopupWindowManager;
 import com.goal98.flipdroid.view.TopBar;
 import com.goal98.tika.common.TikaConstants;
@@ -30,6 +31,9 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.mobclick.android.MobclickAgent;
 import com.mobclick.android.UmengUpdateListener;
+import com.srz.androidtools.database.EachCursor;
+import com.srz.androidtools.util.DeviceInfo;
+import com.srz.androidtools.util.ManagedCursor;
 
 import java.util.*;
 

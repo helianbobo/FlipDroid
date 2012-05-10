@@ -1,39 +1,20 @@
 package com.goal98.flipdroid.activity;
 
-import android.app.Activity;
 import android.app.ActivityGroup;
-import android.app.TabActivity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.PagerTitleStrip;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.TabHost;
 import com.goal98.flipdroid.R;
-import com.goal98.flipdroid.db.RSSURLDB;
-import com.goal98.flipdroid.db.RecommendSourceDB;
-import com.goal98.flipdroid.db.SourceContentDB;
-import com.goal98.flipdroid.db.SourceDB;
-import com.goal98.flipdroid.model.SourceUpdateManager;
-import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
-import com.goal98.flipdroid.model.cachesystem.SourceCache;
-import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
-import com.goal98.flipdroid.util.AlarmSender;
-import com.goal98.flipdroid.util.DeviceInfo;
 import com.goal98.flipdroid.view.PopupWindowManager;
 import com.goal98.flipdroid.view.TopBar;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
 

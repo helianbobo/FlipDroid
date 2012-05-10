@@ -1,9 +1,8 @@
 package com.goal98.flipdroid.view;
 
 import android.app.Activity;
-import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.model.Article;
-import com.goal98.flipdroid.util.DeviceInfo;
+import com.srz.androidtools.util.DeviceInfo;
 
 import java.util.LinkedList;
 import java.util.List;

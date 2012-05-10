@@ -1,21 +1,13 @@
 package com.goal98.flipdroid.activity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.*;
 import android.widget.*;
 import com.goal98.flipdroid.R;
-import com.goal98.flipdroid.db.RSSURLDB;
-import com.goal98.flipdroid.db.RecommendSourceDB;
-import com.goal98.flipdroid.db.SourceContentDB;
-import com.goal98.flipdroid.db.SourceDB;
-import com.goal98.flipdroid.model.SourceUpdateManager;
-import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.multiscreen.MultiScreenSupport;
-import com.goal98.flipdroid.util.AlarmSender;
-import com.goal98.flipdroid.util.DeviceInfo;
+import com.srz.androidtools.util.DeviceInfo;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 /**

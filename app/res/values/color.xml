@@ -34,6 +34,7 @@
 
     <color name="article_title_color">#1872b7</color>
     <color name="background_color">#f4f4f2</color>
+    <color name="transparent">#00f4f4f2</color>
     <color name="content_background">#f4f4f2</color>
 
 </resources>

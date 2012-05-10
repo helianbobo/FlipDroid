@@ -1,6 +1,6 @@
 package com.goal98.flipdroid.activity;
 
-import com.goal98.flipdroid.model.NoSuchPageException;
+import com.srz.androidtools.autoloadlistview.NoSuchPageException;
 
 import java.util.List;
 

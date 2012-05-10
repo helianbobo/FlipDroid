@@ -1,13 +1,14 @@
 package com.goal98.flipdroid.view;
 
+import android.text.method.LinkMovementMethod;
+
 /**
  * Created by IntelliJ IDEA.
  * User: jleo
- * Date: 12-3-24
- * Time: 上午2:03
+ * Date: 12-3-28
+ * Time: 下午5:44
  * To change this template use File | Settings | File Templates.
  */
-public interface HeavyUIOperater {
+public class NoScrollLinkMovementMethod extends LinkMovementMethod {
 
-    void heavyUIOperation();
 }

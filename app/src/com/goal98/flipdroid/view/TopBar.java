@@ -5,13 +5,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.multiscreen.MultiScreenSupport;
-import com.goal98.flipdroid.util.DeviceInfo;
+import com.srz.androidtools.util.DeviceInfo;
 
 /**
  * Created by IntelliJ IDEA.
@@ -54,8 +53,8 @@ public class TopBar extends LinearLayout {
             rightButtonImage = array.getDrawable(R.styleable.topbar_rightButtonImage);
 
         String title = null;
-        if (array.hasValue(R.styleable.topbar_title))
-            title = array.getString(R.styleable.topbar_title);
+        if (array.hasValue(R.styleable.topbar_titleText))
+            title = array.getString(R.styleable.topbar_titleText);
 
 //        ImageButton leftButton = (ImageButton)topbarLL.findViewById(R.id.leftButton);
 //        ImageButton rightButton = (ImageButton)topbarLL.findViewById(R.id.rightButton);

@@ -46,6 +46,8 @@ import com.goal98.flipdroid.util.*;
 import com.goal98.flipdroid.view.*;
 import com.goal98.tika.common.TikaConstants;
 import com.mobclick.android.MobclickAgent;
+import com.srz.androidtools.util.DeviceInfo;
+import com.srz.androidtools.util.StopWatch;
 import weibo4j.WeiboException;
 
 import java.util.concurrent.*;
@@ -231,15 +233,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid.model
         sourceName = (String) getIntent().getExtras().get("sourceName");
         contentUrl = (String) getIntent().getExtras().get("contentUrl");
 
-        ////Log.v(TAG, "sourceImageURL:" + sourceImageURL);
         setContentView(R.layout.main);
         container = (ViewGroup) findViewById(R.id.pageContainer);
 
-        /*container.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-
-            }
-        });*/
         toLoadImage = NetworkUtil.toLoadImage(PageActivity.this);
         pageIndexView = (PageIndexView) findViewById(R.id.pageIndex);
         bottomBar = (HeaderView) findViewById(R.id.header);

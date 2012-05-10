@@ -1,20 +1,12 @@
 package it.tika;
 
-import com.goal98.tika.common.URLConnectionUtil;
-import com.goal98.tika.common.URLRawRepo;
-import com.goal98.tika.common.URLRepoException;
 import flipdroid.grepper.URLAbstract;
-import org.apache.commons.io.FileUtils;
 import org.apache.thrift.TException;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 
 /**
  * Created by IntelliJ IDEA.
@@ -53,7 +45,7 @@ public class TikaServiceImpl implements TikaService.Iface {
     public static void main(String[] args) throws TException, TikaException, IOException {
         TikaServiceImpl tikaService = new TikaServiceImpl();
         TikaRequest request = new TikaRequest();
-        request.setUrl("http://www.36kr.com/p/92876.html");
+        request.setUrl("http://www.36kr.com/p/100534.html");
         ExecutorService executorService =  Executors.newFixedThreadPool(1);
         TikaResponse response = tikaService.fire(request);
         System.out.println(response.getContent());

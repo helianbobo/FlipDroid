@@ -20,6 +20,9 @@
     <string name="isLastPage">This is the last page</string>
     <string name="allfeeds">All Feeds</string>
     <string name="myfavorite">Favorites</string>
+    <string name="favorite">Favorites</string>
+
+    <string name="share">share</string>
 
     <string name="sina_weibo">Sina Weibo</string>
 
@@ -106,12 +109,13 @@
         <item>Tips 04</item>
     </string-array>
 
-    <string name="pull_to_refresh_pull_label">Pull to update...</string>
-    <string name="pull_to_refresh_release_label">Release to update...</string>
-    <string name="pull_to_refresh_refreshing_label">Updating...</string>
-    <string name="pull_to_refresh_tap_label">Tap to update...</string>
+
     <string name="addShortcut">Add shortcut to desktop</string>
     <string name="in_3_days">Recent</string>
     <string name="in_7_days">In a week</string>
     <string name="in_30_days">In a Month</string>
+
+    <string name="add_source">Add Source</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">save</string>
 </resources>

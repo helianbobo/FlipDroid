@@ -3,77 +3,39 @@
 
 <LinearLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
               xmlns:android="http://schemas.android.com/apk/res/android" style="@style/AccountItem"
-              android:orientation="horizontal" android:padding="2dip" android:background="@drawable/listbg">
+              android:orientation="horizontal" android:padding="2dip" android:background="@drawable/listbg_black">
     <com.goal98.android.WebImageView android:id="@+id/source_image" webimage:autoLoad="false"
                                      android:layout_marginBottom="3dp" android:layout_marginTop="3dp"
                                      android:src="@drawable/portrait" webimage:errorDrawable="@drawable/defaultpic"
-                                     android:layout_height="25dip" webimage:defaultWidth="25"
-                                     webimage:defaultHeight="25" webimage:progressDrawable="@drawable/defaultpic"
+                                     android:layout_height="35dip" webimage:defaultWidth="35"
+                                     webimage:defaultHeight="35" webimage:progressDrawable="@drawable/defaultpic"
                                      webimage:roundImage="true"
                                      android:background="@drawable/border"
-                                     android:layout_width="25dip"></com.goal98.android.WebImageView>
+                                     android:layout_width="35dip"></com.goal98.android.WebImageView>
     <LinearLayout android:id="@+id/background" android:layout_width="fill_parent"
                   android:layout_marginBottom="3dp" android:layout_marginTop="3dp"
                   android:layout_height="wrap_content"
                   android:orientation="vertical">
-        <LinearLayout android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:orientation="horizontal">
 
 
-            <TextView
-                    android:id="@+id/source_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:gravity="center_vertical"
-
-                    android:textColor="@color/black"
-                    android:textSize="14dp"
-                    android:textStyle="bold"
-
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:scrollHorizontally="true"
-                    android:paddingLeft="5dip"
-                    android:singleLine="true"
-                    />
-
-
-            <LinearLayout android:layout_width="fill_parent"
-                          android:layout_height="fill_parent" android:paddingRight="10dip"
-                          android:orientation="horizontal" android:gravity="right|center_vertical">
-
-                <TextView android:layout_width="28dp"
-                        android:layout_height="20dp"
-                        android:gravity="center"
-                        android:text="New"
-                        style="@style/NewArticleNumber"
-                        android:layout_margin="0dp"
-                        android:visibility="gone"
-                        android:id="@+id/indicator"/>
-
-                <ProgressBar android:id="@+id/loadingbar"
-                             android:layout_width="wrap_content"
-                             android:layout_height="wrap_content"
-                             android:indeterminate="true"
-                             android:indeterminateOnly="true"
-                             android:visibility="gone" android:gravity="right"
-                             style="?android:attr/progressBarStyleSmall">
-                </ProgressBar>
-
-            </LinearLayout>
-
-
-        </LinearLayout>
         <TextView
-                android:id="@+id/source_desc"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:textColor="@color/gray"
+                android:id="@+id/source_name"
+                android:layout_width="wrap_content"
+                android:gravity="center_vertical"
+
+                android:textColor="@color/white"
+                android:textSize="14dp"
+                android:textStyle="bold"
+
+                style="?attr/spinnerDropDownItemStyle"
+                android:layout_height="35dip"
+
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
                 android:paddingLeft="5dip"
                 android:singleLine="true"
                 />
-
 
         <TextView
                 android:id="@+id/source_type"

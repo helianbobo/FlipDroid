@@ -308,9 +308,10 @@ public class ImageLoader implements Runnable {
     }
 
     protected byte[] retrieveImageData() throws IOException {
-        String imageUrl = URLEncoder.encode(this.imageUrl);
+        String imageUrl = URLEncoder.encode(this.imageUrl,"utf-8");
         imageUrl = imageUrl.replace("%2F", "/");
         imageUrl = imageUrl.replace("%3A", ":");
+        imageUrl = imageUrl.replace("%3F", "?");
 
         URL url = new URL(imageUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();

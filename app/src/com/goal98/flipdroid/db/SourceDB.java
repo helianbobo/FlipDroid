@@ -4,13 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import com.goal98.flipdroid.model.RecommendSource;
 import com.goal98.flipdroid.model.Source;
-import com.goal98.flipdroid.util.EachCursor;
-import com.goal98.flipdroid.util.ManagedCursor;
 import com.goal98.tika.common.TikaConstants;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 

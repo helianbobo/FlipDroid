@@ -43,7 +43,5 @@ public class Constants {
 
     public static final int COLOR_LINK_TEXT = Color.rgb(36, 145, 255);
 
-    public static final int PAGER_UNDERLINE_COLOR = 0xff93d813;
-    public static final int PAGER_CENTER_TEXT_COLOR = 0xFFFFFFFF;
-    public static final int PAGER_SIDE_TEXT_COLOR = 0xFF646470;
+
 }

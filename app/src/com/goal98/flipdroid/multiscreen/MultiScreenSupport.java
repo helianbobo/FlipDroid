@@ -1,6 +1,6 @@
 package com.goal98.flipdroid.multiscreen;
 
-import com.goal98.flipdroid.util.DeviceInfo;
+import com.srz.androidtools.util.DeviceInfo;
 
 /**
  * Created by IntelliJ IDEA.

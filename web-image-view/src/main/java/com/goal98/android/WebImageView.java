@@ -1,7 +1,6 @@
 package com.goal98.android;
 
 import android.R;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.*;
 import android.graphics.drawable.AnimationDrawable;
@@ -9,19 +8,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 import android.widget.ViewSwitcher;
-
-import java.io.*;
-import java.net.*;
-import java.util.List;
-import java.util.Map;
 
 public class WebImageView extends ViewSwitcher {
 
@@ -430,7 +422,6 @@ public class WebImageView extends ViewSwitcher {
                 width = WebImageView.this.getWidth() == 0 ? WebImageView.this.defaultWidth : WebImageView.this.getWidth();
             }
 
-            ((Activity) (WebImageView.this.getContext())).getWindowManager().getDefaultDisplay().getWidth();
             float scale = 0.0f;
             scale = (float) width / bmpWidth;
 

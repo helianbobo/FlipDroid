@@ -6,7 +6,7 @@
                                       android:layout_height="wrap_content"
                                       android:layout_width="fill_parent"
                                       wp:title="@string/allfeeds"></com.goal98.flipdroid.view.TopBar>
-    <com.goal98.flipdroid.view.ViewPagerTabs
+    <com.srz.androidtools.viewpagertitle.ViewPagerTabs
             android:id="@+id/tabs"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

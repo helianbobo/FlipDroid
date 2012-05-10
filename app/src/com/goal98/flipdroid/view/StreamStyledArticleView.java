@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,16 +12,15 @@ import android.widget.TextView;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.activity.ArticleDetailInfo;
-import com.goal98.flipdroid.activity.DetailInfo;
-import com.goal98.flipdroid.activity.ItemView;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.multiscreen.MultiScreenSupport;
 import com.goal98.flipdroid.util.Constants;
-import com.goal98.flipdroid.util.DeviceInfo;
+import com.srz.androidtools.util.DeviceInfo;
 import com.goal98.flipdroid.util.NetworkUtil;
 import com.goal98.flipdroid.util.PrettyTimeUtil;
+import com.srz.androidtools.autoloadlistview.HeavyUIOperater;
+import com.srz.androidtools.autoloadlistview.ItemView;
 
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -32,7 +30,7 @@ import java.util.concurrent.ExecutorService;
  * Time: 下午8:40
  * To change this template use File | Settings | File Templates.
  */
-public class StreamStyledArticleView extends ItemView implements HeavyUIOperater {
+public class StreamStyledArticleView<T> extends ItemView implements HeavyUIOperater {
     private boolean toLoadImage;
     Handler handler = new Handler();
     private Article article;
@@ -58,7 +56,8 @@ public class StreamStyledArticleView extends ItemView implements HeavyUIOperater
         toLoadImage = NetworkUtil.toLoadImage(this.getContext());
     }
 
-    public void render(DetailInfo di) {
+
+    public void render(Object di) {
         ArticleDetailInfo articleDetailInfo = (ArticleDetailInfo) di;
         article = articleDetailInfo.getArticle();
 

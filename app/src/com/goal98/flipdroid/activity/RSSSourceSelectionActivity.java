@@ -1,13 +1,18 @@
 package com.goal98.flipdroid.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ExpandableListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.*;
+import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
+import com.actionbarsherlock.app.SherlockExpandableListActivity;
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.GroupedSource;
@@ -17,24 +22,24 @@ import com.goal98.flipdroid.model.rss.RssParser;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.view.SourceExpandableListAdapter;
-import com.goal98.flipdroid.view.TopBar;
 import com.goal98.tika.common.TikaConstants;
 import com.mobclick.android.MobclickAgent;
 
-import java.util.*;
+import java.util.Map;
 
-public class RSSSourceSelectionActivity extends ExpandableListActivity {
+public class RSSSourceSelectionActivity extends SherlockExpandableListActivity {
+    ActionMode mMode;
 
     protected SourceDB sourceDB;
     private GroupedSource groupedSource;
-    protected TopBar topbar;
+    private SourceExpandableListAdapter sourceExpandableListAdapter;
 
 
     public void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Sherlock);
+        getSupportActionBar().setTitle(R.string.rssfeeds);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.source_expandable_list);
-        topbar = (TopBar) findViewById(R.id.topbar);//(TopBar) inflator.inflate(R.layout.add_rss_topbar,null);
-        setTitle();
         sourceDB = new SourceDB(this);
         String type = getIntent().getExtras().getString("type");
         groupedSource = new SourceRepo(this).findGroupedSourceByType(type);
@@ -42,9 +47,6 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
         group();
     }
 
-    public void setTitle() {
-        topbar.setTitle(getString(R.string.rssfeeds));
-    }
 
     private void group() {
 
@@ -61,9 +63,8 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
         super.onStart();
         String[] from = new String[]{Source.KEY_SOURCE_NAME, Source.KEY_SOURCE_DESC, Source.KEY_IMAGE_URL, Source.KEY_SOURCE_TYPE};
         int[] to = new int[]{R.id.source_name, R.id.source_desc, R.id.source_image, R.id.source_type, R.id.group_desc};
-        ExpandableListAdapter adapter = new SourceExpandableListAdapter(this, groupedSource.getGroups(), R.layout.group, new String[]{SourceRepo.KEY_NAME_GROUP, SourceRepo.KEY_NAME_SAMPLES}, new int[]{R.id.txt_group, R.id.group_desc}, groupedSource.getChildren(), R.layout.source_item, from, to);
-        setListAdapter(adapter);
-
+        sourceExpandableListAdapter = new SourceExpandableListAdapter(this, groupedSource.getGroups(), R.layout.group, new String[]{SourceRepo.KEY_NAME_GROUP, SourceRepo.KEY_NAME_SAMPLES}, new int[]{R.id.txt_group, R.id.group_desc}, groupedSource.getChildren(), R.layout.source_item, from, to, sourceDB);
+        setListAdapter(sourceExpandableListAdapter);
     }
 
     protected void addExtraItem(GroupedSource groupedSource) {
@@ -72,25 +73,36 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
                 Constants.ADD_CUSTOME_SOURCE,
                 "Add any RSS URL here.", null, this.getString(R.string.custom));
 
-        groupedSource.addGroup(SourceRepo.KEY_NAME_GROUP,this.getString(R.string.custom));
+        groupedSource.addGroup(SourceRepo.KEY_NAME_GROUP, this.getString(R.string.custom));
         groupedSource.addChild(this.getString(R.string.custom), customeSection);
     }
 
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
         super.onChildClick(parent, v, groupPosition, childPosition, id);
+        if (mMode == null) {
+            mMode = startActionMode(new AnActionModeOfEpicProportions(this));
+            View closeButton = findViewById(R.id.abs__action_mode_close_button);
+            if (closeButton != null)
+                closeButton.setVisibility(View.GONE);
+        }
+
         Map<String, String> source = (Map<String, String>) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
         String sourceId = source.get(Source.KEY_SOURCE_ID);
 
         if (Constants.ADD_CUSTOME_SOURCE.equals(sourceId)) {
             doWithAddCustomerSouce();
         } else {
-            sourceDB.insert(source);
-            finish();
+            if (sourceDB.findSourceByName(source.get(Source.KEY_SOURCE_NAME)).getCount() > 0) {
+                sourceDB.removeSourceByName(source.get(Source.KEY_SOURCE_NAME));
+            } else {
+                sourceDB.insert(source);
+            }
+            sourceExpandableListAdapter.notifyDataSetChanged();
         }
+
         return true;
     }
-
 
 
     public void doWithAddCustomerSouce() {
@@ -121,7 +133,7 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
                                     Map<String, String> customeRSSFeed = SourceDB.buildSource(TikaConstants.TYPE_RSS,
                                             feed.title,
                                             null,
-                                            feed.description, feed.imageUrl, url,feedURL.getContext().getString(R.string.custom));
+                                            feed.description, feed.imageUrl, url, feedURL.getContext().getString(R.string.custom));
                                     sourceDB.insert(customeRSSFeed);
 
                                     startActivity(new Intent(RSSSourceSelectionActivity.this, IndexActivity.class));
@@ -151,4 +163,57 @@ public class RSSSourceSelectionActivity extends ExpandableListActivity {
         super.onPause();
         MobclickAgent.onPause(this);
     }
+}
+
+final class AnActionModeOfEpicProportions implements ActionMode.Callback {
+    private Activity activity;
+
+    AnActionModeOfEpicProportions(Activity activity) {
+        this.activity = activity;
+    }
+
+    public static boolean isMODE_NOW() {
+        return MODE_NOW;
+    }
+
+    public static void setMODE_NOW(boolean MODE_NOW) {
+        AnActionModeOfEpicProportions.MODE_NOW = MODE_NOW;
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        MODE_NOW = true;
+
+        menu.add(activity.getString(R.string.save))
+                .setIcon(R.drawable.accept)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        mode.finish();
+
+        String itemName = item.toString();
+        if (itemName.equals(activity.getString(R.string.cancel))) {
+            activity.setResult(Activity.RESULT_CANCELED);
+        } else if (itemName.equals(activity.getString(R.string.save))) {
+            activity.setResult(Activity.RESULT_OK);
+        }
+        activity.finish();
+        return true;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        MODE_NOW = false;
+    }
+
+    public static boolean MODE_NOW = false;
 }

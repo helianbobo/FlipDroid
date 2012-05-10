@@ -6,6 +6,7 @@ import com.goal98.flipdroid.exception.NoMorePageException;
 import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.view.Page;
 import com.goal98.flipdroid.view.PagingStrategy;
+import com.srz.androidtools.autoloadlistview.NoSuchPageException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

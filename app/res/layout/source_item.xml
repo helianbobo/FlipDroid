@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<LinearLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
+<RelativeLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
               xmlns:android="http://schemas.android.com/apk/res/android" style="@style/AccountItem"
               android:orientation="horizontal" android:padding="2dip" android:background="@drawable/listbg">
     <com.goal98.android.WebImageView android:id="@+id/source_image" webimage:autoLoad="false"
@@ -11,11 +11,11 @@
                                      webimage:defaultHeight="50" webimage:progressDrawable="@drawable/defaultpic"
                                      webimage:roundImage="true"
                                      android:background="@drawable/border"
-                                     android:layout_width="50dip"></com.goal98.android.WebImageView>
-    <LinearLayout android:id="@+id/background" android:layout_width="fill_parent"
+                                     android:layout_width="50dip" android:layout_alignParentLeft="true"></com.goal98.android.WebImageView>
+    <LinearLayout android:id="@+id/background" android:layout_width="wrap_content"
                   android:layout_marginBottom="3dp" android:layout_marginTop="3dp"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical">
+                  android:layout_height="wrap_content" android:paddingRight="48dip"
+                  android:orientation="vertical" android:layout_toRightOf="@id/source_image">
         <LinearLayout android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
                       android:orientation="horizontal">
@@ -96,5 +96,12 @@
 
 
     </LinearLayout>
-
-</LinearLayout>
+    <ImageView
+            android:id="@+id/ticker"
+            android:layout_width="36dip"
+            android:layout_height="36dip"
+            android:paddingRight="15dip"
+            android:src="@drawable/selected"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"/>
+</RelativeLayout>

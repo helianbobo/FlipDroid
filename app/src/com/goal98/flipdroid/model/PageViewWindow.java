@@ -7,6 +7,7 @@ import com.goal98.flipdroid.exception.NoMoreStatusException;
 import com.goal98.flipdroid.exception.NoNetworkException;
 import com.goal98.flipdroid.view.Page;
 import com.goal98.flipdroid.view.ThumbnailViewContainer;
+import com.srz.androidtools.autoloadlistview.NoSuchPageException;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;

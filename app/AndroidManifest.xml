@@ -9,76 +9,76 @@
                  android:label="@string/app_name" android:debuggable="true">
         <activity android:name=".activity.CoverActivity" android:screenOrientation="portrait"
                   android:alwaysRetainTaskState="true"
-                  android:theme="@android:style/Theme.Light.NoTitleBar">
+                  >
 
         </activity>
         <activity android:name=".activity.TabActivity" android:screenOrientation="portrait"
                   android:alwaysRetainTaskState="true"
-                  android:theme="@android:style/Theme.Light.NoTitleBar">
+                  >
         </activity>
         <activity android:name=".activity.SendMessageActivity" android:screenOrientation="portrait"
                   android:alwaysRetainTaskState="true"
-                  android:theme="@android:style/Theme.Light.NoTitleBar">
+                  >
 
         </activity>
         <activity android:name=".activity.ConfigActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar">
+                  >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
                 </activity>
         <activity android:name=".activity.PageActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  
                   android:windowSoftInputMode="stateUnspecified|adjustPan">
 
         </activity>
         <activity android:name=".activity.IndexActivity" android:screenOrientation="portrait"
                   android:launchMode="singleTask"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  />
         <activity android:name=".activity.ContentLoadedActivity" android:screenOrientation="portrait"
                   android:launchMode="singleTask"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  />
         <activity android:name=".activity.SiteActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  />
         <activity android:name=".activity.SinaSourceSelectionActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  />
         <activity android:name=".activity.RSSSourceSelectionActivity"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  />
 
         <activity android:name=".activity.SinaAccountActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar">
+                  >
 
         </activity>
         <activity android:name=".activity.AccountListActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  />
         <activity android:name=".activity.BindSinaActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  />
         <activity android:name=".activity.SinaSourceSearchActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  />
         <activity android:name=".activity.FlipdroidSourceActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  />
         <activity android:name=".activity.GoogleAccountActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  />
         <activity android:name=".activity.BaiduSearchSourceActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  />
 
         <activity android:name=".activity.SiteActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  />
         <activity android:name=".activity.BaiduSearchSourceActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  />
         <activity android:name=".activity.TipsActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"/>
+                  />
         <activity android:name=".activity.ViewPagerActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar">
+                  >
 
         </activity>
         <activity android:name=".activity.ContentPagedActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar">
+                  >
 
         </activity>
         <activity android:name=".activity.StreamActivity" android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar">
+                  >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -92,10 +92,8 @@
 
         <meta-data android:value="4ecbd9185270152fdc000033" android:name="UMENG_APPKEY"/>
         <meta-data android:value="DEV" android:name="UMENG_CHANNEL"/>
-
-
     </application>
-    <uses-sdk android:minSdkVersion="4"/>
+    <uses-sdk android:targetSdkVersion="10" android:minSdkVersion="4"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>

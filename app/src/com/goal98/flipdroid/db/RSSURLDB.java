@@ -4,11 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import com.goal98.flipdroid.client.TikaExtractResponse;
 import com.goal98.flipdroid.model.Article;
-import com.goal98.flipdroid.model.Source;
-import com.goal98.flipdroid.model.cachesystem.SourceCacheObject;
-import com.goal98.flipdroid.util.StopWatch;
 
 import java.net.MalformedURLException;
 import java.net.URL;

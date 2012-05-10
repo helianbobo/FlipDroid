@@ -1,6 +1,5 @@
 package com.goal98.flipdroid.view;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 import android.view.View;
@@ -9,10 +8,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
-import com.goal98.flipdroid.activity.FlipdroidApplications;
-import com.goal98.flipdroid.util.DeviceInfo;
-
-import java.net.URL;
+import com.srz.androidtools.util.DeviceInfo;
 
 public class SourceItemViewBinder implements SimpleAdapter.ViewBinder, SimpleCursorAdapter.ViewBinder {
     private DeviceInfo deviceInfo;

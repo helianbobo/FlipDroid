@@ -1,19 +1,25 @@
 package com.goal98.flipdroid.activity;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.PagerTitleStrip;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.SubMenu;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.RSSURLDB;
 import com.goal98.flipdroid.db.RecommendSourceDB;
@@ -23,10 +29,12 @@ import com.goal98.flipdroid.model.SourceUpdateManager;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
-import com.goal98.flipdroid.util.*;
-import com.goal98.flipdroid.view.*;
+import com.goal98.flipdroid.util.AlarmSender;
+import com.goal98.flipdroid.view.StreamPagerAdapter;
+import com.goal98.tika.common.TikaConstants;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.srz.androidtools.util.DeviceInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +48,7 @@ import java.util.Map;
  * Time: 下午3:28
  * To change this template use File | Settings | File Templates.
  */
-public class StreamActivity extends Activity implements SourceUpdateable {
+public class StreamActivity extends SherlockActivity implements SourceUpdateable, ActionBar.OnNavigationListener {
     private Handler handler = new Handler();
     private AddSourcePopupViewBuilder addSourcePopupViewBuilder;
     private DeviceInfo deviceInfo;
@@ -50,13 +58,17 @@ public class StreamActivity extends Activity implements SourceUpdateable {
     private List<ArticleAdapter> adapters = new ArrayList<ArticleAdapter>();
     private boolean windowOpened;
     private Animation hideaction;
-    private LinearLayout sourceSelection;
+    //    private LinearLayout sourceSelection;
     private ListView listView = null;
-    private ViewSwitcher titleSwitcher;
+    private ArrayAdapter sourceAdapter;
+    public static final int THEME = R.style.Theme_Sherlock;
+    //    private ViewSwitcher titleSwitcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Sherlock);
         super.onCreate(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
+
         setContentView(R.layout.stream_by_source);
         deviceInfo = DeviceInfo.getInstance(this);
         addSourcePopupViewBuilder = new AddSourcePopupViewBuilder(StreamActivity.this);
@@ -76,48 +88,48 @@ public class StreamActivity extends Activity implements SourceUpdateable {
             public void onAnimationRepeat(Animation animation) {
             }
         });
-        //隐藏动画
-        hideaction = AnimationUtils.loadAnimation(this, R.anim.stay_out);
-        hideaction.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                StreamActivity.this.sourceSelection.setVisibility(View.GONE);
-                windowOpened = false;
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-        });
+//        //隐藏动画
+//        hideaction = AnimationUtils.loadAnimation(this, R.anim.stay_out);
+//        hideaction.setAnimationListener(new Animation.AnimationListener() {
+//            @Override
+//            public void onAnimationStart(Animation animation) {
+//                //To change body of implemented methods use File | Settings | File Templates.
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//                StreamActivity.this.sourceSelection.setVisibility(View.GONE);
+//                windowOpened = false;
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animation animation) {
+//                //To change body of implemented methods use File | Settings | File Templates.
+//            }
+//        });
 
         HostSetter hostSetter = new HostSetter(this);
         hostSetter.setHost();
         hostSetter = null;
 
-        StreamActivity.this.sourceSelection = (LinearLayout) findViewById(R.id.source_selection);
-        listView = (ListView) findViewById(R.id.source_list);
+//        StreamActivity.this.sourceSelection = (LinearLayout) findViewById(R.id.source_selection);
+//        listView = (ListView) findViewById(R.id.source_list);
         bindSourceSelectionAdapter();
 
-        titleSwitcher = (ViewSwitcher) findViewById(R.id.source_selection_trigger);
-        titleSwitcher.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!windowOpened) {
-                    StreamActivity.this.sourceSelection.setVisibility(View.VISIBLE);
-                    listView.setSelectionAfterHeaderView();
-                    StreamActivity.this.sourceSelection.startAnimation(showaction);
-                } else {
-                    hideWindow();
-                }
-            }
-        });
-        titleSwitcher.setDisplayedChild(0);
+//        titleSwitcher = (ViewSwitcher) findViewById(R.id.source_selection_trigger);
+//        titleSwitcher.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (!windowOpened) {
+//                    StreamActivity.this.sourceSelection.setVisibility(View.VISIBLE);
+//                    listView.setSelectionAfterHeaderView();
+//                    StreamActivity.this.sourceSelection.startAnimation(showaction);
+//                } else {
+//                    hideWindow();
+//                }
+//            }
+//        });
+//        titleSwitcher.setDisplayedChild(0);
 
         String from = null;
         setupMainStream(from);
@@ -150,7 +162,7 @@ public class StreamActivity extends Activity implements SourceUpdateable {
 
             @Override
             public void onPageSelected(int i) {
-                animateTitleTo(mPagerAdapter.getPageTitle(i).toString());
+//                animateTitleTo(mPagerAdapter.getPageTitle(i).toString());
             }
 
             @Override
@@ -192,23 +204,7 @@ public class StreamActivity extends Activity implements SourceUpdateable {
 
         final ArticleAdapter adapter = new ArticleAdapter(this, ptr.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, loaderService, noDataView, new View.OnClickListener() {
             public void onClick(View view) {
-                int[] location = new int[2];
-                view.getLocationOnScreen(location);
-
-                if (mPopupWindow != null && mPopupWindow.isShowing()) {
-                    mPopupWindow.dismiss();
-                    return;
-                }
-
-                mPopupWindow = new PopupWindow(addSourcePopup, ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-                mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
-                mPopupWindow.setOutsideTouchable(true);
-                if (location[1] > deviceInfo.getHeight() / 2) {
-                    mPopupWindow.showAsDropDown(view, 0, -view.getHeight());
-                } else {
-                    mPopupWindow.showAsDropDown(view, 0, 0);
-                }
+                showSourceType(view);
             }
         });
         adapters.add(adapter);
@@ -232,23 +228,7 @@ public class StreamActivity extends Activity implements SourceUpdateable {
 
         final ArticleAdapter adapter = new ArticleAdapter(this, ptr.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, loaderService, noDataView, new View.OnClickListener() {
             public void onClick(View view) {
-                int[] location = new int[2];
-                view.getLocationOnScreen(location);
-
-                if (mPopupWindow != null && mPopupWindow.isShowing()) {
-                    mPopupWindow.dismiss();
-                    return;
-                }
-
-                mPopupWindow = new PopupWindow(addSourcePopup, ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-                mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
-                mPopupWindow.setOutsideTouchable(true);
-                if (location[1] > deviceInfo.getHeight() / 2) {
-                    mPopupWindow.showAsDropDown(view, 0, -view.getHeight());
-                } else {
-                    mPopupWindow.showAsDropDown(view, 0, 0);
-                }
+                showSourceType(view);
             }
         });
         adapters.add(adapter);
@@ -259,6 +239,26 @@ public class StreamActivity extends Activity implements SourceUpdateable {
             }
         });
         ptrs.add(ptr);
+    }
+
+    private void showSourceType(View view) {
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+
+        if (mPopupWindow != null && mPopupWindow.isShowing()) {
+            mPopupWindow.dismiss();
+            return;
+        }
+
+        mPopupWindow = new PopupWindow(addSourcePopup, ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+        mPopupWindow.setOutsideTouchable(true);
+        if (location[1] > deviceInfo.getHeight() / 2) {
+            mPopupWindow.showAsDropDown(view, 0, -view.getHeight());
+        } else {
+            mPopupWindow.showAsDropDown(view, 0, 0);
+        }
     }
 
     public void notifyUpdating(CachedArticleSource cachedArticleSource) {
@@ -275,6 +275,19 @@ public class StreamActivity extends Activity implements SourceUpdateable {
 
     public void notifyUpdateDone(CachedArticleSource cachedArticleSource) {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+        final SourceItem sourceItem = (SourceItem) sourceAdapter.getItem(itemPosition);
+        hideWindow();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setupMainStream(sourceItem.getSourceURL());
+//                animateTitleTo(sourceItem.getSourceName());
+            }
+        }, 500);
+        return true;
     }
 
     private class GetDataTask extends AsyncTask<Void, Void, String[]> {
@@ -342,48 +355,83 @@ public class StreamActivity extends Activity implements SourceUpdateable {
 
         SourceDB sourceDB = new SourceDB(this);
         Cursor sourceCursor = sourceDB.findAll();
-        ListAdapter adapter = null;
         if (sourceCursor.getCount() == 0) {
             sourceCursor.close();
             Map<String, String> noData = new HashMap<String, String>();
-            noData.put("text", getString(R.string.nodata));
-            List emptyBlock = new ArrayList();
-            emptyBlock.add(noData);
-            adapter = new SimpleAdapter(this, emptyBlock, R.layout.nodataitem,
-                    new String[]{"text"},
-                    new int[]{R.id.text});
+            sourceAdapter = new ArrayAdapter(this, R.layout.nodataitem,
+                    R.id.text, new String[]{getString(R.string.nodata)}
+            );
         } else {
-            adapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item_mini, sourceDB, deviceInfo);
+            sourceAdapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item_mini, sourceDB, deviceInfo);
         }
         sourceDB.close();
-        listView.setAdapter(adapter);
-        final ListAdapter finalAdapter = adapter;
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final SourceItem sourceItem = (SourceItem) finalAdapter.getItem(i);
-                hideWindow();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        setupMainStream(sourceItem.getSourceURL());
-                        animateTitleTo(sourceItem.getSourceName());
-                    }
-                }, 500);
+//        listView.setAdapter(sourceAdapter);
+//        final ListAdapter finalAdapter = sourceAdapter;
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                final SourceItem sourceItem = (SourceItem) finalAdapter.getItem(i);
+//                hideWindow();
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        setupMainStream(sourceItem.getSourceURL());
+//                        animateTitleTo(sourceItem.getSourceName());
+//                    }
+//                }, 500);
+//
+//            }
+//        });
 
-            }
-        });
+//        Context context = getSupportActionBar().getThemedContext();
+//        ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.locations, R.layout.sherlock_spinner_item);
+
+        sourceAdapter.setDropDownViewResource(R.layout.source_item_mini);
+
+        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        getSupportActionBar().setListNavigationCallbacks(sourceAdapter, this);
+
+        getSupportActionBar().setTitle("");
     }
 
-    private void animateTitleTo(String sourceName) {
-        int next = (titleSwitcher.getDisplayedChild() + 1) % 2;
-        ((TextView) titleSwitcher.getChildAt(next)).setText(sourceName);
-
-        titleSwitcher.setDisplayedChild(next);
-    }
+//    private void animateTitleTo(String sourceName) {
+//        int next = (titleSwitcher.getDisplayedChild() + 1) % 2;
+//        ((TextView) titleSwitcher.getChildAt(next)).setText(sourceName);
+//
+//        titleSwitcher.setDisplayedChild(next);
+//    }
 
 
     private void hideWindow() {
-        StreamActivity.this.sourceSelection.startAnimation(hideaction);
+//        StreamActivity.this.sourceSelection.startAnimation(hideaction);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //Used to put dark icons on light action bar
+        boolean isLight = THEME == R.style.Theme_Sherlock_Light;
+
+        SubMenu addSubMenu = menu.addSubMenu("Add");
+        addSubMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        addSubMenu.add(R.string.rssfeeds).setIcon(R.drawable.rss);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getTitle().equals(this.getString(R.string.rssfeeds))) {
+            Intent intent = new Intent(StreamActivity.this, RSSSourceSelectionActivity.class);
+            intent.putExtra("type", TikaConstants.TYPE_RSS);
+            StreamActivity.this.startActivityForResult(intent, 100);
+        }
+        return true;
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_CANCELED) {
+            bindSourceSelectionAdapter();
+        }
     }
 }

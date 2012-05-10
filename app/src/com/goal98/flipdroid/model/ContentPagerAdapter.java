@@ -3,7 +3,6 @@ package com.goal98.flipdroid.model;
 import android.app.Activity;
 import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.Spanned;
@@ -14,13 +13,20 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
-import com.goal98.flipdroid.util.*;
+import com.goal98.flipdroid.util.Constants;
+import com.goal98.flipdroid.util.NetworkUtil;
+import com.goal98.flipdroid.util.PrettyTimeUtil;
+import com.goal98.flipdroid.util.TextPaintUtil;
 import com.goal98.tika.common.ImageInfo;
 import com.goal98.tika.common.Paragraphs;
 import com.goal98.tika.common.TikaUIObject;
+import com.srz.androidtools.util.DeviceInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +62,7 @@ public class ContentPagerAdapter extends PagerAdapter {
     }
 
     private void doPage(List<TikaUIObject> paragraphsList) {
-        float maxHeightInPixel = (float) (deviceInfo.getDisplayHeight() - 55 * deviceInfo.getDensity());
+        float maxHeightInPixel = (float) (deviceInfo.getDisplayHeight() - (45 + 31+20) * deviceInfo.getDensity());
 
         contentPage = new ContentPage(maxHeightInPixel);
         final LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -117,7 +123,6 @@ public class ContentPagerAdapter extends PagerAdapter {
                     }
                 }
                 tv.setMovementMethod(LinkMovementMethod.getInstance());
-
                 Spanned spanned = Html.fromHtml(sb.toString());
 
                 Spannable spannable = Spannable.Factory.getInstance().newSpannable(spanned);
@@ -128,36 +133,41 @@ public class ContentPagerAdapter extends PagerAdapter {
                 tv.setAutoLinkMask(Linkify.WEB_URLS);
                 tv.setLinkTextColor(Constants.COLOR_LINK_TEXT);
 
-                int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) (deviceInfo.getDisplayWidth()-40*deviceInfo.getDensity()), View.MeasureSpec.AT_MOST);
+                int widthMeasureSpec = 0;
+                if ("<p><blockquote>".equals(style)) {
+                    widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) (deviceInfo.getDisplayWidth() - (40) * deviceInfo.getDensity()/deviceInfo.getDensity()), View.MeasureSpec.AT_MOST);
+                } else {
+                    widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) (deviceInfo.getDisplayWidth() - (40) * deviceInfo.getDensity()/deviceInfo.getDensity()), View.MeasureSpec.AT_MOST);
+                }
                 tv.measure(widthMeasureSpec, View.MeasureSpec.UNSPECIFIED);
 
                 int height = tv.getMeasuredHeight();
+                System.out.println("height leo:" + height);
 
                 contentHolderView.addView(tv, textLayoutParams);
+                tv.setVerticalScrollBarEnabled(false);
                 float diff = contentPage.overFlowIfPut(height);
-                while(diff != -1){
+                while (diff != -1) {
                     int lines = (int) (tv.getLineCount() - diff / tv.getLineHeight());
-                    if(lines > 0)
+                    if (lines > 0)
                         tv.setMaxLines(lines);
 
                     layout = resetNewPage(maxHeightInPixel, layout);
-
                     TextView clonedTextView = cloneTextView(textLayoutParams, txtSize, uiObject, spannable);
-                    clonedTextView.setPadding(clonedTextView.getPaddingLeft(),-lines*tv.getLineHeight()+clonedTextView.getPaddingTop(),clonedTextView.getPaddingRight(),+clonedTextView.getPaddingBottom());
-//                    contentPage.overFlowIfPut(-lines*tv.getLineHeight());
-
-                    widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) (deviceInfo.getDisplayWidth()-40*deviceInfo.getDensity()), View.MeasureSpec.AT_MOST);
+                    clonedTextView.setPadding(clonedTextView.getPaddingLeft(), -lines * tv.getLineHeight() - 8 + clonedTextView.getPaddingTop(), clonedTextView.getPaddingRight(), +clonedTextView.getPaddingBottom());
+                    clonedTextView.setMovementMethod(LinkMovementMethod.getInstance());
+                    widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) (deviceInfo.getDisplayWidth() - (40 ) * deviceInfo.getDensity()), View.MeasureSpec.AT_MOST);
                     clonedTextView.measure(widthMeasureSpec, View.MeasureSpec.UNSPECIFIED);
 
                     height = clonedTextView.getMeasuredHeight();
-
+                    textLayoutParams.gravity = Gravity.TOP;
                     contentHolderView.addView(clonedTextView, textLayoutParams);
 
                     diff = contentPage.overFlowIfPut(height);
                     tv = clonedTextView;
                 }
-            }
 
+            }
 
             if (uiObject.getType().equals(TikaUIObject.TYPE_IMAGE)) {
                 final ImageInfo imageInfo = ((ImageInfo) uiObject);
@@ -165,30 +175,42 @@ public class ContentPagerAdapter extends PagerAdapter {
                     continue;
                 final String url = imageInfo.getUrl();
 
-
                 int height = imageInfo.getHeight();
                 int width = imageInfo.getWidth();
 
+//                int height = (int) (imageInfo.getHeight()/deviceInfo.getDensity());
+//                int width = (int) (imageInfo.getWidth()/deviceInfo.getDensity());
+
                 int actualWidth = (int) (deviceInfo.getWidth() - 40 * deviceInfo.getDensity());
-                float scale = (float)actualWidth/width;
-                if(scale >=1 )
+                float scale = (float) actualWidth / width;
+                if (scale >= 1)
                     scale = 1;
 
-                float diff = contentPage.overFlowIfPut(height*scale);
-                if(diff == -1)
-                    addImageView(url);
-                else{
-                    if(contentPage.getTotalHeight() == 0.0f){
-                        addImageView(url);
-                    }else{
+                if ((height) > maxHeightInPixel) {
+                    if (contentPage.getTotalHeight() == 0.0f || contentPages.size() == 0) {
+                        addImageView(url, width);
+                    } else {
                         layout = resetNewPage(maxHeightInPixel, layout);
-                        i--;
+                        addImageView(url, width);
                     }
-
+                    layout = resetNewPage(maxHeightInPixel, layout);
+                } else {
+                    float diff = contentPage.overFlowIfPut((height));
+                    if (diff == -1)
+                        addImageView(url, width);
+                    else {
+                        if (contentPage.getTotalHeight() == 0.0f || contentPages.size() == 0) {
+                            addImageView(url, width);
+                        } else {
+                            layout = resetNewPage(maxHeightInPixel, layout);
+                            i--;
+                        }
+                    }
                 }
             }
         }
-
+//        if(contentHolderView.getChildCount()>1)
+        resetNewPage(0, layout);
     }
 
     private LinearLayout resetNewPage(float maxHeightInPixel, LinearLayout layout) {
@@ -260,10 +282,10 @@ public class ContentPagerAdapter extends PagerAdapter {
         View infoWrapper = layout.findViewById(R.id.infoWrapper);
         infoWrapper.setVisibility(View.VISIBLE);
 
-        titleWrapper.measure(View.MeasureSpec.makeMeasureSpec(deviceInfo.getDisplayWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.UNSPECIFIED);
+        titleWrapper.measure(View.MeasureSpec.makeMeasureSpec((int) (deviceInfo.getDisplayWidth() - 30 * deviceInfo.getDensity()), View.MeasureSpec.AT_MOST), View.MeasureSpec.UNSPECIFIED);
         int titleWrapperHeight = titleWrapper.getMeasuredHeight();
 
-        infoWrapper.measure(View.MeasureSpec.makeMeasureSpec(deviceInfo.getDisplayWidth(), View.MeasureSpec.EXACTLY), View.MeasureSpec.UNSPECIFIED);
+        infoWrapper.measure(View.MeasureSpec.makeMeasureSpec((int) (deviceInfo.getDisplayWidth() - 40 * deviceInfo.getDensity()), View.MeasureSpec.AT_MOST), View.MeasureSpec.UNSPECIFIED);
         int infoWrapperHeight = infoWrapper.getMeasuredHeight();
 
         contentPage.overFlowIfPut(titleWrapperHeight);
@@ -278,14 +300,14 @@ public class ContentPagerAdapter extends PagerAdapter {
         return arg0 == arg1;
     }
 
-    private void addImageView(String url) {
+    private void addImageView(String url, int width) {
         WebImageView imageView = new WebImageView(activity, url, activity.getResources().getDrawable(Constants.DEFAULT_PIC), activity.getResources().getDrawable(Constants.DEFAULT_PIC), false, toLoadImage, ImageView.ScaleType.FIT_CENTER);
-        imageView.setDefaultWidth(deviceInfo.getWidth());
+        imageView.setDefaultWidth(width);
         final FrameLayout.LayoutParams imageLayoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         imageLayoutParams.setMargins(0, 10, 0, 0);
-        contentHolderView.addView(imageView, imageLayoutParams);
         imageView.loadImage();
+        contentHolderView.addView(imageView, imageLayoutParams);
     }
 
     private float getLineSpacing() {
@@ -298,12 +320,13 @@ public class ContentPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        ((ViewPager) container).addView(contentPages.get(position).getView());
-        return contentPages.get(position).getView();
+        View view = contentPages.get(position).getView();
+        container.addView(view);
+        return view;
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        ((ViewPager) container).removeView(contentPages.get(position).getView());
+        container.removeView(contentPages.get(position).getView());
     }
 }

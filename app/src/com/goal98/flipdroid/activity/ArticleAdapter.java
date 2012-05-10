@@ -4,16 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.view.ArticleHolder;
-import com.goal98.flipdroid.view.ContentLoadedView;
-import com.goal98.flipdroid.view.PopupWindowManager;
 import com.goal98.flipdroid.view.StreamStyledArticleView;
+import com.srz.androidtools.autoloadlistview.PaginationLoaderAdapter;
+import com.srz.androidtools.autoloadlistview.PaginationLoaderService;
 
 import java.util.ArrayList;
 import java.util.List;

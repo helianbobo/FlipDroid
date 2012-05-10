@@ -11,11 +11,12 @@ import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
 import com.goal98.flipdroid.model.rss.RemoteRSSArticleSource;
 import com.goal98.flipdroid.util.Constants;
-import com.goal98.flipdroid.util.EachCursor;
-import com.goal98.flipdroid.util.ManagedCursor;
 import com.goal98.tika.common.TikaConstants;
+import com.srz.androidtools.database.EachCursor;
+import com.srz.androidtools.util.ManagedCursor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.

@@ -4,11 +4,9 @@ import android.graphics.Bitmap;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.Spanned;
-import com.goal98.flipdroid.util.DeviceInfo;
+import com.srz.androidtools.util.DeviceInfo;
 import com.goal98.flipdroid.util.TextPaintUtil;
-import com.goal98.flipdroid.view.ExpandableArticleView;
 import com.goal98.flipdroid.view.Notifier;
-import com.goal98.flipdroid.view.ThumbnailArticleView;
 import com.goal98.tika.common.Paragraphs;
 import com.goal98.tika.common.TikaUIObject;
 

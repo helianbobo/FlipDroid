@@ -44,24 +44,11 @@
                       android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
                       android:id="@+id/contentHolder"
-                      android:layout_gravity="center"
+                      android:layout_gravity="top"
                       android:layout_marginTop="5dp"
-                      android:layout_marginBottom="10dp"
-                      android:gravity="center">
-
+                      android:layout_marginBottom="0dp"
+                      android:gravity="top">
         </LinearLayout>
-
-        <!--<Button android:id="@+id/viewSource"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="50dip"-->
-        <!--android:drawableLeft="@drawable/ic_action_open_original_url"-->
-        <!--style="@style/Button"-->
-        <!--android:background="@drawable/source_button"-->
-        <!--android:paddingLeft="70dp" android:visibility="gone"-->
-        <!--android:paddingRight="70dp"-->
-        <!--android:layout_marginTop="5dp"-->
-        <!--android:layout_marginBottom="10dp"-->
-        <!--android:text="@string/view_source"/>-->
     </LinearLayout>
 
 </LinearLayout>

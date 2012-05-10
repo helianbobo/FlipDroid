@@ -37,7 +37,7 @@ public class ContentPage {
 
     public float overFlowIfPut(float height) {
         totalHeight += height;
-        if (totalHeight > maxHeightInPixel)
+        if (totalHeight >= maxHeightInPixel)
             return totalHeight-maxHeightInPixel;
 
         return -1;

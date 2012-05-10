@@ -1,7 +1,7 @@
 //package com.goal98.flipdroid.model;
 //
 //import android.content.Context;
-//import com.goal98.flipdroid.util.DeviceInfo;
+//import com.srz.androidtools.util.DeviceInfo;
 //import com.goal98.tika.common.TikaUIObject;
 //
 ///**

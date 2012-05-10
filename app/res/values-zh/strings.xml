@@ -26,7 +26,7 @@
     <string name="in_7_days">一周内</string>
     <string name="in_30_days">30天内</string>
     <string name="myfavorite">收藏夹</string>
-
+    <string name="favorite">收藏</string>
 
     <string name="title_anim_flip_duration_preference">翻页动画时间</string>
     <string name="summary_anim_flip_duration_preference">翻页动画时间(毫秒)</string>
@@ -104,4 +104,5 @@
     <string name="pull_to_refresh_refreshing_label">检查更新中</string>
     <string name="pull_to_refresh_tap_label">轻按可以更新</string>
     <string name="addShortcut">添加桌面快捷方式</string>
+    <string name="add_source">添加源</string>
 </resources>

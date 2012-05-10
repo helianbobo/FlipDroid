@@ -3,45 +3,36 @@
         xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent"
         android:orientation="vertical" android:layout_width="fill_parent" android:background="@color/background_color">
-    <RelativeLayout android:orientation="horizontal" android:layout_width="fill_parent" android:paddingLeft="5dip"
-                    android:paddingTop="5dip" android:background="@color/title_bar_color"
-                    android:layout_height="41dip" android:clickable="true">
+    <!--<RelativeLayout android:orientation="horizontal" android:layout_width="fill_parent" android:paddingLeft="5dip"-->
+                    <!--android:paddingTop="5dip" android:background="@color/title_bar_color"-->
+                    <!--android:layout_height="41dip" android:clickable="true">-->
 
-        <ViewSwitcher android:id="@+id/source_selection_trigger" android:layout_centerHorizontal="true"
-                      android:layout_centerVertical="true" android:layout_width="wrap_content"
-                      android:layout_height="wrap_content" android:clickable="true"
-                      android:background="@drawable/arrow_down" android:orientation="vertical">
-            <TextView android:layout_toRightOf="@id/source_image" android:id="@+id/source_name"
-                      android:textColor="@color/title_bar_center_text" android:text="@string/allfeeds"
-                      android:textSize="18sp" android:layout_centerVertical="true"
-                      android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:gravity="center" android:layout_gravity="center" android:paddingRight="5dip"/>
-            <TextView android:layout_toRightOf="@id/source_image" android:id="@+id/source_name2"
-                      android:textColor="@color/title_bar_center_text" android:text="1111"
-                      android:textSize="18sp" android:layout_centerVertical="true"
-                      android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:gravity="center" android:layout_gravity="center" android:paddingRight="5dip"/>
-        </ViewSwitcher>
+        <!--<ViewSwitcher android:id="@+id/source_selection_trigger" android:layout_centerHorizontal="true"-->
+                      <!--android:layout_centerVertical="true" android:layout_width="wrap_content"-->
+                      <!--android:layout_height="wrap_content" android:clickable="true"-->
+                      <!--android:background="@drawable/arrow_down" android:orientation="vertical">-->
+            <!--<TextView android:layout_toRightOf="@id/source_image" android:id="@+id/source_name"-->
+                      <!--android:textColor="@color/title_bar_center_text" android:text="@string/allfeeds"-->
+                      <!--android:textSize="18sp" android:layout_centerVertical="true"-->
+                      <!--android:layout_width="wrap_content" android:layout_height="wrap_content"-->
+                      <!--android:gravity="center" android:layout_gravity="center" android:paddingRight="5dip"/>-->
+            <!--<TextView android:layout_toRightOf="@id/source_image" android:id="@+id/source_name2"-->
+                      <!--android:textColor="@color/title_bar_center_text" android:text="1111"-->
+                      <!--android:textSize="18sp" android:layout_centerVertical="true"-->
+                      <!--android:layout_width="wrap_content" android:layout_height="wrap_content"-->
+                      <!--android:gravity="center" android:layout_gravity="center" android:paddingRight="5dip"/>-->
+        <!--</ViewSwitcher>-->
 
-    </RelativeLayout>
+    <!--</RelativeLayout>-->
 
     <RelativeLayout android:layout_height="wrap_content" android:layout_width="fill_parent"
                     android:orientation="vertical">
         <LinearLayout android:layout_alignParentTop="true" android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
                       android:orientation="vertical">
-            <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dip" android:layout_marginLeft="4dip" android:layout_marginRight="4dip" android:layout_marginBottom="4dip"
-                    android:background="@color/pager_frame_color"/>
-            <!--<com.goal98.flipdroid.view.ViewPagerTabs-->
-                    <!--android:id="@+id/tabs"-->
-                    <!--android:layout_width="fill_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--/>-->
             <!--<View-->
                     <!--android:layout_width="fill_parent"-->
-                    <!--android:layout_height="1dip"-->
+                    <!--android:layout_height="1dip" android:layout_marginLeft="4dip" android:layout_marginRight="4dip" android:layout_marginBottom="4dip"-->
                     <!--android:background="@color/pager_frame_color"/>-->
             <android.support.v4.view.ViewPager
                     android:id="@+id/viewpager"
@@ -52,16 +43,16 @@
 
             </android.support.v4.view.ViewPager>
         </LinearLayout>
-        <LinearLayout android:layout_centerHorizontal="true" android:layout_alignParentTop="true"
-                      android:id="@+id/source_selection" android:visibility="gone"
-                      android:layout_width="240dip" android:layout_height="200dip"
-                      android:background="@drawable/article_list_dropdown_bg_day" android:orientation="vertical">
-            <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dip"
-                    android:background="@color/pager_frame_color"/>
-            <ListView android:id="@+id/source_list" android:layout_height="fill_parent" android:scrollbars="none"
-                      android:layout_width="fill_parent" android:background="@color/gray"></ListView>
-        </LinearLayout>
+        <!--<LinearLayout android:layout_centerHorizontal="true" android:layout_alignParentTop="true"-->
+                      <!--android:id="@+id/source_selection" android:visibility="gone"-->
+                      <!--android:layout_width="240dip" android:layout_height="200dip"-->
+                      <!--android:background="@drawable/article_list_dropdown_bg_day" android:orientation="vertical">-->
+            <!--<View-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="1dip"-->
+                    <!--android:background="@color/pager_frame_color"/>-->
+            <!--<ListView android:id="@+id/source_list" android:layout_height="fill_parent" android:scrollbars="none"-->
+                      <!--android:layout_width="fill_parent" android:background="@color/gray"></ListView>-->
+        <!--</LinearLayout>-->
     </RelativeLayout>
 </LinearLayout>

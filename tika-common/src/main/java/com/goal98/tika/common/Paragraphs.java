@@ -43,25 +43,11 @@ public class Paragraphs {
             }
 
             int startAt = 0;
-//            int startAt = articleContent.indexOf("<");
-//            int brAt = articleContent.indexOf("<br/>");
-//            int linkAt = articleContent.indexOf("<a ");
-//            while (brAt == startAt) {
-//                startAt = articleContent.indexOf("<", brAt + 1);
-//                brAt = articleContent.indexOf("<br/>", brAt + 1);
-//            }
-//            if (startAt > 0 && startAt!=linkAt) {
-//                String text = articleContent.substring(0, startAt);
-//                if (!text.replaceAll("<p>","").replaceAll("</p>","").equals("<br/>"))
-//                    paragraphs.add(new Text(text));
-//            }
 
             endAt = cutAt;
             String paragraph = articleContent.substring(startAt, endAt);
-            System.out.println(paragraph);
             if (paragraph.indexOf(ImageInfo.IMG_START) != -1) {
                 paragraph = parseImg(paragraph);
-
 
                 if (paragraph.trim().length() != 0) {
                     Matcher m;
@@ -90,7 +76,10 @@ public class Paragraphs {
                 }
             } else {
                 if (!paragraph.matches(PAT_TAG_NO_TEXT2.pattern()) && !paragraph.matches(PAT_TAG_NO_TEXT.pattern()))
+                {
+
                     paragraphs.add(new Text(paragraph));
+                }
             }
 
             articleContent = articleContent.substring(endAt);
@@ -214,6 +203,8 @@ public class Paragraphs {
         String body;
 
         Text(String body) {
+            body = body.replaceAll("<img [^>]*?>.*?</img>","");
+            body = body.replaceAll("<a [^>]*?></a>","");
             this.body = body;
         }
 

@@ -4,7 +4,7 @@
 //import android.graphics.Matrix;
 //import android.graphics.drawable.Drawable;
 //import com.goal98.android.MyHandler;
-//import com.goal98.flipdroid.util.DeviceInfo;
+//import com.srz.androidtools.util.DeviceInfo;
 //
 ///**
 // * Created by IntelliJ IDEA.

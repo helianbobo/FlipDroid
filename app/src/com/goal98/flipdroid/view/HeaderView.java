@@ -1,7 +1,6 @@
 package com.goal98.flipdroid.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -12,7 +11,7 @@ import android.widget.*;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.activity.PageActivity;
 import com.goal98.flipdroid.util.Constants;
-import com.goal98.flipdroid.util.DeviceInfo;
+import com.srz.androidtools.util.DeviceInfo;
 
 /**
  * Created by IntelliJ IDEA.

@@ -2,7 +2,7 @@ package com.goal98.flipdroid.activity;
 
 import android.app.Application;
 import com.goal98.flipdroid.client.OAuth;
-import com.goal98.flipdroid.util.DeviceInfo;
+import com.srz.androidtools.util.DeviceInfo;
 
 /**
  * Created by IntelliJ IDEA.
