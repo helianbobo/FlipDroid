@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.SourceDB;
+import com.srz.androidtools.util.AlarmSender;
 
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class SourceExpandableListAdapter extends SimpleExpandableListAdapter {
     private String[] mChildFrom;
     private int[] mChildTo;
     private SourceDB sourceDB;
+    private Context context;
 
     public SourceExpandableListAdapter(Context context, List<? extends Map<String, ?>> groupData, int groupLayout, String[] groupFrom, int[] groupTo, List<? extends List<? extends Map<String, ?>>> childData, int childLayout, String[] childFrom, int[] childTo, SourceDB sourceDB) {
         super(context, groupData, groupLayout, groupFrom, groupTo, childData, childLayout, childFrom, childTo);
@@ -32,6 +34,7 @@ public class SourceExpandableListAdapter extends SimpleExpandableListAdapter {
         mChildFrom = childFrom;
         mChildTo = childTo;
         this.sourceDB = sourceDB;
+        this.context = context;
     }
 
     public SourceExpandableListAdapter(Context context, List<? extends Map<String, ?>> groupData, int expandedGroupLayout, int collapsedGroupLayout, String[] groupFrom, int[] groupTo, List<? extends List<? extends Map<String, ?>>> childData, int childLayout, String[] childFrom, int[] childTo) {
@@ -60,19 +63,44 @@ public class SourceExpandableListAdapter extends SimpleExpandableListAdapter {
         return v;
     }
 
-    private void bindView(View v, Map<String, String> stringMap, String[] mChildFrom, int[] mChildTo, int groupPosition, int childPosition) {
+    private void bindView(final View v, Map<String, String> stringMap, String[] mChildFrom, int[] mChildTo, final int groupPosition, final int childPosition) {
 
-        WebImageView image = (WebImageView) v.findViewById(R.id.source_image);
-        TextView sourceName = (TextView) v.findViewById(R.id.source_name);
-        TextView sourceDesc = (TextView) v.findViewById(R.id.source_desc);
-        TextView sourceType = (TextView) v.findViewById(R.id.source_type);
-        ImageView ticker = (ImageView) v.findViewById(R.id.ticker);
+        final WebImageView image = (WebImageView) v.findViewById(R.id.source_image);
+        final TextView sourceName = (TextView) v.findViewById(R.id.source_name);
+        final TextView sourceDesc = (TextView) v.findViewById(R.id.source_desc);
+        final TextView sourceType = (TextView) v.findViewById(R.id.source_type);
+        final ImageView ticker = (ImageView) v.findViewById(R.id.ticker);
+        final ImageView tickerremove = (ImageView) v.findViewById(R.id.tickerremove);
+
         String sn = stringMap.get(mChildFrom[0]);
+        ticker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Map<String, String> sourceMap = (Map<String, String>) getChild(groupPosition, childPosition);
 
-        if (sourceDB.findSourceByName(sn).getCount() > 0) {
+                sourceDB.insert(sourceMap);
+                notifyDataSetChanged();
+
+                AlarmSender.sendInstantMessage(R.string.added, SourceExpandableListAdapter.this.context);
+            }
+        });
+        tickerremove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Map<String, String> sourceMap = (Map<String, String>) getChild(groupPosition, childPosition);
+
+                sourceDB.removeSourceByName(sourceName.getText().toString());
+                notifyDataSetChanged();
+
+                AlarmSender.sendInstantMessage(R.string.removed, SourceExpandableListAdapter.this.context);
+            }
+        });
+        if (sourceDB.findSourceByName(sn).getCount() == 0) {
             ticker.setVisibility(View.VISIBLE);
+            tickerremove.setVisibility(View.GONE);
         } else {
-            ticker.setVisibility(View.INVISIBLE);
+            ticker.setVisibility(View.GONE);
+            tickerremove.setVisibility(View.VISIBLE);
         }
         image.setInAnimation(null);
         image.setImageUrl(stringMap.get(mChildFrom[2]));
@@ -80,6 +108,5 @@ public class SourceExpandableListAdapter extends SimpleExpandableListAdapter {
         sourceName.setText(sn);
         sourceDesc.setText(stringMap.get(mChildFrom[1]));
         sourceType.setText(stringMap.get(mChildFrom[3]));
-
     }
 }

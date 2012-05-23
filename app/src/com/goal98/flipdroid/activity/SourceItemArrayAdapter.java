@@ -13,6 +13,7 @@ import com.goal98.android.WebImageView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.Source;
+import com.goal98.tika.common.TikaConstants;
 import com.srz.androidtools.database.EachCursor;
 import com.srz.androidtools.util.DeviceInfo;
 import com.srz.androidtools.util.ManagedCursor;
@@ -34,7 +35,8 @@ public class SourceItemArrayAdapter<T> extends ArrayAdapter<SourceItem> {
     public SourceItemArrayAdapter(Context indexActivity, int sourceItemLayoutResource, SourceDB sourceDB, DeviceInfo deviceInfo) {
         super(indexActivity, sourceItemLayoutResource);
 
-        Cursor sourceCursor = sourceDB.findAll();
+        Cursor sourceCursor = sourceDB.findSourceByType(TikaConstants.TYPE_RSS);
+//        Cursor sourceCursor = sourceDB.findAll();
         new ManagedCursor(sourceCursor).each(new EachCursor() {
             public void call(Cursor cursor, int index) {
                 String sourceType = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_TYPE));

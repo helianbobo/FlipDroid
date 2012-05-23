@@ -2,16 +2,13 @@ package com.goal98.flipdroid.activity;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -34,12 +31,12 @@ import com.goal98.flipdroid.view.StreamPagerAdapter;
 import com.goal98.tika.common.TikaConstants;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.srz.androidtools.autoloadlistview.OnNothingLoaded;
+import com.srz.androidtools.autoloadlistview.PaginationLoaderAdapter;
 import com.srz.androidtools.util.DeviceInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -50,10 +47,10 @@ import java.util.Map;
  */
 public class StreamActivity extends SherlockActivity implements SourceUpdateable, ActionBar.OnNavigationListener {
     private Handler handler = new Handler();
-    private AddSourcePopupViewBuilder addSourcePopupViewBuilder;
+    //    private AddSourcePopupViewBuilder addSourcePopupViewBuilder;
     private DeviceInfo deviceInfo;
     private ViewPager mViewPager;
-    private View addSourcePopup;
+    //    private View addSourcePopup;
     private PopupWindow mPopupWindow;
     private List<ArticleAdapter> adapters = new ArrayList<ArticleAdapter>();
     private boolean windowOpened;
@@ -62,6 +59,10 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
     private ListView listView = null;
     private ArrayAdapter sourceAdapter;
     public static final int THEME = R.style.Theme_Sherlock;
+    private ArticleAdapter currentAdapter;
+    private ArticleLoader currentLoaderService;
+    private PullToRefreshListView currentPullToRefresh;
+    private boolean backFromSelection;
     //    private ViewSwitcher titleSwitcher;
 
     @Override
@@ -71,72 +72,34 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
 
         setContentView(R.layout.stream_by_source);
         deviceInfo = DeviceInfo.getInstance(this);
-        addSourcePopupViewBuilder = new AddSourcePopupViewBuilder(StreamActivity.this);
-
-        final Animation showaction = AnimationUtils.loadAnimation(this, R.anim.stay_in);
-        showaction.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                windowOpened = true;
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-//        //隐藏动画
-//        hideaction = AnimationUtils.loadAnimation(this, R.anim.stay_out);
-//        hideaction.setAnimationListener(new Animation.AnimationListener() {
-//            @Override
-//            public void onAnimationStart(Animation animation) {
-//                //To change body of implemented methods use File | Settings | File Templates.
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animation animation) {
-//                StreamActivity.this.sourceSelection.setVisibility(View.GONE);
-//                windowOpened = false;
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animation animation) {
-//                //To change body of implemented methods use File | Settings | File Templates.
-//            }
-//        });
 
         HostSetter hostSetter = new HostSetter(this);
         hostSetter.setHost();
-        hostSetter = null;
-
-//        StreamActivity.this.sourceSelection = (LinearLayout) findViewById(R.id.source_selection);
-//        listView = (ListView) findViewById(R.id.source_list);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
         bindSourceSelectionAdapter();
+        if (sourceAdapter.getItem(0) instanceof SourceItem) {
+            SourceItem sourceItem = (SourceItem) sourceAdapter.getItem(0);
+            if (sourceItem == null)
+                return;
 
-//        titleSwitcher = (ViewSwitcher) findViewById(R.id.source_selection_trigger);
-//        titleSwitcher.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (!windowOpened) {
-//                    StreamActivity.this.sourceSelection.setVisibility(View.VISIBLE);
-//                    listView.setSelectionAfterHeaderView();
-//                    StreamActivity.this.sourceSelection.startAnimation(showaction);
-//                } else {
-//                    hideWindow();
-//                }
-//            }
-//        });
-//        titleSwitcher.setDisplayedChild(0);
+            String from = sourceItem.getSourceURL();
+            String name = sourceItem.getSourceName();
+            setupMainStream(from, name);
+        }
+    }
 
-        String from = null;
-        setupMainStream(from);
+    private void setupEmptyList() {
+        mViewPager.setVisibility(View.GONE);
+        findViewById(R.id.vpcontainer).setBackgroundResource(R.drawable.bgnosource);
+    }
+
+    private void setupNoneEmptyList() {
+        mViewPager.setVisibility(View.VISIBLE);
+        findViewById(R.id.vpcontainer).setBackgroundDrawable(null);
     }
 
 
-    private void setupMainStream(String from) {
+    private void setupMainStream(String from, String name) {
         final List<String> titles = new ArrayList<String>();
 
         titles.add(getString(R.string.allfeeds));
@@ -144,14 +107,13 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
 
         final List<PullToRefreshListView> ptrs = new ArrayList<PullToRefreshListView>();
 
-        addPage(ptrs, from, null, true, 0, 3);
+        addPage(ptrs, from, name, true, 0, 3);
         addFavoritePage(ptrs, null);
 
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
         final PagerAdapter mPagerAdapter = new StreamPagerAdapter(ptrs, titles, null);
 
-        addSourcePopup = addSourcePopupViewBuilder.buildAddSourcePopupView(StreamActivity.this);
+//        addSourcePopup = addSourcePopupViewBuilder.buildAddSourcePopupView(StreamActivity.this);
 
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -181,7 +143,7 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
                             public void run() {
                                 adapters.get(finalI).forceLoad();
                             }
-                        }, (i + 1) * 1000);
+                        }, (i + 1 - 1) * 1000);
                     }
                 }
             }
@@ -191,9 +153,9 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
     }
 
     private void addPage(List<PullToRefreshListView> ptrs, String from, String name, boolean isFirst, int inDaysFrom, int inDaysTo) {
-        final PullToRefreshListView ptr = new PullToRefreshListView(this);
+        currentPullToRefresh = new PullToRefreshListView(this);
 
-        final ArticleLoader loaderService = new ArticleLoader(StreamActivity.this, 10, from, name, inDaysFrom, inDaysTo);
+        currentLoaderService = new ArticleLoader(StreamActivity.this, 10, from, name, inDaysFrom, inDaysTo);
 
         int noDataView = 0;
 
@@ -202,21 +164,23 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
         else
             noDataView = -1;
 
-        final ArticleAdapter adapter = new ArticleAdapter(this, ptr.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, loaderService, noDataView, new View.OnClickListener() {
+        OnNothingLoaded nothingLoaded = new NoMoreArticleToLoad(currentPullToRefresh,currentLoaderService,handler);
+
+        currentAdapter = new ArticleAdapter(this, currentPullToRefresh.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, currentLoaderService, noDataView, new View.OnClickListener() {
             public void onClick(View view) {
-                showSourceType(view);
+//                showSourceType(view);
             }
-        });
-        adapters.add(adapter);
-        ptr.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
+        }, nothingLoaded);
+
+        currentPullToRefresh.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             public void onRefresh() {
                 // Do work to refresh the list here.
-                new GetDataTask(ptr, adapter, loaderService).execute();
+                new GetDataTask(currentPullToRefresh, currentAdapter, currentLoaderService,handler).execute();
             }
         });
-        ptrs.add(ptr);
+        ptrs.add(currentPullToRefresh);
         if (isFirst)
-            adapter.forceLoad();
+            currentAdapter.forceLoad();
     }
 
     private void addFavoritePage(List<PullToRefreshListView> ptrs, String from) {
@@ -226,47 +190,47 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
 
         int noDataView = -1;
 
-        final ArticleAdapter adapter = new ArticleAdapter(this, ptr.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, loaderService, noDataView, new View.OnClickListener() {
+        final ArticleAdapter myAdapter = new ArticleAdapter(this, ptr.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, loaderService, noDataView, new View.OnClickListener() {
             public void onClick(View view) {
-                showSourceType(view);
+                //showSourceType(view);
             }
-        });
-        adapters.add(adapter);
+        }, null);
+        adapters.add(myAdapter);
         ptr.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
             public void onRefresh() {
                 // Do work to refresh the list here.
-                new GetDataTask(ptr, adapter, loaderService).execute();
+                new GetDataTask(ptr, myAdapter, loaderService,handler).execute();
             }
         });
         ptrs.add(ptr);
     }
 
-    private void showSourceType(View view) {
-        int[] location = new int[2];
-        view.getLocationOnScreen(location);
-
-        if (mPopupWindow != null && mPopupWindow.isShowing()) {
-            mPopupWindow.dismiss();
-            return;
-        }
-
-        mPopupWindow = new PopupWindow(addSourcePopup, ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
-        mPopupWindow.setOutsideTouchable(true);
-        if (location[1] > deviceInfo.getHeight() / 2) {
-            mPopupWindow.showAsDropDown(view, 0, -view.getHeight());
-        } else {
-            mPopupWindow.showAsDropDown(view, 0, 0);
-        }
-    }
+//    private void showSourceType(View view) {
+//        int[] location = new int[2];
+//        view.getLocationOnScreen(location);
+//
+//        if (mPopupWindow != null && mPopupWindow.isShowing()) {
+//            mPopupWindow.dismiss();
+//            return;
+//        }
+//
+//        mPopupWindow = new PopupWindow(addSourcePopup, ViewGroup.LayoutParams.WRAP_CONTENT,
+//                ViewGroup.LayoutParams.WRAP_CONTENT);
+//        mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+//        mPopupWindow.setOutsideTouchable(true);
+//        if (location[1] > deviceInfo.getHeight() / 2) {
+//            mPopupWindow.showAsDropDown(view, 0, -view.getHeight());
+//        } else {
+//            mPopupWindow.showAsDropDown(view, 0, 0);
+//        }
+//    }
 
     public void notifyUpdating(CachedArticleSource cachedArticleSource) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public void notifyHasNew(CachedArticleSource cachedArticleSource) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        currentAdapter.forceLoad(false);
     }
 
     public void notifyNoNew(CachedArticleSource cachedArticleSource) {
@@ -278,78 +242,28 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
     }
 
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-        final SourceItem sourceItem = (SourceItem) sourceAdapter.getItem(itemPosition);
-        hideWindow();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setupMainStream(sourceItem.getSourceURL());
-//                animateTitleTo(sourceItem.getSourceName());
-            }
-        }, 500);
+        if(backFromSelection){
+            backFromSelection = false;
+            return true;
+        }
+
+        if (sourceAdapter.getItem(itemPosition) instanceof SourceItem) {
+            final SourceItem sourceItem = (SourceItem) sourceAdapter.getItem(itemPosition);
+
+            if(sourceItem.getSourceName().equals(currentLoaderService.getName()))
+                return true;
+
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setupMainStream(sourceItem.getSourceURL(), sourceItem.getSourceName());
+                }
+            }, 300);
+            return true;
+        }
         return true;
     }
 
-    private class GetDataTask extends AsyncTask<Void, Void, String[]> {
-        private PullToRefreshListView mPullRefreshListView;
-        private ArticleAdapter adapter;
-        private ArticleLoader loaderService;
-
-        public GetDataTask(PullToRefreshListView mPullRefreshListView, ArticleAdapter adapter, ArticleLoader loaderService) {
-            this.mPullRefreshListView = mPullRefreshListView;
-            this.adapter = adapter;
-            this.loaderService = loaderService;
-        }
-
-        int countBeforeUpdate = 0;
-
-        @Override
-        protected String[] doInBackground(Void... params) {
-            adapter.reset();
-            loaderService.reset();
-
-            SourceDB sourceDB = new SourceDB(getApplicationContext());
-            RSSURLDB rssurlDB = new RSSURLDB(getApplicationContext());
-            countBeforeUpdate = rssurlDB.getCount();
-
-            try {
-                SourceUpdateManager updateManager = new SourceUpdateManager(rssurlDB, sourceDB, new SourceCache(new SourceContentDB(StreamActivity.this)), StreamActivity.this, RecommendSourceDB.getInstance(StreamActivity.this));
-                if (loaderService.getName() != null) {
-                    updateManager.updateContentByName(true, loaderService.getName());
-                } else
-                    updateManager.updateContent(true);
-            } finally {
-                sourceDB.close();
-                rssurlDB.close();
-            }
-            adapter.forceLoad(false);
-            return null;
-        }
-
-
-        @Override
-        protected void onPostExecute(String[] result) {
-            RSSURLDB rssurlDB = new RSSURLDB(getApplicationContext());
-            try {
-                int countAfterUpdate = rssurlDB.getCount();
-                final int updatedCount = countAfterUpdate - countBeforeUpdate;
-
-                mPullRefreshListView.onRefreshComplete();
-
-                super.onPostExecute(result);
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        String updated = StreamActivity.this.getString(R.string.updated);
-                        updated = updated.replaceAll("%", "" + updatedCount);
-                        new AlarmSender(StreamActivity.this.getApplicationContext()).sendInstantMessage(updated);
-                    }
-                });
-            } finally {
-                rssurlDB.close();
-            }
-        }
-    }
 
     private void bindSourceSelectionAdapter() {
 
@@ -357,41 +271,23 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
         Cursor sourceCursor = sourceDB.findAll();
         if (sourceCursor.getCount() == 0) {
             sourceCursor.close();
-            Map<String, String> noData = new HashMap<String, String>();
             sourceAdapter = new ArrayAdapter(this, R.layout.nodataitem,
                     R.id.text, new String[]{getString(R.string.nodata)}
             );
+            getSupportActionBar().setTitle(R.string.app_name);
+            setupEmptyList();
         } else {
             sourceAdapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item_mini, sourceDB, deviceInfo);
+            sourceAdapter.setDropDownViewResource(R.layout.source_item_mini);
+
+            getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            getSupportActionBar().setListNavigationCallbacks(sourceAdapter, this);
+            getSupportActionBar().setTitle("");
+            setupNoneEmptyList();
         }
         sourceDB.close();
-//        listView.setAdapter(sourceAdapter);
-//        final ListAdapter finalAdapter = sourceAdapter;
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                final SourceItem sourceItem = (SourceItem) finalAdapter.getItem(i);
-//                hideWindow();
-//                handler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        setupMainStream(sourceItem.getSourceURL());
-//                        animateTitleTo(sourceItem.getSourceName());
-//                    }
-//                }, 500);
-//
-//            }
-//        });
 
-//        Context context = getSupportActionBar().getThemedContext();
-//        ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.locations, R.layout.sherlock_spinner_item);
 
-        sourceAdapter.setDropDownViewResource(R.layout.source_item_mini);
-
-        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        getSupportActionBar().setListNavigationCallbacks(sourceAdapter, this);
-
-        getSupportActionBar().setTitle("");
     }
 
 //    private void animateTitleTo(String sourceName) {
@@ -411,7 +307,8 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
         //Used to put dark icons on light action bar
         boolean isLight = THEME == R.style.Theme_Sherlock_Light;
 
-        SubMenu addSubMenu = menu.addSubMenu("Add");
+        SubMenu addSubMenu = menu.addSubMenu(R.string.addbtn);
+        addSubMenu.setIcon(R.drawable.source_edit);
         addSubMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         addSubMenu.add(R.string.rssfeeds).setIcon(R.drawable.rss);
@@ -430,8 +327,96 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_CANCELED) {
+        if (resultCode == RESULT_OK) {
             bindSourceSelectionAdapter();
+        }
+        backFromSelection = true;
+    }
+}
+
+class NoMoreArticleToLoad implements OnNothingLoaded {
+    private PullToRefreshListView currentPullToRefresh;
+    private PaginationLoaderAdapter currentAdapter;
+    private ArticleLoader currentLoaderService;
+    private Handler handler;
+
+    public NoMoreArticleToLoad(PullToRefreshListView currentPullToRefresh, ArticleLoader currentLoaderService, Handler handler) {
+        this.currentPullToRefresh = currentPullToRefresh;
+        this.currentLoaderService = currentLoaderService;
+        this.handler = handler;
+    }
+
+
+    public void setAdapter(PaginationLoaderAdapter currentAdapter) {
+        this.currentAdapter = currentAdapter;
+    }
+
+    @Override
+    public void onNothingLoaded() {
+        currentPullToRefresh.setRefreshing();
+        new GetDataTask(currentPullToRefresh, currentAdapter, currentLoaderService, handler).execute();
+    }
+}
+
+class GetDataTask extends AsyncTask<Void, Void, String[]> {
+    private PullToRefreshListView mPullRefreshListView;
+    private PaginationLoaderAdapter adapter;
+    private ArticleLoader loaderService;
+    private Handler handler;
+
+    public GetDataTask(PullToRefreshListView mPullRefreshListView, PaginationLoaderAdapter adapter, ArticleLoader loaderService, Handler handler) {
+        this.mPullRefreshListView = mPullRefreshListView;
+        this.adapter = adapter;
+        this.loaderService = loaderService;
+        this.handler = handler;
+    }
+
+    int countBeforeUpdate = 0;
+
+    @Override
+    protected String[] doInBackground(Void... params) {
+        adapter.reset();
+        loaderService.reset();
+
+        SourceDB sourceDB = new SourceDB(adapter.getContext());
+        RSSURLDB rssurlDB = new RSSURLDB(adapter.getContext());
+        countBeforeUpdate = rssurlDB.getCount();
+
+        try {
+            SourceUpdateManager updateManager = new SourceUpdateManager(rssurlDB, sourceDB, new SourceCache(new SourceContentDB(adapter.getContext())), (SourceUpdateable) adapter.getContext(), RecommendSourceDB.getInstance(adapter.getContext()));
+            if (loaderService.getName() != null) {
+                updateManager.updateContentByName(true, loaderService.getName());
+            } else
+                updateManager.updateContent(true);
+        } finally {
+            sourceDB.close();
+            rssurlDB.close();
+        }
+
+        return null;
+    }
+
+
+    @Override
+    protected void onPostExecute(String[] result) {
+        RSSURLDB rssurlDB = new RSSURLDB(adapter.getContext());
+        try {
+            int countAfterUpdate = rssurlDB.getCount();
+            final int updatedCount = countAfterUpdate - countBeforeUpdate;
+
+            mPullRefreshListView.onRefreshComplete();
+
+            super.onPostExecute(result);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    String updated = adapter.getContext().getString(R.string.updated);
+                    updated = updated.replaceAll("%", "" + updatedCount);
+                    new AlarmSender(adapter.getContext()).sendInstantMessage(updated);
+                }
+            });
+        } finally {
+            rssurlDB.close();
         }
     }
 }

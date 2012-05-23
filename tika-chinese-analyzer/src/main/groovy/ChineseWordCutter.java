@@ -20,7 +20,7 @@ public class ChineseWordCutter {
     private static ChineseWordCutter cutter = new ChineseWordCutter();
 
     private ChineseWordCutter() {
-        analyzer = new PaodingAnalyzer(System.getProperty("user.dir") + "/paoding-dic-home.properties");
+       analyzer = new PaodingAnalyzer("/Users/jleo/IdeaProjects/FlipDroid/tika-chinese-analyzer/src/main/resources/paoding-analysis.properties");
     }
 
     public static ChineseWordCutter getInstance() {

@@ -1,0 +1,1 @@
+scp /Users/jleo/IdeaProjects/FlipDroid/tika-api/target/dist/tika-api.jar root@58.215.170.154:/root/tika-api.jar

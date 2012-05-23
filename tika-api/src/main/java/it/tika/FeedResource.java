@@ -16,8 +16,10 @@ import org.restlet.resource.ServerResource;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.logging.Level;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class FeedResource extends ServerResource {
 
@@ -54,7 +56,7 @@ public class FeedResource extends ServerResource {
         source = SourceDBMongoDB.getInstance().findByURL(source);
         List<URLAbstract> urlAbstracts = new ArrayList<URLAbstract>();
         if (source != null) {
-            urlAbstracts = URLDBMongoDB.getInstance().findBySource(source.getId(), 20);
+            urlAbstracts = URLDBMongoDB.getInstance().findBySource(source.getId(), 8);
         }
         long returnedTime = 0;
         String returnBody = "";

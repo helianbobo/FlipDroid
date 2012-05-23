@@ -7,13 +7,11 @@
     <color name="darkblue">#ff000099</color>
     <color name="blue">#ff0066cc</color>
     <color name="lightblue">#ff2491ff</color>
-    <color name="verylightblue">#ff66ccff</color>
     <color name="darkred">#ffcc0000</color>
     <color name="red">#ffff3333</color>
     <color name="green">#ff00f500</color>
     <color name="darkgreen">#ff00b500</color>
     <color name="lightred">#ffff6666</color>
-    <color name="transparent">#00000000</color>
     <color name="header_divider_color">#4c90d3e8</color>
     <color name="header_btn_text_color_normal">#ffe6ecef</color>
     <color name="header_btn_backgroud_press_color">#ff054158</color>

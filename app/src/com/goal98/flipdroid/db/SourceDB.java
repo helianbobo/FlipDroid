@@ -96,4 +96,12 @@ public class SourceDB extends AbstractDB {
 
         return query(projection, selection, selectionArgs, null);
     }
+
+    public Cursor findSourceByType(final String type) {
+        String[] projection = null;
+        String selection = Source.KEY_SOURCE_TYPE + " = ? ";
+        String[] selectionArgs = {type};
+
+        return query(projection, selection, selectionArgs, null);
+    }
 }

@@ -14,7 +14,7 @@
     <string name="addmorefeeds">add more</string>
     <string name="nodatainscroll">No more data</string>
     <string name="mystream">My Stream</string>
-    <string name="updated">You have % new entries</string>
+    <string name="updated">% new entries</string>
     <string name="rssfeeds">RSS Feeds</string>
     <string name="sinafeeds">Sina Weibo</string>
     <string name="isLastPage">This is the last page</string>
@@ -118,4 +118,9 @@
     <string name="add_source">Add Source</string>
     <string name="cancel">Cancel</string>
     <string name="save">save</string>
+    <string name="added">Added</string>
+    <string name="removed">Removed</string>
+    <string name="plsdroptpupdate">Please drag and drop to update</string>
+    <string name="addbtn">Add</string>
+    <string name="plsadd">No feed has been added so far, please add feeds by clicking the top-right add button!</string>
 </resources>

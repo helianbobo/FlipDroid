@@ -27,9 +27,9 @@
 
     <RelativeLayout android:layout_height="wrap_content" android:layout_width="fill_parent"
                     android:orientation="vertical">
-        <LinearLayout android:layout_alignParentTop="true" android:layout_width="fill_parent"
+        <LinearLayout android:id="@+id/vpcontainer" android:layout_alignParentTop="true" android:layout_width="fill_parent"
                       android:layout_height="fill_parent"
-                      android:orientation="vertical">
+                      android:orientation="vertical" android:background="@drawable/bgnosource">
             <!--<View-->
                     <!--android:layout_width="fill_parent"-->
                     <!--android:layout_height="1dip" android:layout_marginLeft="4dip" android:layout_marginRight="4dip" android:layout_marginBottom="4dip"-->
@@ -38,10 +38,12 @@
                     android:id="@+id/viewpager"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center" >
 
 
             </android.support.v4.view.ViewPager>
+            <!--<TextView android:paddingLeft="40dip" android:paddingRight="40dip" android:gravity="top|center_horizontal" android:paddingTop="30dip" android:visibility="gone" android:id="@+id/firsttimewelcome" android:text="@string/plsadd" android:layout_width="fill_parent"-->
+                      <!--android:layout_height="fill_parent" android:textSize="18sp" android:textColor="@color/grepblack"></TextView>-->
         </LinearLayout>
         <!--<LinearLayout android:layout_centerHorizontal="true" android:layout_alignParentTop="true"-->
                       <!--android:id="@+id/source_selection" android:visibility="gone"-->

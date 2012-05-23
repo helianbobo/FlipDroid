@@ -109,8 +109,8 @@ public class RSSURLDB extends AbstractDB {
 
     public boolean exist(String sourceURL, String content) {
         String[] projection = null;
-        String selection = RSSURLDB.URL + " = ? and " + RSSURLDB.CONTENT + " = '" + content+"'";
-        String[] selectionArgs = {sourceURL};
+        String selection = RSSURLDB.URL + " = ? and " + RSSURLDB.CONTENT  + " = ?";
+        String[] selectionArgs = {sourceURL,content};
 
         Cursor cursor = null;
         try {

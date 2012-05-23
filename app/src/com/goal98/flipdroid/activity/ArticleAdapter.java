@@ -10,6 +10,7 @@ import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.view.ArticleHolder;
 import com.goal98.flipdroid.view.StreamStyledArticleView;
+import com.srz.androidtools.autoloadlistview.OnNothingLoaded;
 import com.srz.androidtools.autoloadlistview.PaginationLoaderAdapter;
 import com.srz.androidtools.autoloadlistview.PaginationLoaderService;
 
@@ -27,13 +28,15 @@ public class ArticleAdapter extends PaginationLoaderAdapter {
     protected Context context;
     private boolean loaded;
 
-    public ArticleAdapter(Activity activity, ListView listView, int progressDrawableResourceId, int layoutId, PaginationLoaderService loaderService, List<Article> videoDetailInfos, int nodataview, View.OnClickListener noitemListener) {
-        super(activity, listView, layoutId, progressDrawableResourceId, videoDetailInfos, nodataview, loaderService, noitemListener);
+    public ArticleAdapter(Activity activity, ListView listView, int progressDrawableResourceId, int layoutId, PaginationLoaderService loaderService, List<Article> videoDetailInfos, int nodataview, View.OnClickListener noitemListener, OnNothingLoaded onNothingLoadedListener) {
+        super(activity, listView, layoutId, progressDrawableResourceId, videoDetailInfos, nodataview, loaderService, noitemListener,onNothingLoadedListener);
+        if(onNothingLoadedListener!=null)
+            onNothingLoadedListener.setAdapter(this);
         this.context = activity;
     }
 
-    public ArticleAdapter(Activity activity, ListView listView, int progressDrawableResourceId, int layoutId, PaginationLoaderService loaderService, int nodataview, View.OnClickListener noitemListener) {
-        this(activity, listView, progressDrawableResourceId, layoutId, loaderService, new ArrayList(), nodataview, noitemListener);
+    public ArticleAdapter(Activity activity, ListView listView, int progressDrawableResourceId, int layoutId, PaginationLoaderService loaderService, int nodataview, View.OnClickListener noitemListener,OnNothingLoaded onNothingLoadedListener) {
+        this(activity, listView, progressDrawableResourceId, layoutId, loaderService, new ArrayList(), nodataview, noitemListener,onNothingLoadedListener);
     }
 
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

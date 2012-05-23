@@ -1,17 +1,16 @@
 package com.goal98.flipdroid.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import com.actionbarsherlock.app.SherlockExpandableListActivity;
 import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.db.SourceDB;
@@ -38,6 +37,7 @@ public class RSSSourceSelectionActivity extends SherlockExpandableListActivity {
     public void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_Sherlock);
         getSupportActionBar().setTitle(R.string.rssfeeds);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.source_expandable_list);
         sourceDB = new SourceDB(this);
@@ -80,26 +80,26 @@ public class RSSSourceSelectionActivity extends SherlockExpandableListActivity {
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
         super.onChildClick(parent, v, groupPosition, childPosition, id);
-        if (mMode == null) {
-            mMode = startActionMode(new AnActionModeOfEpicProportions(this));
-            View closeButton = findViewById(R.id.abs__action_mode_close_button);
-            if (closeButton != null)
-                closeButton.setVisibility(View.GONE);
-        }
+//        if (mMode == null) {
+//            mMode = startActionMode(new AnActionModeOfEpicProportions(this));
+//            View closeButton = findViewById(R.id.abs__action_mode_close_button);
+//            if (closeButton != null)
+//                closeButton.setVisibility(View.GONE);
+//        }
 
-        Map<String, String> source = (Map<String, String>) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
-        String sourceId = source.get(Source.KEY_SOURCE_ID);
-
-        if (Constants.ADD_CUSTOME_SOURCE.equals(sourceId)) {
-            doWithAddCustomerSouce();
-        } else {
-            if (sourceDB.findSourceByName(source.get(Source.KEY_SOURCE_NAME)).getCount() > 0) {
-                sourceDB.removeSourceByName(source.get(Source.KEY_SOURCE_NAME));
-            } else {
-                sourceDB.insert(source);
-            }
-            sourceExpandableListAdapter.notifyDataSetChanged();
-        }
+//        Map<String, String> source = (Map<String, String>) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
+//        String sourceId = source.get(Source.KEY_SOURCE_ID);
+//
+//        if (Constants.ADD_CUSTOME_SOURCE.equals(sourceId)) {
+//            doWithAddCustomerSouce();
+//        } else {
+//            if (sourceDB.findSourceByName(source.get(Source.KEY_SOURCE_NAME)).getCount() > 0) {
+//                sourceDB.removeSourceByName(source.get(Source.KEY_SOURCE_NAME));
+//            } else {
+//                sourceDB.insert(source);
+//            }
+//            sourceExpandableListAdapter.notifyDataSetChanged();
+//        }
 
         return true;
     }
@@ -154,6 +154,21 @@ public class RSSSourceSelectionActivity extends SherlockExpandableListActivity {
                         }).show();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        setResult(RESULT_OK);
+        finish();
+        return true;
+    }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME) {
+            setResult(RESULT_OK);
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     public void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
@@ -165,55 +180,3 @@ public class RSSSourceSelectionActivity extends SherlockExpandableListActivity {
     }
 }
 
-final class AnActionModeOfEpicProportions implements ActionMode.Callback {
-    private Activity activity;
-
-    AnActionModeOfEpicProportions(Activity activity) {
-        this.activity = activity;
-    }
-
-    public static boolean isMODE_NOW() {
-        return MODE_NOW;
-    }
-
-    public static void setMODE_NOW(boolean MODE_NOW) {
-        AnActionModeOfEpicProportions.MODE_NOW = MODE_NOW;
-    }
-
-    @Override
-    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        MODE_NOW = true;
-
-        menu.add(activity.getString(R.string.save))
-                .setIcon(R.drawable.accept)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        return false;
-    }
-
-    @Override
-    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        mode.finish();
-
-        String itemName = item.toString();
-        if (itemName.equals(activity.getString(R.string.cancel))) {
-            activity.setResult(Activity.RESULT_CANCELED);
-        } else if (itemName.equals(activity.getString(R.string.save))) {
-            activity.setResult(Activity.RESULT_OK);
-        }
-        activity.finish();
-        return true;
-    }
-
-    @Override
-    public void onDestroyActionMode(ActionMode mode) {
-        MODE_NOW = false;
-    }
-
-    public static boolean MODE_NOW = false;
-}

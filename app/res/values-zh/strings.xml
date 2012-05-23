@@ -12,6 +12,7 @@
     <string name="search">搜索</string>
     <string name="flip">划动 >></string>
     <string name="nodatainscroll">没有更多了</string>
+    <string name="plsdroptpupdate">请下拉以获取内容</string>
     <string name="mystream">我的阅读</string>
     <string name="addfeeds">添加订阅</string>
     <string name="addmorefeeds">添加更多订阅</string>
@@ -105,4 +106,8 @@
     <string name="pull_to_refresh_tap_label">轻按可以更新</string>
     <string name="addShortcut">添加桌面快捷方式</string>
     <string name="add_source">添加源</string>
+    <string name="added">已添加</string>
+    <string name="removed">已删除</string>
+    <string name="addbtn">编辑源</string>
+    <string name="plsadd">还没有添加任何订阅，快点击右上角的添加按钮吧!</string>
 </resources>

@@ -142,8 +142,10 @@ public class StreamStyledArticleView<T> extends ItemView implements HeavyUIOpera
 
 
     public void heavyUIOperation() {
-        if (imageView != null)
+        if (imageView != null){
+//            imageView.setInAnimation(this.getContext(), android.R.anim.fade_in);
             imageView.loadImage();
+        }
         portraitViewWeiboContent.loadImage();
     }
 }

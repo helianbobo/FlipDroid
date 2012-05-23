@@ -62,7 +62,7 @@ public class ContentPagerAdapter extends PagerAdapter {
     }
 
     private void doPage(List<TikaUIObject> paragraphsList) {
-        float maxHeightInPixel = (float) (deviceInfo.getDisplayHeight() - (45 + 31+20) * deviceInfo.getDensity());
+        float maxHeightInPixel = (float) (deviceInfo.getDisplayHeight() - (45 + 31 + 20) * deviceInfo.getDensity());
 
         contentPage = new ContentPage(maxHeightInPixel);
         final LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -135,9 +135,9 @@ public class ContentPagerAdapter extends PagerAdapter {
 
                 int widthMeasureSpec = 0;
                 if ("<p><blockquote>".equals(style)) {
-                    widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) (deviceInfo.getDisplayWidth() - (40) * deviceInfo.getDensity()/deviceInfo.getDensity()), View.MeasureSpec.AT_MOST);
+                    widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) (deviceInfo.getDisplayWidth() - (40) * deviceInfo.getDensity() / deviceInfo.getDensity()), View.MeasureSpec.AT_MOST);
                 } else {
-                    widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) (deviceInfo.getDisplayWidth() - (40) * deviceInfo.getDensity()/deviceInfo.getDensity()), View.MeasureSpec.AT_MOST);
+                    widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) (deviceInfo.getDisplayWidth() - (40) * deviceInfo.getDensity() / deviceInfo.getDensity()), View.MeasureSpec.AT_MOST);
                 }
                 tv.measure(widthMeasureSpec, View.MeasureSpec.UNSPECIFIED);
 
@@ -156,7 +156,7 @@ public class ContentPagerAdapter extends PagerAdapter {
                     TextView clonedTextView = cloneTextView(textLayoutParams, txtSize, uiObject, spannable);
                     clonedTextView.setPadding(clonedTextView.getPaddingLeft(), -lines * tv.getLineHeight() - 8 + clonedTextView.getPaddingTop(), clonedTextView.getPaddingRight(), +clonedTextView.getPaddingBottom());
                     clonedTextView.setMovementMethod(LinkMovementMethod.getInstance());
-                    widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) (deviceInfo.getDisplayWidth() - (40 ) * deviceInfo.getDensity()), View.MeasureSpec.AT_MOST);
+                    widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) (deviceInfo.getDisplayWidth() - (40) * deviceInfo.getDensity()), View.MeasureSpec.AT_MOST);
                     clonedTextView.measure(widthMeasureSpec, View.MeasureSpec.UNSPECIFIED);
 
                     height = clonedTextView.getMeasuredHeight();
@@ -178,29 +178,37 @@ public class ContentPagerAdapter extends PagerAdapter {
                 int height = imageInfo.getHeight();
                 int width = imageInfo.getWidth();
 
+
 //                int height = (int) (imageInfo.getHeight()/deviceInfo.getDensity());
 //                int width = (int) (imageInfo.getWidth()/deviceInfo.getDensity());
 
                 int actualWidth = (int) (deviceInfo.getWidth() - 40 * deviceInfo.getDensity());
-                float scale = (float) actualWidth / width;
-                if (scale >= 1)
-                    scale = 1;
+                boolean scaled = false;
+                float scale = 0;
+                if (width > actualWidth) {
+                     scale = (float) actualWidth / width;
+                    scaled = true;
+                    if (scale >= 1)
+                        scale = 1;
+
+                    height = (int) (height*scale);
+                }
 
                 if ((height) > maxHeightInPixel) {
                     if (contentPage.getTotalHeight() == 0.0f || contentPages.size() == 0) {
-                        addImageView(url, width);
+                        addImageView(url, scaled? (int) (scale * width) :width);
                     } else {
                         layout = resetNewPage(maxHeightInPixel, layout);
-                        addImageView(url, width);
+                        addImageView(url, scaled? (int) (scale * width) :width);
                     }
                     layout = resetNewPage(maxHeightInPixel, layout);
                 } else {
                     float diff = contentPage.overFlowIfPut((height));
                     if (diff == -1)
-                        addImageView(url, width);
+                        addImageView(url, scaled? (int) (scale * width) :width);
                     else {
                         if (contentPage.getTotalHeight() == 0.0f || contentPages.size() == 0) {
-                            addImageView(url, width);
+                            addImageView(url, scaled? (int) (scale * width) :width);
                         } else {
                             layout = resetNewPage(maxHeightInPixel, layout);
                             i--;
