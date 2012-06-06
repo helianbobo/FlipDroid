@@ -1,19 +1,14 @@
 package com.goal98.flipdroid.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
-import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.client.OAuth;
 import com.goal98.flipdroid.client.UserInfo;
 import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
-import com.goal98.flipdroid.util.Constants;
 import com.goal98.tika.common.TikaConstants;
 
 /**
@@ -50,12 +45,12 @@ public class WeiPaiWebViewClient extends WebViewClient {
                 UserInfo user = oauth.GetAccessToken(url);
                 if (user != null) {
 
-                    try {
-                        if(!sourceDB.isMySinaWeiboAccountExist())
-                            sourceDB.insert(TikaConstants.TYPE_MY_SINA_WEIBO, activity.getString(R.string.my_timeline), Constants.SOURCE_HOME, activity.getString(R.string.my_timeline_desc), null,"mysina", "http://www.sinaimg.cn/blog/developer/wiki/48x48.png");
-                    } catch (Exception e) {
-                        Log.w(TAG, e.getMessage(), e);
-                    }
+//                    try {
+//                        if(!sourceDB.isMySinaWeiboAccountExist())
+//                            sourceDB.insert(TikaConstants.TYPE_MY_SINA_WEIBO, activity.getString(R.string.my_timeline), Constants.SOURCE_HOME, activity.getString(R.string.my_timeline_desc), null,"mysina", "http://www.sinaimg.cn/blog/developer/wiki/48x48.png");
+//                    } catch (Exception e) {
+//                        Log.w(TAG, e.getMessage(), e);
+//                    }
                     accountDB.insertOrUpdateOAuth(user.getUserId(), user.getToken(), user.getTokenSecret(), TikaConstants.TYPE_MY_SINA_WEIBO);
                     preferences.edit().putString(SINA_ACCOUNT_PREF_KEY, user.getUserId()).commit();
 

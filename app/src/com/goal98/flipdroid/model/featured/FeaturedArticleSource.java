@@ -1,13 +1,11 @@
 package com.goal98.flipdroid.model.featured;
 
 import com.goal98.flipdroid.client.LastModifiedStampedResult;
+import com.goal98.flipdroid.client.TikaClientException;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.RemoteArticleSource;
-import com.goal98.flipdroid.model.cachesystem.BaseCacheableArticleSource;
 import com.goal98.flipdroid.model.cachesystem.CacheToken;
 import com.goal98.tika.common.TikaConstants;
-
-import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
@@ -27,6 +25,17 @@ public class FeaturedArticleSource extends RemoteArticleSource {
         token.setType(TikaConstants.TYPE_FEATURED);
         token.setToken(this.remoteSourceToken);
         return token;
+    }
+
+    protected LastModifiedStampedResult getLatestSource() {
+        try {
+            LastModifiedStampedResult feedJSON = tikaClient.getFeaturedJSON(remoteSourceToken, lastModified);
+            if (feedJSON == null)
+                return null;
+            return feedJSON;
+        } catch (TikaClientException e) {
+            return null;
+        }
     }
 
     protected void setSourceType(Article article) {

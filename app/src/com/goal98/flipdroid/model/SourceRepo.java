@@ -134,6 +134,24 @@ public class SourceRepo {
                 }
             }
         }
+        if (array != null && TikaConstants.TYPE_FEATURED.equals(type)) {
+            int count = array.length();
+            for (int i = 0; i < count; i++) {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = array.getJSONObject(i);
+                    Map<String, String> source1 = SourceDB.buildSource(type,
+                            jsonObject.getString("name"),
+                            jsonObject.getString("id"),
+                            jsonObject.getString("desc"),
+                            jsonObject.getString("image_url"),
+                            jsonObject.getString("content_url"));
+                    result.add(source1);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         return result;
     }
 
@@ -144,7 +162,7 @@ public class SourceRepo {
             String sourceName = type.toUpperCase() + "_" + Constants.RECOMMAND_SOURCE_SUFFIX;
             if (recommendSource == null) {//read local file as a failover process
                 sourceJsonStr = fromFileSourceResolver.resolve(sourceName);
-                recommendSourceDB.insert(sourceJsonStr, sourceName,-1);
+                recommendSourceDB.insert(sourceJsonStr, sourceName, -1);
             } else {
                 sourceJsonStr = recommendSource.getBody();
             }

@@ -28,6 +28,7 @@ public class TikaClient {
 
     public TikaClient(String host) {
         this.host = host;
+
     }
 
     public LastModifiedStampedResult updateRecommendSource(String type, long lastModified) {
@@ -94,10 +95,30 @@ public class TikaClient {
         return feedJSONParser.getFeedsFromFeedJSON(feedJSON);
     }
 
-    public LastModifiedStampedResult getFeedJSON(String sourceURL, long lastModified) throws TikaClientException {
+    public LastModifiedStampedResult getCategoryJSON(String sourceURL, long lastModified) throws TikaClientException {
+        String requestURL = null;
+        try {
+            requestURL = "http://" + host + "/v1/feature?source=" + URLEncoder.encode(sourceURL, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+
+        }
+        return readWithIMS(requestURL,lastModified);
+    }
+
+    public LastModifiedStampedResult getRSSJSON(String sourceURL, long lastModified) throws TikaClientException {
         String requestURL = null;
         try {
             requestURL = "http://" + host + "/v1/feed?source=" + URLEncoder.encode(sourceURL, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+
+        }
+        return readWithIMS(requestURL,lastModified);
+    }
+
+    public LastModifiedStampedResult getFeaturedJSON(String feature, long lastModified) throws TikaClientException {
+        String requestURL = null;
+        try {
+            requestURL = "http://" + host + "/v1/feature?source=" + URLEncoder.encode(feature, "utf-8");
         } catch (UnsupportedEncodingException e) {
 
         }
@@ -136,11 +157,15 @@ public class TikaClient {
 
     public LastModifiedStampedResult readWithIMS(String url, long lastModified) throws TikaClientException {
         HttpURLConnection u = null;
+
         try {
             u = (HttpURLConnection) new URL(url).openConnection();
         } catch (IOException e) {
             return new LastModifiedStampedResult(-1,null);
         }
+        u.setConnectTimeout(10000);
+        u.setReadTimeout(10000);
+
         if (lastModified != -1)
             u.setIfModifiedSince(lastModified);
         try {

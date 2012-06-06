@@ -172,4 +172,7 @@
     <style name="TabItem_Icon">
         <item name="android:layout_marginTop">6.0dip</item>
     </style>
+    <style name="SherlockSpinner">
+        <item name="android:gravity">center</item>
+    </style>
 </resources>

@@ -1,23 +1,13 @@
 package com.goal98.flipdroid.view;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.text.AndroidCharacter;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import com.goal98.flipdroid.R;
-import com.goal98.flipdroid.activity.PageActivity;
-import com.goal98.flipdroid.util.Constants;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -33,7 +23,7 @@ public class PageIndexView extends LinearLayout {
     private int current;
 //    private boolean hasUpdate;
     private boolean updating;
-    private PageActivity activity;
+    private Context activity;
 
     public void setLatestUpdateDate(Date latestUpdateDate) {
         this.latestUpdateDate = latestUpdateDate;
@@ -46,7 +36,7 @@ public class PageIndexView extends LinearLayout {
 
     public PageIndexView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        activity = (PageActivity) context;
+        activity =  context;
         this.setOrientation(HORIZONTAL);
         this.setGravity(Gravity.CENTER);
 //        setDot(8, 4);
@@ -59,19 +49,22 @@ public class PageIndexView extends LinearLayout {
             this.current = (int) ((current / (float) total) * 15);
             this.total = 15;
         }
+        if(this.current == 0){
+            this.current = 1;
+        }
         updateView();
     }
 
     private void updateView() {
         this.removeAllViews();
-        TextView latest = new TextView(this.getContext());
-        latest.setText(R.string.latest);
-        latest.setTextColor(Color.parseColor("#CCCCCC"));
-        latest.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        params.setMargins(5, 0, 5, 2);
+//        TextView latest = new TextView(this.getContext());
+//        latest.setText(R.string.latest);
+//        latest.setTextColor(Color.parseColor("#CCCCCC"));
+//        latest.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+//        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+//        params.setMargins(5, 0, 5, 2);
 
-        this.addView(latest, params);
+//        this.addView(latest, params);
         for (int i = 0; i < this.total; i++) {
             ImageView greyDot = new ImageView(this.getContext());
             if (i + 1 == current)
@@ -80,20 +73,20 @@ public class PageIndexView extends LinearLayout {
                 greyDot.setBackgroundResource(R.drawable.dot);
             greyDot.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             LayoutParams paramsDot = new LayoutParams(12, 12);
-            paramsDot.setMargins(2, 0, 2, 0);
+            paramsDot.setMargins(3, 0, 3, 0);
             this.addView(greyDot, paramsDot);
         }
 
-        TextView latestUpdate = new TextView(this.getContext());
-        latestUpdate.setText(new SimpleDateFormat("MMM dd").format(latestUpdateDate));
-        latestUpdate.setTextColor(Color.parseColor("#CCCCCC"));
-        latestUpdate.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
-        this.addView(latestUpdate, params);
+//        TextView latestUpdate = new TextView(this.getContext());
+//        latestUpdate.setText(new SimpleDateFormat("MMM dd").format(latestUpdateDate));
+//        latestUpdate.setTextColor(Color.parseColor("#CCCCCC"));
+//        latestUpdate.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+//        this.addView(latestUpdate, params);
 
         if (updating) {
             LinearLayout progressBar = (LinearLayout) LayoutInflater.from(this.getContext()).inflate(R.layout.progressbar, null);
             progressBar.findViewById(R.id.loading).setVisibility(GONE);
-            this.addView(progressBar, params);
+//            this.addView(progressBar, params);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.goal98.flipdroid.model.rss;
 
+import com.goal98.flipdroid.client.LastModifiedStampedResult;
+import com.goal98.flipdroid.client.TikaClientException;
 import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.RemoteArticleSource;
 import com.goal98.flipdroid.model.cachesystem.CacheToken;
@@ -24,10 +26,18 @@ public class RemoteRSSArticleSource extends RemoteArticleSource {
         return token;
     }
 
-
-
-
     protected void setSourceType(Article article) {
         article.setSourceType(TikaConstants.TYPE_RSS);
+    }
+
+    protected LastModifiedStampedResult getLatestSource() {
+        try {
+            LastModifiedStampedResult feedJSON = tikaClient.getRSSJSON(remoteSourceToken, lastModified);
+            if (feedJSON == null)
+                return null;
+            return feedJSON;
+        } catch (TikaClientException e) {
+            return null;
+        }
     }
 }

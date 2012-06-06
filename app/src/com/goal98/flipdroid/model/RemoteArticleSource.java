@@ -4,7 +4,6 @@ import com.goal98.flipdroid.client.*;
 import com.goal98.flipdroid.model.cachesystem.BaseCacheableArticleSource;
 import com.goal98.flipdroid.model.cachesystem.CacheToken;
 import com.goal98.flipdroid.util.Constants;
-import com.goal98.tika.common.TikaConstants;
 import org.apache.commons.io.IOUtils;
 
 import java.net.MalformedURLException;
@@ -24,7 +23,7 @@ public abstract class RemoteArticleSource extends BaseCacheableArticleSource {
     protected String remoteSourceToken;
     private String sourceName;
     private String sourceImage;
-    TikaClient tikaClient;
+    protected TikaClient tikaClient;
 
     public String getImageUrl() {
         return sourceImage;  //To change body of implemented methods use File | Settings | File Templates.
@@ -32,6 +31,7 @@ public abstract class RemoteArticleSource extends BaseCacheableArticleSource {
     public String getAuthor() {
         return sourceName;  //To change body of implemented methods use File | Settings | File Templates.
     }
+
     public RemoteArticleSource(String remoteSourceToken, String sourceName, String sourceImage) {
         this.remoteSourceToken = remoteSourceToken;
         this.sourceName = sourceName;
@@ -40,17 +40,6 @@ public abstract class RemoteArticleSource extends BaseCacheableArticleSource {
     }
 
     public abstract CacheToken getCacheToken();
-
-    protected LastModifiedStampedResult getLatestSource() {
-        try {
-            LastModifiedStampedResult feedJSON = tikaClient.getFeedJSON(remoteSourceToken, lastModified);
-            if (feedJSON == null)
-                return null;
-            return feedJSON;
-        } catch (TikaClientException e) {
-            return null;
-        }
-    }
 
     public Date lastModified() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
@@ -96,5 +85,6 @@ public abstract class RemoteArticleSource extends BaseCacheableArticleSource {
 
 
     private final FeedJSONParser feedJSONParser = new FeedJSONParser();
+
     protected abstract void setSourceType(Article article);
 }

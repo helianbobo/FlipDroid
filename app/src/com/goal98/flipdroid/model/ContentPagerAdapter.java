@@ -6,7 +6,6 @@ import android.support.v4.view.PagerAdapter;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -62,7 +61,7 @@ public class ContentPagerAdapter extends PagerAdapter {
     }
 
     private void doPage(List<TikaUIObject> paragraphsList) {
-        float maxHeightInPixel = (float) (deviceInfo.getDisplayHeight() - (45 + 31 + 20) * deviceInfo.getDensity());
+        float maxHeightInPixel = (float) (deviceInfo.getDisplayHeight() - (45 + 31 + 20+20) * deviceInfo.getDensity());
 
         contentPage = new ContentPage(maxHeightInPixel);
         final LinearLayout.LayoutParams textLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -95,7 +94,7 @@ public class ContentPagerAdapter extends PagerAdapter {
                     tv.setPadding(2 + txtSize * 2, 3, 2 + txtSize * 2, 3);
                     tv.setBackgroundColor(Color.parseColor("#DDDDDD"));
                     sb = new StringBuilder();
-                    textLayoutParams.setMargins(0, (int) tv.getTextSize(), 0, 0);
+//                    textLayoutParams.setMargins(0, (int) tv.getTextSize(), 0, 0);
                 } else {
                     tv.setPadding(2 + txtSize, 3, 2 + txtSize, 3);
                     sb = new StringBuilder("<br/>");
@@ -122,7 +121,7 @@ public class ContentPagerAdapter extends PagerAdapter {
                         break;
                     }
                 }
-                tv.setMovementMethod(LinkMovementMethod.getInstance());
+//                tv.setMovementMethod(LinkMovementMethod.getInstance());
                 Spanned spanned = Html.fromHtml(sb.toString());
 
                 Spannable spannable = Spannable.Factory.getInstance().newSpannable(spanned);
@@ -130,8 +129,8 @@ public class ContentPagerAdapter extends PagerAdapter {
                 TextPaintUtil.removeUnderlines(spannable);
                 tv.setText(spannable);
 
-                tv.setAutoLinkMask(Linkify.WEB_URLS);
-                tv.setLinkTextColor(Constants.COLOR_LINK_TEXT);
+//                tv.setAutoLinkMask(Linkify.WEB_URLS);
+//                tv.setLinkTextColor(Constants.COLOR_LINK_TEXT);
 
                 int widthMeasureSpec = 0;
                 if ("<p><blockquote>".equals(style)) {
@@ -155,7 +154,7 @@ public class ContentPagerAdapter extends PagerAdapter {
                     layout = resetNewPage(maxHeightInPixel, layout);
                     TextView clonedTextView = cloneTextView(textLayoutParams, txtSize, uiObject, spannable);
                     clonedTextView.setPadding(clonedTextView.getPaddingLeft(), -lines * tv.getLineHeight() - 8 + clonedTextView.getPaddingTop(), clonedTextView.getPaddingRight(), +clonedTextView.getPaddingBottom());
-                    clonedTextView.setMovementMethod(LinkMovementMethod.getInstance());
+//                    clonedTextView.setMovementMethod(LinkMovementMethod.getInstance());
                     widthMeasureSpec = View.MeasureSpec.makeMeasureSpec((int) (deviceInfo.getDisplayWidth() - (40) * deviceInfo.getDensity()), View.MeasureSpec.AT_MOST);
                     clonedTextView.measure(widthMeasureSpec, View.MeasureSpec.UNSPECIFIED);
 

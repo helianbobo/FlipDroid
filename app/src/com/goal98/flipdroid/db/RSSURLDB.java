@@ -77,7 +77,9 @@ public class RSSURLDB extends AbstractDB {
             values.put(RSSURLDB.TITLE, article.getTitle());
             values.put(RSSURLDB.DATE, article.getCreatedDate().getTime());
             values.put(RSSURLDB.AUTHOR, article.getAuthor());
-            values.put(RSSURLDB.AUTHOR_IMAGE, article.getPortraitImageUrl().toExternalForm());
+            if(article.getPortraitImageUrl()!=null)
+                values.put(RSSURLDB.AUTHOR_IMAGE, article.getPortraitImageUrl().toExternalForm());
+
             values.put(RSSURLDB.SOURCE, article.getFrom());
             values.put(RSSURLDB.STATUS, RSSURLDB.STATUS_NEW + "");
             values.put(RSSURLDB.TYPE, article.getSourceType());
@@ -171,7 +173,7 @@ public class RSSURLDB extends AbstractDB {
             selection += " and " + RSSURLDB.SOURCE + " = '" + from + "' ";
 
         if (inDaysFrom != -1)
-            selection += " and " + RSSURLDB.DATE + " < " + (new Date().getTime() - inDaysFrom * 1000 * 3600 * 24) + " and " + RSSURLDB.DATE + ">" + (new Date().getTime() - inDaysTo * 1000 * 3600 * 24);
+            selection += " and " + RSSURLDB.DATE + " < " + (new Date().getTime() - inDaysFrom * 1000l * 3600 * 24) + " and " + RSSURLDB.DATE + ">" + (new Date().getTime() - inDaysTo * 1000l * 3600 * 24);
 
         String[] selectionArgs = null;
 
@@ -198,7 +200,7 @@ public class RSSURLDB extends AbstractDB {
             fromClause += " and " + RSSURLDB.SOURCE + " = '" + from + "'";
         }
         if (inDaysFrom != -1) {
-            fromClause += " and " + RSSURLDB.DATE + " < " + (new Date().getTime() - inDaysFrom * 1000 * 3600 * 24) + " and " + RSSURLDB.DATE + ">" + (new Date().getTime() - inDaysTo * 1000 * 3600 * 24);
+            fromClause += " and " + RSSURLDB.DATE + " < " + (new Date().getTime() - inDaysFrom * 1000l * 3600 * 24) + " and " + RSSURLDB.DATE + ">" + (new Date().getTime() - inDaysTo * 1000l * 3600 * 24);
         }
         Cursor cursor = rawQuery("select * from " + getTableName() + " where " + RSSURLDB.STATUS + " = ? " + fromClause + " order by " + RSSURLDB.DATE + " desc limit " + recordPerPage + " offset " + offset, new String[]{statusNew + ""});
         try {
@@ -233,6 +235,7 @@ public class RSSURLDB extends AbstractDB {
         article.setAuthor(cursor.getString(cursor.getColumnIndex(RSSURLDB.AUTHOR)));
         article.setSourceType(cursor.getString(cursor.getColumnIndex(RSSURLDB.TYPE)));
         article.setSourceURL(cursor.getString(cursor.getColumnIndex(RSSURLDB.URL)));
+        article.setFrom(cursor.getString(cursor.getColumnIndex(RSSURLDB.SOURCE)));
         String imageString = cursor.getString(cursor.getColumnIndex(RSSURLDB.IMAGES));
         int favorite = cursor.getInt(cursor.getColumnIndex(RSSURLDB.FAVORITE));
         article.setIsFavorite(favorite != 0);

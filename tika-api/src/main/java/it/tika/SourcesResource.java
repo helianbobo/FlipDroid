@@ -1,6 +1,5 @@
 package it.tika;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -8,7 +7,6 @@ import org.json.JSONObject;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 

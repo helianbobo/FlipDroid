@@ -14,6 +14,7 @@ public class URLAbstract {
     private String base;
     private List<String> images = new ArrayList<String>();
     private String referencedFrom;
+    private String sogouClass;
 
     public Date getCreateDate() {
         return createDate;
@@ -133,5 +134,17 @@ public class URLAbstract {
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
         return result;
+    }
+
+    public void setClazz(String sogouClass) {
+        this.sogouClass = sogouClass;
+    }
+
+    public String getSogouClass() {
+        return sogouClass;
+    }
+
+    public void setSogouClass(String sogouClass) {
+        this.sogouClass = sogouClass;
     }
 }

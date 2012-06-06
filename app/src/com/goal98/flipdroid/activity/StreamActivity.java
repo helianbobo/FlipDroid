@@ -63,6 +63,8 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
     private ArticleLoader currentLoaderService;
     private PullToRefreshListView currentPullToRefresh;
     private boolean backFromSelection;
+    private String lastItemName;
+    private boolean needRefresh = false;
     //    private ViewSwitcher titleSwitcher;
 
     @Override
@@ -82,7 +84,12 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
             if (sourceItem == null)
                 return;
 
-            String from = sourceItem.getSourceURL();
+            String from = null;
+            if(sourceItem.getSourceType().equals(TikaConstants.TYPE_RSS))
+                from = sourceItem.getSourceURL();
+            else
+                from = sourceItem.getCategory();
+
             String name = sourceItem.getSourceName();
             setupMainStream(from, name);
         }
@@ -107,7 +114,7 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
 
         final List<PullToRefreshListView> ptrs = new ArrayList<PullToRefreshListView>();
 
-        addPage(ptrs, from, name, true, 0, 3);
+        addPage(ptrs, from, name, true, 0, 100);
         addFavoritePage(ptrs, null);
 
 
@@ -124,7 +131,13 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
 
             @Override
             public void onPageSelected(int i) {
-//                animateTitleTo(mPagerAdapter.getPageTitle(i).toString());
+                if(i==0){//normal
+                    getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+                    getSupportActionBar().setTitle("");
+                }else{
+                    getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                    getSupportActionBar().setTitle(R.string.favorite);
+                }
             }
 
             @Override
@@ -135,15 +148,15 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                if (adapters.size() > 1) {
-                    for (int i = 1; i < adapters.size(); i++) {
+                if (adapters.size() >= 1) {
+                    for (int i = 0; i < adapters.size(); i++) {
                         final int finalI = i;
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 adapters.get(finalI).forceLoad();
                             }
-                        }, (i + 1 - 1) * 1000);
+                        }, (i+1) * 1000);
                     }
                 }
             }
@@ -188,7 +201,7 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
 
         final ArticleLoader loaderService = new ArticleLoader(StreamActivity.this, 10, from, true);
 
-        int noDataView = -1;
+        int noDataView = R.layout.add_more_favorite_view;
 
         final ArticleAdapter myAdapter = new ArticleAdapter(this, ptr.getAdapterView(), R.layout.lvloading, R.layout.stream_styled_article_view, loaderService, noDataView, new View.OnClickListener() {
             public void onClick(View view) {
@@ -240,9 +253,10 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
     public void notifyUpdateDone(CachedArticleSource cachedArticleSource) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
+    private int lastItemPosition = 0;
 
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-        if(backFromSelection){
+        if(backFromSelection && !needRefresh){
             backFromSelection = false;
             return true;
         }
@@ -250,13 +264,22 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
         if (sourceAdapter.getItem(itemPosition) instanceof SourceItem) {
             final SourceItem sourceItem = (SourceItem) sourceAdapter.getItem(itemPosition);
 
-            if(sourceItem.getSourceName().equals(currentLoaderService.getName()))
-                return true;
 
+            if(currentLoaderService != null && sourceItem.getSourceName().equals(currentLoaderService.getName()))
+                return true;
+            needRefresh = false;
+            backFromSelection = false;
+            lastItemPosition = itemPosition;
+            lastItemName = sourceItem.getSourceName();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    setupMainStream(sourceItem.getSourceURL(), sourceItem.getSourceName());
+                    String from = null;
+                    if(sourceItem.getSourceType().equals(TikaConstants.TYPE_RSS))
+                        from = sourceItem.getSourceURL();
+                    else
+                        from = sourceItem.getCategory();
+                    setupMainStream(from, sourceItem.getSourceName());
                 }
             }, 300);
             return true;
@@ -268,7 +291,7 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
     private void bindSourceSelectionAdapter() {
 
         SourceDB sourceDB = new SourceDB(this);
-        Cursor sourceCursor = sourceDB.findAll();
+        Cursor sourceCursor = sourceDB.findSourceByMultipleType(new String[]{TikaConstants.TYPE_RSS,TikaConstants.TYPE_FEATURED});
         if (sourceCursor.getCount() == 0) {
             sourceCursor.close();
             sourceAdapter = new ArrayAdapter(this, R.layout.nodataitem,
@@ -283,6 +306,23 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
             getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
             getSupportActionBar().setListNavigationCallbacks(sourceAdapter, this);
             getSupportActionBar().setTitle("");
+
+            if(sourceAdapter.getCount() > lastItemPosition){
+                SourceItem item = (SourceItem) sourceAdapter.getItem(lastItemPosition);
+                String lastName = item.getSourceName();
+                if(lastItemPosition != 0 && lastName.equals(lastItemName)){
+                    getSupportActionBar().setSelectedNavigationItem(lastItemPosition);
+                }else{
+                    getSupportActionBar().setSelectedNavigationItem(0);
+                    needRefresh = true;
+                }
+            }else{
+                getSupportActionBar().setSelectedNavigationItem(0);
+                needRefresh = true;
+            }
+
+
+
             setupNoneEmptyList();
         }
         sourceDB.close();
@@ -312,9 +352,15 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
         addSubMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         addSubMenu.add(R.string.rssfeeds).setIcon(R.drawable.rss);
+        addSubMenu.add(R.string.featured).setIcon(R.drawable.icon);
+
+        SubMenu configSubMenu = menu.addSubMenu(R.string.config);
+        configSubMenu.setIcon(R.drawable.settings);
+        configSubMenu.getItem().setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 
         return true;
     }
+    private String lastSourceName;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -322,6 +368,14 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
             Intent intent = new Intent(StreamActivity.this, RSSSourceSelectionActivity.class);
             intent.putExtra("type", TikaConstants.TYPE_RSS);
             StreamActivity.this.startActivityForResult(intent, 100);
+        }
+        if (item.getTitle().equals(this.getString(R.string.featured))) {
+            Intent intent = new Intent(StreamActivity.this, FeaturedSourceSelectionActivity.class);
+            StreamActivity.this.startActivityForResult(intent, 100);
+        }
+        if (item.getTitle().equals(this.getString(R.string.config))) {
+            Intent intent = new Intent(StreamActivity.this, ConfigActivity.class);
+            StreamActivity.this.startActivity(intent);
         }
         return true;
     }
@@ -354,7 +408,7 @@ class NoMoreArticleToLoad implements OnNothingLoaded {
     @Override
     public void onNothingLoaded() {
         currentPullToRefresh.setRefreshing();
-        new GetDataTask(currentPullToRefresh, currentAdapter, currentLoaderService, handler).execute();
+//        new GetDataTask(currentPullToRefresh, currentAdapter, currentLoaderService, handler).execute();
     }
 }
 

@@ -2,7 +2,6 @@ package com.goal98.flipdroid.client;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import com.goal98.flipdroid.activity.BindSinaActivity;
 import com.goal98.flipdroid.util.Constants;
 import oauth.signpost.OAuthProvider;
@@ -11,7 +10,6 @@ import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
-import oauth.signpost.exception.OAuthNotAuthorizedException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -42,17 +40,19 @@ public class OAuth {
         this.consumerSecret = consumerSecret;
     }
 
-    public Boolean RequestAccessToken(Activity activity, String callBackUrl) {
+    public Boolean RequestAccessToken(Activity activity, String callBackUrl, OnRetrieved onRetrieved) {
         Boolean ret = false;
         try {
             httpOauthConsumer = new CommonsHttpOAuthConsumer(consumerKey, consumerSecret);
             httpOauthprovider = new DefaultOAuthProvider("http://api.t.sina.com.cn/oauth/request_token", "http://api.t.sina.com.cn/oauth/access_token", "http://api.t.sina.com.cn/oauth/authorize");
             String authUrl = httpOauthprovider.retrieveRequestToken(httpOauthConsumer, callBackUrl);
+            if(onRetrieved!=null)
+                onRetrieved.onRetrieved();
 
             Intent intent = new Intent(activity, BindSinaActivity.class);
             intent.putExtra(BindSinaActivity.URL, authUrl);
 
-            activity.startActivity(intent);
+            activity.startActivityForResult(intent,1);
 
             ret = true;
         } catch (Exception e) {
@@ -136,5 +136,9 @@ public class OAuth {
             e.printStackTrace();
         }
         return response;
+    }
+
+    public interface OnRetrieved {
+        public void onRetrieved();
     }
 }

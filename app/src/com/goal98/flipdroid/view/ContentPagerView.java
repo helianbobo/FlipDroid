@@ -1,11 +1,9 @@
 package com.goal98.flipdroid.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import com.goal98.flipdroid.model.Article;
-import com.goal98.flipdroid.model.ContentPagerAdapter;import com.srz.androidtools.util.DeviceInfo;
 
 /**
  * Created by IntelliJ IDEA.
@@ -16,19 +14,13 @@ import com.goal98.flipdroid.model.ContentPagerAdapter;import com.srz.androidtool
  */
 public class ContentPagerView extends ViewPager {
 
-    private final DeviceInfo deviceInfo;
     private Article article;
     private PagerAdapter mPagerAdapter;
 
     public ContentPagerView(Context context, Article article) {
         super(context);
-        deviceInfo = DeviceInfo.getInstance((Activity) context);
-        this.article = article;
-        set((Activity) context, article);
+
+
     }
 
-    private void set(Activity context, Article article) {
-        mPagerAdapter = new ContentPagerAdapter(article,deviceInfo, (Activity) context);
-        setAdapter(mPagerAdapter);
-    }
 }

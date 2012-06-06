@@ -2,7 +2,7 @@
 
 
 <LinearLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
-              xmlns:android="http://schemas.android.com/apk/res/android" style="@style/AccountItem"
+              xmlns:android="http://schemas.android.com/apk/res/android" style="@style/AccountItem" android:gravity="center"
               android:orientation="horizontal" android:padding="2dip" android:background="@drawable/listbg_black">
     <com.goal98.android.WebImageView android:id="@+id/source_image" webimage:autoLoad="false"
                                      android:layout_marginBottom="3dp" android:layout_marginTop="3dp"

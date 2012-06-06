@@ -10,6 +10,24 @@ package it.tika.mongodb.source;
 public class Source {
     String url;
     String id;
+    String clazz;
+    String type;
+
+    public String getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(String clazz) {
+        this.clazz = clazz;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getUrl() {
         return url;

@@ -49,6 +49,7 @@
 
     <string name="title_load_image_preference">load image in non-WIFI</string>
     <string name="key_load_image_preference">load_image</string>
+    <string name="key_save_wifi">save_wifi</string>
     <string name="key_auto_check_update_nonwifi_preference">auto_update_nonwifi</string>
 
     <string name="button_add_new_account">Add New Account</string>

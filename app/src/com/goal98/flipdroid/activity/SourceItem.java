@@ -1,8 +1,6 @@
 package com.goal98.flipdroid.activity;
 
 import android.view.View;
-import android.view.ViewManager;
-import android.widget.LinearLayout;
 
 import java.util.Date;
 
@@ -21,6 +19,12 @@ public class SourceItem {
     private String sourceURL;
     private View sourceItemView;
     private Date sourceUpdateTime;
+
+    public String getCategory() {
+        return category;
+    }
+
+    private String category;
 
     public Date getSourceUpdateTime() {
         return sourceUpdateTime;
@@ -86,5 +90,9 @@ public class SourceItem {
 
     public View getSourceItemView() {
         return sourceItemView;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

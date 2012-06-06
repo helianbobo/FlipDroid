@@ -14,7 +14,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
@@ -259,13 +258,20 @@ public class ContentLoadedActivity extends Activity {
                                 final OAuth oauth = new OAuth();
                                 application.setOauth(oauth);
 
+                                showDialog(PROMPT_INPROGRESS);
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
                                         hander.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                boolean result = oauth.RequestAccessToken(ContentLoadedActivity.this, "flipdroid://SinaAccountSaver");
+                                                boolean result = oauth.RequestAccessToken(ContentLoadedActivity.this, "flipdroid://SinaAccountSaver", new OAuth.OnRetrieved() {
+                                                    @Override
+                                                    public void onRetrieved() {
+                                                        if (ContentLoadedActivity.this.dialog != null)
+                                                            ContentLoadedActivity.this.dialog.dismiss();
+                                                    }
+                                                });
                                                 if (!result) {
                                                     new AlarmSender(ContentLoadedActivity.this.getApplicationContext()).sendInstantMessage(R.string.networkerror);
                                                 }
@@ -274,7 +280,6 @@ public class ContentLoadedActivity extends Activity {
 
                                     }
                                 }).start();
-                                showDialog(PROMPT_INPROGRESS);
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

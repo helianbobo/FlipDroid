@@ -5,7 +5,6 @@ import org.restlet.Application;
 import org.restlet.Component;
 import org.restlet.Restlet;
 import org.restlet.data.Protocol;
-import org.restlet.data.Reference;
 import org.restlet.resource.Directory;
 
 public class APIServer {
@@ -28,6 +27,7 @@ public class APIServer {
         c.getDefaultHost().attach("/"+CURRENT_VERSION+"/url/abstract/rating", URLAbstractRatingResource.class);
         c.getDefaultHost().attach("/"+CURRENT_VERSION+"/sources/search", SourcesResource.class);
         c.getDefaultHost().attach("/"+CURRENT_VERSION+"/feed", FeedResource.class);
+        c.getDefaultHost().attach("/"+CURRENT_VERSION+"/feature", FeatureResource.class);
         c.getDefaultHost().attach("/"+CURRENT_VERSION+"/recommend", RecommendResource.class);
 
 

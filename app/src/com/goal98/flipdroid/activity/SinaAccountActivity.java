@@ -8,23 +8,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TableRow;
 import android.widget.TextView;
 import com.goal98.flipdroid.R;
 import com.goal98.flipdroid.client.OAuth;
-import com.goal98.flipdroid.client.UserInfo;
-import com.goal98.flipdroid.db.AccountDB;
-import com.goal98.flipdroid.db.SourceDB;
-import com.goal98.flipdroid.model.sina.OAuthHolder;
 import com.goal98.flipdroid.util.AlarmSender;
-import com.goal98.flipdroid.util.Constants;
 import com.goal98.tika.common.TikaConstants;
 import com.mobclick.android.MobclickAgent;
-import weibo4j.WeiboException;
 
 
 public class SinaAccountActivity extends Activity {
@@ -63,7 +53,7 @@ public class SinaAccountActivity extends Activity {
                                 OAuth oauth = new OAuth();
                                 application.setOauth(oauth);
                                 ////System.out.println("OAuthHolder.oauth" + application + oauth);
-                                boolean result = oauth.RequestAccessToken(SinaAccountActivity.this, "flipdroid://SinaAccountSaver");
+                                boolean result = oauth.RequestAccessToken(SinaAccountActivity.this, "flipdroid://SinaAccountSaver",null);
                                 if (!result)
                                     new AlarmSender(SinaAccountActivity.this.getApplicationContext()).sendInstantMessage(R.string.networkerror);
                                 SinaAccountActivity.this.finish();

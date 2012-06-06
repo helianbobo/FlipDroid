@@ -72,29 +72,23 @@ public class SourceExpandableListAdapter extends SimpleExpandableListAdapter {
         final ImageView ticker = (ImageView) v.findViewById(R.id.ticker);
         final ImageView tickerremove = (ImageView) v.findViewById(R.id.tickerremove);
 
-        String sn = stringMap.get(mChildFrom[0]);
-        ticker.setOnClickListener(new View.OnClickListener() {
+        final String sn = stringMap.get(mChildFrom[0]);
+        v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Map<String, String> sourceMap = (Map<String, String>) getChild(groupPosition, childPosition);
 
-                sourceDB.insert(sourceMap);
+                if (sourceDB.findSourceByName(sn).getCount() == 0) {
+                    sourceDB.insert(sourceMap);
+                } else {
+                    sourceDB.removeSourceByName(sn);
+                }
                 notifyDataSetChanged();
 
                 AlarmSender.sendInstantMessage(R.string.added, SourceExpandableListAdapter.this.context);
             }
         });
-        tickerremove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Map<String, String> sourceMap = (Map<String, String>) getChild(groupPosition, childPosition);
 
-                sourceDB.removeSourceByName(sourceName.getText().toString());
-                notifyDataSetChanged();
-
-                AlarmSender.sendInstantMessage(R.string.removed, SourceExpandableListAdapter.this.context);
-            }
-        });
         if (sourceDB.findSourceByName(sn).getCount() == 0) {
             ticker.setVisibility(View.VISIBLE);
             tickerremove.setVisibility(View.GONE);

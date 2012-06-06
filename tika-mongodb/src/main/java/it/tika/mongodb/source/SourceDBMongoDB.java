@@ -1,10 +1,11 @@
 package it.tika.mongodb.source;
 
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBObject;
+import com.mongodb.MongoException;
 import flipdroid.grepper.exception.DBNotAvailableException;
 import it.tika.mongodb.MongoDBFactory;
-import it.tika.mongodb.blacklist.BlacklistedTikaImage;
-import it.tika.mongodb.logger.Log;
 import org.bson.types.ObjectId;
 
 import java.net.UnknownHostException;
@@ -51,6 +52,8 @@ public class SourceDBMongoDB implements SourceDBInterface {
             DBObject urlFromDB = db.getCollection(urlCollectionName).findOne(query);
             if (urlFromDB != null) {
                 existingSource = new Source();
+                existingSource.setClazz(urlFromDB.get("class").toString());
+                existingSource.setType(urlFromDB.get("type").toString());
                 existingSource.setUrl(source.getUrl());
                 existingSource.setId(((ObjectId) urlFromDB.get("_id")).toStringMongod());
             }
@@ -58,5 +61,36 @@ public class SourceDBMongoDB implements SourceDBInterface {
             logger.log(Level.INFO, e.getMessage(), e);
         }
         return existingSource;
+    }
+
+    public Source findByReference(String reference) {
+        BasicDBObject query = new BasicDBObject();
+
+        if(reference!=null)
+            try {
+                query.put("_id", new ObjectId(reference));
+            } catch (Exception e) {
+                return null;
+            }
+        else
+            return null;
+        try {
+            DBObject sourceFromDB = db.getCollection(urlCollectionName).findOne(query);
+            if (sourceFromDB != null) {
+                Source existingSource = new Source();
+                existingSource.setClazz(sourceFromDB.get("class").toString());
+                existingSource.setType(sourceFromDB.get("type").toString());
+                existingSource.setUrl(sourceFromDB.get("url").toString());
+                existingSource.setId(((ObjectId) sourceFromDB.get("_id")).toStringMongod());
+                return existingSource;
+            }
+        } catch (MongoException e) {
+            logger.log(Level.INFO, e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public void a(){
+
     }
 }

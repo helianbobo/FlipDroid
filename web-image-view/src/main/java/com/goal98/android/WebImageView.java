@@ -233,6 +233,7 @@ public class WebImageView extends ViewSwitcher {
      * Use this method to trigger the it.tika.mongodb.image read if you had previously set autoLoad to false.
      */
     public void loadImage() {
+        System.out.println("triggerred heavy "+imageUrl);
         if (imageUrl == null) {
             return;
         }

@@ -1,7 +1,5 @@
 package it.tika.mongodb.source;
 
-import it.tika.mongodb.logger.Log;
-
 /**
  * Created by IntelliJ IDEA.
  * User: jleo
@@ -11,4 +9,6 @@ import it.tika.mongodb.logger.Log;
  */
 public interface SourceDBInterface {
     public Source findByURL(Source source);
+
+    Source findByReference(String reference);
 }

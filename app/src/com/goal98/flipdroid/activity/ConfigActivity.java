@@ -4,13 +4,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.*;
 import android.widget.ListView;
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.goal98.flipdroid.R;
 import com.mobclick.android.MobclickAgent;
 
-public class ConfigActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class ConfigActivity extends SherlockPreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     SharedPreferences settings;
 //    private ListPreference browseModePreference;
-    private CheckBoxPreference loadImagePreference;
+    private CheckBoxPreference saveWifi;
     private CheckBoxPreference autoUpdateNonWIFIPreference;
     //    private ListPreference animationModePreference;
 //    private String browseModeKey;
@@ -28,6 +29,7 @@ public class ConfigActivity extends PreferenceActivity implements SharedPreferen
 
 
     public void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Sherlock);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.config);
 
@@ -39,27 +41,11 @@ public class ConfigActivity extends PreferenceActivity implements SharedPreferen
 
         settings = PreferenceManager.getDefaultSharedPreferences(this);
         settings.registerOnSharedPreferenceChangeListener(this);
-//        browseModeKey = getString(R.string.key_browse_mode_preference);
         animationModeKey = getString(R.string.key_animation_mode_preference);
-//        browseModePreference = (ListPreference) this.findPreference(getString(R.string.key_browse_mode_preference));
-        loadImagePreference = (CheckBoxPreference) this.findPreference(getString(R.string.key_load_image_preference));
-        autoUpdateNonWIFIPreference = (CheckBoxPreference) this.findPreference(getString(R.string.key_auto_check_update_nonwifi_preference));
-
-//        animationModePreference = (ListPreference) this.findPreference(getString(R.string.key_animation_mode_preference));
-//        int browseModeIndex = findEntryIndex(settings, browseModeKey, browseModePreference);
-//        int animationModeIndex = findEntryIndex(settings, animationModeKey, animationModePreference);
-
-//        browseModePreference.setSummary(browseModePreference.getEntries()[browseModeIndex]);
-//        animationModePreference.setSummary(animationModePreference.getEntries()[animationModeIndex]);
+        saveWifi = (CheckBoxPreference) this.findPreference(getString(R.string.key_save_wifi));
     }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-//        if (key.equals(browseModeKey)) {
-//            setSummary(sharedPreferences, key, browseModePreference);
-//        }
-//        if (key.equals(animationModeKey)) {
-//            setSummary(sharedPreferences, key, animationModePreference);
-//        }
     }
 
     private void setSummary(SharedPreferences sharedPreferences, String key, ListPreference preference) {

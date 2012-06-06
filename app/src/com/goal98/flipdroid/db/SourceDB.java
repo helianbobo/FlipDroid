@@ -104,4 +104,17 @@ public class SourceDB extends AbstractDB {
 
         return query(projection, selection, selectionArgs, null);
     }
+
+    public Cursor findSourceByMultipleType(final String[] types) {
+        String[] projection = null;
+        String selection = "1=1";
+        for(String t:types){
+            selection += " or ";
+            selection = selection + (Source.KEY_SOURCE_TYPE + " = ? ");
+        }
+
+        String[] selectionArgs = types;
+
+        return query(projection, selection, selectionArgs, null);
+    }
 }

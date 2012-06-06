@@ -1,6 +1,5 @@
 package com.goal98.flipdroid.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -21,14 +20,14 @@ public class NetworkUtil {
     }
 
     public static boolean toLoadImage(Context context) {
-        boolean updateNonWIFI = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getString(R.string.key_load_image_preference), false);
-        boolean shallUpdate = (NetworkUtil.isNetworkAvailable(context) && NetworkUtil.isWifi(context)) || (NetworkUtil.isNetworkAvailable(context) && !NetworkUtil.isWifi(context) && NetworkUtil.isGPRS(context) && updateNonWIFI);
+        boolean saveWifi = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getString(R.string.key_save_wifi), false);
+        boolean shallUpdate = (NetworkUtil.isNetworkAvailable(context) && NetworkUtil.isWifi(context)) || (NetworkUtil.isNetworkAvailable(context) && !NetworkUtil.isWifi(context) && NetworkUtil.isGPRS(context) && !saveWifi);
         return shallUpdate;
     }
 
     public static boolean toUpdateSource(Context context) {
-        boolean updateNonWIFI = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getString(R.string.key_auto_check_update_nonwifi_preference), false);
-        boolean shallUpdate = (NetworkUtil.isNetworkAvailable(context) && NetworkUtil.isWifi(context)) || (NetworkUtil.isNetworkAvailable(context) && !NetworkUtil.isWifi(context) && NetworkUtil.isGPRS(context) && updateNonWIFI);
+        boolean saveWifi = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getString(R.string.key_save_wifi), false);
+        boolean shallUpdate = (NetworkUtil.isNetworkAvailable(context) && NetworkUtil.isWifi(context)) || (NetworkUtil.isNetworkAvailable(context) && !NetworkUtil.isWifi(context) && NetworkUtil.isGPRS(context) && !saveWifi);
         return shallUpdate;
     }
 

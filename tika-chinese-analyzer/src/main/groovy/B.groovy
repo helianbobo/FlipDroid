@@ -1,1 +1,6 @@
-"println2"("cena")
+('a'..'z').each {
+    println it
+}
+('A'..'Z').each {
+    println it
+}

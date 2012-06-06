@@ -12,6 +12,7 @@
     <string name="search">搜索</string>
     <string name="flip">划动 >></string>
     <string name="nodatainscroll">没有更多了</string>
+    <string name="nodatainfavorite">没有收藏</string>
     <string name="plsdroptpupdate">请下拉以获取内容</string>
     <string name="mystream">我的阅读</string>
     <string name="addfeeds">添加订阅</string>
@@ -19,6 +20,7 @@
     <string name="sina_weibo">新浪微博</string>
     <string name="updated">您有%条更新</string>
     <string name="rssfeeds">RSS订阅</string>
+    <string name="featured">天鹅绒精选</string>
     <string name="sinafeeds">新浪微博</string>
     <string name="isLastPage">已是最后一页</string>
     <string name="share">分享</string>
@@ -43,6 +45,7 @@
     <string name="title_animation_mode_preference">翻页动画</string>
     <string name="dialog_title_animation_mode_preference">翻页动画</string>
     <string name="title_load_image_preference">非WIFI下加载图片</string>
+    <string name="title_save_wifi">省流量模式</string>
     <string name="button_add_new_account">添加新账户</string>
     <string name="button_add_new_source">添加新订阅</string>
     <string name="button_login">登入</string>

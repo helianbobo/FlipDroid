@@ -18,7 +18,6 @@
      See DefaultValues.java for more information. -->
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android">
-
     <EditTextPreference
             android:key="@string/key_anim_flip_duration_preference"
             android:defaultValue="400"
@@ -26,34 +25,9 @@
             android:title="@string/title_anim_flip_duration_preference"
             android:summary="@string/summary_anim_flip_duration_preference"
             android:dialogTitle="@string/dialog_title_anim_flip_duration_preference"/>
-
-
     <android.preference.CheckBoxPreference android:id="@+id/loadImage"
-                                           android:key="@string/key_load_image_preference"
-                                           android:defaultValue="false"
-                                           android:title="@string/title_load_image_preference"
+                                           android:key="@string/key_save_wifi"
+                                           android:defaultValue="true"
+                                           android:title="@string/title_save_wifi"
             />
-
-    <android.preference.CheckBoxPreference android:id="@+id/autoUpdateCheckNonWifi"
-                                           android:key="@string/key_auto_check_update_nonwifi_preference"
-                                           android:defaultValue="false"
-                                           android:title="@string/title_auto_check_update_nonwifi_preference"
-            />
-
-    <!--<EditTextPreference
-            android:key="@string/key_tika_host"
-            android:defaultValue="www.tika.it"
-            android:inputType="text"
-            android:title="Host"
-            android:summary="www.tika.it | 10.10.2.2:8182 | 192.168.1.100:8182"
-            android:dialogTitle="Host"/>-->
-
-    <!--<ListPreference android:id="@+id/animation"-->
-    <!--android:key="@string/key_animation_mode_preference"-->
-    <!--android:defaultValue="0"-->
-    <!--android:title="@string/title_animation_mode_preference"-->
-    <!--android:dialogTitle="@string/dialog_title_animation_mode_preference"-->
-    <!--android:entries="@array/animation_mode_options"-->
-    <!--android:entryValues="@array/animation_mode_values"-->
-    <!--/>-->
 </PreferenceScreen>

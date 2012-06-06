@@ -1,8 +1,4 @@
-def date = new Date()
-Calendar c = new GregorianCalendar()
-c.setTime(date)
-c.set(Calendar.DAY_OF_WEEK,2)
+def d = new Date()
+d.setTime(1338965697133)
 
-c.getti
-
-println c.format("yyyy-MM-dd")
+println d

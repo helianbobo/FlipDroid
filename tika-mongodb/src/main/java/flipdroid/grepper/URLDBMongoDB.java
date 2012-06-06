@@ -1,5 +1,6 @@
 package flipdroid.grepper;
 
+import com.goal98.tika.utils.Each;
 import com.mongodb.*;
 import flipdroid.grepper.exception.DBNotAvailableException;
 import it.tika.mongodb.MongoDBFactory;
@@ -61,21 +62,105 @@ public class URLDBMongoDB implements URLDBInterface {
         return urlAbstract;
     }
 
-    private URLAbstract fromDBObjectToURLAbstract(DBObject urlFromDB) {
+    public URLAbstract fromDBObjectToURLAbstract(DBObject urlFromDB) {
         List<String> imageList = new ArrayList<String>();
-        BasicDBList images = (BasicDBList) urlFromDB.get("images");
-        if (images != null)
-            for (int i = 0; i < images.size(); i++)
-                imageList.add((String) images.get(i));
-
+        if (urlFromDB.get("images") instanceof BasicDBList) {
+            BasicDBList images = (BasicDBList) urlFromDB.get("images");
+            if (images != null)
+                for (int i = 0; i < images.size(); i++)
+                    imageList.add((String) images.get(i));
+        }
         URLAbstract urlAbstract = new URLAbstract(
                 (String) urlFromDB.get("url"),
                 (String) urlFromDB.get("title"),
                 (String) urlFromDB.get("content"),
                 imageList);
-        urlAbstract.setCreateDate((Date) urlFromDB.get("time"));
+
+        Object time = urlFromDB.get("time");
+        if (time instanceof Date)
+            urlAbstract.setCreateDate((Date) time);
+        else
+            urlAbstract.setCreateDate(new Date());
+
         urlAbstract.setReferencedFrom((String) urlFromDB.get("reference"));
+        urlAbstract.setClazz((String) urlFromDB.get("sogou_class"));
         return urlAbstract;
+    }
+
+    public List<URLAbstract> findByCategory(String category, int limit, boolean imageOnly) {
+        BasicDBObject categoryQuery = new BasicDBObject();
+        categoryQuery.put("sogou_class", category);
+
+        BasicDBObject gt0Query = new BasicDBObject();
+        if (imageOnly) {
+            gt0Query.put("$gt", 0);
+        } else {
+            gt0Query.put("$gt", -1);
+        }
+
+        BasicDBObject imageQuery = new BasicDBObject();
+        imageQuery.put("imageSize", gt0Query);
+
+        BasicDBObject andQuery = new BasicDBObject();
+        ArrayList<DBObject> list = new ArrayList<DBObject>();
+        list.add(imageQuery);
+        list.add(categoryQuery);
+
+        andQuery.put("$and", list);
+
+        List<URLAbstract> urlAbstracts = new ArrayList<URLAbstract>();
+        try {
+            DBCursor urlFromDB = null;
+            if (limit > 0) {
+                urlFromDB = db.getCollection(urlCollectionName).find(andQuery).sort(new BasicDBObject("time", -1)).limit(limit);
+            } else {
+                urlFromDB = db.getCollection(urlCollectionName).find(andQuery).sort(new BasicDBObject("time", -1));
+            }
+            while (urlFromDB != null && urlFromDB.hasNext()) {
+                DBObject url = urlFromDB.next();
+                URLAbstract urlAbstract = fromDBObjectToURLAbstract(url);
+                urlAbstracts.add(urlAbstract);
+            }
+        } catch (MongoException e) {
+            logger.log(Level.INFO, e.getMessage(), e);
+        }
+        return urlAbstracts;
+    }
+
+    @Override
+    public void findAllInCat(String category, Each each) {
+        BasicDBObject categoryQuery = new BasicDBObject();
+
+        Pattern p = Pattern.compile(category);
+
+        categoryQuery.put("sogou_class", p);
+
+//        BasicDBObject gt0Query = new BasicDBObject();
+//        if(tru){
+//            gt0Query.put("$gt", 0);
+//        }else{
+//            gt0Query.put("$gt",-1);
+//        }
+//
+//        BasicDBObject imageQuery = new BasicDBObject();
+//        imageQuery.put("imageSize", gt0Query);
+//
+//        BasicDBObject andQuery = new BasicDBObject();
+//        ArrayList<DBObject> list = new ArrayList<DBObject>();
+//        list.add(imageQuery);
+//        list.add(categoryQuery);
+
+//        andQuery.put("$and", list);
+
+        try {
+            DBCursor urlFromDB = null;
+            urlFromDB = db.getCollection(urlCollectionName).find(categoryQuery).sort(new BasicDBObject("time", -1));
+            while (urlFromDB != null && urlFromDB.hasNext()) {
+                each.doWith(urlFromDB.next());
+            }
+        } catch (MongoException e) {
+            logger.log(Level.INFO, e.getMessage(), e);
+        }
     }
 
     public List<URLAbstract> findBySource(String sourceId, int limit) {
@@ -123,6 +208,19 @@ public class URLDBMongoDB implements URLDBInterface {
         return urlAbstracts;
     }
 
+    @Override
+    public void findAll(Each each) {
+        try {
+            DBCursor urlFromDB = db.getCollection(urlCollectionName).find().sort(new BasicDBObject("time", -1));
+            while (urlFromDB != null && urlFromDB.hasNext()) {
+                DBObject url = urlFromDB.next();
+                each.doWith(url);
+            }
+        } catch (MongoException e) {
+            logger.log(Level.INFO, e.getMessage(), e);
+        }
+    }
+
     public void insert(URLAbstract urlAbstract) {
         BasicDBObject urlAbstractObj = new BasicDBObject();
         urlAbstractObj.put("url", urlAbstract.getUrl());
@@ -132,8 +230,10 @@ public class URLDBMongoDB implements URLDBInterface {
         urlAbstractObj.put("type", "user");
         urlAbstractObj.put("time", new Date());
         urlAbstractObj.put("state", "success");
+        urlAbstractObj.put("sogou_class", urlAbstract.getSogouClass());
         urlAbstractObj.put("reference", urlAbstract.getReferencedFrom());
         urlAbstractObj.put("indexURL", urlAbstract.getIndexURL());
+        urlAbstractObj.put("imageSize", urlAbstract.getImages().size());
         try {
             db.getCollection(urlCollectionName).insert(urlAbstractObj);
         } catch (MongoException e) {
@@ -164,7 +264,10 @@ public class URLDBMongoDB implements URLDBInterface {
             urlFromDB.put("title", urlAbstract.getTitle());
             urlFromDB.put("content", urlAbstract.getContent());
             urlFromDB.put("images", urlAbstract.getImages());
-            urlFromDB.put("time", new Date());
+            urlFromDB.put("imageSize", urlAbstract.getImages().size());
+            urlFromDB.put("reference", urlAbstract.getReferencedFrom());
+            urlFromDB.put("sogou_class", urlAbstract.getSogouClass());
+            urlFromDB.put("last_update", new Date());
             db.getCollection(urlCollectionName).update(query, urlFromDB);
         } catch (MongoException e) {
             logger.log(Level.INFO, e.getMessage(), e);

@@ -9,6 +9,7 @@ import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
 import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
+import com.goal98.flipdroid.model.featured.FeaturedArticleSource;
 import com.goal98.flipdroid.model.rss.RemoteRSSArticleSource;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.tika.common.TikaConstants;
@@ -54,12 +55,19 @@ public class SourceUpdateManager {
                 String sourceContentUrl = c.getString(c.getColumnIndex(Source.KEY_CONTENT_URL));
                 String sourceName = c.getString(c.getColumnIndex(Source.KEY_SOURCE_NAME));
                 String sourceImage = c.getString(c.getColumnIndex(Source.KEY_IMAGE_URL));
+                String sourceCat = c.getString(c.getColumnIndex(Source.KEY_CAT));
 
                 CachedArticleSource cachedArticleSource = null;
                 if (sourceType.equals(TikaConstants.TYPE_RSS)) {
                     RemoteArticleSource remoteRSSArticleSource = new RemoteRSSArticleSource(sourceContentUrl, sourceName, sourceImage);
                     cachedArticleSource = new CachedArticleSource(remoteRSSArticleSource, updateable, sourceCache, rssurlDB);
                 }
+
+                if (sourceType.equals(TikaConstants.TYPE_FEATURED)) {
+                    RemoteArticleSource remoteFeaturedArticleSource = new FeaturedArticleSource(sourceCat, sourceName, sourceImage);
+                    cachedArticleSource = new CachedArticleSource(remoteFeaturedArticleSource, updateable, sourceCache, rssurlDB);
+                }
+
 
                 if (cachedArticleSource != null) {
                     cachedArticleSources.add(cachedArticleSource);

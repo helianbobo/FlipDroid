@@ -1,14 +1,7 @@
 package com.goal98.flipdroid.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
 import com.actionbarsherlock.app.SherlockExpandableListActivity;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.MenuItem;
@@ -17,8 +10,6 @@ import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.GroupedSource;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.model.SourceRepo;
-import com.goal98.flipdroid.model.rss.RssParser;
-import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.flipdroid.view.SourceExpandableListAdapter;
 import com.goal98.tika.common.TikaConstants;
@@ -32,7 +23,6 @@ public class RSSSourceSelectionActivity extends SherlockExpandableListActivity {
     protected SourceDB sourceDB;
     private GroupedSource groupedSource;
     private SourceExpandableListAdapter sourceExpandableListAdapter;
-
 
     public void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_Sherlock);
@@ -77,82 +67,82 @@ public class RSSSourceSelectionActivity extends SherlockExpandableListActivity {
         groupedSource.addChild(this.getString(R.string.custom), customeSection);
     }
 
-    @Override
-    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-        super.onChildClick(parent, v, groupPosition, childPosition, id);
-//        if (mMode == null) {
-//            mMode = startActionMode(new AnActionModeOfEpicProportions(this));
-//            View closeButton = findViewById(R.id.abs__action_mode_close_button);
-//            if (closeButton != null)
-//                closeButton.setVisibility(View.GONE);
-//        }
-
-//        Map<String, String> source = (Map<String, String>) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
-//        String sourceId = source.get(Source.KEY_SOURCE_ID);
+//    @Override
+//    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+//        super.onChildClick(parent, v, groupPosition, childPosition, id);
+////        if (mMode == null) {
+////            mMode = startActionMode(new AnActionModeOfEpicProportions(this));
+////            View closeButton = findViewById(R.id.abs__action_mode_close_button);
+////            if (closeButton != null)
+////                closeButton.setVisibility(View.GONE);
+////        }
 //
-//        if (Constants.ADD_CUSTOME_SOURCE.equals(sourceId)) {
-//            doWithAddCustomerSouce();
-//        } else {
-//            if (sourceDB.findSourceByName(source.get(Source.KEY_SOURCE_NAME)).getCount() > 0) {
-//                sourceDB.removeSourceByName(source.get(Source.KEY_SOURCE_NAME));
-//            } else {
-//                sourceDB.insert(source);
-//            }
-//            sourceExpandableListAdapter.notifyDataSetChanged();
-//        }
-
-        return true;
-    }
-
-
-    public void doWithAddCustomerSouce() {
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        final LinearLayout layout = new LinearLayout(this);
-
-        final EditText feedURL = new EditText(this);
-        feedURL.setSingleLine(true);
-        layout.setPadding(10, 5, 10, 5);
-        layout.addView(feedURL, 0, lp);
-
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.pastersshere)
-                .setView(layout)
-                .setPositiveButton(android.R.string.ok,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                String url = feedURL.getText().toString();
-                                if (!url.startsWith("http://"))
-                                    url = "http://" + url;
-
-                                RssParser rp = new RssParser(url);
-                                try {
-                                    rp.parse();
-                                    RssParser.RssFeed feed = rp.getFeed();
-                                    Map<String, String> customeRSSFeed = SourceDB.buildSource(TikaConstants.TYPE_RSS,
-                                            feed.title,
-                                            null,
-                                            feed.description, feed.imageUrl, url, feedURL.getContext().getString(R.string.custom));
-                                    sourceDB.insert(customeRSSFeed);
-
-                                    startActivity(new Intent(RSSSourceSelectionActivity.this, IndexActivity.class));
-
-                                    finish();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    new AlarmSender(RSSSourceSelectionActivity.this.getApplicationContext()).sendInstantMessage(R.string.rssinvalid);
-                                }
-                            }
-                        })
-                .setNegativeButton(android.R.string.cancel,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();
-    }
+////        Map<String, String> source = (Map<String, String>) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
+////        String sourceId = source.get(Source.KEY_SOURCE_ID);
+////
+////        if (Constants.ADD_CUSTOME_SOURCE.equals(sourceId)) {
+////            doWithAddCustomerSouce();
+////        } else {
+////            if (sourceDB.findSourceByName(source.get(Source.KEY_SOURCE_NAME)).getCount() > 0) {
+////                sourceDB.removeSourceByName(source.get(Source.KEY_SOURCE_NAME));
+////            } else {
+////                sourceDB.insert(source);
+////            }
+////            sourceExpandableListAdapter.notifyDataSetChanged();
+////        }
+//
+//        return true;
+//    }
+//
+//
+//    public void doWithAddCustomerSouce() {
+//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+//                LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//        final LinearLayout layout = new LinearLayout(this);
+//
+//        final EditText feedURL = new EditText(this);
+//        feedURL.setSingleLine(true);
+//        layout.setPadding(10, 5, 10, 5);
+//        layout.addView(feedURL, 0, lp);
+//
+//        new AlertDialog.Builder(this)
+//                .setTitle(R.string.pastersshere)
+//                .setView(layout)
+//                .setPositiveButton(android.R.string.ok,
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog,
+//                                                int which) {
+//                                String url = feedURL.getText().toString();
+//                                if (!url.startsWith("http://"))
+//                                    url = "http://" + url;
+//
+//                                RssParser rp = new RssParser(url);
+//                                try {
+//                                    rp.parse();
+//                                    RssParser.RssFeed feed = rp.getFeed();
+//                                    Map<String, String> customeRSSFeed = SourceDB.buildSource(TikaConstants.TYPE_RSS,
+//                                            feed.title,
+//                                            null,
+//                                            feed.description, feed.imageUrl, url, feedURL.getContext().getString(R.string.custom));
+//                                    sourceDB.insert(customeRSSFeed);
+//
+//                                    startActivity(new Intent(RSSSourceSelectionActivity.this, IndexActivity.class));
+//
+//                                    finish();
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                    new AlarmSender(RSSSourceSelectionActivity.this.getApplicationContext()).sendInstantMessage(R.string.rssinvalid);
+//                                }
+//                            }
+//                        })
+//                .setNegativeButton(android.R.string.cancel,
+//                        new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog,
+//                                                int which) {
+//                                dialog.dismiss();
+//                            }
+//                        }).show();
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

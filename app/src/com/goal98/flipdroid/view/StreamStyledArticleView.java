@@ -137,11 +137,13 @@ public class StreamStyledArticleView<T> extends ItemView implements HeavyUIOpera
 
 
     public Article getArticle() {
+
         return article;
     }
 
 
-    public void heavyUIOperation() {
+    public synchronized void heavyUIOperation() {
+        System.out.println("triggerred heavy");
         if (imageView != null){
 //            imageView.setInAnimation(this.getContext(), android.R.anim.fade_in);
             imageView.loadImage();

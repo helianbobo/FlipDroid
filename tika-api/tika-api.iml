@@ -14,7 +14,7 @@
       <excludeFolder url="file://$MODULE_DIR$/target/surefire" />
       <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.6" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.restlet.jse:org.restlet:2.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.osgi:org.osgi.core:4.0.0" level="project" />
