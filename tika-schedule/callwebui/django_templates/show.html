@@ -36,10 +36,10 @@
 			<div id ="testlist"></div>
 			<!--<a href="#" class="btn" rel="popover" id="testadd" title="test" data-content="test">test</a>	-->
 			{% load callwebui_tags %}
-			<div class="span3">
+			<div class="span4">
 				<ul class="thumbnails">
 					{% for item in items.object_list %}
-					<li class="span3">
+					<li class="span4">
 						<div class="thumbnail" id="tbn-{{forloop.counter}}">
 							<div id="myCarousel-{{forloop.counter}}" class="carousel">
 								<!-- Carousel items -->
@@ -79,12 +79,12 @@
 							</div>
 						</div>
 					</li>
-					{%if  forloop.counter|divisibleby:6 %}
+					{%if  forloop.counter|divisibleby:8 %}
 				</ul>
 			</div>
 			{% endif  %}
-			{%if  forloop.counter|divisibleby:6 and not forloop.last%}
-			<div class="span3">
+			{%if  forloop.counter|divisibleby:8 and not forloop.last%}
+			<div class="span4">
 				<ul class="thumbnails">
 					{% endif  %}
 
