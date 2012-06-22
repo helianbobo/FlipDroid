@@ -1,0 +1,302 @@
+Traceback (most recent call last):
+  File "manage.py", line 14, in <module>
+    execute_manager(settings)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 438, in execute_manager
+    utility.execute()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 379, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 191, in run_from_argv
+    self.execute(*args, **options.__dict__)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 220, in execute
+    output = self.handle(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 67, in handle
+    self.run(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 76, in run
+    autoreload.main(self.inner_run, args, options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 131, in main
+    reloader(main_func, args, kwargs)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 104, in python_reloader
+    reloader_thread()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 83, in reloader_thread
+    ensure_echo_on()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 77, in ensure_echo_on
+    attr_list = termios.tcgetattr(fd)
+termios.error: (25, 'Inappropriate ioctl for device')
+Unhandled exception in thread started by <bound method Command.inner_run of <django.contrib.staticfiles.management.commands.runserver.Command object at 0x84c262c>>
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 81, in inner_run
+    from django.conf import settings
+ImportError: No module named django.conf
+Traceback (most recent call last):
+  File "manage.py", line 14, in <module>
+    execute_manager(settings)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 438, in execute_manager
+    utility.execute()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 379, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 191, in run_from_argv
+    self.execute(*args, **options.__dict__)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 220, in execute
+    output = self.handle(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 67, in handle
+    self.run(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 76, in run
+    autoreload.main(self.inner_run, args, options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 131, in main
+    reloader(main_func, args, kwargs)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 104, in python_reloader
+    reloader_thread()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 83, in reloader_thread
+    ensure_echo_on()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 77, in ensure_echo_on
+    attr_list = termios.tcgetattr(fd)
+termios.error: (25, 'Inappropriate ioctl for device')
+Unhandled exception in thread started by <bound method Command.inner_run of <django.contrib.staticfiles.management.commands.runserver.Command object at 0x829d62c>>
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 81, in inner_run
+    from django.conf import settings
+ImportError: No module named django.conf
+Traceback (most recent call last):
+  File "manage.py", line 14, in <module>
+    execute_manager(settings)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 438, in execute_manager
+    utility.execute()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 379, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 191, in run_from_argv
+    self.execute(*args, **options.__dict__)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 220, in execute
+    output = self.handle(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 67, in handle
+    self.run(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 76, in run
+    autoreload.main(self.inner_run, args, options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 131, in main
+    reloader(main_func, args, kwargs)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 104, in python_reloader
+    reloader_thread()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 83, in reloader_thread
+    ensure_echo_on()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 77, in ensure_echo_on
+    attr_list = termios.tcgetattr(fd)
+termios.error: (25, 'Inappropriate ioctl for device')
+Unhandled exception in thread started by <bound method Command.inner_run of <django.contrib.staticfiles.management.commands.runserver.Command object at 0x8a5862c>>
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 81, in inner_run
+    from django.conf import settings
+ImportError: No module named django.conf
+Traceback (most recent call last):
+  File "manage.py", line 14, in <module>
+    execute_manager(settings)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 438, in execute_manager
+    utility.execute()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 379, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 191, in run_from_argv
+    self.execute(*args, **options.__dict__)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 220, in execute
+    output = self.handle(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 67, in handle
+    self.run(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 76, in run
+    autoreload.main(self.inner_run, args, options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 131, in main
+    reloader(main_func, args, kwargs)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 104, in python_reloader
+    reloader_thread()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 83, in reloader_thread
+    ensure_echo_on()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 77, in ensure_echo_on
+    attr_list = termios.tcgetattr(fd)
+termios.error: (25, 'Inappropriate ioctl for device')
+Unhandled exception in thread started by <bound method Command.inner_run of <django.contrib.staticfiles.management.commands.runserver.Command object at 0x838562c>>
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 81, in inner_run
+    from django.conf import settings
+ImportError: No module named django.conf
+Traceback (most recent call last):
+  File "manage.py", line 14, in <module>
+    execute_manager(settings)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 438, in execute_manager
+    utility.execute()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 379, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 191, in run_from_argv
+    self.execute(*args, **options.__dict__)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 220, in execute
+    output = self.handle(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 67, in handle
+    self.run(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 76, in run
+    autoreload.main(self.inner_run, args, options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 131, in main
+    reloader(main_func, args, kwargs)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 104, in python_reloader
+    reloader_thread()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 83, in reloader_thread
+    ensure_echo_on()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 77, in ensure_echo_on
+    attr_list = termios.tcgetattr(fd)
+termios.error: (25, 'Inappropriate ioctl for device')
+Unhandled exception in thread started by <bound method Command.inner_run of <django.contrib.staticfiles.management.commands.runserver.Command object at 0xa07c62c>>
+Validating models...
+
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 88, in inner_run
+    self.validate(display_num_errors=True)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 249, in validate
+    num_errors = get_validation_errors(s, app)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/validation.py", line 145, in get_validation_errors
+    for r in rel_opts.get_all_related_objects():
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/db/models/options.py", line 360, in get_all_related_objects
+    local_only=local_only, include_hidden=include_hidden)]
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/db/models/options.py", line 371, in get_all_related_objects_with_model
+    self._fill_related_objects_cache()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/db/models/options.py", line 394, in _fill_related_objects_cache
+    cache[RelatedObject(f.rel.to, klass, f)] = None
+TypeError: 'NoneType' object is not callable
+Traceback (most recent call last):
+  File "manage.py", line 14, in <module>
+    execute_manager(settings)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 438, in execute_manager
+    utility.execute()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 379, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 191, in run_from_argv
+    self.execute(*args, **options.__dict__)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 220, in execute
+    output = self.handle(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 67, in handle
+    self.run(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 76, in run
+    autoreload.main(self.inner_run, args, options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 131, in main
+    reloader(main_func, args, kwargs)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 104, in python_reloader
+    reloader_thread()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 83, in reloader_thread
+    ensure_echo_on()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 77, in ensure_echo_on
+    attr_list = termios.tcgetattr(fd)
+termios.error: (25, 'Inappropriate ioctl for device')
+Unhandled exception in thread started by <bound method Command.inner_run of <django.contrib.staticfiles.management.commands.runserver.Command object at 0x903462c>>
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 81, in inner_run
+    from django.conf import settings
+ImportError: No module named django.conf
+Traceback (most recent call last):
+  File "manage.py", line 14, in <module>
+    execute_manager(settings)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 438, in execute_manager
+    utility.execute()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 379, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 191, in run_from_argv
+    self.execute(*args, **options.__dict__)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 220, in execute
+    output = self.handle(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 67, in handle
+    self.run(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 76, in run
+    autoreload.main(self.inner_run, args, options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 131, in main
+    reloader(main_func, args, kwargs)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 104, in python_reloader
+    reloader_thread()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 83, in reloader_thread
+    ensure_echo_on()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 77, in ensure_echo_on
+    attr_list = termios.tcgetattr(fd)
+termios.error: (25, 'Inappropriate ioctl for device')
+Unhandled exception in thread started by <bound method Command.inner_run of <django.contrib.staticfiles.management.commands.runserver.Command object at 0x892062c>>
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 81, in inner_run
+    from django.conf import settings
+ImportError: No module named django.conf
+Traceback (most recent call last):
+  File "manage.py", line 14, in <module>
+    execute_manager(settings)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 438, in execute_manager
+    utility.execute()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 379, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 191, in run_from_argv
+    self.execute(*args, **options.__dict__)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 220, in execute
+    output = self.handle(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 67, in handle
+    self.run(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 76, in run
+    autoreload.main(self.inner_run, args, options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 131, in main
+    reloader(main_func, args, kwargs)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 104, in python_reloader
+    reloader_thread()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 83, in reloader_thread
+    ensure_echo_on()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 77, in ensure_echo_on
+    attr_list = termios.tcgetattr(fd)
+termios.error: (25, 'Inappropriate ioctl for device')
+Unhandled exception in thread started by <bound method Command.inner_run of <django.contrib.staticfiles.management.commands.runserver.Command object at 0x8d7f62c>>
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 81, in inner_run
+    from django.conf import settings
+ImportError: No module named django.conf
+Traceback (most recent call last):
+  File "manage.py", line 14, in <module>
+    execute_manager(settings)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 438, in execute_manager
+    utility.execute()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 379, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 191, in run_from_argv
+    self.execute(*args, **options.__dict__)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 220, in execute
+    output = self.handle(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 67, in handle
+    self.run(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 76, in run
+    autoreload.main(self.inner_run, args, options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 131, in main
+    reloader(main_func, args, kwargs)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 104, in python_reloader
+    reloader_thread()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 83, in reloader_thread
+    ensure_echo_on()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 77, in ensure_echo_on
+    attr_list = termios.tcgetattr(fd)
+termios.error: (25, 'Inappropriate ioctl for device')
+Unhandled exception in thread started by <bound method Command.inner_run of <django.contrib.staticfiles.management.commands.runserver.Command object at 0x86c062c>>
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 81, in inner_run
+    from django.conf import settings
+ImportError: No module named django.conf
+Traceback (most recent call last):
+  File "manage.py", line 14, in <module>
+    execute_manager(settings)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 438, in execute_manager
+    utility.execute()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/__init__.py", line 379, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 191, in run_from_argv
+    self.execute(*args, **options.__dict__)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/base.py", line 220, in execute
+    output = self.handle(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 67, in handle
+    self.run(*args, **options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 76, in run
+    autoreload.main(self.inner_run, args, options)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 131, in main
+    reloader(main_func, args, kwargs)
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 104, in python_reloader
+    reloader_thread()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 83, in reloader_thread
+    ensure_echo_on()
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/utils/autoreload.py", line 77, in ensure_echo_on
+    attr_list = termios.tcgetattr(fd)
+termios.error: (25, 'Inappropriate ioctl for device')
+Unhandled exception in thread started by <bound method Command.inner_run of <django.contrib.staticfiles.management.commands.runserver.Command object at 0x8f1a62c>>
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/site-packages/Django-1.3-py2.6.egg/django/core/management/commands/runserver.py", line 81, in inner_run
+    from django.conf import settings
+ImportError: No module named django.conf

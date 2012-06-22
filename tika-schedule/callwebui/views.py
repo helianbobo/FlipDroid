@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-  
 from django.http import HttpResponse,HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render_to_response
@@ -36,6 +37,8 @@ def paging(request,item_list,page=1,per_page=10):
         items = paginator.page(1)
     except EmptyPage:
         items = paginator.page(paginator.num_pages)
+ 
+        
     return items
 
 def pagingSearch(request,item_list,per_page=10):
@@ -57,7 +60,7 @@ def showSource(request,page=1):
     #item_list = [item for item in model.con.Source.find()]
     item_list =  model.con.Source.find() 
     items = paging(request, item_list,page) 
-    return render_to_response('source.html', {'items': items})
+    return render_to_response('source.html', {'items': items,'thepage':page})
 
 
 @islogin
@@ -71,38 +74,65 @@ def showRecommendSource(request,page=1):
 @islogin
 def updateSource(request):
     
+    try:
+        if request.POST['update']=='adds':        
+            _type=request.POST['type']
+            urls=request.POST['urls'].encode("utf-8")
+            _time = datetime.datetime.utcnow()
+         
+            for url in urls.split('\n'):
+                url =  "".join(url.split())
+                print url 
+                x = model.con.Source() 
+                x["url"]=url.decode('utf-8')
+                x["type"]=_type
+                x["md5"] = u"1"
+                x["time"]=_time
+                x["class"] = u"unknown"
+                x.save()
+            return HttpResponseRedirect("/console/source/")
+    except Exception as e:
+        print e
+        
+     
+        
+    page = request.path[request.path.rfind('/')+1:] 
     if request.GET['update']=='add':
         x = model.con.Source() 
         x["url"]=request.GET['url']
         x["type"]=request.GET['type']
         x["md5"] = u"1"
+        x["class"] = u"unknown"
         x["time"]=datetime.datetime.utcnow()
          
         x.save()
-        return HttpResponseRedirect("/console/source/")
+        return HttpResponseRedirect("/console/source/"+page)
         
-    type = request.GET['type'] 
+    _type = request.GET['type'] 
     url = request.GET['url']
     theid = request.GET['_id']
-  
+    theclass = request.GET['class']
     if request.GET['update']=='update':
         model.con.tika.source.update({'_id':pymongo.objectid.ObjectId(theid)}, 
                                   {'$set':{"url": url,
-                                            "time": datetime.datetime.utcnow()                              
+                                            "time": datetime.datetime.utcnow() ,
+                                             "class": theclass,
+                                             "type": _type
                                 }},False) 
-        return HttpResponseRedirect("/console/source/")
+        return HttpResponseRedirect("/console/source/"+page)
 
     if request.GET['update']=='delete':
         model.con.tika.source.remove({'_id':pymongo.objectid.ObjectId(theid)})
-        return HttpResponseRedirect("/console/source/")
+        return HttpResponseRedirect("/console/source/"+page)
+        
     
  
 @islogin
 def updateRecommendSourceSource(request):
-    if request.GET['update']=='add':
+    if request.POST['update']=='add':
         x = model.con.Recommend_Source() 
-        x["body"]=request.GET['body']
-        x["type"]=request.GET['type']
+        x["body"]=request.POST['body']
+        x["type"]=request.POST['type']
          
         #x["lastModified"]=unicode(time.strftime(ISOTIMEFORMAT, time.gmtime()))
         x["lastModified"]=datetime.datetime.utcnow()
@@ -110,11 +140,11 @@ def updateRecommendSourceSource(request):
         x.save()
         return HttpResponseRedirect("/console/recommendsource/")
         
-    type = request.GET['type'] 
-    body = request.GET['body']
-    theid = request.GET['_id']
+    type = request.POST['type'] 
+    body = request.POST['body']
+    theid = request.POST['_id']
   
-    if request.GET['update']=='update':
+    if request.POST['update']=='update':
         model.con.tika.RecommendSource.update({'_id':pymongo.objectid.ObjectId(theid)}, 
                                   {'$set':{"body": body,
                                            "lastModified": datetime.datetime.utcnow(),
@@ -123,7 +153,7 @@ def updateRecommendSourceSource(request):
                                 }},False) 
         return HttpResponseRedirect("/console/recommendsource/")
 
-    if request.GET['update']=='delete':
+    if request.POST['update']=='delete':
         model.con.tika.RecommendSource.remove({'_id':pymongo.objectid.ObjectId(theid)})
         return HttpResponseRedirect("/console/recommendsource/")
     
@@ -137,7 +167,7 @@ def showUrls(request,page=1):
     
     item_list =model.con.Url_abstract.find().sort('time', pymongo.DESCENDING)
     items=paging(request,item_list,page) 
-    return render_to_response('urls.html', { 'items': items})
+    return render_to_response('urls.html', { 'items': items,'vsss':"i am ok,haha"})
 
 
 
@@ -172,6 +202,18 @@ def updateUrls(request):
         model.con.tika.url_abstract.remove({'_id':pymongo.objectid.ObjectId(theid)})
         return HttpResponseRedirect("/console/urls/")
     
+
+def showUrl(request):        
+   
+    theid = request.GET['_id']
+    print "#######:",theid
+  
+    if request.GET['update']=='show':
+        
+        item = model.con.tika.url_abstract.find_one({'_id':pymongo.objectid.ObjectId(theid)}) 
+        html= item['content']  
+        return HttpResponse(html) 
+    
     
 
     
@@ -202,7 +244,46 @@ def sessiontest(request):
             return HttpResponse("Please enable cookies and try again.")
     return sessiontest(request) 
 
+def getlistAndtag(request,page=1):
+    if request.GET.get('tag') is not None:
+        tag = ";".join(request.GET.get('tag').split("_"))
+        item_list =model.con.Url_abstract.find({"images":{"$ne":[]},"sogou_class":{'$regex': tag}}).sort('time', pymongo.DESCENDING)
+    else:
+        item_list =model.con.Url_abstract.find({"images":{"$ne":[]}}).sort('time', pymongo.DESCENDING)
+        tag = ""
+    return item_list,tag
+
+def showPage(request,page=1): 
+    item_list,tag = getlistAndtag(request,page)
+    items=paging(request,item_list,page,24) 
+    return render_to_response('show.html', { 'items': items,'tag':tag})
+
+def getlistForScroll(request,page=1): 
+    item_list,tag = getlistAndtag(request,page)
+    items=paging(request,item_list,page,24) 
+    startindex = 24*(int(page)-1)
+    return render_to_response('thumbnail_list.html', { 'items': items,'tag':tag,'startindex':startindex})
+ 
+ 
 
 
+import simplejson
+
+def getReadModal(request, id):
+    item = model.con.tika.url_abstract.find_one({'_id':pymongo.objectid.ObjectId(id)})
+  
+     
+    return render_to_response('readmodal.html', {'item': item})  
+
+
+def getinfo(request, id):
+    item = model.con.tika.url_abstract.find_one({'_id':pymongo.objectid.ObjectId(id)})
+    content = item['content']
+         
+    
+    j = {'title':item['title'],'id':id,'content':content}
+     
+    return HttpResponse(simplejson.dumps(j))
+  
  
     

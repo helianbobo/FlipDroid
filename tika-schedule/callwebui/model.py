@@ -6,8 +6,18 @@ Created on 2011-8-21
 #from pymongo import Connection
 from mongokit import * 
 #db = Connection().tika
- 
-con = Connection()
+DBUSERNAME="tika"
+DBPASSWORD="Pass1234."
+DBHOST='mongoc2.grandcloud.cn'
+DBPOST=10005
+
+con = Connection(DBHOST,DBPOST,slave_okay=True)
+con.tika.authenticate(DBUSERNAME, DBPASSWORD)
+
+
+#DB_HOST='localhost'
+#DB_PORT=27017
+#con = Connection(DB_HOST,DB_PORT)
 
 
 #class Tika(object):
@@ -32,7 +42,7 @@ class Source(Document):
                  'type':unicode,
                  'md5':unicode,
                  'time':datetime.datetime,
-                  
+                 'class':unicode, 
                  }
     required_fields = ['url' ]
     

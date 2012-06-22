@@ -1,0 +1,218 @@
+{% extends "base2.html" %}
+{% block content %}
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+			<a class="brand" href="#">天鹅绒</a>
+			<ul class="nav" nowtag="{{tag}}">
+				<li {%ifequal tag "" %} class="active"{%endifequal%}>
+					<a href="./">ALL</a>
+				</li>
+				<li {%ifequal tag "IT" %} class="active"{%endifequal%}  >
+					<a  href="./?tag=IT">IT</a>
+				</li>
+				<li {%ifequal tag "Sport" %} class="active"{%endifequal%}>
+					<a   href="./?tag=Sport">体育</a>
+				</li>
+				<li {%ifequal tag "Car" %} class="active"{%endifequal%}>
+					<a   href="./?tag=Car">汽车</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div >
+	<div class="sidebar-nav" align="center">
+		 <a class="label label-info" onclick="javascript:scroll(0,0)" >Top</a>  
+		 
+	</div><!--/.well -->
+	<div class="container" >
+		<div class="row">
+		 
+			<div id ="modalres">
+				<div id="myModal" class="modal hide fade" style="display: none;"></div>
+			</div>
+			<div id ="testlist"></div>
+			<!--<a href="#" class="btn" rel="popover" id="testadd" title="test" data-content="test">test</a>	-->
+			{% load callwebui_tags %}
+			<div class="span3">
+				<ul class="thumbnails">
+					{% for item in items.object_list %}
+					<li class="span3">
+						<div class="thumbnail" id="tbn-{{forloop.counter}}">
+							<div id="myCarousel-{{forloop.counter}}" class="carousel">
+								<!-- Carousel items -->
+								<div class="carousel-inner">
+									{% for image in item.images %}
+									{% if forloop.first %}
+									<div class = "active item" >
+										<img src={{image}} alt="">
+									</div>
+									{% else %}
+									<div class = "item" >
+										<img src={{image}} alt="">
+									</div>
+									{% endif %}
+									{% endfor %}
+									<div class="carousel-caption">
+										<h4 class="123">{{item.title|slice:":10"}}</h4>
+									</div>
+								</div>
+								<!-- Carousel nav -->
+								{% if item.images|length  > 1%} <a class="carousel-control left" href="#myCarousel-{{forloop.counter}}" data-slide="prev">&lsaquo;</a>
+								<a class="carousel-control right" href="#myCarousel-{{forloop.counter}}" data-slide="next">&rsaquo;</a>
+								{% endif %}
+							</div>
+							<div class="caption">
+								<p>
+									{{item.content|striptags|cut:"hack"|slice:":100"|add:"..."}}
+								</p>
+								<div>
+									<a href="#{{item|mongo_id}}" class="btn btn-primary" id="readbtn-{{forloop.counter}}" tag="{{item|mongo_id}}" data-toggle="modal">阅读</a>
+									<!--<a href="./updateurls?_id={{item|mongo_id}}&update=show" class="btn btn-primary" >闃呰</a>-->
+									<a href="#" class="btn" rel="popover" id="ex-{{forloop.counter}}" title="1111" data-content="222222">转发</a>
+									<div class="pull-right">
+										{{item.sogou_class}}
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+					{%if  forloop.counter|divisibleby:6 %}
+				</ul>
+			</div>
+			{% endif  %}
+			{%if  forloop.counter|divisibleby:6 and not forloop.last%}
+			<div class="span3">
+				<ul class="thumbnails">
+					{% endif  %}
+
+					{%if  forloop.last %}
+				</ul>
+			</div>
+			{% endif  %}
+
+			{% endfor %}
+			<script type="text/javascript" language="javascript">
+				$(function() {
+					$('#myModal').on('hidden', function() {
+
+						$("body").css({
+							overflow : 'scroll'
+						})
+
+					})
+
+					$('#myModal').on('shown', function() {
+						$('body').css('overflow', 'hidden')
+
+					})
+				});
+
+			</script>
+			<script type="text/javascript" language="javascript">
+				$(function() {
+
+					$('[id^="readbtn"]').live("click", function() {
+
+						var $id = $(this).attr("tag");
+						$('#myModal').load("./getReadModal/" + $id, function() {
+							$('#myModal').modal("show")
+						});
+					});
+
+					$(window).bind("scroll", function() {
+
+						if($(document).scrollTop() + $(window).height() > $(document).height() - 50) {
+
+							var nextpage = $('.thumbnail').size() / 24 + 1;
+
+							$.ajax({
+								type : "get",
+								url : "./getlistForScroll/" + nextpage.toString() + "?tag=" + $('.nav:first').attr('nowtag'),
+								success : function(data) {
+									var $tf = $('.thumbnails')
+									var ct = $(data).children().size() / $tf.size();
+									$(data).children().each(function(index) {
+										$(this).appendTo($tf.eq(index / ct));
+									});
+								}
+							});
+
+							//	$("#testadd").trigger("click");
+						}
+					})
+				});
+
+			</script>
+			<script type="text/javascript" language="javascript">
+				$(function() {
+					$('#totop').click(function() {
+
+					});
+
+					$('#testadd').click(function() {
+
+						var nextpage = $('.thumbnail').size() / 24 + 1;
+
+						$.ajax({
+							type : "get",
+							url : "./getlistForScroll/" + nextpage.toString() + "?tag=" + $('.nav:first').attr('nowtag'),
+							success : function(data) {
+								var $tf = $('.thumbnails')
+								var ct = $(data).children().size() / $tf.size();
+								$(data).children().each(function(index) {
+									$(this).appendTo($tf.eq(index / ct));
+								});
+							}
+						});
+
+						/*
+						 $('#testlist').load("./getlistForScroll/"+nextpage.toString()+"?tag="+$('.nav:first').attr('nowtag')		,function() {
+						 var $tf=$('.thumbnails')
+						 var ct = $('#testlist').children().size()  /$tf.size();
+						 $('#testlist').children().each(function(index){
+						 $(this).appendTo($tf.eq(index/ ct ));
+						 });
+						 }); */
+
+					});
+				});
+
+			</script>
+			<script type="text/javascript" language="javascript">
+								$(function() {
+
+				$('.nav li a').click(function(e) {
+				$('.nav li').removeClass('active');
+
+				var $this = $(this);
+				if (!$this.hasClass('active')) {
+				$this.addClass('active');
+				}
+				e.preventDefault();
+				});
+				/*
+				$('[id^="ex"]').popover(options)*/
+
+				$('[id^="myCarousel"]').carousel({
+				interval false;
+				});
+				});</script>
+		</div>
+	</div>
+</div>
+<div class="navbar navbar-fixed-bottom">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
+			<ul class="nav pull-right" nowtag="{{tag}}">
+				<li>
+					<a  id="totop1" href="javascript:scroll(0,0)"  onclick="">返回顶部</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+{% endblock %} 

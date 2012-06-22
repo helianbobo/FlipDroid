@@ -2,7 +2,7 @@
 {% block title %}Url_abstract{% endblock %}  
 {% block content %}  
 <a href="/console/source/">goto source!!!!</a>
-
+  <p><font size="1">{{vsss|truncatewords:"2"}}</font> </p>
 <ul>
 {% for item in items.object_list %}
   
@@ -10,7 +10,8 @@
      <form action="updateurls" method="get"  >
      {% for k,v in item.items %}
      {% ifequal k 'title' %}
-     	 <p><font size="1">{{v}}</font> </p>
+    
+     	 <p><font size="1">{{v }}</font> </p>
      {% else %}
      	{% ifequal k  'content' %}
       

@@ -1,7 +1,6 @@
 {% extends "base.html" %}  
 {% block title %}Source{% endblock %}  
-{% block content %} 
- 
+{% block content %}  
  <a href="/console/urls/">goto url_abstract</a>
 
 <ul>

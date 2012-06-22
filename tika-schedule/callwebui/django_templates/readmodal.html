@@ -1,0 +1,43 @@
+ 
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">×</button>
+              <h3>{{item.title}}</h3>
+            </div>
+            <div class="modal-body">
+            			<div id="myCarousel-{{forloop.counter}}" class="carousel">
+							<!-- Carousel items -->
+							<div class="carousel-inner">
+								{% for image in item.images %}
+								{% if forloop.first %}
+								<div class = "active item" >
+									<img src={{image}} alt="">
+								</div>
+								{% else %}
+								<div class = "item" >
+									<img src={{image}} alt="">
+								</div>
+								{% endif %}
+								{% endfor %}
+					 
+							</div>
+							<!-- Carousel nav -->
+							{% if item.images|length  > 1%} <a class="carousel-control left" href="#myCarousel-{{forloop.counter}}" data-slide="prev">&lsaquo;</a>
+							<a class="carousel-control right" href="#myCarousel-{{forloop.counter}}" data-slide="next">&rsaquo;</a>
+							{% endif %}
+						</div>
+            	
+              <p><a href="{{item.url}}" class="tooltip-test" data-original-title="Tooltip">{{item.url}}</a></p>
+
+              <hr> 
+              <div id="content">
+              	
+              		{{item.content|cut:"hack"|removetags:"img"|safe}}
+              </div>
+            </div>
+            <div class="modal-footer">
+              <a href="#" class="btn" data-dismiss="modal">关闭</a>
+              <a href="#" class="btn btn-primary">转发</a>
+            </div>
+ 
+
+ 

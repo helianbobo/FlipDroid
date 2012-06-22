@@ -1,12 +1,14 @@
 {% extends "base.html" %}  
 {% block title %}Source{% endblock %}  
 {% block content %}  
+
+ 
  <a href="/console/urls/">goto url_abstract</a>
  <a href="/console/recommendsource/">goto RecommendSource!!!!</a>
 <ul>
 {% for item in items.object_list %}
     <li>
-     <form action="updatesource" method="get"  >
+     <form action="updatesource//{{thepage}}" method="get"  >
      {% for k,v in item.items %}
      {% ifequal k '_id' %}
      	 
@@ -16,9 +18,12 @@
      <input name={{k}} type="text" value= {{v}}  style= "WIDTH: 300px">
      
       {% else %}
-     
+     {% ifequal k 'class' %}
+	  <input name={{k}} type="text" value= {{v}}  style= "WIDTH: 300px">
+	  {% else %}
      <input name={{k}} type="text" value= "{{v}}" >
-     {% endifequal %}
+ {% endifequal %}   
+ {% endifequal %}
      {% endifequal %}
 	{% endfor %}
     <input name="update" type="submit" value="update">
@@ -27,13 +32,23 @@
     </li>
 {% endfor %}
  <li>
-     <form action="updatesource" method="get"  >   
+     <form action="updatesource/{{thepage}}" method="get"  >   
      <input name="url" type="text" value="url" >
      <select name="type">
 	<option value="rss" selected="selected">rss</option>
 	<option value="weibo">weibo</option>
 	</select>
     <input name="update" type="submit" value="add">
+    </form>
+    </li>
+ <li>
+     <form action="updatesource" method="post"  >  
+<textarea name="urls" rows="10" cols="100"></textarea> 
+     <select name="type">
+	<option value="rss" selected="selected">rss</option>
+	<option value="weibo">weibo</option>
+	</select>
+    <input name="update" type="submit" value="adds">
     </form>
     </li>
 </ul>

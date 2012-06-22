@@ -1,7 +1,7 @@
 <uwsgi>
     <socket>127.0.0.1:8000</socket>
-    <chdir>/data/tika-preload/callwebui</chdir>
+    <chdir>/root/tika-schedule/callwebui</chdir>
     <pythonpath>..</pythonpath>
     <module>wsgi</module>
-    <logdate>true</logdate>  
+    <logdate>true</logdate>
 </uwsgi>
