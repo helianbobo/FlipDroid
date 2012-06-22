@@ -254,11 +254,20 @@ def getlistAndtag(request,page=1):
     return item_list,tag
 
 def showPage(request,page=1): 
+    '''
+           现在对应url是/console/showPage/
+    '''
     item_list,tag = getlistAndtag(request,page)
     items=paging(request,item_list,page,24) 
     return render_to_response('show.html', { 'items': items,'tag':tag})
 
-def getlistForScroll(request,page=1): 
+def getlistForScroll(request,page=2): 
+    '''
+    showpage滚动到最后，ajax加载新数据调用,调用是最早的page应该从2开始
+    thumbnail_list.html 是ajax加载新数据时候先渲染这个模板然后加到show.html的每个thumbnails后面 ，
+          平均加，现在4列thumbnails，一次加载24个，每个平均6个
+         
+    '''
     item_list,tag = getlistAndtag(request,page)
     items=paging(request,item_list,page,24) 
     startindex = 24*(int(page)-1)
@@ -270,6 +279,10 @@ def getlistForScroll(request,page=1):
 import simplejson
 
 def getReadModal(request, id):
+    '''
+            单个文章content去渲染readmodal.html，readmodal.html就是bootstrap modal，div里面的内容
+    '''
+      
     item = model.con.tika.url_abstract.find_one({'_id':pymongo.objectid.ObjectId(id)})
   
      
@@ -277,6 +290,11 @@ def getReadModal(request, id):
 
 
 def getinfo(request, id):
+    '''
+          返回单个文章json，现在没用到
+            
+    '''
+    
     item = model.con.tika.url_abstract.find_one({'_id':pymongo.objectid.ObjectId(id)})
     content = item['content']
          
