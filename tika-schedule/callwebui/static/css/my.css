@@ -18,6 +18,8 @@
   position:absolute;
   bottom:58px; 
   top:58px; 
+  left:0px;
+  right:0px;
   padding: 10px;
   overflow-y: auto;
 }
