@@ -21,6 +21,7 @@
 	<option value="SINA_WEIBO"  {%ifequal  v  'SINA_WEIBO' %}selected="selected"{%endifequal%}>SINA_WEIBO</option>
 	<option value="RSS" {%ifequal  v  'RSS' %}selected="selected"{%endifequal%} >RSS</option>
 	<option value="DEFAULT" {%ifequal  v  'DEFAULT' %}selected="selected"{%endifequal%} >DEFAULT</option>
+	<option value="FEATURED" {%ifequal  v  'FEATURED' %}selected="selected"{%endifequal%} >FEATURED</option>
 	</select>
      
        {% else %}
@@ -42,6 +43,7 @@
 	<option value="SINA_WEIBO"   selected="selected" >SINA_WEIBO</option>
 	<option value="RSS"   >RSS</option>
 	<option value="DEFAULT"   >DEFAULT</option>
+	<option value="FEATURED"   >FEATURED</option>
 	</select>
     <input name="update" type="submit" value="add">
     </form>
