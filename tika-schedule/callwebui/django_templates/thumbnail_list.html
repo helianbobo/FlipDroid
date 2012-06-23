@@ -11,20 +11,14 @@
 				<div class = "active item" >
 					<img src={{image}} alt="">
 				</div>
-				{% else %}
-				<div class = "item" >
-					<img src={{image}} alt="">
-				</div>
+	 
 				{% endif %}
 				{% endfor %}
 				<div class="carousel-caption">
-					<h4 class="123">{{item.title|slice:":10"}}</h4>
+					<h4 class="123">{{item.title|slice:":18"}}</h4>
 				</div>
 			</div>
-			<!-- Carousel nav -->
-			{% if item.images|length  > 1%} <a class="carousel-control left" href="#myCarousel-{{forloop.counter|add:startindex }}" data-slide="prev">&lsaquo;</a>
-			<a class="carousel-control right" href="#myCarousel-{{forloop.counter|add:startindex }}" data-slide="next">&rsaquo;</a>
-			{% endif %}
+ 
 		</div>
 		<div class="caption">
 			<p>

@@ -1,7 +1,10 @@
 {% extends "base2.html" %}
 {% block content %}
+ 
 <div class="navbar navbar-fixed-top">
+	
 	<div class="navbar-inner">
+		
 		<div class="container">
 			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
 			<a class="brand" href="#">天鹅绒</a>
@@ -23,17 +26,63 @@
 	</div>
 </div>
 <div >
+ 
 	<div class="sidebar-nav" align="center">
 		 <a class="label label-info" onclick="javascript:scroll(0,0)" >Top</a>  
 		 
 	</div><!--/.well -->
+ 
+	<div class="container">   
+	 
+</div>
+	
+	
+	
 	<div class="container" >
 		<div class="row">
-		 
+		
+				   <div class="span6 hero-unit">
+    
+        <h1>快使用天鹅绒！  <small>哼哼哈兮</small></h1>
+        <p><a>点击下载</a> </p> 
+        </div> 
+				
+ <div>  			 
+ <div class="page-header span3">
+        <h1>  希腊战神 ！  <small>3 : 0 德国</small></h1>    
+    </div>
+   
+ <blockquote class="pull-right">
+ 	  <p class="pull-left">将停止对欧元区希腊的贷款救助。</p>
+  <small>安格拉·梅克尔</small> 
+  
+    <p class="pull-left">戈麦斯这个傻货，见一次抽一次</p>
+  <small>波多尔斯基   </small>
+  
+  <p class="pull-left">哈哈，纳粹回家，夺冠还看鲁尼</p>
+  <small>太阳报   </small>
+ 
+</blockquote>
+   </div> 
+   
+ 
+</div>  
+		
+		
+		
+		<div class="row">
+ 
+		   
+				
+      
+ 
 			<div id ="modalres">
 				<div id="myModal" class="modal hide fade" style="display: none;"></div>
 			</div>
 			<div id ="testlist"></div>
+				 
+
+ 
 			<!--<a href="#" class="btn" rel="popover" id="testadd" title="test" data-content="test">test</a>	-->
 			{% load callwebui_tags %}
 			<div class="span4">
@@ -49,20 +98,14 @@
 									<div class = "active item" >
 										<img src={{image}} alt="">
 									</div>
-									{% else %}
-									<div class = "item" >
-										<img src={{image}} alt="">
-									</div>
+				 
 									{% endif %}
 									{% endfor %}
 									<div class="carousel-caption">
-										<h4 class="123">{{item.title|slice:":10"}}</h4>
+										<h4 class="123">{{item.title|slice:":18"}}</h4>
 									</div>
 								</div>
-								<!-- Carousel nav -->
-								{% if item.images|length  > 1%} <a class="carousel-control left" href="#myCarousel-{{forloop.counter}}" data-slide="prev">&lsaquo;</a>
-								<a class="carousel-control right" href="#myCarousel-{{forloop.counter}}" data-slide="next">&rsaquo;</a>
-								{% endif %}
+	 
 							</div>
 							<div class="caption">
 								<p>
