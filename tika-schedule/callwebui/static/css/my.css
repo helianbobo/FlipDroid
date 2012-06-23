@@ -1,13 +1,18 @@
 .sidebar-nav{ position:fixed; width:3%; top:50%;right:5px ; }
 .sidebar-nav a{ font-size:150%;}
 .myloading{position:fixed; width:5%; top:95%;right:5px ; }
+
 .modal-my {
-    width:70%;
-    height : 70%; 
-    margin: -35% 0 0 -35%;
+   
+   
+    width:80%;
+    height:80%;
+    margin: -40% 0 0 -40%; 
+     
     overflow-x: hidden;
      
 }
+
 .modal-my .modal-body {
   max-height: none;
   position:absolute;
@@ -22,4 +27,5 @@
     bottom:0px;
     width:97%;
 }
+ 
  
