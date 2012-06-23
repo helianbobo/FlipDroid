@@ -6,8 +6,7 @@ import pymongo
 import model
 import time
 import datetime
-from compiler.ast import Keyword
-from Cython.Shadow import typeof
+
 ISOTIMEFORMAT='%Y-%m-%d %X'
 
 PASSWD="qqwwee"
