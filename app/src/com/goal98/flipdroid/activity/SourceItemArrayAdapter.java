@@ -49,7 +49,7 @@ public class SourceItemArrayAdapter<T> extends ArrayAdapter<SourceItem> {
                 String sourceName = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_NAME));
                 String sourceImage = cursor.getString(cursor.getColumnIndex(Source.KEY_IMAGE_URL));
                 String sourceDesc = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_DESC));
-                String sourceID = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_ID));
+//                String sourceID = cursor.getString(cursor.getColumnIndex(Source.KEY_SOURCE_ID));
                 String sourceCat = cursor.getString(cursor.getColumnIndex(Source.KEY_CAT));
                 long sourceUpdateTime = cursor.getLong(cursor.getColumnIndex(Source.KEY_UPDATE_TIME));
 
@@ -59,7 +59,7 @@ public class SourceItemArrayAdapter<T> extends ArrayAdapter<SourceItem> {
                 item.setSourceImage(sourceImage);
                 item.setSourceURL(sourceContentUrl);
                 item.setSourceDesc(sourceDesc);
-                item.setSourceId(sourceID);
+//                item.setSourceId(sourceID);
                 item.setCategory(sourceCat);
                 final Date date = new Date();
                 date.setTime(sourceUpdateTime);
@@ -166,7 +166,7 @@ public class SourceItemArrayAdapter<T> extends ArrayAdapter<SourceItem> {
                 @Override
                 public void onClick(View view) {
                     if (sourceDB.findSourceByName(sourceName).getCount() == 0) {
-                        sourceDB.insert(item.getSourceType(), item.getSourceName(), item.getSourceId(), item.getSourceDesc(), item.getSourceURL(), item.getCategory(), item.getSourceImage());
+                        sourceDB.insert(item.getSourceType(), item.getSourceName(), item.getSourceDesc(), item.getSourceURL(), item.getCategory(), item.getSourceImage());
                     } else {
                         sourceDB.removeSourceByName(sourceName);
                     }

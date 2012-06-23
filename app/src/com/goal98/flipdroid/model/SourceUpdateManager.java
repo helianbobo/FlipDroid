@@ -122,5 +122,5 @@ public class SourceUpdateManager {
         }
     }
 
-    public static final String[] UPDATE_TYPE = new String[]{TikaConstants.TYPE_RSS, TikaConstants.TYPE_SINA_WEIBO, TikaConstants.TYPE_DEFAULT};
+    public static final String[] UPDATE_TYPE = new String[]{TikaConstants.TYPE_RSS, TikaConstants.TYPE_FEATURED};
 }

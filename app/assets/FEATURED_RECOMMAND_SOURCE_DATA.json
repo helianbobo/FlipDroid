@@ -1,59 +1,290 @@
 [
     {
-        "name":"互联网",
-        "id":"1",
-        "desc":"",
-        "image_url":"http://58.215.170.154/appimages/source-internet.png",
-        "content_url":"IT",
-        "type":"FEATURED"
-    },
+        "name":"健康",
+        "content_url":"Woman;Health",
+        "cat":"女人",
+        "image_url":"http://58.215.170.154/appimages/Woman-Health.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"婚姻",
+        "content_url":"Woman;Marriage",
+        "cat":"女人",
+        "image_url":"http://58.215.170.154/appimages/Woman-Marriage.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"PSP",
+        "content_url":"Game;PSP",
+        "cat":",
+        "image_url":"http://58.215.170.154/appimages/Game-PSP.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
     {
         "name":"移动",
-        "id":"6",
-        "desc":"",
-        "image_url":"http://58.215.170.154/appimages/source-internet.png",
-        "content_url":"Mobile",
-        "type":"FEATURED"
-    },
-    {
-        "name":"Web",
-        "id":"7",
-        "desc":"",
-        "image_url":"http://58.215.170.154/appimages/source-internet.png",
-        "content_url":"Web",
-        "type":"FEATURED"
-    },
+        "content_url":"IT;Mobile",
+        "cat":"IT",
+        "image_url":"http://58.215.170.154/appimages/IT-Mobile.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
     {
         "name":"体育",
-        "id":"2",
-        "desc":"",
-        "image_url":"http://58.215.170.154/appimages/source-sports.png",
         "content_url":"Sports",
-        "type":"FEATURED"
+        "cat":"体育",
+        "image_url":"http://58.215.170.154/appimages/Sports.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"IT人物",
+        "content_url":"IT;People",
+        "cat":"IT",
+        "image_url":"http://58.215.170.154/appimages/IT-People.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"CBA",
+        "content_url":"Sports;CBA",
+        "cat":"体育",
+        "image_url":"http://58.215.170.154/appimages/Sports-CBA.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"XBOX306",
+        "content_url":"Game;xbox360",
+        "cat":"游戏",
+        "image_url":"http://58.215.170.154/appimages/Game-xbox360.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"IT评论",
+        "content_url":"IT;Comment",
+        "cat":"IT",
+        "image_url":"http://58.215.170.154/appimages/IT-Comment.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"电影",
+        "content_url":"Movie",
+        "cat":"电影",
+        "image_url":"http://58.215.170.154/appimages/Movie.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"汽车导购",
+        "content_url":"Cars;Guide",
+        "cat":"汽车",
+        "image_url":"http://58.215.170.154/appimages/Cars-Guide.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"地理",
+        "content_url":"Geography",
+        "cat":"地理",
+        "image_url":"http://58.215.170.154/appimages/Geography.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"国际",
+        "content_url":"International",
+        "cat":"国际",
+        "image_url":"http://58.215.170.154/appimages/International.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"育儿",
+        "content_url":"Woman;Son",
+        "cat":"女人",
+        "image_url":"http://58.215.170.154/appimages/Woman-Son.png",
+        "type":"FEATURED",
+        "desc":""
     },
     {
-        "name":"游戏",
-        "id":"3",
-        "desc":"",
-        "image_url":"http://58.215.170.154/appimages/source-game.png",
-        "content_url":"Game",
-        "type":"FEATURED"
-    },
+        "name":"摄影",
+        "content_url":"Photograghy",
+        "cat":"摄影",
+        "image_url":"http://58.215.170.154/appimages/Photograghy.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"NBA",
+        "content_url":"Sports;NBA",
+        "cat":"体育",
+        "image_url":"http://58.215.170.154/appimages/Sports-NBA.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"汽车市场",
+        "content_url":"Cars;Market",
+        "cat":"汽车",
+        "image_url":"http://58.215.170.154/appimages/Cars-Market.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"PS3",
+        "content_url":"Game;ps3",
+        "cat":"游戏",
+        "image_url":"http://58.215.170.154/appimages/Game-ps3.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"IT综合",
+        "content_url":"IT",
+        "cat":"IT",
+        "image_url":"http://58.215.170.154/appimages/IT.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"美容",
+        "content_url":"Woman;Beauty",
+        "cat":"女人",
+        "image_url":"http://58.215.170.154/appimages/Woman-Beauty.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"八卦",
+        "content_url":"Woman;Stars",
+        "cat":"女人",
+        "image_url":"http://58.215.170.154/appimages/Woman-Stars.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"时尚",
+        "content_url":"Woman;Fashion",
+        "cat":"女人",
+        "image_url":"http://58.215.170.154/appimages/Woman-Fashion.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"足球",
+        "content_url":"Sports;Soccer",
+        "cat":"体育",
+        "image_url":"http://58.215.170.154/appimages/Sports-Soccer.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"汽车综合",
+        "content_url":"Cars",
+        "cat":"汽车",
+        "image_url":"http://58.215.170.154/appimages/Cars.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"女人综合",
+        "content_url":"Woman",
+        "cat":"女人",
+        "image_url":"http://58.215.170.154/appimages/Woman.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"设备",
+        "content_url":"Technology;Device",
+        "cat":"科技",
+        "image_url":"http://58.215.170.154/appimages/Technology-Device.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"互联网",
+        "content_url":"IT;Web",
+        "cat":"IT",
+        "image_url":"http://58.215.170.154/appimages/IT-Web.png",
+        "type":"FEATURED",
+        "desc":""
+    }  ,
+    {
+        "name":"NDS",
+        "content_url":"Game;NDS",
+        "cat":"游戏",
+        "image_url":"http://58.215.170.154/appimages/Game-NDS.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"魔兽世界",
+        "content_url":"Game;WOW",
+        "cat":"游戏",
+        "image_url":"http://58.215.170.154/appimages/Game-WOW.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"汽车配件",
+        "content_url":"Cars;Accessories",
+        "cat":"汽车",
+        "image_url":"http://58.215.170.154/appimages/Cars-Accessories.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"书评",
+        "content_url":"BookComment",
+        "cat":"书评",
+        "image_url":"http://58.215.170.154/appimages/BookComment.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"医学",
+        "content_url":"Medicine",
+        "cat":"医学",
+        "image_url":"http://58.215.170.154/appimages/Medicine.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"F1赛车",
+        "content_url":"Sports;F1",
+        "cat":"体育",
+        "image_url":"http://58.215.170.154/appimages/Sports-F1.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"计算机技术",
+        "content_url":"IT;Technique",
+        "cat":"IT",
+        "image_url":"http://58.215.170.154/appimages/IT-Technique.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
+    {
+        "name":"高尔夫",
+        "content_url":"Sports;Golf",
+        "cat":"体育",
+        "image_url":"http://58.215.170.154/appimages/Sports-Golf.png",
+        "type":"FEATURED",
+        "desc":""
+    } ,
     {
         "name":"科技",
-        "id":"4",
-        "desc":"",
-        "image_url":"http://58.215.170.154/appimages/source-tech.png",
         "content_url":"Technology",
-        "type":"FEATURED"
-    },
-    {
-        "name":"女性话题",
-        "id":"5",
-        "desc":"",
-        "image_url":"http://58.215.170.154/appimages/source-women.png",
-        "content_url":"Woman",
-        "type":"FEATURED"
+        "cat":"科技",
+        "image_url":"http://58.215.170.154/appimages/Technology.png",
+        "type":"FEATURED",
+        "desc":""
     }
-
 ]

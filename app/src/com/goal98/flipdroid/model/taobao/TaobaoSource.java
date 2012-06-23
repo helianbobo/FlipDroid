@@ -1,15 +1,14 @@
 package com.goal98.flipdroid.model.taobao;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
 import com.goal98.flipdroid.model.GroupedSource;
 import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.model.SourceRepo;
 import com.goal98.flipdroid.util.Constants;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TaobaoSource {
     public static String TAOBAOURI="http://gw.api.taobao.com/router/rest";
@@ -32,7 +31,7 @@ public class TaobaoSource {
       
                 Map<String, String> result = new HashMap<String, String>();
                 result.put(Source.KEY_SOURCE_NAME, queryStr);
-                result.put(Source.KEY_SOURCE_ID, Constants.TYPE_TAOBAO+queryStr);
+//                result.put(Source.KEY_SOURCE_ID, Constants.TYPE_TAOBAO+queryStr);
                 result.put(Source.KEY_SOURCE_DESC, "淘宝搜索商品");
                 result.put(Source.KEY_SOURCE_TYPE, Constants.TYPE_TAOBAO);
                 result.put(Source.KEY_IMAGE_URL, "");

@@ -34,7 +34,7 @@ public class FlipdroidSearchSource implements SearchSource {
                 TikaSourceResponse tikaSourceResponse = responses.get(i);
                 Map<String, String> result = new HashMap<String, String>();
                 result.put(Source.KEY_SOURCE_NAME, tikaSourceResponse.getName());
-                result.put(Source.KEY_SOURCE_ID, tikaSourceResponse.getId());
+//                result.put(Source.KEY_SOURCE_ID, tikaSourceResponse.getId());
                 result.put(Source.KEY_SOURCE_DESC, tikaSourceResponse.getDesc());
                 result.put(Source.KEY_SOURCE_TYPE, tikaSourceResponse.getAccountType());
                 result.put(Source.KEY_IMAGE_URL, tikaSourceResponse.getImageURL());
@@ -60,7 +60,7 @@ public class FlipdroidSearchSource implements SearchSource {
 		uri = String.format(BAIDUURI,URLEncoder.encode(queryStr.trim(), "GB2312"));
 		Map<String, String> result = new HashMap<String, String>();
 	            result.put(Source.KEY_SOURCE_NAME, queryStr);
-	            result.put(Source.KEY_SOURCE_ID, Constants.TYPE_BAIDUSEARCH+queryStr);
+//	            result.put(Source.KEY_SOURCE_ID, Constants.TYPE_BAIDUSEARCH+queryStr);
 	            result.put(Source.KEY_SOURCE_DESC, "百度RSS新闻订阅");
 	            result.put(Source.KEY_SOURCE_TYPE, Constants.TYPE_BAIDUSEARCH);
 	            result.put(Source.KEY_IMAGE_URL, "");
@@ -75,7 +75,7 @@ public class FlipdroidSearchSource implements SearchSource {
 	    
 	    Map<String, String> result = new HashMap<String, String>();
             result.put(Source.KEY_SOURCE_NAME, queryStr);
-            result.put(Source.KEY_SOURCE_ID, Constants.TYPE_TAOBAO+queryStr);
+//            result.put(Source.KEY_SOURCE_ID, Constants.TYPE_TAOBAO+queryStr);
             result.put(Source.KEY_SOURCE_DESC, "淘宝搜索商品");
             result.put(Source.KEY_SOURCE_TYPE, Constants.TYPE_TAOBAO);
             result.put(Source.KEY_IMAGE_URL, "");

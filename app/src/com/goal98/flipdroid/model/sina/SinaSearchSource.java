@@ -67,7 +67,7 @@ public class SinaSearchSource implements SearchSource {
                     User user = userList.get(i);
                     Map<String, String> result = new HashMap<String, String>();
                     result.put(Source.KEY_SOURCE_NAME, user.getName());
-                    result.put(Source.KEY_SOURCE_ID, String.valueOf(user.getId()));
+//                    result.put(Source.KEY_SOURCE_ID, String.valueOf(user.getId()));
                     result.put(Source.KEY_SOURCE_DESC, user.getDescription());
                     result.put(Source.KEY_SOURCE_TYPE, TikaConstants.TYPE_SINA_WEIBO);
                     result.put(Source.KEY_IMAGE_URL, user.getProfileImageURL().toString());

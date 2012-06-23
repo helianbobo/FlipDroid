@@ -7,6 +7,9 @@ import flipdroid.grepper.*;
 import flipdroid.grepper.exception.DBNotAvailableException;
 import flipdroid.grepper.extractor.ExtractorException;
 import it.tika.mongodb.image.TikaImageService;
+import it.tika.mongodb.source.Source;
+import it.tika.mongodb.source.SourceDBInterface;
+import it.tika.mongodb.source.SourceDBMongoDB;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -81,11 +84,11 @@ public class Tika {
                         conn = URLConnectionUtil.decorateURLConnection(url);
 
                         responseCode = conn.getResponseCode();
-                        isText = conn.getContentType().toUpperCase().indexOf("TEXT/HTML")!=-1;
+                        isText = conn.getContentType().toUpperCase().indexOf("TEXT/HTML") != -1;
 //                        LOG.info("responseCode " + responseCode);
                         if (responseCode >= 200 && responseCode <= 299) {
                             break;
-                        }else{
+                        } else {
                             count++;
                         }
                     } catch (IOException e) {
@@ -128,6 +131,11 @@ public class Tika {
 
 //                    LOG.info("unextracted result:" + result.getRawContent());
 
+                    if (referencedFrom != null) {
+                        SourceDBInterface sourceDBInterface = new SourceDBMongoDB();
+                        Source source = sourceDBInterface.findByReference(referencedFrom);
+                        result.setClazz(source.getClazz());
+                    }
                     result = webpageExtractor.extract(result);
                     if (result != null && result.getContent() != null && result.getContent().length() != 0) {
                         try {

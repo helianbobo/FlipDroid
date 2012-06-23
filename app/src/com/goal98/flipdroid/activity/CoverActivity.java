@@ -132,7 +132,7 @@ public class CoverActivity extends Activity {
 
                     final Map<String, String> source = SourceDB.buildSource(defaultSource.getString("type"),
                             defaultSource.getString("name"),
-                            defaultSource.getString("id"),
+//                            defaultSource.getString("id"),
                             defaultSource.getString("desc"),
                             defaultSource.getString("image_url"),
                             contentURL,
