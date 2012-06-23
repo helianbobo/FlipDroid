@@ -3,19 +3,21 @@
 {% for item in items.object_list %}
 <li class="span4">
 	<div class="thumbnail" id="tbn-{{forloop.counter|add:startindex }}">
-		<div id="myCarousel-{{forloop.counter|add:startindex }}" class="carousel">
+		<div id="myCarousel-{{forloop.counter|add:startindex }}" class="carousel" rel="popover" data-content="{{item.content|striptags|cut:"hack"|slice:":300"|add:"..."}}" data-original-title="{{item.title}}">
+		
+		
 			<!-- Carousel items -->
 			<div class="carousel-inner">
 				{% for image in item.images %}
 				{% if forloop.first %}
 				<div class = "active item" >
-					<img src={{image}} alt="">
+					<img src={{image}} alt="" onerror="removeNoImg(this)">
 				</div>
 	 
 				{% endif %}
 				{% endfor %}
 				<div class="carousel-caption">
-					<h4 class="123">{{item.title|slice:":18"}}</h4>
+					<h4>{{item.title|slice:":18"}}</h4>
 				</div>
 			</div>
  
@@ -27,8 +29,11 @@
 			 <div>
 				<a href="#{{item|mongo_id}}" class="btn btn-primary" id="readbtn-{{forloop.counter|add:startindex}}" tag="{{item|mongo_id}}" data-toggle="modal">阅读</a>
 				<!--<a href="./updateurls?_id={{item|mongo_id}}&update=show" class="btn btn-primary" >闃呰</a>-->
-				<a href="#" class="btn" rel="popover" id="ex-{{forloop.counter|add:startindex }}" title="1111" data-content="222222">转发</a>
-				<div class="pull-right">{{item.sogou_class}} </div>
+				<a href="#" class="btn" rel="popover" id="ex-{{forloop.counter|add:startindex }}" data-original-title="转发到Sina微博" data-content="{{item.title}}">转发</a>
+				 
+					&nbsp&nbsp&nbsp
+									 {{ item.time|timesince  }}&nbspago 
+										 &nbsp&nbsp{{item.sogou_class}}
 			 </div>
 		</div>
 	</div>
@@ -36,3 +41,17 @@
 {%endfor%}
  
 </div>
+
+			<script type="text/javascript" language="javascript">
+		 
+			
+				$(function() {
+					$('a[rel=tooltip]').tooltip();
+					$('a[rel=popover]').popover();
+					 
+					$('.thumbnails:last .carousel').popover( { placement: 'left' } );
+					$('.thumbnails .carousel').popover( { placement: 'right' } ); 
+		 
+				});
+
+			</script>
