@@ -44,7 +44,10 @@
 				   <div class="span6 hero-unit">
     
         <h1>快使用天鹅绒！  <small>哼哼哈兮</small></h1>
-        <p><a>点击下载</a> </p> 
+        <p>不一样的阅读体验</p> 
+         <a class="btn btn-primary btn-large">
+      点击下载
+    </a>
         </div> 
 				
  <div>  			 
@@ -96,7 +99,7 @@
 									{% for image in item.images %}
 									{% if forloop.first %}
 									<div class = "active item" >
-										<img src={{image}} alt="">
+										<img src={{image}} alt=""   onerror="this.src='/static/img/404.jpg'" >
 									</div>
 				 
 									{% endif %}
@@ -246,16 +249,5 @@
 		</div>
 	</div>
 </div>
-<div class="navbar navbar-fixed-bottom">
-	<div class="navbar-inner">
-		<div class="container">
-			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
-			<ul class="nav pull-right" nowtag="{{tag}}">
-				<li>
-					<a  id="totop1" href="javascript:scroll(0,0)"  onclick="">返回顶部</a>
-				</li>
-			</ul>
-		</div>
-	</div>
-</div>
+ 
 {% endblock %} 

@@ -10,11 +10,11 @@
 								{% for image in item.images %}
 								{% if forloop.first %}
 								<div class = "active item" >
-									<img src={{image}} alt="">
+									<img src={{image}} alt="" onerror="this.src='/static/img/404.jpg'" >
 								</div>
 								{% else %}
 								<div class = "item" >
-									<img src={{image}} alt="">
+									<img src={{image}} alt="" onerror="this.src='/static/img/404.jpg'" >
 								</div>
 								{% endif %}
 								{% endfor %}
