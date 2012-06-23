@@ -6,6 +6,8 @@ import pymongo
 import model
 import time
 import datetime
+from compiler.ast import Keyword
+from Cython.Shadow import typeof
 ISOTIMEFORMAT='%Y-%m-%d %X'
 
 PASSWD="qqwwee"
@@ -14,6 +16,7 @@ SESSIONID="user"
 TYPE_SINA_WEIBO = "SINA_WEIBO"
 TYPE_RSS = "RSS"
 TYPE_DEFAULT = "DEFAULT"
+TYPE_FEATURED = "FEATURED"
 
 def islogin(func):
     def fun(request,**argw):
@@ -244,22 +247,38 @@ def sessiontest(request):
             return HttpResponse("Please enable cookies and try again.")
     return sessiontest(request) 
 
-def getlistAndtag(request,page=1):
-    if request.GET.get('tag') is not None:
-        tag = ";".join(request.GET.get('tag').split("_"))
-        item_list =model.con.Url_abstract.find({"images":{"$ne":[]},"sogou_class":{'$regex': tag}}).sort('time', pymongo.DESCENDING)
-    else:
+def getlistAndtag(request,page=1): 
+    keyword =  ""
+    tag = ""
+    
+    if 'keyword' in request.GET and request.GET['keyword']:
+        keyword = request.GET['keyword']
+     
+
+    if 'tag' in request.GET and request.GET['tag']:
+        print 123
+        tag = ";".join(request.GET['tag'].split("_"))
+        
+    if keyword is "" and tag is "":
         item_list =model.con.Url_abstract.find({"images":{"$ne":[]}}).sort('time', pymongo.DESCENDING)
-        tag = ""
-    return item_list,tag
+    if keyword is "" and tag is not "":
+        item_list =model.con.Url_abstract.find({"images":{"$ne":[]},"sogou_class":{'$regex': tag}}).sort('time', pymongo.DESCENDING)
+    if keyword is not "" and tag is  "":
+        item_list =model.con.Url_abstract.find({"images":{"$ne":[]},"title":{'$regex': re.escape(keyword)}}).sort('time', pymongo.DESCENDING)
+    if keyword is not "" and tag is not "":
+        item_list =model.con.Url_abstract.find({"images":{"$ne":[]},"sogou_class":{'$regex': tag},"title":{'$regex': re.escape(keyword)}}).sort('time', pymongo.DESCENDING)
+   
+    return item_list,tag,keyword
+
+ 
 
 def showPage(request,page=1): 
     '''
            现在对应url是/console/showPage/
     '''
-    item_list,tag = getlistAndtag(request,page)
+    item_list,tag,keyword = getlistAndtag(request,page)
     items=paging(request,item_list,page,24) 
-    return render_to_response('show.html', { 'items': items,'tag':tag})
+    return render_to_response('show.html', { 'items': items,'tag':tag,'keyword':keyword})
 
 def getlistForScroll(request,page=2): 
     '''
@@ -268,10 +287,10 @@ def getlistForScroll(request,page=2):
           平均加，现在4列thumbnails，一次加载24个，每个平均6个
          
     '''
-    item_list,tag = getlistAndtag(request,page)
+    item_list,tag,keyword = getlistAndtag(request,page)
     items=paging(request,item_list,page,24) 
     startindex = 24*(int(page)-1)
-    return render_to_response('thumbnail_list.html', { 'items': items,'tag':tag,'startindex':startindex})
+    return render_to_response('thumbnail_list.html', { 'items': items,'tag':tag,'keyword':keyword,'startindex':startindex})
  
  
 
