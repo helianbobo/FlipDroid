@@ -8,12 +8,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.ViewConfigurationCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -28,6 +30,7 @@ import com.goal98.flipdroid.model.Article;
 import com.goal98.flipdroid.model.ContentPagerAdapter;
 import com.goal98.flipdroid.util.AlarmSender;
 import com.goal98.flipdroid.util.Constants;
+import com.goal98.flipdroid.util.GestureUtil;
 import com.goal98.flipdroid.util.SinaAccountUtil;
 import com.goal98.flipdroid.view.ArticleHolder;
 import com.goal98.flipdroid.view.ContentPagerView;
@@ -53,11 +56,17 @@ public class ContentPagedActivity extends SherlockActivity {
     private RelativeLayout body;
     private PageIndexView pageIndexView;
     private boolean inShare;
+    private int mTouchSlop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_Sherlock);
         super.onCreate(savedInstanceState);
+
+        final ViewConfiguration configuration = ViewConfiguration.get(this);
+        mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
+        GestureUtil.minDelta = mTouchSlop;
+
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_TITLE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.contentloaded);
@@ -89,7 +98,6 @@ public class ContentPagedActivity extends SherlockActivity {
         loadedArticleView.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override

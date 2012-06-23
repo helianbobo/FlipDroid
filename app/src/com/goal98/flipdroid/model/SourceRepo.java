@@ -35,6 +35,7 @@ public class SourceRepo {
         for (int i = 0; i < sourceList.size(); i++) {
             Map<String, String> childValueMap = sourceList.get(i);
             String cat = childValueMap.get("cat");
+            cat = cat.split(";")[0];
             String sourceName = childValueMap.get(Source.KEY_SOURCE_NAME);
             final Map<String, String> group = new HashMap<String, String>();
             group.put(KEY_NAME_GROUP, cat);
@@ -105,7 +106,7 @@ public class SourceRepo {
                     jsonObject = array.getJSONObject(i);
                     Map<String, String> source1 = SourceDB.buildSource(type,
                             jsonObject.getString("name"),
-                            jsonObject.getString("id"),
+//                            jsonObject.getString("id"),
                             jsonObject.getString("desc"),
                             jsonObject.getString("image_url"),
                             jsonObject.getString("cat"));
@@ -123,7 +124,7 @@ public class SourceRepo {
                     jsonObject = array.getJSONObject(i);
                     Map<String, String> source1 = SourceDB.buildSource(type,
                             jsonObject.getString("name"),
-                            jsonObject.getString("id"),
+//                            jsonObject.getString("id"),
                             jsonObject.getString("desc"),
                             jsonObject.getString("image_url"),
                             jsonObject.getString("content_url"),
@@ -142,7 +143,7 @@ public class SourceRepo {
                     jsonObject = array.getJSONObject(i);
                     Map<String, String> source1 = SourceDB.buildSource(type,
                             jsonObject.getString("name"),
-                            jsonObject.getString("id"),
+//                            jsonObject.getString("id"),
                             jsonObject.getString("desc"),
                             jsonObject.getString("image_url"),
                             jsonObject.getString("content_url"));

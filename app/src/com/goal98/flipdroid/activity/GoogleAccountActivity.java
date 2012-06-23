@@ -11,9 +11,8 @@ import com.goal98.flipdroid.db.AccountDB;
 import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.google.GReader;
 import com.goal98.flipdroid.util.AlarmSender;
-import com.goal98.flipdroid.util.Constants;
-import com.srz.androidtools.util.DeviceInfo;
 import com.goal98.tika.common.TikaConstants;
+import com.srz.androidtools.util.DeviceInfo;
 
 
 public class GoogleAccountActivity extends SinaAccountActivity {
@@ -69,7 +68,7 @@ public class GoogleAccountActivity extends SinaAccountActivity {
             return;
         }
         if (gr.isLogin()) {
-            sourceDB.insert(TikaConstants.TYPE_GOOGLE_READER, getString(R.string.my_feed), Constants.SOURCE_HOME, getString(R.string.my_feed_desc), null,"mygr", "http://www.google.com/images/logos/google_logo_41.png");
+            sourceDB.insert(TikaConstants.TYPE_GOOGLE_READER, getString(R.string.my_feed),  getString(R.string.my_feed_desc), null,"mygr", "http://www.google.com/images/logos/google_logo_41.png");
             accountDB.insertOrUpdate(username, password, TikaConstants.TYPE_GOOGLE_READER);
             preferences.edit().putString(GOOGLE_ACCOUNT_PREF_KEY, username).commit();
             preferences.edit().putString(GOOGLE_ACCOUNT_SID, gr.getSid()).commit();

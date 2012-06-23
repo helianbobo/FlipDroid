@@ -15,8 +15,6 @@ import com.goal98.flipdroid.model.Source;
 import com.goal98.flipdroid.util.Constants;
 import com.goal98.tika.common.TikaConstants;
 
-import java.util.Date;
-
 public abstract class AbstractDB {
 
     protected SQLiteOpenHelper helper;
@@ -88,11 +86,10 @@ public abstract class AbstractDB {
 
         private static final String SOURCE_TABLE_CREATE =
                 "CREATE TABLE " + Source.TABLE_NAME + " (" +
-                        BaseColumns._ID + " INTEGER," +
                         Source.KEY_SOURCE_TYPE + " TEXT, " +
                         Source.KEY_SOURCE_NAME + " TEXT, " +
                         Source.KEY_SOURCE_DESC + " TEXT, " +
-                        Source.KEY_SOURCE_ID + " TEXT, " +
+//                        Source.KEY_SOURCE_ID + " TEXT, " +
                         Source.KEY_IMAGE_URL + " TEXT, " +
                         Source.KEY_CONTENT_URL + " TEXT, " +
                         Source.KEY_CAT + " TEXT, " +
@@ -149,7 +146,7 @@ public abstract class AbstractDB {
                         ");";
 
         private static final String SOURCE_INIT_DATA = "INSERT INTO " + Source.TABLE_NAME +
-                " (" + Source.KEY_SOURCE_NAME + "," + Source.KEY_SOURCE_ID + "," + Source.KEY_SOURCE_TYPE + ")" +
+                " (" + Source.KEY_SOURCE_NAME + "," + Source.KEY_SOURCE_TYPE + ")" +
                 " values ('FAKE', 'FAKE', '" + TikaConstants.TYPE_FAKE + "');";
 
         public DBOpenHelper(Context context) {

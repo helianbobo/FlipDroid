@@ -1,9 +1,7 @@
 package it.tika.mongodb.source;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBObject;
-import com.mongodb.MongoException;
+import com.goal98.tika.utils.Each;
+import com.mongodb.*;
 import flipdroid.grepper.exception.DBNotAvailableException;
 import it.tika.mongodb.MongoDBFactory;
 import org.bson.types.ObjectId;
@@ -27,7 +25,7 @@ public class SourceDBMongoDB implements SourceDBInterface {
 
     private Logger logger = Logger.getLogger(SourceDBMongoDB.class.getName());
 
-    private SourceDBMongoDB() throws UnknownHostException {
+    public SourceDBMongoDB() throws UnknownHostException {
         db = MongoDBFactory.getDBInstance();
     }
 
@@ -90,7 +88,12 @@ public class SourceDBMongoDB implements SourceDBInterface {
         return null;
     }
 
-    public void a(){
-
+    @Override
+    public void findAll(Each each) {
+        DBCursor urlFromDB = null;
+        urlFromDB = db.getCollection(urlCollectionName).find().sort(new BasicDBObject("time", -1));
+        while (urlFromDB != null && urlFromDB.hasNext()) {
+            each.doWith(urlFromDB.next());
+        }
     }
 }

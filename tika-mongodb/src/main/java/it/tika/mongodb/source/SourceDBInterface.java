@@ -1,5 +1,7 @@
 package it.tika.mongodb.source;
 
+import com.goal98.tika.utils.Each;
+
 /**
  * Created by IntelliJ IDEA.
  * User: jleo
@@ -11,4 +13,7 @@ public interface SourceDBInterface {
     public Source findByURL(Source source);
 
     Source findByReference(String reference);
+
+    void findAll(Each each);
+
 }

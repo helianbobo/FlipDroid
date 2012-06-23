@@ -21,10 +21,10 @@ public class SourceDB extends AbstractDB {
         return Source.TABLE_NAME;
     }
 
-    public static Map<String, String> buildSource(String accountType, String name, String id, String desc, String imageUrl, String contentURL, String cat) {
+    public static Map<String, String> buildSource(String accountType, String name,  String desc, String imageUrl, String contentURL, String cat) {
         Map<String, String> result = new HashMap<String, String>();
         result.put(Source.KEY_SOURCE_NAME, name);
-        result.put(Source.KEY_SOURCE_ID, id);
+//        result.put(Source.KEY_SOURCE_ID, id);
         result.put(Source.KEY_SOURCE_DESC, desc);
         result.put(Source.KEY_SOURCE_TYPE, accountType);
         result.put(Source.KEY_IMAGE_URL, imageUrl);
@@ -33,8 +33,8 @@ public class SourceDB extends AbstractDB {
         return result;
     }
 
-    public static Map<String, String> buildSource(String accountType, String name, String id, String desc, String imageUrl, String cat) {
-        return buildSource(accountType, name, id, desc, imageUrl, null, cat);
+    public static Map<String, String> buildSource(String accountType, String name, String desc, String imageUrl, String cat) {
+        return buildSource(accountType, name, desc, imageUrl, null, cat);
     }
 
     public long insert(ContentValues values) {
@@ -46,7 +46,7 @@ public class SourceDB extends AbstractDB {
         ContentValues values = new ContentValues();
         values.put(Source.KEY_SOURCE_NAME, source.get(Source.KEY_SOURCE_NAME));
         values.put(Source.KEY_SOURCE_TYPE, source.get(Source.KEY_SOURCE_TYPE));
-        values.put(Source.KEY_SOURCE_ID, source.get(Source.KEY_SOURCE_ID));
+//        values.put(Source.KEY_SOURCE_ID, source.get(Source.KEY_SOURCE_ID));
         values.put(Source.KEY_IMAGE_URL, source.get(Source.KEY_IMAGE_URL));
         values.put(Source.KEY_SOURCE_DESC, source.get(Source.KEY_SOURCE_DESC));
         values.put(Source.KEY_CONTENT_URL, source.get(Source.KEY_CONTENT_URL));
@@ -54,11 +54,11 @@ public class SourceDB extends AbstractDB {
         return insert(values);
     }
 
-    public long insert(String accountType, String sourceName, String sourceId, String sourceDesc, String contentURL, String cat, String imageURL) {
+    public long insert(String accountType, String sourceName, String sourceDesc, String contentURL, String cat, String imageURL) {
         ContentValues values = new ContentValues();
         values.put(Source.KEY_SOURCE_NAME, sourceName);
         values.put(Source.KEY_SOURCE_TYPE, accountType);
-        values.put(Source.KEY_SOURCE_ID, sourceId);
+//        values.put(Source.KEY_SOURCE_ID, sourceId);
         values.put(Source.KEY_SOURCE_DESC, sourceDesc);
         values.put(Source.KEY_CONTENT_URL, contentURL);
         values.put(Source.KEY_CAT, cat);
