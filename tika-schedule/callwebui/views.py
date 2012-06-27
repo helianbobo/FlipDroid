@@ -6,6 +6,8 @@ import pymongo
 import model
 import time
 import datetime
+from django.template import loader,RequestContext 
+
 
 ISOTIMEFORMAT='%Y-%m-%d %X'
 
@@ -250,12 +252,13 @@ def getlistAndtag(request,page=1):
     keyword =  ""
     tag = ""
     
-    if 'keyword' in request.GET and request.GET['keyword']:
+    if 'keyword' in request.GET and request.GET['keyword']: 
         keyword = request.GET['keyword']
-     
-
+        
+        
+      
     if 'tag' in request.GET and request.GET['tag']:
-        print 123
+        
         tag = ";".join(request.GET['tag'].split("_"))
         
     if keyword is "" and tag is "":
@@ -263,9 +266,13 @@ def getlistAndtag(request,page=1):
     if keyword is "" and tag is not "":
         item_list =model.con.Url_abstract.find({"images":{"$ne":[]},"sogou_class":{'$regex': tag}}).sort('time', pymongo.DESCENDING)
     if keyword is not "" and tag is  "":
-        item_list =model.con.Url_abstract.find({"images":{"$ne":[]},"title":{'$regex': re.escape(keyword)}}).sort('time', pymongo.DESCENDING)
+        re_keyword = keyword.replace(" ","|")
+        item_list =model.con.Url_abstract.find({"images":{"$ne":[]},"sogou_class":{'$regex': tag}, "title": {'$regex': re_keyword}}).sort('time', pymongo.DESCENDING)
+     
+        #item_list =model.con.Url_abstract.find({"images":{"$ne":[]},"title": {'$regex': re_keyword}}).sort('time', pymongo.DESCENDING)
     if keyword is not "" and tag is not "":
-        item_list =model.con.Url_abstract.find({"images":{"$ne":[]},"sogou_class":{'$regex': tag},"title":{'$regex': re.escape(keyword)}}).sort('time', pymongo.DESCENDING)
+        re_keyword = keyword.replace(" ","|")
+        item_list =model.con.Url_abstract.find({"images":{"$ne":[]},"sogou_class":{'$regex': tag},"title":{'$regex': re_keyword}}).sort('time', pymongo.DESCENDING)
    
     return item_list,tag,keyword
 
@@ -277,7 +284,10 @@ def showPage(request,page=1):
     '''
     item_list,tag,keyword = getlistAndtag(request,page)
     items=paging(request,item_list,page,24) 
-    return render_to_response('show.html', { 'items': items,'tag':tag,'keyword':keyword})
+    
+    return render_to_response('show.html', RequestContext(request,{ 'items': items,'tag':tag,'keyword':keyword}))
+
+ 
 
 def getlistForScroll(request,page=2): 
     '''
@@ -320,6 +330,13 @@ def getinfo(request, id):
     j = {'title':item['title'],'id':id,'content':content}
      
     return HttpResponse(simplejson.dumps(j))
+
+def showPageForWeibo(request,page=1): 
+    print request
+#    item_list,tag,keyword = getlistAndtag(request,page)
+#    items=paging(request,item_list,page,24)  
+#    return render_to_response('show.html', RequestContext(request,{ 'items': items,'tag':tag,'keyword':keyword}))
+    return HttpResponse("2222")
   
  
     

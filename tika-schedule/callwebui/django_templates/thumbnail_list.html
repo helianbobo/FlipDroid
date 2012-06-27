@@ -1,4 +1,5 @@
 <div>
+	 
 {% load callwebui_tags %}
 {% for item in items.object_list %}
 <li class="span4">
@@ -29,10 +30,10 @@
 			 <div>
 				<a href="#{{item|mongo_id}}" class="btn btn-primary" id="readbtn-{{forloop.counter|add:startindex}}" tag="{{item|mongo_id}}" data-toggle="modal">阅读</a>
 				<!--<a href="./updateurls?_id={{item|mongo_id}}&update=show" class="btn btn-primary" >闃呰</a>-->
-				<a href="#" class="btn" rel="popover" id="ex-{{forloop.counter|add:startindex }}" data-original-title="转发到Sina微博" data-content="{{item.title}}">转发</a>
+				<a  class="btn" rel="popover" id="ex-{{forloop.counter|add:startindex }}" data-original-title="转发到Sina微博" data-content="{{item.title}}">转发</a>
 				 
 					&nbsp&nbsp&nbsp
-									 {{ item.time|timesince  }}&nbspago 
+									 {{ item.time|timesince  }}&nbsp 前
 										 &nbsp&nbsp{{item.sogou_class}}
 			 </div>
 		</div>

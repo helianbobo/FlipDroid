@@ -1,7 +1,24 @@
 {% extends "base2.html" %}
 {% block content %}
+	<script >
+				$(function() {
 
-
+					$('[id^="ex-"]').live("click", function() {
+						var $content = $(this).attr("data-content");
+						var $id = $(this).attr("id");
+						var $url = $(this).attr("data-url");
+						WB2.anyWhere(function(W) {
+							W.widget.publish({
+								toolbar : "face,image,topic",
+								button_type : "red",
+								button_size : "middle",
+								default_text : "#"+$content+"#"+$url,
+								id : $id 
+							});
+						});
+					});
+				})
+			</script>
 <div class="navbar navbar-fixed-top">
 	<div class="navbar-inner">
 		<div class="container">
@@ -9,10 +26,8 @@
 			<a class="brand" href="./">天鹅绒</a>
 			<ul class="nav" nowtag="{{tag}}" nowkeyword="{{keyword}}">
 				<li {%ifequal tag "" %} class="active"{%endifequal%}>
-					{%if keyword %}
-					<a href="#">{{keyword}}</a>
+					{%if keyword %} <a href="#">{{keyword}}</a>
 					{%endif%}
-					 
 				</li>
 				<li {%ifequal tag "IT" %} class="active"{%endifequal%}   >
 					<a  href="./?tag=IT">IT</a>
@@ -30,21 +45,13 @@
 					<a   href="./?tag=Diablo3">Diablo3</a>
 				</li>
 			</ul>
-			
-		  
 			<form class="navbar-search pull-right" method="get" >
-			 
-					<input type="text" class="search-query" name="keyword"  placeholder="搜索">
-				 
+				{% csrf_token %}
+				<input type="text" class="search-query" name="keyword"  placeholder="搜索">
 			</form>
- 
-			
 		</div>
 	</div>
-</div> 
- 
-
- 
+</div>
 <div >
 	<div id="myModal" class="modal hide fade modal-my" ></div>
 	<div class="sidebar-nav" align="center">
@@ -66,21 +73,21 @@
 			</div>
 			<div>
 				<div class="page-header span3">
-					<h1> 希腊战神 ！ <small>3 : 0 德国</small></h1>
+					<h1> 金球C罗 <small> 完克西班牙</small></h1>
 				</div>
 				<blockquote class="pull-right">
 					<p class="pull-left">
-						将停止对欧元区希腊的贷款救助。
+						哈哈，金球奖应该是我的了！！！
 					</p>
-					<small>安格拉·梅克尔</small>
+					<small>C罗</small>
 					<p class="pull-left">
-						戈麦斯这个傻货，见一次抽一次
+						c罗金球，煤球滚蛋，葡萄牙夺冠
 					</p>
-					<small>波多尔斯基 </small>
+					<small>卡西</small>
 					<p class="pull-left">
-						哈哈，纳粹回家，夺冠还看鲁尼
+						无语
 					</p>
-					<small>太阳报 </small>
+					<small>煤球</small>
 				</blockquote>
 			</div>
 		</div>
@@ -116,9 +123,9 @@
 									<a href="#{{item|mongo_id}}" class="btn btn-primary" id="readbtn-{{forloop.counter}}" tag="{{item|mongo_id}}" data-toggle="modal"
 									>阅读</a>
 									<!--<a href="./updateurls?_id={{item|mongo_id}}&update=show" class="btn btn-primary" >闃呰</a>-->
-									<a href="#" class="btn" rel="popover" id="ex-{{forloop.counter}}" title="转发到Sina微博" data-content="{{item.title}}">转发</a>
+									<a   class="btn"  id="ex-{{forloop.counter}}" title="转发到Sina微博" data-content="{{item.title}}" data-url="{{item.url}}">转发</a>
 									&nbsp&nbsp&nbsp
-									{{ item.time|timesince  }}&nbspago
+									{{ item.time|timesince  }}&nbsp 前
 									&nbsp&nbsp{{item.sogou_class}}
 								</div>
 							</div>
@@ -139,6 +146,7 @@
 			{% endif  %}
 
 			{% endfor %}
+		 
 			<script type="text/javascript" language="javascript">
 				function setpopAndtip() {
 
