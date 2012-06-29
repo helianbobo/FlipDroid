@@ -29,6 +29,15 @@ urlpatterns = patterns('',
     ('^console/showpage/getinfo/(?P<id>\S+)', views.getinfo),
     ('^console/showpage/getReadModal/(?P<id>\S+)', views.getReadModal),
     (r'^console/showpage/getlistForScroll/(?P<page>\d+)',views.getlistForScroll),
+    
+    ('^console/showpageForWeibo/$',views.showPageForWeibo  ),
+    (r'^console/showpageForWeibo/(?P<page>\d+)',views.showPageForWeibo),
+     ('^console/showpageForWeibo/updateurls', views.showUrl),
+    ('^console/showpageForWeibo/getinfo/(?P<id>\S+)', views.getinfo),
+    ('^console/showpageForWeibo/getReadModal/(?P<id>\S+)', views.getReadModal),
+    (r'^console/showpageForWeibo/getlistForScroll/(?P<page>\d+)',views.getlistForScroll),
+    
+    
     ('^console/recommendsource/updatesource', views.updateRecommendSourceSource),
     ('^console/test/', views.test),
     ('^console/login/$', views.login),

@@ -1,4 +1,14 @@
  
+    
+            <iframe width="100%" height="700"  frameborder="0" scrolling="no"  class="sina-siderbar"
+             name="ifrName"
+            src="http://widget.weibo.com/livestream/listlive.php?language=zh_cn
+            &width=0&height=700&uid=1839934142&skin=8&refer=1&appkey=165792866&pic=0
+            &titlebar=1&border=0&publish=1&atalk=1&recomm=0&at=0&atopic={{item.sogou_class}}&ptopic={{item.title|slice:":20"}}&colordiy=0&dpc=1"
+             
+            ></iframe>
+           
+ 
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal">×</button>
               <h3>{{item.title}}</h3>
@@ -10,11 +20,11 @@
 								{% for image in item.images %}
 								{% if forloop.first %}
 								<div class = "active item" >
-									<img src={{image}} alt="">
+									<img src={{image}} alt="" onerror="this.src='/static/img/404.jpg'" >
 								</div>
 								{% else %}
 								<div class = "item" >
-									<img src={{image}} alt="">
+									<img src={{image}} alt="" onerror="this.src='/static/img/404.jpg'" >
 								</div>
 								{% endif %}
 								{% endfor %}
@@ -36,7 +46,7 @@
             </div>
             <div class="modal-footer">
               <a href="#" class="btn" data-dismiss="modal">关闭</a>
-              <a href="#" class="btn btn-primary">转发</a>
+             <!-- <a href="#" class="btn btn-primary">杞彂</a>-->
             </div>
  
 

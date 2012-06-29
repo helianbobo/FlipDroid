@@ -1,2 +1,36 @@
 .sidebar-nav{ position:fixed; width:3%; top:50%;right:5px ; }
-.sidebar-nav a{ font-size:150%;}​
+.sidebar-nav a{ font-size:150%;}
+.myloading{position:fixed; width:5%; top:95%;right:5px ; }
+
+.modal-my { 
+    width:70%;
+    height:80%;
+    margin: -40% 0 0 -43%;  
+    overflow-x: hidden;
+}
+
+.modal-my .modal-body {
+  max-height: none;
+  position:absolute;
+  bottom:58px; 
+  top:58px; 
+  left:0px;
+  right:0px;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.modal-my .modal-footer {
+    position:absolute;
+    bottom:0px;
+    width:97%;
+}
+
+.sina-siderbar {
+    position:fixed;  
+    top:15%;right:2%;
+    max-width:20%;
+    height:100%;
+}
+ 
+ 
