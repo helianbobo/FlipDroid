@@ -19,6 +19,7 @@ public class SourceItem {
     private String sourceURL;
     private View sourceItemView;
     private Date sourceUpdateTime;
+    private String firstImage;
 
     public String getCategory() {
         return category;
@@ -94,5 +95,17 @@ public class SourceItem {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public void setBackgroundImage(String firstImage) {
+        this.firstImage = firstImage;
+    }
+
+    public String getFirstImage() {
+        return firstImage;
+    }
+
+    public void setFirstImage(String firstImage) {
+        this.firstImage = firstImage;
     }
 }

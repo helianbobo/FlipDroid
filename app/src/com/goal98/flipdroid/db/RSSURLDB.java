@@ -193,6 +193,33 @@ public class RSSURLDB extends AbstractDB {
         return findAllByStatus(statusNew, null, offset, inDaysFrom, inDaysTo);
     }
 
+    public List<Article> findOneByStatus(int statusNew, String from, int inDaysFrom, int inDaysTo) {
+        List<Article> articles = new ArrayList<Article>();
+        String fromClause = "";
+        if (from != null) {
+            fromClause += " and " + RSSURLDB.SOURCE + " = '" + from + "'";
+        }
+        if (inDaysFrom != -1) {
+            fromClause += " and " + RSSURLDB.DATE + " < " + (new Date().getTime() - inDaysFrom * 1000l * 3600 * 24) + " and " + RSSURLDB.DATE + ">" + (new Date().getTime() - inDaysTo * 1000l * 3600 * 24);
+        }
+        Cursor cursor = rawQuery("select * from " + getTableName() + " where " + RSSURLDB.STATUS + " = ? " + fromClause + " order by " + RSSURLDB.DATE + " desc limit " + 1, new String[]{statusNew + ""});
+        try {
+            if (cursor.getCount() == 0) {
+                return null;
+            }
+            cursor.moveToFirst();
+            do {
+                Article article = cursorToArticle(cursor);
+                articles.add(article);
+            } while (cursor.moveToNext());
+
+
+        } finally {
+            cursor.close();
+        }
+        return articles;
+    }
+
     public List<Article> findAllByStatus(int statusNew, String from, int offset, int inDaysFrom, int inDaysTo) {
         List<Article> articles = new ArrayList<Article>();
         String fromClause = "";

@@ -148,7 +148,7 @@ public class SourceItemArrayAdapter<T> extends ArrayAdapter<SourceItem> {
         try {
             if (item.getSourceImage() != null)
                 sourceImageView.setImageUrl(item.getSourceImage());
-            sourceImageView.loadImage();
+//            sourceImageView.loadImage();
         } catch (Exception e) {
             Log.e(this.getClass().getName(), e.getMessage(), e);
         }

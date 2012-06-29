@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:wp="http://schemas.android.com/apk/res/com.goal98.flipdroid" android:id="@+id/indexView" xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:wp="http://schemas.android.com/apk/res/com.goal98.flipdroid" android:id="@+id/indexView"
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 style="@style/Index">
 
     <LinearLayout android:orientation="vertical" style="@style/Index">
-        <com.goal98.flipdroid.view.TopBar android:id="@+id/topbar" wp:rightButtonImage="@drawable/like"
-                                          android:layout_height="wrap_content"
-                                          android:layout_width="fill_parent"
-                                          wp:title="@string/my_feed"></com.goal98.flipdroid.view.TopBar>
+        <GridView android:layout_height="fill_parent"
+                  android:layout_width="fill_parent"
+                  android:numColumns="2"
+                  android:columnWidth="200dip"
+                  android:verticalSpacing="10dp"
+                  android:horizontalSpacing="10dp"
+                  android:id="@+id/gridview">
 
-
-
-        <com.handmark.pulltorefresh.library.PullToRefreshListView android:layout_height="fill_parent"
-                                                                  android:layout_width="fill_parent"
-
-                                                                  android:id="@+id/pull_refresh_list" />
-
+        </GridView>
     </LinearLayout>
 
 </RelativeLayout>

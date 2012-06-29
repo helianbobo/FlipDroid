@@ -117,4 +117,20 @@ public class SourceDB extends AbstractDB {
 
         return query(projection, selection, selectionArgs, null);
     }
+
+//    public Cursor findSourceByMultipleTypeWithLatestImage(final String[] types) {
+//
+//        String[] projection = null;
+//
+//
+//        String selection = "1=1";
+//        for(String t:types){
+//            selection += " or ";
+//            selection = selection + (Source.KEY_SOURCE_TYPE + " = ? ");
+//        }
+//
+//        String[] selectionArgs = types;
+//
+//        return rawQuery("select max(content_url) from source s left join rssurl r on s.content_url = r.source where "+selection + " group by s.content_url", types);
+//    }
 }

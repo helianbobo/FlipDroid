@@ -26,6 +26,10 @@ public class WebImageView extends ViewSwitcher {
     public ImageView imageView;
 
 
+    public void setScaleType(ScaleType scaleType) {
+        this.scaleType = scaleType;
+    }
+
     private ScaleType scaleType = ScaleType.FIT_CENTER;
 
     private Drawable progressDrawable, errorDrawable;

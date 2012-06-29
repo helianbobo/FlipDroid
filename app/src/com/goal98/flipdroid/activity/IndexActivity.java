@@ -1,43 +1,36 @@
 package com.goal98.flipdroid.activity;
 
 import android.app.Activity;
-import android.app.ListActivity;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.*;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.*;
+import com.actionbarsherlock.app.SherlockActivity;
 import com.goal98.flipdroid.R;
-import com.goal98.flipdroid.db.*;
-import com.goal98.flipdroid.model.Source;
-import com.goal98.flipdroid.model.SourceUpdateManager;
-import com.goal98.flipdroid.model.cachesystem.CacheToken;
-import com.goal98.flipdroid.model.cachesystem.CachedArticleSource;
+import com.goal98.flipdroid.db.AccountDB;
+import com.goal98.flipdroid.db.RSSURLDB;
+import com.goal98.flipdroid.db.SourceContentDB;
+import com.goal98.flipdroid.db.SourceDB;
 import com.goal98.flipdroid.model.cachesystem.SourceCache;
-import com.goal98.flipdroid.model.cachesystem.SourceUpdateable;
 import com.goal98.flipdroid.util.NetworkUtil;
-import com.goal98.flipdroid.util.SinaAccountUtil;
-import com.goal98.flipdroid.view.PopupWindowManager;
-import com.goal98.flipdroid.view.TopBar;
 import com.goal98.tika.common.TikaConstants;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.mobclick.android.MobclickAgent;
 import com.mobclick.android.UmengUpdateListener;
-import com.srz.androidtools.database.EachCursor;
 import com.srz.androidtools.util.DeviceInfo;
-import com.srz.androidtools.util.ManagedCursor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class IndexActivity extends ListActivity implements SourceUpdateable {
+public class IndexActivity extends SherlockActivity{
 
     static final private int CONFIG_ID = Menu.FIRST;
     static final private int CLEAR_ID = Menu.FIRST + 1;
@@ -55,11 +48,12 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
     //    private SourceCache sourceCache;
     private BaseAdapter adapter;
     private boolean updated;
-    private PullToRefreshListView mPullRefreshListView;
+//    private PullToRefreshListView mPullRefreshListView;
 
     final private Map indicatorMap = new HashMap();
 
     private String TAG = this.getClass().getName();
+    private GridView gridview;
 
 
     @Override
@@ -74,6 +68,7 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
 
 
     public void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Sherlock);
         super.onCreate(savedInstanceState);
 
         if (NetworkUtil.isNetworkAvailable(this)) {
@@ -109,37 +104,20 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         sourceDB = new SourceDB(this);
         rssurlDB = new RSSURLDB(this);
         setContentView(R.layout.index);
-
+         gridview = (GridView) findViewById(R.id.gridview);
         addSourcePopupViewBuilder = new AddSourcePopupViewBuilder(IndexActivity.this);
         addSourcePopup = addSourcePopupViewBuilder.buildAddSourcePopupView(IndexActivity.this);
-        final TopBar topbar = (TopBar) findViewById(R.id.topbar);
-        topbar.setTitle(this.getString(R.string.app_name));
-        topbar.addButton(TopBar.IMAGE, R.drawable.ic_btn_add_source, new LinearLayout.OnClickListener() {
-            public synchronized void onClick(View view) {
-                if (mPopupWindow != null && mPopupWindow.isShowing()) {
-                    mPopupWindow.dismiss();
-                    return;
-                }
 
-                mPopupWindow = new PopupWindow(addSourcePopup, ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-                mPopupWindow.setOutsideTouchable(true);
-                mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
-                mPopupWindow.showAsDropDown(topbar.getTableRow());
-                PopupWindowManager.getInstance().setWindow(mPopupWindow);
-            }
-        });
-
-        mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
-
-        // Set a listener to be invoked when the list should be refreshed.
-        mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
-            public void onRefresh() {
-                // Do work to refresh the list here.
-                new GetDataTask().execute();
-            }
-        });
-        this.getListView().setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+//        mPullRefreshListView = (PullToRefreshListView) findViewById(R.id.pull_refresh_list);
+//
+//        // Set a listener to be invoked when the list should be refreshed.
+//        mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener() {
+//            public void onRefresh() {
+//                // Do work to refresh the list here.
+//                new GetDataTask().execute();
+//            }
+//        });
+        gridview.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             public void onCreateContextMenu(ContextMenu menu, View v,
                                             ContextMenu.ContextMenuInfo menuInfo) {
                 if (v.findViewById(R.id.text) != null)
@@ -157,56 +135,56 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
 
         adapter.notifyDataSetChanged();
 
-        final Cursor c = sourceDB.findAll();
-        hander.post(new Runnable() {
-            public void run() {
-                ManagedCursor mc = new ManagedCursor(c);
-                mc.each(new EachCursor() {
-                    public void call(Cursor cursor, int index) {
-                        if (!(adapter.getItem(index) instanceof SourceItem))
-                            return;
-                        SourceItem item = (SourceItem) adapter.getItem(index);
-                        if (indicatorMap.get(item.getSourceType() + "_" + item.getSourceURL()) != null) {
-                            View childAt = IndexActivity.this.getListView().getChildAt(index);
-                            if (childAt != null) {
-                                childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
-                                TextView indicator = (TextView) childAt.findViewById(R.id.indicator);
-                                indicator.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    }
-                });
-            }
-        });
+//        final Cursor c = sourceDB.findAll();
+//        hander.post(new Runnable() {
+//            public void run() {
+//                ManagedCursor mc = new ManagedCursor(c);
+//                mc.each(new EachCursor() {
+//                    public void call(Cursor cursor, int index) {
+//                        if (!(adapter.getItem(index) instanceof SourceItem))
+//                            return;
+//                        SourceItem item = (SourceItem) adapter.getItem(index);
+//                        if (indicatorMap.get(item.getSourceType() + "_" + item.getSourceURL()) != null) {
+//                            View childAt = IndexActivity.this.getListView().getChildAt(index);
+//                            if (childAt != null) {
+//                                childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
+//                                TextView indicator = (TextView) childAt.findViewById(R.id.indicator);
+//                                indicator.setVisibility(View.VISIBLE);
+//                            }
+//                        }
+//                    }
+//                });
+//            }
+//        });
     }
 
 
-    private void updateSource() {
-        SourceUpdateManager updateManager = new SourceUpdateManager(rssurlDB, sourceDB,new SourceCache(new SourceContentDB(IndexActivity.this)), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
-        updateManager.updateAll(false);
-    }
+//    private void updateSource() {
+//        SourceUpdateManager updateManager = new SourceUpdateManager(rssurlDB, sourceDB,new SourceCache(new SourceContentDB(IndexActivity.this)), IndexActivity.this, RecommendSourceDB.getInstance(IndexActivity.this));
+//        updateManager.updateAll(false);
+//    }
 
 
 
 
-    private class GetDataTask extends AsyncTask<Void, Void, String[]> {
-
-        @Override
-        protected String[] doInBackground(Void... params) {
-            // Simulates a background job.
-            updateSource();
-            return null;
-        }
-
-
-        @Override
-        protected void onPostExecute(String[] result) {
-            // Call onRefreshComplete when the list has been refreshed.
-            mPullRefreshListView.onRefreshComplete();
-
-            super.onPostExecute(result);
-        }
-    }
+//    private class GetDataTask extends AsyncTask<Void, Void, String[]> {
+//
+//        @Override
+//        protected String[] doInBackground(Void... params) {
+//            // Simulates a background job.
+//            updateSource();
+//            return null;
+//        }
+//
+//
+//        @Override
+//        protected void onPostExecute(String[] result) {
+//            // Call onRefreshComplete when the list has been refreshed.
+////            mPullRefreshListView.onRefreshComplete();
+//
+//            super.onPostExecute(result);
+//        }
+//    }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -258,11 +236,10 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
                     new String[]{"text"},
                     new int[]{R.id.text});
         } else {
-            adapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item, sourceDB, deviceInfo);
+            adapter = new SourceGridArrayAdapter<SourceItem>(this, R.layout.source_grid, sourceDB, deviceInfo,rssurlDB );
         }
-
-        setListAdapter(adapter);
-
+        gridview.setAdapter(adapter);
+//        setListAdapter(adapter);
     }
 
     @Override
@@ -316,189 +293,125 @@ public class IndexActivity extends ListActivity implements SourceUpdateable {
         closeDB();
     }
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        Intent intent;
-        if (l.getItemAtPosition(position) instanceof Map) {
-            return;
-        }
+//    @Override
+//    protected void onListItemClick(ListView l, View v, int position, long id) {
+//        Intent intent;
+//        if (l.getItemAtPosition(position) instanceof Map) {
+//            return;
+//        }
+//
+//        SourceItem item = (SourceItem) l.getItemAtPosition(position);
+//
+//        if (TikaConstants.TYPE_MY_SINA_WEIBO.endsWith(item.getSourceType()) && !SinaAccountUtil.alreadyBinded(this)) {
+//
+//            intent = new Intent(this, SinaAccountActivity.class);
+//            intent.putExtra("PROMPTTEXT", this.getString(R.string.gotosinaoauth));
+//
+//        } else {
+//
+//            intent = new Intent(this, PageActivity.class);
+//            indicatorMap.remove(item.getSourceType() + "_" + item.getSourceURL());
+//
+//            intent.putExtra("type", item.getSourceType());
+//            intent.putExtra("sourceId", item.getSourceId());
+//            intent.putExtra("sourceImage", item.getSourceImage());
+//            intent.putExtra("sourceName", item.getSourceName());
+//            intent.putExtra("contentUrl", item.getSourceURL());//for rss
+//
+//        }
+//
+//
+//        startActivity(intent);
+//        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+//    }
 
-        SourceItem item = (SourceItem) l.getItemAtPosition(position);
+//    public void notifyUpdating(final CachedArticleSource cachedArticleSource) {
+//        final CacheToken token = cachedArticleSource.getToken();
+//        hander.post(new Runnable() {
+//            public void run() {
+//                for (int i = 0; i < adapter.getCount(); i++) {
+//                    SourceItem item = (SourceItem) adapter.getItem(i);
+//                    if (token.match(item)) {
+//                        if (item.getSourceItemView() != null) {
+//                            item.getSourceItemView().findViewById(R.id.loadingbar).setVisibility(View.VISIBLE);
+//                            item.getSourceItemView().findViewById(R.id.indicator).setVisibility(View.GONE);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        );
+//    }
 
-        if (TikaConstants.TYPE_MY_SINA_WEIBO.endsWith(item.getSourceType()) && !SinaAccountUtil.alreadyBinded(this)) {
-
-            intent = new Intent(this, SinaAccountActivity.class);
-            intent.putExtra("PROMPTTEXT", this.getString(R.string.gotosinaoauth));
-
-        } else {
-
-            intent = new Intent(this, PageActivity.class);
-            indicatorMap.remove(item.getSourceType() + "_" + item.getSourceURL());
-
-            intent.putExtra("type", item.getSourceType());
-            intent.putExtra("sourceId", item.getSourceId());
-            intent.putExtra("sourceImage", item.getSourceImage());
-            intent.putExtra("sourceName", item.getSourceName());
-            intent.putExtra("contentUrl", item.getSourceURL());//for rss
-
-        }
-
-
-        startActivity(intent);
-        overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        menu.add(0, CONFIG_ID, 0, R.string.config);
-        menu.add(0, CLEAR_ID, 0, R.string.clear_all_account);
-        menu.add(0, ACCOUNT_LIST_ID, 0, R.string.accounts);
-        menu.add(0, TIPS_ID, 0, R.string.tips);
-
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case CONFIG_ID:
-                startActivity(new Intent(this, ConfigActivity.class));
-                return true;
-            case CLEAR_ID:
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                preferences.edit().putString(WeiPaiWebViewClient.SINA_ACCOUNT_PREF_KEY, null).commit();
-
-                int count = accountDB.deleteAll();
-                Log.e(this.getClass().getName(), count + " accounts are deleted.");
-
-                count = sourceDB.deleteAll();
-
-                SourceContentDB sourceContentDB = new SourceContentDB(this);
-                try {
-                    sourceContentDB.deleteAll();
-                } finally {
-                    sourceContentDB.close();
-                }
-
-                Log.e(this.getClass().getName(), count + " sources are deleted.");
-
-                RSSURLDB rssurldb = new RSSURLDB(this);
-                try{
-                rssurldb.deleteAll();
-                }finally {
-                    rssurldb.close();
-                }
-                adapter = new SourceItemArrayAdapter<SourceItem>(this, R.layout.source_item, sourceDB, deviceInfo);
-                bindAdapter();
-                adapter.notifyDataSetChanged();
-                return true;
-            case ACCOUNT_LIST_ID:
-                startActivity(new Intent(this, AccountListActivity.class));
-                return true;
-            case TIPS_ID:
-                startActivity(new Intent(this, TipsActivity.class));
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void notifyUpdating(final CachedArticleSource cachedArticleSource) {
-        final CacheToken token = cachedArticleSource.getToken();
-        hander.post(new Runnable() {
-            public void run() {
-                for (int i = 0; i < adapter.getCount(); i++) {
-                    SourceItem item = (SourceItem) adapter.getItem(i);
-                    if (token.match(item)) {
-                        if (item.getSourceItemView() != null) {
-                            item.getSourceItemView().findViewById(R.id.loadingbar).setVisibility(View.VISIBLE);
-                            item.getSourceItemView().findViewById(R.id.indicator).setVisibility(View.GONE);
-                        }
-                    }
-                }
-            }
-        }
-        );
-    }
-
-    public void notifyHasNew
-            (final CachedArticleSource
-                     cachedArticleSource) {
-        final CacheToken token = cachedArticleSource.getToken();
-
-        final Cursor c = sourceDB.findAll();
-        hander.post(new Runnable() {
-            public void run() {
-                ManagedCursor mc = new ManagedCursor(c);
-                mc.each(new EachCursor() {
-                    public void call(Cursor cursor, int index) {
-                        if (adapter.getCount() <= index)
-                            return;
-                        if (!(adapter.getItem(index) instanceof SourceItem))
-                            return;
-                        SourceItem item = (SourceItem) adapter.getItem(index);
-                        if (token.match(item)) {
-                            View childAt = IndexActivity.this.getListView().getChildAt(index);
-                            if (childAt != null) {
-                                childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
-                                TextView indicator = (TextView) childAt.findViewById(R.id.indicator);
-                                indicator.setVisibility(View.VISIBLE);
-                                indicatorMap.put(token.getType() + "_" + token.getToken(), new Object());
-                            }
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    Handler hander = new Handler();
-
-    public void notifyNoNew
-            (final CachedArticleSource
-                     cachedArticleSource) {
-        final CacheToken token = cachedArticleSource.getToken();
-
-        final Cursor c = sourceDB.findAll();
-        hander.post(new Runnable() {
-            public void run() {
-                ManagedCursor mc = new ManagedCursor(c);
-                mc.each(new EachCursor() {
-                    public void call(Cursor cursor, int index) {
-                        if (adapter.getCount() <= index)
-                            return;
-                        if (!(adapter.getItem(index) instanceof SourceItem))
-                            return;
-                        SourceItem item = (SourceItem) adapter.getItem(index);
-                        if (token.match(item)) {
-                            View childAt = IndexActivity.this.getListView().getChildAt(index);
-                            if (childAt != null) {
-                                childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
-                                if (indicatorMap.get(item.getSourceType() + "_" + item.getSourceURL()) != null) {
-                                    TextView indicator = (TextView) childAt.findViewById(R.id.indicator);
-                                    indicator.setVisibility(View.VISIBLE);
-                                }
-
-                            }
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    public void notifyUpdateDone(CachedArticleSource cachedArticleSource) {
-        ContentValues values = new ContentValues();
-        values.put(Source.KEY_UPDATE_TIME, new Date().getTime());
-        sourceDB.update(values, Source.KEY_SOURCE_TYPE + " = ? and " + Source.KEY_CONTENT_URL + " = ?", new String[]{cachedArticleSource.getToken().getType(), cachedArticleSource.getToken().getToken()});
-    }
+//    public void notifyHasNew
+//            (final CachedArticleSource
+//                     cachedArticleSource) {
+//        final CacheToken token = cachedArticleSource.getToken();
+//
+//        final Cursor c = sourceDB.findAll();
+//        hander.post(new Runnable() {
+//            public void run() {
+//                ManagedCursor mc = new ManagedCursor(c);
+//                mc.each(new EachCursor() {
+//                    public void call(Cursor cursor, int index) {
+//                        if (adapter.getCount() <= index)
+//                            return;
+//                        if (!(adapter.getItem(index) instanceof SourceItem))
+//                            return;
+//                        SourceItem item = (SourceItem) adapter.getItem(index);
+//                        if (token.match(item)) {
+//                            View childAt = IndexActivity.this.getListView().getChildAt(index);
+//                            if (childAt != null) {
+//                                childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
+//                                TextView indicator = (TextView) childAt.findViewById(R.id.indicator);
+//                                indicator.setVisibility(View.VISIBLE);
+//                                indicatorMap.put(token.getType() + "_" + token.getToken(), new Object());
+//                            }
+//                        }
+//                    }
+//                });
+//            }
+//        });
+//    }
+//
+//    Handler hander = new Handler();
+//
+//    public void notifyNoNew
+//            (final CachedArticleSource
+//                     cachedArticleSource) {
+//        final CacheToken token = cachedArticleSource.getToken();
+//
+//        final Cursor c = sourceDB.findAll();
+//        hander.post(new Runnable() {
+//            public void run() {
+//                ManagedCursor mc = new ManagedCursor(c);
+//                mc.each(new EachCursor() {
+//                    public void call(Cursor cursor, int index) {
+//                        if (adapter.getCount() <= index)
+//                            return;
+//                        if (!(adapter.getItem(index) instanceof SourceItem))
+//                            return;
+//                        SourceItem item = (SourceItem) adapter.getItem(index);
+//                        if (token.match(item)) {
+//                            View childAt = IndexActivity.this.getListView().getChildAt(index);
+//                            if (childAt != null) {
+//                                childAt.findViewById(R.id.loadingbar).setVisibility(View.GONE);
+//                                if (indicatorMap.get(item.getSourceType() + "_" + item.getSourceURL()) != null) {
+//                                    TextView indicator = (TextView) childAt.findViewById(R.id.indicator);
+//                                    indicator.setVisibility(View.VISIBLE);
+//                                }
+//
+//                            }
+//                        }
+//                    }
+//                });
+//            }
+//        });
+//    }
+//
+//    public void notifyUpdateDone(CachedArticleSource cachedArticleSource) {
+//        ContentValues values = new ContentValues();
+//        values.put(Source.KEY_UPDATE_TIME, new Date().getTime());
+//        sourceDB.update(values, Source.KEY_SOURCE_TYPE + " = ? and " + Source.KEY_CONTENT_URL + " = ?", new String[]{cachedArticleSource.getToken().getType(), cachedArticleSource.getToken().getToken()});
+//    }
 }
