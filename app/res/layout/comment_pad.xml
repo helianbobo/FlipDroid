@@ -1,4 +1,4 @@
-<LinearLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid" android:orientation="vertical"
+<LinearLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid2" android:orientation="vertical"
               android:layout_width="match_parent" android:background="@drawable/roundcorner" android:padding="5dip"
               android:layout_height="match_parent" xmlns:android="http://schemas.android.com/apk/res/android"
               >
@@ -76,7 +76,7 @@
                   android:paddingLeft="5dip"
                   android:gravity="center"></TextView>
     </LinearLayout>
-    <com.goal98.flipdroid.view.LinedEditText
+    <com.goal98.flipdroid2.view.LinedEditText
             android:id="@+id/comment"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.goal98.flipdroid.view.TopBar xmlns:wp="http://schemas.android.com/apk/res/com.goal98.flipdroid" xmlns:android="http://schemas.android.com/apk/res/android"
+<com.goal98.flipdroid2.view.TopBar xmlns:wp="http://schemas.android.com/apk/res/com.goal98.flipdroid2" xmlns:android="http://schemas.android.com/apk/res/android"
                                   android:layout_height="wrap_content"
                                   android:layout_width="fill_parent"
-                                  android:id="@+id/topbar"></com.goal98.flipdroid.view.TopBar>
+                                  android:id="@+id/topbar"></com.goal98.flipdroid2.view.TopBar>

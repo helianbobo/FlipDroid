@@ -1,12 +1,5 @@
 [
-    {
-        "name":"健康",
-        "content_url":"Woman;Health",
-        "cat":"女人",
-        "image_url":"http://58.215.170.154/appimages/Woman-Health.png",
-        "type":"FEATURED",
-        "desc":""
-    } ,
+
     {
         "name":"婚姻",
         "content_url":"Woman;Marriage",
@@ -18,7 +11,7 @@
     {
         "name":"PSP",
         "content_url":"Game;PSP",
-        "cat":",
+        "cat":"游戏",
         "image_url":"http://58.215.170.154/appimages/Game-PSP.png",
         "type":"FEATURED",
         "desc":""

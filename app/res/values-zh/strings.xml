@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">天鹅绒围脖</string>
+    <string name="app_name">悦读家</string>
     <string name="config">设置</string>
     <string name="password">密码</string>
     <string name="username">用户名</string>
@@ -11,6 +11,8 @@
     <string name="next">下一条</string>
     <string name="search">搜索</string>
     <string name="flip">划动 >></string>
+    <string name="unsubscribe">退订</string>
+    <string name="unsubscribed">已退订</string>
     <string name="nodatainscroll">没有更多了</string>
     <string name="nodatainfavorite">没有收藏</string>
     <string name="plsdroptpupdate">请下拉以获取内容</string>
@@ -20,7 +22,7 @@
     <string name="sina_weibo">新浪微博</string>
     <string name="updated">您有%条更新</string>
     <string name="rssfeeds">RSS订阅</string>
-    <string name="featured">天鹅绒精选</string>
+    <string name="featured">悦读家精选</string>
     <string name="sinafeeds">新浪微博</string>
     <string name="isLastPage">已是最后一页</string>
     <string name="share">分享</string>
@@ -30,7 +32,7 @@
     <string name="in_30_days">30天内</string>
     <string name="myfavorite">收藏夹</string>
     <string name="favorite">收藏</string>
-
+    <string name="failed">更新失败，稍后再试</string>
     <string name="title_anim_flip_duration_preference">翻页动画时间</string>
     <string name="summary_anim_flip_duration_preference">翻页动画时间(毫秒)</string>
     <string name="dialog_title_anim_flip_duration_preference">翻页动画时间(毫秒)</string>

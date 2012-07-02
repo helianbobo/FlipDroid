@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-        xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
+        xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid2"
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent"
         android:orientation="vertical" android:layout_width="fill_parent" android:background="@color/background_color">
     <!--<RelativeLayout android:orientation="horizontal" android:layout_width="fill_parent" android:paddingLeft="5dip"-->

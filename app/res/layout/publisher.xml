@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid"
+<RelativeLayout xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.flipdroid2"
                 xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/publisherWrapper"
                 android:layout_width="fill_parent" android:layout_marginTop="3dip"
                 android:layout_height="fill_parent" android:orientation="horizontal" android:gravity="bottom">

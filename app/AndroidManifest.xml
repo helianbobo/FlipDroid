@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           android:versionCode="4"
           android:versionName="1.1.2"
-          package="com.goal98.flipdroid">
+          package="com.goal98.flipdroid2">
 
 
     <application android:name=".activity.FlipdroidApplications" android:icon="@drawable/icon"
@@ -23,10 +23,6 @@
         </activity>
         <activity android:name=".activity.ConfigActivity" android:screenOrientation="portrait"
                   >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
                 </activity>
         <activity android:name=".activity.PageActivity" android:screenOrientation="portrait"
                   
@@ -36,10 +32,6 @@
         <activity android:name=".activity.IndexActivity" android:screenOrientation="portrait"
                   android:launchMode="singleTask"
                   >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
                 </activity>
         <activity android:name=".activity.ContentLoadedActivity" android:screenOrientation="portrait"
                   android:launchMode="singleTask"
@@ -109,6 +101,4 @@
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"/>
     <uses-permission android:name="android.permission.READ_LOGS"/>
-    <uses-permission android:name="android.permission.SEND_SMS"/>
-
 </manifest>

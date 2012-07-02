@@ -95,6 +95,9 @@
     <string name="keywordhere">Keywords here</string>
     <string name="nodata">No source added, Click button above to add sources</string>
     <string name="latest">Latest</string>
+    <string name="failed">Failed to update</string>
+    <string name="unsubscribe">Unsubscribe</string>
+    <string name="unsubscribed">Unsubscribed</string>
 
     <string name="add_custom_source">Add Custom Source</string>
     <string name="add_custom_source_desc">Add any weibo account to follow</string>

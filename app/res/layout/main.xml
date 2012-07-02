@@ -3,17 +3,17 @@
 <RelativeLayout android:id="@+id/pageView" xmlns:android="http://schemas.android.com/apk/res/android"
                 style="@style/Page">
 
-    <com.goal98.flipdroid.view.FlipPage
+    <com.goal98.flipdroid2.view.FlipPage
             style="@style/Page"
             android:id="@+id/articlePerPage" android:weightSum="480" android:orientation="vertical"
             android:background="#FFFFFF">
 
-        <com.goal98.flipdroid.view.PageIndexView android:background="@color/white" android:id="@+id/pageIndex"
+        <com.goal98.flipdroid2.view.PageIndexView android:background="@color/white" android:id="@+id/pageIndex"
                                                  android:layout_width="fill_parent"
                                                  android:layout_weight="25"
                                                  android:layout_height="0dip" android:gravity="center">
 
-        </com.goal98.flipdroid.view.PageIndexView>
+        </com.goal98.flipdroid2.view.PageIndexView>
 
         <FrameLayout android:background="#f0f0f0" android:id="@+id/pageContainer" android:layout_width="match_parent"
                      android:layout_weight="415"
@@ -21,13 +21,13 @@
 
         </FrameLayout>
 
-        <com.goal98.flipdroid.view.HeaderView android:background="#FFFFFF" android:id="@+id/header"
+        <com.goal98.flipdroid2.view.HeaderView android:background="#FFFFFF" android:id="@+id/header"
                                               android:layout_width="match_parent"
                                               android:layout_weight="40" android:visibility="invisible"
                                               android:layout_height="0dip" android:gravity="center">
 
-        </com.goal98.flipdroid.view.HeaderView>
-    </com.goal98.flipdroid.view.FlipPage>
+        </com.goal98.flipdroid2.view.HeaderView>
+    </com.goal98.flipdroid2.view.FlipPage>
 
     <include layout="@layout/tutorial" android:id="@+id/tutorial"/>
 
