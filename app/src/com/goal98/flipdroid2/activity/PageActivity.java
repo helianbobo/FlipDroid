@@ -1304,9 +1304,9 @@ public class PageActivity extends Activity implements com.goal98.flipdroid2.mode
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 FlipdroidApplications application = (FlipdroidApplications) getApplication();
-                                OAuth oauth = new OAuth();
+                                OAuth oauth = new OAuth(handler);
                                 application.setOauth(oauth);
-                                ////Log.v(TAG, "OAuthHolder.oauth" + application + oauth);
+
                                 boolean result = oauth.RequestAccessToken(PageActivity.this, "flipdroid2://SinaAccountSaver", new OAuth.OnRetrieved() {
                                     @Override
                                     public void onRetrieved() {

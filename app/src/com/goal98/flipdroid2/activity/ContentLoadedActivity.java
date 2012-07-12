@@ -255,23 +255,24 @@ public class ContentLoadedActivity extends Activity {
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 FlipdroidApplications application = (FlipdroidApplications) getApplication();
-                                final OAuth oauth = new OAuth();
+                                final OAuth oauth = new OAuth(hander);
                                 application.setOauth(oauth);
 
                                 showDialog(PROMPT_INPROGRESS);
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        final boolean result = oauth.RequestAccessToken(ContentLoadedActivity.this, "flipdroid2://SinaAccountSaver", new OAuth.OnRetrieved() {
+                                            @Override
+                                            public void onRetrieved() {
+                                                if (ContentLoadedActivity.this.dialog != null)
+                                                    ContentLoadedActivity.this.dialog.dismiss();
+                                            }
+                                        });
                                         hander.post(new Runnable() {
                                             @Override
                                             public void run() {
-                                                boolean result = oauth.RequestAccessToken(ContentLoadedActivity.this, "flipdroid2://SinaAccountSaver", new OAuth.OnRetrieved() {
-                                                    @Override
-                                                    public void onRetrieved() {
-                                                        if (ContentLoadedActivity.this.dialog != null)
-                                                            ContentLoadedActivity.this.dialog.dismiss();
-                                                    }
-                                                });
+
                                                 if (!result) {
                                                     new AlarmSender(ContentLoadedActivity.this.getApplicationContext()).sendInstantMessage(R.string.networkerror);
                                                 }

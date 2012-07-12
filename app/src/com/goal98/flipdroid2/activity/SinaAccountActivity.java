@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -26,7 +27,7 @@ public class SinaAccountActivity extends Activity {
 
     protected SharedPreferences preferences;
     protected TableRow logoView;
-
+    Handler handler = new Handler();
     String promptText = null;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -50,9 +51,8 @@ public class SinaAccountActivity extends Activity {
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 FlipdroidApplications application = (FlipdroidApplications) getApplication();
-                                OAuth oauth = new OAuth();
+                                OAuth oauth = new OAuth(handler);
                                 application.setOauth(oauth);
-                                ////System.out.println("OAuthHolder.oauth" + application + oauth);
                                 boolean result = oauth.RequestAccessToken(SinaAccountActivity.this, "flipdroid2://SinaAccountSaver",null);
                                 if (!result)
                                     new AlarmSender(SinaAccountActivity.this.getApplicationContext()).sendInstantMessage(R.string.networkerror);

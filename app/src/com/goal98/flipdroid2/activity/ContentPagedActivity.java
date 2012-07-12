@@ -104,8 +104,26 @@ public class ContentPagedActivity extends SherlockActivity {
         loadedArticleView.setAdapter(mPagerAdapter);
 
         loadedArticleView.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            int exitSignal = 0;
             @Override
             public void onPageScrolled(int i, float v, int i1) {
+                if(i==0 || mPagerAdapter.getCount()-1 == i){
+                    if(v == 0)
+                        if(exitSignal<=3)
+                            exitSignal++;
+                        else{
+                            if(i==0)
+                                ContentPagedActivity.this.overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
+                            else
+                                ContentPagedActivity.this.overridePendingTransition(android.R.anim.slide_out_right, R.anim.fade);
+                            ContentPagedActivity.this.finish();
+                        }
+
+                }else{
+                    exitSignal=0;
+                }
+
+
             }
 
             @Override
@@ -158,7 +176,7 @@ public class ContentPagedActivity extends SherlockActivity {
                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 FlipdroidApplications application = (FlipdroidApplications) getApplication();
-                                final OAuth oauth = new OAuth();
+                                final OAuth oauth = new OAuth(hander);
                                 application.setOauth(oauth);
                                 if (ContentPagedActivity.this.promptDialog != null)
                                     ContentPagedActivity.this.promptDialog.dismiss();
@@ -167,14 +185,13 @@ public class ContentPagedActivity extends SherlockActivity {
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        final boolean result = oauth.RequestAccessToken(ContentPagedActivity.this, "flipdroid2://SinaAccountSaver", null);
                                         hander.post(new Runnable() {
                                             @Override
                                             public void run() {
-
-                                                    boolean result = oauth.RequestAccessToken(ContentPagedActivity.this, "flipdroid2://SinaAccountSaver", null);
-                                                    if (!result) {
-                                                        new AlarmSender(ContentPagedActivity.this.getApplicationContext()).sendInstantMessage(R.string.networkerror);
-                                                    }
+                                                if (!result) {
+                                                    new AlarmSender(ContentPagedActivity.this.getApplicationContext()).sendInstantMessage(R.string.networkerror);
+                                                }
                                             }
                                         });
 
@@ -385,7 +402,7 @@ public class ContentPagedActivity extends SherlockActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if(promptDialog!=null)
-                promptDialog.dismiss();
+        if (promptDialog != null)
+            promptDialog.dismiss();
     }
 }

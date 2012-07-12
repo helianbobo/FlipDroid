@@ -2,6 +2,7 @@ package com.goal98.flipdroid2.client;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Handler;
 import com.goal98.flipdroid2.activity.BindSinaActivity;
 import com.goal98.flipdroid2.util.Constants;
 import oauth.signpost.OAuthProvider;
@@ -28,11 +29,10 @@ public class OAuth {
     private OAuthProvider httpOauthprovider;
     public String consumerKey;
     public String consumerSecret;
+    private Handler handler;
 
-    public OAuth() {
-// 第一组：（App Key和App Secret）
-// 这组参数就是本系列文本第一篇提到的建一个新的应用获取App Key和App Secret。
-        this(Constants.CONSUMER_KEY, Constants.CONSUMER_SECRET);
+    public OAuth(Handler hander) {
+        this(hander, Constants.CONSUMER_KEY, Constants.CONSUMER_SECRET);
     }
 
     public OAuth(String consumerKey, String consumerSecret) {
@@ -40,20 +40,30 @@ public class OAuth {
         this.consumerSecret = consumerSecret;
     }
 
-    public Boolean RequestAccessToken(Activity activity, String callBackUrl, OnRetrieved onRetrieved) {
+    public OAuth(Handler hander,String consumerKey, String consumerSecret) {
+        this.handler = hander;
+        this.consumerKey = consumerKey;
+        this.consumerSecret = consumerSecret;
+    }
+
+    public Boolean RequestAccessToken(final Activity activity, String callBackUrl, OnRetrieved onRetrieved) {
         Boolean ret = false;
         try {
             httpOauthConsumer = new CommonsHttpOAuthConsumer(consumerKey, consumerSecret);
             httpOauthprovider = new DefaultOAuthProvider("http://api.t.sina.com.cn/oauth/request_token", "http://api.t.sina.com.cn/oauth/access_token", "http://api.t.sina.com.cn/oauth/authorize");
-            String authUrl = httpOauthprovider.retrieveRequestToken(httpOauthConsumer, callBackUrl);
-            if(onRetrieved!=null)
+            final String authUrl = httpOauthprovider.retrieveRequestToken(httpOauthConsumer, callBackUrl);
+            if (onRetrieved != null)
                 onRetrieved.onRetrieved();
 
-            Intent intent = new Intent(activity, BindSinaActivity.class);
-            intent.putExtra(BindSinaActivity.URL, authUrl);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(activity, BindSinaActivity.class);
+                    intent.putExtra(BindSinaActivity.URL, authUrl);
 
-            activity.startActivityForResult(intent,1);
-
+                    activity.startActivityForResult(intent, 1);
+                }
+            });
             ret = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,7 +97,7 @@ public class OAuth {
 //            return null;
 //        }
         SortedSet<String> user_id = httpOauthprovider.getResponseParameters().get("user_id");
-        if(user_id==null){
+        if (user_id == null) {
             return null;
         }
         String userId = user_id.first();
