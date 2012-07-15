@@ -1,0 +1,43 @@
+[
+    {
+        "name":"互联网",
+        "id":"1",
+        "desc":"",
+        "image_url":"http://tika.it/appimages/source-internet.png",
+        "content_url":"Techo",
+        "type":"FEATURED"
+    },
+    {
+        "name":"体育",
+        "id":"2",
+        "desc":"",
+        "image_url":"http://tika.it/appimages/source-sports.png",
+        "content_url":"http://news.baidu.com/n?cmd=1&class=sportnews&tn=rss",
+        "type":"FEATURED"
+    },
+    {
+        "name":"游戏",
+        "id":"3",
+        "desc":"",
+        "image_url":"http://tika.it/appimages/source-game.png",
+        "content_url":"http://news.baidu.com/n?cmd=1&class=gamenews&tn=rss",
+        "type":"FEATURED"
+    },
+    {
+        "name":"科技",
+        "id":"4",
+        "desc":"",
+        "image_url":"http://tika.it/appimages/source-tech.png",
+        "content_url":"http://news.baidu.com/n?cmd=1&class=technnews&tn=rss",
+        "type":"FEATURED"
+    },
+    {
+        "name":"女性话题",
+        "id":"5",
+        "desc":"",
+        "image_url":"http://tika.it/appimages/source-women.png",
+        "content_url":"http://news.baidu.com/n?cmd=1&class=healthnews&tn=rss",
+        "type":"FEATURED"
+    }
+
+]

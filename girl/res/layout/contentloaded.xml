@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:wp="http://schemas.android.com/apk/res/com.goal98.girl" android:id="@+id/body" xmlns:android="http://schemas.android.com/apk/res/android"
+                style="@style/Index" android:background="#fff4f4f2">
+    <com.goal98.girl.view.PageIndexView android:background="@color/white" android:id="@+id/pageIndex"
+                                             android:layout_width="fill_parent"
+                                             android:layout_height="20dip" android:gravity="center" android:layout_alignParentBottom="true">
+
+    </com.goal98.girl.view.PageIndexView>
+</RelativeLayout>

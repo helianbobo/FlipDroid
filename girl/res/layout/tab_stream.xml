@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:background="@drawable/bg_tb_item_left" style="@style/TabItem_Layout"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@+id/tab_item_iv_icon" android:adjustViewBounds="true" android:layout_width="wrap_content" android:layout_height="15dp" android:src="@drawable/ic_tab_chat" android:layout_centerHorizontal="true" style="@style/TabItem_Icon" />
+    <TextView android:id="@+id/tab_item_tv_label" android:text="@string/mystream" android:layout_below="@id/tab_item_iv_icon" android:layout_centerHorizontal="true" style="@style/Style.TabItem.Label" />
+</RelativeLayout>

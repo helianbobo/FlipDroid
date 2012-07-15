@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ListView android:id="@+id/sourceList" xmlns:android="http://schemas.android.com/apk/res/android"
+          android:layout_width="fill_parent" android:background="@drawable/roundcorner"
+          android:layout_height="wrap_content" android:cacheColorHint="#00000000" android:divider="#EBEBEB"
+          android:dividerHeight="1dip"></ListView>

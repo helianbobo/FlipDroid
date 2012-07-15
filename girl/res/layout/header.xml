@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge android:layout_width="fill_parent"
+       android:layout_height="fill_parent" xmlns:webimage="http://schemas.android.com/apk/res/com.goal98.girl" xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout android:orientation="horizontal"
+                  android:id="@+id/header"
+                  android:layout_width="fill_parent"
+                  android:layout_height="fill_parent" android:gravity="left|center_vertical"
+                  android:background="@color/white" android:weightSum="100">
+            <ImageButton android:id="@+id/content" android:background="@drawable/ic_menu_home"
+                         android:layout_width="wrap_content" android:layout_alignParentLeft="true" android:layout_centerVertical="true"
+                         android:adjustViewBounds="true" android:scaleType="center"
+                         android:layout_height="wrap_content" android:layout_gravity="left"
+                         android:gravity="left|center_vertical"/>
+
+
+            <TextView android:maxWidth="140dip" android:id="@+id/headerText" android:layout_marginLeft="3dip"
+                      android:gravity="left|center_vertical" android:layout_centerInParent="true"
+                      android:textSize="20dp" android:textStyle="bold" android:text="@string/sinaweiboheader"
+                      android:singleLine="true"
+                      android:layout_marginBottom="1px" android:layout_width="wrap_content"
+                      android:ellipsize="end"
+                      android:layout_height="fill_parent"></TextView>
+
+        <com.goal98.android.WebImageView android:id="@+id/headerImage" webimage:autoLoad="false"
+                                         android:layout_toLeftOf="@id/headerText" android:src="@drawable/portrait" webimage:roundImage="true"
+                                         android:layout_height="wrap_content" webimage:defaultWidth="50"
+                                         webimage:defaultHeight="50" android:visibility="invisible" android:layout_centerVertical="true"
+                                         android:layout_width="50dip" android:gravity="center"></com.goal98.android.WebImageView>
+
+
+            <Button android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:text="@string/button_update"
+                    style="@style/UpdateButton"
+                    android:layout_margin="3dp"
+                    android:id="@+id/update" android:paddingLeft="15dip" android:paddingRight="15dip"
+                    android:visibility="invisible"
+                    android:layout_gravity="left" android:layout_alignParentRight="true" android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+
+     <include layout="@layout/articleloadedtoolbar"/>
+
+</merge>

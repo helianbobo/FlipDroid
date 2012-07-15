@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout android:paddingRight="10.0dip" android:minHeight="40.0dip" style="@style/menu_item"
+  xmlns:android="http://schemas.android.com/apk/res/android" android:paddingLeft="5dip">
+    <ImageView android:id="@+id/menu_iv_status" android:paddingTop="4.0dip" android:src="@drawable/sina" android:adjustViewBounds="true" android:layout_width="50dip" android:layout_height="50dip" android:layout_alignParentTop="true" android:layout_centerInParent="true"/>
+    <TextView android:id="@+id/menu_tv_text" android:layout_width="wrap_content" android:layout_height="wrap_content" style="@style/menu_text" android:layout_below="@id/menu_iv_status" android:text="新浪微博"/>
+</RelativeLayout>

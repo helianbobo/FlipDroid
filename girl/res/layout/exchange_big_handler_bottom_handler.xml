@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/exchange_display"
+    android:layout_width="fill_parent"
+    android:layout_height="55dp" >
+
+    <ImageView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/exchange_banner_bg"
+        android:layout_width="fill_parent"
+        android:layout_height="67dp"
+        android:layout_below="@+id/top_ban"
+        android:scaleType="fitXY"
+        android:src="@drawable/exchange_ban"
+        android:visibility="visible" >
+    </ImageView>
+
+    <ImageView
+        android:id="@+id/exchange_appIcon0"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/exchange_zhanwei" >
+    </ImageView>
+
+    <ViewFlipper
+        android:id="@+id/exchange_flipper"
+        android:layout_width="260dp"
+        android:layout_height="35dp"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="3dp"
+        android:layout_toRightOf="@+id/exchange_appIcon0"
+        android:flipInterval="10000"
+        android:inAnimation="@anim/exchange_push_up_in"
+        android:outAnimation="@anim/exchange_push_up_out" >
+
+        <include layout="@layout/exchange_big_handler_flipper_content" />
+    </ViewFlipper>
+
+</RelativeLayout>

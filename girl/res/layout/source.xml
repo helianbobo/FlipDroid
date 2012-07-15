@@ -1,0 +1,15 @@
+<GridView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@+id/sourceGrid"
+
+          style="@style/SourceGrid"
+
+          android:padding="10dp"
+          android:verticalSpacing="10dp"
+
+          android:horizontalSpacing="10dp"
+          android:numColumns="auto_fit"
+          android:columnWidth="130dp"
+          android:stretchMode="columnWidth"
+
+          android:gravity="center"
+        />

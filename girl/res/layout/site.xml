@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:wp="http://schemas.android.com/apk/res/com.goal98.girl" android:orientation="vertical"
+              style="@style/Index">
+
+    <com.goal98.girl.view.TopBar wp:rightButtonImage="@drawable/like"
+                                      android:layout_height="wrap_content"
+                                      android:layout_width="fill_parent"
+                                      wp:title="@string/addfeeds"></com.goal98.girl.view.TopBar>
+    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/siteGrid"
+
+              style="@style/SiteGrid"
+
+              android:padding="10dp"
+              android:verticalSpacing="10dp"
+
+              android:horizontalSpacing="10dp"
+              android:numColumns="auto_fit"
+              android:columnWidth="130dp"
+              android:stretchMode="columnWidth"
+
+              android:gravity="center"
+            />
+</LinearLayout>

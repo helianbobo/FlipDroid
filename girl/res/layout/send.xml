@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical" android:layout_width="fill_parent"
+              android:layout_height="fill_parent">
+    <!-- 请输入手机号码标签 -->
+    <TextView android:layout_width="fill_parent"
+              android:layout_height="wrap_content" android:text="hello" />
+
+    <!-- 手机号码编辑框 -->
+    <EditText android:layout_width="fill_parent"
+              android:layout_height="wrap_content" android:id="@+id/mobile" />
+
+    <!-- 请输入信息内容标签 -->
+    <TextView android:layout_width="fill_parent"
+              android:layout_height="wrap_content" android:text="content" />
+
+    <!-- 信息内容编辑框 -->
+    <EditText android:layout_width="fill_parent"
+              android:layout_height="wrap_content" android:minLines="3"
+              android:id="@+id/message" />
+
+    <!-- 发送按钮 -->
+    <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:text="send"
+            android:id="@+id/send"/>
+</LinearLayout>

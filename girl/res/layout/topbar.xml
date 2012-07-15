@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/titleBar"
+              android:background="@drawable/nav_bar_bg"
+              android:layout_width="fill_parent" android:orientation="horizontal"
+              android:layout_height="30dip" android:paddingTop="4.4dip"
+              android:paddingBottom="2.4dip" android:paddingLeft="3.5dip" android:paddingRight="3.5dip">
+    <TextView android:id="@+id/topBarTitle" android:drawableLeft="@drawable/feather_40x"
+              android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:gravity="center" android:layout_gravity="center"/>
+    <LinearLayout android:layout_width="fill_parent" android:minWidth="95dip" android:layout_height="wrap_content"
+                  >
+        <TableLayout android:layout_width="fill_parent" android:layout_height="fill_parent" >
+            <TableRow android:id="@+id/topbar_button" android:gravity="right">
+
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
+</LinearLayout>

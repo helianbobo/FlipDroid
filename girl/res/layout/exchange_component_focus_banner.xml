@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="55dp"
+	android:id="@+id/exchange_banner">
+
+	<RelativeLayout android:layout_width="fill_parent"
+		android:layout_height="67dp" android:id="@+id/exchange_banner_bg"
+		android:background="@drawable/exchange_banner_grey">
+	</RelativeLayout>
+
+	<ImageView android:layout_width="35dp" android:layout_height="35dp"
+		android:id="@+id/exchange_appIcon0" android:background="@drawable/exchange_zhanwei"
+		android:layout_marginLeft="5dp" android:layout_centerVertical="true">
+	</ImageView>
+
+	<TextView android:id="@+id/exchange_name0"
+		android:layout_width="120dp" android:layout_toRightOf="@+id/exchange_appIcon0"
+		android:layout_height="wrap_content" android:textColor="#000000"
+		android:textSize="14dp" android:layout_marginTop="10dp"
+		android:layout_marginLeft="5dp" android:text="开心听">
+	</TextView>
+
+	<TextView android:id="@+id/exchange_content0"
+		android:layout_width="wrap_content" android:layout_toRightOf="@+id/exchange_appIcon0"
+		android:layout_alignParentBottom="true" android:layout_marginBottom="10dp"
+		android:layout_marginLeft="5dp" android:layout_height="wrap_content"
+		android:textSize="12dp" android:textColor="#777777" android:text="android上最好的音乐软件">
+	</TextView>
+
+	<TextView android:id="@+id/exchange_size0"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:layout_marginTop="10dp" android:layout_alignParentRight="true"
+		android:layout_marginRight="5dp" android:textSize="12dp"
+		android:gravity="center" android:textColor="#777777" android:text="(大小:1.6M)">
+	</TextView>
+
+</RelativeLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <declare-styleable name="webimage">
+        <attr name="autoLoad" format="boolean"/>
+        <attr name="roundImage" format="boolean"/>
+        <attr name="defaultWidth" format="integer"/>
+        <attr name="defaultHeight" format="integer"/>
+        <attr name="errorDrawable" format="reference"/>
+        <attr name="progressDrawable" format="reference"/>
+        <attr name="loadFromInternet" format="boolean"/>
+        <attr name="scaleType" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="streamStyledArticleView">
+        <attr name="toLoadFromInternet" format="boolean"/>
+    </declare-styleable>
+
+
+
+    <declare-styleable name="topbar">
+        <attr name="leftButtonLabel" format="string"/>
+        <attr name="leftButtonImage" format="reference"/>
+        <attr name="rightButtonImage" format="reference"/>
+        <attr name="titleText" format="string"/>
+        <attr name="rightButtonLabel" format="string"/>
+    </declare-styleable>
+
+
+
+</resources>

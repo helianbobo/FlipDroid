@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">悦美女</string>
+    <string name="config">设置</string>
+    <string name="password">密码</string>
+    <string name="username">用户名</string>
+    <string name="clear_all_account">清除账户</string>
+    <string name="accounts">用户管理</string>
+    <string name="tips">教程</string>
+    <string name="next">下一条</string>
+    <string name="search">搜索</string>
+    <string name="flip">划动 >></string>
+    <string name="unsubscribe">退订</string>
+    <string name="unsubscribed">已退订</string>
+    <string name="nodatainscroll">没有更多了</string>
+    <string name="nodatainfavorite">没有收藏</string>
+    <string name="plsdroptpupdate">请下拉以获取内容</string>
+    <string name="mystream">我的阅读</string>
+    <string name="addfeeds">添加订阅</string>
+    <string name="addmorefeeds">添加更多订阅</string>
+    <string name="sina_weibo">新浪微博</string>
+    <string name="updated">您有%条更新</string>
+    <string name="rssfeeds">RSS订阅</string>
+    <string name="featured">悦美女精选</string>
+    <string name="sinafeeds">新浪微博</string>
+    <string name="isLastPage">已是最后一页</string>
+    <string name="share">分享</string>
+    <string name="addfavorite">收藏</string>
+    <string name="in_3_days">三天内</string>
+    <string name="in_7_days">一周内</string>
+    <string name="in_30_days">30天内</string>
+    <string name="myfavorite">收藏夹</string>
+    <string name="favorite">收藏</string>
+    <string name="failed">更新失败，稍后再试</string>
+    <string name="title_anim_flip_duration_preference">翻页动画时间</string>
+    <string name="summary_anim_flip_duration_preference">翻页动画时间(毫秒)</string>
+    <string name="dialog_title_anim_flip_duration_preference">翻页动画时间(毫秒)</string>
+
+    <string name="title_article_per_page_preference">每页显示文章数</string>
+    <string name="summary_article_per_page_preference">每页显示文章数</string>
+    <string name="dialog_title_article_per_page_preference">每页显示文章数</string>
+
+    <string name="title_browse_mode_preference">浏览模式</string>
+    <string name="dialog_title_browse_mode_preference">浏览模式</string>
+
+    <string name="title_animation_mode_preference">翻页动画</string>
+    <string name="dialog_title_animation_mode_preference">翻页动画</string>
+    <string name="title_load_image_preference">非WIFI下加载图片</string>
+    <string name="title_save_wifi">省流量模式</string>
+    <string name="button_add_new_account">添加新账户</string>
+    <string name="button_add_new_source">添加新订阅</string>
+    <string name="button_login">登入</string>
+    <string name="button_close">关闭</string>
+    <string name="button_update">刷新</string>
+    <string name="button_send">发送</string>
+    <string name="button_finish">完成</string>
+
+    <string name="my_timeline">我的微博</string>
+    <string name="my_timeline_desc">我关注的微博</string>
+
+    <string name="msg_no_more_page">读不到内容了。向左划显示最后一页，向右划返回主选单</string>
+    <string name="loading">加载中...</string>
+    <string name="url_loading">链接内容读取中...</string>
+    <string name="sharedBy">分享自</string>
+    <string name="tikaservererror">获取内容不成功，等一下再试吧。</string>
+    <string name="tikatimeout">获取内容超时</string>
+    <string name="unknownerror">获取内容错误</string>
+    <string name="networkerror">找不到网络</string>
+    <string name="locale">ZH_CN</string>
+    <string name="comment">评论微博</string>
+    <string name="saysomething">说点儿什么吧......</string>
+    <string name="pastersshere">在这儿粘贴订阅源</string>
+    <string name="rssinvalid">无效RSS源</string>
+    <string name="deletesource">删除源</string>
+    <string name="yes">删除</string>
+    <string name="no">取消</string>
+    <string name="my_feed">编辑订阅</string>
+    <string name="my_feed_desc">我的谷歌订阅</string>
+    <string name="credentialInCorrect">认证失败</string>
+    <string name="nonetwork">没有可用网络连接，现在就去设置网络？</string>
+    <string name="ok">好的</string>
+    <string name="cancel">不了</string>
+    <string name="gotosinaoauth">现在就去新浪微博做认证吗？</string>
+    <string name="commentneedsinaoauth">评论功能需要绑定新浪微博帐号</string>
+    <string name="addsinamusthavesina">要添加新浪微博的源，你必须绑定新浪微博帐号，现在就去绑定吗？</string>
+    <string name="custom">自定义</string>
+    <string name="keywordhere">输入您想查找的关键字</string>
+    <string name="nodata">尚未添加源,点击上方按钮以添加源</string>
+    <string name="latest">最新</string>
+
+    <string name="add_custom_source">手工添加关注源</string>
+    <string name="add_custom_source_desc">搜索并添加微博用户到关注源</string>
+    <string name="view_source">查看源链接</string>
+
+    <string name="original_url_is_not_available">源链接不存在。</string>
+    <string name="share_success">已分享到您的微博</string>
+    <string name="inprogress">请稍候</string>
+    <string name="toolong">不能超过140字</string>
+    <string name="title_auto_check_update_nonwifi_preference">非Wifi下自动更新</string>
+
+    <string-array name="tips">
+        <item>左右划上下划都可以翻页。</item>
+        <item>绑定新浪微博帐号后,可以在浏览的时候将你喜欢的文章分享到新浪微博</item>
+        <item>想要删除一个源，请长按该源，弹出菜单后，点击删除</item>
+        <item>目前支持3种源，新浪微博、RSS和谷歌订阅</item>
+    </string-array>
+    <string name="pull_to_refresh_pull_label">下拉检查更新</string>
+    <string name="pull_to_refresh_release_label">松开可以更新</string>
+    <string name="pull_to_refresh_refreshing_label">检查更新中</string>
+    <string name="pull_to_refresh_tap_label">轻按可以更新</string>
+    <string name="addShortcut">添加桌面快捷方式</string>
+    <string name="add_source">添加源</string>
+    <string name="added">已添加</string>
+    <string name="removed">已删除</string>
+    <string name="addbtn">编辑源</string>
+    <string name="plsadd">还没有添加任何订阅，快点击右上角的添加按钮吧!</string>
+</resources>
