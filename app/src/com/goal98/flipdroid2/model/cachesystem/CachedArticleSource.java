@@ -40,7 +40,7 @@ public class CachedArticleSource implements ArticleSource {
 
                 List<Article> articles = articleSource.contentToArticles(content);
                 for (int i = 0; i < articles.size(); i++) {
-                    Article article =  articles.get(i);
+                    Article article = articles.get(i);
                     article.setFrom(articleSource.getCacheToken().getToken());
                     rssurlDB.insert(article);
                 }
@@ -99,7 +99,6 @@ public class CachedArticleSource implements ArticleSource {
                     } else {
                         sourceUpdateable.notifyNoNew(CachedArticleSource.this);
                     }
-                    sourceUpdateable.notifyUpdateDone(CachedArticleSource.this);
                 } catch (IOException e) {
                 } finally {
                     updating = false;

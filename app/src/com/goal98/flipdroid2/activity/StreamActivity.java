@@ -74,7 +74,7 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
 
             String from = null;
 //            if (sourceItem.getSourceType().equals(TikaConstants.TYPE_RSS))
-                from = sourceItem.getSourceURL();
+            from = sourceItem.getSourceURL();
 //            else
 //                from = sourceItem.getCategory();
 
@@ -226,21 +226,6 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
 //        }
 //    }
 
-    public void notifyUpdating(CachedArticleSource cachedArticleSource) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public void notifyHasNew(CachedArticleSource cachedArticleSource) {
-        mainStreamAdapter.forceLoad(false);
-    }
-
-    public void notifyNoNew(CachedArticleSource cachedArticleSource) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public void notifyUpdateDone(CachedArticleSource cachedArticleSource) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
 
     private int lastItemPosition = 0;
 
@@ -265,7 +250,7 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
                 public void run() {
                     String from = null;
 //                    if (sourceItem.getSourceType().equals(TikaConstants.TYPE_RSS))
-                        from = sourceItem.getSourceURL();
+                    from = sourceItem.getSourceURL();
 //                    else
 //                        from = sourceItem.getCategory();
                     setupMainStream(from, sourceItem.getSourceName());
@@ -375,6 +360,23 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
         }
         backFromSelection = true;
     }
+
+    public void notifyUpdating(CachedArticleSource cachedArticleSource) {
+    }
+
+    public void notifyHasNew(CachedArticleSource cachedArticleSource) {
+        mainStreamAdapter.reset();
+        mainStreamAdapter.forceLoad(false);
+    }
+
+    public void notifyNoNew(CachedArticleSource cachedArticleSource) {
+        cachedArticleSource.reset();
+    }
+
+    public void notifyUpdateDone(CachedArticleSource cachedArticleSource) {
+
+    }
+
 }
 
 class NoMoreArticleToLoad implements OnNothingLoaded {
@@ -400,6 +402,8 @@ class NoMoreArticleToLoad implements OnNothingLoaded {
     }
 }
 
+
+
 class GetDataTask extends AsyncTask<Void, Void, String[]> {
     private PullToRefreshListView mPullRefreshListView;
     private PaginationLoaderAdapter adapter;
@@ -423,7 +427,6 @@ class GetDataTask extends AsyncTask<Void, Void, String[]> {
 
     @Override
     protected String[] doInBackground(Void... params) {
-        adapter.reset();
         loaderService.reset();
 
         countBeforeUpdate = rssurlDB.getCount();
@@ -444,7 +447,7 @@ class GetDataTask extends AsyncTask<Void, Void, String[]> {
 
     @Override
     protected void onPostExecute(String[] result) {
-        if(failed){
+        if (failed) {
             new AlarmSender(adapter.getContext()).sendInstantMessage(R.string.failed);
             return;
         }
