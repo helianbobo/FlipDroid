@@ -25,6 +25,7 @@ import com.goal98.girl.model.cachesystem.CachedArticleSource;
 import com.goal98.girl.model.cachesystem.SourceCache;
 import com.goal98.girl.model.cachesystem.SourceUpdateable;
 import com.goal98.girl.util.AlarmSender;
+import com.goal98.girl.view.GrilPTR;
 import com.goal98.girl.view.StreamPagerAdapter;
 import com.goal98.tika.common.TikaConstants;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -162,7 +163,7 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
     }
 
     private void addPage(List<PullToRefreshListView> ptrs, String from, String name, boolean isFirst, int inDaysFrom, int inDaysTo) {
-        final PullToRefreshListView currentPullToRefresh = new PullToRefreshListView(this);
+        final PullToRefreshListView currentPullToRefresh = new GrilPTR(this);
 
         currentLoaderService = new ArticleLoader(StreamActivity.this, 10, from, name, inDaysFrom, inDaysTo);
 
@@ -193,7 +194,7 @@ public class StreamActivity extends SherlockActivity implements SourceUpdateable
     }
 
     private void addFavoritePage(List<PullToRefreshListView> ptrs, String from) {
-        final PullToRefreshListView ptr = new PullToRefreshListView(this);
+        final PullToRefreshListView ptr = new GrilPTR(this);
 
         final ArticleLoader loaderService = new ArticleLoader(StreamActivity.this, 10, from, true);
 

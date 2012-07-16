@@ -15,6 +15,7 @@ import com.srz.androidtools.autoloadlistview.PaginationLoaderAdapter;
 import com.srz.androidtools.autoloadlistview.PaginationLoaderService;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -43,7 +44,14 @@ public class ArticleAdapter extends PaginationLoaderAdapter {
         StreamStyledArticleView articleView = (StreamStyledArticleView) view;
         Article article = articleView.getArticle();
 
+        List<Article> articles = new LinkedList<Article>();
+        for (int j = 0; j < items.size(); j++) {
+            ArticleDetailInfo adi = (ArticleDetailInfo) items.get(j);
+            articles.add(adi.getArticle());
+        }
+        ArticleHolder.getInstance().setArticles(articles);
         ArticleHolder.getInstance().setArticle(article);
+
         Intent articleLoadedActivityIntent = new Intent(context, ContentPagedActivity.class);
         context.startActivity(articleLoadedActivityIntent);
     }
