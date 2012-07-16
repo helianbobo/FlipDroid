@@ -1,6 +1,6 @@
 package com.goal98.tika.common;
 
-import android.view.View;
+
 
 /**
  * Created by IntelliJ IDEA.
