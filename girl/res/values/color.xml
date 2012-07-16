@@ -35,4 +35,6 @@
     <color name="transparent">#00f4f4f2</color>
     <color name="content_background">#f4f4f2</color>
 
+    <color name="verylightblue">#FFFD79B3</color>
+
 </resources>
