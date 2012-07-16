@@ -4,23 +4,23 @@
     <color name="grepblack">#ff565656</color>
     <color name="gray">#ffaaaaaa</color>
     <color name="lightgray">#fff7f7f7</color>
-    <color name="darkblue">#ff000099</color>
-    <color name="blue">#ff0066cc</color>
-    <color name="lightblue">#ff2491ff</color>
+    <color name="darkblue">#ffDE0060</color>
+    <color name="blue">#ffFC2986</color>
+    <color name="lightblue">#ffFD5BA2</color>
     <color name="darkred">#ffcc0000</color>
     <color name="red">#ffff3333</color>
     <color name="green">#ff00f500</color>
     <color name="darkgreen">#ff00b500</color>
     <color name="lightred">#ffff6666</color>
-    <color name="header_divider_color">#4c90d3e8</color>
+    <color name="header_divider_color">#4cFD5BA2</color>
     <color name="header_btn_text_color_normal">#ffe6ecef</color>
     <color name="header_btn_backgroud_press_color">#ff054158</color>
     <color name="text_selected_color">#ffff9f08</color>
     <color name="maintab_text_normal">#ffc1c1c1</color>
     <color name="menu_item_dark">#7f000000</color>
     <color name="menu_text">#ffffffff</color>
-    <color name="toast_color">#ff2c73ff</color>
-    <color name="lightbluetransparent">#ee2491ff</color>
+    <color name="toast_color">#ffFC5CA3</color>
+    <color name="lightbluetransparent">#eeFD5BA2</color>
 
 
 
@@ -30,7 +30,7 @@
     <color name="pager_frame_color">#91A438</color>
     <color name="pager_background_color">#5fa707</color>
 
-    <color name="article_title_color">#1872b7</color>
+    <color name="article_title_color">#FC2986</color>
     <color name="background_color">#f4f4f2</color>
     <color name="transparent">#00f4f4f2</color>
     <color name="content_background">#f4f4f2</color>
