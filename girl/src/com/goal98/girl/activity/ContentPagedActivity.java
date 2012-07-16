@@ -148,8 +148,17 @@ public class ContentPagedActivity extends SherlockActivity {
                         else {
                             if (i == 0)
                                 ContentPagedActivity.this.overridePendingTransition(android.R.anim.slide_in_left, R.anim.fade);
-                            else
+                            else {
                                 ContentPagedActivity.this.overridePendingTransition(android.R.anim.slide_out_right, R.anim.fade);
+                                if (ArticleHolder.getInstance().getNextArticle() == null) {
+                                    ContentPagedActivity.this.finish();
+                                    return;
+                                }
+                                loadedArticleView.setOnPageChangeListener(null);
+                                Intent articleLoadedActivityIntent = new Intent(ContentPagedActivity.this.getApplication(), ContentPagedActivity.class);
+                                articleLoadedActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                ContentPagedActivity.this.getApplication().startActivity(articleLoadedActivityIntent);
+                            }
                             ContentPagedActivity.this.finish();
                         }
 
