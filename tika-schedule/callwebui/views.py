@@ -7,6 +7,7 @@ import model
 import time
 import datetime
 from django.template import loader,RequestContext 
+from bson.objectid import ObjectId
 
 
 ISOTIMEFORMAT='%Y-%m-%d %X'
@@ -117,7 +118,7 @@ def updateSource(request):
     theid = request.GET['_id']
     theclass = request.GET['class']
     if request.GET['update']=='update':
-        model.con.tika.source.update({'_id':pymongo.objectid.ObjectId(theid)}, 
+        model.con.tika.source.update({'_id':ObjectId(theid)}, 
                                   {'$set':{"url": url,
                                             "time": datetime.datetime.utcnow() ,
                                              "class": theclass,
@@ -126,7 +127,7 @@ def updateSource(request):
         return HttpResponseRedirect("/console/source/"+page)
 
     if request.GET['update']=='delete':
-        model.con.tika.source.remove({'_id':pymongo.objectid.ObjectId(theid)})
+        model.con.tika.source.remove({'_id':ObjectId(theid)})
         return HttpResponseRedirect("/console/source/"+page)
         
     
@@ -149,7 +150,7 @@ def updateRecommendSourceSource(request):
     theid = request.POST['_id']
   
     if request.POST['update']=='update':
-        model.con.tika.RecommendSource.update({'_id':pymongo.objectid.ObjectId(theid)}, 
+        model.con.tika.RecommendSource.update({'_id':ObjectId(theid)}, 
                                   {'$set':{"body": body,
                                            "lastModified": datetime.datetime.utcnow(),
                                             #"lastModified": time.strftime( ISOTIMEFORMAT, time.gmtime()),
@@ -158,7 +159,7 @@ def updateRecommendSourceSource(request):
         return HttpResponseRedirect("/console/recommendsource/")
 
     if request.POST['update']=='delete':
-        model.con.tika.RecommendSource.remove({'_id':pymongo.objectid.ObjectId(theid)})
+        model.con.tika.RecommendSource.remove({'_id':ObjectId(theid)})
         return HttpResponseRedirect("/console/recommendsource/")
     
  
@@ -195,7 +196,7 @@ def updateUrls(request):
   
     if request.GET['update']=='show':
         
-        item = model.con.tika.url_abstract.find_one({'_id':pymongo.objectid.ObjectId(theid)})
+        item = model.con.tika.url_abstract.find_one({'_id':ObjectId(theid)})
          
          
         html= item['content']
@@ -203,7 +204,7 @@ def updateUrls(request):
         return HttpResponse(html)
     
     if request.GET['update']=='delete':
-        model.con.tika.url_abstract.remove({'_id':pymongo.objectid.ObjectId(theid)})
+        model.con.tika.url_abstract.remove({'_id':ObjectId(theid)})
         return HttpResponseRedirect("/console/urls/")
     
 
@@ -214,7 +215,7 @@ def showUrl(request):
   
     if request.GET['update']=='show':
         
-        item = model.con.tika.url_abstract.find_one({'_id':pymongo.objectid.ObjectId(theid)}) 
+        item = model.con.tika.url_abstract.find_one({'_id':ObjectId(theid)}) 
         html= item['content']  
         return HttpResponse(html) 
     
@@ -311,7 +312,8 @@ def getReadModal(request, id):
             单个文章content去渲染readmodal.html，readmodal.html就是bootstrap modal，div里面的内容
     '''
       
-    item = model.con.tika.url_abstract.find_one({'_id':pymongo.objectid.ObjectId(id)})
+    # item = model.con.tika.url_abstract.find_one({'_id':ObjectId(id)})
+    item = model.con.tika.url_abstract.find_one({'_id':ObjectId(id)})
   
      
     return render_to_response('readmodal.html', {'item': item})  
@@ -323,7 +325,7 @@ def getinfo(request, id):
             
     '''
     
-    item = model.con.tika.url_abstract.find_one({'_id':pymongo.objectid.ObjectId(id)})
+    item = model.con.tika.url_abstract.find_one({'_id':ObjectId(id)})
     content = item['content']
          
     

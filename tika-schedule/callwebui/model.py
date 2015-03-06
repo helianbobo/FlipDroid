@@ -9,15 +9,15 @@ from mongokit import *
 DBUSERNAME="tika"
 DBPASSWORD="Pass1234."
 DBHOST='mongoc2.grandcloud.cn'
-DBPOST=10005
+DBPORT=10005
 
-con = Connection(DBHOST,DBPOST,slave_okay=True)
-con.tika.authenticate(DBUSERNAME, DBPASSWORD)
+#con = Connection(DBHOST,DBPORT,slave_okay=True)
+#con.tika.authenticate(DBUSERNAME, DBPASSWORD)
 
 
-#DB_HOST='localhost'
-#DB_PORT=27017
-#con = Connection(DB_HOST,DB_PORT)
+DB_HOST='hemal1'
+DB_PORT=27017
+con = Connection(DB_HOST,DB_PORT)
 
 
 #class Tika(object):
