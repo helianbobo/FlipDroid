@@ -29,6 +29,13 @@
 					{%if keyword %} <a href="#">{{keyword}}</a>
 					{%endif%}
 				</li>
+				<li {%ifequal tag "nba" %} class="active"{%endifequal%}>
+					<a   href="./?tag=nba">NBA</a>
+				</li>
+				<li {%ifequal tag "stock" %} class="active"{%endifequal%}>
+					<a   href="./?tag=stock">金融</a>
+				</li>
+
 				<li {%ifequal tag "IT" %} class="active"{%endifequal%}   >
 					<a  href="./?tag=IT">IT</a>
 				</li>
