@@ -8,6 +8,8 @@ import time
 import datetime
 from django.template import loader,RequestContext 
 from bson.objectid import ObjectId
+import json
+from bson import json_util
 
 
 ISOTIMEFORMAT='%Y-%m-%d %X'
@@ -250,6 +252,7 @@ def sessiontest(request):
     return sessiontest(request) 
 
 def getlistAndtag(request,page=1): 
+    print "###getlistAndtag"
     keyword =  ""
     tag = ""
     
@@ -274,7 +277,7 @@ def getlistAndtag(request,page=1):
     if keyword is not "" and tag is not "":
         re_keyword = keyword.replace(" ","|")
         item_list =model.con.Url_abstract.find({"images":{"$ne":[]},"sogou_class":{'$regex': tag},"title":{'$regex': re_keyword}}).sort('time', pymongo.DESCENDING)
-   
+  
     return item_list,tag,keyword
 
  
@@ -285,8 +288,41 @@ def showPage(request,page=1):
     '''
     item_list,tag,keyword = getlistAndtag(request,page)
     items=paging(request,item_list,page,24) 
+
     
     return render_to_response('show.html', RequestContext(request,{ 'items': items,'tag':tag,'keyword':keyword}))
+
+
+url_re = re.compile(r'\<img\ssrc=.*?\</img\>')
+def getNews(request,page=1): 
+    '''
+           现在对应url是/console/showPage/
+    '''
+     
+
+
+    item_list,tag,keyword = getlistAndtag(request,page)
+    items=paging(request,item_list,page,24) 
+    # for x in items.object_list:
+    #     print x
+    ritem = []
+    for x in items.object_list:
+        x['time'] =str(x['time'])[:19]
+
+
+        x['content'] =url_re.sub("",x['content'].replace(">hack<","><"))
+
+        ritem.append(x)
+
+    # r = json_util.dumps([x for x in items.object_list])
+    r = json_util.dumps(ritem )
+    if 'callback' in request.GET and request.GET['callback']:
+        callbackname = request.GET['callback']
+        r = callbackname+"("+r+")"
+    return HttpResponse(r)
+    # return HttpResponse(simplejson.dumps([x for x in items.object_list]))
+
+    # return HttpResponse(simplejson.dumps({ 'items': items,'tag':tag,'keyword':keyword}))
 
  
 

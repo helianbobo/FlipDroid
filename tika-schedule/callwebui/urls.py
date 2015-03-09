@@ -25,6 +25,9 @@ urlpatterns = patterns('',
      
     ('^console/showpage/$',views.showPage ),
     (r'^console/showpage/(?P<page>\d+)',views.showPage),
+    ('^api/news/$',views.getNews ),
+    (r'^api/news/(?P<page>\d+)',views.getNews),
+
      ('^console/showpage/updateurls', views.showUrl),
     ('^console/showpage/getinfo/(?P<id>\S+)', views.getinfo),
     ('^console/showpage/getReadModal/(?P<id>\S+)', views.getReadModal),
